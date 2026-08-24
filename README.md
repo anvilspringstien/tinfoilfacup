@@ -1,3 +1,0 @@
-The project is to create a small, fairly stand-alone search engine that will return a set of localised lower-league English footbal clubs who are eligible to play in the English FA Cup. This is so people will be able to take part in a unique way of following the cup by attending their local teams tie in the qualifying rounds and then following the winner in each round in an attempt to get all the way to the final of the cup in Wembley Stadium.
-Hopefully this will update with each round played providing statistics as the user progresses their journey through the competition.
-Ultimately this will have an action associated with the engine which will auto-update the main html file.
