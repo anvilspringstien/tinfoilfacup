@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "updated_at": "2026-08-24T23:56:00+01:00",
+  "round_dates": {
+    "First Round Qualifying": "2026-09-05",
+    "Second Round Qualifying": "2026-09-19",
+    "Third Round Qualifying": "2026-10-03",
+    "Fourth Round Qualifying": "2026-10-17",
+    "First Round Proper": "2026-11-07"
+  },
+  "results": {
+    "Blyth Spartans AFC": {
+      "home": "Blyth Spartans",
+      "away": "Morpeth Town",
+      "home_score": 2,
+      "away_score": 1,
+      "winner": "Blyth Spartans AFC",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-22",
+      "round": "Preliminary Round"
+    },
+    "Redcar Town FC": {
+      "home": "Redcar Town",
+      "away": "Bridlington Town",
+      "home_score": 2,
+      "away_score": 1,
+      "winner": "Redcar Town FC",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-21",
+      "round": "Preliminary Round"
+    },
+    "Heaton Stannington FC": {
+      "home": "Kendal Town",
+      "away": "Heaton Stannington",
+      "home_score": 2,
+      "away_score": 2,
+      "winner": "",
+      "status": "FT",
+      "decision": "draw-replay",
+      "date": "2026-08-22",
+      "round": "Preliminary Round"
+    }
+  },
+  "replays": {
+    "Heaton Stannington FC": {
+      "round": "Preliminary Round Replay",
+      "home": "Heaton Stannington",
+      "away": "Kendal Town",
+      "date": "2026-08-25",
+      "kickoff": "19:45",
+      "ground": "The Willow Park",
+      "postcode": "NE7 7RZ"
+    }
+  },
+  "fixtures": {
+    "Blyth Spartans AFC": {
+      "round": "First Round Qualifying",
+      "home": "Redcar Town",
+      "away": "Blyth Spartans",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Redcar Town FC": {
+      "round": "First Round Qualifying",
+      "home": "Redcar Town",
+      "away": "Blyth Spartans",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Heaton Stannington FC": {
+      "round": "First Round Qualifying",
+      "home": "Kendal Town or Heaton Stannington",
+      "away": "Knaresborough Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Kendal Town FC": {
+      "round": "First Round Qualifying",
+      "home": "Kendal Town or Heaton Stannington",
+      "away": "Knaresborough Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    }
+  },
+  "source_note": "Seeded from official FA First Round Qualifying draw; designed for automated replacement by updater."
+}
