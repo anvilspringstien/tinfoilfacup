@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-08-24T14:07:00+01:00",
+  "updated_at": "2026-08-25T12:11:20.875993+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -55,5 +55,1807 @@
       "postcode": "NE7 7RZ"
     }
   },
-  "fixtures": {}
+  "fixtures": {
+    "Bamber Bridge": {
+      "round": "First Round Qualifying",
+      "home": "Bamber Bridge",
+      "away": "Trafford",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Trafford": {
+      "round": "First Round Qualifying",
+      "home": "Bamber Bridge",
+      "away": "Trafford",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Litherland Remyca": {
+      "round": "First Round Qualifying",
+      "home": "Litherland Remyca",
+      "away": "1874 Northwich or Horbury Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "1874 Northwich": {
+      "round": "First Round Qualifying",
+      "home": "Litherland Remyca",
+      "away": "1874 Northwich or Horbury Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Horbury Town": {
+      "round": "First Round Qualifying",
+      "home": "Litherland Remyca",
+      "away": "1874 Northwich or Horbury Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Redcar Town": {
+      "round": "First Round Qualifying",
+      "home": "Redcar Town",
+      "away": "Blyth Spartans",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Blyth Spartans": {
+      "round": "First Round Qualifying",
+      "home": "Redcar Town",
+      "away": "Blyth Spartans",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Vauxhall Motors": {
+      "round": "First Round Qualifying",
+      "home": "Vauxhall Motors",
+      "away": "Dunston",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Dunston": {
+      "round": "First Round Qualifying",
+      "home": "Vauxhall Motors",
+      "away": "Dunston",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Workington": {
+      "round": "First Round Qualifying",
+      "home": "Workington",
+      "away": "Marske United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Marske United": {
+      "round": "First Round Qualifying",
+      "home": "Workington",
+      "away": "Marske United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Emley": {
+      "round": "First Round Qualifying",
+      "home": "Emley",
+      "away": "Bishop Auckland",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bishop Auckland": {
+      "round": "First Round Qualifying",
+      "home": "Emley",
+      "away": "Bishop Auckland",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Kendal Town": {
+      "round": "First Round Qualifying",
+      "home": "Kendal Town or Heaton Stannington",
+      "away": "Knaresborough Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Heaton Stannington": {
+      "round": "First Round Qualifying",
+      "home": "Kendal Town or Heaton Stannington",
+      "away": "Knaresborough Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Knaresborough Town": {
+      "round": "First Round Qualifying",
+      "home": "Kendal Town or Heaton Stannington",
+      "away": "Knaresborough Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Shildon": {
+      "round": "First Round Qualifying",
+      "home": "Shildon",
+      "away": "Warrington Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Warrington Town": {
+      "round": "First Round Qualifying",
+      "home": "Shildon",
+      "away": "Warrington Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Avro": {
+      "round": "First Round Qualifying",
+      "home": "Avro",
+      "away": "Witton Albion",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Witton Albion": {
+      "round": "First Round Qualifying",
+      "home": "Avro",
+      "away": "Witton Albion",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Curzon Ashton": {
+      "round": "First Round Qualifying",
+      "home": "Curzon Ashton",
+      "away": "Bradford (Park Avenue)",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bradford (Park Avenue)": {
+      "round": "First Round Qualifying",
+      "home": "Curzon Ashton",
+      "away": "Bradford (Park Avenue)",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Redcar Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Redcar Athletic",
+      "away": "Stocksbridge Park Steels",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Stocksbridge Park Steels": {
+      "round": "First Round Qualifying",
+      "home": "Redcar Athletic",
+      "away": "Stocksbridge Park Steels",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Warrington Rylands": {
+      "round": "First Round Qualifying",
+      "home": "Warrington Rylands",
+      "away": "Hyde United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hyde United": {
+      "round": "First Round Qualifying",
+      "home": "Warrington Rylands",
+      "away": "Hyde United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Garforth Town": {
+      "round": "First Round Qualifying",
+      "home": "Garforth Town",
+      "away": "FC United of Manchester",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "FC United of Manchester": {
+      "round": "First Round Qualifying",
+      "home": "Garforth Town",
+      "away": "FC United of Manchester",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Lancaster City": {
+      "round": "First Round Qualifying",
+      "home": "Lancaster City",
+      "away": "Tadcaster Albion",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Tadcaster Albion": {
+      "round": "First Round Qualifying",
+      "home": "Lancaster City",
+      "away": "Tadcaster Albion",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "South Liverpool": {
+      "round": "First Round Qualifying",
+      "home": "South Liverpool",
+      "away": "Prestwich Heys",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Prestwich Heys": {
+      "round": "First Round Qualifying",
+      "home": "South Liverpool",
+      "away": "Prestwich Heys",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Lower Breck": {
+      "round": "First Round Qualifying",
+      "home": "Lower Breck",
+      "away": "Thornaby",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Thornaby": {
+      "round": "First Round Qualifying",
+      "home": "Lower Breck",
+      "away": "Thornaby",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ossett United": {
+      "round": "First Round Qualifying",
+      "home": "Ossett United",
+      "away": "Pontefract Collieries",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Pontefract Collieries": {
+      "round": "First Round Qualifying",
+      "home": "Ossett United",
+      "away": "Pontefract Collieries",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Whitby Town": {
+      "round": "First Round Qualifying",
+      "home": "Whitby Town",
+      "away": "Ashton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ashton United": {
+      "round": "First Round Qualifying",
+      "home": "Whitby Town",
+      "away": "Ashton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Northwich Victoria": {
+      "round": "First Round Qualifying",
+      "home": "Northwich Victoria or Bootle",
+      "away": "Atherton Collieries",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Bootle": {
+      "round": "First Round Qualifying",
+      "home": "Northwich Victoria or Bootle",
+      "away": "Atherton Collieries",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Atherton Collieries": {
+      "round": "First Round Qualifying",
+      "home": "Northwich Victoria or Bootle",
+      "away": "Atherton Collieries",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Stockton Town": {
+      "round": "First Round Qualifying",
+      "home": "Stockton Town",
+      "away": "Guiseley",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Guiseley": {
+      "round": "First Round Qualifying",
+      "home": "Stockton Town",
+      "away": "Guiseley",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bury": {
+      "round": "First Round Qualifying",
+      "home": "Bury",
+      "away": "Wythenshawe",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Wythenshawe": {
+      "round": "First Round Qualifying",
+      "home": "Bury",
+      "away": "Wythenshawe",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cleethorpes Town": {
+      "round": "First Round Qualifying",
+      "home": "Cleethorpes Town",
+      "away": "Newcastle Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Newcastle Town": {
+      "round": "First Round Qualifying",
+      "home": "Cleethorpes Town",
+      "away": "Newcastle Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Alfreton Town": {
+      "round": "First Round Qualifying",
+      "home": "Alfreton Town",
+      "away": "Stratford Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Stratford Town": {
+      "round": "First Round Qualifying",
+      "home": "Alfreton Town",
+      "away": "Stratford Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Stourbridge": {
+      "round": "First Round Qualifying",
+      "home": "Stourbridge",
+      "away": "Rushall Olympic",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Rushall Olympic": {
+      "round": "First Round Qualifying",
+      "home": "Stourbridge",
+      "away": "Rushall Olympic",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hanley Town": {
+      "round": "First Round Qualifying",
+      "home": "Hanley Town or Droitwich Spa",
+      "away": "Abbey Hulton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Droitwich Spa": {
+      "round": "First Round Qualifying",
+      "home": "Hanley Town or Droitwich Spa",
+      "away": "Abbey Hulton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Abbey Hulton United": {
+      "round": "First Round Qualifying",
+      "home": "Hanley Town or Droitwich Spa",
+      "away": "Abbey Hulton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Bottesford Town": {
+      "round": "First Round Qualifying",
+      "home": "Bottesford Town or Bourne Town",
+      "away": "Boldmere St Michaels",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Bourne Town": {
+      "round": "First Round Qualifying",
+      "home": "Bottesford Town or Bourne Town",
+      "away": "Boldmere St Michaels",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Boldmere St Michaels": {
+      "round": "First Round Qualifying",
+      "home": "Bottesford Town or Bourne Town",
+      "away": "Boldmere St Michaels",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Stamford": {
+      "round": "First Round Qualifying",
+      "home": "Stamford",
+      "away": "Mickleover",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Mickleover": {
+      "round": "First Round Qualifying",
+      "home": "Stamford",
+      "away": "Mickleover",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Wellingborough Town": {
+      "round": "First Round Qualifying",
+      "home": "Wellingborough Town",
+      "away": "Kettering Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Kettering Town": {
+      "round": "First Round Qualifying",
+      "home": "Wellingborough Town",
+      "away": "Kettering Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Desborough Town": {
+      "round": "First Round Qualifying",
+      "home": "Desborough Town",
+      "away": "AFC Rushden & Diamonds or Long Eaton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "AFC Rushden & Diamonds": {
+      "round": "First Round Qualifying",
+      "home": "Desborough Town",
+      "away": "AFC Rushden & Diamonds or Long Eaton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Long Eaton United": {
+      "round": "First Round Qualifying",
+      "home": "Desborough Town",
+      "away": "AFC Rushden & Diamonds or Long Eaton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Sherwood Colliery": {
+      "round": "First Round Qualifying",
+      "home": "Sherwood Colliery",
+      "away": "Gainsborough Trinity",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Gainsborough Trinity": {
+      "round": "First Round Qualifying",
+      "home": "Sherwood Colliery",
+      "away": "Gainsborough Trinity",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Alvechurch": {
+      "round": "First Round Qualifying",
+      "home": "Alvechurch",
+      "away": "AFC Wolverhampton City",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "AFC Wolverhampton City": {
+      "round": "First Round Qualifying",
+      "home": "Alvechurch",
+      "away": "AFC Wolverhampton City",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Malvern Town": {
+      "round": "First Round Qualifying",
+      "home": "Malvern Town",
+      "away": "Redditch United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Redditch United": {
+      "round": "First Round Qualifying",
+      "home": "Malvern Town",
+      "away": "Redditch United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bromsgrove Sporting": {
+      "round": "First Round Qualifying",
+      "home": "Bromsgrove Sporting",
+      "away": "Nuneaton Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Nuneaton Town": {
+      "round": "First Round Qualifying",
+      "home": "Bromsgrove Sporting",
+      "away": "Nuneaton Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Halesowen Town": {
+      "round": "First Round Qualifying",
+      "home": "Halesowen Town",
+      "away": "Basford United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Basford United": {
+      "round": "First Round Qualifying",
+      "home": "Halesowen Town",
+      "away": "Basford United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Stafford Rangers": {
+      "round": "First Round Qualifying",
+      "home": "Stafford Rangers",
+      "away": "Northampton On Chenecks",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Northampton On Chenecks": {
+      "round": "First Round Qualifying",
+      "home": "Stafford Rangers",
+      "away": "Northampton On Chenecks",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Quorn": {
+      "round": "First Round Qualifying",
+      "home": "Quorn",
+      "away": "Shepshed Dynamo",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Shepshed Dynamo": {
+      "round": "First Round Qualifying",
+      "home": "Quorn",
+      "away": "Shepshed Dynamo",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Coventry United": {
+      "round": "First Round Qualifying",
+      "home": "Coventry United",
+      "away": "Bedworth United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bedworth United": {
+      "round": "First Round Qualifying",
+      "home": "Coventry United",
+      "away": "Bedworth United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Leamington": {
+      "round": "First Round Qualifying",
+      "home": "Leamington",
+      "away": "Ilkeston Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ilkeston Town": {
+      "round": "First Round Qualifying",
+      "home": "Leamington",
+      "away": "Ilkeston Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Belper Town": {
+      "round": "First Round Qualifying",
+      "home": "Belper Town",
+      "away": "Evesham United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Evesham United": {
+      "round": "First Round Qualifying",
+      "home": "Belper Town",
+      "away": "Evesham United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "North Ferriby": {
+      "round": "First Round Qualifying",
+      "home": "North Ferriby",
+      "away": "Barton Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Barton Town": {
+      "round": "First Round Qualifying",
+      "home": "North Ferriby",
+      "away": "Barton Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Knowle": {
+      "round": "First Round Qualifying",
+      "home": "Knowle",
+      "away": "Worcester City",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Worcester City": {
+      "round": "First Round Qualifying",
+      "home": "Knowle",
+      "away": "Worcester City",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Sporting Khalsa": {
+      "round": "First Round Qualifying",
+      "home": "Sporting Khalsa",
+      "away": "Leek Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Leek Town": {
+      "round": "First Round Qualifying",
+      "home": "Sporting Khalsa",
+      "away": "Leek Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Northampton Sileby Rangers": {
+      "round": "First Round Qualifying",
+      "home": "Northampton Sileby Rangers",
+      "away": "Anstey Nomads",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Anstey Nomads": {
+      "round": "First Round Qualifying",
+      "home": "Northampton Sileby Rangers",
+      "away": "Anstey Nomads",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Lye Town": {
+      "round": "First Round Qualifying",
+      "home": "Lye Town",
+      "away": "Racing Club Warwick",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Racing Club Warwick": {
+      "round": "First Round Qualifying",
+      "home": "Lye Town",
+      "away": "Racing Club Warwick",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Wingate & Finchley": {
+      "round": "First Round Qualifying",
+      "home": "Wingate & Finchley",
+      "away": "Felixstowe & Walton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Felixstowe & Walton United": {
+      "round": "First Round Qualifying",
+      "home": "Wingate & Finchley",
+      "away": "Felixstowe & Walton United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bishop's Stortford": {
+      "round": "First Round Qualifying",
+      "home": "Bishop's Stortford",
+      "away": "Berkhamsted",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Berkhamsted": {
+      "round": "First Round Qualifying",
+      "home": "Bishop's Stortford",
+      "away": "Berkhamsted",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Stanway Rovers": {
+      "round": "First Round Qualifying",
+      "home": "Stanway Rovers",
+      "away": "Needham Market",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Needham Market": {
+      "round": "First Round Qualifying",
+      "home": "Stanway Rovers",
+      "away": "Needham Market",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Yaxley": {
+      "round": "First Round Qualifying",
+      "home": "Yaxley or Wisbech Town",
+      "away": "Buckhurst Hill",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Wisbech Town": {
+      "round": "First Round Qualifying",
+      "home": "Yaxley or Wisbech Town",
+      "away": "Buckhurst Hill",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Buckhurst Hill": {
+      "round": "First Round Qualifying",
+      "home": "Yaxley or Wisbech Town",
+      "away": "Buckhurst Hill",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Hendon": {
+      "round": "First Round Qualifying",
+      "home": "Hendon",
+      "away": "Hullbridge Sports",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hullbridge Sports": {
+      "round": "First Round Qualifying",
+      "home": "Hendon",
+      "away": "Hullbridge Sports",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Peterborough Sports": {
+      "round": "First Round Qualifying",
+      "home": "Peterborough Sports",
+      "away": "Ipswich Wanderers",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ipswich Wanderers": {
+      "round": "First Round Qualifying",
+      "home": "Peterborough Sports",
+      "away": "Ipswich Wanderers",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "London Lions": {
+      "round": "First Round Qualifying",
+      "home": "London Lions",
+      "away": "Bury Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bury Town": {
+      "round": "First Round Qualifying",
+      "home": "London Lions",
+      "away": "Bury Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Witham Town": {
+      "round": "First Round Qualifying",
+      "home": "Witham Town or Potters Bar Town",
+      "away": "Stotfold",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Potters Bar Town": {
+      "round": "First Round Qualifying",
+      "home": "Witham Town or Potters Bar Town",
+      "away": "Stotfold",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Stotfold": {
+      "round": "First Round Qualifying",
+      "home": "Witham Town or Potters Bar Town",
+      "away": "Stotfold",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Haringey Borough": {
+      "round": "First Round Qualifying",
+      "home": "Haringey Borough or Frenford",
+      "away": "Enfield Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Frenford": {
+      "round": "First Round Qualifying",
+      "home": "Haringey Borough or Frenford",
+      "away": "Enfield Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Enfield Town": {
+      "round": "First Round Qualifying",
+      "home": "Haringey Borough or Frenford",
+      "away": "Enfield Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Leighton Town": {
+      "round": "First Round Qualifying",
+      "home": "Leighton Town",
+      "away": "Gorleston",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Gorleston": {
+      "round": "First Round Qualifying",
+      "home": "Leighton Town",
+      "away": "Gorleston",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cambridge City": {
+      "round": "First Round Qualifying",
+      "home": "Cambridge City",
+      "away": "Maldon & Tiptree",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Maldon & Tiptree": {
+      "round": "First Round Qualifying",
+      "home": "Cambridge City",
+      "away": "Maldon & Tiptree",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Mulbarton Wanderers": {
+      "round": "First Round Qualifying",
+      "home": "Mulbarton Wanderers",
+      "away": "Cornard United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cornard United": {
+      "round": "First Round Qualifying",
+      "home": "Mulbarton Wanderers",
+      "away": "Cornard United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Real Bedford": {
+      "round": "First Round Qualifying",
+      "home": "Real Bedford",
+      "away": "Royston Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Royston Town": {
+      "round": "First Round Qualifying",
+      "home": "Real Bedford",
+      "away": "Royston Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Harleston Town": {
+      "round": "First Round Qualifying",
+      "home": "Harleston Town",
+      "away": "Romford or Baldock Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Romford": {
+      "round": "First Round Qualifying",
+      "home": "Harleston Town",
+      "away": "Romford or Baldock Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Baldock Town": {
+      "round": "First Round Qualifying",
+      "home": "Harleston Town",
+      "away": "Romford or Baldock Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "St Albans City": {
+      "round": "First Round Qualifying",
+      "home": "St Albans City",
+      "away": "Hashtag United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hashtag United": {
+      "round": "First Round Qualifying",
+      "home": "St Albans City",
+      "away": "Hashtag United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Dunstable": {
+      "round": "First Round Qualifying",
+      "home": "Dunstable",
+      "away": "Woodford Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Woodford Town": {
+      "round": "First Round Qualifying",
+      "home": "Dunstable",
+      "away": "Woodford Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Aveley": {
+      "round": "First Round Qualifying",
+      "home": "Aveley",
+      "away": "Cheshunt",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cheshunt": {
+      "round": "First Round Qualifying",
+      "home": "Aveley",
+      "away": "Cheshunt",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Canvey Island": {
+      "round": "First Round Qualifying",
+      "home": "Canvey Island",
+      "away": "Newmarket Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Newmarket Town": {
+      "round": "First Round Qualifying",
+      "home": "Canvey Island",
+      "away": "Newmarket Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Brantham Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Brantham Athletic",
+      "away": "Waltham Abbey",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Waltham Abbey": {
+      "round": "First Round Qualifying",
+      "home": "Brantham Athletic",
+      "away": "Waltham Abbey",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ware": {
+      "round": "First Round Qualifying",
+      "home": "Ware",
+      "away": "St Ives Town or Fakenham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "St Ives Town": {
+      "round": "First Round Qualifying",
+      "home": "Ware",
+      "away": "St Ives Town or Fakenham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Fakenham Town": {
+      "round": "First Round Qualifying",
+      "home": "Ware",
+      "away": "St Ives Town or Fakenham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Grays Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Grays Athletic",
+      "away": "Leiston",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Leiston": {
+      "round": "First Round Qualifying",
+      "home": "Grays Athletic",
+      "away": "Leiston",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Biggleswade Town": {
+      "round": "First Round Qualifying",
+      "home": "Biggleswade Town",
+      "away": "Hitchin Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hitchin Town": {
+      "round": "First Round Qualifying",
+      "home": "Biggleswade Town",
+      "away": "Hitchin Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Concord Rangers": {
+      "round": "First Round Qualifying",
+      "home": "Concord Rangers",
+      "away": "Brentwood Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Brentwood Town": {
+      "round": "First Round Qualifying",
+      "home": "Concord Rangers",
+      "away": "Brentwood Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Redhill": {
+      "round": "First Round Qualifying",
+      "home": "Redhill",
+      "away": "Sheppey United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Sheppey United": {
+      "round": "First Round Qualifying",
+      "home": "Redhill",
+      "away": "Sheppey United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Burgess Hill Town": {
+      "round": "First Round Qualifying",
+      "home": "Burgess Hill Town",
+      "away": "Jersey Bulls",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Jersey Bulls": {
+      "round": "First Round Qualifying",
+      "home": "Burgess Hill Town",
+      "away": "Jersey Bulls",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Lewes": {
+      "round": "First Round Qualifying",
+      "home": "Lewes",
+      "away": "Cray Wanderers",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cray Wanderers": {
+      "round": "First Round Qualifying",
+      "home": "Lewes",
+      "away": "Cray Wanderers",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ascot United": {
+      "round": "First Round Qualifying",
+      "home": "Ascot United",
+      "away": "Pagham",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Pagham": {
+      "round": "First Round Qualifying",
+      "home": "Ascot United",
+      "away": "Pagham",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Dulwich Hamlet": {
+      "round": "First Round Qualifying",
+      "home": "Dulwich Hamlet",
+      "away": "East Grinstead Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "East Grinstead Town": {
+      "round": "First Round Qualifying",
+      "home": "Dulwich Hamlet",
+      "away": "East Grinstead Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Crowborough Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Crowborough Athletic",
+      "away": "AFC Whyteleafe",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "AFC Whyteleafe": {
+      "round": "First Round Qualifying",
+      "home": "Crowborough Athletic",
+      "away": "AFC Whyteleafe",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Flackwell Heath": {
+      "round": "First Round Qualifying",
+      "home": "Flackwell Heath",
+      "away": "Hanwell Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hanwell Town": {
+      "round": "First Round Qualifying",
+      "home": "Flackwell Heath",
+      "away": "Hanwell Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Margate": {
+      "round": "First Round Qualifying",
+      "home": "Margate",
+      "away": "Snodland Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Snodland Town": {
+      "round": "First Round Qualifying",
+      "home": "Margate",
+      "away": "Snodland Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Sittingbourne": {
+      "round": "First Round Qualifying",
+      "home": "Sittingbourne",
+      "away": "AFC Greenwich Borough",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "AFC Greenwich Borough": {
+      "round": "First Round Qualifying",
+      "home": "Sittingbourne",
+      "away": "AFC Greenwich Borough",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Ramsgate": {
+      "round": "First Round Qualifying",
+      "home": "Ramsgate",
+      "away": "Bracknell Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bracknell Town": {
+      "round": "First Round Qualifying",
+      "home": "Ramsgate",
+      "away": "Bracknell Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hanworth Villa": {
+      "round": "First Round Qualifying",
+      "home": "Hanworth Villa",
+      "away": "Whitstable Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Whitstable Town": {
+      "round": "First Round Qualifying",
+      "home": "Hanworth Villa",
+      "away": "Whitstable Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Petts Wood & Holmesdale": {
+      "round": "First Round Qualifying",
+      "home": "Petts Wood & Holmesdale",
+      "away": "Windsor & Eton",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Windsor & Eton": {
+      "round": "First Round Qualifying",
+      "home": "Petts Wood & Holmesdale",
+      "away": "Windsor & Eton",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Leatherhead": {
+      "round": "First Round Qualifying",
+      "home": "Leatherhead",
+      "away": "AFC Croydon Athletic",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "AFC Croydon Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Leatherhead",
+      "away": "AFC Croydon Athletic",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Chertsey Town": {
+      "round": "First Round Qualifying",
+      "home": "Chertsey Town",
+      "away": "Carshalton Athletic",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Carshalton Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Chertsey Town",
+      "away": "Carshalton Athletic",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Egham Town": {
+      "round": "First Round Qualifying",
+      "home": "Egham Town",
+      "away": "Chatham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Chatham Town": {
+      "round": "First Round Qualifying",
+      "home": "Egham Town",
+      "away": "Chatham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Southall": {
+      "round": "First Round Qualifying",
+      "home": "Southall",
+      "away": "Cobham",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cobham": {
+      "round": "First Round Qualifying",
+      "home": "Southall",
+      "away": "Cobham",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bedfont": {
+      "round": "First Round Qualifying",
+      "home": "Bedfont or Faversham Town",
+      "away": "Welling United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Faversham Town": {
+      "round": "First Round Qualifying",
+      "home": "Bedfont or Faversham Town",
+      "away": "Welling United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Welling United": {
+      "round": "First Round Qualifying",
+      "home": "Bedfont or Faversham Town",
+      "away": "Welling United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Whitehawk": {
+      "round": "First Round Qualifying",
+      "home": "Whitehawk",
+      "away": "Eastbourne Borough",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Eastbourne Borough": {
+      "round": "First Round Qualifying",
+      "home": "Whitehawk",
+      "away": "Eastbourne Borough",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Punjab United": {
+      "round": "First Round Qualifying",
+      "home": "Punjab United or SE Dons",
+      "away": "Erith Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "SE Dons": {
+      "round": "First Round Qualifying",
+      "home": "Punjab United or SE Dons",
+      "away": "Erith Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Erith Town": {
+      "round": "First Round Qualifying",
+      "home": "Punjab United or SE Dons",
+      "away": "Erith Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Three Bridges": {
+      "round": "First Round Qualifying",
+      "home": "Three Bridges",
+      "away": "Kingstonian",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Kingstonian": {
+      "round": "First Round Qualifying",
+      "home": "Three Bridges",
+      "away": "Kingstonian",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hayes & Yeading United": {
+      "round": "First Round Qualifying",
+      "home": "Hayes & Yeading United",
+      "away": "Camberley Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Camberley Town": {
+      "round": "First Round Qualifying",
+      "home": "Hayes & Yeading United",
+      "away": "Camberley Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Broadfields United": {
+      "round": "First Round Qualifying",
+      "home": "Broadfields United or Corinthian",
+      "away": "Chichester City",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Corinthian": {
+      "round": "First Round Qualifying",
+      "home": "Broadfields United or Corinthian",
+      "away": "Chichester City",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Chichester City": {
+      "round": "First Round Qualifying",
+      "home": "Broadfields United or Corinthian",
+      "away": "Chichester City",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Uxbridge": {
+      "round": "First Round Qualifying",
+      "home": "Uxbridge",
+      "away": "Sutton Common Rovers or Haywards Heath Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Sutton Common Rovers": {
+      "round": "First Round Qualifying",
+      "home": "Uxbridge",
+      "away": "Sutton Common Rovers or Haywards Heath Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Haywards Heath Town": {
+      "round": "First Round Qualifying",
+      "home": "Uxbridge",
+      "away": "Sutton Common Rovers or Haywards Heath Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Westfield": {
+      "round": "First Round Qualifying",
+      "home": "Westfield or Hassocks",
+      "away": "Dartford",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Hassocks": {
+      "round": "First Round Qualifying",
+      "home": "Westfield or Hassocks",
+      "away": "Dartford",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Dartford": {
+      "round": "First Round Qualifying",
+      "home": "Westfield or Hassocks",
+      "away": "Dartford",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Yate Town": {
+      "round": "First Round Qualifying",
+      "home": "Yate Town",
+      "away": "Devizes Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Devizes Town": {
+      "round": "First Round Qualifying",
+      "home": "Yate Town",
+      "away": "Devizes Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Brixham": {
+      "round": "First Round Qualifying",
+      "home": "Brixham",
+      "away": "Dorchester Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Dorchester Town": {
+      "round": "First Round Qualifying",
+      "home": "Brixham",
+      "away": "Dorchester Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Thame United": {
+      "round": "First Round Qualifying",
+      "home": "Thame United",
+      "away": "Reading City",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Reading City": {
+      "round": "First Round Qualifying",
+      "home": "Thame United",
+      "away": "Reading City",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Baffins Milton Rovers": {
+      "round": "First Round Qualifying",
+      "home": "Baffins Milton Rovers",
+      "away": "Slimbridge or Milton Keynes Irish",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Slimbridge": {
+      "round": "First Round Qualifying",
+      "home": "Baffins Milton Rovers",
+      "away": "Slimbridge or Milton Keynes Irish",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Milton Keynes Irish": {
+      "round": "First Round Qualifying",
+      "home": "Baffins Milton Rovers",
+      "away": "Slimbridge or Milton Keynes Irish",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Wimborne Town": {
+      "round": "First Round Qualifying",
+      "home": "Wimborne Town",
+      "away": "Larkhall Athletic or Portishead Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Larkhall Athletic": {
+      "round": "First Round Qualifying",
+      "home": "Wimborne Town",
+      "away": "Larkhall Athletic or Portishead Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Portishead Town": {
+      "round": "First Round Qualifying",
+      "home": "Wimborne Town",
+      "away": "Larkhall Athletic or Portishead Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Winslow United": {
+      "round": "First Round Qualifying",
+      "home": "Winslow United or Longlevens",
+      "away": "Swindon Supermarine",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Longlevens": {
+      "round": "First Round Qualifying",
+      "home": "Winslow United or Longlevens",
+      "away": "Swindon Supermarine",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Swindon Supermarine": {
+      "round": "First Round Qualifying",
+      "home": "Winslow United or Longlevens",
+      "away": "Swindon Supermarine",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Wells City": {
+      "round": "First Round Qualifying",
+      "home": "Wells City",
+      "away": "Hungerford Town or Wokingham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Hungerford Town": {
+      "round": "First Round Qualifying",
+      "home": "Wells City",
+      "away": "Hungerford Town or Wokingham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Wokingham Town": {
+      "round": "First Round Qualifying",
+      "home": "Wells City",
+      "away": "Hungerford Town or Wokingham Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Bishop's Cleeve": {
+      "round": "First Round Qualifying",
+      "home": "Bishop's Cleeve",
+      "away": "Poole Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Poole Town": {
+      "round": "First Round Qualifying",
+      "home": "Bishop's Cleeve",
+      "away": "Poole Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Sholing": {
+      "round": "First Round Qualifying",
+      "home": "Sholing",
+      "away": "Andover New Street",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Andover New Street": {
+      "round": "First Round Qualifying",
+      "home": "Sholing",
+      "away": "Andover New Street",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Bath City": {
+      "round": "First Round Qualifying",
+      "home": "Bath City",
+      "away": "Weymouth",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Weymouth": {
+      "round": "First Round Qualifying",
+      "home": "Bath City",
+      "away": "Weymouth",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Taunton Town": {
+      "round": "First Round Qualifying",
+      "home": "Taunton Town",
+      "away": "Millbrook (Hampshire)",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Millbrook (Hampshire)": {
+      "round": "First Round Qualifying",
+      "home": "Taunton Town",
+      "away": "Millbrook (Hampshire)",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Gosport Borough": {
+      "round": "First Round Qualifying",
+      "home": "Gosport Borough",
+      "away": "Plymouth Parkway",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Plymouth Parkway": {
+      "round": "First Round Qualifying",
+      "home": "Gosport Borough",
+      "away": "Plymouth Parkway",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Falmouth Town": {
+      "round": "First Round Qualifying",
+      "home": "Falmouth Town",
+      "away": "Frome Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Frome Town": {
+      "round": "First Round Qualifying",
+      "home": "Falmouth Town",
+      "away": "Frome Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Basingstoke Town": {
+      "round": "First Round Qualifying",
+      "home": "Basingstoke Town",
+      "away": "AFC Stoneham or Badshot Lea",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "AFC Stoneham": {
+      "round": "First Round Qualifying",
+      "home": "Basingstoke Town",
+      "away": "AFC Stoneham or Badshot Lea",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Badshot Lea": {
+      "round": "First Round Qualifying",
+      "home": "Basingstoke Town",
+      "away": "AFC Stoneham or Badshot Lea",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "St Blazey": {
+      "round": "First Round Qualifying",
+      "home": "St Blazey",
+      "away": "Tiverton Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Tiverton Town": {
+      "round": "First Round Qualifying",
+      "home": "St Blazey",
+      "away": "Tiverton Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Fleetlands": {
+      "round": "First Round Qualifying",
+      "home": "Fleetlands",
+      "away": "Cirencester Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Cirencester Town": {
+      "round": "First Round Qualifying",
+      "home": "Fleetlands",
+      "away": "Cirencester Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "AFC Portchester": {
+      "round": "First Round Qualifying",
+      "home": "AFC Portchester or Westbury United",
+      "away": "Portland United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Westbury United": {
+      "round": "First Round Qualifying",
+      "home": "AFC Portchester or Westbury United",
+      "away": "Portland United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Portland United": {
+      "round": "First Round Qualifying",
+      "home": "AFC Portchester or Westbury United",
+      "away": "Portland United",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Chippenham Town": {
+      "round": "First Round Qualifying",
+      "home": "Chippenham Town",
+      "away": "Havant & Waterlooville",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Havant & Waterlooville": {
+      "round": "First Round Qualifying",
+      "home": "Chippenham Town",
+      "away": "Havant & Waterlooville",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Hamble Club": {
+      "round": "First Round Qualifying",
+      "home": "Hamble Club or Tadley Calleva",
+      "away": "Laverstock & Ford",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Tadley Calleva": {
+      "round": "First Round Qualifying",
+      "home": "Hamble Club or Tadley Calleva",
+      "away": "Laverstock & Ford",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Laverstock & Ford": {
+      "round": "First Round Qualifying",
+      "home": "Hamble Club or Tadley Calleva",
+      "away": "Laverstock & Ford",
+      "date": "2026-09-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Gloucester City": {
+      "round": "First Round Qualifying",
+      "home": "Gloucester City",
+      "away": "Mangotsfield United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Mangotsfield United": {
+      "round": "First Round Qualifying",
+      "home": "Gloucester City",
+      "away": "Mangotsfield United",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Banbury United": {
+      "round": "First Round Qualifying",
+      "home": "Banbury United",
+      "away": "Exmouth Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    },
+    "Exmouth Town": {
+      "round": "First Round Qualifying",
+      "home": "Banbury United",
+      "away": "Exmouth Town",
+      "date": "2026-09-05",
+      "kickoff": "15:00"
+    }
+  },
+  "source_url": "https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/emirates-fa-cup/the-emirates-fa-cup-1q.ashx?la=en",
+  "source_round": "First Round Qualifying",
+  "source_tie_count": 112
 }
