@@ -1,0 +1,39 @@
+name: Refresh FA Cup competition data
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: "Official FA article/page OR draw PDF URL"
+        required: true
+      round_name:
+        description: "Round name"
+        required: true
+        default: "First Round Qualifying"
+      round_date:
+        description: "Default match date YYYY-MM-DD"
+        required: true
+        default: "2026-09-05"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install PDF text tools
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - name: Update competition JSON
+        run: python updater/update_draw.py "${{ inputs.source_url }}" "${{ inputs.round_name }}" "${{ inputs.round_date }}"
+      - name: Commit changed competition data
+        run: |
+          git config user.name "Tin Foil FA Cup Updater"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition.json
+          if git diff --cached --quiet; then
+            echo "No competition-data change."
+          else
+            git commit -m "Refresh FA Cup competition data"
+            git push
+          fi
