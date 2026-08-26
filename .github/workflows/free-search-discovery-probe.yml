@@ -1,0 +1,17 @@
+name: Free search discovery probe (v7.5.6)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Test no-key search discovery
+        run: python updater/free_search_discovery_probe.py
+      - name: Upload discovery report
+        uses: actions/upload-artifact@v4
+        with:
+          name: free-search-discovery-report
+          path: updater/free-search-discovery-report.json
