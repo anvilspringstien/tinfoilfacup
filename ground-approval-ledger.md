@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Ground Approval Ledger
 
-Mode: **DRY RUN**
+Mode: **PUBLISH**
 
 - 🟢 Exception-cleared candidates seen: **2**
 - Eligible for promotion: **2**

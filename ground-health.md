@@ -1,9 +1,9 @@
 # Tin Foil FA Cup — Ground Health
 
-Last checked: **26/08/2026, 14:51:24 UTC**
+Last checked: **26/08/2026, 16:31:02 UTC**
 
-- 🟢 Complete verified club-ground records: **409**
-- 🔴 Critical ground-data items: **81**
+- 🟢 Complete verified club-ground records: **411**
+- 🔴 Critical ground-data items: **79**
 - 🟡 Review items: **11**
 - ⚪ Eligible clubs audited: **491**
 
@@ -11,7 +11,6 @@ Last checked: **26/08/2026, 14:51:24 UTC**
 ## 🔴 Missing / incomplete canonical records
 
 - **AFC Greenwich Borough** — No canonical ground record
-- **AFC Mansfield** — No canonical ground record
 - **AFC Welwyn** — No canonical ground record
 - **Atherton LR FC** — No canonical ground record
 - **Balham FC** — No canonical ground record
@@ -47,7 +46,6 @@ Last checked: **26/08/2026, 14:51:24 UTC**
 - **Handsworth FC** — No canonical ground record
 - **Hartpury FC** — No canonical ground record
 - **Hayes & Yeading United FC** — No canonical ground record
-- **Heanor Town FC** — No canonical ground record
 - **Hertford Town FC** — No canonical ground record
 - **Heybridge Swifts FC** — No canonical ground record
 - **Hinckley AFC** — No canonical ground record
