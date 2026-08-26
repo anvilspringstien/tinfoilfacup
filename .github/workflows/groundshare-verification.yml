@@ -1,0 +1,25 @@
+name: Groundshare verification (v7.7.0)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify groundshare candidates
+        run: python updater/groundshare_verification.py
+      - name: Commit verification dashboard
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Verification"
+          git config user.email "actions@users.noreply.github.com"
+          git add groundshare-verification.md updater/groundshare-verification.json updater/ground-approval-ledger.json
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Update groundshare verification v7.7.0"; git push; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: groundshare-verification
+          path: |
+            groundshare-verification.md
+            updater/groundshare-verification.json
+            updater/ground-approval-ledger.json
