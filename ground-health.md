@@ -1,10 +1,10 @@
 # Tin Foil FA Cup — Ground Health
 
-Last checked: **26/08/2026, 13:41:47 UTC**
+Last checked: **26/08/2026, 14:08:12 UTC**
 
-- 🟢 Complete verified club-ground records: **95**
+- 🟢 Complete verified club-ground records: **99**
 - 🔴 Critical ground-data items: **391**
-- 🟡 Review items: **7**
+- 🟡 Review items: **2**
 - ⚪ Eligible clubs audited: **491**
 
 
@@ -412,11 +412,7 @@ None found.
 
 ## 🟡 Missing coordinates
 
-- **Blyth Spartans AFC** — Croft Park • NE24 3JE
-- **Longridge Town FC** — Inglewhite Road • PR3 2DB
-- **Northwich Victoria FC** — Apec Taxis Stadium • WA7 6GJ
-- **South Liverpool FC** — Jericho Lane Sports Hub • L17 5AL
-- **Vauxhall Motors FC** — Premier Jet Stadium • CH66 1NJ
+None found.
 
 ## 🟡 Unverified locations
 
