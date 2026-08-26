@@ -1,18 +1,13 @@
 {
-  "checked_at": "2026-08-26T16:34:02.084791+00:00",
+  "checked_at": "2026-08-26T22:00:33.960736+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "ground_records": 417,
     "complete_verified": 411,
     "critical_items": 79,
     "review_items": 11,
-    "missing_or_incomplete": 79,
-    "invalid_postcodes": 0,
-    "missing_coordinates": 0,
-    "unverified": 1,
-    "duplicate_club_records": 0,
-    "conflicting_club_records": 0,
-    "shared_postcodes": 10
+    "shared_postcodes": 10,
+    "known_approved_groundshares": 0,
+    "unverified": 1
   },
   "missing_or_incomplete": [
     [
@@ -332,16 +327,6 @@
       "No canonical ground record"
     ]
   ],
-  "invalid_postcodes": [],
-  "missing_coordinates": [],
-  "unverified": [
-    [
-      "South Liverpool FC",
-      "Jericho Lane Sports Hub",
-      "L17 5AL",
-      "unverified"
-    ]
-  ],
   "shared_postcodes": [
     [
       "TN26 1NJ",
@@ -412,6 +397,15 @@
         "Bottesford Town FC",
         "Bottlesford Town FC"
       ]
+    ]
+  ],
+  "known_approved_groundshares": [],
+  "unverified": [
+    [
+      "South Liverpool FC",
+      "Jericho Lane Sports Hub",
+      "L17 5AL",
+      "unverified"
     ]
   ]
 }

@@ -1,110 +1,10 @@
 # Tin Foil FA Cup — Ground Health
 
-Last checked: **26/08/2026, 16:34:02 UTC**
-
 - 🟢 Complete verified club-ground records: **411**
 - 🔴 Critical ground-data items: **79**
 - 🟡 Review items: **11**
 - ⚪ Eligible clubs audited: **491**
-
-
-## 🔴 Missing / incomplete canonical records
-
-- **AFC Greenwich Borough** — No canonical ground record
-- **AFC Welwyn** — No canonical ground record
-- **Atherton LR FC** — No canonical ground record
-- **Balham FC** — No canonical ground record
-- **Barwell FC** — No canonical ground record
-- **Beaconsfield Town FC** — No canonical ground record
-- **Bedworth United FC** — No canonical ground record
-- **Belper United FC** — No canonical ground record
-- **Billingshurst FC** — No canonical ground record
-- **Bishop's Cleeve FC** — No canonical ground record
-- **Bournemouth Poppies FC** — No canonical ground record
-- **Bovey Tracey FC** — No canonical ground record
-- **Bradford (Park Avenue) FC** — No canonical ground record
-- **Broadfields United FC** — No canonical ground record
-- **Cobham FC** — No canonical ground record
-- **Corby Town FC** — No canonical ground record
-- **Darlaston Town FC** — No canonical ground record
-- **Dearne & District FC** — No canonical ground record
-- **Desborough Town FC** — No canonical ground record
-- **Devizes Town FC** — No canonical ground record
-- **Droylsden FC** — No canonical ground record
-- **Dudley Town FC** — No canonical ground record
-- **Eastbourne United AFC** — No canonical ground record
-- **Eastwood Community FC** — No canonical ground record
-- **Enfield FC** — No canonical ground record
-- **Epsom & Ewell FC** — No canonical ground record
-- **Everett Rovers FC** — No canonical ground record
-- **Faversham Strike Force FC** — No canonical ground record
-- **Fleetlands FC** — No canonical ground record
-- **Frickley Athletic FC** — No canonical ground record
-- **Godalming Town FC** — No canonical ground record
-- **Grays Athletic FC** — No canonical ground record
-- **Hackney Wick FC** — No canonical ground record
-- **Handsworth FC** — No canonical ground record
-- **Hartpury FC** — No canonical ground record
-- **Hayes & Yeading United FC** — No canonical ground record
-- **Hertford Town FC** — No canonical ground record
-- **Heybridge Swifts FC** — No canonical ground record
-- **Hinckley AFC** — No canonical ground record
-- **Horsham YMCA FC** — No canonical ground record
-- **Keighley Town FC** — No canonical ground record
-- **Knowle FC** — No canonical ground record
-- **Larkfield & New Hythe FC** — No canonical ground record
-- **Liskeard Athletic FC** — No canonical ground record
-- **Loughborough Students FC** — No canonical ground record
-- **Millbrook FC (Hampshire)** — No canonical ground record
-- **Moulton FC** — No canonical ground record
-- **Nelson FC** — No canonical ground record
-- **Northampton Sileby Rangers FC** — No canonical ground record
-- **Nuneaton Town FC** — No canonical ground record
-- **Pershore Town 88 FC** — No canonical ground record
-- **Potters Bar Town FC** — No canonical ground record
-- **Prestwich Heys AFC** — No canonical ground record
-- **Rayners Lane FC** — No canonical ground record
-- **Retford FC** — No canonical ground record
-- **Retford United FC** — No canonical ground record
-- **Romulus FC** — No canonical ground record
-- **Runcorn Town FC** — No canonical ground record
-- **SE Dons FC** — No canonical ground record
-- **Soul Tower Hamlets FC** — No canonical ground record
-- **Southall FC** — No canonical ground record
-- **Sporting Bengal United FC** — No canonical ground record
-- **Sporting Khalsa FC** — No canonical ground record
-- **Stockport Georgians FC** — No canonical ground record
-- **Sturminster Newton United FC** — No canonical ground record
-- **Sutton Athletic FC** — No canonical ground record
-- **Sutton Coldfield Town FC** — No canonical ground record
-- **Sutton United FC (Birmingham)** — No canonical ground record
-- **Tilbury FC** — No canonical ground record
-- **Tooting & Mitcham United FC** — No canonical ground record
-- **Walthamstow FC** — No canonical ground record
-- **Wells City FC** — No canonical ground record
-- **West Essex FC** — No canonical ground record
-- **Whitstable Town FC** — No canonical ground record
-- **Witham Town FC** — No canonical ground record
-- **Wormley Rovers FC** — No canonical ground record
-- **Worsbrough Bridge Athletic FC** — No canonical ground record
-- **Yarm & Eaglescliffe FC** — No canonical ground record
-- **Yateley United FC** — No canonical ground record
-
-## 🔴 Conflicting duplicate club records
-
-None found.
-
-## 🟡 Invalid-looking UK postcodes
-
-None found.
-
-## 🟡 Missing coordinates
-
-None found.
-
-## 🟡 Unverified locations
-
-- **South Liverpool FC** — Jericho Lane Sports Hub • L17 5AL — `unverified`
+- 🏟️ Known approved groundshares suppressed from warnings: **0**
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -119,4 +19,6 @@ None found.
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
 - **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
 
-Audit only: no Clubfinder or competition data changed.
+## 🏟️ Known approved groundshares
+
+None.
