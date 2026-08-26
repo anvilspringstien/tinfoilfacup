@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-08-25T12:11:20.875993+00:00",
+  "updated_at": "2026-08-26T05:33:00.471657+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -33,28 +33,79 @@
       "round": "Preliminary Round"
     },
     "Heaton Stannington FC": {
-      "home": "Kendal Town",
-      "away": "Heaton Stannington",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-08-22",
-      "round": "Preliminary Round"
-    }
-  },
-  "replays": {
-    "Heaton Stannington FC": {
-      "round": "Preliminary Round Replay",
       "home": "Heaton Stannington",
       "away": "Kendal Town",
+      "home_score": 4,
+      "away_score": 2,
+      "winner": "Heaton Stannington",
+      "status": "FT",
+      "decision": "",
       "date": "2026-08-25",
-      "kickoff": "19:45",
-      "ground": "The Willow Park",
-      "postcode": "NE7 7RZ"
+      "round": "Preliminary Round Replay",
+      "source_url": "https://www.thefa.com/competitions/thefacup/results"
+    },
+    "Heaton Stannington AFC": {
+      "home": "Heaton Stannington",
+      "away": "Kendal Town",
+      "home_score": 4,
+      "away_score": 2,
+      "winner": "Heaton Stannington",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-25",
+      "round": "Preliminary Round Replay",
+      "source_url": "https://www.thefa.com/competitions/thefacup/results"
+    },
+    "Heaton Stannington": {
+      "home": "Heaton Stannington",
+      "away": "Kendal Town",
+      "home_score": 4,
+      "away_score": 2,
+      "winner": "Heaton Stannington",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-25",
+      "round": "Preliminary Round Replay",
+      "source_url": "https://www.thefa.com/competitions/thefacup/results"
+    },
+    "Kendal Town": {
+      "home": "Heaton Stannington",
+      "away": "Kendal Town",
+      "home_score": 4,
+      "away_score": 2,
+      "winner": "Heaton Stannington",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-25",
+      "round": "Preliminary Round Replay",
+      "source_url": "https://www.thefa.com/competitions/thefacup/results"
+    },
+    "Kendal Town FC": {
+      "home": "Heaton Stannington",
+      "away": "Kendal Town",
+      "home_score": 4,
+      "away_score": 2,
+      "winner": "Heaton Stannington",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-25",
+      "round": "Preliminary Round Replay",
+      "source_url": "https://www.thefa.com/competitions/thefacup/results"
+    },
+    "Kendal Town AFC": {
+      "home": "Heaton Stannington",
+      "away": "Kendal Town",
+      "home_score": 4,
+      "away_score": 2,
+      "winner": "Heaton Stannington",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-08-25",
+      "round": "Preliminary Round Replay",
+      "source_url": "https://www.thefa.com/competitions/thefacup/results"
     }
   },
+  "replays": {},
   "fixtures": {
     "Bamber Bridge": {
       "round": "First Round Qualifying",
@@ -1857,5 +1908,15 @@
   },
   "source_url": "https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/emirates-fa-cup/the-emirates-fa-cup-1q.ashx?la=en",
   "source_round": "First Round Qualifying",
-  "source_tie_count": 112
+  "source_tie_count": 112,
+  "last_result_source_url": "https://www.thefa.com/competitions/thefacup/results",
+  "last_result_round": "Preliminary Round Replay",
+  "last_result": {
+    "home": "Heaton Stannington",
+    "away": "Kendal Town",
+    "home_score": 4,
+    "away_score": 2,
+    "winner": "Heaton Stannington",
+    "date": "2026-08-25"
+  }
 }
