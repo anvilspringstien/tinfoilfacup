@@ -1,0 +1,47 @@
+name: Record result (v7.6 assisted)
+on:
+  workflow_dispatch:
+    inputs:
+      home:
+        description: "Home club"
+        required: true
+      away:
+        description: "Away club"
+        required: true
+      home_score:
+        description: "Home score"
+        required: true
+      away_score:
+        description: "Away score"
+        required: true
+      round_name:
+        description: "Round name"
+        required: true
+      match_date:
+        description: "Match date YYYY-MM-DD"
+        required: true
+      decision:
+        description: "Optional: draw-replay / winner: Club; pens 5-4"
+        required: false
+        default: ""
+permissions:
+  contents: write
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate and record result
+        run: |
+          python updater/assisted_result.py             "${{ inputs.home }}"             "${{ inputs.away }}"             "${{ inputs.home_score }}"             "${{ inputs.away_score }}"             "${{ inputs.round_name }}"             "${{ inputs.match_date }}"             "${{ inputs.decision }}"
+      - name: Commit competition data
+        run: |
+          git config user.name "Tin Foil FA Cup Updater"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition.json
+          if git diff --cached --quiet; then
+            echo "No competition-data change."
+          else
+            git commit -m "Record assisted FA Cup result"
+            git push
+          fi
