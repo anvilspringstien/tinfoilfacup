@@ -1,0 +1,39 @@
+name: Competition health monitor (v7.6.1)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 7 * * *"
+    - cron: "17 19 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Audit played fixtures for missing results
+        run: python updater/competition_health.py
+
+      - name: Commit health report
+        run: |
+          git config user.name "Tin Foil FA Cup Health Monitor"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition-health.md updater/competition-health.json
+          if git diff --cached --quiet; then
+            echo "Health report unchanged."
+          else
+            git commit -m "Update competition health report"
+            git push
+          fi
+
+      - name: Upload health report
+        uses: actions/upload-artifact@v4
+        with:
+          name: competition-health
+          path: |
+            competition-health.md
+            updater/competition-health.json
