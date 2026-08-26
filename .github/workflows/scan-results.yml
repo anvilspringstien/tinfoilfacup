@@ -1,0 +1,38 @@
+name: Scan FA Cup results (v7.5 pilot)
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: "Results source URL"
+        required: true
+        default: "https://www.thefa.com/competitions/thefacup/results"
+      publish:
+        description: "Publish validated new results?"
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Scan and validate
+        run: |
+          if [ "${{ inputs.publish }}" = "true" ]; then
+            python updater/auto_results.py --url "${{ inputs.source_url }}" --publish
+          else
+            python updater/auto_results.py --url "${{ inputs.source_url }}"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-pilot-report
+          path: updater/results-pilot-report.json
+      - name: Commit validated data
+        if: ${{ inputs.publish }}
+        run: |
+          git config user.name "Tin Foil FA Cup Updater"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition.json
+          if git diff --cached --quiet; then echo "No new results."; else git commit -m "Auto-import validated FA Cup results"; git push; fi
