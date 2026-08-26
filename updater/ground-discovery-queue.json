@@ -1,0 +1,7225 @@
+{
+  "checked_at": "2026-08-26T14:22:21.022808+00:00",
+  "source_url": "https://fchd.info/maps/GAZ.htm",
+  "source_season": "2025-26",
+  "mode": "proposal-only",
+  "batch_size": 25,
+  "counts": {
+    "missing_clubs": 391,
+    "fchd_records_parsed": 826,
+    "high_confidence": 356,
+    "review": 7,
+    "no_match": 28,
+    "batches": 16
+  },
+  "queue": [
+    {
+      "club": "Abbey Hey",
+      "ground_candidate": "Abbey Stadium",
+      "postcode": "M18 7HD",
+      "lat": 53.454821,
+      "lon": -2.166826,
+      "raw_lines": [
+        "Abbey Stadium",
+        "Goredale Avenue",
+        "Gorton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Abbey Hey FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 1,
+      "batch": 1
+    },
+    {
+      "club": "Abbey Rangers",
+      "ground_candidate": "Addlestone Moor",
+      "postcode": "KT15 2QH",
+      "lat": 51.382457,
+      "lon": -0.491627,
+      "raw_lines": [
+        "Addlestone Moor",
+        "Addlestone"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Abbey Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 2,
+      "batch": 1
+    },
+    {
+      "club": "AFC Liverpool",
+      "ground_candidate": "Berry Street Garage Stadium",
+      "postcode": "L30 1NY",
+      "lat": 53.471359,
+      "lon": -2.960595,
+      "raw_lines": [
+        "Bootle FC",
+        "Berry Street Garage Stadium",
+        "Vesty Road",
+        "off Bridie Road",
+        "Bootle"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "AFC Liverpool",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 3,
+      "batch": 1
+    },
+    {
+      "club": "AFC Mansfield",
+      "ground_candidate": "Forest Town Welfare",
+      "postcode": "NG19 0EE",
+      "lat": 53.151566,
+      "lon": -1.161345,
+      "raw_lines": [
+        "Forest Town Welfare",
+        "Clipstone Road West",
+        "Forest Town"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "AFC Mansfield",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 4,
+      "batch": 1
+    },
+    {
+      "club": "AFC Stoneham",
+      "ground_candidate": "Stoneham Lane Football Complex",
+      "postcode": "SO16 2PA",
+      "lat": 50.948258,
+      "lon": -1.373068,
+      "raw_lines": [
+        "Stoneham Lane Football Complex",
+        "Stoneham Lane",
+        "Eastleigh"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "AFC Stoneham",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 5,
+      "batch": 1
+    },
+    {
+      "club": "AFC Welwyn",
+      "ground_candidate": "Lantern Stadium",
+      "postcode": "EN6 1QB",
+      "lat": 51.696206,
+      "lon": -0.177682,
+      "raw_lines": [
+        "Potters Bar Town",
+        "Lantern Stadium",
+        "Parkfield",
+        "Watkins Rise",
+        "Potters Bar"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "AFC Welwyn",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 6,
+      "batch": 1
+    },
+    {
+      "club": "Atherstone Town",
+      "ground_candidate": "Sheepy Road",
+      "postcode": "CV9 3AD",
+      "lat": 52.584596,
+      "lon": -1.548099,
+      "raw_lines": [
+        "Sheepy Road",
+        "Atherstone"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Atherstone Town CFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 7,
+      "batch": 1
+    },
+    {
+      "club": "Aylesbury United",
+      "ground_candidate": "The Meadow",
+      "postcode": "HP5 1NE",
+      "lat": 51.698869,
+      "lon": -0.614008,
+      "raw_lines": [
+        "Chesham United FC",
+        "The Meadow",
+        "Amy Lane",
+        "Chesham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Aylesbury United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 8,
+      "batch": 1
+    },
+    {
+      "club": "Baffins Milton Rovers",
+      "ground_candidate": "PMC Stadium",
+      "postcode": "PO3 5LY",
+      "lat": 50.823422,
+      "lon": -1.043494,
+      "raw_lines": [
+        "PMC Stadium",
+        "Eastern Road",
+        "Portsmouth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Baffins Milton Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 9,
+      "batch": 1
+    },
+    {
+      "club": "Baldock Town",
+      "ground_candidate": "New Lamb Meadow",
+      "postcode": "SG15 6RS",
+      "lat": 52.001252,
+      "lon": -0.264781,
+      "raw_lines": [
+        "Arlesey Town FC",
+        "New Lamb Meadow",
+        "Hitchin Road",
+        "Arlesey"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Baldock Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 10,
+      "batch": 1
+    },
+    {
+      "club": "Balham",
+      "ground_candidate": "Imperial Fields",
+      "postcode": "SM4 6BF",
+      "lat": 51.393245,
+      "lon": -0.17234,
+      "raw_lines": [
+        "Tooting & Mitcham United",
+        "Imperial Fields",
+        "Bishopsford Road",
+        "Morden"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Balham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 11,
+      "batch": 1
+    },
+    {
+      "club": "Barnstaple Town",
+      "ground_candidate": "Mill Road",
+      "postcode": "EX31 1JQ",
+      "lat": 51.082584,
+      "lon": -4.068591,
+      "raw_lines": [
+        "Mill Road",
+        "Barnstaple"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Barnstaple Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 12,
+      "batch": 1
+    },
+    {
+      "club": "Barton Town",
+      "ground_candidate": "The Easy Buy Stadium",
+      "postcode": "DN18 5JD",
+      "lat": 53.689708,
+      "lon": -0.434193,
+      "raw_lines": [
+        "The Easy Buy Stadium",
+        "off Falkland Way",
+        "Barton-upon-Humber"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Barton Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 13,
+      "batch": 1
+    },
+    {
+      "club": "Barwell",
+      "ground_candidate": "Crown Skip Hire Stadium",
+      "postcode": "LE9 8FQ",
+      "lat": 52.572692,
+      "lon": -1.341223,
+      "raw_lines": [
+        "Crown Skip Hire Stadium",
+        "Kirkby Road",
+        "Barwell"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Barwell FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 14,
+      "batch": 1
+    },
+    {
+      "club": "Basford United",
+      "ground_candidate": "Greenwich Avenue",
+      "postcode": "NG6 0LD",
+      "lat": 52.987734,
+      "lon": -1.18969,
+      "raw_lines": [
+        "Greenwich Avenue",
+        "Basford",
+        "Nottingham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Basford United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 15,
+      "batch": 1
+    },
+    {
+      "club": "Bashley",
+      "ground_candidate": "The Veho Community Stadium",
+      "postcode": "BH25 5RY",
+      "lat": 50.772971,
+      "lon": -1.656891,
+      "raw_lines": [
+        "The Veho Community Stadium",
+        "Bashley Road",
+        "New Milton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bashley FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 16,
+      "batch": 1
+    },
+    {
+      "club": "Beaconsfield Town",
+      "ground_candidate": "Holloways Park",
+      "postcode": "HP9 2SF",
+      "lat": 51.593448,
+      "lon": -0.629682,
+      "raw_lines": [
+        "Holloways Park",
+        "Windsor Road",
+        "Beaconsfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Beaconsfield Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 17,
+      "batch": 1
+    },
+    {
+      "club": "Bearsted",
+      "ground_candidate": "Otham Sports Club",
+      "postcode": "ME15 8RG",
+      "lat": 51.245125,
+      "lon": 0.571523,
+      "raw_lines": [
+        "Otham Sports Club",
+        "Honey Lane",
+        "off White Horse Lane",
+        "Otham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bearsted FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 18,
+      "batch": 1
+    },
+    {
+      "club": "Bedfont",
+      "ground_candidate": "The Orchard",
+      "postcode": "TW14 9QT",
+      "lat": 51.461099,
+      "lon": -0.426235,
+      "raw_lines": [
+        "The Orchard",
+        "Hatton Lane",
+        "Bedfont"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bedfont FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 19,
+      "batch": 1
+    },
+    {
+      "club": "Bedworth United",
+      "ground_candidate": "The Oval",
+      "postcode": "CV12 8NN",
+      "lat": 52.476584,
+      "lon": -1.47132,
+      "raw_lines": [
+        "The Oval",
+        "Coventry Road",
+        "Bedworth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bedworth United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 20,
+      "batch": 1
+    },
+    {
+      "club": "Belper Town",
+      "ground_candidate": "Raygar Stadium",
+      "postcode": "DE56 1BA",
+      "lat": 53.027173,
+      "lon": -1.487326,
+      "raw_lines": [
+        "Raygar Stadium",
+        "Bridge Street",
+        "Belper"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Belper Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 21,
+      "batch": 1
+    },
+    {
+      "club": "Belper United",
+      "ground_candidate": "Coronation Park",
+      "postcode": "NG16 3HB",
+      "lat": 53.01484,
+      "lon": -1.29749,
+      "raw_lines": [
+        "Eastwood Community FC",
+        "Coronation Park",
+        "Chewton Street",
+        "Eastwood"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Belper United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 22,
+      "batch": 1
+    },
+    {
+      "club": "Bemerton Heath Harlequins",
+      "ground_candidate": "A-Class Arena",
+      "postcode": "SP2 9DT",
+      "lat": 51.081095,
+      "lon": -1.835819,
+      "raw_lines": [
+        "A-Class Arena",
+        "Western Way",
+        "Bemerton Heath",
+        "Salisbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bemerton Heath Harlequins FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 23,
+      "batch": 1
+    },
+    {
+      "club": "Benfleet",
+      "ground_candidate": "Woodside Park",
+      "postcode": "SS7 4PA",
+      "lat": 51.578887,
+      "lon": 0.564674,
+      "raw_lines": [
+        "Woodside Park",
+        "Manor Road",
+        "Benfleet"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Benfleet FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 24,
+      "batch": 1
+    },
+    {
+      "club": "Bexhill United",
+      "ground_candidate": "The Polegrove",
+      "postcode": "TN39 3HA",
+      "lat": 50.837352,
+      "lon": 0.461268,
+      "raw_lines": [
+        "The Polegrove",
+        "Brockley Lane",
+        "Bexhill on Sea"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bexhill United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 25,
+      "batch": 1
+    },
+    {
+      "club": "Biggleswade FC",
+      "ground_candidate": "The Eyrie",
+      "postcode": "MK44 3LW",
+      "lat": 52.128794,
+      "lon": -0.413841,
+      "raw_lines": [
+        "Bedford Town FC",
+        "The Eyrie",
+        "Meadow Lane",
+        "Cardington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Biggleswade FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 26,
+      "batch": 2
+    },
+    {
+      "club": "Biggleswade Town",
+      "ground_candidate": "Sonning Finance Stadium",
+      "postcode": "SG18 9JT",
+      "lat": 52.076852,
+      "lon": -0.268841,
+      "raw_lines": [
+        "Sonning Finance Stadium",
+        "Langford Road",
+        "Biggleswade"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Biggleswade Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 27,
+      "batch": 2
+    },
+    {
+      "club": "Biggleswade United",
+      "ground_candidate": "Verdant Stadium",
+      "postcode": "SG18 0AA",
+      "lat": 52.094861,
+      "lon": -0.267674,
+      "raw_lines": [
+        "Verdant Stadium",
+        "Fairfield Road",
+        "Biggleswade"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Biggleswade United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 28,
+      "batch": 2
+    },
+    {
+      "club": "Bishop Auckland",
+      "ground_candidate": "Heritage Park",
+      "postcode": "DL14 9AE",
+      "lat": 54.638212,
+      "lon": -1.693621,
+      "raw_lines": [
+        "Heritage Park",
+        "Stadium Way",
+        "Bishop Auckland"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bishop Auckland FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 29,
+      "batch": 2
+    },
+    {
+      "club": "Blackstones",
+      "ground_candidate": "Blackstones Sports & Social Club",
+      "postcode": "PE9 1SH",
+      "lat": 52.662248,
+      "lon": -0.469514,
+      "raw_lines": [
+        "Blackstones Sports & Social Club",
+        "Lincoln Road",
+        "Stamford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Blackstones AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 30,
+      "batch": 2
+    },
+    {
+      "club": "Bognor Regis Town",
+      "ground_candidate": "MKM Arena",
+      "postcode": "PO21 2TY",
+      "lat": 50.786986,
+      "lon": -0.690217,
+      "raw_lines": [
+        "MKM Arena",
+        "Nyewood Lane",
+        "Bognor Regis"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bognor Regis Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 31,
+      "batch": 2
+    },
+    {
+      "club": "Boldmere St Michaels",
+      "ground_candidate": "Trevor Brown Memorial Ground",
+      "postcode": "B73 5RY",
+      "lat": 52.541748,
+      "lon": -1.842389,
+      "raw_lines": [
+        "Trevor Brown Memorial Ground",
+        "Church Road",
+        "Boldmere"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Boldmere St Michaels FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 32,
+      "batch": 2
+    },
+    {
+      "club": "Boro Rangers",
+      "ground_candidate": "Phoenix Park",
+      "postcode": "TS4 3JW",
+      "lat": 54.542771,
+      "lon": -1.230584,
+      "raw_lines": [
+        "Phoenix Park",
+        "Saltergill Avenue",
+        "Middlesbrough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Boro Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 33,
+      "batch": 2
+    },
+    {
+      "club": "Boston Town",
+      "ground_candidate": "Tattershall Road",
+      "postcode": "PE21 9LR",
+      "lat": 52.991668,
+      "lon": -0.038035,
+      "raw_lines": [
+        "Tattershall Road",
+        "Boston"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Boston Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 34,
+      "batch": 2
+    },
+    {
+      "club": "Bottesford Town",
+      "ground_candidate": "Barrett Steel Stadium",
+      "postcode": "DN17 2TQ",
+      "lat": 53.554568,
+      "lon": -0.672969,
+      "raw_lines": [
+        "Barrett Steel Stadium",
+        "Birch Park",
+        "Ontario Road",
+        "Bottesford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bottesford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 35,
+      "batch": 2
+    },
+    {
+      "club": "Bourne Town",
+      "ground_candidate": "Abbey Lawn",
+      "postcode": "PE10 9EN",
+      "lat": 52.766307,
+      "lon": -0.371734,
+      "raw_lines": [
+        "Abbey Lawn",
+        "Abbey Road",
+        "Bourne"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bourne Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 36,
+      "batch": 2
+    },
+    {
+      "club": "Bowers & Pitsea",
+      "ground_candidate": "Len Salmon Stadium",
+      "postcode": "SS13 2BE",
+      "lat": 51.574047,
+      "lon": 0.518124,
+      "raw_lines": [
+        "Len Salmon Stadium",
+        "Crown Avenue",
+        "off Kenneth Road",
+        "Pitsea"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bowers & Pitsea FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 37,
+      "batch": 2
+    },
+    {
+      "club": "Bradford Park Avenue",
+      "ground_candidate": "Horsfall Community Stadium",
+      "postcode": "BD6 1JQ",
+      "lat": 53.755886,
+      "lon": -1.776183,
+      "raw_lines": [
+        "Horsfall Community Stadium",
+        "Cemetery Road",
+        "Bradford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bradford (Park Avenue) FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 38,
+      "batch": 2
+    },
+    {
+      "club": "Bradford Town",
+      "ground_candidate": "Bradford Sports & Social Club",
+      "postcode": "BA15 1EE",
+      "lat": 51.339427,
+      "lon": -2.243809,
+      "raw_lines": [
+        "Bradford Sports & Social Club",
+        "Trowbridge Road",
+        "Bradford on Avon"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bradford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 39,
+      "batch": 2
+    },
+    {
+      "club": "Brantham Athletic",
+      "ground_candidate": "Brantham Leisure Centre",
+      "postcode": "CO11 1RZ",
+      "lat": 51.957793,
+      "lon": 1.058991,
+      "raw_lines": [
+        "Brantham Leisure Centre",
+        "New Village",
+        "Brantham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Brantham Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 40,
+      "batch": 2
+    },
+    {
+      "club": "Bridgwater United",
+      "ground_candidate": "Fairfax Park",
+      "postcode": "TA6 4TZ",
+      "lat": 51.131847,
+      "lon": -2.989419,
+      "raw_lines": [
+        "Fairfax Park",
+        "College Way",
+        "Bridgwater"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bridgwater United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 41,
+      "batch": 2
+    },
+    {
+      "club": "Bridlington Town",
+      "ground_candidate": "Mounting Systems Stadium",
+      "postcode": "YO16 7LN",
+      "lat": 54.089155,
+      "lon": -0.19731,
+      "raw_lines": [
+        "Mounting Systems Stadium",
+        "Queensgate",
+        "Bridlington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bridlington Town AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 42,
+      "batch": 2
+    },
+    {
+      "club": "Brightlingsea Regent",
+      "ground_candidate": "North Road",
+      "postcode": "CO7 0PL",
+      "lat": 51.81583,
+      "lon": 1.026378,
+      "raw_lines": [
+        "North Road",
+        "Brightlingsea"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Brightlingsea Regent FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 43,
+      "batch": 2
+    },
+    {
+      "club": "Brislington",
+      "ground_candidate": "Popular Insulation Stadium",
+      "postcode": "BS4 5RS",
+      "lat": 51.429654,
+      "lon": -2.524834,
+      "raw_lines": [
+        "Popular Insulation Stadium",
+        "Ironmould Lane",
+        "Brislington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Brislington FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 44,
+      "batch": 2
+    },
+    {
+      "club": "Broadfields United",
+      "ground_candidate": "Tithe Farm Social Club",
+      "postcode": "HA2 0XH",
+      "lat": 51.56988,
+      "lon": -0.365086,
+      "raw_lines": [
+        "Rayners Lane FC",
+        "Tithe Farm Social Club",
+        "151 Rayners Lane",
+        "Harrow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Broadfields United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 45,
+      "batch": 2
+    },
+    {
+      "club": "Brockenhurst",
+      "ground_candidate": "Meadens Skoda Arena",
+      "postcode": "SO42 7RE",
+      "lat": 50.82075,
+      "lon": -1.575842,
+      "raw_lines": [
+        "Meadens Skoda Arena",
+        "Grigg Lane",
+        "Brockenhurst"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Brockenhurst FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 46,
+      "batch": 2
+    },
+    {
+      "club": "Buckhurst Hill",
+      "ground_candidate": "Roding Lane",
+      "postcode": "IG9 6BJ",
+      "lat": 51.62645,
+      "lon": 0.055911,
+      "raw_lines": [
+        "Roding Lane",
+        "Buckhurst Hill"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Buckhurst Hill FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 47,
+      "batch": 2
+    },
+    {
+      "club": "Buckland Athletic",
+      "ground_candidate": "VX3 Stadium",
+      "postcode": "TQ12 5JU",
+      "lat": 50.513236,
+      "lon": -3.595684,
+      "raw_lines": [
+        "VX3 Stadium",
+        "Homers Heath",
+        "Kingskerswell Road",
+        "Newton Abbot"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Buckland Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 48,
+      "batch": 2
+    },
+    {
+      "club": "Burnham",
+      "ground_candidate": "1878 Stadium",
+      "postcode": "SL1 8JG",
+      "lat": 51.537885,
+      "lon": -0.666769,
+      "raw_lines": [
+        "1878 Stadium",
+        "Wymers Wood Road",
+        "Burnham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Burnham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 49,
+      "batch": 2
+    },
+    {
+      "club": "Burscough",
+      "ground_candidate": "Community Ground",
+      "postcode": "L40 0SD",
+      "lat": 53.60582,
+      "lon": -2.847022,
+      "raw_lines": [
+        "Community Ground",
+        "Bobby Langton Way",
+        "Mart Lane",
+        "Burscough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Burscough FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 50,
+      "batch": 2
+    },
+    {
+      "club": "Camberley Town",
+      "ground_candidate": "Krooner Park",
+      "postcode": "GU15 2QW",
+      "lat": 51.326568,
+      "lon": -0.757377,
+      "raw_lines": [
+        "Krooner Park",
+        "Wilton Road",
+        "Camberley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Camberley Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 51,
+      "batch": 3
+    },
+    {
+      "club": "Campion",
+      "ground_candidate": "Anytime Couriers Stadium",
+      "postcode": "BD9 5AT",
+      "lat": 53.810913,
+      "lon": -1.783875,
+      "raw_lines": [
+        "Anytime Couriers Stadium",
+        "Manningham Mills SA",
+        "Scotchman Road",
+        "Bradford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Campion AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 52,
+      "batch": 3
+    },
+    {
+      "club": "Canvey Island",
+      "ground_candidate": "Steve's Taxis Stadium",
+      "postcode": "SS8 7PX",
+      "lat": 51.5165,
+      "lon": 0.615703,
+      "raw_lines": [
+        "Steve's Taxis Stadium",
+        "Park Lane",
+        "Canvey Island"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Canvey Island FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 53,
+      "batch": 3
+    },
+    {
+      "club": "Carlton Town",
+      "ground_candidate": "Bill Stokeld Stadium",
+      "postcode": "NG14 5HN",
+      "lat": 52.971427,
+      "lon": -1.062741,
+      "raw_lines": [
+        "Bill Stokeld Stadium",
+        "Stoke Lane (off A612 bypass)",
+        "Gedling"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Carlton Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 54,
+      "batch": 3
+    },
+    {
+      "club": "Chadderton",
+      "ground_candidate": "Emplas Commercial North Stadium",
+      "postcode": "OL9 0JT",
+      "lat": 53.547583,
+      "lon": -2.143959,
+      "raw_lines": [
+        "Emplas Commercial North Stadium",
+        "Andrew Street",
+        "Chadderton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Chadderton FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 55,
+      "batch": 3
+    },
+    {
+      "club": "Charnock Richard",
+      "ground_candidate": "Mossie Park",
+      "postcode": "PR7 5LZ",
+      "lat": 53.632194,
+      "lon": -2.673288,
+      "raw_lines": [
+        "Mossie Park",
+        "Charter Lane",
+        "Charnock Richard"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Charnock Richard FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 56,
+      "batch": 3
+    },
+    {
+      "club": "Cheadle Town",
+      "ground_candidate": "Ground Up Solutions Stadium",
+      "postcode": "SK8 2AN",
+      "lat": 53.392151,
+      "lon": -2.203378,
+      "raw_lines": [
+        "Ground Up Solutions Stadium",
+        "Park Road",
+        "Cheadle"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cheadle Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 57,
+      "batch": 3
+    },
+    {
+      "club": "Chipstead",
+      "ground_candidate": "NRT Stadium",
+      "postcode": "CR5 3SF",
+      "lat": 51.29215,
+      "lon": -0.170212,
+      "raw_lines": [
+        "NRT Stadium",
+        "High Road",
+        "Chipstead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Chipstead FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 58,
+      "batch": 3
+    },
+    {
+      "club": "Chislehurst Glebe",
+      "ground_candidate": "Foxbury",
+      "postcode": "BR7 6HA",
+      "lat": 51.419765,
+      "lon": 0.08382,
+      "raw_lines": [
+        "Foxbury",
+        "Foxbury Avenue",
+        "Chislehurst"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Chislehurst Glebe FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 59,
+      "batch": 3
+    },
+    {
+      "club": "Christchurch",
+      "ground_candidate": "MA Hart Stadium",
+      "postcode": "BH23 6DY",
+      "lat": 50.772842,
+      "lon": -1.8176,
+      "raw_lines": [
+        "MA Hart Stadium",
+        "Hurn Bridge Sports Club",
+        "Avon Causeway",
+        "Christchurch"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Christchurch FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 60,
+      "batch": 3
+    },
+    {
+      "club": "Cinderford Town",
+      "ground_candidate": "Causeway Ground",
+      "postcode": "GL14 2QH",
+      "lat": 51.8269,
+      "lon": -2.493302,
+      "raw_lines": [
+        "Causeway Ground",
+        "Edge Hills Road",
+        "Hilldene",
+        "Cinderford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cinderford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 61,
+      "batch": 3
+    },
+    {
+      "club": "Cirencester Town",
+      "ground_candidate": "Corinium Stadium",
+      "postcode": "GL7 1HS",
+      "lat": 51.711759,
+      "lon": -1.944539,
+      "raw_lines": [
+        "Corinium Stadium",
+        "Kingshill Lane",
+        "Cirencester"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cirencester Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 62,
+      "batch": 3
+    },
+    {
+      "club": "Clapton Community",
+      "ground_candidate": "Old Spotted Dog",
+      "postcode": "E7 9NP",
+      "lat": 51.542234,
+      "lon": 0.021468,
+      "raw_lines": [
+        "Old Spotted Dog",
+        "Upton Lane",
+        "London"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Clapton Community FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 63,
+      "batch": 3
+    },
+    {
+      "club": "Clay Cross Town",
+      "ground_candidate": "Mill Lane",
+      "postcode": "S45 9QF",
+      "lat": 53.172013,
+      "lon": -1.432399,
+      "raw_lines": [
+        "Mill Lane",
+        "Holmgate",
+        "Clay Cross"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Clay Cross Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 64,
+      "batch": 3
+    },
+    {
+      "club": "Clevedon Town",
+      "ground_candidate": "North Somerset Community Stadium",
+      "postcode": "BS21 6TG",
+      "lat": 51.423302,
+      "lon": -2.836761,
+      "raw_lines": [
+        "North Somerset Community Stadium",
+        "Davis Lane",
+        "Clevedon"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Clevedon Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 65,
+      "batch": 3
+    },
+    {
+      "club": "Clitheroe",
+      "ground_candidate": "Loom Loft Stadium",
+      "postcode": "BB7 1LZ",
+      "lat": 53.871663,
+      "lon": -2.385446,
+      "raw_lines": [
+        "Loom Loft Stadium",
+        "Shawbridge",
+        "off Pendle Road",
+        "Clitheroe"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Clitheroe FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 66,
+      "batch": 3
+    },
+    {
+      "club": "Cobham",
+      "ground_candidate": "Reg Madwick Stadium",
+      "postcode": "KT11 1AA",
+      "lat": 51.329232,
+      "lon": -0.416391,
+      "raw_lines": [
+        "Reg Madwick Stadium",
+        "Leg o' Mutton Field",
+        "Downside Bridge Road",
+        "Cobham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cobham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 67,
+      "batch": 3
+    },
+    {
+      "club": "Cockfosters",
+      "ground_candidate": "Cockfosters Sports Ground",
+      "postcode": "EN4 9JG",
+      "lat": 51.653244,
+      "lon": -0.151855,
+      "raw_lines": [
+        "Cockfosters Sports Ground",
+        "Chalk Lane",
+        "Cockfosters"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cockfosters FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 68,
+      "batch": 3
+    },
+    {
+      "club": "Coleshill Town",
+      "ground_candidate": "Pack Meadow",
+      "postcode": "B46 3JQ",
+      "lat": 52.482593,
+      "lon": -1.698395,
+      "raw_lines": [
+        "Pack Meadow",
+        "Packington Lane",
+        "Coleshill"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Coleshill Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 69,
+      "batch": 3
+    },
+    {
+      "club": "Colney Heath",
+      "ground_candidate": "Recreation Ground",
+      "postcode": "AL4 0NP",
+      "lat": 51.741176,
+      "lon": -0.260882,
+      "raw_lines": [
+        "Recreation Ground",
+        "High Street",
+        "Colney Heath"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Colney Heath FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 70,
+      "batch": 3
+    },
+    {
+      "club": "Concord Rangers",
+      "ground_candidate": "Aspect Arena",
+      "postcode": "SS8 0HH",
+      "lat": 51.512555,
+      "lon": 0.575473,
+      "raw_lines": [
+        "Aspect Arena",
+        "Thames Road",
+        "Canvey Island"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Concord Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 71,
+      "batch": 3
+    },
+    {
+      "club": "Congleton Town",
+      "ground_candidate": "Cleric Stadium",
+      "postcode": "CW12 4GA",
+      "lat": 53.161772,
+      "lon": -2.220819,
+      "raw_lines": [
+        "Cleric Stadium",
+        "Booth Street",
+        "off Crescent Road",
+        "Congleton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Congleton Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 72,
+      "batch": 3
+    },
+    {
+      "club": "Corby Town",
+      "ground_candidate": "Steel Park",
+      "postcode": "NN17 2AE",
+      "lat": 52.506582,
+      "lon": -0.718515,
+      "raw_lines": [
+        "Steel Park",
+        "Jimmy Kane Way",
+        "Rockingham Road",
+        "Corby"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Corby Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 73,
+      "batch": 3
+    },
+    {
+      "club": "Corinthian-Casuals",
+      "ground_candidate": "King George's Field",
+      "postcode": "KT6 7NA",
+      "lat": 51.372159,
+      "lon": -0.287195,
+      "raw_lines": [
+        "King George's Field",
+        "Hook Rise South",
+        "Tolworth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Corinthian Casuals FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 74,
+      "batch": 3
+    },
+    {
+      "club": "Corinthian",
+      "ground_candidate": "Corinthian Sports Club",
+      "postcode": "DA3 8LY",
+      "lat": 51.382195,
+      "lon": 0.296503,
+      "raw_lines": [
+        "Corinthian Sports Club",
+        "Gay Dawn Farm",
+        "Valley Road",
+        "Longfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Corinthian FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 75,
+      "batch": 3
+    },
+    {
+      "club": "Cornard United",
+      "ground_candidate": "Blackhouse Lane Stadium",
+      "postcode": "CO10 0NL",
+      "lat": 52.021916,
+      "lon": 0.753708,
+      "raw_lines": [
+        "Blackhouse Lane Stadium",
+        "off Bures Road",
+        "Great Cornard"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cornard United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 76,
+      "batch": 4
+    },
+    {
+      "club": "Corsham Town",
+      "ground_candidate": "Southbank",
+      "postcode": "SN13 9HS",
+      "lat": 51.430545,
+      "lon": -2.172217,
+      "raw_lines": [
+        "Southbank",
+        "Lacock Road",
+        "Corsham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Corsham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 77,
+      "batch": 4
+    },
+    {
+      "club": "Coton Green",
+      "ground_candidate": "Dave Henderson Memorial Ground",
+      "postcode": "B78 3RX",
+      "lat": 52.610041,
+      "lon": -1.697648,
+      "raw_lines": [
+        "Dave Henderson Memorial Ground",
+        "New Mill Lane",
+        "Fazeley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Coton Green FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 78,
+      "batch": 4
+    },
+    {
+      "club": "Coventry Sphinx",
+      "ground_candidate": "Cameron Slater Arena",
+      "postcode": "CV3 1WA",
+      "lat": 52.401438,
+      "lon": -1.472062,
+      "raw_lines": [
+        "Cameron Slater Arena",
+        "Sphinx Drive",
+        "Coventry"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Coventry Sphinx FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 79,
+      "batch": 4
+    },
+    {
+      "club": "Coventry United",
+      "ground_candidate": "Butts Park Arena",
+      "postcode": "CV1 3GE",
+      "lat": 52.406252,
+      "lon": -1.525907,
+      "raw_lines": [
+        "Butts Park Arena",
+        "Butts Park",
+        "Coventry"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Coventry United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 80,
+      "batch": 4
+    },
+    {
+      "club": "Cowes Sports",
+      "ground_candidate": "The Zilch Waste Stadium",
+      "postcode": "PO31 7NT",
+      "lat": 50.75856,
+      "lon": -1.30893,
+      "raw_lines": [
+        "The Zilch Waste Stadium",
+        "Westwood Park",
+        "Reynolds Close",
+        "Cowes"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cowes Sports FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 81,
+      "batch": 4
+    },
+    {
+      "club": "Crawley Down Gatwick",
+      "ground_candidate": "Haven Centre",
+      "postcode": "RH10 4LJ",
+      "lat": 51.126855,
+      "lon": -0.074638,
+      "raw_lines": [
+        "Haven Centre",
+        "Hophurst Lane",
+        "Crawley Down"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Crawley Down Gatwick FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 82,
+      "batch": 4
+    },
+    {
+      "club": "Cray Valley (PM)",
+      "ground_candidate": "Artic Stadium",
+      "postcode": "SE9 5HT",
+      "lat": 51.450626,
+      "lon": 0.034726,
+      "raw_lines": [
+        "Artic Stadium",
+        "Middle Park Avenue",
+        "Eltham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cray Valley (PM) FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 83,
+      "batch": 4
+    },
+    {
+      "club": "Cribbs",
+      "ground_candidate": "South West Pitch-side Trauma Care Stadium",
+      "postcode": "BS10 7TB",
+      "lat": 51.51627,
+      "lon": -2.627604,
+      "raw_lines": [
+        "South West Pitch-side Trauma Care Stadium",
+        "The Lawns",
+        "Station Road",
+        "Henbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Cribbs FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 84,
+      "batch": 4
+    },
+    {
+      "club": "Crowborough Athletic",
+      "ground_candidate": "Charles Centrury Community Stadium",
+      "postcode": "TN6 3BU",
+      "lat": 51.041993,
+      "lon": 0.165587,
+      "raw_lines": [
+        "Charles Centrury Community Stadium",
+        "Aldervale Cottages",
+        "Crowborough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Crowborough Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 85,
+      "batch": 4
+    },
+    {
+      "club": "Daventry Town",
+      "ground_candidate": "Master Abrasives Stadium",
+      "postcode": "NN11 4NS",
+      "lat": 52.257223,
+      "lon": -1.189787,
+      "raw_lines": [
+        "Master Abrasives Stadium",
+        "Elderstubbs",
+        "Browns Road",
+        "Daventry"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Daventry Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 86,
+      "batch": 4
+    },
+    {
+      "club": "Deal Town",
+      "ground_candidate": "Charles Sports Ground",
+      "postcode": "CT14 9AU",
+      "lat": 51.216427,
+      "lon": 1.389121,
+      "raw_lines": [
+        "Charles Sports Ground",
+        "St Leonards Road",
+        "Deal"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Deal Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 87,
+      "batch": 4
+    },
+    {
+      "club": "Deeping Rangers",
+      "ground_candidate": "Haydon Whitham Stadium",
+      "postcode": "PE6 8LQ",
+      "lat": 52.688621,
+      "lon": -0.305441,
+      "raw_lines": [
+        "Haydon Whitham Stadium",
+        "Outgang Road",
+        "Market Deeping"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Deeping Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 88,
+      "batch": 4
+    },
+    {
+      "club": "Dereham Town",
+      "ground_candidate": "Aldiss Park",
+      "postcode": "NR20 3PX",
+      "lat": 52.682467,
+      "lon": 0.972503,
+      "raw_lines": [
+        "Aldiss Park",
+        "Norwich Road",
+        "Dereham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Dereham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 89,
+      "batch": 4
+    },
+    {
+      "club": "Didcot Town",
+      "ground_candidate": "Christchurch Homes Loop Meadow Stadium",
+      "postcode": "OX11 7GA",
+      "lat": 51.61412,
+      "lon": -1.239751,
+      "raw_lines": [
+        "Christchurch Homes Loop Meadow Stadium",
+        "Bowmont Water",
+        "Ladygrove",
+        "Didcot"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Didcot Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 90,
+      "batch": 4
+    },
+    {
+      "club": "Dorchester Town",
+      "ground_candidate": "Avenue Stadium",
+      "postcode": "DT1 2RY",
+      "lat": 50.700547,
+      "lon": -2.445623,
+      "raw_lines": [
+        "Avenue Stadium",
+        "Weymouth Avenue",
+        "Dorchester"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Dorchester Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 91,
+      "batch": 4
+    },
+    {
+      "club": "Downham Town",
+      "ground_candidate": "Memorial Field",
+      "postcode": "PE38 9QE",
+      "lat": 52.609451,
+      "lon": 0.384373,
+      "raw_lines": [
+        "Memorial Field",
+        "Lynn Road",
+        "Downham Market"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Downham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 92,
+      "batch": 4
+    },
+    {
+      "club": "Downton",
+      "ground_candidate": "Brian Whithead Sports & Social Club",
+      "postcode": "SP5 3NF",
+      "lat": 50.992389,
+      "lon": -1.762965,
+      "raw_lines": [
+        "Brian Whithead Sports & Social Club",
+        "Wick Lane",
+        "Downton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Downton FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 93,
+      "batch": 4
+    },
+    {
+      "club": "Droitwich Spa",
+      "ground_candidate": "Droitwich Spa Leisure Centre",
+      "postcode": "WR9 0RZ",
+      "lat": 52.269201,
+      "lon": -2.164965,
+      "raw_lines": [
+        "Droitwich Spa Leisure Centre",
+        "Briar Mill",
+        "Droitwich"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Droitwich Spa FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 94,
+      "batch": 4
+    },
+    {
+      "club": "Dudley Town",
+      "ground_candidate": "Guardian Warehousing Arena",
+      "postcode": "WV13 3BB",
+      "lat": 52.591944,
+      "lon": -2.065991,
+      "raw_lines": [
+        "Sporting Khalsa FC",
+        "Guardian Warehousing Arena",
+        "Noose Lane",
+        "Willenhall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Dudley Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 95,
+      "batch": 4
+    },
+    {
+      "club": "AFC Dunstable",
+      "ground_candidate": "Creasey Park",
+      "postcode": "LU6 1BB",
+      "lat": 51.892857,
+      "lon": -0.539143,
+      "raw_lines": [
+        "Dunstable Town FC",
+        "Creasey Park",
+        "Creasey Park Drive",
+        "Dunstable"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Dunstable FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 96,
+      "batch": 4
+    },
+    {
+      "club": "Dunston",
+      "ground_candidate": "UTS Stadium",
+      "postcode": "NE11 9JL",
+      "lat": 54.955462,
+      "lon": -1.650442,
+      "raw_lines": [
+        "UTS Stadium",
+        "Wellington Road",
+        "Gateshead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Dunston FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 97,
+      "batch": 4
+    },
+    {
+      "club": "Easington Sports",
+      "ground_candidate": "Addison Road",
+      "postcode": "OX16 9DH",
+      "lat": 52.047316,
+      "lon": -1.3399,
+      "raw_lines": [
+        "Addison Road",
+        "Easington Estate",
+        "Banbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Easington Sports FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 98,
+      "batch": 4
+    },
+    {
+      "club": "East Cowes Victoria Athletic",
+      "ground_candidate": "Beatrice Avenue",
+      "postcode": "PO32 6PA",
+      "lat": 50.744657,
+      "lon": -1.277046,
+      "raw_lines": [
+        "Beatrice Avenue",
+        "Whippingham",
+        "East Cowes"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "East Cowes Victoria Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 99,
+      "batch": 4
+    },
+    {
+      "club": "East Grinstead Town",
+      "ground_candidate": "Vistavis Community Stadium",
+      "postcode": "RH19 3LS",
+      "lat": 51.131344,
+      "lon": -0.002041,
+      "raw_lines": [
+        "Vistavis Community Stadium",
+        "College Lane",
+        "East Court",
+        "East Grinstead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "East Grinstead Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 100,
+      "batch": 4
+    },
+    {
+      "club": "Eastwood Community",
+      "ground_candidate": "Coronation Park",
+      "postcode": "NG16 3HB",
+      "lat": 53.01484,
+      "lon": -1.29749,
+      "raw_lines": [
+        "Coronation Park",
+        "Chewton Street",
+        "Eastwood"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Eastwood Community FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 101,
+      "batch": 5
+    },
+    {
+      "club": "Egham Town",
+      "ground_candidate": "Runnymede Stadium",
+      "postcode": "TW20 8XD",
+      "lat": 51.426451,
+      "lon": -0.533292,
+      "raw_lines": [
+        "Runnymede Stadium",
+        "Wards Place",
+        "off Pond Road",
+        "Egham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Egham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 102,
+      "batch": 5
+    },
+    {
+      "club": "Ely City",
+      "ground_candidate": "Demcom Stadium",
+      "postcode": "CB6 2SH",
+      "lat": 52.410278,
+      "lon": 0.246944,
+      "raw_lines": [
+        "Demcom Stadium",
+        "Downham Road",
+        "Ely"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ely City FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 103,
+      "batch": 5
+    },
+    {
+      "club": "Enfield",
+      "ground_candidate": "Hertingfordbury Park",
+      "postcode": "SG13 8EX",
+      "lat": 51.791726,
+      "lon": -0.088407,
+      "raw_lines": [
+        "Hertford Town FC",
+        "Hertingfordbury Park",
+        "West Street",
+        "Hertford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Enfield FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 104,
+      "batch": 5
+    },
+    {
+      "club": "Epsom & Ewell",
+      "ground_candidate": "Cobham FC: Reg Madwick Stadium",
+      "postcode": "KT11 1AA",
+      "lat": 51.329232,
+      "lon": -0.416391,
+      "raw_lines": [
+        "Cobham FC: Reg Madwick Stadium",
+        "Leg o' Mutton Field",
+        "Downside Bridge Road",
+        "Cobham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Epsom & Ewell FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 105,
+      "batch": 5
+    },
+    {
+      "club": "Erith & Belvedere",
+      "ground_candidate": "Park View Road",
+      "postcode": "DA16 1SY",
+      "lat": 51.460321,
+      "lon": 0.116599,
+      "raw_lines": [
+        "Welling United FC",
+        "Park View Road",
+        "Welling"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Erith & Belvedere FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 106,
+      "batch": 5
+    },
+    {
+      "club": "Erith Town",
+      "ground_candidate": "Bayliss Avenue",
+      "postcode": "SE28 8NJ",
+      "lat": 51.504996,
+      "lon": 0.129722,
+      "raw_lines": [
+        "Sporting Club Thamesmead FC",
+        "Bayliss Avenue",
+        "Thamesmead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Erith Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 107,
+      "batch": 5
+    },
+    {
+      "club": "Euxton Villa",
+      "ground_candidate": "Jim Fowler Memorial Ground",
+      "postcode": "PR7 6HH",
+      "lat": 53.675821,
+      "lon": -2.69491,
+      "raw_lines": [
+        "Jim Fowler Memorial Ground",
+        "Runshaw Hall Lane",
+        "Euxton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Euxton Villa FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 108,
+      "batch": 5
+    },
+    {
+      "club": "Eversley & California",
+      "ground_candidate": "Eversley Sports Association",
+      "postcode": "RG27 0NS",
+      "lat": 51.351455,
+      "lon": -0.856165,
+      "raw_lines": [
+        "Eversley Sports Association",
+        "Fox Lane",
+        "Eversley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Eversley & California FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 109,
+      "batch": 5
+    },
+    {
+      "club": "Exmouth Town",
+      "ground_candidate": "Complete Infrastructure Stadium",
+      "postcode": "EX8 3EE",
+      "lat": 50.626406,
+      "lon": -3.414549,
+      "raw_lines": [
+        "Complete Infrastructure Stadium",
+        "Southern Road",
+        "Exmouth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Exmouth Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 110,
+      "batch": 5
+    },
+    {
+      "club": "Eynesbury Rovers",
+      "ground_candidate": "Alfred Hall Memorial Ground",
+      "postcode": "PE19 2SF",
+      "lat": 52.217645,
+      "lon": -0.268834,
+      "raw_lines": [
+        "Alfred Hall Memorial Ground",
+        "Hall Road",
+        "Eynesbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Eynesbury Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 111,
+      "batch": 5
+    },
+    {
+      "club": "Fairford Town",
+      "ground_candidate": "Acorn Property Group Stadium",
+      "postcode": "GL7 4AX",
+      "lat": 51.707488,
+      "lon": -1.76763,
+      "raw_lines": [
+        "Acorn Property Group Stadium",
+        "Cinder Lane",
+        "London Road",
+        "Fairford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Fairford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 112,
+      "batch": 5
+    },
+    {
+      "club": "Falmouth Town",
+      "ground_candidate": "Bickland Park",
+      "postcode": "TR11 4PB",
+      "lat": 50.156039,
+      "lon": -5.098601,
+      "raw_lines": [
+        "Bickland Park",
+        "Bickland Water Road",
+        "Falmouth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Falmouth Town AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 113,
+      "batch": 5
+    },
+    {
+      "club": "Fareham Town",
+      "ground_candidate": "Cams Alders Stadium",
+      "postcode": "PO14 1RH",
+      "lat": 50.845487,
+      "lon": -1.190216,
+      "raw_lines": [
+        "Cams Alders Stadium",
+        "Palmerston Drive",
+        "Fareham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Fareham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 114,
+      "batch": 5
+    },
+    {
+      "club": "Faversham Strike Force",
+      "ground_candidate": "The Belmont Stadium",
+      "postcode": "CT5 1QP",
+      "lat": 51.353102,
+      "lon": 1.028707,
+      "raw_lines": [
+        "Whitstable Town FC",
+        "The Belmont Stadium",
+        "Belmont Road",
+        "Whitstable"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Faversham Strike Force FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 115,
+      "batch": 5
+    },
+    {
+      "club": "Faversham Town",
+      "ground_candidate": "Aquatherm Stadium",
+      "postcode": "ME13 8ND",
+      "lat": 51.306808,
+      "lon": 0.895518,
+      "raw_lines": [
+        "Aquatherm Stadium",
+        "Salters Lane",
+        "Faversham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Faversham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 116,
+      "batch": 5
+    },
+    {
+      "club": "FC Peterborough",
+      "ground_candidate": "Millfields AutoParts Stadium",
+      "postcode": "PE1 4PE",
+      "lat": 52.59499,
+      "lon": -0.227042,
+      "raw_lines": [
+        "Millfields AutoParts Stadium",
+        "Recreation Ground",
+        "Chestnut Avenue",
+        "Dogsthorpe"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "FC Peterborough",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 117,
+      "batch": 5
+    },
+    {
+      "club": "FC St Helens",
+      "ground_candidate": "SMS Pro Soccer Park",
+      "postcode": "WA10 6TD",
+      "lat": 53.461318,
+      "lon": -2.749697,
+      "raw_lines": [
+        "SMS Pro Soccer Park",
+        "Windleshaw Road",
+        "St Helens"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "FC St Helens",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 118,
+      "batch": 5
+    },
+    {
+      "club": "Felixstowe & Walton United",
+      "ground_candidate": "The Martello Ground",
+      "postcode": "IP11 9HT",
+      "lat": 51.970733,
+      "lon": 1.355828,
+      "raw_lines": [
+        "The Martello Ground",
+        "Dellwood Avenue",
+        "Felixstowe"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Felixstowe & Walton United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 119,
+      "batch": 5
+    },
+    {
+      "club": "Fisher",
+      "ground_candidate": "St Pauls Sports Ground",
+      "postcode": "SE16 6NT",
+      "lat": 51.506282,
+      "lon": -0.040123,
+      "raw_lines": [
+        "St Pauls Sports Ground",
+        "Salter Road",
+        "Rotherhithe"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Fisher FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 120,
+      "batch": 5
+    },
+    {
+      "club": "Flackwell Heath",
+      "ground_candidate": "Wilks Park",
+      "postcode": "HP10 9EA",
+      "lat": 51.604257,
+      "lon": -0.712119,
+      "raw_lines": [
+        "Wilks Park",
+        "Magpie Lane",
+        "Heath End Road",
+        "Fairford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Flackwell Heath FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 121,
+      "batch": 5
+    },
+    {
+      "club": "Fleet Town",
+      "ground_candidate": "Easy as HGV Stadium",
+      "postcode": "GU51 5FA",
+      "lat": 51.276355,
+      "lon": -0.849989,
+      "raw_lines": [
+        "Easy as HGV Stadium",
+        "Calthorpe Park",
+        "Crookham Road",
+        "Fleet"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Fleet Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 122,
+      "batch": 5
+    },
+    {
+      "club": "Forest Row",
+      "ground_candidate": "Jubilee Field",
+      "postcode": "RH10 1LQ",
+      "lat": 51.115314,
+      "lon": -0.167697,
+      "raw_lines": [
+        "Three Bridges FC",
+        "Jubilee Field",
+        "Three Bridges Road",
+        "Crawley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Forest Row FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 123,
+      "batch": 5
+    },
+    {
+      "club": "Frenford",
+      "ground_candidate": "Frenford Club",
+      "postcode": "IG1 3PS",
+      "lat": 51.573392,
+      "lon": 0.057393,
+      "raw_lines": [
+        "Frenford Club",
+        "Jack Carter Centre",
+        "The Drive",
+        "Ilford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Frenford FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 124,
+      "batch": 5
+    },
+    {
+      "club": "Frickley Athletic",
+      "ground_candidate": "Westfield Lane",
+      "postcode": "WF9 2EQ",
+      "lat": 53.598022,
+      "lon": -1.292242,
+      "raw_lines": [
+        "Westfield Lane",
+        "South Elmsall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Frickley Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 125,
+      "batch": 5
+    },
+    {
+      "club": "Glossop North End",
+      "ground_candidate": "The Asgard Engineering Stadium",
+      "postcode": "SK13 7AJ",
+      "lat": 53.445538,
+      "lon": -1.957943,
+      "raw_lines": [
+        "The Asgard Engineering Stadium",
+        "Surrey Street",
+        "Glossop"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Glossop North End FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 126,
+      "batch": 6
+    },
+    {
+      "club": "Godmanchester Rovers",
+      "ground_candidate": "The Peter Hodson Community Ground",
+      "postcode": "PE29 2LQ",
+      "lat": 52.30918,
+      "lon": -0.160501,
+      "raw_lines": [
+        "The Peter Hodson Community Ground",
+        "Bearscroft Lane",
+        "Godmanchester"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Godmanchester Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 127,
+      "batch": 6
+    },
+    {
+      "club": "Golcar United",
+      "ground_candidate": "Skye Direct Stadium",
+      "postcode": "HD7 4AZ",
+      "lat": 53.641848,
+      "lon": -1.843776,
+      "raw_lines": [
+        "Skye Direct Stadium",
+        "Longfield Avenue",
+        "Golcar"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Golcar United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 128,
+      "batch": 6
+    },
+    {
+      "club": "Gorleston",
+      "ground_candidate": "Wellesley Recreation Ground",
+      "postcode": "NR30 1EY",
+      "lat": 52.612619,
+      "lon": 1.736184,
+      "raw_lines": [
+        "Great Yarmouth Town FC",
+        "Wellesley Recreation Ground",
+        "Sandown Road",
+        "Great Yarmouth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Gorleston FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 129,
+      "batch": 6
+    },
+    {
+      "club": "Grantham Town",
+      "ground_candidate": "South Kesteven Stadium",
+      "postcode": "NG31 7XQ",
+      "lat": 52.905771,
+      "lon": -0.666776,
+      "raw_lines": [
+        "South Kesteven Stadium",
+        "Trent Road",
+        "Grantham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Grantham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 130,
+      "batch": 6
+    },
+    {
+      "club": "Grays Athletic",
+      "ground_candidate": "EMR Stadium",
+      "postcode": "RM18 8NL",
+      "lat": 51.470122,
+      "lon": 0.363331,
+      "raw_lines": [
+        "Tilbury FC",
+        "EMR Stadium",
+        "Chadfields",
+        "St Chad's Road",
+        "Tilbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Grays Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 131,
+      "batch": 6
+    },
+    {
+      "club": "Great Wakering Rovers",
+      "ground_candidate": "Burroughs Park",
+      "postcode": "SS3 0HE",
+      "lat": 51.55567,
+      "lon": 0.797831,
+      "raw_lines": [
+        "Burroughs Park",
+        "Little Wakering",
+        "Hall Lane",
+        "Great Wakering"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Great Wakering Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 132,
+      "batch": 6
+    },
+    {
+      "club": "Gresley Rovers",
+      "ground_candidate": "Moat Ground",
+      "postcode": "DE11 9RE",
+      "lat": 52.761809,
+      "lon": -1.563942,
+      "raw_lines": [
+        "Moat Ground",
+        "Moat Street",
+        "Church Gresley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Gresley Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 133,
+      "batch": 6
+    },
+    {
+      "club": "Grimsby Borough",
+      "ground_candidate": "Bradley Football Development Centre",
+      "postcode": "DN37 0AG",
+      "lat": 53.546002,
+      "lon": -0.122733,
+      "raw_lines": [
+        "Bradley Football Development Centre",
+        "Bradley Road",
+        "Grimsby"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Grimsby Borough FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 134,
+      "batch": 6
+    },
+    {
+      "club": "Guernsey",
+      "ground_candidate": "Victoria Park",
+      "postcode": "GY2 4BB",
+      "lat": 49.47402,
+      "lon": -2.538714,
+      "raw_lines": [
+        "Victoria Park",
+        "Victoria Avenue",
+        "St Sampson",
+        "Guernsey"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Guernsey FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 135,
+      "batch": 6
+    },
+    {
+      "club": "Hackney Wick",
+      "ground_candidate": "Simarco Stadium",
+      "postcode": "CM8 1UN",
+      "lat": 51.799688,
+      "lon": 0.626646,
+      "raw_lines": [
+        "Witham Town FC",
+        "Simarco Stadium",
+        "Spa Road",
+        "Witham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hackney Wick FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 136,
+      "batch": 6
+    },
+    {
+      "club": "Hadley",
+      "ground_candidate": "Hadley Sports Ground",
+      "postcode": "EN5 3LD",
+      "lat": 51.642244,
+      "lon": -0.244229,
+      "raw_lines": [
+        "Hadley Sports Ground",
+        "Brickfield Road",
+        "Arkley",
+        "Barnet"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hadley FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 137,
+      "batch": 6
+    },
+    {
+      "club": "Hallam",
+      "ground_candidate": "Sandygate",
+      "postcode": "S10 5SE",
+      "lat": 53.376441,
+      "lon": -1.530919,
+      "raw_lines": [
+        "Sandygate",
+        "Sandygate Road",
+        "Crosspool",
+        "Sheffield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hallam FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 138,
+      "batch": 6
+    },
+    {
+      "club": "Hallen",
+      "ground_candidate": "Hallen Centre",
+      "postcode": "BS10 7RU",
+      "lat": 51.517164,
+      "lon": -2.65256,
+      "raw_lines": [
+        "Hallen Centre",
+        "Moorhouse Lane",
+        "Hallen"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hallen FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 139,
+      "batch": 6
+    },
+    {
+      "club": "Halstead Town",
+      "ground_candidate": "Millbank Stadium",
+      "postcode": "CO9 1HR",
+      "lat": 51.946542,
+      "lon": 0.632558,
+      "raw_lines": [
+        "Millbank Stadium",
+        "Rosemary Lane",
+        "Broton Industrial Estate",
+        "Halstead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Halstead Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 140,
+      "batch": 6
+    },
+    {
+      "club": "Hamble Club",
+      "ground_candidate": "Hamble Community Facility",
+      "postcode": "SO31 4TS",
+      "lat": 50.867733,
+      "lon": -1.330433,
+      "raw_lines": [
+        "Hamble Community Facility",
+        "Hamble Lane",
+        "Hamble le Rice"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hamble Club FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 141,
+      "batch": 6
+    },
+    {
+      "club": "Hamworthy Recreation",
+      "ground_candidate": "The Meyson Properties Stadium",
+      "postcode": "BH21 3AE",
+      "lat": 50.786276,
+      "lon": -1.952909,
+      "raw_lines": [
+        "The Meyson Properties Stadium",
+        "Hamworthy Club",
+        "Magna Road",
+        "Merley",
+        "Wimborne"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hamworthy Recreation FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 142,
+      "batch": 6
+    },
+    {
+      "club": "Handsworth",
+      "ground_candidate": "Express Worktops Stadium",
+      "postcode": "S80 1UJ",
+      "lat": 53.384294,
+      "lon": -1.39422,
+      "raw_lines": [
+        "Express Worktops Stadium",
+        "Olivers Mount",
+        "Dartnall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Handsworth FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 143,
+      "batch": 6
+    },
+    {
+      "club": "Hanley Town",
+      "ground_candidate": "Affpord Rent-a-car Stadium",
+      "postcode": "ST2 8AJ",
+      "lat": 53.028486,
+      "lon": -2.148592,
+      "raw_lines": [
+        "Affpord Rent-a-car Stadium",
+        "Abbey Lane",
+        "Bucknall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hanley Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 144,
+      "batch": 6
+    },
+    {
+      "club": "Harefield United",
+      "ground_candidate": "Preston Park",
+      "postcode": "UB9 6NE",
+      "lat": 51.601161,
+      "lon": -0.476605,
+      "raw_lines": [
+        "Preston Park",
+        "Breakspear Road North",
+        "Harefield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Harefield United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 145,
+      "batch": 6
+    },
+    {
+      "club": "Haringey Borough",
+      "ground_candidate": "CVS Van Hire Stadium",
+      "postcode": "N17 7JP",
+      "lat": 51.605625,
+      "lon": -0.09266,
+      "raw_lines": [
+        "CVS Van Hire Stadium",
+        "Coles Park",
+        "White Hart Lane",
+        "Tottenham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Haringey Borough FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 146,
+      "batch": 6
+    },
+    {
+      "club": "Harleston Town",
+      "ground_candidate": "Recreation Ground",
+      "postcode": "IP20 9DD",
+      "lat": 52.402402,
+      "lon": 1.29457,
+      "raw_lines": [
+        "Recreation Ground",
+        "Wilderness Lane",
+        "Harleston"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Harleston Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 147,
+      "batch": 6
+    },
+    {
+      "club": "Harrow Borough",
+      "ground_candidate": "Rogers Family Stadium",
+      "postcode": "HA2 8SS",
+      "lat": 51.55815,
+      "lon": -0.371351,
+      "raw_lines": [
+        "Rogers Family Stadium",
+        "Earlsmead",
+        "off Carlyon Avenue",
+        "South Harrow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Harrow Borough FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 148,
+      "batch": 6
+    },
+    {
+      "club": "Harwich & Parkeston",
+      "ground_candidate": "The Royal Oak",
+      "postcode": "CO12 4AA",
+      "lat": 51.935039,
+      "lon": 1.273483,
+      "raw_lines": [
+        "The Royal Oak",
+        "Main Road",
+        "Dovercourt"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Harwich & Parkeston FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 149,
+      "batch": 6
+    },
+    {
+      "club": "Hashtag United",
+      "ground_candidate": "Parkside",
+      "postcode": "RM15 4PX",
+      "lat": 51.503489,
+      "lon": 0.261312,
+      "raw_lines": [
+        "Aveley FC",
+        "Parkside",
+        "Park Lane",
+        "Aveley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hashtag United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 150,
+      "batch": 6
+    },
+    {
+      "club": "Hassocks",
+      "ground_candidate": "The Hassocks Hotel Beacon Ground",
+      "postcode": "BN6 9LU",
+      "lat": 50.919857,
+      "lon": -0.150604,
+      "raw_lines": [
+        "The Hassocks Hotel Beacon Ground",
+        "Brighton Road",
+        "Hassocks"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hassocks FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 151,
+      "batch": 7
+    },
+    {
+      "club": "Hastings United",
+      "ground_candidate": "Pilot Field",
+      "postcode": "TN34 2AX",
+      "lat": 50.874512,
+      "lon": 0.587097,
+      "raw_lines": [
+        "Pilot Field",
+        "Elphinstone Road",
+        "Hastings"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hastings United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 152,
+      "batch": 7
+    },
+    {
+      "club": "Haverhill Rovers",
+      "ground_candidate": "The New Croft",
+      "postcode": "CB9 0BW",
+      "lat": 52.087438,
+      "lon": 0.448283,
+      "raw_lines": [
+        "The New Croft",
+        "Chalkstone Way",
+        "Haverhill"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Haverhill Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 153,
+      "batch": 7
+    },
+    {
+      "club": "Hayes & Yeading United",
+      "ground_candidate": "SkyEx Community Stadium",
+      "postcode": "UB4 0SL",
+      "lat": 51.508276,
+      "lon": -0.394797,
+      "raw_lines": [
+        "SkyEx Community Stadium",
+        "Beaconsfield Road",
+        "Hayes"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hayes & Yeading United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 154,
+      "batch": 7
+    },
+    {
+      "club": "Haywards Heath Town",
+      "ground_candidate": "Hanbury Stadium",
+      "postcode": "RH16 3PT",
+      "lat": 51.000311,
+      "lon": -0.087413,
+      "raw_lines": [
+        "Hanbury Stadium",
+        "Allen Road",
+        "Haywards Heath"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Haywards Heath Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 155,
+      "batch": 7
+    },
+    {
+      "club": "Heacham",
+      "ground_candidate": "Heacham Sports Field",
+      "postcode": "PE31 7HG",
+      "lat": 52.911378,
+      "lon": 0.488825,
+      "raw_lines": [
+        "Heacham Sports Field",
+        "Station Road",
+        "Heacham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Heacham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 156,
+      "batch": 7
+    },
+    {
+      "club": "Heanor Town",
+      "ground_candidate": "The Town Ground",
+      "postcode": "DE75 7EN",
+      "lat": 53.011586,
+      "lon": -1.356027,
+      "raw_lines": [
+        "The Town Ground",
+        "Mayfield Avenue",
+        "Heanor"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Heanor Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 157,
+      "batch": 7
+    },
+    {
+      "club": "Hereford Pegasus",
+      "ground_candidate": "Old School Lane",
+      "postcode": "HR1 1EX",
+      "lat": 52.073924,
+      "lon": -2.712859,
+      "raw_lines": [
+        "Old School Lane",
+        "Hereford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hereford Pegasus FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 158,
+      "batch": 7
+    },
+    {
+      "club": "Herne Bay",
+      "ground_candidate": "Winch's Field",
+      "postcode": "CT6 5SG",
+      "lat": 51.36469,
+      "lon": 1.129952,
+      "raw_lines": [
+        "Winch's Field",
+        "Stanley Gardens",
+        "Herne Bay"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Herne Bay FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 159,
+      "batch": 7
+    },
+    {
+      "club": "Hertford Town",
+      "ground_candidate": "Hertingfordbury Park",
+      "postcode": "SG13 8EX",
+      "lat": 51.791726,
+      "lon": -0.088407,
+      "raw_lines": [
+        "Hertingfordbury Park",
+        "West Street",
+        "Hertford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hertford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 160,
+      "batch": 7
+    },
+    {
+      "club": "Heybridge Swifts",
+      "ground_candidate": "First Call Community Stadium",
+      "postcode": "CM9 8JA",
+      "lat": 51.744198,
+      "lon": 0.700613,
+      "raw_lines": [
+        "First Call Community Stadium",
+        "Scraley Road",
+        "Heybridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Heybridge Swifts FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 161,
+      "batch": 7
+    },
+    {
+      "club": "Highgate United",
+      "ground_candidate": "The Coppice",
+      "postcode": "B90 1PH",
+      "lat": 52.38905,
+      "lon": -1.84582,
+      "raw_lines": [
+        "The Coppice",
+        "Tythe Barn Lane",
+        "Shirley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Highgate United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 162,
+      "batch": 7
+    },
+    {
+      "club": "Highworth Town",
+      "ground_candidate": "Sports Pavilion",
+      "postcode": "SN6 7DD",
+      "lat": 51.627961,
+      "lon": -1.71368,
+      "raw_lines": [
+        "Sports Pavilion",
+        "Elms Recreation Ground",
+        "off The Green",
+        "Highworth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Highworth Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 163,
+      "batch": 7
+    },
+    {
+      "club": "Hilltop",
+      "ground_candidate": "Silver Jubilee Park",
+      "postcode": "NW9 7NE",
+      "lat": 51.57667,
+      "lon": -0.254081,
+      "raw_lines": [
+        "Hendon FC",
+        "Silver Jubilee Park",
+        "Townsend Lane",
+        "London"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hilltop FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 164,
+      "batch": 7
+    },
+    {
+      "club": "Hinckley",
+      "ground_candidate": "UK Flooring Stadium",
+      "postcode": "LE9 8FQ",
+      "lat": 52.572692,
+      "lon": -1.341223,
+      "raw_lines": [
+        "Barwell FC",
+        "UK Flooring Stadium",
+        "Kirkby Road",
+        "Barwell"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hinckley AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 165,
+      "batch": 7
+    },
+    {
+      "club": "Hollands & Blair",
+      "ground_candidate": "Star Meadow Sports Club",
+      "postcode": "ME7 3AL",
+      "lat": 51.371026,
+      "lon": 0.56255,
+      "raw_lines": [
+        "Star Meadow Sports Club",
+        "Darland Avenue",
+        "Gillingham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hollands & Blair FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 166,
+      "batch": 7
+    },
+    {
+      "club": "Holmesdale",
+      "ground_candidate": "RTL Group Stadium",
+      "postcode": "BR2 8HQ",
+      "lat": 51.37413,
+      "lon": 0.03742,
+      "raw_lines": [
+        "RTL Group Stadium",
+        "68 Oakley Road",
+        "Bromley Common"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Holmesdale FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 167,
+      "batch": 7
+    },
+    {
+      "club": "Holyport",
+      "ground_candidate": "Summerleaze Village",
+      "postcode": "SL6 8SP",
+      "lat": 51.539433,
+      "lon": -0.721219,
+      "raw_lines": [
+        "Summerleaze Village",
+        "Summerleaze Road",
+        "Maidenhead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Holyport FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 168,
+      "batch": 7
+    },
+    {
+      "club": "Horbury Town",
+      "ground_candidate": "Pulse Hire Ltd Stadium",
+      "postcode": "WF4 5BH",
+      "lat": 53.654177,
+      "lon": -1.553503,
+      "raw_lines": [
+        "Pulse Hire Ltd Stadium",
+        "Slazenger Sports Complex",
+        "Addingford",
+        "Horbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Horbury Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 169,
+      "batch": 7
+    },
+    {
+      "club": "Horden Community Welfare",
+      "ground_candidate": "Horden Community Welfare Park",
+      "postcode": "SR8 4LX",
+      "lat": 54.764488,
+      "lon": -1.31722,
+      "raw_lines": [
+        "Horden Community Welfare Park",
+        "Eden Street",
+        "Horden"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Horden Community Welfare FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 170,
+      "batch": 7
+    },
+    {
+      "club": "Horley Town",
+      "ground_candidate": "The New Defence",
+      "postcode": "RH6 8SP",
+      "lat": 51.175314,
+      "lon": -0.181858,
+      "raw_lines": [
+        "The New Defence",
+        "Anderson Way",
+        "Court Lodge Way",
+        "Horley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Horley Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 171,
+      "batch": 7
+    },
+    {
+      "club": "Horndean",
+      "ground_candidate": "Five Heads Park",
+      "postcode": "PO8 9NZ",
+      "lat": 50.917088,
+      "lon": -1.006078,
+      "raw_lines": [
+        "Five Heads Park",
+        "Five Heads Road",
+        "Horndean"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Horndean FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 172,
+      "batch": 7
+    },
+    {
+      "club": "Hucknall Town",
+      "ground_candidate": "Aerial Way",
+      "postcode": "NG15 6DW",
+      "lat": 53.026191,
+      "lon": -1.214845,
+      "raw_lines": [
+        "Aerial Way",
+        "Hucknall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hucknall Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 173,
+      "batch": 7
+    },
+    {
+      "club": "Hullbridge Sports",
+      "ground_candidate": "Hullbridge Sports & Social Club",
+      "postcode": "SS5 6BJ",
+      "lat": 51.615755,
+      "lon": 0.619355,
+      "raw_lines": [
+        "Hullbridge Sports & Social Club",
+        "Lower Road",
+        "Hullbridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hullbridge Sports FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 174,
+      "batch": 7
+    },
+    {
+      "club": "Hutton",
+      "ground_candidate": "New Lodge",
+      "postcode": "CM12 9SA",
+      "lat": 51.621786,
+      "lon": 0.403281,
+      "raw_lines": [
+        "Billericay Town FC",
+        "New Lodge",
+        "Blunts Wall Road",
+        "Billericay"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hutton FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 175,
+      "batch": 7
+    },
+    {
+      "club": "Hythe & Dibden",
+      "ground_candidate": "Hythe Garage Stadium",
+      "postcode": "SO45 5TN",
+      "lat": 50.867724,
+      "lon": -1.419784,
+      "raw_lines": [
+        "Hythe Garage Stadium",
+        "Clayfields",
+        "Claypits Lane",
+        "Dibden"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Hythe & Dibden FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 176,
+      "batch": 8
+    },
+    {
+      "club": "Ilford",
+      "ground_candidate": "Cricklefield Stadium",
+      "postcode": "IG1 1FY",
+      "lat": 51.560034,
+      "lon": 0.091206,
+      "raw_lines": [
+        "Cricklefield Stadium",
+        "Cricklefield Place",
+        "off High Road",
+        "Seven Kings"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ilford FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 177,
+      "batch": 8
+    },
+    {
+      "club": "Ipswich Wanderers",
+      "ground_candidate": "GBS Stadium",
+      "postcode": "IP4 3NR",
+      "lat": 52.065045,
+      "lon": 1.207521,
+      "raw_lines": [
+        "GBS Stadium",
+        "Humber Doucy Sports Centre",
+        "Humber Doucy Lane",
+        "Ipswich"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ipswich Wanderers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 178,
+      "batch": 8
+    },
+    {
+      "club": "Irlam",
+      "ground_candidate": "Silver Street",
+      "postcode": "M44 6HR",
+      "lat": 53.457483,
+      "lon": -2.413771,
+      "raw_lines": [
+        "Silver Street",
+        "Irlam"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Irlam FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 179,
+      "batch": 8
+    },
+    {
+      "club": "Ivybridge Town",
+      "ground_candidate": "Erme Valley",
+      "postcode": "PL21 9ES",
+      "lat": 50.382924,
+      "lon": -3.924728,
+      "raw_lines": [
+        "Erme Valley",
+        "Ermington Road",
+        "Ivybridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ivybridge Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 180,
+      "batch": 8
+    },
+    {
+      "club": "Jersey Bulls",
+      "ground_candidate": "Springfield Stadium",
+      "postcode": "JE2 4LF",
+      "lat": 49.191565,
+      "lon": -2.100728,
+      "raw_lines": [
+        "Springfield Stadium",
+        "Janvrin Road",
+        "St Helier"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Jersey Bulls FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 181,
+      "batch": 8
+    },
+    {
+      "club": "Kennington",
+      "ground_candidate": "The Homelands",
+      "postcode": "TN26 1NJ",
+      "lat": 51.105001,
+      "lon": 0.856021,
+      "raw_lines": [
+        "Ashford United FC",
+        "The Homelands",
+        "Ashford Road",
+        "Kingsnorth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Kennington FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 182,
+      "batch": 8
+    },
+    {
+      "club": "Kidlington",
+      "ground_candidate": "Yarnton Road",
+      "postcode": "OX5 1AT",
+      "lat": 51.817086,
+      "lon": -1.289962,
+      "raw_lines": [
+        "Yarnton Road",
+        "Kidlington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Kidlington FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 183,
+      "batch": 8
+    },
+    {
+      "club": "Kidsgrove Athletic",
+      "ground_candidate": "Autonet Insurance Stadium",
+      "postcode": "ST7 1DH",
+      "lat": 53.081122,
+      "lon": -2.250608,
+      "raw_lines": [
+        "Autonet Insurance Stadium",
+        "Hollinwood Close",
+        "off Hollinwood Road",
+        "Kidsgrove"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Kidsgrove Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 184,
+      "batch": 8
+    },
+    {
+      "club": "Kimberley Miners Welfare",
+      "ground_candidate": "Stag Ground",
+      "postcode": "NG16 2NB",
+      "lat": 52.996232,
+      "lon": -1.250579,
+      "raw_lines": [
+        "Stag Ground",
+        "Nottingham Road",
+        "Kimberley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Kimberley Miners Welfare FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 185,
+      "batch": 8
+    },
+    {
+      "club": "Kings Langley",
+      "ground_candidate": "Orbital Fasteners Stadium",
+      "postcode": "WD4 8BS",
+      "lat": 51.722689,
+      "lon": -0.450956,
+      "raw_lines": [
+        "Orbital Fasteners Stadium",
+        "Hempstead Road",
+        "King's Langley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Kings Langley FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 186,
+      "batch": 8
+    },
+    {
+      "club": "Kirkley & Pakefield",
+      "ground_candidate": "Walmer Road",
+      "postcode": "NR33 7LE",
+      "lat": 52.45627,
+      "lon": 1.726558,
+      "raw_lines": [
+        "Walmer Road",
+        "Lowestoft"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Kirkley & Pakefield FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 187,
+      "batch": 8
+    },
+    {
+      "club": "Knaphill",
+      "ground_candidate": "Brookwood Country Park",
+      "postcode": "GU21 2AY",
+      "lat": 51.310332,
+      "lon": -0.614784,
+      "raw_lines": [
+        "Brookwood Country Park",
+        "Redding Way",
+        "Lower Guildford Road",
+        "Knaphill"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Knaphill FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 188,
+      "batch": 8
+    },
+    {
+      "club": "Knaresborough Town",
+      "ground_candidate": "Hummel Stadium",
+      "postcode": "HG5 8LF",
+      "lat": 54.004473,
+      "lon": -1.449664,
+      "raw_lines": [
+        "Hummel Stadium",
+        "Manse Lane",
+        "Knaresborough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Knaresborough Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 189,
+      "batch": 8
+    },
+    {
+      "club": "Lancing",
+      "ground_candidate": "Sussex FA HQ",
+      "postcode": "BN15 9AX",
+      "lat": 50.829842,
+      "lon": -0.324112,
+      "raw_lines": [
+        "Sussex FA HQ",
+        "Culver Road",
+        "Lancing"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lancing FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 190,
+      "batch": 8
+    },
+    {
+      "club": "Larkhall Athletic",
+      "ground_candidate": "Plain Ham",
+      "postcode": "BA1 8DJ",
+      "lat": 51.403318,
+      "lon": -2.349753,
+      "raw_lines": [
+        "Plain Ham",
+        "Charlcombe Lane",
+        "Bath"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Larkhall Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 191,
+      "batch": 8
+    },
+    {
+      "club": "Laverstock & Ford",
+      "ground_candidate": "The Dell",
+      "postcode": "SP1 1QX",
+      "lat": 51.079379,
+      "lon": -1.774429,
+      "raw_lines": [
+        "The Dell",
+        "Church Road",
+        "Laverstock"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Laverstock & Ford FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 192,
+      "batch": 8
+    },
+    {
+      "club": "Leverstock Green",
+      "ground_candidate": "Lords Builders Merchants Stadium",
+      "postcode": "HP2 4NQ",
+      "lat": 51.749908,
+      "lon": -0.426233,
+      "raw_lines": [
+        "Lords Builders Merchants Stadium",
+        "Pancake Lane",
+        "Leverstock Green"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Leverstock Green FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 193,
+      "batch": 8
+    },
+    {
+      "club": "Lichfield City",
+      "ground_candidate": "Brownsfield Road",
+      "postcode": "WS13 6AY",
+      "lat": 52.693322,
+      "lon": -1.813739,
+      "raw_lines": [
+        "Brownsfield Road",
+        "Eastern Avenue",
+        "Lichfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lichfield City FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 194,
+      "batch": 8
+    },
+    {
+      "club": "Lincoln United",
+      "ground_candidate": "Ashby Avenue",
+      "postcode": "LN6 0DY",
+      "lat": 53.210785,
+      "lon": -0.585346,
+      "raw_lines": [
+        "Ashby Avenue",
+        "Hartsholme",
+        "Lincoln"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lincoln United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 195,
+      "batch": 8
+    },
+    {
+      "club": "Lingfield",
+      "ground_candidate": "Godstone Road Recreation Ground",
+      "postcode": "RH7 6BT",
+      "lat": 51.179317,
+      "lon": -0.027599,
+      "raw_lines": [
+        "Godstone Road Recreation Ground",
+        "Godstone Road",
+        "Lingfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lingfield FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 196,
+      "batch": 8
+    },
+    {
+      "club": "Litherland REMYCA",
+      "ground_candidate": "Litherland Sports Park",
+      "postcode": "L21 7LA",
+      "lat": 53.47898,
+      "lon": -2.986807,
+      "raw_lines": [
+        "Litherland Sports Park",
+        "Boundary Road",
+        "Liverpool"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Litherland Remyca FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 197,
+      "batch": 8
+    },
+    {
+      "club": "Little Common",
+      "ground_candidate": "Little Common Recreation Ground",
+      "postcode": "TN39 4PG",
+      "lat": 50.848919,
+      "lon": 0.439407,
+      "raw_lines": [
+        "Little Common Recreation Ground",
+        "Peartree Lane",
+        "Bexhill-on-Sea"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Little Common FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 198,
+      "batch": 8
+    },
+    {
+      "club": "Littlehampton Town",
+      "ground_candidate": "The Sportsfield",
+      "postcode": "BN17 6BD",
+      "lat": 50.808116,
+      "lon": -0.530046,
+      "raw_lines": [
+        "The Sportsfield",
+        "St Flora's Road",
+        "Littlehampton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Littlehampton Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 199,
+      "batch": 8
+    },
+    {
+      "club": "Liversedge",
+      "ground_candidate": "Clayborn Ground",
+      "postcode": "WF15 8DF",
+      "lat": 53.717675,
+      "lon": -1.711787,
+      "raw_lines": [
+        "Clayborn Ground",
+        "Quaker Lane",
+        "Hightown Road",
+        "Cleckheaton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Liversedge FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 200,
+      "batch": 8
+    },
+    {
+      "club": "London Lions",
+      "ground_candidate": "Rowley Lane Sports Ground",
+      "postcode": "EN5 3HW",
+      "lat": 51.651666,
+      "lon": -0.246731,
+      "raw_lines": [
+        "Rowley Lane Sports Ground",
+        "Rowley Lane",
+        "High Barnet"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "London Lions FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 201,
+      "batch": 9
+    },
+    {
+      "club": "Long Eaton United",
+      "ground_candidate": "Grange Park",
+      "postcode": "NG10 2EF",
+      "lat": 52.896417,
+      "lon": -1.25627,
+      "raw_lines": [
+        "Grange Park",
+        "Station Road",
+        "Long Eaton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Long Eaton United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 202,
+      "batch": 9
+    },
+    {
+      "club": "Longlevens",
+      "ground_candidate": "Saw Mills End",
+      "postcode": "GL4 3DG",
+      "lat": 51.864841,
+      "lon": -2.209665,
+      "raw_lines": [
+        "Saw Mills End",
+        "off Corinium Avenue",
+        "Barnwood",
+        "Gloucester"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Longlevens FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 203,
+      "batch": 9
+    },
+    {
+      "club": "Loughborough Students",
+      "ground_candidate": "Loughborough University Stadium",
+      "postcode": "LE11 3AJ",
+      "lat": 52.756975,
+      "lon": -1.242555,
+      "raw_lines": [
+        "Loughborough University Stadium",
+        "Holywell Sports Complex",
+        "Holywell Park",
+        "Loughborough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Loughborough Students FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 204,
+      "batch": 9
+    },
+    {
+      "club": "Lower Breck",
+      "ground_candidate": "Anfield Sports & Community Centre",
+      "postcode": "L6 0AG",
+      "lat": 53.42781,
+      "lon": -2.943123,
+      "raw_lines": [
+        "Anfield Sports & Community Centre",
+        "Breckside Park",
+        "Liverpool"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lower Breck FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 205,
+      "batch": 9
+    },
+    {
+      "club": "Lutterworth Town",
+      "ground_candidate": "Dunley Way",
+      "postcode": "LE17 4NP",
+      "lat": 52.465167,
+      "lon": -1.20312,
+      "raw_lines": [
+        "Dunley Way",
+        "off Crescent Road",
+        "Lutterworth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lutterworth Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 206,
+      "batch": 9
+    },
+    {
+      "club": "Lye Town",
+      "ground_candidate": "Sports Ground",
+      "postcode": "DY9 7DH",
+      "lat": 52.456663,
+      "lon": -2.120066,
+      "raw_lines": [
+        "Sports Ground",
+        "Stourbridge Road",
+        "Lye"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Lye Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 207,
+      "batch": 9
+    },
+    {
+      "club": "Malmesbury Victoria",
+      "ground_candidate": "The Flying Monk Ground",
+      "postcode": "SN16 9FG",
+      "lat": 51.589652,
+      "lon": -2.102496,
+      "raw_lines": [
+        "The Flying Monk Ground",
+        "Gloucester Road",
+        "Malmesbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Malmesbury Victoria FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 208,
+      "batch": 9
+    },
+    {
+      "club": "Mangotsfield United",
+      "ground_candidate": "Cossham Street",
+      "postcode": "BS16 9EN",
+      "lat": 51.482845,
+      "lon": -2.481547,
+      "raw_lines": [
+        "Cossham Street",
+        "Mangotsfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Mangotsfield United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 209,
+      "batch": 9
+    },
+    {
+      "club": "March Town United",
+      "ground_candidate": "Sports Ground",
+      "postcode": "PE15 8HS",
+      "lat": 52.554339,
+      "lon": 0.085994,
+      "raw_lines": [
+        "Sports Ground",
+        "Robin Goodfellows Lane",
+        "March"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "March Town United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 210,
+      "batch": 9
+    },
+    {
+      "club": "Marlow",
+      "ground_candidate": "Alfred Davis Memorial Ground",
+      "postcode": "SL7 3ED",
+      "lat": 51.577063,
+      "lon": -0.77398,
+      "raw_lines": [
+        "Alfred Davis Memorial Ground",
+        "Oak Tree Road",
+        "Marlow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Marlow FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 211,
+      "batch": 9
+    },
+    {
+      "club": "Matlock Town",
+      "ground_candidate": "Causeway Lane",
+      "postcode": "DE4 3AR",
+      "lat": 53.137091,
+      "lon": -1.551723,
+      "raw_lines": [
+        "Causeway Lane",
+        "Matlock"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Matlock Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 212,
+      "batch": 9
+    },
+    {
+      "club": "Merstham",
+      "ground_candidate": "Hybrid Fitness Stadium",
+      "postcode": "RH1 3QB",
+      "lat": 51.258175,
+      "lon": -0.146658,
+      "raw_lines": [
+        "Hybrid Fitness Stadium",
+        "Weldon Way",
+        "Merstham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Merstham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 213,
+      "batch": 9
+    },
+    {
+      "club": "Metropolitan Police",
+      "ground_candidate": "Imber Court Sports Club",
+      "postcode": "KT8 0BT",
+      "lat": 51.390486,
+      "lon": -0.351742,
+      "raw_lines": [
+        "Imber Court Sports Club",
+        "Ember Lane",
+        "East Molesey"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Metropolitan Police FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 214,
+      "batch": 9
+    },
+    {
+      "club": "Mickleover",
+      "ground_candidate": "Don Arnott Arena",
+      "postcode": "DE3 9FB",
+      "lat": 52.923703,
+      "lon": -1.533971,
+      "raw_lines": [
+        "Don Arnott Arena",
+        "Station Road",
+        "Mickleover"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Mickleover FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 215,
+      "batch": 9
+    },
+    {
+      "club": "Midhurst & Easebourne",
+      "ground_candidate": "Rotherfield",
+      "postcode": "GU29 9BE",
+      "lat": 50.994216,
+      "lon": -0.734267,
+      "raw_lines": [
+        "Rotherfield",
+        "Dodsley Grove",
+        "Easebourne"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Midhurst & Easebourne FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 216,
+      "batch": 9
+    },
+    {
+      "club": "Mildenhall Town",
+      "ground_candidate": "Riverside Stadium",
+      "postcode": "IP28 7HG",
+      "lat": 52.342443,
+      "lon": 0.515039,
+      "raw_lines": [
+        "Riverside Stadium",
+        "Recreation Way",
+        "Mildenhall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Mildenhall Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 217,
+      "batch": 9
+    },
+    {
+      "club": "Milton Keynes Irish",
+      "ground_candidate": "MK Irish Centre",
+      "postcode": "MK2 2HX",
+      "lat": 51.995819,
+      "lon": -0.711955,
+      "raw_lines": [
+        "MK Irish Centre",
+        "Manor Fields",
+        "Watling Street",
+        "Bletchley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Milton Keynes Irish FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 218,
+      "batch": 9
+    },
+    {
+      "club": "Moneyfields",
+      "ground_candidate": "John Jenkins Stadium",
+      "postcode": "PO3 6LA",
+      "lat": 50.81451,
+      "lon": -1.060784,
+      "raw_lines": [
+        "John Jenkins Stadium",
+        "Moneyfield Avenue",
+        "Portsmouth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Moneyfields FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 219,
+      "batch": 9
+    },
+    {
+      "club": "Mossley",
+      "ground_candidate": "Seel Park",
+      "postcode": "OL5 0ES",
+      "lat": 53.516422,
+      "lon": -2.044337,
+      "raw_lines": [
+        "Seel Park",
+        "Market Street",
+        "Mossley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Mossley AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 220,
+      "batch": 9
+    },
+    {
+      "club": "Moulton",
+      "ground_candidate": "Brunting Road",
+      "postcode": "NN3 7QF",
+      "lat": 52.285353,
+      "lon": -0.85807,
+      "raw_lines": [
+        "Brunting Road",
+        "Moulton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Moulton FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 221,
+      "batch": 9
+    },
+    {
+      "club": "Mulbarton Wanderers",
+      "ground_candidate": "The Abode Arena at Mulberry Park",
+      "postcode": "NR14 8AE",
+      "lat": 52.562004,
+      "lon": 1.238401,
+      "raw_lines": [
+        "The Abode Arena at Mulberry Park",
+        "Long Lane",
+        "Mulbarton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Mulbarton Wanderers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 222,
+      "batch": 9
+    },
+    {
+      "club": "Nantwich Town",
+      "ground_candidate": "Optimum Pay Stadium",
+      "postcode": "CW5 5BS",
+      "lat": 53.072682,
+      "lon": -2.528494,
+      "raw_lines": [
+        "Optimum Pay Stadium",
+        "Water Lode",
+        "Nantwich"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Nantwich Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 223,
+      "batch": 9
+    },
+    {
+      "club": "Newark Town",
+      "ground_candidate": "YMCA Sports Village",
+      "postcode": "NG24 4FH",
+      "lat": 53.061571,
+      "lon": -0.799714,
+      "raw_lines": [
+        "YMCA Sports Village",
+        "Lord Hawke Way",
+        "Newark"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Newark Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 224,
+      "batch": 9
+    },
+    {
+      "club": "Newhaven",
+      "ground_candidate": "The Trafalgar Ground",
+      "postcode": "BN9 9DA",
+      "lat": 50.785249,
+      "lon": 0.049948,
+      "raw_lines": [
+        "The Trafalgar Ground",
+        "Fort Road",
+        "Newhaven"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Newhaven FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 225,
+      "batch": 9
+    },
+    {
+      "club": "Newmarket Town",
+      "ground_candidate": "The Tristel Stadium",
+      "postcode": "CB8 8BT",
+      "lat": 52.239316,
+      "lon": 0.411389,
+      "raw_lines": [
+        "The Tristel Stadium",
+        "Cricket Field Road (off New Cheveley Road)",
+        "Newmarket"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Newmarket Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 226,
+      "batch": 10
+    },
+    {
+      "club": "Newport Pagnell Town",
+      "ground_candidate": "Willen Road",
+      "postcode": "MK16 0DF",
+      "lat": 52.076934,
+      "lon": -0.721052,
+      "raw_lines": [
+        "Willen Road",
+        "Newport Pagnell"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Newport Pagnell Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 227,
+      "batch": 10
+    },
+    {
+      "club": "Newton Aycliffe",
+      "ground_candidate": "Moore Lane Park",
+      "postcode": "DL5 5AG",
+      "lat": 54.617311,
+      "lon": -1.557261,
+      "raw_lines": [
+        "Moore Lane Park",
+        "Moore Lane",
+        "Newton Aycliffe"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Newton Aycliffe FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 228,
+      "batch": 10
+    },
+    {
+      "club": "North Ferriby",
+      "ground_candidate": "Dransfield Stadium",
+      "postcode": "HU14 3AB",
+      "lat": 53.717368,
+      "lon": -0.500178,
+      "raw_lines": [
+        "Dransfield Stadium",
+        "Grange Lane",
+        "Church Road",
+        "North Ferriby"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "North Ferriby FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 229,
+      "batch": 10
+    },
+    {
+      "club": "North Greenford United",
+      "ground_candidate": "Berkeley Fields",
+      "postcode": "UB6 0NX",
+      "lat": 51.547668,
+      "lon": -0.338716,
+      "raw_lines": [
+        "Berkeley Fields",
+        "Berkeley Avenue",
+        "Greenford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "North Greenford United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 230,
+      "batch": 10
+    },
+    {
+      "club": "North Leigh",
+      "ground_candidate": "Eynsham Hall Park Sports Ground",
+      "postcode": "OX29 6SL",
+      "lat": 51.812103,
+      "lon": -1.428046,
+      "raw_lines": [
+        "Eynsham Hall Park Sports Ground",
+        "Woodstock Road",
+        "North Leigh"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "North Leigh FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 231,
+      "batch": 10
+    },
+    {
+      "club": "Northampton ON Chenecks",
+      "ground_candidate": "Old Northamptonians Sports Ground",
+      "postcode": "NN1 5RT",
+      "lat": 52.240379,
+      "lon": -0.864669,
+      "raw_lines": [
+        "Old Northamptonians Sports Ground",
+        "Billing Road",
+        "Northampton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Northampton On Chenecks FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 232,
+      "batch": 10
+    },
+    {
+      "club": "Northampton Sileby Rangers",
+      "ground_candidate": "O'Riordan Bond Sradium",
+      "postcode": "NN3 6FR",
+      "lat": 52.275583,
+      "lon": -0.852269,
+      "raw_lines": [
+        "O'Riordan Bond Sradium",
+        "Fernie Fields",
+        "Talavera Way",
+        "Northampton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Northampton Sileby Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 233,
+      "batch": 10
+    },
+    {
+      "club": "Northwood",
+      "ground_candidate": "Skyline Roofing Stadium",
+      "postcode": "HA6 1HR",
+      "lat": 51.600833,
+      "lon": -0.415622,
+      "raw_lines": [
+        "Skyline Roofing Stadium",
+        "Chestnut Avenue",
+        "Northwood"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Northwood FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 234,
+      "batch": 10
+    },
+    {
+      "club": "Nuneaton Town",
+      "ground_candidate": "The Oval",
+      "postcode": "CV12 8NN",
+      "lat": 52.476584,
+      "lon": -1.47132,
+      "raw_lines": [
+        "Bedworth United FC",
+        "The Oval",
+        "Coventry Road",
+        "Bedworth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Nuneaton Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 235,
+      "batch": 10
+    },
+    {
+      "club": "Ossett United",
+      "ground_candidate": "Ingfield",
+      "postcode": "WF5 9HA",
+      "lat": 53.681547,
+      "lon": -1.577532,
+      "raw_lines": [
+        "Ingfield",
+        "Prospect Road",
+        "Ossett"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ossett United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 236,
+      "batch": 10
+    },
+    {
+      "club": "Padiham",
+      "ground_candidate": "Ruby Civil Arena",
+      "postcode": "BB12 8LE",
+      "lat": 53.80243,
+      "lon": -2.321354,
+      "raw_lines": [
+        "Ruby Civil Arena",
+        "Arbories Memorial Sports Ground",
+        "Well Street",
+        "Padiham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Padiham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 237,
+      "batch": 10
+    },
+    {
+      "club": "Pagham",
+      "ground_candidate": "Nyetimber Lane",
+      "postcode": "PO21 3JY",
+      "lat": 50.778523,
+      "lon": -0.732868,
+      "raw_lines": [
+        "Nyetimber Lane",
+        "Pagham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Pagham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 238,
+      "batch": 10
+    },
+    {
+      "club": "Parkgate",
+      "ground_candidate": "Rotherham Hospice Community Stadium",
+      "postcode": "S62 6LA",
+      "lat": 53.458122,
+      "lon": -1.334533,
+      "raw_lines": [
+        "Rotherham Hospice Community Stadium",
+        "Green Lane",
+        "Rawmarsh"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Parkgate FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 239,
+      "batch": 10
+    },
+    {
+      "club": "Paulton Rovers",
+      "ground_candidate": "Winterfield Stadium",
+      "postcode": "BS39 7RF",
+      "lat": 51.30257,
+      "lon": -2.495523,
+      "raw_lines": [
+        "Winterfield Stadium",
+        "Winterfield Road",
+        "Paulton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Paulton Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 240,
+      "batch": 10
+    },
+    {
+      "club": "Peacehaven & Telscombe",
+      "ground_candidate": "Piddinghoe Avenue",
+      "postcode": "BN10 8RJ",
+      "lat": 50.793462,
+      "lon": 0.012974,
+      "raw_lines": [
+        "Piddinghoe Avenue",
+        "Peacehaven"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Peacehaven & Telscombe FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 241,
+      "batch": 10
+    },
+    {
+      "club": "Penistone Church",
+      "ground_candidate": "Parker Roofing Memorial Ground",
+      "postcode": "S36 6AT",
+      "lat": 53.524016,
+      "lon": -1.624397,
+      "raw_lines": [
+        "Parker Roofing Memorial Ground",
+        "Church View Road",
+        "Penistone"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Penistone Church FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 242,
+      "batch": 10
+    },
+    {
+      "club": "Penn & Tylers Green",
+      "ground_candidate": "French School Meadow",
+      "postcode": "HP10 8LG",
+      "lat": 51.636308,
+      "lon": -0.689087,
+      "raw_lines": [
+        "French School Meadow",
+        "Elm Road",
+        "Penn"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Penn & Tylers Green FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 243,
+      "batch": 10
+    },
+    {
+      "club": "Petersfield Town",
+      "ground_candidate": "The Smartspaces Stadium",
+      "postcode": "GU31 4BW",
+      "lat": 51.007301,
+      "lon": -0.927415,
+      "raw_lines": [
+        "The Smartspaces Stadium",
+        "Love Lane",
+        "Petersfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Petersfield Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 244,
+      "batch": 10
+    },
+    {
+      "club": "Phoenix Sports",
+      "ground_candidate": "The Christopher Russell Stadium",
+      "postcode": "DA7 6JT",
+      "lat": 51.458934,
+      "lon": 0.170402,
+      "raw_lines": [
+        "The Christopher Russell Stadium",
+        "Mayplace Road East",
+        "Barnehurst"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Phoenix Sports FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 245,
+      "batch": 10
+    },
+    {
+      "club": "Pickering Town",
+      "ground_candidate": "Recreation Club",
+      "postcode": "YO18 7DB",
+      "lat": 54.242704,
+      "lon": -0.778245,
+      "raw_lines": [
+        "Recreation Club",
+        "Mill Lane",
+        "off Malton Road",
+        "Pickering"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Pickering Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 246,
+      "batch": 10
+    },
+    {
+      "club": "Pontefract Collieries",
+      "ground_candidate": "Hunters Stadium",
+      "postcode": "WF8 4QF",
+      "lat": 53.696544,
+      "lon": -1.314115,
+      "raw_lines": [
+        "Hunters Stadium",
+        "Beecham Lane",
+        "Pontefract"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Pontefract Collieries FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 247,
+      "batch": 10
+    },
+    {
+      "club": "Portishead Town",
+      "ground_candidate": "Bristol Road",
+      "postcode": "BS20 6QG",
+      "lat": 51.474354,
+      "lon": -2.763618,
+      "raw_lines": [
+        "Bristol Road",
+        "Portishead"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Portishead Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 248,
+      "batch": 10
+    },
+    {
+      "club": "Portland United",
+      "ground_candidate": "Camp & Satherley Stadium",
+      "postcode": "DT5 1DP",
+      "lat": 50.551023,
+      "lon": -2.431212,
+      "raw_lines": [
+        "Camp & Satherley Stadium",
+        "New Grove Corner",
+        "off Grove Road",
+        "Portland"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Portland United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 249,
+      "batch": 10
+    },
+    {
+      "club": "Potters Bar Town",
+      "ground_candidate": "Lantern Stadium",
+      "postcode": "EN6 1QB",
+      "lat": 51.696206,
+      "lon": -0.177682,
+      "raw_lines": [
+        "Lantern Stadium",
+        "Parkfield",
+        "Watkins Rise",
+        "Potters Bar"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Potters Bar Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 250,
+      "batch": 10
+    },
+    {
+      "club": "Potton United",
+      "ground_candidate": "The Hutchinson Hollow",
+      "postcode": "SG19 2LU",
+      "lat": 52.123185,
+      "lon": -0.217203,
+      "raw_lines": [
+        "The Hutchinson Hollow",
+        "Biggleswade Road",
+        "Potton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Potton United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 251,
+      "batch": 11
+    },
+    {
+      "club": "Prescot Cables",
+      "ground_candidate": "IP Truck Parts Stadium",
+      "postcode": "L34 6HD",
+      "lat": 53.431893,
+      "lon": -2.8048,
+      "raw_lines": [
+        "IP Truck Parts Stadium",
+        "Valerie Park",
+        "Eaton Street",
+        "Prescot"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Prescot Cables FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 252,
+      "batch": 11
+    },
+    {
+      "club": "Prestwich Heys",
+      "ground_candidate": "Adie Moran Park",
+      "postcode": "M45 6WG",
+      "lat": 53.544546,
+      "lon": -2.733053,
+      "raw_lines": [
+        "Adie Moran Park",
+        "Sandgate Road",
+        "Whitefield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Prestwich Heys AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 253,
+      "batch": 11
+    },
+    {
+      "club": "Punjab United",
+      "ground_candidate": "Steve Cook Stadium",
+      "postcode": "DA12 5ND",
+      "lat": 51.417768,
+      "lon": 0.377233,
+      "raw_lines": [
+        "Steve Cook Stadium",
+        "Dunkirk Close",
+        "off Hawkins Avenue",
+        "Gravesend"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Punjab United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 254,
+      "batch": 11
+    },
+    {
+      "club": "Ramsbottom United",
+      "ground_candidate": "Harry Williams Riverside Stadium",
+      "postcode": "BL0 0BS",
+      "lat": 53.64475,
+      "lon": -2.313417,
+      "raw_lines": [
+        "Harry Williams Riverside Stadium",
+        "Acre Bottom",
+        "off Bridge Street",
+        "Ramsbottom"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ramsbottom United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 255,
+      "batch": 11
+    },
+    {
+      "club": "Rayners Lane",
+      "ground_candidate": "Tithe Farm Social Club",
+      "postcode": "HA2 0XH",
+      "lat": 51.56988,
+      "lon": -0.365086,
+      "raw_lines": [
+        "Tithe Farm Social Club",
+        "151 Rayners Lane",
+        "Harrow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Rayners Lane FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 256,
+      "batch": 11
+    },
+    {
+      "club": "Raynes Park Vale",
+      "ground_candidate": "Prince Georges Playing Fields",
+      "postcode": "SW20 9DZ",
+      "lat": 51.403328,
+      "lon": -0.226997,
+      "raw_lines": [
+        "Prince Georges Playing Fields",
+        "Grand Drive",
+        "Raynes Park"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Raynes Park Vale FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 257,
+      "batch": 11
+    },
+    {
+      "club": "Reading City",
+      "ground_candidate": "Rivermoor",
+      "postcode": "RG30 6AY",
+      "lat": 51.465674,
+      "lon": -1.011878,
+      "raw_lines": [
+        "Rivermoor",
+        "Scours Lane",
+        "Tilehurst"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Reading City FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 258,
+      "batch": 11
+    },
+    {
+      "club": "Redbridge",
+      "ground_candidate": "Techsoc.com Stadium",
+      "postcode": "IG6 1NB",
+      "lat": 51.58529,
+      "lon": 0.089447,
+      "raw_lines": [
+        "Techsoc.com Stadium",
+        "Station Road",
+        "Barkingside"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Redbridge FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 259,
+      "batch": 11
+    },
+    {
+      "club": "Redhill",
+      "ground_candidate": "Kiln Brow",
+      "postcode": "RH1 5AE",
+      "lat": 51.219269,
+      "lon": -0.170648,
+      "raw_lines": [
+        "Kiln Brow",
+        "Three Arch Road",
+        "Redhill"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Redhill FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 260,
+      "batch": 11
+    },
+    {
+      "club": "Risborough Rangers",
+      "ground_candidate": "The Kamtech Stadium",
+      "postcode": "HP27 9NE",
+      "lat": 51.718035,
+      "lon": -0.846399,
+      "raw_lines": [
+        "The Kamtech Stadium",
+        "Windsor Playing Fields",
+        "Horsenden Lane",
+        "Princes Risborough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Risborough Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 261,
+      "batch": 11
+    },
+    {
+      "club": "Roffey",
+      "ground_candidate": "Chennells Brook",
+      "postcode": "RH12 5JL",
+      "lat": 51.085922,
+      "lon": -0.296702,
+      "raw_lines": [
+        "Chennells Brook",
+        "Bartholomew Way",
+        "Horsham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Roffey FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 262,
+      "batch": 11
+    },
+    {
+      "club": "Roman Glass St George",
+      "ground_candidate": "Oaklands Park",
+      "postcode": "BS32 4AG",
+      "lat": 51.548962,
+      "lon": -2.57183,
+      "raw_lines": [
+        "Oaklands Park",
+        "Gloucester Road",
+        "Almondsbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Roman Glass St George FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 263,
+      "batch": 11
+    },
+    {
+      "club": "Romford",
+      "ground_candidate": "Mayesbrook Park",
+      "postcode": "RM8 2JR",
+      "lat": 51.547611,
+      "lon": 0.11146,
+      "raw_lines": [
+        "Barking FC",
+        "Mayesbrook Park",
+        "Lodge Avenue",
+        "Barking"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Romford FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 264,
+      "batch": 11
+    },
+    {
+      "club": "Romulus",
+      "ground_candidate": "Domino's Stadium",
+      "postcode": "B72 1NL",
+      "lat": 52.556733,
+      "lon": -1.818659,
+      "raw_lines": [
+        "Sutton Coldfield Town FC",
+        "Domino's Stadium",
+        "Central Ground",
+        "Coles Lane",
+        "Sutton Coldfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Romulus FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 265,
+      "batch": 11
+    },
+    {
+      "club": "Rossington Main",
+      "ground_candidate": "Kalkut's Community Stadium",
+      "postcode": "DN11 0TE",
+      "lat": 53.481425,
+      "lon": -1.073877,
+      "raw_lines": [
+        "Kalkut's Community Stadium",
+        "Oxford Street",
+        "Rossington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Rossington Main FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 266,
+      "batch": 11
+    },
+    {
+      "club": "Royal Wootton Bassett Town",
+      "ground_candidate": "Gerard Buxton Sports Ground",
+      "postcode": "SN4 8DS",
+      "lat": 51.554678,
+      "lon": -1.895464,
+      "raw_lines": [
+        "Gerard Buxton Sports Ground",
+        "Brinkworth Road",
+        "Royal Wootton Bassett"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Royal Wootton Bassett Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 267,
+      "batch": 11
+    },
+    {
+      "club": "Royston Town",
+      "ground_candidate": "8a Garden Walk",
+      "postcode": "SG8 7HP",
+      "lat": 52.052677,
+      "lon": -0.01677,
+      "raw_lines": [
+        "8a Garden Walk",
+        "Royston"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Royston Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 268,
+      "batch": 11
+    },
+    {
+      "club": "Rugby Borough",
+      "ground_candidate": "Nationwide Windows Arena",
+      "postcode": "CV21 4PN",
+      "lat": 52.353598,
+      "lon": -1.211102,
+      "raw_lines": [
+        "Nationwide Windows Arena",
+        "Kilsby Lane",
+        "Rugby"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Rugby Borough FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 269,
+      "batch": 11
+    },
+    {
+      "club": "Rugby Town",
+      "ground_candidate": "Butlin Road",
+      "postcode": "CV21 3SD",
+      "lat": 52.373181,
+      "lon": -1.234988,
+      "raw_lines": [
+        "Butlin Road",
+        "Rugby"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Rugby Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 270,
+      "batch": 11
+    },
+    {
+      "club": "Rusthall",
+      "ground_candidate": "Jockey Farm Stadium",
+      "postcode": "TN4 8SH",
+      "lat": 51.138587,
+      "lon": 0.223578,
+      "raw_lines": [
+        "Jockey Farm Stadium",
+        "Nellington Road",
+        "Rusthall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Rusthall FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 271,
+      "batch": 11
+    },
+    {
+      "club": "Saffron Walden Town",
+      "ground_candidate": "The Meadow",
+      "postcode": "CB10 2DU",
+      "lat": 52.027285,
+      "lon": 0.239993,
+      "raw_lines": [
+        "The Meadow",
+        "Catons Lane",
+        "Saffron Walden"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Saffron Walden Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 272,
+      "batch": 11
+    },
+    {
+      "club": "Saltash United",
+      "ground_candidate": "Kimberley Stadium",
+      "postcode": "PL12 6DX",
+      "lat": 50.410201,
+      "lon": -4.223422,
+      "raw_lines": [
+        "Kimberley Stadium",
+        "Callington Road",
+        "Saltash"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Saltash United AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 273,
+      "batch": 11
+    },
+    {
+      "club": "Sawbridgeworth Town",
+      "ground_candidate": "Crofters",
+      "postcode": "CM21 0DF",
+      "lat": 51.818706,
+      "lon": 0.147104,
+      "raw_lines": [
+        "Crofters",
+        "Crofters End",
+        "off West Road",
+        "Sawbridgeworth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sawbridgeworth Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 274,
+      "batch": 11
+    },
+    {
+      "club": "Seaford Town",
+      "ground_candidate": "The Crouch Recreation Ground",
+      "postcode": "BN25 1AF",
+      "lat": 50.771599,
+      "lon": 0.10778,
+      "raw_lines": [
+        "The Crouch Recreation Ground",
+        "Bramber Lane",
+        "Seaford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Seaford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 275,
+      "batch": 11
+    },
+    {
+      "club": "Sevenoaks Town",
+      "ground_candidate": "The Bourne Stadium",
+      "postcode": "TN14 5BX",
+      "lat": 51.290857,
+      "lon": 0.202005,
+      "raw_lines": [
+        "The Bourne Stadium",
+        "Greatness Park",
+        "Mill Lane",
+        "Sevenoaks"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sevenoaks Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 276,
+      "batch": 12
+    },
+    {
+      "club": "Shaftesbury",
+      "ground_candidate": "Cockrams",
+      "postcode": "SP7 8PD",
+      "lat": 51.006317,
+      "lon": -2.189786,
+      "raw_lines": [
+        "Cockrams",
+        "Coppice Street",
+        "Shaftesbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Shaftesbury FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 277,
+      "batch": 12
+    },
+    {
+      "club": "Sheerwater",
+      "ground_candidate": "Eastwood Leisure Centre",
+      "postcode": "GU21 5RL",
+      "lat": 51.336446,
+      "lon": -0.527226,
+      "raw_lines": [
+        "Eastwood Leisure Centre",
+        "Devonshire Avenue",
+        "Woking"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sheerwater FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 278,
+      "batch": 12
+    },
+    {
+      "club": "Sheppey United",
+      "ground_candidate": "Holm Park",
+      "postcode": "ME12 3DB",
+      "lat": 51.421393,
+      "lon": 0.766804,
+      "raw_lines": [
+        "Holm Park",
+        "Queenborough Road",
+        "Halfway"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sheppey United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 279,
+      "batch": 12
+    },
+    {
+      "club": "Shepshed Dynamo",
+      "ground_candidate": "Dovecote Stadium",
+      "postcode": "LE12 9BN",
+      "lat": 52.774496,
+      "lon": -1.287004,
+      "raw_lines": [
+        "Dovecote Stadium",
+        "Butthole Lane",
+        "Shepshed"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Shepshed Dynamo FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 280,
+      "batch": 12
+    },
+    {
+      "club": "Sherborne Town",
+      "ground_candidate": "The GMS Windows Arena",
+      "postcode": "DT9 5NS",
+      "lat": 50.940395,
+      "lon": -2.510025,
+      "raw_lines": [
+        "The GMS Windows Arena",
+        "Raleigh Grove",
+        "The Terrace Playing Field",
+        "Sherborne"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sherborne Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 281,
+      "batch": 12
+    },
+    {
+      "club": "Sherwood Colliery",
+      "ground_candidate": "Debdale Park",
+      "postcode": "NG19 7NS",
+      "lat": 53.161352,
+      "lon": -1.206219,
+      "raw_lines": [
+        "Debdale Park",
+        "Debdale Lane",
+        "Mansfield Woodhouse"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sherwood Colliery FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 282,
+      "batch": 12
+    },
+    {
+      "club": "Sidmouth Town",
+      "ground_candidate": "Manstone Lane",
+      "postcode": "EX10 9TF",
+      "lat": 50.694342,
+      "lon": -3.238004,
+      "raw_lines": [
+        "Manstone Lane",
+        "Sidmouth"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sidmouth Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 283,
+      "batch": 12
+    },
+    {
+      "club": "Silsden",
+      "ground_candidate": "Regal Interiors Stadium",
+      "postcode": "BD20 0EH",
+      "lat": 53.906927,
+      "lon": -1.943362,
+      "raw_lines": [
+        "Regal Interiors Stadium",
+        "Keighley Road",
+        "Silsden"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Silsden AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 284,
+      "batch": 12
+    },
+    {
+      "club": "Sittingbourne",
+      "ground_candidate": "The Staxson Stadium",
+      "postcode": "ME9 8AG",
+      "lat": 51.314497,
+      "lon": 0.729436,
+      "raw_lines": [
+        "The Staxson Stadium",
+        "Broadoak Road",
+        "Sittingbourne"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sittingbourne FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 285,
+      "batch": 12
+    },
+    {
+      "club": "Skegness Town",
+      "ground_candidate": "MKM Stadium",
+      "postcode": "PE25 2EL",
+      "lat": 53.143008,
+      "lon": 0.323939,
+      "raw_lines": [
+        "MKM Stadium",
+        "Wainfleet Road",
+        "Skegness"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Skegness Town AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 286,
+      "batch": 12
+    },
+    {
+      "club": "Slimbridge",
+      "ground_candidate": "Thornhill Park",
+      "postcode": "GL2 7AF",
+      "lat": 51.723762,
+      "lon": -2.369347,
+      "raw_lines": [
+        "Thornhill Park",
+        "Wisloe Road",
+        "Cambridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Slimbridge AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 287,
+      "batch": 12
+    },
+    {
+      "club": "Snodland Town",
+      "ground_candidate": "GI Landscapes Stadium",
+      "postcode": "ME6 5DL",
+      "lat": 51.332969,
+      "lon": 0.432813,
+      "raw_lines": [
+        "GI Landscapes Stadium",
+        "Potyn's Sports Field",
+        "Paddlesworth Road",
+        "Snodland"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Snodland Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 288,
+      "batch": 12
+    },
+    {
+      "club": "Soham Town Rangers",
+      "ground_candidate": "Julius Martin Lane",
+      "postcode": "CB7 5EQ",
+      "lat": 52.339393,
+      "lon": 0.330218,
+      "raw_lines": [
+        "Julius Martin Lane",
+        "Soham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Soham Town Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 289,
+      "batch": 12
+    },
+    {
+      "club": "SOUL Tower Hamlets",
+      "ground_candidate": "Mile End Stadium",
+      "postcode": "E14 7TW",
+      "lat": 51.519021,
+      "lon": -0.033389,
+      "raw_lines": [
+        "Mile End Stadium",
+        "Rhodeswell Road",
+        "Tower Hamlets"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Soul Tower Hamlets FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 290,
+      "batch": 12
+    },
+    {
+      "club": "Southall",
+      "ground_candidate": "SkyEx Community Stadium",
+      "postcode": "UB4 0SL",
+      "lat": 51.508276,
+      "lon": -0.394797,
+      "raw_lines": [
+        "Hayes & Yeading Unite FC",
+        "SkyEx Community Stadium",
+        "Beaconsfield Road",
+        "Hayes"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Southall FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 291,
+      "batch": 12
+    },
+    {
+      "club": "Sporting Bengal United",
+      "ground_candidate": "Mile End Stadium",
+      "postcode": "E14 7TW",
+      "lat": 51.519021,
+      "lon": -0.033389,
+      "raw_lines": [
+        "Mile End Stadium",
+        "Rhodeswell Road",
+        "Tower Hamlets"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sporting Bengal United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 292,
+      "batch": 12
+    },
+    {
+      "club": "Sporting Club Inkberrow",
+      "ground_candidate": "Recreation Ground",
+      "postcode": "WR7 4HJ",
+      "lat": 52.220793,
+      "lon": -1.980755,
+      "raw_lines": [
+        "Recreation Ground",
+        "Sands Road",
+        "Inkberrow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sporting Club Inkberrow FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 293,
+      "batch": 12
+    },
+    {
+      "club": "Sporting Khalsa",
+      "ground_candidate": "Guardian Warehousing Stadium",
+      "postcode": "WV13 3BB",
+      "lat": 52.591944,
+      "lon": -2.065991,
+      "raw_lines": [
+        "Guardian Warehousing Stadium",
+        "Noose Lane",
+        "Willenhall"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sporting Khalsa FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 294,
+      "batch": 12
+    },
+    {
+      "club": "St Blazey",
+      "ground_candidate": "Blaise Park",
+      "postcode": "PL24 2ND",
+      "lat": 50.361345,
+      "lon": -4.714499,
+      "raw_lines": [
+        "Blaise Park",
+        "Station Road",
+        "St Blazey"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "St Blazey FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 295,
+      "batch": 12
+    },
+    {
+      "club": "St Ives Town",
+      "ground_candidate": "Quattro Tech Westwood Road",
+      "postcode": "PE27 6DT",
+      "lat": 52.330412,
+      "lon": -0.082152,
+      "raw_lines": [
+        "Quattro Tech Westwood Road",
+        "St Ives"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "St Ives Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 296,
+      "batch": 12
+    },
+    {
+      "club": "St Neots Town",
+      "ground_candidate": "Kester Way",
+      "postcode": "PE19 6SL",
+      "lat": 52.23301,
+      "lon": -0.244932,
+      "raw_lines": [
+        "Kester Way",
+        "St Neots"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "St Neots Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 297,
+      "batch": 12
+    },
+    {
+      "club": "Stafford Rangers",
+      "ground_candidate": "Stan Robinson Stadium",
+      "postcode": "ST16 3BX",
+      "lat": 52.818563,
+      "lon": -2.116854,
+      "raw_lines": [
+        "Stan Robinson Stadium",
+        "Astonfields Road",
+        "Stafford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Stafford Rangers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 298,
+      "batch": 12
+    },
+    {
+      "club": "Stalybridge Celtic",
+      "ground_candidate": "Bower Fold",
+      "postcode": "SK15 2RT",
+      "lat": 53.475334,
+      "lon": -2.043876,
+      "raw_lines": [
+        "Bower Fold",
+        "Mottram Road",
+        "Stalybridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Stalybridge Celtic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 299,
+      "batch": 12
+    },
+    {
+      "club": "Steyning Town",
+      "ground_candidate": "The Shooting Field",
+      "postcode": "BN44 3RQ",
+      "lat": 50.892175,
+      "lon": -0.32796,
+      "raw_lines": [
+        "The Shooting Field",
+        "Church Road",
+        "Steyning"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Steyning Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 300,
+      "batch": 12
+    },
+    {
+      "club": "Stocksbridge Park Steels",
+      "ground_candidate": "Bracken Moor Stadium",
+      "postcode": "S36 2AN",
+      "lat": 53.477099,
+      "lon": -1.586866,
+      "raw_lines": [
+        "Bracken Moor Stadium",
+        "Bracken Moor Lane",
+        "Stocksbridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Stocksbridge Park Steels FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 301,
+      "batch": 13
+    },
+    {
+      "club": "Stone Old Alleynians",
+      "ground_candidate": "Red Industries Stadium",
+      "postcode": "ST5 3BX",
+      "lat": 52.997663,
+      "lon": -2.214913,
+      "raw_lines": [
+        "Newcastle Town FC",
+        "Red Industries Stadium",
+        "Buckmaster Avenue",
+        "Clayton",
+        "Newcastle-under-Lyme"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Stone Old Alleynians FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 302,
+      "batch": 13
+    },
+    {
+      "club": "Stotfold",
+      "ground_candidate": "JSJ Stadium",
+      "postcode": "SG5 4HE",
+      "lat": 52.019211,
+      "lon": -0.238528,
+      "raw_lines": [
+        "JSJ Stadium",
+        "New Roker Park",
+        "Arlesey Road",
+        "Stotfold"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Stotfold FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 303,
+      "batch": 13
+    },
+    {
+      "club": "Stourport Swifts",
+      "ground_candidate": "Walshes Meadow",
+      "postcode": "DY13 0AA",
+      "lat": 52.335426,
+      "lon": -2.280735,
+      "raw_lines": [
+        "Walshes Meadow",
+        "Harold Davies Drive",
+        "Stourport on Severn"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Stourport Swifts FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 304,
+      "batch": 13
+    },
+    {
+      "club": "Street",
+      "ground_candidate": "Tannery Ground",
+      "postcode": "BA16 0TA",
+      "lat": 51.116129,
+      "lon": -2.743967,
+      "raw_lines": [
+        "Tannery Ground",
+        "Middlebrooks",
+        "Street"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Street FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 305,
+      "batch": 13
+    },
+    {
+      "club": "Sutton Athletic",
+      "ground_candidate": "Lower Road Ground",
+      "postcode": "BR8 7RZ",
+      "lat": 51.414314,
+      "lon": 0.198723,
+      "raw_lines": [
+        "Lower Road Ground",
+        "Lower Road",
+        "Hextable"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sutton Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 306,
+      "batch": 13
+    },
+    {
+      "club": "Sutton Coldfield Town",
+      "ground_candidate": "Domino's Arena",
+      "postcode": "B72 1NL",
+      "lat": 52.556733,
+      "lon": -1.818659,
+      "raw_lines": [
+        "Domino's Arena",
+        "Central Ground",
+        "Coles Lane",
+        "Sutton Coldfield"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sutton Coldfield Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 307,
+      "batch": 13
+    },
+    {
+      "club": "Sutton Common Rovers",
+      "ground_candidate": "War Memorial Sports Ground",
+      "postcode": "SM5 2PW",
+      "lat": 51.369706,
+      "lon": -0.171787,
+      "raw_lines": [
+        "Carshalton Athletic FC",
+        "War Memorial Sports Ground",
+        "Colston Avenue",
+        "Carshalton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Sutton Common Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 308,
+      "batch": 13
+    },
+    {
+      "club": "Swindon Supermarine",
+      "ground_candidate": "Imagine Cruising Stadium",
+      "postcode": "SN3 4BZ",
+      "lat": 51.605095,
+      "lon": -1.730118,
+      "raw_lines": [
+        "Imagine Cruising Stadium",
+        "Supermarine Road",
+        "South Marston"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Swindon Supermarine FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 309,
+      "batch": 13
+    },
+    {
+      "club": "Tadcaster Albion",
+      "ground_candidate": "Young Guns Arena",
+      "postcode": "LS24 9AY",
+      "lat": 53.883138,
+      "lon": -1.258484,
+      "raw_lines": [
+        "Young Guns Arena",
+        "Ings Lane",
+        "Tadcaster"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tadcaster Albion FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 310,
+      "batch": 13
+    },
+    {
+      "club": "Tadley Calleva",
+      "ground_candidate": "Barlows Park",
+      "postcode": "RG26 3PX",
+      "lat": 51.358062,
+      "lon": -1.135883,
+      "raw_lines": [
+        "Barlows Park",
+        "Silchester Road",
+        "Tadley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tadley Calleva FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 311,
+      "batch": 13
+    },
+    {
+      "club": "Takeley",
+      "ground_candidate": "Full Vision Stadium",
+      "postcode": "CM22 6SQ",
+      "lat": 51.865724,
+      "lon": 0.267612,
+      "raw_lines": [
+        "Full Vision Stadium",
+        "Station Road",
+        "Takeley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Takeley FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 312,
+      "batch": 13
+    },
+    {
+      "club": "Tavistock",
+      "ground_candidate": "Langsford Park",
+      "postcode": "PL19 8JR",
+      "lat": 50.538903,
+      "lon": -4.151574,
+      "raw_lines": [
+        "Langsford Park",
+        "Crowndale Road",
+        "Tavistock"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tavistock AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 313,
+      "batch": 13
+    },
+    {
+      "club": "Thackley",
+      "ground_candidate": "Meridian Stadium",
+      "postcode": "BD10 0TL",
+      "lat": 53.847484,
+      "lon": -1.733008,
+      "raw_lines": [
+        "Meridian Stadium",
+        "Dennyfield",
+        "Ainsbury Avenue",
+        "Thackley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Thackley AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 314,
+      "batch": 13
+    },
+    {
+      "club": "Thame United",
+      "ground_candidate": "The ASM Stadium",
+      "postcode": "OX9 3RN",
+      "lat": 51.755877,
+      "lon": -0.97608,
+      "raw_lines": [
+        "The ASM Stadium",
+        "Tythrop Way",
+        "Thame"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Thame United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 315,
+      "batch": 13
+    },
+    {
+      "club": "Thatcham Town",
+      "ground_candidate": "Mettal Stadium",
+      "postcode": "RG19 4PA",
+      "lat": 51.391353,
+      "lon": -1.242421,
+      "raw_lines": [
+        "Mettal Stadium",
+        "Crookham Hill",
+        "Thatcham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Thatcham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 316,
+      "batch": 13
+    },
+    {
+      "club": "Thornbury Town",
+      "ground_candidate": "Mundy Playing Fields",
+      "postcode": "BS35 1NA",
+      "lat": 51.605855,
+      "lon": -2.530765,
+      "raw_lines": [
+        "Mundy Playing Fields",
+        "Kington Lane",
+        "Thornbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Thornbury Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 317,
+      "batch": 13
+    },
+    {
+      "club": "Tilbury",
+      "ground_candidate": "EMR Stadium",
+      "postcode": "RM18 8NL",
+      "lat": 51.470122,
+      "lon": 0.363331,
+      "raw_lines": [
+        "EMR Stadium",
+        "Chadfields",
+        "St Chad's Road",
+        "Tilbury"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tilbury FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 318,
+      "batch": 13
+    },
+    {
+      "club": "Tiverton Town",
+      "ground_candidate": "Slee Blackwell Solicitors Stadium",
+      "postcode": "EX16 6SG",
+      "lat": 50.909239,
+      "lon": -3.490189,
+      "raw_lines": [
+        "Slee Blackwell Solicitors Stadium",
+        "Ladysmead",
+        "Bolham Road",
+        "Tiverton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tiverton Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 319,
+      "batch": 13
+    },
+    {
+      "club": "Tividale",
+      "ground_candidate": "The Beeches",
+      "postcode": "B69 1UL",
+      "lat": 52.510692,
+      "lon": -2.050183,
+      "raw_lines": [
+        "The Beeches",
+        "Packwood Road",
+        "Tividale"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tividale FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 320,
+      "batch": 13
+    },
+    {
+      "club": "Tooting & Mitcham United",
+      "ground_candidate": "Imperial Fields",
+      "postcode": "SM4 6BF",
+      "lat": 51.393245,
+      "lon": -0.17234,
+      "raw_lines": [
+        "Imperial Fields",
+        "Bishopsford Road",
+        "Morden"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tooting & Mitcham United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 321,
+      "batch": 13
+    },
+    {
+      "club": "Torpoint Athletic",
+      "ground_candidate": "The Mill",
+      "postcode": "PL11 2RE",
+      "lat": 50.37336,
+      "lon": -4.208988,
+      "raw_lines": [
+        "The Mill",
+        "Mill Lane",
+        "Carbeile Road",
+        "Torpoint"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Torpoint Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 322,
+      "batch": 13
+    },
+    {
+      "club": "Tring Athletic",
+      "ground_candidate": "The Michael Anthony Stadium",
+      "postcode": "HP23 5NS",
+      "lat": 51.796779,
+      "lon": -0.640186,
+      "raw_lines": [
+        "The Michael Anthony Stadium",
+        "Pendley Sports Centre",
+        "Cow Lane",
+        "Tring"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tring Athletic FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 323,
+      "batch": 13
+    },
+    {
+      "club": "Tuffley Rovers",
+      "ground_candidate": "Glevum Park",
+      "postcode": "GL2 5DT",
+      "lat": 51.840015,
+      "lon": -2.262223,
+      "raw_lines": [
+        "Glevum Park",
+        "Lower Tuffley Lane",
+        "Gloucester"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tuffley Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 324,
+      "batch": 13
+    },
+    {
+      "club": "Tunbridge Wells",
+      "ground_candidate": "Culverden Stadium",
+      "postcode": "TN4 9SG",
+      "lat": 51.144349,
+      "lon": 0.250879,
+      "raw_lines": [
+        "Culverden Stadium",
+        "Culverdon Down",
+        "Tunbridge Wells"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Tunbridge Wells FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 325,
+      "batch": 13
+    },
+    {
+      "club": "Uttoxeter Town",
+      "ground_candidate": "Oldfields Sports Ground",
+      "postcode": "ST14 7JX",
+      "lat": 52.899881,
+      "lon": -1.874655,
+      "raw_lines": [
+        "Oldfields Sports Ground",
+        "Springfields Road",
+        "Uttoxeter"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Uttoxeter Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 326,
+      "batch": 14
+    },
+    {
+      "club": "Virginia Water",
+      "ground_candidate": "Arbour Park",
+      "postcode": "SL2 5AY",
+      "lat": 51.519858,
+      "lon": -0.588342,
+      "raw_lines": [
+        "Slough Town FC",
+        "Arbour Park",
+        "Stoke Road",
+        "Slough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Virginia Water FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 327,
+      "batch": 14
+    },
+    {
+      "club": "Wallingford & Crowmarsh",
+      "ground_candidate": "Howdens Stadium",
+      "postcode": "OX10 9RB",
+      "lat": 51.599985,
+      "lon": -1.141917,
+      "raw_lines": [
+        "Howdens Stadium",
+        "Wallingford Sports Park",
+        "Hithercroft Road",
+        "Wallingford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wallingford & Crowmarsh FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 328,
+      "batch": 14
+    },
+    {
+      "club": "Walsham-le-Willows",
+      "ground_candidate": "The Morrish Stadium",
+      "postcode": "IP31 3AH",
+      "lat": 52.307782,
+      "lon": 0.931032,
+      "raw_lines": [
+        "The Morrish Stadium",
+        "The Meadow",
+        "Summer Road",
+        "Walsham-le-Willows"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Walsham Le Willows FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 329,
+      "batch": 14
+    },
+    {
+      "club": "Waltham Abbey",
+      "ground_candidate": "Capershotts",
+      "postcode": "EN9 1NX",
+      "lat": 51.682793,
+      "lon": 0.005879,
+      "raw_lines": [
+        "Capershotts",
+        "Sewardstone Road",
+        "Waltham Abbey"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Waltham Abbey FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 330,
+      "batch": 14
+    },
+    {
+      "club": "Walthamstow",
+      "ground_candidate": "Wadham Lodge Sports Centre",
+      "postcode": "E17 4JP",
+      "lat": 51.597388,
+      "lon": -0.008999,
+      "raw_lines": [
+        "Wadham Lodge Sports Centre",
+        "Kitchener Road",
+        "Walthamstow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Walthamstow FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 331,
+      "batch": 14
+    },
+    {
+      "club": "Ware",
+      "ground_candidate": "Wodson Park",
+      "postcode": "SG12 0UQ",
+      "lat": 51.824799,
+      "lon": -0.033281,
+      "raw_lines": [
+        "Wodson Park",
+        "Wadesmill Road",
+        "Ware"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Ware FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 332,
+      "batch": 14
+    },
+    {
+      "club": "Wellingborough Town",
+      "ground_candidate": "Dog & Duck Stadium",
+      "postcode": "NN8 2DP",
+      "lat": 52.293192,
+      "lon": -0.682212,
+      "raw_lines": [
+        "Dog & Duck Stadium",
+        "London Road",
+        "Wellingborough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wellingborough Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 333,
+      "batch": 14
+    },
+    {
+      "club": "Wellington",
+      "ground_candidate": "Kensal Ground",
+      "postcode": "HR4 8AZ",
+      "lat": 52.127104,
+      "lon": -2.734571,
+      "raw_lines": [
+        "Kensal Ground",
+        "Wellington Playing Fields",
+        "Wellington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wellington AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 334,
+      "batch": 14
+    },
+    {
+      "club": "Welwyn Garden City",
+      "ground_candidate": "Herns Way",
+      "postcode": "AL7 1TA",
+      "lat": 51.806173,
+      "lon": -0.178505,
+      "raw_lines": [
+        "Herns Way",
+        "Panshanger",
+        "Welwyn Garden City"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Welwyn Garden City FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 335,
+      "batch": 14
+    },
+    {
+      "club": "West Didsbury & Chorlton",
+      "ground_candidate": "Step Places Stadium",
+      "postcode": "M21 8FE",
+      "lat": 53.433492,
+      "lon": -2.282559,
+      "raw_lines": [
+        "Step Places Stadium",
+        "Recreation Ground",
+        "Brookburn Road",
+        "Chorlton"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "West Didsbury & Chorlton AFC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 336,
+      "batch": 14
+    },
+    {
+      "club": "West Essex",
+      "ground_candidate": "Matchday Centre",
+      "postcode": "E17 4JP",
+      "lat": 51.597388,
+      "lon": -0.008999,
+      "raw_lines": [
+        "Walthamstow FC",
+        "Matchday Centre",
+        "Wadham Lodge",
+        "Kitchener Road",
+        "Walthamstow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "West Essex FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 337,
+      "batch": 14
+    },
+    {
+      "club": "Westfields",
+      "ground_candidate": "Allpay Park",
+      "postcode": "HR4 9NA",
+      "lat": 52.063316,
+      "lon": -2.722658,
+      "raw_lines": [
+        "Allpay Park",
+        "Widemarsh Common",
+        "Hereford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Westfields FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 338,
+      "batch": 14
+    },
+    {
+      "club": "Whitchurch Alport",
+      "ground_candidate": "Get Moving Stadium",
+      "postcode": "SY13 1PG",
+      "lat": 52.972376,
+      "lon": -2.672473,
+      "raw_lines": [
+        "Get Moving Stadium",
+        "Yockings Park",
+        "Black Park Road",
+        "Whitchurch"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Whitchurch Alport FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 339,
+      "batch": 14
+    },
+    {
+      "club": "White Ensign",
+      "ground_candidate": "Burroughs Park",
+      "postcode": "SS2 6UD",
+      "lat": 51.565887,
+      "lon": 0.676301,
+      "raw_lines": [
+        "Great Wakering Rovers FC",
+        "Burroughs Park",
+        "Little Wakering",
+        "Hall Lane",
+        "Great Wakering"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "White Ensign FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 340,
+      "batch": 14
+    },
+    {
+      "club": "Whitstable Town",
+      "ground_candidate": "The Belmont Stadium",
+      "postcode": "CT5 1QP",
+      "lat": 51.353102,
+      "lon": 1.028707,
+      "raw_lines": [
+        "The Belmont Stadium",
+        "Belmont Road",
+        "Whitstable"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Whitstable Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 341,
+      "batch": 14
+    },
+    {
+      "club": "Wick",
+      "ground_candidate": "Crabtree Park",
+      "postcode": "BN17 7LS",
+      "lat": 50.82444,
+      "lon": -0.53847,
+      "raw_lines": [
+        "Crabtree Park",
+        "Coomes Way",
+        "Wick"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wick FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 342,
+      "batch": 14
+    },
+    {
+      "club": "Willand Rovers",
+      "ground_candidate": "Stan Robinson Stadium",
+      "postcode": "EX15 2RG",
+      "lat": 50.888045,
+      "lon": -3.37017,
+      "raw_lines": [
+        "Stan Robinson Stadium",
+        "Silver Street",
+        "Willand"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Willand Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 343,
+      "batch": 14
+    },
+    {
+      "club": "Windsor & Eton",
+      "ground_candidate": "Stag Meadow",
+      "postcode": "SL4 3DR",
+      "lat": 51.469492,
+      "lon": -0.622759,
+      "raw_lines": [
+        "Stag Meadow",
+        "St Leonards Road",
+        "Windsor"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Windsor & Eton FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 344,
+      "batch": 14
+    },
+    {
+      "club": "Winsford United",
+      "ground_candidate": "Barton Stadium. Wharton Road",
+      "postcode": "CW7 3AE",
+      "lat": 53.192454,
+      "lon": -2.512313,
+      "raw_lines": [
+        "Barton Stadium. Wharton Road",
+        "Winsford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Winsford United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 345,
+      "batch": 14
+    },
+    {
+      "club": "Winslow United",
+      "ground_candidate": "Recreation Ground",
+      "postcode": "MK18 3JG",
+      "lat": 51.94555,
+      "lon": -0.879009,
+      "raw_lines": [
+        "Recreation Ground",
+        "Elmfields Gate",
+        "Winslow"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Winslow United FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 346,
+      "batch": 14
+    },
+    {
+      "club": "Wisbech Town",
+      "ground_candidate": "Fountain Fresh Park",
+      "postcode": "PE14 7AL",
+      "lat": 52.678949,
+      "lon": 0.179207,
+      "raw_lines": [
+        "Fountain Fresh Park",
+        "Lynn Road",
+        "Wisbech"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wisbech Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 347,
+      "batch": 14
+    },
+    {
+      "club": "Witham Town",
+      "ground_candidate": "Simarco Stadium",
+      "postcode": "CM8 1UN",
+      "lat": 51.799688,
+      "lon": 0.626646,
+      "raw_lines": [
+        "Simarco Stadium",
+        "Spa Road",
+        "Witham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Witham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 348,
+      "batch": 14
+    },
+    {
+      "club": "Wokingham Town",
+      "ground_candidate": "Emmbrook Sports & Social Club",
+      "postcode": "RG41 1JB",
+      "lat": 51.42325,
+      "lon": -0.859222,
+      "raw_lines": [
+        "Emmbrook Sports & Social Club",
+        "Lowther Road",
+        "Wokingham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wokingham Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 349,
+      "batch": 14
+    },
+    {
+      "club": "Woodbridge Town",
+      "ground_candidate": "Homestyle UK Ground",
+      "postcode": "IP12 4LS",
+      "lat": 52.085579,
+      "lon": 1.290986,
+      "raw_lines": [
+        "Homestyle UK Ground",
+        "Fynn Road",
+        "off Seckford Hall Road",
+        "Woodbridge"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Woodbridge Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 350,
+      "batch": 14
+    },
+    {
+      "club": "Woodford Town",
+      "ground_candidate": "Ashton's Stadium",
+      "postcode": "IG8 8AA",
+      "lat": 51.607249,
+      "lon": 0.049971,
+      "raw_lines": [
+        "Ashton's Stadium",
+        "Chigwell Road",
+        "Woodford Bridge",
+        "Woodford Green"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Woodford Town FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 351,
+      "batch": 15
+    },
+    {
+      "club": "Worcester Raiders",
+      "ground_candidate": "DOADC Stadium",
+      "postcode": "WR3 7SS",
+      "lat": 52.224076,
+      "lon": -2.221177,
+      "raw_lines": [
+        "DOADC Stadium",
+        "Claines Lane",
+        "Worcester"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Worcester Raiders FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 352,
+      "batch": 15
+    },
+    {
+      "club": "Wormley Rovers",
+      "ground_candidate": "Wormley Sports Club",
+      "postcode": "EN10 7QF",
+      "lat": 51.734435,
+      "lon": -0.029329,
+      "raw_lines": [
+        "Wormley Sports Club",
+        "Church Lane",
+        "Wormley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wormley Rovers FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 353,
+      "batch": 15
+    },
+    {
+      "club": "Wroxham",
+      "ground_candidate": "Trafford Park",
+      "postcode": "NR12 8SJ",
+      "lat": 52.700958,
+      "lon": 1.397087,
+      "raw_lines": [
+        "Trafford Park",
+        "Skinners Lane",
+        "Wroxham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wroxham FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 354,
+      "batch": 15
+    },
+    {
+      "club": "Wythenshawe",
+      "ground_candidate": "Avensure Community Stadium",
+      "postcode": "M22 4US",
+      "lat": 53.392859,
+      "lon": -2.246883,
+      "raw_lines": [
+        "Avensure Community Stadium",
+        "Hollyhedge Park",
+        "Altrincham Road",
+        "Sharston"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Wythenshawe FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 355,
+      "batch": 15
+    },
+    {
+      "club": "Yaxley",
+      "ground_candidate": "MOTiQ Stadium",
+      "postcode": "PE7 3NA",
+      "lat": 52.510525,
+      "lon": -0.257406,
+      "raw_lines": [
+        "MOTiQ Stadium",
+        "APG Park",
+        "Leading Drove",
+        "off Holme Road",
+        "Yaxley"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Yaxley FC",
+      "confidence": "HIGH",
+      "match_type": "normalised exact",
+      "score": 1.0,
+      "queue_id": 356,
+      "batch": 15
+    },
+    {
+      "club": "Bishops Cleeve",
+      "ground_candidate": "Everyone's Energy Stadium",
+      "postcode": "GL52 3PD",
+      "lat": 51.937467,
+      "lon": -2.058,
+      "raw_lines": [
+        "Everyone's Energy Stadium",
+        "Kayte Lane",
+        "Bishops Cleeve"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Bishop's Cleeve FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.966,
+      "queue_id": 357,
+      "batch": 15
+    },
+    {
+      "club": "Harleston Town",
+      "ground_candidate": "Recreation Ground",
+      "postcode": "IP20 9DD",
+      "lat": 52.402402,
+      "lon": 1.29457,
+      "raw_lines": [
+        "Recreation Ground",
+        "Wilderness Lane",
+        "Harleston"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Darlaston Town FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.857,
+      "queue_id": 358,
+      "batch": 15
+    },
+    {
+      "club": "Knaresborough Town",
+      "ground_candidate": "Hummel Stadium",
+      "postcode": "HG5 8LF",
+      "lat": 54.004473,
+      "lon": -1.449664,
+      "raw_lines": [
+        "Hummel Stadium",
+        "Manse Lane",
+        "Knaresborough"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Desborough Town FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.848,
+      "queue_id": 359,
+      "batch": 15
+    },
+    {
+      "club": "Horsham YM",
+      "ground_candidate": "Gorings Mead",
+      "postcode": "RH13 5BP",
+      "lat": 51.057658,
+      "lon": -0.323934,
+      "raw_lines": [
+        "Gorings Mead",
+        "Horsham"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Horsham YMCA FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.909,
+      "queue_id": 360,
+      "batch": 15
+    },
+    {
+      "club": "Pershore Town",
+      "ground_candidate": "Recruit 12 Community Stadium",
+      "postcode": "WR10 1QU",
+      "lat": 52.112785,
+      "lon": -2.073418,
+      "raw_lines": [
+        "Recruit 12 Community Stadium",
+        "King George's Way",
+        "Pershore"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Pershore Town 88 FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.897,
+      "queue_id": 361,
+      "batch": 15
+    },
+    {
+      "club": "Brentford",
+      "ground_candidate": "Gtech Community Stadium",
+      "postcode": "TW8 0RU",
+      "lat": 51.490759,
+      "lon": -0.288675,
+      "raw_lines": [
+        "Gtech Community Stadium",
+        "Lionel Road South",
+        "Brentford"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Retford FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.875,
+      "queue_id": 362,
+      "batch": 15
+    },
+    {
+      "club": "AFC Telford United",
+      "ground_candidate": "New Bucks Head Stadium",
+      "postcode": "TF1 2TU",
+      "lat": 52.697371,
+      "lon": -2.501431,
+      "raw_lines": [
+        "New Bucks Head Stadium",
+        "Watling Street",
+        "Wellington"
+      ],
+      "source": "https://fchd.info/maps/GAZ.htm",
+      "eligible_club": "Retford United FC",
+      "confidence": "REVIEW",
+      "match_type": "fuzzy name",
+      "score": 0.857,
+      "queue_id": 363,
+      "batch": 15
+    },
+    {
+      "eligible_club": "AFC Greenwich Borough",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 364,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Atherton LR FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 365,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Billingshurst FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 366,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Bournemouth Poppies FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 367,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Bovey Tracey FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 368,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Dearne & District FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 369,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Devizes Town FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 370,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Droylsden FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 371,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Eastbourne United AFC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 372,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Everett Rovers FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 373,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Fleetlands FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 374,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Godalming Town FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 375,
+      "batch": 15
+    },
+    {
+      "eligible_club": "Hartpury FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 376,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Keighley Town FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 377,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Knowle FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 378,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Larkfield & New Hythe FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 379,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Liskeard Athletic FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 380,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Millbrook FC (Hampshire)",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 381,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Nelson FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 382,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Runcorn Town FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 383,
+      "batch": 16
+    },
+    {
+      "eligible_club": "SE Dons FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 384,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Stockport Georgians FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 385,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Sturminster Newton United FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 386,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Sutton United FC (Birmingham)",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 387,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Wells City FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 388,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Worsbrough Bridge Athletic FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 389,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Yarm & Eaglescliffe FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 390,
+      "batch": 16
+    },
+    {
+      "eligible_club": "Yateley United FC",
+      "confidence": "NO MATCH",
+      "match_type": "none",
+      "score": 0.0,
+      "queue_id": 391,
+      "batch": 16
+    }
+  ]
+}
