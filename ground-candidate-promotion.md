@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Ground Candidate Promotion
 
-Mode: **DRY RUN**
+Mode: **PUBLISH**
 
 - v7.6.5 validated candidates seen: **310**
 - Eligible for promotion now: **310**
