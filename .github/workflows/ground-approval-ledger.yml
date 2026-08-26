@@ -1,0 +1,45 @@
+name: Ground approval ledger (v7.6.9)
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish only exception-cleared GREEN ground candidates?"
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build approval ledger and evaluate promotion
+        run: |
+          if [ "${{ inputs.publish }}" = "true" ]; then
+            python updater/ground_approval_ledger.py --publish
+          else
+            python updater/ground_approval_ledger.py
+          fi
+      - name: Re-run Ground Health after publish
+        if: ${{ inputs.publish }}
+        run: |
+          if [ -f updater/ground_health.py ]; then python updater/ground_health.py; fi
+      - name: Commit reports and optional promotion
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Approval"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-approval-ledger.md updater/ground-approval-ledger.json updater/ground-approval-run.json
+          if [ "${{ inputs.publish }}" = "true" ]; then
+            git add clubfinder.html
+            if [ -f ground-health.md ]; then git add ground-health.md; fi
+            if [ -f updater/ground-health.json ]; then git add updater/ground-health.json; fi
+          fi
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Update ground approval ledger v7.6.9"; git push; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ground-approval-ledger
+          path: |
+            ground-approval-ledger.md
+            updater/ground-approval-ledger.json
+            updater/ground-approval-run.json
