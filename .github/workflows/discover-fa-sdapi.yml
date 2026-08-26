@@ -1,0 +1,17 @@
+name: Discover FA SDAPI config (v7.5.3)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Inspect Opta / SDAPI configuration
+        run: python updater/fa_sdapi_discovery.py
+      - name: Upload SDAPI discovery report
+        uses: actions/upload-artifact@v4
+        with:
+          name: fa-sdapi-discovery
+          path: updater/fa-sdapi-discovery.json
