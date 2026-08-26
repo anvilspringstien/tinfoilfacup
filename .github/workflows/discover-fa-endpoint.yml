@@ -1,0 +1,22 @@
+name: Discover FA data endpoint (v7.5.2)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Inspect FA page and JavaScript bundles
+        run: python updater/fa_endpoint_discovery.py
+
+      - name: Upload endpoint discovery report
+        uses: actions/upload-artifact@v4
+        with:
+          name: fa-endpoint-discovery
+          path: updater/fa-endpoint-discovery.json
