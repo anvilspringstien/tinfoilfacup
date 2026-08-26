@@ -1,0 +1,32 @@
+name: Ground verification queue (v7.6.5)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate HIGH ground candidates independently
+        run: python updater/ground_verification_queue.py
+      - name: Commit ground verification dashboard
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Verification"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-verification-queue.md updater/ground-verification-queue.json
+          if git diff --cached --quiet; then
+            echo "Ground verification queue unchanged."
+          else
+            git commit -m "Update ground verification queue"
+            git push
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ground-verification-queue
+          path: |
+            ground-verification-queue.md
+            updater/ground-verification-queue.json
