@@ -1,0 +1,81 @@
+name: Current groundshare approval (v7.7.1)
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "approve = record known relationship; correct = also prepare/update canonical venue"
+        required: true
+        type: choice
+        options: [approve, correct]
+      tenant:
+        description: "Tenant club name exactly as Clubfinder uses it"
+        required: true
+        type: string
+      host:
+        description: "Host club (if known)"
+        required: false
+        type: string
+      ground:
+        description: "Current ground name"
+        required: true
+        type: string
+      postcode:
+        description: "Current ground postcode"
+        required: true
+        type: string
+      season:
+        description: "Season/current period"
+        required: true
+        default: "2026-27"
+        type: string
+      evidence:
+        description: "Short human evidence note"
+        required: true
+        type: string
+      source_url:
+        description: "Public evidence URL"
+        required: true
+        type: string
+      latitude:
+        description: "Required when CORRECT changes postcode"
+        required: false
+        type: string
+      longitude:
+        description: "Required when CORRECT changes postcode"
+        required: false
+        type: string
+      publish:
+        description: "Apply canonical venue correction? (only relevant to CORRECT)"
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: write
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Record approval or correction
+        shell: bash
+        run: |
+          ARGS=(--mode "${{ inputs.mode }}" --tenant "${{ inputs.tenant }}" --host "${{ inputs.host }}" --ground "${{ inputs.ground }}" --postcode "${{ inputs.postcode }}" --season "${{ inputs.season }}" --evidence "${{ inputs.evidence }}" --source-url "${{ inputs.source_url }}")
+          if [ -n "${{ inputs.latitude }}" ]; then ARGS+=(--lat "${{ inputs.latitude }}"); fi
+          if [ -n "${{ inputs.longitude }}" ]; then ARGS+=(--lon "${{ inputs.longitude }}"); fi
+          if [ "${{ inputs.publish }}" = "true" ]; then ARGS+=(--publish); fi
+          python updater/current_groundshare_approval.py "${ARGS[@]}"
+      - name: Re-run Ground Health after canonical correction
+        if: ${{ inputs.mode == 'correct' && inputs.publish }}
+        run: |
+          if [ -f updater/ground_health.py ]; then python updater/ground_health.py; fi
+      - name: Commit ledger/report and optional correction
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Approval"
+          git config user.email "actions@users.noreply.github.com"
+          git add groundshare-approval.md updater/ground-approval-ledger.json updater/groundshare-approval-run.json
+          if [ "${{ inputs.mode }}" = "correct" ] && [ "${{ inputs.publish }}" = "true" ]; then
+            git add clubfinder.html
+            if [ -f ground-health.md ]; then git add ground-health.md; fi
+            if [ -f updater/ground-health.json ]; then git add updater/ground-health.json; fi
+          fi
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Record current groundshare approval"; git push; fi
