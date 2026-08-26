@@ -1,0 +1,45 @@
+name: Apply approved ground coordinates (v7.6.3a)
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply_repairs:
+        description: "Apply the READY repairs from ground-coordinate-repair.json?"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: ${{ inputs.apply_repairs }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Apply approved coordinate repairs
+        run: python updater/apply_ground_coordinate_repairs.py
+
+      - name: Re-run Ground Health
+        run: |
+          if [ -f updater/ground_health.py ]; then
+            python updater/ground_health.py
+          else
+            echo "ground_health.py not present; skipping health rerun."
+          fi
+
+      - name: Commit repaired ground registry
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Maintainer"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html updater/ground-coordinate-apply-result.json
+          if [ -f ground-health.md ]; then git add ground-health.md; fi
+          if [ -f updater/ground-health.json ]; then git add updater/ground-health.json; fi
+          if git diff --cached --quiet; then
+            echo "No coordinate changes to commit."
+          else
+            git commit -m "Apply approved ground coordinate repairs"
+            git push
+          fi
