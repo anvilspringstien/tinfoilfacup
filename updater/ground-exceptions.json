@@ -1,0 +1,1246 @@
+{
+  "checked_at": "2026-08-26T16:01:02.695462+00:00",
+  "mode": "triage-only",
+  "missing_total": 81,
+  "category_counts": {
+    "GROUNDSHARE / HOST-GROUND REVIEW": 34,
+    "GEOGRAPHY / POSTCODE REVIEW": 7,
+    "GEOGRAPHY / POSTCODE INVESTIGATION": 5,
+    "FUZZY CLUB-NAME MATCH": 7,
+    "NO FCHD MATCH": 28,
+    "OTHER EXCEPTION": 0
+  },
+  "categories": {
+    "GROUNDSHARE / HOST-GROUND REVIEW": [
+      {
+        "club": "AFC Mansfield",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "AFC Mansfield",
+        "ground_candidate": "Forest Town Welfare",
+        "postcode": "NG19 0EE",
+        "flags": [
+          "GROUND_NAME_MAY_BE_HOST_CLUB"
+        ],
+        "distance_km": 0.078,
+        "raw_lines": [
+          "Forest Town Welfare",
+          "Clipstone Road West",
+          "Forest Town"
+        ]
+      },
+      {
+        "club": "AFC Welwyn",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "AFC Welwyn",
+        "ground_candidate": "Lantern Stadium",
+        "postcode": "EN6 1QB",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.143,
+        "raw_lines": [
+          "Potters Bar Town",
+          "Lantern Stadium",
+          "Parkfield",
+          "Watkins Rise",
+          "Potters Bar"
+        ]
+      },
+      {
+        "club": "Balham FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Balham",
+        "ground_candidate": "Imperial Fields",
+        "postcode": "SM4 6BF",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.056,
+        "raw_lines": [
+          "Tooting & Mitcham United",
+          "Imperial Fields",
+          "Bishopsford Road",
+          "Morden"
+        ]
+      },
+      {
+        "club": "Barwell FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Barwell",
+        "ground_candidate": "Crown Skip Hire Stadium",
+        "postcode": "LE9 8FQ",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.214,
+        "raw_lines": [
+          "Crown Skip Hire Stadium",
+          "Kirkby Road",
+          "Barwell"
+        ]
+      },
+      {
+        "club": "Bedworth United FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Bedworth United",
+        "ground_candidate": "The Oval",
+        "postcode": "CV12 8NN",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.107,
+        "raw_lines": [
+          "The Oval",
+          "Coventry Road",
+          "Bedworth"
+        ]
+      },
+      {
+        "club": "Belper United FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Belper United",
+        "ground_candidate": "Coronation Park",
+        "postcode": "NG16 3HB",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.141,
+        "raw_lines": [
+          "Eastwood Community FC",
+          "Coronation Park",
+          "Chewton Street",
+          "Eastwood"
+        ]
+      },
+      {
+        "club": "Broadfields United FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Broadfields United",
+        "ground_candidate": "Tithe Farm Social Club",
+        "postcode": "HA2 0XH",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.117,
+        "raw_lines": [
+          "Rayners Lane FC",
+          "Tithe Farm Social Club",
+          "151 Rayners Lane",
+          "Harrow"
+        ]
+      },
+      {
+        "club": "Cobham FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Cobham",
+        "ground_candidate": "Reg Madwick Stadium",
+        "postcode": "KT11 1AA",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.177,
+        "raw_lines": [
+          "Reg Madwick Stadium",
+          "Leg o' Mutton Field",
+          "Downside Bridge Road",
+          "Cobham"
+        ]
+      },
+      {
+        "club": "Dudley Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Dudley Town",
+        "ground_candidate": "Guardian Warehousing Arena",
+        "postcode": "WV13 3BB",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.204,
+        "raw_lines": [
+          "Sporting Khalsa FC",
+          "Guardian Warehousing Arena",
+          "Noose Lane",
+          "Willenhall"
+        ]
+      },
+      {
+        "club": "Eastwood Community FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Eastwood Community",
+        "ground_candidate": "Coronation Park",
+        "postcode": "NG16 3HB",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.141,
+        "raw_lines": [
+          "Coronation Park",
+          "Chewton Street",
+          "Eastwood"
+        ]
+      },
+      {
+        "club": "Enfield FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Enfield",
+        "ground_candidate": "Hertingfordbury Park",
+        "postcode": "SG13 8EX",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.505,
+        "raw_lines": [
+          "Hertford Town FC",
+          "Hertingfordbury Park",
+          "West Street",
+          "Hertford"
+        ]
+      },
+      {
+        "club": "Epsom & Ewell FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Epsom & Ewell",
+        "ground_candidate": "Cobham FC: Reg Madwick Stadium",
+        "postcode": "KT11 1AA",
+        "flags": [
+          "SHARED_POSTCODE",
+          "GROUND_NAME_MAY_BE_HOST_CLUB"
+        ],
+        "distance_km": 0.177,
+        "raw_lines": [
+          "Cobham FC: Reg Madwick Stadium",
+          "Leg o' Mutton Field",
+          "Downside Bridge Road",
+          "Cobham"
+        ]
+      },
+      {
+        "club": "Faversham Strike Force FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Faversham Strike Force",
+        "ground_candidate": "The Belmont Stadium",
+        "postcode": "CT5 1QP",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.198,
+        "raw_lines": [
+          "Whitstable Town FC",
+          "The Belmont Stadium",
+          "Belmont Road",
+          "Whitstable"
+        ]
+      },
+      {
+        "club": "Grays Athletic FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Grays Athletic",
+        "ground_candidate": "EMR Stadium",
+        "postcode": "RM18 8NL",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.159,
+        "raw_lines": [
+          "Tilbury FC",
+          "EMR Stadium",
+          "Chadfields",
+          "St Chad's Road",
+          "Tilbury"
+        ]
+      },
+      {
+        "club": "Hackney Wick FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Hackney Wick",
+        "ground_candidate": "Simarco Stadium",
+        "postcode": "CM8 1UN",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.072,
+        "raw_lines": [
+          "Witham Town FC",
+          "Simarco Stadium",
+          "Spa Road",
+          "Witham"
+        ]
+      },
+      {
+        "club": "Hayes & Yeading United FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Hayes & Yeading United",
+        "ground_candidate": "SkyEx Community Stadium",
+        "postcode": "UB4 0SL",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.169,
+        "raw_lines": [
+          "SkyEx Community Stadium",
+          "Beaconsfield Road",
+          "Hayes"
+        ]
+      },
+      {
+        "club": "Heanor Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Heanor Town",
+        "ground_candidate": "The Town Ground",
+        "postcode": "DE75 7EN",
+        "flags": [
+          "GROUND_NAME_MAY_BE_HOST_CLUB"
+        ],
+        "distance_km": 0.172,
+        "raw_lines": [
+          "The Town Ground",
+          "Mayfield Avenue",
+          "Heanor"
+        ]
+      },
+      {
+        "club": "Hertford Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Hertford Town",
+        "ground_candidate": "Hertingfordbury Park",
+        "postcode": "SG13 8EX",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.505,
+        "raw_lines": [
+          "Hertingfordbury Park",
+          "West Street",
+          "Hertford"
+        ]
+      },
+      {
+        "club": "Hinckley AFC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Hinckley",
+        "ground_candidate": "UK Flooring Stadium",
+        "postcode": "LE9 8FQ",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.214,
+        "raw_lines": [
+          "Barwell FC",
+          "UK Flooring Stadium",
+          "Kirkby Road",
+          "Barwell"
+        ]
+      },
+      {
+        "club": "Nuneaton Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Nuneaton Town",
+        "ground_candidate": "The Oval",
+        "postcode": "CV12 8NN",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.107,
+        "raw_lines": [
+          "Bedworth United FC",
+          "The Oval",
+          "Coventry Road",
+          "Bedworth"
+        ]
+      },
+      {
+        "club": "Potters Bar Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Potters Bar Town",
+        "ground_candidate": "Lantern Stadium",
+        "postcode": "EN6 1QB",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.143,
+        "raw_lines": [
+          "Lantern Stadium",
+          "Parkfield",
+          "Watkins Rise",
+          "Potters Bar"
+        ]
+      },
+      {
+        "club": "Rayners Lane FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Rayners Lane",
+        "ground_candidate": "Tithe Farm Social Club",
+        "postcode": "HA2 0XH",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.117,
+        "raw_lines": [
+          "Tithe Farm Social Club",
+          "151 Rayners Lane",
+          "Harrow"
+        ]
+      },
+      {
+        "club": "Romulus FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Romulus",
+        "ground_candidate": "Domino's Stadium",
+        "postcode": "B72 1NL",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.086,
+        "raw_lines": [
+          "Sutton Coldfield Town FC",
+          "Domino's Stadium",
+          "Central Ground",
+          "Coles Lane",
+          "Sutton Coldfield"
+        ]
+      },
+      {
+        "club": "Soul Tower Hamlets FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "SOUL Tower Hamlets",
+        "ground_candidate": "Mile End Stadium",
+        "postcode": "E14 7TW",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.458,
+        "raw_lines": [
+          "Mile End Stadium",
+          "Rhodeswell Road",
+          "Tower Hamlets"
+        ]
+      },
+      {
+        "club": "Southall FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Southall",
+        "ground_candidate": "SkyEx Community Stadium",
+        "postcode": "UB4 0SL",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.169,
+        "raw_lines": [
+          "Hayes & Yeading Unite FC",
+          "SkyEx Community Stadium",
+          "Beaconsfield Road",
+          "Hayes"
+        ]
+      },
+      {
+        "club": "Sporting Bengal United FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Sporting Bengal United",
+        "ground_candidate": "Mile End Stadium",
+        "postcode": "E14 7TW",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.458,
+        "raw_lines": [
+          "Mile End Stadium",
+          "Rhodeswell Road",
+          "Tower Hamlets"
+        ]
+      },
+      {
+        "club": "Sporting Khalsa FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Sporting Khalsa",
+        "ground_candidate": "Guardian Warehousing Stadium",
+        "postcode": "WV13 3BB",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.204,
+        "raw_lines": [
+          "Guardian Warehousing Stadium",
+          "Noose Lane",
+          "Willenhall"
+        ]
+      },
+      {
+        "club": "Sutton Coldfield Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Sutton Coldfield Town",
+        "ground_candidate": "Domino's Arena",
+        "postcode": "B72 1NL",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.086,
+        "raw_lines": [
+          "Domino's Arena",
+          "Central Ground",
+          "Coles Lane",
+          "Sutton Coldfield"
+        ]
+      },
+      {
+        "club": "Tilbury FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Tilbury",
+        "ground_candidate": "EMR Stadium",
+        "postcode": "RM18 8NL",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.159,
+        "raw_lines": [
+          "EMR Stadium",
+          "Chadfields",
+          "St Chad's Road",
+          "Tilbury"
+        ]
+      },
+      {
+        "club": "Tooting & Mitcham United FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Tooting & Mitcham United",
+        "ground_candidate": "Imperial Fields",
+        "postcode": "SM4 6BF",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.056,
+        "raw_lines": [
+          "Imperial Fields",
+          "Bishopsford Road",
+          "Morden"
+        ]
+      },
+      {
+        "club": "Walthamstow FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Walthamstow",
+        "ground_candidate": "Wadham Lodge Sports Centre",
+        "postcode": "E17 4JP",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.086,
+        "raw_lines": [
+          "Wadham Lodge Sports Centre",
+          "Kitchener Road",
+          "Walthamstow"
+        ]
+      },
+      {
+        "club": "West Essex FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "West Essex",
+        "ground_candidate": "Matchday Centre",
+        "postcode": "E17 4JP",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.086,
+        "raw_lines": [
+          "Walthamstow FC",
+          "Matchday Centre",
+          "Wadham Lodge",
+          "Kitchener Road",
+          "Walthamstow"
+        ]
+      },
+      {
+        "club": "Whitstable Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Whitstable Town",
+        "ground_candidate": "The Belmont Stadium",
+        "postcode": "CT5 1QP",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.198,
+        "raw_lines": [
+          "The Belmont Stadium",
+          "Belmont Road",
+          "Whitstable"
+        ]
+      },
+      {
+        "club": "Witham Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Witham Town",
+        "ground_candidate": "Simarco Stadium",
+        "postcode": "CM8 1UN",
+        "flags": [
+          "SHARED_POSTCODE"
+        ],
+        "distance_km": 0.072,
+        "raw_lines": [
+          "Simarco Stadium",
+          "Spa Road",
+          "Witham"
+        ]
+      }
+    ],
+    "GEOGRAPHY / POSTCODE REVIEW": [
+      {
+        "club": "Beaconsfield Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Beaconsfield Town",
+        "ground_candidate": "Holloways Park",
+        "postcode": "HP9 2SF",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 1.445,
+        "raw_lines": [
+          "Holloways Park",
+          "Windsor Road",
+          "Beaconsfield"
+        ]
+      },
+      {
+        "club": "Bradford (Park Avenue) FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Bradford Park Avenue",
+        "ground_candidate": "Horsfall Community Stadium",
+        "postcode": "BD6 1JQ",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 0.798,
+        "raw_lines": [
+          "Horsfall Community Stadium",
+          "Cemetery Road",
+          "Bradford"
+        ]
+      },
+      {
+        "club": "Corby Town FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Corby Town",
+        "ground_candidate": "Steel Park",
+        "postcode": "NN17 2AE",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 0.908,
+        "raw_lines": [
+          "Steel Park",
+          "Jimmy Kane Way",
+          "Rockingham Road",
+          "Corby"
+        ]
+      },
+      {
+        "club": "Frickley Athletic FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Frickley Athletic",
+        "ground_candidate": "Westfield Lane",
+        "postcode": "WF9 2EQ",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 0.849,
+        "raw_lines": [
+          "Westfield Lane",
+          "South Elmsall"
+        ]
+      },
+      {
+        "club": "Heybridge Swifts FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Heybridge Swifts",
+        "ground_candidate": "First Call Community Stadium",
+        "postcode": "CM9 8JA",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 0.75,
+        "raw_lines": [
+          "First Call Community Stadium",
+          "Scraley Road",
+          "Heybridge"
+        ]
+      },
+      {
+        "club": "Sutton Athletic FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Sutton Athletic",
+        "ground_candidate": "Lower Road Ground",
+        "postcode": "BR8 7RZ",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 0.86,
+        "raw_lines": [
+          "Lower Road Ground",
+          "Lower Road",
+          "Hextable"
+        ]
+      },
+      {
+        "club": "Wormley Rovers FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Wormley Rovers",
+        "ground_candidate": "Wormley Sports Club",
+        "postcode": "EN10 7QF",
+        "flags": [
+          "LOCATION_DIFFERENCE_GT_750M"
+        ],
+        "distance_km": 0.835,
+        "raw_lines": [
+          "Wormley Sports Club",
+          "Church Lane",
+          "Wormley"
+        ]
+      }
+    ],
+    "GEOGRAPHY / POSTCODE INVESTIGATION": [
+      {
+        "club": "Handsworth FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Handsworth",
+        "ground_candidate": "Express Worktops Stadium",
+        "postcode": "S80 1UJ",
+        "flags": [
+          "LOCATION_DISAGREEMENT_GT_2KM"
+        ],
+        "distance_km": 19.32,
+        "raw_lines": [
+          "Express Worktops Stadium",
+          "Olivers Mount",
+          "Dartnall"
+        ]
+      },
+      {
+        "club": "Loughborough Students FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Loughborough Students",
+        "ground_candidate": "Loughborough University Stadium",
+        "postcode": "LE11 3AJ",
+        "flags": [
+          "POSTCODE_LOOKUP_FAILED"
+        ],
+        "distance_km": null,
+        "raw_lines": [
+          "Loughborough University Stadium",
+          "Holywell Sports Complex",
+          "Holywell Park",
+          "Loughborough"
+        ]
+      },
+      {
+        "club": "Moulton FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Moulton",
+        "ground_candidate": "Brunting Road",
+        "postcode": "NN3 7QF",
+        "flags": [
+          "POSTCODE_LOOKUP_FAILED"
+        ],
+        "distance_km": null,
+        "raw_lines": [
+          "Brunting Road",
+          "Moulton"
+        ]
+      },
+      {
+        "club": "Northampton Sileby Rangers FC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Northampton Sileby Rangers",
+        "ground_candidate": "O'Riordan Bond Sradium",
+        "postcode": "NN3 6FR",
+        "flags": [
+          "POSTCODE_LOOKUP_FAILED"
+        ],
+        "distance_km": null,
+        "raw_lines": [
+          "O'Riordan Bond Sradium",
+          "Fernie Fields",
+          "Talavera Way",
+          "Northampton"
+        ]
+      },
+      {
+        "club": "Prestwich Heys AFC",
+        "discovery_confidence": "HIGH",
+        "fchd_match": "Prestwich Heys",
+        "ground_candidate": "Adie Moran Park",
+        "postcode": "M45 6WG",
+        "flags": [
+          "LOCATION_DISAGREEMENT_GT_2KM"
+        ],
+        "distance_km": 30.354,
+        "raw_lines": [
+          "Adie Moran Park",
+          "Sandgate Road",
+          "Whitefield"
+        ]
+      }
+    ],
+    "FUZZY CLUB-NAME MATCH": [
+      {
+        "club": "Bishop's Cleeve FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "Bishops Cleeve",
+        "ground_candidate": "Everyone's Energy Stadium",
+        "postcode": "GL52 3PD",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "Everyone's Energy Stadium",
+          "Kayte Lane",
+          "Bishops Cleeve"
+        ]
+      },
+      {
+        "club": "Darlaston Town FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "Harleston Town",
+        "ground_candidate": "Recreation Ground",
+        "postcode": "IP20 9DD",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "Recreation Ground",
+          "Wilderness Lane",
+          "Harleston"
+        ]
+      },
+      {
+        "club": "Desborough Town FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "Knaresborough Town",
+        "ground_candidate": "Hummel Stadium",
+        "postcode": "HG5 8LF",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "Hummel Stadium",
+          "Manse Lane",
+          "Knaresborough"
+        ]
+      },
+      {
+        "club": "Horsham YMCA FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "Horsham YM",
+        "ground_candidate": "Gorings Mead",
+        "postcode": "RH13 5BP",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "Gorings Mead",
+          "Horsham"
+        ]
+      },
+      {
+        "club": "Pershore Town 88 FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "Pershore Town",
+        "ground_candidate": "Recruit 12 Community Stadium",
+        "postcode": "WR10 1QU",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "Recruit 12 Community Stadium",
+          "King George's Way",
+          "Pershore"
+        ]
+      },
+      {
+        "club": "Retford FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "Brentford",
+        "ground_candidate": "Gtech Community Stadium",
+        "postcode": "TW8 0RU",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "Gtech Community Stadium",
+          "Lionel Road South",
+          "Brentford"
+        ]
+      },
+      {
+        "club": "Retford United FC",
+        "discovery_confidence": "REVIEW",
+        "fchd_match": "AFC Telford United",
+        "ground_candidate": "New Bucks Head Stadium",
+        "postcode": "TF1 2TU",
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": [
+          "New Bucks Head Stadium",
+          "Watling Street",
+          "Wellington"
+        ]
+      }
+    ],
+    "NO FCHD MATCH": [
+      {
+        "club": "AFC Greenwich Borough",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Atherton LR FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Billingshurst FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Bournemouth Poppies FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Bovey Tracey FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Dearne & District FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Devizes Town FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Droylsden FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Eastbourne United AFC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Everett Rovers FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Fleetlands FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Godalming Town FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Hartpury FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Keighley Town FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Knowle FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Larkfield & New Hythe FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Liskeard Athletic FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Millbrook FC (Hampshire)",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Nelson FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Runcorn Town FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "SE Dons FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Stockport Georgians FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Sturminster Newton United FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Sutton United FC (Birmingham)",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Wells City FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Worsbrough Bridge Athletic FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Yarm & Eaglescliffe FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      },
+      {
+        "club": "Yateley United FC",
+        "discovery_confidence": "NO MATCH",
+        "fchd_match": null,
+        "ground_candidate": null,
+        "postcode": null,
+        "flags": [],
+        "distance_km": null,
+        "raw_lines": []
+      }
+    ],
+    "OTHER EXCEPTION": []
+  },
+  "existing_yellow_health": {
+    "unverified_locations": [
+      [
+        "South Liverpool FC",
+        "Jericho Lane Sports Hub",
+        "L17 5AL",
+        "unverified"
+      ]
+    ],
+    "shared_postcodes": [
+      [
+        "TN26 1NJ",
+        [
+          "Ashford United FC",
+          "Kennington FC"
+        ]
+      ],
+      [
+        "NE24 3JE",
+        [
+          "Blyth Spartans AFC",
+          "Blyth Town FC"
+        ]
+      ],
+      [
+        "L30 1NY",
+        [
+          "AFC Liverpool",
+          "Bootle FC"
+        ]
+      ],
+      [
+        "NW9 7NE",
+        [
+          "Hendon FC",
+          "Hilltop FC"
+        ]
+      ],
+      [
+        "SW20 9DZ",
+        [
+          "Kingstonian FC",
+          "Raynes Park Vale FC"
+        ]
+      ],
+      [
+        "SG15 6RS",
+        [
+          "Arlesey Town FC",
+          "Baldock Town FC"
+        ]
+      ],
+      [
+        "RM8 2JR",
+        [
+          "Barking FC",
+          "Romford FC"
+        ]
+      ],
+      [
+        "NR30 1EY",
+        [
+          "Gorleston FC",
+          "Great Yarmouth Town FC"
+        ]
+      ],
+      [
+        "ST5 3BX",
+        [
+          "Newcastle Town FC",
+          "Stone Old Alleynians FC"
+        ]
+      ],
+      [
+        "DN17 2TQ",
+        [
+          "Bottesford Town FC",
+          "Bottlesford Town FC"
+        ]
+      ]
+    ]
+  }
+}
