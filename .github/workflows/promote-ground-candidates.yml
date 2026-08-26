@@ -1,0 +1,71 @@
+name: Promote validated ground candidates (v7.6.6)
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish VALIDATED_CANDIDATE grounds into clubfinder.html?"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Evaluate candidate promotion
+        run: |
+          if [ "${{ inputs.publish }}" = "true" ]; then
+            python updater/promote_ground_candidates.py --publish
+          else
+            python updater/promote_ground_candidates.py
+          fi
+
+      - name: Re-run Ground Health
+        if: ${{ inputs.publish }}
+        run: |
+          if [ -f updater/ground_health.py ]; then
+            python updater/ground_health.py
+          else
+            echo "ground_health.py not present; skipping health rerun."
+          fi
+
+      - name: Commit dry-run report
+        if: ${{ !inputs.publish }}
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-candidate-promotion.md updater/ground-candidate-promotion.json
+          if git diff --cached --quiet; then
+            echo "Dry-run report unchanged."
+          else
+            git commit -m "Update ground candidate promotion dry run"
+            git push
+          fi
+
+      - name: Commit promoted grounds
+        if: ${{ inputs.publish }}
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html ground-candidate-promotion.md updater/ground-candidate-promotion.json
+          if [ -f ground-health.md ]; then git add ground-health.md; fi
+          if [ -f updater/ground-health.json ]; then git add updater/ground-health.json; fi
+          if git diff --cached --quiet; then
+            echo "No promotion changes to commit."
+          else
+            git commit -m "Promote validated canonical ground records"
+            git push
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ground-candidate-promotion
+          path: |
+            ground-candidate-promotion.md
+            updater/ground-candidate-promotion.json
