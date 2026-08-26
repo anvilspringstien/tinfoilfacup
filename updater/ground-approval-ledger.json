@@ -1,0 +1,22 @@
+{
+  "version": "7.6.9",
+  "updated_at": "2026-08-26T16:28:57.412411+00:00",
+  "known_groundshares": [],
+  "approved_exceptions": [
+    {
+      "club": "AFC Mansfield",
+      "type": "exception-rule-cleared",
+      "ground": "Forest Town Welfare",
+      "postcode": "NG19 0EE",
+      "rule_version": "7.6.9"
+    },
+    {
+      "club": "Heanor Town FC",
+      "type": "exception-rule-cleared",
+      "ground": "The Town Ground",
+      "postcode": "DE75 7EN",
+      "rule_version": "7.6.9"
+    }
+  ],
+  "instructions": "Add approvals only after explicit review. Ground Health integration can consume this ledger in the next stage."
+}
