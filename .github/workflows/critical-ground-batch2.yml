@@ -1,0 +1,24 @@
+name: Critical ground batch 2 (v7.9.7)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/critical_ground_batch2.py'
+      - '.github/workflows/critical-ground-batch2.yml'
+permissions: {contents: write}
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Promote ten independently validated critical ground records
+        run: python updater/critical_ground_batch2.py
+      - name: Re-run Ground Health
+        run: python updater/ground_health.py
+      - name: Commit batch and Ground Health
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Publisher"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html updater/critical-ground-batch2.json ground-health.md updater/ground-health.json
+          git commit -m "Publish critical ground batch 2 v7.9.7"
+          git push
