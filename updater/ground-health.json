@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T11:47:11.737105+00:00",
+  "checked_at": "2026-08-27T12:24:46.758169+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 422,
-    "critical_items": 68,
-    "review_items": 11,
-    "shared_postcodes": 10,
-    "known_approved_groundshares": 1,
+    "complete_verified": 430,
+    "critical_items": 60,
+    "review_items": 12,
+    "shared_postcodes": 11,
+    "known_approved_groundshares": 4,
     "unverified": 1
   },
   "missing_or_incomplete": [
@@ -24,10 +24,6 @@
     ],
     [
       "Barwell FC",
-      "No canonical ground record"
-    ],
-    [
-      "Bedworth United FC",
       "No canonical ground record"
     ],
     [
@@ -103,10 +99,6 @@
       "No canonical ground record"
     ],
     [
-      "Faversham Strike Force FC",
-      "No canonical ground record"
-    ],
-    [
       "Fleetlands FC",
       "No canonical ground record"
     ],
@@ -116,10 +108,6 @@
     ],
     [
       "Grays Athletic FC",
-      "No canonical ground record"
-    ],
-    [
-      "Hackney Wick FC",
       "No canonical ground record"
     ],
     [
@@ -179,10 +167,6 @@
       "No canonical ground record"
     ],
     [
-      "Nuneaton Town FC",
-      "No canonical ground record"
-    ],
-    [
       "Prestwich Heys AFC",
       "No canonical ground record"
     ],
@@ -211,15 +195,7 @@
       "No canonical ground record"
     ],
     [
-      "Soul Tower Hamlets FC",
-      "No canonical ground record"
-    ],
-    [
       "Southall FC",
-      "No canonical ground record"
-    ],
-    [
-      "Sporting Bengal United FC",
       "No canonical ground record"
     ],
     [
@@ -260,14 +236,6 @@
     ],
     [
       "West Essex FC",
-      "No canonical ground record"
-    ],
-    [
-      "Whitstable Town FC",
-      "No canonical ground record"
-    ],
-    [
-      "Witham Town FC",
       "No canonical ground record"
     ],
     [
@@ -353,6 +321,13 @@
         "Bottesford Town FC",
         "Bottlesford Town FC"
       ]
+    ],
+    [
+      "E14 7TW",
+      [
+        "Soul Tower Hamlets FC",
+        "Sporting Bengal United FC"
+      ]
     ]
   ],
   "known_approved_groundshares": [
@@ -360,6 +335,24 @@
       "postcode": "EN6 1QB",
       "tenant": "AFC Welwyn",
       "host": "Potters Bar Town FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "CM8 1UN",
+      "tenant": "Hackney Wick FC",
+      "host": "Witham Town FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "CT5 1QP",
+      "tenant": "Faversham Strike Force FC",
+      "host": "Whitstable Town FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "CV12 8NN",
+      "tenant": "Nuneaton Town FC",
+      "host": "Bedworth United FC",
       "season": "2026-27"
     }
   ],
