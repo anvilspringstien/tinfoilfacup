@@ -1,0 +1,130 @@
+{
+  "checked_at": "2026-08-27T12:17:31.137261+00:00",
+  "version": "7.8.4",
+  "batch": 1,
+  "mode": "DRY RUN",
+  "confirmed_relationships": 4,
+  "directed_relationships": 3,
+  "undirected_shared_venues": 1,
+  "canonical_club_records_ready": 8,
+  "existing_canonical_club_records": 0,
+  "groundshare_ledger_relationships_ready": 4,
+  "held_relationships": 1,
+  "existing_canonical_records_overwritten": 0,
+  "published": false,
+  "plans": [
+    {
+      "pair_id": 2,
+      "clubs": [
+        "Hackney Wick FC",
+        "Witham Town FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "Simarco Stadium",
+      "postcode": "CM8 1UN",
+      "club_records": [
+        {
+          "club": "Hackney Wick FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.799688,
+          "lon": 0.626646
+        },
+        {
+          "club": "Witham Town FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.799688,
+          "lon": 0.626646
+        }
+      ]
+    },
+    {
+      "pair_id": 3,
+      "clubs": [
+        "Faversham Strike Force FC",
+        "Whitstable Town FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "The Belmont Stadium / YMS Stadium",
+      "postcode": "CT5 1QP",
+      "club_records": [
+        {
+          "club": "Faversham Strike Force FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.353102,
+          "lon": 1.028707
+        },
+        {
+          "club": "Whitstable Town FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.353102,
+          "lon": 1.028707
+        }
+      ]
+    },
+    {
+      "pair_id": 4,
+      "clubs": [
+        "Bedworth United FC",
+        "Nuneaton Town FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "The Oval",
+      "postcode": "CV12 8NN",
+      "club_records": [
+        {
+          "club": "Bedworth United FC",
+          "state": "READY_TO_ADD",
+          "lat": 52.476584,
+          "lon": -1.47132
+        },
+        {
+          "club": "Nuneaton Town FC",
+          "state": "READY_TO_ADD",
+          "lat": 52.476584,
+          "lon": -1.47132
+        }
+      ]
+    },
+    {
+      "pair_id": 5,
+      "clubs": [
+        "Soul Tower Hamlets FC",
+        "Sporting Bengal United FC"
+      ],
+      "relationship_type": "CONFIRMED_SHARED_VENUE_UNDIRECTED",
+      "ground": "Mile End Stadium",
+      "postcode": "E14 7TW",
+      "club_records": [
+        {
+          "club": "Soul Tower Hamlets FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.519021,
+          "lon": -0.033389
+        },
+        {
+          "club": "Sporting Bengal United FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.519021,
+          "lon": -0.033389
+        }
+      ]
+    }
+  ],
+  "held": [
+    {
+      "pair_id": 1,
+      "clubs": [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
+      ],
+      "postcode": "B72 1NL",
+      "ground": "Central Ground / Coles Lane",
+      "status": "HELD_FOR_MORE_EVIDENCE",
+      "research_status": "AMBIGUOUS",
+      "evidence_note": "Current 2026/27 fixture evidence places Romulus home matches at Central Ground, Coles Lane, B72 1NL, but the evidence gathered for this batch does not explicitly establish a current Romulus ↔ Sutton Coldfield Town groundshare or host/tenant direction.",
+      "sources": [
+        "https://runcorntown.co.uk/news2.php?id=3401"
+      ]
+    }
+  ]
+}
