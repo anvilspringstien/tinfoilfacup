@@ -1,0 +1,35 @@
+{
+  "published_at": "2026-08-27T14:32:59.976344+00:00",
+  "version": "7.9.5",
+  "mode": "SAFE CANONICAL HOST PROMOTION",
+  "canonical_host_records_added": 2,
+  "existing_records_overwritten": 0,
+  "relationships_modified": 0,
+  "records": [
+    {
+      "name": "Chessington & Hook United FC",
+      "ground": "Chalky Lane",
+      "postcode": "KT9 2NF",
+      "lat": 51.350284,
+      "lon": -0.309281,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 host venue evidence: https://www.chufc.co.uk/contact",
+      "ground_source": "Current official Chessington & Hook United contact/2026-27 club information",
+      "coordinate_source": "FCHD mapped Chalky Lane ground coordinate"
+    },
+    {
+      "name": "Uxbridge FC",
+      "ground": "Honeycroft",
+      "postcode": "UB7 8HX",
+      "lat": 51.514078,
+      "lon": -0.457668,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
+      "ground_source": "Current official Uxbridge FC venue/directions and 2026-27 information",
+      "coordinate_source": "FCHD mapped Uxbridge/Honeycroft ground coordinate"
+    }
+  ],
+  "competition_json_changed": false
+}

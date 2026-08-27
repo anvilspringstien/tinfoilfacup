@@ -4,8 +4,8 @@
 - 🔴 Critical ground-data items: **39**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares reconciled to canonical records: **11**
-- ⏳ Approved groundshares pending canonical host/tenant reconciliation: **2**
+- 🏟️ Known approved groundshares reconciled to canonical records: **13**
+- ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
 
@@ -76,9 +76,10 @@
 - **Enfield FC** → Hertford Town FC • SG13 8EX • 2026-27
 - **Balham FC** → Tooting & Mitcham United FC • SM4 6BF • 2026-27
 - **Dudley Town FC** → Sporting Khalsa FC • WV13 3BB • 2026-27
+- **Epsom & Ewell FC** → Chessington & Hook United FC • KT9 2NF • 2026-27
 - **Belper United FC** → Mickleover FC • DE3 9FB • 2026-27
+- **Southall FC** → Uxbridge FC • UB7 8HX • 2026-27
 
 ## ⏳ Approved relationships awaiting canonical counterpart
 
-- **Epsom & Ewell FC** → Chessington & Hook United FC • KT9 2NF • 2026-27 — canonical tenant matches: 1; canonical host matches: 0
-- **Southall FC** → Uxbridge FC • UB7 8HX • 2026-27 — canonical tenant matches: 1; canonical host matches: 0
+None.
