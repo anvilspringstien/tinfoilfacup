@@ -1,0 +1,84 @@
+{
+  "published_at": "2026-08-27T15:12:38.680679+00:00",
+  "version": "7.9.10",
+  "canonical_records_added": 4,
+  "eligible_records_added": 3,
+  "host_records_added": 1,
+  "existing_records_overwritten": 0,
+  "groundshares_recorded": 2,
+  "records": [
+    {
+      "name": "Liskeard Athletic FC",
+      "ground": "Lux Park",
+      "postcode": "PL14 3HZ",
+      "lat": 50.460916,
+      "lon": -4.46164,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.swpleague.co.uk/div-1-west/division-1-west/",
+      "ground_source": "Current league club directory; Lux Park independently confirmed",
+      "coordinate_source": "FCHD mapped Lux Park ground coordinate"
+    },
+    {
+      "name": "Stockport Georgians FC",
+      "ground": "Cromley Road",
+      "postcode": "SK2 7DT",
+      "lat": 53.3831,
+      "lon": -2.1473,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.pitchero.com/clubs/stockportgeorgiansfc/contact",
+      "ground_source": "Current official club contact page",
+      "coordinate_source": "Open postcode/playing-field geodata for SK2 7DT; football playing field independently listed at address"
+    },
+    {
+      "name": "SE Dons FC",
+      "ground": "The Bauvill Stadium",
+      "postcode": "ME4 6LR",
+      "lat": 51.3686,
+      "lon": 0.5214,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://fulltime.thefa.com/displayTeam.html?divisionseason=261605801&teamID=80521829",
+      "ground_source": "FA Full-Time and current SCEFL evidence place SE Dons home matches at Bauvill Stadium",
+      "coordinate_source": "Mapped Chatham Town/Bauvill Stadium ground coordinate"
+    },
+    {
+      "name": "Chatham Town FC",
+      "ground": "The Bauvill Stadium",
+      "postcode": "ME4 6LR",
+      "lat": 51.3686,
+      "lon": 0.5214,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.chathamtownfc.com/contact-us/",
+      "ground_source": "Current official Chatham Town contact page",
+      "coordinate_source": "Mapped Bauvill Stadium ground coordinate"
+    }
+  ],
+  "relationships": [
+    {
+      "tenant": "AFC Greenwich Borough",
+      "host": "Holmesdale FC",
+      "ground": "RTL Group Stadium",
+      "postcode": "BR2 8HQ",
+      "season": "2026-27",
+      "evidence": "AFC Greenwich Borough's current official site places its first team at RTL Group Stadium, 68 Oakley Road, while current club-history/directory evidence identifies the arrangement as a groundshare with Holmesdale FC.",
+      "source_url": "https://greenwichborough.com/"
+    },
+    {
+      "tenant": "SE Dons FC",
+      "host": "Chatham Town FC",
+      "ground": "The Bauvill Stadium",
+      "postcode": "ME4 6LR",
+      "season": "2026-27",
+      "evidence": "Current SCEFL/FA Full-Time evidence places SE Dons home matches at the Bauvill Stadium and identifies the venue as a groundshare with Chatham Town.",
+      "source_url": "https://fulltime.thefa.com/displayTeam.html?divisionseason=261605801&teamID=80521829"
+    }
+  ],
+  "protected_held": [
+    "Romulus FC",
+    "Sutton Coldfield Town FC"
+  ],
+  "competition_json_changed": false
+}

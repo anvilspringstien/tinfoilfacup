@@ -1,20 +1,17 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **482**
-- 🔴 Critical ground-data items: **8**
-- 🟡 Review items: **14**
+- 🟢 Complete verified club-ground records: **485**
+- 🔴 Critical ground-data items: **5**
+- 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares reconciled to canonical records: **13**
+- 🏟️ Known approved groundshares reconciled to canonical records: **15**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
 
 - **Fleetlands FC** — No canonical ground record
 - **Hartpury FC** — No canonical ground record
-- **Liskeard Athletic FC** — No canonical ground record
 - **Romulus FC** — No canonical ground record
-- **SE Dons FC** — No canonical ground record
-- **Stockport Georgians FC** — No canonical ground record
 - **Sutton Coldfield Town FC** — No canonical ground record
 - **Sutton United FC (Birmingham)** — No canonical ground record
 
@@ -30,7 +27,6 @@
 - **NR30 1EY** — Gorleston FC, Great Yarmouth Town FC
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
 - **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
-- **BR2 8HQ** — AFC Greenwich Borough, Holmesdale FC
 - **E14 7TW** — Soul Tower Hamlets FC, Sporting Bengal United FC
 - **E17 4JP** — Walthamstow FC, West Essex FC
 
@@ -49,6 +45,8 @@
 - **Epsom & Ewell FC** → Chessington & Hook United FC • KT9 2NF • 2026-27
 - **Belper United FC** → Mickleover FC • DE3 9FB • 2026-27
 - **Southall FC** → Uxbridge FC • UB7 8HX • 2026-27
+- **AFC Greenwich Borough** → Holmesdale FC • BR2 8HQ • 2026-27
+- **SE Dons FC** → Chatham Town FC • ME4 6LR • 2026-27
 
 ## ⏳ Approved relationships awaiting canonical counterpart
 

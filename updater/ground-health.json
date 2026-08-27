@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T15:09:33.941271+00:00",
+  "checked_at": "2026-08-27T15:12:38.751971+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 482,
-    "critical_items": 8,
-    "review_items": 14,
-    "shared_postcodes": 13,
-    "known_approved_groundshares": 13,
+    "complete_verified": 485,
+    "critical_items": 5,
+    "review_items": 13,
+    "shared_postcodes": 12,
+    "known_approved_groundshares": 15,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 1
   },
@@ -20,19 +20,7 @@
       "No canonical ground record"
     ],
     [
-      "Liskeard Athletic FC",
-      "No canonical ground record"
-    ],
-    [
       "Romulus FC",
-      "No canonical ground record"
-    ],
-    [
-      "SE Dons FC",
-      "No canonical ground record"
-    ],
-    [
-      "Stockport Georgians FC",
       "No canonical ground record"
     ],
     [
@@ -113,13 +101,6 @@
       [
         "Bottesford Town FC",
         "Bottlesford Town FC"
-      ]
-    ],
-    [
-      "BR2 8HQ",
-      [
-        "AFC Greenwich Borough",
-        "Holmesdale FC"
       ]
     ],
     [
@@ -214,6 +195,18 @@
       "postcode": "UB7 8HX",
       "tenant": "Southall FC",
       "host": "Uxbridge FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "BR2 8HQ",
+      "tenant": "AFC Greenwich Borough",
+      "host": "Holmesdale FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "ME4 6LR",
+      "tenant": "SE Dons FC",
+      "host": "Chatham Town FC",
       "season": "2026-27"
     }
   ],

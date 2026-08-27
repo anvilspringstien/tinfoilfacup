@@ -1,6 +1,6 @@
 {
-  "version": "7.9.3",
-  "updated_at": "2026-08-27T14:22:26.227705+00:00",
+  "version": "7.9.10",
+  "updated_at": "2026-08-27T15:12:38.680679+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -156,6 +156,30 @@
       "approved_at": "2026-08-27T14:22:26.227705+00:00",
       "status": "current",
       "approval_source": "v7.9.3 current venue promotion after v7.9.2 validation"
+    },
+    {
+      "tenant": "AFC Greenwich Borough",
+      "host": "Holmesdale FC",
+      "ground": "RTL Group Stadium",
+      "postcode": "BR2 8HQ",
+      "season": "2026-27",
+      "evidence": "AFC Greenwich Borough's current official site places its first team at RTL Group Stadium, 68 Oakley Road, while current club-history/directory evidence identifies the arrangement as a groundshare with Holmesdale FC.",
+      "source_url": "https://greenwichborough.com/",
+      "approved_at": "2026-08-27T15:12:38.680679+00:00",
+      "status": "current",
+      "approval_source": "v7.9.10 independently validated groundshare reconciliation"
+    },
+    {
+      "tenant": "SE Dons FC",
+      "host": "Chatham Town FC",
+      "ground": "The Bauvill Stadium",
+      "postcode": "ME4 6LR",
+      "season": "2026-27",
+      "evidence": "Current SCEFL/FA Full-Time evidence places SE Dons home matches at the Bauvill Stadium and identifies the venue as a groundshare with Chatham Town.",
+      "source_url": "https://fulltime.thefa.com/displayTeam.html?divisionseason=261605801&teamID=80521829",
+      "approved_at": "2026-08-27T15:12:38.680679+00:00",
+      "status": "current",
+      "approval_source": "v7.9.10 independently validated groundshare reconciliation"
     }
   ],
   "approved_exceptions": [
