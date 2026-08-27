@@ -1,15 +1,15 @@
 # Tin Foil FA Cup — Identity Variant Promotion
 
-Last checked: **27/08/2026, 11:38:10 UTC**
+Last checked: **27/08/2026, 11:45:40 UTC**
 
-Mode: **DRY RUN**
+Mode: **PUBLISH**
 
 - Confirmed identity candidates: **3**
 - Ready to promote: **3**
 - Held: **0**
 - Skipped by safety checks: **0**
 - Existing canonical records overwritten: **0**
-- Published: **NO**
+- Published: **YES**
 
 ## Promotion records
 
