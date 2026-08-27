@@ -1,0 +1,24 @@
+name: Shared postcode review resolution (v7.9.14)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/resolve_shared_postcode_reviews.py'
+      - 'updater/ground_health.py'
+      - '.github/workflows/shared-postcode-review-resolution.yml'
+permissions: {contents: write}
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Resolve evidenced shared-postcode reviews
+        run: python updater/resolve_shared_postcode_reviews.py
+      - name: Re-run Ground Health
+        run: python updater/ground_health.py
+      - name: Commit review resolution and Ground Health
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add updater/ground-approval-ledger.json shared-postcode-review-resolution.md updater/shared-postcode-review-resolution.json ground-health.md updater/ground-health.json
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Resolve shared postcode reviews v7.9.14"; git push; fi
