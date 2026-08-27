@@ -1,0 +1,97 @@
+{
+  "published_at": "2026-08-27T15:09:33.855599+00:00",
+  "version": "7.9.9",
+  "canonical_records_added": 7,
+  "existing_records_overwritten": 0,
+  "records": [
+    {
+      "name": "AFC Greenwich Borough",
+      "ground": "RTL Group Stadium",
+      "postcode": "BR2 8HQ",
+      "lat": 51.37413,
+      "lon": 0.03742,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://greenwichborough.com/",
+      "ground_source": "Current official club site, 2026/27",
+      "coordinate_source": "FCHD mapped Holmesdale/RTL Group Stadium ground coordinate"
+    },
+    {
+      "name": "Dearne & District FC",
+      "ground": "Century Cladding Community Welfare Ground",
+      "postcode": "S63 9EH",
+      "lat": 53.528734,
+      "lon": -1.311926,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://ncefl.org.uk/teams/dearne%26district/",
+      "ground_source": "Current NCEL 2026/27 club directory and 2026 home fixture evidence",
+      "coordinate_source": "FCHD 2023-24 mapped Welfare Pitch, Furlong Road ground coordinate"
+    },
+    {
+      "name": "Desborough Town FC",
+      "ground": "Waterworks Field",
+      "postcode": "NN14 2LJ",
+      "lat": 52.445338,
+      "lon": -0.829238,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.artarnfc.co.uk/",
+      "ground_source": "Club ground address; independently matched to historic/current Desborough Town identity",
+      "coordinate_source": "FCHD 2023-24 mapped Waterworks Ground coordinate"
+    },
+    {
+      "name": "Godalming Town FC",
+      "ground": "Bill Kyte Stadium",
+      "postcode": "GU7 3JE",
+      "lat": 51.195,
+      "lon": -0.5975,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://godalmingtownfc.co.uk/find-us/",
+      "ground_source": "Current official club directions page",
+      "coordinate_source": "Mapped Bill Kyte Stadium ground coordinate cross-checked against current Wey Court address"
+    },
+    {
+      "name": "Knowle FC",
+      "ground": "The Robins' Nest",
+      "postcode": "B93 0NX",
+      "lat": 52.392759,
+      "lon": -1.733625,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.knowlefc.co.uk/",
+      "ground_source": "Current official club site and home fixture listing",
+      "coordinate_source": "FCHD mapped Knowle ground coordinate"
+    },
+    {
+      "name": "Sturminster Newton United FC",
+      "ground": "The We Heat South Stadium, Barnetts Field",
+      "postcode": "DT10 1EW",
+      "lat": 50.935727,
+      "lon": -2.30135,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://snufc.com/teams/1st-team",
+      "ground_source": "Current official 2026/27 first-team page and directions",
+      "coordinate_source": "FCHD mapped Barnett's Field ground coordinate"
+    },
+    {
+      "name": "Yarm & Eaglescliffe FC",
+      "ground": "Bedford Terrace",
+      "postcode": "TS23 4AE",
+      "lat": 54.602338,
+      "lon": -1.282006,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://yarmeaglescliffefc.uk/",
+      "ground_source": "Current official 2026/27 first-team home fixtures and club address at Bedford Terrace",
+      "coordinate_source": "Open Postcode Geo point for TS23 4AE; current ground address independently confirmed"
+    }
+  ],
+  "protected_held": [
+    "Romulus FC",
+    "Sutton Coldfield Town FC"
+  ],
+  "competition_json_changed": false
+}

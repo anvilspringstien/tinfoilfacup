@@ -1,29 +1,22 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **475**
-- 🔴 Critical ground-data items: **15**
-- 🟡 Review items: **13**
+- 🟢 Complete verified club-ground records: **482**
+- 🔴 Critical ground-data items: **8**
+- 🟡 Review items: **14**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **13**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
 
-- **AFC Greenwich Borough** — No canonical ground record
-- **Dearne & District FC** — No canonical ground record
-- **Desborough Town FC** — No canonical ground record
 - **Fleetlands FC** — No canonical ground record
-- **Godalming Town FC** — No canonical ground record
 - **Hartpury FC** — No canonical ground record
-- **Knowle FC** — No canonical ground record
 - **Liskeard Athletic FC** — No canonical ground record
 - **Romulus FC** — No canonical ground record
 - **SE Dons FC** — No canonical ground record
 - **Stockport Georgians FC** — No canonical ground record
-- **Sturminster Newton United FC** — No canonical ground record
 - **Sutton Coldfield Town FC** — No canonical ground record
 - **Sutton United FC (Birmingham)** — No canonical ground record
-- **Yarm & Eaglescliffe FC** — No canonical ground record
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -37,6 +30,7 @@
 - **NR30 1EY** — Gorleston FC, Great Yarmouth Town FC
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
 - **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
+- **BR2 8HQ** — AFC Greenwich Borough, Holmesdale FC
 - **E14 7TW** — Soul Tower Hamlets FC, Sporting Bengal United FC
 - **E17 4JP** — Walthamstow FC, West Essex FC
 
