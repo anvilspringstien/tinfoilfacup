@@ -1,0 +1,125 @@
+{
+  "checked_at": "2026-08-27T13:13:16.519787+00:00",
+  "version": "7.8.7",
+  "batch": 2,
+  "mode": "DRY RUN",
+  "confirmed_relationships": 3,
+  "directed_relationships": 2,
+  "undirected_shared_venues": 1,
+  "rejected_not_current_relationships": 2,
+  "canonical_club_records_ready": 6,
+  "existing_canonical_club_records": 0,
+  "groundshare_ledger_relationships_ready": 3,
+  "existing_canonical_records_overwritten": 0,
+  "published": false,
+  "plans": [
+    {
+      "pair_id": 6,
+      "clubs": [
+        "Walthamstow FC",
+        "West Essex FC"
+      ],
+      "relationship_type": "CONFIRMED_SHARED_VENUE_UNDIRECTED",
+      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
+      "postcode": "E17 4JP",
+      "club_records": [
+        {
+          "club": "Walthamstow FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.597388,
+          "lon": -0.008999
+        },
+        {
+          "club": "West Essex FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.597388,
+          "lon": -0.008999
+        }
+      ]
+    },
+    {
+      "pair_id": 7,
+      "clubs": [
+        "Broadfields United FC",
+        "Rayners Lane FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "Tithe Farm Sports & Social Club",
+      "postcode": "HA2 0XH",
+      "club_records": [
+        {
+          "club": "Broadfields United FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.56988,
+          "lon": -0.365086
+        },
+        {
+          "club": "Rayners Lane FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.56988,
+          "lon": -0.365086
+        }
+      ]
+    },
+    {
+      "pair_id": 9,
+      "clubs": [
+        "Barwell FC",
+        "Hinckley AFC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "Kirkby Road",
+      "postcode": "LE9 8FQ",
+      "club_records": [
+        {
+          "club": "Barwell FC",
+          "state": "READY_TO_ADD",
+          "lat": 52.572692,
+          "lon": -1.341223
+        },
+        {
+          "club": "Hinckley AFC",
+          "state": "READY_TO_ADD",
+          "lat": 52.572692,
+          "lon": -1.341223
+        }
+      ]
+    }
+  ],
+  "rejected_not_current": [
+    {
+      "pair_id": 8,
+      "clubs": [
+        "Cobham FC",
+        "Epsom & Ewell FC"
+      ],
+      "postcode": "KT11 1AA",
+      "current_ground": "Chalky Lane, Chessington",
+      "status": "HUMAN_REJECTED_NOT_CURRENT",
+      "research_status": "NOT_CURRENT",
+      "evidence_note": "The queued Cobham relationship is no longer current. Epsom & Ewell's own history says the club returned to Cobham for 2025/26 but moved again in October 2025 to Chessington & Hook United. Its August 2026 FA Cup match preview identifies Chalky Lane as its 2026/27 home venue. Cobham ↔ Epsom & Ewell must therefore not be approved from the stale shared-postcode candidate.",
+      "sources": [
+        "https://epsomandewellfc.co.uk/club/history/",
+        "https://epsomandewellfc.co.uk/2026/08/match-preview-epsom-ewell-vs-chipstead-emirates-f-a-cup-extra-preliminary-round/"
+      ],
+      "confirmation_note": "Human confirmation accepts the v7.8.5 finding that this queued relationship is not current. It is excluded from groundshare promotion."
+    },
+    {
+      "pair_id": 10,
+      "clubs": [
+        "Belper United FC",
+        "Eastwood Community FC"
+      ],
+      "postcode": "NG16 3HB",
+      "current_ground": "Don Amott Arena, Mickleover",
+      "status": "HUMAN_REJECTED_NOT_CURRENT",
+      "research_status": "NOT_CURRENT",
+      "evidence_note": "The queued Eastwood relationship is no longer current. Belper United announced in March 2026 that it would leave Eastwood CFC at the end of the 2025/26 season, ending a three-year groundshare. Belper United's current official site now gives the Don Amott Arena, home of Mickleover FC, as its ground. Eastwood's current site continues to identify Coronation Park as Eastwood's home. Belper United ↔ Eastwood Community must therefore not be approved for 2026/27.",
+      "sources": [
+        "https://belperunited.co.uk/",
+        "https://www.eastwoodcfc.co.uk/"
+      ],
+      "confirmation_note": "Human confirmation accepts the v7.8.5 finding that this queued relationship is not current. It is excluded from groundshare promotion."
+    }
+  ]
+}
