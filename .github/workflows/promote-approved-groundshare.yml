@@ -1,0 +1,43 @@
+name: Promote approved groundshare (v7.7.3b)
+on:
+  workflow_dispatch:
+    inputs:
+      tenant:
+        description: "Approved tenant club"
+        required: true
+        type: string
+      publish:
+        description: "Publish canonical GROUNDS record?"
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: write
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate and optionally promote
+        shell: bash
+        run: |
+          ARGS=(--tenant "${{ inputs.tenant }}")
+          if [ "${{ inputs.publish }}" = "true" ]; then ARGS+=(--publish); fi
+          python updater/promote_approved_groundshare.py "${ARGS[@]}"
+      - name: Re-run Ground Health after publish
+        if: ${{ inputs.publish }}
+        run: python updater/ground_health.py
+      - name: Commit
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add approved-groundshare-promotion.md
+          if [ "${{ inputs.publish }}" = "true" ]; then
+            git add clubfinder.html ground-health.md updater/ground-health.json
+          fi
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Promote approved groundshare v7.7.3b"
+            git push
+          fi
