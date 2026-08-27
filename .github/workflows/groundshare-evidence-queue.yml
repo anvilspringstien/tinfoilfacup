@@ -1,0 +1,23 @@
+name: Groundshare evidence queue (v7.8.1)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build proposal-only groundshare evidence queue
+        run: python updater/groundshare_evidence_queue.py
+      - name: Commit groundshare evidence queue
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Queue"
+          git config user.email "actions@users.noreply.github.com"
+          git add groundshare-evidence-queue.md updater/groundshare-evidence-queue.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update groundshare evidence queue v7.8.1"
+            git push
+          fi
