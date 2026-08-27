@@ -1,0 +1,23 @@
+name: Groundshare evidence confirmation — Batch 3 (v7.8.9)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Confirm researched groundshare evidence — Batch 3
+        run: python updater/groundshare_evidence_confirmation_batch3.py
+      - name: Commit confirmation record
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Confirmation"
+          git config user.email "actions@users.noreply.github.com"
+          git add groundshare-evidence-confirmation-batch3.md updater/groundshare-evidence-confirmation-batch3.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Groundshare evidence confirmation v7.8.9 batch 3"
+            git push
+          fi
