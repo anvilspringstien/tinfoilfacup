@@ -1,0 +1,23 @@
+name: Current venue correction queue (v7.9.1)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build proposal-only current venue correction queue
+        run: python updater/current_venue_correction_queue.py
+      - name: Commit current venue correction queue
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add current-venue-correction-queue.md updater/current-venue-correction-queue.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update current venue correction queue v7.9.1"
+            git push
+          fi
