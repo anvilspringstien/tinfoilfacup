@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'updater/export_test_postcodes.py'
+      - '.github/workflows/tester-postcode-export.yml'
 permissions:
   contents: write
 jobs:
