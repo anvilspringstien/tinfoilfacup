@@ -1,10 +1,10 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **436**
-- 🔴 Critical ground-data items: **54**
+- 🟢 Complete verified club-ground records: **444**
+- 🔴 Critical ground-data items: **46**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares suppressed from warnings: **6**
+- 🏟️ Known approved groundshares suppressed from warnings: **10**
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -29,3 +29,7 @@
 - **Nuneaton Town FC** → Bedworth United FC • CV12 8NN • 2026-27
 - **Broadfields United FC** → Rayners Lane FC • HA2 0XH • 2026-27
 - **Hinckley AFC** → Barwell FC • LE9 8FQ • 2026-27
+- **Grays Athletic FC** → Tilbury FC • RM18 8NL • 2026-27
+- **Enfield FC** → Hertford Town FC • SG13 8EX • 2026-27
+- **Balham FC** → Tooting & Mitcham United FC • SM4 6BF • 2026-27
+- **Dudley Town FC** → Sporting Khalsa FC • WV13 3BB • 2026-27

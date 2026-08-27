@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T13:18:18.960066+00:00",
+  "checked_at": "2026-08-27T13:39:03.595483+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 436,
-    "critical_items": 54,
+    "complete_verified": 444,
+    "critical_items": 46,
     "review_items": 13,
     "shared_postcodes": 12,
-    "known_approved_groundshares": 6,
+    "known_approved_groundshares": 10,
     "unverified": 1
   },
   "missing_or_incomplete": [
@@ -16,10 +16,6 @@
     ],
     [
       "Atherton LR FC",
-      "No canonical ground record"
-    ],
-    [
-      "Balham FC",
       "No canonical ground record"
     ],
     [
@@ -67,19 +63,11 @@
       "No canonical ground record"
     ],
     [
-      "Dudley Town FC",
-      "No canonical ground record"
-    ],
-    [
       "Eastbourne United AFC",
       "No canonical ground record"
     ],
     [
       "Eastwood Community FC",
-      "No canonical ground record"
-    ],
-    [
-      "Enfield FC",
       "No canonical ground record"
     ],
     [
@@ -99,10 +87,6 @@
       "No canonical ground record"
     ],
     [
-      "Grays Athletic FC",
-      "No canonical ground record"
-    ],
-    [
       "Handsworth FC",
       "No canonical ground record"
     ],
@@ -112,10 +96,6 @@
     ],
     [
       "Hayes & Yeading United FC",
-      "No canonical ground record"
-    ],
-    [
-      "Hertford Town FC",
       "No canonical ground record"
     ],
     [
@@ -183,10 +163,6 @@
       "No canonical ground record"
     ],
     [
-      "Sporting Khalsa FC",
-      "No canonical ground record"
-    ],
-    [
       "Stockport Georgians FC",
       "No canonical ground record"
     ],
@@ -200,14 +176,6 @@
     ],
     [
       "Sutton United FC (Birmingham)",
-      "No canonical ground record"
-    ],
-    [
-      "Tilbury FC",
-      "No canonical ground record"
-    ],
-    [
-      "Tooting & Mitcham United FC",
       "No canonical ground record"
     ],
     [
@@ -348,6 +316,30 @@
       "postcode": "LE9 8FQ",
       "tenant": "Hinckley AFC",
       "host": "Barwell FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "RM18 8NL",
+      "tenant": "Grays Athletic FC",
+      "host": "Tilbury FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "SG13 8EX",
+      "tenant": "Enfield FC",
+      "host": "Hertford Town FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "SM4 6BF",
+      "tenant": "Balham FC",
+      "host": "Tooting & Mitcham United FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "WV13 3BB",
+      "tenant": "Dudley Town FC",
+      "host": "Sporting Khalsa FC",
       "season": "2026-27"
     }
   ],
