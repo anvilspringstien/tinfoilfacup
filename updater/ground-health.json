@@ -1,33 +1,18 @@
 {
-  "checked_at": "2026-08-27T15:32:49.398894+00:00",
+  "checked_at": "2026-08-27T15:39:48.512234+00:00",
   "counts": {
     "eligible_clubs": 491,
     "complete_verified": 491,
     "critical_items": 0,
-    "review_items": 2,
-    "shared_postcodes": 2,
-    "known_approved_groundshares": 22,
+    "review_items": 0,
+    "shared_postcodes": 0,
+    "known_approved_groundshares": 23,
     "known_confirmed_shared_venues": 3,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 0
   },
   "missing_or_incomplete": [],
-  "shared_postcodes": [
-    [
-      "DN17 2TQ",
-      [
-        "Bottesford Town FC",
-        "Bottlesford Town FC"
-      ]
-    ],
-    [
-      "B72 1NL",
-      [
-        "Romulus FC",
-        "Sutton Coldfield Town FC"
-      ]
-    ]
-  ],
+  "shared_postcodes": [],
   "known_approved_groundshares": [
     {
       "postcode": "EN6 1QB",
@@ -159,6 +144,12 @@
       "postcode": "TW19 7BH",
       "tenant": "Kingstonian FC",
       "host": "Ashford Town (Middx) FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "B72 1NL",
+      "tenant": "Romulus FC",
+      "host": "Sutton Coldfield Town FC",
       "season": "2026-27"
     }
   ],

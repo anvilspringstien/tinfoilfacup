@@ -2,9 +2,9 @@
 
 - 🟢 Complete verified club-ground records: **491**
 - 🔴 Critical ground-data items: **0**
-- 🟡 Review items: **2**
+- 🟡 Review items: **0**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares reconciled to canonical records: **22**
+- 🏟️ Known approved groundshares reconciled to canonical records: **23**
 - 🤝 Confirmed shared venues reconciled without forced direction: **3**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
@@ -14,8 +14,7 @@ None.
 
 ## 🟡 Shared postcodes / possible groundshares
 
-- **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
-- **B72 1NL** — Romulus FC, Sutton Coldfield Town FC
+No unexplained shared postcodes found.
 
 ## 🏟️ Known approved groundshares
 
@@ -41,6 +40,7 @@ None.
 - **Stone Old Alleynians FC** → Newcastle Town FC • ST5 3BX • 2026-27
 - **Hilltop FC** → Hendon FC • NW9 7NE • 2026-27
 - **Kingstonian FC** → Ashford Town (Middx) FC • TW19 7BH • 2026-27
+- **Romulus FC** → Sutton Coldfield Town FC • B72 1NL • 2026-27
 
 ## 🤝 Confirmed shared venues without forced direction
 

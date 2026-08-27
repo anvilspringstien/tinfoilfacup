@@ -1,6 +1,6 @@
 {
-  "version": "7.9.16",
-  "updated_at": "2026-08-27T15:32:49.313575+00:00",
+  "version": "7.9.17",
+  "updated_at": "2026-08-27T15:39:48.425107+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -264,6 +264,18 @@
       "approved_at": "2026-08-27T15:32:49.313575+00:00",
       "status": "current",
       "approval_source": "v7.9.16 post-correction current groundshare approval"
+    },
+    {
+      "tenant": "Romulus FC",
+      "host": "Sutton Coldfield Town FC",
+      "ground": "The Domino's Arena / Central Ground",
+      "postcode": "B72 1NL",
+      "season": "2026-27",
+      "evidence": "Current venue evidence places both clubs at The Domino's Arena, Coles Lane. FCHD explicitly records Romulus at Sutton Coldfield Town FC's Domino's Stadium; current league fixture evidence places both at The Domino's Arena; independent reporting identifies Romulus as groundsharing with Sutton Coldfield Town, consistent with the established landlord/tenant relationship.",
+      "source_url": "https://fchd.info/maps/GAZ.htm",
+      "approved_at": "2026-08-27T15:39:48.425087+00:00",
+      "status": "current",
+      "approval_source": "v7.9.17 final evidence review"
     }
   ],
   "approved_exceptions": [
