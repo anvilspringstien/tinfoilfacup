@@ -1,0 +1,27 @@
+name: Current venue validation (v7.9.2)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/current_venue_validation.py'
+      - '.github/workflows/current-venue-validation.yml'
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate live canonical venue records
+        run: python updater/current_venue_validation.py
+      - name: Commit validation report
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add current-venue-validation.md updater/current-venue-validation.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update current venue validation v7.9.2"
+            git push
+          fi
