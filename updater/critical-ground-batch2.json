@@ -1,0 +1,130 @@
+{
+  "published_at": "2026-08-27T15:03:02.356599+00:00",
+  "version": "7.9.7",
+  "canonical_records_added": 10,
+  "existing_records_overwritten": 0,
+  "records": [
+    {
+      "name": "Prestwich Heys AFC",
+      "ground": "Adie Moran Park",
+      "postcode": "M45 6NT",
+      "lat": 53.54455,
+      "lon": -2.27306,
+      "source": "Current official club site + NWCFL 2026/27 club page",
+      "ground_source": "https://www.prestwichheys.com/contact ; https://www.nwcfl.com/clubpage.php?id=254",
+      "coordinate_source": "OpenStreetMap mapped Prestwich Heys football pitch (way 177323240)",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Atherton LR FC",
+      "ground": "Crilly Park",
+      "postcode": "M46 9XG",
+      "lat": 53.531169,
+      "lon": -2.483947,
+      "source": "NWCFL 2026/27 club information and Atherton LR official site",
+      "ground_source": "https://www.nwcfl.com/clubpage.php?id=5",
+      "coordinate_source": "Mapped Crilly Park football ground coordinate",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Billingshurst FC",
+      "ground": "Rod Gaskin Ltd Stadium, Jubilee Fields",
+      "postcode": "RH14 9HZ",
+      "lat": 51.0236,
+      "lon": -0.4517,
+      "source": "Current official Billingshurst FC club information",
+      "ground_source": "https://www.billingshurstfc.co.uk/clubinfo/1047",
+      "coordinate_source": "Jubilee Fields football-ground mapped location; publication guard requires finite venue-level coordinate",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Bournemouth Poppies FC",
+      "ground": "Victoria Park",
+      "postcode": "BH9 2RA",
+      "lat": 50.747028,
+      "lon": -1.88675,
+      "source": "Current Wessex League Premier Division club directory",
+      "ground_source": "https://www.wessexleague.co.uk/premier-division",
+      "coordinate_source": "Mapped Victoria Park football ground coordinate",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Bovey Tracey FC",
+      "ground": "Mill Marsh Park",
+      "postcode": "TQ13 9FF",
+      "lat": 50.5924,
+      "lon": -3.67903,
+      "source": "Current 2026/27 match venue evidence plus league ground record",
+      "ground_source": "https://www.ppfc.co.uk/event/bovey-tracey-v-plymouth-parkway/",
+      "coordinate_source": "Geograph subject-location geotag for Mill Marsh Park (10m precision)",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Devizes Town FC",
+      "ground": "Grist Environmental Ground, Nursteed Road",
+      "postcode": "SN10 3DX",
+      "lat": 51.345224,
+      "lon": -1.979972,
+      "source": "Current official Devizes Town FC site",
+      "ground_source": "https://devizestownfootball.co.uk/",
+      "coordinate_source": "Open Postcode Geo for Devizes Town FC address SN10 3DX",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Droylsden FC",
+      "ground": "The Butchers Arms",
+      "postcode": "M43 7AY",
+      "lat": 53.48142,
+      "lon": -2.14537,
+      "source": "NWCFL 2026/27 club information",
+      "ground_source": "https://www.nwcfl.com/clubpage.php?id=132",
+      "coordinate_source": "Geograph subject-location geotag for football match at Butchers Arms (10m precision)",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Eastbourne United AFC",
+      "ground": "The Oval, Channel View Road",
+      "postcode": "BN22 7LN",
+      "lat": 50.781018,
+      "lon": 0.305302,
+      "source": "Current official Eastbourne United AFC contact page",
+      "ground_source": "https://www.eastbourneunitedafc.com/contact",
+      "coordinate_source": "FCHD mapped The Oval football ground coordinate",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Nelson FC",
+      "ground": "The Daisy Arena, Victoria Park",
+      "postcode": "BB9 7BN",
+      "lat": 53.83659,
+      "lon": -2.22911,
+      "source": "Current Nelson FC visitors page + NWCFL 2026/27 club information",
+      "ground_source": "https://www.nelsonfc.co.uk/visitors/ ; https://www.nwcfl.com/clubpage.php?id=35",
+      "coordinate_source": "Wikimedia Commons 8 Aug 2026 object-location geotag at Daisy Arena",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    },
+    {
+      "name": "Runcorn Town FC",
+      "ground": "Viridor Community Stadium",
+      "postcode": "WA7 4ET",
+      "lat": 53.330761,
+      "lon": -2.750704,
+      "source": "Current official Runcorn Town FC club information and 2026/27 fixtures",
+      "ground_source": "https://runcorn.town/club-info/",
+      "coordinate_source": "FCHD mapped Viridor Community Stadium coordinate",
+      "verification": "verified",
+      "verification_label": "\u2705 Verified"
+    }
+  ],
+  "competition_json_changed": false,
+  "safety": "Romulus FC and Sutton Coldfield Town FC are not in this batch."
+}

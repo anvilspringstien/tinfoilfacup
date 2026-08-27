@@ -1,7 +1,7 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **455**
-- 🔴 Critical ground-data items: **35**
+- 🟢 Complete verified club-ground records: **465**
+- 🔴 Critical ground-data items: **25**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **13**
@@ -10,16 +10,9 @@
 ## 🔴 Critical missing/incomplete canonical records
 
 - **AFC Greenwich Borough** — No canonical ground record
-- **Atherton LR FC** — No canonical ground record
-- **Billingshurst FC** — No canonical ground record
-- **Bournemouth Poppies FC** — No canonical ground record
-- **Bovey Tracey FC** — No canonical ground record
 - **Darlaston Town FC** — No canonical ground record
 - **Dearne & District FC** — No canonical ground record
 - **Desborough Town FC** — No canonical ground record
-- **Devizes Town FC** — No canonical ground record
-- **Droylsden FC** — No canonical ground record
-- **Eastbourne United AFC** — No canonical ground record
 - **Everett Rovers FC** — No canonical ground record
 - **Fleetlands FC** — No canonical ground record
 - **Godalming Town FC** — No canonical ground record
@@ -29,12 +22,9 @@
 - **Larkfield & New Hythe FC** — No canonical ground record
 - **Liskeard Athletic FC** — No canonical ground record
 - **Millbrook FC (Hampshire)** — No canonical ground record
-- **Nelson FC** — No canonical ground record
-- **Prestwich Heys AFC** — No canonical ground record
 - **Retford FC** — No canonical ground record
 - **Retford United FC** — No canonical ground record
 - **Romulus FC** — No canonical ground record
-- **Runcorn Town FC** — No canonical ground record
 - **SE Dons FC** — No canonical ground record
 - **Stockport Georgians FC** — No canonical ground record
 - **Sturminster Newton United FC** — No canonical ground record
