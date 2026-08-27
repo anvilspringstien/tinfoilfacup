@@ -1,0 +1,261 @@
+{
+  "checked_at": "2026-08-27T12:06:12.092154+00:00",
+  "version": "7.8.2",
+  "mode": "PROPOSAL ONLY / RESEARCH",
+  "source": "updater/groundshare-evidence-queue.json",
+  "batch": 1,
+  "pairs_researched": 5,
+  "confirmed": 4,
+  "ambiguous": 1,
+  "not_current": 0,
+  "records": [
+    {
+      "pair_id": 1,
+      "clubs": [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
+      ],
+      "postcode": "B72 1NL",
+      "queue_records": [
+        {
+          "club": "Romulus FC",
+          "fchd_match": "Romulus",
+          "ground_candidate": "Domino's Stadium",
+          "postcode": "B72 1NL",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Sutton Coldfield Town FC",
+            "Domino's Stadium",
+            "Central Ground",
+            "Coles Lane",
+            "Sutton Coldfield"
+          ]
+        },
+        {
+          "club": "Sutton Coldfield Town FC",
+          "fchd_match": "Sutton Coldfield Town",
+          "ground_candidate": "Domino's Arena",
+          "postcode": "B72 1NL",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Domino's Arena",
+            "Central Ground",
+            "Coles Lane",
+            "Sutton Coldfield"
+          ]
+        }
+      ],
+      "status": "AMBIGUOUS",
+      "host": null,
+      "tenant": null,
+      "ground": "Central Ground / Coles Lane",
+      "evidence_note": "Current 2026/27 fixture evidence places Romulus home matches at Central Ground, Coles Lane, B72 1NL, but the evidence gathered for this batch does not explicitly establish a current Romulus ↔ Sutton Coldfield Town groundshare or host/tenant direction.",
+      "sources": [
+        "https://runcorntown.co.uk/news2.php?id=3401"
+      ]
+    },
+    {
+      "pair_id": 2,
+      "clubs": [
+        "Hackney Wick FC",
+        "Witham Town FC"
+      ],
+      "postcode": "CM8 1UN",
+      "queue_records": [
+        {
+          "club": "Hackney Wick FC",
+          "fchd_match": "Hackney Wick",
+          "ground_candidate": "Simarco Stadium",
+          "postcode": "CM8 1UN",
+          "distance_km": 0.072,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Witham Town FC",
+            "Simarco Stadium",
+            "Spa Road",
+            "Witham"
+          ]
+        },
+        {
+          "club": "Witham Town FC",
+          "fchd_match": "Witham Town",
+          "ground_candidate": "Simarco Stadium",
+          "postcode": "CM8 1UN",
+          "distance_km": 0.072,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Simarco Stadium",
+            "Spa Road",
+            "Witham"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": "Witham Town FC",
+      "tenant": "Hackney Wick FC",
+      "ground": "Simarco Stadium",
+      "evidence_note": "Current 2026/27 Essex Senior League reporting explicitly lists Hackney Wick as groundsharing at Witham Town; independent current league-opponent reporting also describes Hackney Wick as playing at Witham.",
+      "sources": [
+        "https://www.harwichandparkeston.com/news/shrimpers-staying-in-esl-2979068.html",
+        "https://www.claptoncfc.co.uk/2026/05/14/clapton-cfc-mens-first-team-placed-in-the-essex-senior-league-for-2026-27/"
+      ]
+    },
+    {
+      "pair_id": 3,
+      "clubs": [
+        "Faversham Strike Force FC",
+        "Whitstable Town FC"
+      ],
+      "postcode": "CT5 1QP",
+      "queue_records": [
+        {
+          "club": "Faversham Strike Force FC",
+          "fchd_match": "Faversham Strike Force",
+          "ground_candidate": "The Belmont Stadium",
+          "postcode": "CT5 1QP",
+          "distance_km": 0.198,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Whitstable Town FC",
+            "The Belmont Stadium",
+            "Belmont Road",
+            "Whitstable"
+          ]
+        },
+        {
+          "club": "Whitstable Town FC",
+          "fchd_match": "Whitstable Town",
+          "ground_candidate": "The Belmont Stadium",
+          "postcode": "CT5 1QP",
+          "distance_km": 0.198,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "The Belmont Stadium",
+            "Belmont Road",
+            "Whitstable"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": "Whitstable Town FC",
+      "tenant": "Faversham Strike Force FC",
+      "ground": "The Belmont Stadium / YMS Stadium",
+      "evidence_note": "Faversham Strike Force announced in April 2025 that its Men's First Team would groundshare with Whitstable Town for the next two seasons. Whitstable's July 2026 match report still describes Strike Force as sharing its stadium, confirming the arrangement remains current in 2026/27.",
+      "sources": [
+        "https://www.favershamstrikeforce.co.uk/news/groundshare-with-whitstable-town-fc-for-mens-first-team-next-season",
+        "https://www.whitstabletownfc.club/teams/224251/match-centre/0-6515623/report"
+      ]
+    },
+    {
+      "pair_id": 4,
+      "clubs": [
+        "Bedworth United FC",
+        "Nuneaton Town FC"
+      ],
+      "postcode": "CV12 8NN",
+      "queue_records": [
+        {
+          "club": "Bedworth United FC",
+          "fchd_match": "Bedworth United",
+          "ground_candidate": "The Oval",
+          "postcode": "CV12 8NN",
+          "distance_km": 0.107,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "The Oval",
+            "Coventry Road",
+            "Bedworth"
+          ]
+        },
+        {
+          "club": "Nuneaton Town FC",
+          "fchd_match": "Nuneaton Town",
+          "ground_candidate": "The Oval",
+          "postcode": "CV12 8NN",
+          "distance_km": 0.107,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Bedworth United FC",
+            "The Oval",
+            "Coventry Road",
+            "Bedworth"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": "Bedworth United FC",
+      "tenant": "Nuneaton Town FC",
+      "ground": "The Oval",
+      "evidence_note": "Nuneaton Town's current match-day information explicitly says its home games are at The Oval, home of Bedworth United FC, under a pitch-hire agreement, and gives CV12 8NN. This explicitly establishes Bedworth as host and Nuneaton as tenant for the current period.",
+      "sources": [
+        "https://www.nuneatontownfc.co.uk/match-day-information"
+      ]
+    },
+    {
+      "pair_id": 5,
+      "clubs": [
+        "Soul Tower Hamlets FC",
+        "Sporting Bengal United FC"
+      ],
+      "postcode": "E14 7TW",
+      "queue_records": [
+        {
+          "club": "Soul Tower Hamlets FC",
+          "fchd_match": "SOUL Tower Hamlets",
+          "ground_candidate": "Mile End Stadium",
+          "postcode": "E14 7TW",
+          "distance_km": 0.458,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Mile End Stadium",
+            "Rhodeswell Road",
+            "Tower Hamlets"
+          ]
+        },
+        {
+          "club": "Sporting Bengal United FC",
+          "fchd_match": "Sporting Bengal United",
+          "ground_candidate": "Mile End Stadium",
+          "postcode": "E14 7TW",
+          "distance_km": 0.458,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Mile End Stadium",
+            "Rhodeswell Road",
+            "Tower Hamlets"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": null,
+      "tenant": null,
+      "ground": "Mile End Stadium",
+      "evidence_note": "Current 2026/27 Essex Senior League reporting explicitly lists SOUL Tower Hamlets and Sporting Bengal United as groundsharing with each other at Mile End Stadium. The evidence supports the shared relationship but not a reliable host/tenant direction, so direction remains unresolved.",
+      "sources": [
+        "https://www.harwichandparkeston.com/news/shrimpers-staying-in-esl-2979068.html"
+      ]
+    }
+  ]
+}
