@@ -1,0 +1,268 @@
+{
+  "checked_at": "2026-08-27T12:48:41.749204+00:00",
+  "version": "7.8.5",
+  "mode": "PROPOSAL ONLY / RESEARCH",
+  "source": "updater/groundshare-evidence-queue.json",
+  "batch": 2,
+  "pairs_researched": 5,
+  "confirmed": 3,
+  "ambiguous": 0,
+  "not_current": 2,
+  "records": [
+    {
+      "pair_id": 6,
+      "clubs": [
+        "Walthamstow FC",
+        "West Essex FC"
+      ],
+      "postcode": "E17 4JP",
+      "queue_records": [
+        {
+          "club": "Walthamstow FC",
+          "fchd_match": "Walthamstow",
+          "ground_candidate": "Wadham Lodge Sports Centre",
+          "postcode": "E17 4JP",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Wadham Lodge Sports Centre",
+            "Kitchener Road",
+            "Walthamstow"
+          ]
+        },
+        {
+          "club": "West Essex FC",
+          "fchd_match": "West Essex",
+          "ground_candidate": "Matchday Centre",
+          "postcode": "E17 4JP",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Walthamstow FC",
+            "Matchday Centre",
+            "Wadham Lodge",
+            "Kitchener Road",
+            "Walthamstow"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": null,
+      "tenant": null,
+      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
+      "evidence_note": "Current Essex Senior League club information says West Essex's Senior 1st XI groundshare at Wadham Lodge Stadium, while current FA county directory information places both Walthamstow and West Essex at Wadham Lodge, E17 4JP. West Essex's own ground announcement explicitly described sharing the stadium with Walthamstow. The shared venue is therefore supported, but because the venue is operated separately and the current evidence does not safely establish a landlord/tenant direction between the two clubs, direction remains unresolved.",
+      "sources": [
+        "https://www.essexseniorleague.co.uk/en_US/archive15032-club-info/92007845",
+        "https://www.thefa.com/-/media/cfa/essexfa/files/handbook/2025-26/section-3---club-and-competition-directory---men---senior-status.ashx",
+        "https://westessexfc.org.uk/news/club-statement-re--ground-announcement"
+      ]
+    },
+    {
+      "pair_id": 7,
+      "clubs": [
+        "Broadfields United FC",
+        "Rayners Lane FC"
+      ],
+      "postcode": "HA2 0XH",
+      "queue_records": [
+        {
+          "club": "Broadfields United FC",
+          "fchd_match": "Broadfields United",
+          "ground_candidate": "Tithe Farm Social Club",
+          "postcode": "HA2 0XH",
+          "distance_km": 0.117,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Rayners Lane FC",
+            "Tithe Farm Social Club",
+            "151 Rayners Lane",
+            "Harrow"
+          ]
+        },
+        {
+          "club": "Rayners Lane FC",
+          "fchd_match": "Rayners Lane",
+          "ground_candidate": "Tithe Farm Social Club",
+          "postcode": "HA2 0XH",
+          "distance_km": 0.117,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Tithe Farm Social Club",
+            "151 Rayners Lane",
+            "Harrow"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": "Rayners Lane FC",
+      "tenant": "Broadfields United FC",
+      "ground": "Tithe Farm Sports & Social Club",
+      "evidence_note": "Rayners Lane's current 2026/27 official site states that Broadfields United groundshare at Tithe Farm, and Broadfields United's own club history records the move into a groundshare agreement with Rayners Lane at Tithe Farm. Current venue information also lists both clubs there. This supports Rayners Lane as the host club and Broadfields United as tenant.",
+      "sources": [
+        "https://raynerslanefc.co.uk/",
+        "https://www.broadfieldsunitedfc.co.uk/a/club-history-64122.html",
+        "https://www.tithefarmclub.com/whats-on/"
+      ]
+    },
+    {
+      "pair_id": 8,
+      "clubs": [
+        "Cobham FC",
+        "Epsom & Ewell FC"
+      ],
+      "postcode": "KT11 1AA",
+      "queue_records": [
+        {
+          "club": "Cobham FC",
+          "fchd_match": "Cobham",
+          "ground_candidate": "Reg Madwick Stadium",
+          "postcode": "KT11 1AA",
+          "distance_km": 0.177,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Reg Madwick Stadium",
+            "Leg o' Mutton Field",
+            "Downside Bridge Road",
+            "Cobham"
+          ]
+        },
+        {
+          "club": "Epsom & Ewell FC",
+          "fchd_match": "Epsom & Ewell",
+          "ground_candidate": "Cobham FC: Reg Madwick Stadium",
+          "postcode": "KT11 1AA",
+          "distance_km": 0.177,
+          "flags": [
+            "SHARED_POSTCODE",
+            "GROUND_NAME_MAY_BE_HOST_CLUB"
+          ],
+          "raw_lines": [
+            "Cobham FC: Reg Madwick Stadium",
+            "Leg o' Mutton Field",
+            "Downside Bridge Road",
+            "Cobham"
+          ]
+        }
+      ],
+      "status": "NOT_CURRENT",
+      "host": null,
+      "tenant": null,
+      "ground": "Chalky Lane, Chessington",
+      "evidence_note": "The queued Cobham relationship is no longer current. Epsom & Ewell's own history says the club returned to Cobham for 2025/26 but moved again in October 2025 to Chessington & Hook United. Its August 2026 FA Cup match preview identifies Chalky Lane as its 2026/27 home venue. Cobham ↔ Epsom & Ewell must therefore not be approved from the stale shared-postcode candidate.",
+      "sources": [
+        "https://epsomandewellfc.co.uk/club/history/",
+        "https://epsomandewellfc.co.uk/2026/08/match-preview-epsom-ewell-vs-chipstead-emirates-f-a-cup-extra-preliminary-round/"
+      ]
+    },
+    {
+      "pair_id": 9,
+      "clubs": [
+        "Barwell FC",
+        "Hinckley AFC"
+      ],
+      "postcode": "LE9 8FQ",
+      "queue_records": [
+        {
+          "club": "Barwell FC",
+          "fchd_match": "Barwell",
+          "ground_candidate": "Crown Skip Hire Stadium",
+          "postcode": "LE9 8FQ",
+          "distance_km": 0.214,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Crown Skip Hire Stadium",
+            "Kirkby Road",
+            "Barwell"
+          ]
+        },
+        {
+          "club": "Hinckley AFC",
+          "fchd_match": "Hinckley",
+          "ground_candidate": "UK Flooring Stadium",
+          "postcode": "LE9 8FQ",
+          "distance_km": 0.214,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Barwell FC",
+            "UK Flooring Stadium",
+            "Kirkby Road",
+            "Barwell"
+          ]
+        }
+      ],
+      "status": "CONFIRMED",
+      "host": "Barwell FC",
+      "tenant": "Hinckley AFC",
+      "ground": "Kirkby Road",
+      "evidence_note": "Hinckley AFC's current official ground information says the club plays its home matches at Barwell FC, Kirkby Road, LE9 8FQ. A July 2026 FA Cup announcement explicitly calls Barwell the landlords when explaining a fixture move caused by Barwell also being at home. This establishes Barwell as host and Hinckley AFC as tenant for 2026/27.",
+      "sources": [
+        "https://hinckleyafc.co.uk/first-team/where-are-we/",
+        "https://hinckleyafc.co.uk/2026/07/19/friday-night-fa-cup-football-at-kirkby-road/"
+      ]
+    },
+    {
+      "pair_id": 10,
+      "clubs": [
+        "Belper United FC",
+        "Eastwood Community FC"
+      ],
+      "postcode": "NG16 3HB",
+      "queue_records": [
+        {
+          "club": "Belper United FC",
+          "fchd_match": "Belper United",
+          "ground_candidate": "Coronation Park",
+          "postcode": "NG16 3HB",
+          "distance_km": 0.141,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Eastwood Community FC",
+            "Coronation Park",
+            "Chewton Street",
+            "Eastwood"
+          ]
+        },
+        {
+          "club": "Eastwood Community FC",
+          "fchd_match": "Eastwood Community",
+          "ground_candidate": "Coronation Park",
+          "postcode": "NG16 3HB",
+          "distance_km": 0.141,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Coronation Park",
+            "Chewton Street",
+            "Eastwood"
+          ]
+        }
+      ],
+      "status": "NOT_CURRENT",
+      "host": null,
+      "tenant": null,
+      "ground": "Don Amott Arena, Mickleover",
+      "evidence_note": "The queued Eastwood relationship is no longer current. Belper United announced in March 2026 that it would leave Eastwood CFC at the end of the 2025/26 season, ending a three-year groundshare. Belper United's current official site now gives the Don Amott Arena, home of Mickleover FC, as its ground. Eastwood's current site continues to identify Coronation Park as Eastwood's home. Belper United ↔ Eastwood Community must therefore not be approved for 2026/27.",
+      "sources": [
+        "https://belperunited.co.uk/",
+        "https://www.eastwoodcfc.co.uk/"
+      ]
+    }
+  ]
+}
