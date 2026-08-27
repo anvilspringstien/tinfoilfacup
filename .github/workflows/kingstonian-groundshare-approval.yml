@@ -1,0 +1,20 @@
+name: Kingstonian groundshare approval (v7.9.16)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/approve_kingstonian_groundshare.py'
+      - '.github/workflows/kingstonian-groundshare-approval.yml'
+permissions: {contents: write}
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: python updater/approve_kingstonian_groundshare.py
+      - run: python updater/ground_health.py
+      - run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add updater/ground-approval-ledger.json kingstonian-groundshare-approval.md updater/kingstonian-groundshare-approval.json ground-health.md updater/ground-health.json
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Approve Kingstonian groundshare v7.9.16"; git push; fi
