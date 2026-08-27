@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **26/08/2026, 16:17:39 UTC**
+Last checked: **27/08/2026, 09:42:29 UTC**
 
 **Verification/triage only. Nothing is published automatically.**
 
