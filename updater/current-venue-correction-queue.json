@@ -1,0 +1,100 @@
+{
+  "checked_at": "2026-08-27T14:03:57.158336+00:00",
+  "version": "7.9.1",
+  "mode": "PROPOSAL ONLY / CURRENT-VENUE CORRECTION QUEUE",
+  "sources": [
+    "updater/groundshare-evidence-confirmation-batch2.json",
+    "updater/groundshare-evidence-confirmation-batch3.json"
+  ],
+  "queue_items": 7,
+  "evidenced_moved_clubs": 3,
+  "counterpart_checks": 3,
+  "centroid_current_ground_checks": 1,
+  "held_outside_queue": 2,
+  "published_canonical_records": 0,
+  "items": [
+    {
+      "club": "Epsom & Ewell FC",
+      "action": "CURRENT_VENUE_CORRECTION_RESEARCH",
+      "evidenced_current_venue": "Chalky Lane, Chessington",
+      "stale_groundshare_postcode": "KT11 1AA",
+      "source_pair_id": 8,
+      "evidence_note": "The queued Cobham relationship is no longer current. Epsom & Ewell's own history says the club returned to Cobham for 2025/26 but moved again in October 2025 to Chessington & Hook United. Its August 2026 FA Cup match preview identifies Chalky Lane as its 2026/27 home venue. Cobham ↔ Epsom & Ewell must therefore not be approved from the stale shared-postcode candidate.",
+      "sources": [
+        "https://epsomandewellfc.co.uk/club/history/",
+        "https://epsomandewellfc.co.uk/2026/08/match-preview-epsom-ewell-vs-chipstead-emirates-f-a-cup-extra-preliminary-round/"
+      ],
+      "publish_eligible": false
+    },
+    {
+      "club": "Cobham FC",
+      "action": "COUNTERPART_CURRENT_GROUND_CHECK",
+      "stale_groundshare_postcode": "KT11 1AA",
+      "source_pair_id": 8,
+      "reason": "Former counterpart remains a separate current-ground verification unit; do not infer its current venue from the rejected relationship.",
+      "publish_eligible": false
+    },
+    {
+      "club": "Belper United FC",
+      "action": "CURRENT_VENUE_CORRECTION_RESEARCH",
+      "evidenced_current_venue": "Don Amott Arena, Mickleover",
+      "stale_groundshare_postcode": "NG16 3HB",
+      "source_pair_id": 10,
+      "evidence_note": "The queued Eastwood relationship is no longer current. Belper United announced in March 2026 that it would leave Eastwood CFC at the end of the 2025/26 season, ending a three-year groundshare. Belper United's current official site now gives the Don Amott Arena, home of Mickleover FC, as its ground. Eastwood's current site continues to identify Coronation Park as Eastwood's home. Belper United ↔ Eastwood Community must therefore not be approved for 2026/27.",
+      "sources": [
+        "https://belperunited.co.uk/",
+        "https://www.eastwoodcfc.co.uk/"
+      ],
+      "publish_eligible": false
+    },
+    {
+      "club": "Eastwood Community FC",
+      "action": "COUNTERPART_CURRENT_GROUND_CHECK",
+      "stale_groundshare_postcode": "NG16 3HB",
+      "source_pair_id": 10,
+      "reason": "Former counterpart remains a separate current-ground verification unit; do not infer its current venue from the rejected relationship.",
+      "publish_eligible": false
+    },
+    {
+      "club": "Southall FC",
+      "action": "CURRENT_VENUE_CORRECTION_RESEARCH",
+      "evidenced_current_venue": "Honeycroft, Uxbridge",
+      "stale_groundshare_postcode": "UB4 0SL",
+      "source_pair_id": 14,
+      "evidence_note": "The queued Hayes & Yeading United relationship is no longer current. Southall announced in March 2026 that its SkyEx groundshare had ended and that it would groundshare at Uxbridge FC's Honeycroft for 2026/27. Uxbridge independently announced Southall as its groundshare tenant. Hayes & Yeading United ↔ Southall must therefore not be approved from the stale UB4 0SL candidate.",
+      "sources": [
+        "https://www.southallfc.com/news/club-statement-new-groundshare-agreement-20262027-2971024.html",
+        "https://www.uxbridgefc.com/post/groundshare-agreement-26-27-season"
+      ],
+      "publish_eligible": false
+    },
+    {
+      "club": "Hayes & Yeading United FC",
+      "action": "COUNTERPART_CURRENT_GROUND_CHECK",
+      "stale_groundshare_postcode": "UB4 0SL",
+      "source_pair_id": 14,
+      "reason": "Former counterpart remains a separate current-ground verification unit; do not infer its current venue from the rejected relationship.",
+      "publish_eligible": false
+    },
+    {
+      "club": "Corby Town FC",
+      "action": "CURRENT_GROUND_POSTCODE_CHECK",
+      "candidate_ground": "Steel Park",
+      "candidate_postcode": "NN17 2AE",
+      "candidate_separation_km": 0.908,
+      "reason": "Verify current ground/postcode once (750m–2km centroid difference).",
+      "publish_eligible": false
+    }
+  ],
+  "held": [
+    {
+      "clubs": [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
+      ],
+      "postcode": "B72 1NL",
+      "status": "HELD_FOR_MORE_EVIDENCE",
+      "reason": "Existing evidence places Romulus home matches at Coles Lane/B72 1NL but does not explicitly establish the current Romulus ↔ Sutton Coldfield Town relationship. Keep outside the correction queue."
+    }
+  ]
+}
