@@ -1,0 +1,23 @@
+name: Final protected ground records (v7.9.13)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/publish_final_protected_ground_records.py'
+      - '.github/workflows/final-protected-ground-records.yml'
+permissions: {contents: write}
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Publish independent Romulus and Sutton Coldfield ground records
+        run: python updater/publish_final_protected_ground_records.py
+      - name: Re-run Ground Health
+        run: python updater/ground_health.py
+      - name: Commit records, held status and Ground Health
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html updater/ground-approval-ledger.json final-protected-ground-records.md updater/final-protected-ground-records.json ground-health.md updater/ground-health.json
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Publish final protected ground records v7.9.13"; git push; fi
