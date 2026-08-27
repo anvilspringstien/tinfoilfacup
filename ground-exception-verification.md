@@ -1,14 +1,14 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **27/08/2026, 13:20:04 UTC**
+Last checked: **27/08/2026, 13:40:11 UTC**
 
 **Resolution-aware verification/triage only. Nothing is published automatically.**
 
 - 🟢 Approved candidates: **0**
-- 🟡 One human decision required: **17**
+- 🟡 One human decision required: **9**
 - 🔴 Genuine ground research required: **37**
-- ✅ Resolved since earlier verification: **6**
-- ⚪ Current actionable exception total: **54**
+- ✅ Resolved since earlier verification: **8**
+- ⚪ Current actionable exception total: **46**
 
 Clubs that now have a canonical `GROUNDS` record are removed from the actionable totals rather than being reported forever as stale exceptions.
 
@@ -18,23 +18,15 @@ None.
 
 ## 🟡 One human decision required
 
-- **Balham FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
 - **Belper United FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
 - **Cobham FC** — Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
 - **Corby Town FC** — Steel Park • NN17 2AE • separation `0.908 km` • Verify current ground/postcode once (750m–2km centroid difference)
-- **Dudley Town FC** — Guardian Warehousing Arena • WV13 3BB • separation `0.204 km` • Approve shared-ground relationship
 - **Eastwood Community FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
-- **Enfield FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Epsom & Ewell FC** — Cobham FC: Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
-- **Grays Athletic FC** — EMR Stadium • RM18 8NL • separation `0.159 km` • Approve shared-ground relationship
 - **Hayes & Yeading United FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
-- **Hertford Town FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Romulus FC** — Domino's Stadium • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
 - **Southall FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
-- **Sporting Khalsa FC** — Guardian Warehousing Stadium • WV13 3BB • separation `0.204 km` • Approve shared-ground relationship
 - **Sutton Coldfield Town FC** — Domino's Arena • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
-- **Tilbury FC** — EMR Stadium • RM18 8NL • separation `0.159 km` • Approve shared-ground relationship
-- **Tooting & Mitcham United FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
 
 ## 🔴 Genuine ground research required
 
@@ -78,12 +70,14 @@ None.
 
 ## ✅ Resolved since earlier verification
 
-- **Barwell FC** — Kirkby Road • LE9 8FQ — Canonical GROUNDS record now present
-- **Broadfields United FC** — Tithe Farm Sports & Social Club • HA2 0XH — Canonical GROUNDS record now present; approved groundshare relationship recorded
-- **Hinckley AFC** — Kirkby Road • LE9 8FQ — Canonical GROUNDS record now present; approved groundshare relationship recorded
-- **Rayners Lane FC** — Tithe Farm Sports & Social Club • HA2 0XH — Canonical GROUNDS record now present
-- **Walthamstow FC** — Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres) • E17 4JP — Canonical GROUNDS record now present
-- **West Essex FC** — Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres) • E17 4JP — Canonical GROUNDS record now present
+- **Balham FC** — Imperial Fields • SM4 6BF — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Dudley Town FC** — Guardian Warehousing Arena • WV13 3BB — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Enfield FC** — Hertingfordbury Park • SG13 8EX — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Grays Athletic FC** — The EMR Stadium • RM18 8NL — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Hertford Town FC** — Hertingfordbury Park • SG13 8EX — Canonical GROUNDS record now present
+- **Sporting Khalsa FC** — Guardian Warehousing Arena • WV13 3BB — Canonical GROUNDS record now present
+- **Tilbury FC** — The EMR Stadium • RM18 8NL — Canonical GROUNDS record now present
+- **Tooting & Mitcham United FC** — Imperial Fields • SM4 6BF — Canonical GROUNDS record now present
 
 ## Rules
 

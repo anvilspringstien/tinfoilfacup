@@ -1,33 +1,14 @@
 {
-  "checked_at": "2026-08-27T13:20:04.425756+00:00",
+  "checked_at": "2026-08-27T13:40:11.304971+00:00",
   "mode": "resolution-aware verification/triage",
-  "active_total": 54,
-  "resolved_total": 6,
+  "active_total": 46,
+  "resolved_total": 8,
   "counts": {
     "APPROVED_CANDIDATE": 0,
-    "HUMAN_DECISION": 17,
+    "HUMAN_DECISION": 9,
     "GROUND_RESEARCH": 37
   },
   "records": [
-    {
-      "club": "Balham FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Balham",
-      "ground_candidate": "Imperial Fields",
-      "postcode": "SM4 6BF",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.056,
-      "raw_lines": [
-        "Tooting & Mitcham United",
-        "Imperial Fields",
-        "Bishopsford Road",
-        "Morden"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
     {
       "club": "Belper United FC",
       "discovery_confidence": "HIGH",
@@ -67,25 +48,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Dudley Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Dudley Town",
-      "ground_candidate": "Guardian Warehousing Arena",
-      "postcode": "WV13 3BB",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.204,
-      "raw_lines": [
-        "Sporting Khalsa FC",
-        "Guardian Warehousing Arena",
-        "Noose Lane",
-        "Willenhall"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Eastwood Community FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Eastwood Community",
@@ -99,25 +61,6 @@
         "Coronation Park",
         "Chewton Street",
         "Eastwood"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Enfield FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Enfield",
-      "ground_candidate": "Hertingfordbury Park",
-      "postcode": "SG13 8EX",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.505,
-      "raw_lines": [
-        "Hertford Town FC",
-        "Hertingfordbury Park",
-        "West Street",
-        "Hertford"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -143,26 +86,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Grays Athletic FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Grays Athletic",
-      "ground_candidate": "EMR Stadium",
-      "postcode": "RM18 8NL",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.159,
-      "raw_lines": [
-        "Tilbury FC",
-        "EMR Stadium",
-        "Chadfields",
-        "St Chad's Road",
-        "Tilbury"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Hayes & Yeading United FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Hayes & Yeading United",
@@ -176,24 +99,6 @@
         "SkyEx Community Stadium",
         "Beaconsfield Road",
         "Hayes"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Hertford Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Hertford Town",
-      "ground_candidate": "Hertingfordbury Park",
-      "postcode": "SG13 8EX",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.505,
-      "raw_lines": [
-        "Hertingfordbury Park",
-        "West Street",
-        "Hertford"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -238,24 +143,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Sporting Khalsa FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Sporting Khalsa",
-      "ground_candidate": "Guardian Warehousing Stadium",
-      "postcode": "WV13 3BB",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.204,
-      "raw_lines": [
-        "Guardian Warehousing Stadium",
-        "Noose Lane",
-        "Willenhall"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Sutton Coldfield Town FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Sutton Coldfield Town",
@@ -270,43 +157,6 @@
         "Central Ground",
         "Coles Lane",
         "Sutton Coldfield"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Tilbury FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Tilbury",
-      "ground_candidate": "EMR Stadium",
-      "postcode": "RM18 8NL",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.159,
-      "raw_lines": [
-        "EMR Stadium",
-        "Chadfields",
-        "St Chad's Road",
-        "Tilbury"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Tooting & Mitcham United FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Tooting & Mitcham United",
-      "ground_candidate": "Imperial Fields",
-      "postcode": "SM4 6BF",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.056,
-      "raw_lines": [
-        "Imperial Fields",
-        "Bishopsford Road",
-        "Morden"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -824,44 +674,58 @@
   ],
   "resolved_since_verification": [
     {
-      "club": "Barwell FC",
-      "ground": "Kirkby Road",
-      "postcode": "LE9 8FQ",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Broadfields United FC",
-      "ground": "Tithe Farm Sports & Social Club",
-      "postcode": "HA2 0XH",
+      "club": "Balham FC",
+      "ground": "Imperial Fields",
+      "postcode": "SM4 6BF",
       "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Hinckley AFC",
-      "ground": "Kirkby Road",
-      "postcode": "LE9 8FQ",
+      "club": "Dudley Town FC",
+      "ground": "Guardian Warehousing Arena",
+      "postcode": "WV13 3BB",
       "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Rayners Lane FC",
-      "ground": "Tithe Farm Sports & Social Club",
-      "postcode": "HA2 0XH",
+      "club": "Enfield FC",
+      "ground": "Hertingfordbury Park",
+      "postcode": "SG13 8EX",
+      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Grays Athletic FC",
+      "ground": "The EMR Stadium",
+      "postcode": "RM18 8NL",
+      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Hertford Town FC",
+      "ground": "Hertingfordbury Park",
+      "postcode": "SG13 8EX",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Walthamstow FC",
-      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
-      "postcode": "E17 4JP",
+      "club": "Sporting Khalsa FC",
+      "ground": "Guardian Warehousing Arena",
+      "postcode": "WV13 3BB",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "West Essex FC",
-      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
-      "postcode": "E17 4JP",
+      "club": "Tilbury FC",
+      "ground": "The EMR Stadium",
+      "postcode": "RM18 8NL",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Tooting & Mitcham United FC",
+      "ground": "Imperial Fields",
+      "postcode": "SM4 6BF",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     }
