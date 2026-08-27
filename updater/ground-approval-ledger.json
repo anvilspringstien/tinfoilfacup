@@ -1,6 +1,6 @@
 {
-  "version": "7.9.14",
-  "updated_at": "2026-08-27T15:29:36.945263+00:00",
+  "version": "7.9.15",
+  "updated_at": "2026-08-27T15:31:12.973983+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -240,6 +240,18 @@
       "approved_at": "2026-08-27T15:29:36.945263+00:00",
       "status": "current",
       "approval_source": "v7.9.14 shared-postcode evidence review"
+    },
+    {
+      "tenant": "Hilltop FC",
+      "host": "Hendon FC",
+      "ground": "Silver Jubilee Park",
+      "postcode": "NW9 7NE",
+      "season": "2026-27",
+      "evidence": "Hilltop FC's own April 2025 club statement confirms a long-term groundshare at Silver Jubilee Park from 2025/26, and current 2026/27 home fixtures remain at Silver Jubilee Park. Hendon's current official site identifies Silver Jubilee Park as its home.",
+      "source_url": "https://hilltopfc.co.uk/club-statement-hilltop-fc-confirm-new-ground-share-agreement-from-the-202526-season",
+      "approved_at": "2026-08-27T15:31:12.973983+00:00",
+      "status": "current",
+      "approval_source": "v7.9.15 final shared-postcode evidence review"
     }
   ],
   "approved_exceptions": [
@@ -258,7 +270,54 @@
       "rule_version": "7.6.9"
     }
   ],
-  "venue_corrections": [],
+  "venue_corrections": [
+    {
+      "club": "Blyth Town FC",
+      "type": "canonical_current_venue_correction",
+      "before": {
+        "name": "Blyth Town FC",
+        "ground": "Croft Park",
+        "postcode": "NE24 3JE",
+        "lat": 55.1177,
+        "lon": -1.5157,
+        "verification": null
+      },
+      "after": {
+        "name": "Blyth Town FC",
+        "ground": "Gateway Park",
+        "postcode": "NE24 3PS",
+        "lat": 55.105842,
+        "lon": -1.519702,
+        "verification": "verified"
+      },
+      "source_url": "https://blythtownfc.com/contact/",
+      "approved_at": "2026-08-27T15:31:12.973983+00:00",
+      "approval_source": "v7.9.15 final shared-postcode correction"
+    },
+    {
+      "club": "Kingstonian FC",
+      "type": "canonical_current_venue_correction",
+      "before": {
+        "name": "Kingstonian FC",
+        "ground": "Raynes Park Vale FC",
+        "postcode": "SW20 9DZ",
+        "lat": 51.403328,
+        "lon": -0.226997,
+        "verification": null
+      },
+      "after": {
+        "name": "Kingstonian FC",
+        "ground": "Robert Parker Stadium",
+        "postcode": "TW19 7BH",
+        "lat": 51.451958,
+        "lon": -0.462119,
+        "verification": "verified"
+      },
+      "source_url": "https://www.kingstonianfc.com/generalinfo",
+      "approved_at": "2026-08-27T15:31:12.973983+00:00",
+      "approval_source": "v7.9.15 final shared-postcode correction"
+    }
+  ],
   "known_shared_venues": [
     {
       "clubs": [

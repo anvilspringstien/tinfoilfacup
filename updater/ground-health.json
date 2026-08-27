@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T15:29:36.999398+00:00",
+  "checked_at": "2026-08-27T15:31:13.068834+00:00",
   "counts": {
     "eligible_clubs": 491,
     "complete_verified": 491,
     "critical_items": 0,
-    "review_items": 5,
-    "shared_postcodes": 5,
-    "known_approved_groundshares": 20,
+    "review_items": 3,
+    "shared_postcodes": 3,
+    "known_approved_groundshares": 21,
     "known_confirmed_shared_venues": 3,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 0
@@ -14,10 +14,10 @@
   "missing_or_incomplete": [],
   "shared_postcodes": [
     [
-      "NE24 3JE",
+      "TW19 7BH",
       [
-        "Blyth Spartans AFC",
-        "Blyth Town FC"
+        "Ashford Town (Middx) FC",
+        "Kingstonian FC"
       ]
     ],
     [
@@ -25,20 +25,6 @@
       [
         "Bottesford Town FC",
         "Bottlesford Town FC"
-      ]
-    ],
-    [
-      "NW9 7NE",
-      [
-        "Hendon FC",
-        "Hilltop FC"
-      ]
-    ],
-    [
-      "SW20 9DZ",
-      [
-        "Kingstonian FC",
-        "Raynes Park Vale FC"
       ]
     ],
     [
@@ -168,6 +154,12 @@
       "postcode": "ST5 3BX",
       "tenant": "Stone Old Alleynians FC",
       "host": "Newcastle Town FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "NW9 7NE",
+      "tenant": "Hilltop FC",
+      "host": "Hendon FC",
       "season": "2026-27"
     }
   ],

@@ -2,9 +2,9 @@
 
 - 🟢 Complete verified club-ground records: **491**
 - 🔴 Critical ground-data items: **0**
-- 🟡 Review items: **5**
+- 🟡 Review items: **3**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares reconciled to canonical records: **20**
+- 🏟️ Known approved groundshares reconciled to canonical records: **21**
 - 🤝 Confirmed shared venues reconciled without forced direction: **3**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
@@ -14,10 +14,8 @@ None.
 
 ## 🟡 Shared postcodes / possible groundshares
 
-- **NE24 3JE** — Blyth Spartans AFC, Blyth Town FC
+- **TW19 7BH** — Ashford Town (Middx) FC, Kingstonian FC
 - **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
-- **NW9 7NE** — Hendon FC, Hilltop FC
-- **SW20 9DZ** — Kingstonian FC, Raynes Park Vale FC
 - **B72 1NL** — Romulus FC, Sutton Coldfield Town FC
 
 ## 🏟️ Known approved groundshares
@@ -42,6 +40,7 @@ None.
 - **Kennington FC** → Ashford United FC • TN26 1NJ • 2026-27
 - **Romford FC** → Barking FC • RM8 2JR • 2026-27
 - **Stone Old Alleynians FC** → Newcastle Town FC • ST5 3BX • 2026-27
+- **Hilltop FC** → Hendon FC • NW9 7NE • 2026-27
 
 ## 🤝 Confirmed shared venues without forced direction
 

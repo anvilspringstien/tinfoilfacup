@@ -1,0 +1,63 @@
+{
+  "published_at": "2026-08-27T15:31:12.973983+00:00",
+  "version": "7.9.15",
+  "canonical_records_corrected": 2,
+  "existing_records_added": 0,
+  "groundshares_approved": 1,
+  "records": [
+    {
+      "club": "Blyth Town FC",
+      "before": {
+        "name": "Blyth Town FC",
+        "ground": "Croft Park",
+        "postcode": "NE24 3JE",
+        "lat": 55.1177,
+        "lon": -1.5157,
+        "verification": null
+      },
+      "after": {
+        "name": "Blyth Town FC",
+        "ground": "Gateway Park",
+        "postcode": "NE24 3PS",
+        "lat": 55.105842,
+        "lon": -1.519702,
+        "verification": "verified"
+      },
+      "source": "https://blythtownfc.com/contact/"
+    },
+    {
+      "club": "Kingstonian FC",
+      "before": {
+        "name": "Kingstonian FC",
+        "ground": "Raynes Park Vale FC",
+        "postcode": "SW20 9DZ",
+        "lat": 51.403328,
+        "lon": -0.226997,
+        "verification": null
+      },
+      "after": {
+        "name": "Kingstonian FC",
+        "ground": "Robert Parker Stadium",
+        "postcode": "TW19 7BH",
+        "lat": 51.451958,
+        "lon": -0.462119,
+        "verification": "verified"
+      },
+      "source": "https://www.kingstonianfc.com/generalinfo"
+    }
+  ],
+  "relationship": {
+    "tenant": "Hilltop FC",
+    "host": "Hendon FC",
+    "ground": "Silver Jubilee Park",
+    "postcode": "NW9 7NE",
+    "season": "2026-27",
+    "evidence": "Hilltop FC's own April 2025 club statement confirms a long-term groundshare at Silver Jubilee Park from 2025/26, and current 2026/27 home fixtures remain at Silver Jubilee Park. Hendon's current official site identifies Silver Jubilee Park as its home.",
+    "source_url": "https://hilltopfc.co.uk/club-statement-hilltop-fc-confirm-new-ground-share-agreement-from-the-202526-season"
+  },
+  "still_held": [
+    "Bottesford Town FC / Bottlesford Town FC identity review",
+    "Romulus FC / Sutton Coldfield Town FC relationship"
+  ],
+  "competition_json_changed": false
+}
