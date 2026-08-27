@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-08-27T12:27:34.977505+00:00",
+  "checked_at": "2026-08-27T13:20:04.425756+00:00",
   "mode": "resolution-aware verification/triage",
-  "active_total": 60,
-  "resolved_total": 8,
+  "active_total": 54,
+  "resolved_total": 6,
   "counts": {
     "APPROVED_CANDIDATE": 0,
-    "HUMAN_DECISION": 23,
+    "HUMAN_DECISION": 17,
     "GROUND_RESEARCH": 37
   },
   "records": [
@@ -29,24 +29,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Barwell FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Barwell",
-      "ground_candidate": "Crown Skip Hire Stadium",
-      "postcode": "LE9 8FQ",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.214,
-      "raw_lines": [
-        "Crown Skip Hire Stadium",
-        "Kirkby Road",
-        "Barwell"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Belper United FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Belper United",
@@ -61,25 +43,6 @@
         "Coronation Park",
         "Chewton Street",
         "Eastwood"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Broadfields United FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Broadfields United",
-      "ground_candidate": "Tithe Farm Social Club",
-      "postcode": "HA2 0XH",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.117,
-      "raw_lines": [
-        "Rayners Lane FC",
-        "Tithe Farm Social Club",
-        "151 Rayners Lane",
-        "Harrow"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -236,43 +199,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Hinckley AFC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Hinckley",
-      "ground_candidate": "UK Flooring Stadium",
-      "postcode": "LE9 8FQ",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.214,
-      "raw_lines": [
-        "Barwell FC",
-        "UK Flooring Stadium",
-        "Kirkby Road",
-        "Barwell"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Rayners Lane FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Rayners Lane",
-      "ground_candidate": "Tithe Farm Social Club",
-      "postcode": "HA2 0XH",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.117,
-      "raw_lines": [
-        "Tithe Farm Social Club",
-        "151 Rayners Lane",
-        "Harrow"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Romulus FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Romulus",
@@ -381,44 +307,6 @@
         "Imperial Fields",
         "Bishopsford Road",
         "Morden"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Walthamstow FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Walthamstow",
-      "ground_candidate": "Wadham Lodge Sports Centre",
-      "postcode": "E17 4JP",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.086,
-      "raw_lines": [
-        "Wadham Lodge Sports Centre",
-        "Kitchener Road",
-        "Walthamstow"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "West Essex FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "West Essex",
-      "ground_candidate": "Matchday Centre",
-      "postcode": "E17 4JP",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.086,
-      "raw_lines": [
-        "Walthamstow FC",
-        "Matchday Centre",
-        "Wadham Lodge",
-        "Kitchener Road",
-        "Walthamstow"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -936,58 +824,44 @@
   ],
   "resolved_since_verification": [
     {
-      "club": "Bedworth United FC",
-      "ground": "The Oval",
-      "postcode": "CV12 8NN",
+      "club": "Barwell FC",
+      "ground": "Kirkby Road",
+      "postcode": "LE9 8FQ",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Faversham Strike Force FC",
-      "ground": "The Belmont Stadium / YMS Stadium",
-      "postcode": "CT5 1QP",
+      "club": "Broadfields United FC",
+      "ground": "Tithe Farm Sports & Social Club",
+      "postcode": "HA2 0XH",
       "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Hackney Wick FC",
-      "ground": "Simarco Stadium",
-      "postcode": "CM8 1UN",
+      "club": "Hinckley AFC",
+      "ground": "Kirkby Road",
+      "postcode": "LE9 8FQ",
       "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Nuneaton Town FC",
-      "ground": "The Oval",
-      "postcode": "CV12 8NN",
-      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Soul Tower Hamlets FC",
-      "ground": "Mile End Stadium",
-      "postcode": "E14 7TW",
+      "club": "Rayners Lane FC",
+      "ground": "Tithe Farm Sports & Social Club",
+      "postcode": "HA2 0XH",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Sporting Bengal United FC",
-      "ground": "Mile End Stadium",
-      "postcode": "E14 7TW",
+      "club": "Walthamstow FC",
+      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
+      "postcode": "E17 4JP",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Whitstable Town FC",
-      "ground": "The Belmont Stadium / YMS Stadium",
-      "postcode": "CT5 1QP",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Witham Town FC",
-      "ground": "Simarco Stadium",
-      "postcode": "CM8 1UN",
+      "club": "West Essex FC",
+      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
+      "postcode": "E17 4JP",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     }
