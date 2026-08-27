@@ -1,0 +1,132 @@
+{
+  "checked_at": "2026-08-27T13:33:44.941560+00:00",
+  "version": "7.9.0",
+  "batch": 3,
+  "mode": "DRY RUN",
+  "confirmed_relationships": 4,
+  "directed_relationships": 4,
+  "undirected_shared_venues": 0,
+  "rejected_not_current_relationships": 1,
+  "canonical_club_records_ready": 8,
+  "existing_canonical_club_records": 0,
+  "groundshare_ledger_relationships_ready": 4,
+  "existing_canonical_records_overwritten": 0,
+  "published": false,
+  "plans": [
+    {
+      "pair_id": 11,
+      "clubs": [
+        "Grays Athletic FC",
+        "Tilbury FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "The EMR Stadium",
+      "postcode": "RM18 8NL",
+      "club_records": [
+        {
+          "club": "Grays Athletic FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.470122,
+          "lon": 0.363331
+        },
+        {
+          "club": "Tilbury FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.470122,
+          "lon": 0.363331
+        }
+      ]
+    },
+    {
+      "pair_id": 12,
+      "clubs": [
+        "Enfield FC",
+        "Hertford Town FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "Hertingfordbury Park",
+      "postcode": "SG13 8EX",
+      "club_records": [
+        {
+          "club": "Enfield FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.791726,
+          "lon": -0.088407
+        },
+        {
+          "club": "Hertford Town FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.791726,
+          "lon": -0.088407
+        }
+      ]
+    },
+    {
+      "pair_id": 13,
+      "clubs": [
+        "Balham FC",
+        "Tooting & Mitcham United FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "Imperial Fields",
+      "postcode": "SM4 6BF",
+      "club_records": [
+        {
+          "club": "Balham FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.393245,
+          "lon": -0.17234
+        },
+        {
+          "club": "Tooting & Mitcham United FC",
+          "state": "READY_TO_ADD",
+          "lat": 51.393245,
+          "lon": -0.17234
+        }
+      ]
+    },
+    {
+      "pair_id": 15,
+      "clubs": [
+        "Dudley Town FC",
+        "Sporting Khalsa FC"
+      ],
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "ground": "Guardian Warehousing Arena",
+      "postcode": "WV13 3BB",
+      "club_records": [
+        {
+          "club": "Dudley Town FC",
+          "state": "READY_TO_ADD",
+          "lat": 52.591944,
+          "lon": -2.065991
+        },
+        {
+          "club": "Sporting Khalsa FC",
+          "state": "READY_TO_ADD",
+          "lat": 52.591944,
+          "lon": -2.065991
+        }
+      ]
+    }
+  ],
+  "rejected_not_current": [
+    {
+      "pair_id": 14,
+      "clubs": [
+        "Hayes & Yeading United FC",
+        "Southall FC"
+      ],
+      "postcode": "UB4 0SL",
+      "current_ground": "Honeycroft, Uxbridge",
+      "status": "HUMAN_REJECTED_NOT_CURRENT",
+      "research_status": "NOT_CURRENT",
+      "evidence_note": "The queued Hayes & Yeading United relationship is no longer current. Southall announced in March 2026 that its SkyEx groundshare had ended and that it would groundshare at Uxbridge FC's Honeycroft for 2026/27. Uxbridge independently announced Southall as its groundshare tenant. Hayes & Yeading United ↔ Southall must therefore not be approved from the stale UB4 0SL candidate.",
+      "sources": [
+        "https://www.southallfc.com/news/club-statement-new-groundshare-agreement-20262027-2971024.html",
+        "https://www.uxbridgefc.com/post/groundshare-agreement-26-27-season"
+      ],
+      "confirmation_note": "Human confirmation accepts the v7.8.8 finding that this queued relationship is not current. It is excluded from groundshare promotion."
+    }
+  ]
+}
