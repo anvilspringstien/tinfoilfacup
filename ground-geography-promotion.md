@@ -1,15 +1,15 @@
 # Tin Foil FA Cup — Geography Candidate Promotion
 
-Last checked: **27/08/2026, 10:32:22 UTC**
+Last checked: **27/08/2026, 10:36:30 UTC**
 
-Mode: **DRY RUN**
+Mode: **PUBLISH**
 
 - Eligible geography candidates: **6**
 - Ready to promote: **6**
 - Held/rejected: **1**
 - Skipped by safety checks: **0**
 - Existing canonical records overwritten: **0**
-- Published: **NO**
+- Published: **YES**
 
 ## Promotion records
 
