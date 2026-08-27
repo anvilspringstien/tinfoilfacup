@@ -1,0 +1,36 @@
+name: Groundshare candidate promotion — Batch 2 (v7.8.7)
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish confirmed Batch 2 records and ledger relationships'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate groundshare promotion — Batch 2
+        shell: bash
+        run: |
+          ARGS=()
+          if [ "${{ inputs.publish }}" = "true" ]; then ARGS+=(--publish); fi
+          python updater/groundshare_candidate_promotion_batch2.py "${ARGS[@]}"
+      - name: Commit promotion report / published data
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add groundshare-candidate-promotion-batch2.md updater/groundshare-candidate-promotion-batch2.json
+          if [ "${{ inputs.publish }}" = "true" ]; then
+            git add clubfinder.html updater/ground-approval-ledger.json
+          fi
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Groundshare candidate promotion v7.8.7 batch 2"
+            git push
+          fi
