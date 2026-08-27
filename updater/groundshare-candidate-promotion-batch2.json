@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-08-27T13:13:16.519787+00:00",
+  "checked_at": "2026-08-27T13:16:57.187456+00:00",
   "version": "7.8.7",
   "batch": 2,
-  "mode": "DRY RUN",
+  "mode": "PUBLISH",
   "confirmed_relationships": 3,
   "directed_relationships": 2,
   "undirected_shared_venues": 1,
@@ -11,7 +11,7 @@
   "existing_canonical_club_records": 0,
   "groundshare_ledger_relationships_ready": 3,
   "existing_canonical_records_overwritten": 0,
-  "published": false,
+  "published": true,
   "plans": [
     {
       "pair_id": 6,

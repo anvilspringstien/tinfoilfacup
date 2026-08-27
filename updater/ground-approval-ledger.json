@@ -1,6 +1,6 @@
 {
   "version": "7.7.2",
-  "updated_at": "2026-08-27T12:21:43.148397+00:00",
+  "updated_at": "2026-08-27T13:16:57.181307+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -48,6 +48,30 @@
       "approved_at": "2026-08-27T12:21:43.148397+00:00",
       "status": "current",
       "approval_source": "v7.8.3 human confirmation"
+    },
+    {
+      "tenant": "Broadfields United FC",
+      "host": "Rayners Lane FC",
+      "ground": "Tithe Farm Sports & Social Club",
+      "postcode": "HA2 0XH",
+      "season": "2026-27",
+      "evidence": "Rayners Lane's current 2026/27 official site states that Broadfields United groundshare at Tithe Farm, and Broadfields United's own club history records the move into a groundshare agreement with Rayners Lane at Tithe Farm. Current venue information also lists both clubs there. This supports Rayners Lane as the host club and Broadfields United as tenant.",
+      "source_url": "https://raynerslanefc.co.uk/",
+      "approved_at": "2026-08-27T13:16:57.181307+00:00",
+      "status": "current",
+      "approval_source": "v7.8.6 human confirmation"
+    },
+    {
+      "tenant": "Hinckley AFC",
+      "host": "Barwell FC",
+      "ground": "Kirkby Road",
+      "postcode": "LE9 8FQ",
+      "season": "2026-27",
+      "evidence": "Hinckley AFC's current official ground information says the club plays its home matches at Barwell FC, Kirkby Road, LE9 8FQ. A July 2026 FA Cup announcement explicitly calls Barwell the landlords when explaining a fixture move caused by Barwell also being at home. This establishes Barwell as host and Hinckley AFC as tenant for 2026/27.",
+      "source_url": "https://hinckleyafc.co.uk/first-team/where-are-we/",
+      "approved_at": "2026-08-27T13:16:57.181307+00:00",
+      "status": "current",
+      "approval_source": "v7.8.6 human confirmation"
     }
   ],
   "approved_exceptions": [
@@ -82,6 +106,21 @@
       "approved_at": "2026-08-27T12:21:43.148397+00:00",
       "status": "current",
       "approval_source": "v7.8.3 human confirmation"
+    },
+    {
+      "clubs": [
+        "Walthamstow FC",
+        "West Essex FC"
+      ],
+      "relationship_type": "confirmed_shared_venue_undirected",
+      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
+      "postcode": "E17 4JP",
+      "season": "2026-27",
+      "evidence": "Current Essex Senior League club information says West Essex's Senior 1st XI groundshare at Wadham Lodge Stadium, while current FA county directory information places both Walthamstow and West Essex at Wadham Lodge, E17 4JP. West Essex's own ground announcement explicitly described sharing the stadium with Walthamstow. The shared venue is therefore supported, but because the venue is operated separately and the current evidence does not safely establish a landlord/tenant direction between the two clubs, direction remains unresolved.",
+      "source_url": "https://www.essexseniorleague.co.uk/en_US/archive15032-club-info/92007845",
+      "approved_at": "2026-08-27T13:16:57.181307+00:00",
+      "status": "current",
+      "approval_source": "v7.8.6 human confirmation"
     }
   ]
 }
