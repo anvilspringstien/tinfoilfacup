@@ -1,13 +1,13 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **27/08/2026, 09:53:43 UTC**
+Last checked: **27/08/2026, 10:10:12 UTC**
 
 **Resolution-aware verification/triage only. Nothing is published automatically.**
 
 - 🟢 Approved candidates: **0**
 - 🟡 One human decision required: **40**
 - 🔴 Genuine ground research required: **37**
-- ✅ Resolved since earlier verification: **4**
+- ✅ Resolved since earlier verification: **0**
 - ⚪ Current actionable exception total: **77**
 
 Clubs that now have a canonical `GROUNDS` record are removed from the actionable totals rather than being reported forever as stale exceptions.
@@ -101,10 +101,7 @@ None.
 
 ## ✅ Resolved since earlier verification
 
-- **AFC Mansfield** — Forest Town Welfare • NG19 0EE — Canonical GROUNDS record now present
-- **AFC Welwyn** — Lantern Stadium • EN6 1QB — Canonical GROUNDS record now present; approved groundshare relationship recorded
-- **Heanor Town FC** — The Town Ground • DE75 7EN — Canonical GROUNDS record now present
-- **Potters Bar Town FC** — Lantern Stadium • EN6 1QB — Canonical GROUNDS record now present
+None.
 
 ## Rules
 

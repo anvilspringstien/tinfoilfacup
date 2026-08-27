@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-08-27T09:53:43.637327+00:00",
+  "checked_at": "2026-08-27T10:10:12.229631+00:00",
   "mode": "resolution-aware verification/triage",
   "active_total": 77,
-  "resolved_total": 4,
+  "resolved_total": 0,
   "counts": {
     "APPROVED_CANDIDATE": 0,
     "HUMAN_DECISION": 40,
@@ -1235,35 +1235,6 @@
       "reason": "No FCHD candidate; another free/public source required"
     }
   ],
-  "resolved_since_verification": [
-    {
-      "club": "AFC Mansfield",
-      "ground": "Forest Town Welfare",
-      "postcode": "NG19 0EE",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "APPROVED_CANDIDATE"
-    },
-    {
-      "club": "AFC Welwyn",
-      "ground": "Lantern Stadium",
-      "postcode": "EN6 1QB",
-      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Heanor Town FC",
-      "ground": "The Town Ground",
-      "postcode": "DE75 7EN",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "APPROVED_CANDIDATE"
-    },
-    {
-      "club": "Potters Bar Town FC",
-      "ground": "Lantern Stadium",
-      "postcode": "EN6 1QB",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "HUMAN_DECISION"
-    }
-  ],
+  "resolved_since_verification": [],
   "rules_version": "7.7.4"
 }
