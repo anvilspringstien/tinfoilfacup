@@ -1,20 +1,16 @@
 {
-  "checked_at": "2026-08-27T15:15:48.370371+00:00",
+  "checked_at": "2026-08-27T15:18:13.017316+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 487,
-    "critical_items": 3,
-    "review_items": 13,
+    "complete_verified": 489,
+    "critical_items": 2,
+    "review_items": 12,
     "shared_postcodes": 12,
     "known_approved_groundshares": 15,
     "approved_groundshares_pending_canonical_reconciliation": 0,
-    "unverified": 1
+    "unverified": 0
   },
   "missing_or_incomplete": [
-    [
-      "Hartpury FC",
-      "No canonical ground record"
-    ],
     [
       "Romulus FC",
       "No canonical ground record"
@@ -26,10 +22,31 @@
   ],
   "shared_postcodes": [
     [
+      "L30 1NY",
+      [
+        "AFC Liverpool",
+        "Bootle FC"
+      ]
+    ],
+    [
+      "SG15 6RS",
+      [
+        "Arlesey Town FC",
+        "Baldock Town FC"
+      ]
+    ],
+    [
       "TN26 1NJ",
       [
         "Ashford United FC",
         "Kennington FC"
+      ]
+    ],
+    [
+      "RM8 2JR",
+      [
+        "Barking FC",
+        "Romford FC"
       ]
     ],
     [
@@ -40,10 +57,17 @@
       ]
     ],
     [
-      "L30 1NY",
+      "DN17 2TQ",
       [
-        "AFC Liverpool",
-        "Bootle FC"
+        "Bottesford Town FC",
+        "Bottlesford Town FC"
+      ]
+    ],
+    [
+      "NR30 1EY",
+      [
+        "Gorleston FC",
+        "Great Yarmouth Town FC"
       ]
     ],
     [
@@ -61,38 +85,10 @@
       ]
     ],
     [
-      "SG15 6RS",
-      [
-        "Arlesey Town FC",
-        "Baldock Town FC"
-      ]
-    ],
-    [
-      "RM8 2JR",
-      [
-        "Barking FC",
-        "Romford FC"
-      ]
-    ],
-    [
-      "NR30 1EY",
-      [
-        "Gorleston FC",
-        "Great Yarmouth Town FC"
-      ]
-    ],
-    [
       "ST5 3BX",
       [
         "Newcastle Town FC",
         "Stone Old Alleynians FC"
-      ]
-    ],
-    [
-      "DN17 2TQ",
-      [
-        "Bottesford Town FC",
-        "Bottlesford Town FC"
       ]
     ],
     [
@@ -203,12 +199,5 @@
     }
   ],
   "approved_groundshares_pending_canonical_reconciliation": [],
-  "unverified": [
-    [
-      "South Liverpool FC",
-      "Jericho Lane Sports Hub",
-      "L17 5AL",
-      "unverified"
-    ]
-  ]
+  "unverified": []
 }

@@ -1,30 +1,29 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **487**
-- 🔴 Critical ground-data items: **3**
-- 🟡 Review items: **13**
+- 🟢 Complete verified club-ground records: **489**
+- 🔴 Critical ground-data items: **2**
+- 🟡 Review items: **12**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **15**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
 
-- **Hartpury FC** — No canonical ground record
 - **Romulus FC** — No canonical ground record
 - **Sutton Coldfield Town FC** — No canonical ground record
 
 ## 🟡 Shared postcodes / possible groundshares
 
-- **TN26 1NJ** — Ashford United FC, Kennington FC
-- **NE24 3JE** — Blyth Spartans AFC, Blyth Town FC
 - **L30 1NY** — AFC Liverpool, Bootle FC
+- **SG15 6RS** — Arlesey Town FC, Baldock Town FC
+- **TN26 1NJ** — Ashford United FC, Kennington FC
+- **RM8 2JR** — Barking FC, Romford FC
+- **NE24 3JE** — Blyth Spartans AFC, Blyth Town FC
+- **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
+- **NR30 1EY** — Gorleston FC, Great Yarmouth Town FC
 - **NW9 7NE** — Hendon FC, Hilltop FC
 - **SW20 9DZ** — Kingstonian FC, Raynes Park Vale FC
-- **SG15 6RS** — Arlesey Town FC, Baldock Town FC
-- **RM8 2JR** — Barking FC, Romford FC
-- **NR30 1EY** — Gorleston FC, Great Yarmouth Town FC
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
-- **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
 - **E14 7TW** — Soul Tower Hamlets FC, Sporting Bengal United FC
 - **E17 4JP** — Walthamstow FC, West Essex FC
 

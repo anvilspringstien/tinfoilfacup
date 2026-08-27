@@ -1,0 +1,53 @@
+{
+  "published_at": "2026-08-27T15:18:12.930823+00:00",
+  "version": "7.9.12",
+  "hartpury_canonical_added": 1,
+  "south_liverpool_verified": 1,
+  "existing_ground_or_postcode_overwritten": 0,
+  "temporary_groundshares_recorded": 1,
+  "protected_relationship_changed": 0,
+  "hartpury": {
+    "name": "Hartpury FC",
+    "ground": "4ED Hartpury Stadium, with Vodafone",
+    "postcode": "GL19 3BE",
+    "lat": 51.90923,
+    "lon": -2.30673,
+    "verification": "verified",
+    "verification_label": "✅ Verified",
+    "source": "Current home-ground evidence: https://www.hartpury.ac.uk/hartpury-fc/getting-here/",
+    "ground_source": "Current official Hartpury FC getting-here page; permanent club home while pitch renovation is temporary",
+    "coordinate_source": "Hartpury University & College official sports map stadium marker"
+  },
+  "south_liverpool_before": {
+    "ground": "Jericho Lane Sports Hub",
+    "postcode": "L17 5AL",
+    "verification": "unverified"
+  },
+  "south_liverpool_after": {
+    "ground": "Jericho Lane Sports Hub",
+    "postcode": "L17 5AL",
+    "verification": "verified"
+  },
+  "temporary": {
+    "tenant": "Hartpury FC",
+    "host": "Gloucester City AFC",
+    "ground": "The KMM Energy Stadium",
+    "postcode": "GL2 5HD",
+    "season": "2026-27",
+    "effective_from": "2026-08-29",
+    "effective_through": "2026-10-03",
+    "affected_home_fixtures": [
+      "2026-08-29 Exmouth Town (FA Trophy)",
+      "2026-09-15 Melksham Town",
+      "2026-09-22 Worcester Raiders",
+      "2026-09-26 Bideford AFC",
+      "2026-10-03 Barnstaple Town"
+    ],
+    "status": "temporary",
+    "evidence": "Southern League and Gloucester City independently confirm Hartpury will use Gloucester City's KMM Energy Stadium only for these five home fixtures while 3G works are completed at 4ED Hartpury Stadium.",
+    "source_url": "https://www.southern-football-league.co.uk/articles/hartpury-fc-announce-temporary-groundshare-agreement-at-the-kmm-energy-stadium",
+    "recorded_at": "2026-08-27T15:18:12.930823+00:00",
+    "approval_source": "v7.9.12 time-bounded venue handling"
+  },
+  "competition_json_changed": false
+}
