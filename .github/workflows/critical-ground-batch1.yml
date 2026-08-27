@@ -1,0 +1,28 @@
+name: Critical ground batch 1 (v7.9.6)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/promote_critical_ground_batch1.py'
+      - '.github/workflows/critical-ground-batch1.yml'
+permissions: {contents: write}
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Promote four validated critical ground records
+        run: python updater/promote_critical_ground_batch1.py
+      - name: Re-run Ground Health
+        run: python updater/ground_health.py
+      - name: Commit batch and Ground Health
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html critical-ground-batch1.md updater/critical-ground-batch1.json ground-health.md updater/ground-health.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Publish critical ground batch 1 v7.9.6"
+            git push
+          fi
