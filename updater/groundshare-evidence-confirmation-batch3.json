@@ -1,0 +1,109 @@
+{
+  "checked_at": "2026-08-27T13:29:57.639787+00:00",
+  "version": "7.8.9",
+  "mode": "CONFIRMATION ONLY / NO PUBLISH",
+  "source": "updater/groundshare-evidence-research-batch3.json",
+  "batch": 3,
+  "confirmed_relationships": 4,
+  "directed_host_tenant_relationships": 4,
+  "confirmed_shared_venue_undirected": 0,
+  "rejected_not_current_relationships": 1,
+  "published_canonical_records": 0,
+  "confirmed": [
+    {
+      "pair_id": 11,
+      "clubs": [
+        "Grays Athletic FC",
+        "Tilbury FC"
+      ],
+      "postcode": "RM18 8NL",
+      "ground": "The EMR Stadium",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "host": "Tilbury FC",
+      "tenant": "Grays Athletic FC",
+      "evidence_note": "Grays Athletic's current 2026/27 visitor and membership information says its home matches are played at Tilbury Football Club's EMR Stadium, Saint Chads Road, RM18 8NL. This supports Tilbury as host and Grays Athletic as tenant for the current period.",
+      "sources": [
+        "https://www.graysathletic.co.uk/a/for-visitors-20933.html?page=1",
+        "https://www.graysathletic.co.uk/a/202526-grays-athletic-club-member-ground-pass-67766.html"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.8 evidence research. This does not publish canonical GROUNDS records."
+    },
+    {
+      "pair_id": 12,
+      "clubs": [
+        "Enfield FC",
+        "Hertford Town FC"
+      ],
+      "postcode": "SG13 8EX",
+      "ground": "Hertingfordbury Park",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "host": "Hertford Town FC",
+      "tenant": "Enfield FC",
+      "evidence_note": "Current 2026/27 fixture information places Enfield home matches at Hertingfordbury Park, while current club-directory information identifies Hertingfordbury Park as Hertford Town's ground and Enfield as a club sharing it. The relationship has been in place since 2024 and remains supported by current venue evidence.",
+      "sources": [
+        "https://www.southern-football-league.co.uk/match/6a5dfaf378ef96268d68aee9",
+        "https://www.footballgroundmap.com/ground/hertingfordbury-park/hertford-town"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.8 evidence research. This does not publish canonical GROUNDS records."
+    },
+    {
+      "pair_id": 13,
+      "clubs": [
+        "Balham FC",
+        "Tooting & Mitcham United FC"
+      ],
+      "postcode": "SM4 6BF",
+      "ground": "Imperial Fields",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "host": "Tooting & Mitcham United FC",
+      "tenant": "Balham FC",
+      "evidence_note": "Balham's own club information states that it groundshares at Imperial Fields with Tooting & Mitcham United, and current August 2026 FA Cup opposition reporting independently confirms Balham's home groundshare there. This supports Tooting & Mitcham United as host and Balham as tenant.",
+      "sources": [
+        "https://www.balhamfc.com/teams/mens-first-team",
+        "https://www.pitchero.com/clubs/metropolitanpolicefc/news/fa-cup-preview--balham-2991272.html"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.8 evidence research. This does not publish canonical GROUNDS records."
+    },
+    {
+      "pair_id": 15,
+      "clubs": [
+        "Dudley Town FC",
+        "Sporting Khalsa FC"
+      ],
+      "postcode": "WV13 3BB",
+      "ground": "Guardian Warehousing Arena",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "host": "Sporting Khalsa FC",
+      "tenant": "Dudley Town FC",
+      "evidence_note": "Dudley Town's current 2026/27 ticketing information identifies the Guardian Warehousing Arena as its home venue, while Dudley's own historical club statement explicitly describes its groundshare facilities at Sporting Khalsa. Current 2026 fixture evidence continues to place both clubs at the same Willenhall venue. This supports Sporting Khalsa as host and Dudley Town as tenant.",
+      "sources": [
+        "https://dudleytownfootballclub.co.uk/news/ticketing-details-ahead-of-the-202627-season",
+        "https://www.dudleytownfootballclub.co.uk/news/chairman-chats"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.8 evidence research. This does not publish canonical GROUNDS records."
+    }
+  ],
+  "rejected_not_current": [
+    {
+      "pair_id": 14,
+      "clubs": [
+        "Hayes & Yeading United FC",
+        "Southall FC"
+      ],
+      "postcode": "UB4 0SL",
+      "current_ground": "Honeycroft, Uxbridge",
+      "status": "HUMAN_REJECTED_NOT_CURRENT",
+      "research_status": "NOT_CURRENT",
+      "evidence_note": "The queued Hayes & Yeading United relationship is no longer current. Southall announced in March 2026 that its SkyEx groundshare had ended and that it would groundshare at Uxbridge FC's Honeycroft for 2026/27. Uxbridge independently announced Southall as its groundshare tenant. Hayes & Yeading United ↔ Southall must therefore not be approved from the stale UB4 0SL candidate.",
+      "sources": [
+        "https://www.southallfc.com/news/club-statement-new-groundshare-agreement-20262027-2971024.html",
+        "https://www.uxbridgefc.com/post/groundshare-agreement-26-27-season"
+      ],
+      "confirmation_note": "Human confirmation accepts the v7.8.8 finding that this queued relationship is not current. It is excluded from groundshare promotion."
+    }
+  ]
+}
