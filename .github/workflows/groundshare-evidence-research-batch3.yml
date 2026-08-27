@@ -1,0 +1,23 @@
+name: Groundshare evidence research — Batch 3 (v7.8.8)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build proposal-only Batch 3 evidence research
+        run: python updater/groundshare_evidence_research_batch3.py
+      - name: Commit Batch 3 evidence research
+        run: |
+          git config user.name "Tin Foil FA Cup Groundshare Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add groundshare-evidence-research-batch3.md updater/groundshare-evidence-research-batch3.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update groundshare evidence research v7.8.8 batch 3"
+            git push
+          fi
