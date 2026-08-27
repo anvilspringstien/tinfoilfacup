@@ -1,0 +1,93 @@
+{
+  "checked_at": "2026-08-27T10:32:22.549585+00:00",
+  "version": "7.7.7",
+  "mode": "DRY RUN",
+  "eligible_geography_candidates": 6,
+  "ready_to_promote": 6,
+  "held_rejected": 1,
+  "skipped_safety": 0,
+  "overwrites": 0,
+  "published": false,
+  "promotion_records": [
+    {
+      "name": "Beaconsfield Town FC",
+      "ground": "Holloways Park",
+      "postcode": "HP9 2SE",
+      "lat": 51.587894,
+      "lon": -0.628189,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+      "coordinate_source": "Fresh Postcodes.io coordinates for corrected postcode",
+      "geography_validation": "v7.7.6"
+    },
+    {
+      "name": "Bradford (Park Avenue) FC",
+      "ground": "Horsfall Community Stadium",
+      "postcode": "BD6 2NG",
+      "lat": 53.758419,
+      "lon": -1.777899,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+      "coordinate_source": "Fresh Postcodes.io coordinates for corrected postcode",
+      "geography_validation": "v7.7.6"
+    },
+    {
+      "name": "Frickley Athletic FC",
+      "ground": "Westfield Lane",
+      "postcode": "WF9 2EQ",
+      "lat": 53.598022,
+      "lon": -1.292242,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+      "coordinate_source": "Previously validated FCHD coordinates",
+      "geography_validation": "v7.7.6"
+    },
+    {
+      "name": "Heybridge Swifts FC",
+      "ground": "Scraley Road Stadium",
+      "postcode": "CM9 8JA",
+      "lat": 51.744198,
+      "lon": 0.700613,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+      "coordinate_source": "Previously validated FCHD coordinates",
+      "geography_validation": "v7.7.6"
+    },
+    {
+      "name": "Sutton Athletic FC",
+      "ground": "Lower Road Ground",
+      "postcode": "BR8 7RZ",
+      "lat": 51.414314,
+      "lon": 0.198723,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+      "coordinate_source": "Previously validated FCHD coordinates",
+      "geography_validation": "v7.7.6"
+    },
+    {
+      "name": "Wormley Rovers FC",
+      "ground": "Wormley Sports Club",
+      "postcode": "EN10 7QE",
+      "lat": 51.734387,
+      "lon": -0.03781,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+      "coordinate_source": "Fresh Postcodes.io coordinates for corrected postcode",
+      "geography_validation": "v7.7.6"
+    }
+  ],
+  "held": [
+    {
+      "club": "Corby Town FC",
+      "status": "HELD_FOR_RESEARCH",
+      "reason": "Status is not promotion-eligible"
+    }
+  ],
+  "skipped": []
+}
