@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-08-27T11:06:02.815410+00:00",
+  "version": "7.7.8",
+  "mode": "PROPOSAL ONLY",
+  "source": "updater/ground-exception-verification.json",
+  "candidate_count": 3,
+  "missing_count": 0,
+  "mismatch_count": 0,
+  "records": [
+    {
+      "club": "Bishop's Cleeve FC",
+      "fchd_match": "Bishops Cleeve",
+      "ground_candidate": "Everyone's Energy Stadium",
+      "postcode": "GL52 3PD",
+      "distance_km": null,
+      "classification": "MECHANICAL_NAME_VARIANT",
+      "decision": "HUMAN_CONFIRMATION_REQUIRED",
+      "note": "Apostrophe/name-format variant only; retain for one current-ground confirmation before any promotion.",
+      "source_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Horsham YMCA FC",
+      "fchd_match": "Horsham YM",
+      "ground_candidate": "Gorings Mead",
+      "postcode": "RH13 5BP",
+      "distance_km": null,
+      "classification": "PLAUSIBLE_IDENTITY_VARIANT",
+      "decision": "HUMAN_CONFIRMATION_REQUIRED",
+      "note": "FCHD short-name variant; explicit human identity confirmation still required before any promotion.",
+      "source_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Pershore Town 88 FC",
+      "fchd_match": "Pershore Town",
+      "ground_candidate": "Recruit 12 Community Stadium",
+      "postcode": "WR10 1QU",
+      "distance_km": null,
+      "classification": "PLAUSIBLE_IDENTITY_VARIANT",
+      "decision": "HUMAN_CONFIRMATION_REQUIRED",
+      "note": "FCHD historical/short-name variant; explicit human identity confirmation still required before any promotion.",
+      "source_state": "HUMAN_DECISION"
+    }
+  ],
+  "missing": [],
+  "mismatches": []
+}
