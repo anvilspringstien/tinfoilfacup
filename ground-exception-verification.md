@@ -1,14 +1,14 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **27/08/2026, 11:50:45 UTC**
+Last checked: **27/08/2026, 12:27:34 UTC**
 
 **Resolution-aware verification/triage only. Nothing is published automatically.**
 
 - 🟢 Approved candidates: **0**
-- 🟡 One human decision required: **31**
+- 🟡 One human decision required: **23**
 - 🔴 Genuine ground research required: **37**
-- ✅ Resolved since earlier verification: **3**
-- ⚪ Current actionable exception total: **68**
+- ✅ Resolved since earlier verification: **8**
+- ⚪ Current actionable exception total: **60**
 
 Clubs that now have a canonical `GROUNDS` record are removed from the actionable totals rather than being reported forever as stale exceptions.
 
@@ -20,7 +20,6 @@ None.
 
 - **Balham FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
 - **Barwell FC** — Crown Skip Hire Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
-- **Bedworth United FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
 - **Belper United FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
 - **Broadfields United FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Cobham FC** — Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
@@ -29,26 +28,19 @@ None.
 - **Eastwood Community FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
 - **Enfield FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Epsom & Ewell FC** — Cobham FC: Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
-- **Faversham Strike Force FC** — The Belmont Stadium • CT5 1QP • separation `0.198 km` • Approve shared-ground relationship
 - **Grays Athletic FC** — EMR Stadium • RM18 8NL • separation `0.159 km` • Approve shared-ground relationship
-- **Hackney Wick FC** — Simarco Stadium • CM8 1UN • separation `0.072 km` • Approve shared-ground relationship
 - **Hayes & Yeading United FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
 - **Hertford Town FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Hinckley AFC** — UK Flooring Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
-- **Nuneaton Town FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
 - **Rayners Lane FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Romulus FC** — Domino's Stadium • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
-- **Soul Tower Hamlets FC** — Mile End Stadium • E14 7TW • separation `0.458 km` • Approve shared-ground relationship
 - **Southall FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
-- **Sporting Bengal United FC** — Mile End Stadium • E14 7TW • separation `0.458 km` • Approve shared-ground relationship
 - **Sporting Khalsa FC** — Guardian Warehousing Stadium • WV13 3BB • separation `0.204 km` • Approve shared-ground relationship
 - **Sutton Coldfield Town FC** — Domino's Arena • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
 - **Tilbury FC** — EMR Stadium • RM18 8NL • separation `0.159 km` • Approve shared-ground relationship
 - **Tooting & Mitcham United FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
 - **Walthamstow FC** — Wadham Lodge Sports Centre • E17 4JP • separation `0.086 km` • Approve shared-ground relationship
 - **West Essex FC** — Matchday Centre • E17 4JP • separation `0.086 km` • Approve shared-ground relationship
-- **Whitstable Town FC** — The Belmont Stadium • CT5 1QP • separation `0.198 km` • Approve shared-ground relationship
-- **Witham Town FC** — Simarco Stadium • CM8 1UN • separation `0.072 km` • Approve shared-ground relationship
 
 ## 🔴 Genuine ground research required
 
@@ -92,9 +84,14 @@ None.
 
 ## ✅ Resolved since earlier verification
 
-- **Bishop's Cleeve FC** — Everyone's Energy Stadium • GL52 3PD — Canonical GROUNDS record now present
-- **Horsham YMCA FC** — Gorings Mead • RH13 5BP — Canonical GROUNDS record now present
-- **Pershore Town 88 FC** — That Carpet Place Community Stadium • WR10 1QU — Canonical GROUNDS record now present
+- **Bedworth United FC** — The Oval • CV12 8NN — Canonical GROUNDS record now present
+- **Faversham Strike Force FC** — The Belmont Stadium / YMS Stadium • CT5 1QP — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Hackney Wick FC** — Simarco Stadium • CM8 1UN — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Nuneaton Town FC** — The Oval • CV12 8NN — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Soul Tower Hamlets FC** — Mile End Stadium • E14 7TW — Canonical GROUNDS record now present
+- **Sporting Bengal United FC** — Mile End Stadium • E14 7TW — Canonical GROUNDS record now present
+- **Whitstable Town FC** — The Belmont Stadium / YMS Stadium • CT5 1QP — Canonical GROUNDS record now present
+- **Witham Town FC** — Simarco Stadium • CM8 1UN — Canonical GROUNDS record now present
 
 ## Rules
 

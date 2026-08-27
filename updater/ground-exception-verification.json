@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-08-27T11:50:45.575715+00:00",
+  "checked_at": "2026-08-27T12:27:34.977505+00:00",
   "mode": "resolution-aware verification/triage",
-  "active_total": 68,
-  "resolved_total": 3,
+  "active_total": 60,
+  "resolved_total": 8,
   "counts": {
     "APPROVED_CANDIDATE": 0,
-    "HUMAN_DECISION": 31,
+    "HUMAN_DECISION": 23,
     "GROUND_RESEARCH": 37
   },
   "records": [
@@ -42,24 +42,6 @@
         "Crown Skip Hire Stadium",
         "Kirkby Road",
         "Barwell"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Bedworth United FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Bedworth United",
-      "ground_candidate": "The Oval",
-      "postcode": "CV12 8NN",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.107,
-      "raw_lines": [
-        "The Oval",
-        "Coventry Road",
-        "Bedworth"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -198,25 +180,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Faversham Strike Force FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Faversham Strike Force",
-      "ground_candidate": "The Belmont Stadium",
-      "postcode": "CT5 1QP",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.198,
-      "raw_lines": [
-        "Whitstable Town FC",
-        "The Belmont Stadium",
-        "Belmont Road",
-        "Whitstable"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Grays Athletic FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Grays Athletic",
@@ -232,25 +195,6 @@
         "Chadfields",
         "St Chad's Road",
         "Tilbury"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Hackney Wick FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Hackney Wick",
-      "ground_candidate": "Simarco Stadium",
-      "postcode": "CM8 1UN",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.072,
-      "raw_lines": [
-        "Witham Town FC",
-        "Simarco Stadium",
-        "Spa Road",
-        "Witham"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -311,25 +255,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Nuneaton Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Nuneaton Town",
-      "ground_candidate": "The Oval",
-      "postcode": "CV12 8NN",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.107,
-      "raw_lines": [
-        "Bedworth United FC",
-        "The Oval",
-        "Coventry Road",
-        "Bedworth"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Rayners Lane FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Rayners Lane",
@@ -368,24 +293,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Soul Tower Hamlets FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "SOUL Tower Hamlets",
-      "ground_candidate": "Mile End Stadium",
-      "postcode": "E14 7TW",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.458,
-      "raw_lines": [
-        "Mile End Stadium",
-        "Rhodeswell Road",
-        "Tower Hamlets"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
       "club": "Southall FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Southall",
@@ -400,24 +307,6 @@
         "SkyEx Community Stadium",
         "Beaconsfield Road",
         "Hayes"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Sporting Bengal United FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Sporting Bengal United",
-      "ground_candidate": "Mile End Stadium",
-      "postcode": "E14 7TW",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.458,
-      "raw_lines": [
-        "Mile End Stadium",
-        "Rhodeswell Road",
-        "Tower Hamlets"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -530,42 +419,6 @@
         "Wadham Lodge",
         "Kitchener Road",
         "Walthamstow"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Whitstable Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Whitstable Town",
-      "ground_candidate": "The Belmont Stadium",
-      "postcode": "CT5 1QP",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.198,
-      "raw_lines": [
-        "The Belmont Stadium",
-        "Belmont Road",
-        "Whitstable"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Witham Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Witham Town",
-      "ground_candidate": "Simarco Stadium",
-      "postcode": "CM8 1UN",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.072,
-      "raw_lines": [
-        "Simarco Stadium",
-        "Spa Road",
-        "Witham"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -1083,23 +936,58 @@
   ],
   "resolved_since_verification": [
     {
-      "club": "Bishop's Cleeve FC",
-      "ground": "Everyone's Energy Stadium",
-      "postcode": "GL52 3PD",
+      "club": "Bedworth United FC",
+      "ground": "The Oval",
+      "postcode": "CV12 8NN",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Horsham YMCA FC",
-      "ground": "Gorings Mead",
-      "postcode": "RH13 5BP",
+      "club": "Faversham Strike Force FC",
+      "ground": "The Belmont Stadium / YMS Stadium",
+      "postcode": "CT5 1QP",
+      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Hackney Wick FC",
+      "ground": "Simarco Stadium",
+      "postcode": "CM8 1UN",
+      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Nuneaton Town FC",
+      "ground": "The Oval",
+      "postcode": "CV12 8NN",
+      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Soul Tower Hamlets FC",
+      "ground": "Mile End Stadium",
+      "postcode": "E14 7TW",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Pershore Town 88 FC",
-      "ground": "That Carpet Place Community Stadium",
-      "postcode": "WR10 1QU",
+      "club": "Sporting Bengal United FC",
+      "ground": "Mile End Stadium",
+      "postcode": "E14 7TW",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Whitstable Town FC",
+      "ground": "The Belmont Stadium / YMS Stadium",
+      "postcode": "CT5 1QP",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Witham Town FC",
+      "ground": "Simarco Stadium",
+      "postcode": "CM8 1UN",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     }
