@@ -1,6 +1,6 @@
 {
-  "version": "7.9.15",
-  "updated_at": "2026-08-27T15:31:12.973983+00:00",
+  "version": "7.9.16",
+  "updated_at": "2026-08-27T15:32:49.313575+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -252,6 +252,18 @@
       "approved_at": "2026-08-27T15:31:12.973983+00:00",
       "status": "current",
       "approval_source": "v7.9.15 final shared-postcode evidence review"
+    },
+    {
+      "tenant": "Kingstonian FC",
+      "host": "Ashford Town (Middx) FC",
+      "ground": "Robert Parker Stadium",
+      "postcode": "TW19 7BH",
+      "season": "2026-27",
+      "evidence": "Kingstonian's official March 2026 announcement says its Raynes Park Vale groundshare ends after 2025/26 and it signed a two-season groundshare at the Robert Parker Stadium, home of Ashford Town (Middlesex). Kingstonian's current official general information confirms Robert Parker Stadium as its 2026/27 home.",
+      "source_url": "https://www.kingstonianfc.com/news/k-s-to-groundshare-at-ashford-town-middlesex",
+      "approved_at": "2026-08-27T15:32:49.313575+00:00",
+      "status": "current",
+      "approval_source": "v7.9.16 post-correction current groundshare approval"
     }
   ],
   "approved_exceptions": [

@@ -1,25 +1,18 @@
 {
-  "checked_at": "2026-08-27T15:31:13.068834+00:00",
+  "checked_at": "2026-08-27T15:32:49.398894+00:00",
   "counts": {
     "eligible_clubs": 491,
     "complete_verified": 491,
     "critical_items": 0,
-    "review_items": 3,
-    "shared_postcodes": 3,
-    "known_approved_groundshares": 21,
+    "review_items": 2,
+    "shared_postcodes": 2,
+    "known_approved_groundshares": 22,
     "known_confirmed_shared_venues": 3,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 0
   },
   "missing_or_incomplete": [],
   "shared_postcodes": [
-    [
-      "TW19 7BH",
-      [
-        "Ashford Town (Middx) FC",
-        "Kingstonian FC"
-      ]
-    ],
     [
       "DN17 2TQ",
       [
@@ -160,6 +153,12 @@
       "postcode": "NW9 7NE",
       "tenant": "Hilltop FC",
       "host": "Hendon FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "TW19 7BH",
+      "tenant": "Kingstonian FC",
+      "host": "Ashford Town (Middx) FC",
       "season": "2026-27"
     }
   ],
