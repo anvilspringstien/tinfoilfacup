@@ -1,0 +1,33 @@
+name: Ground identity variant promotion (v7.8.0)
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish confirmed identity-variant records into canonical GROUNDS'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run identity variant promotion
+        run: |
+          ARGS=()
+          if [ "${{ inputs.publish }}" = "true" ]; then ARGS+=(--publish); fi
+          python updater/promote_identity_variant_candidates.py "${ARGS[@]}"
+      - name: Commit report / published grounds
+        run: |
+          git config user.name "Tin Foil FA Cup Identity Promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-identity-variant-promotion.md updater/identity-variant-promotion.json
+          if [ "${{ inputs.publish }}" = "true" ]; then git add clubfinder.html; fi
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Identity variant promotion v7.8.0"
+            git push
+          fi
