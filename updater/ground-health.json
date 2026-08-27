@@ -1,12 +1,13 @@
 {
-  "checked_at": "2026-08-27T15:19:49.309342+00:00",
+  "checked_at": "2026-08-27T15:28:40.969723+00:00",
   "counts": {
     "eligible_clubs": 491,
     "complete_verified": 491,
     "critical_items": 0,
-    "review_items": 13,
-    "shared_postcodes": 13,
+    "review_items": 11,
+    "shared_postcodes": 11,
     "known_approved_groundshares": 15,
+    "known_confirmed_shared_venues": 2,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 0
   },
@@ -80,20 +81,6 @@
       [
         "Newcastle Town FC",
         "Stone Old Alleynians FC"
-      ]
-    ],
-    [
-      "E14 7TW",
-      [
-        "Soul Tower Hamlets FC",
-        "Sporting Bengal United FC"
-      ]
-    ],
-    [
-      "E17 4JP",
-      [
-        "Walthamstow FC",
-        "West Essex FC"
       ]
     ],
     [
@@ -194,6 +181,26 @@
       "tenant": "SE Dons FC",
       "host": "Chatham Town FC",
       "season": "2026-27"
+    }
+  ],
+  "known_confirmed_shared_venues": [
+    {
+      "postcode": "E14 7TW",
+      "clubs": [
+        "Soul Tower Hamlets FC",
+        "Sporting Bengal United FC"
+      ],
+      "season": "2026-27",
+      "relationship_type": "confirmed_shared_venue_undirected"
+    },
+    {
+      "postcode": "E17 4JP",
+      "clubs": [
+        "Walthamstow FC",
+        "West Essex FC"
+      ],
+      "season": "2026-27",
+      "relationship_type": "confirmed_shared_venue_undirected"
     }
   ],
   "approved_groundshares_pending_canonical_reconciliation": [],

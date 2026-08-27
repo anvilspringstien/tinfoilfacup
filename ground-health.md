@@ -2,9 +2,10 @@
 
 - 🟢 Complete verified club-ground records: **491**
 - 🔴 Critical ground-data items: **0**
-- 🟡 Review items: **13**
+- 🟡 Review items: **11**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **15**
+- 🤝 Confirmed shared venues reconciled without forced direction: **2**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
@@ -23,8 +24,6 @@ None.
 - **NW9 7NE** — Hendon FC, Hilltop FC
 - **SW20 9DZ** — Kingstonian FC, Raynes Park Vale FC
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
-- **E14 7TW** — Soul Tower Hamlets FC, Sporting Bengal United FC
-- **E17 4JP** — Walthamstow FC, West Essex FC
 - **B72 1NL** — Romulus FC, Sutton Coldfield Town FC
 
 ## 🏟️ Known approved groundshares
@@ -44,6 +43,11 @@ None.
 - **Southall FC** → Uxbridge FC • UB7 8HX • 2026-27
 - **AFC Greenwich Borough** → Holmesdale FC • BR2 8HQ • 2026-27
 - **SE Dons FC** → Chatham Town FC • ME4 6LR • 2026-27
+
+## 🤝 Confirmed shared venues without forced direction
+
+- **Soul Tower Hamlets FC, Sporting Bengal United FC** • E14 7TW • 2026-27
+- **Walthamstow FC, West Essex FC** • E17 4JP • 2026-27
 
 ## ⏳ Approved relationships awaiting canonical counterpart
 
