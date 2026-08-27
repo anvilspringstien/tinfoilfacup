@@ -1,7 +1,7 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **413**
-- 🔴 Critical ground-data items: **77**
+- 🟢 Complete verified club-ground records: **419**
+- 🔴 Critical ground-data items: **71**
 - 🟡 Review items: **11**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares suppressed from warnings: **1**
