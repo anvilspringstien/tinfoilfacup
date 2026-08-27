@@ -1,0 +1,23 @@
+name: Ground geography review (v7.7.5)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build proposal-only geography review
+        run: python updater/geography_review_resolver.py
+      - name: Commit geography review
+        run: |
+          git config user.name "Tin Foil FA Cup Geography Review"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-geography-review.md updater/geography-review.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update geography review v7.7.5"
+            git push
+          fi
