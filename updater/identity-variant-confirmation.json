@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-08-27T11:20:15.329194+00:00",
+  "version": "7.7.9",
+  "mode": "CONFIRMATION ONLY / NO PUBLISH",
+  "source": "updater/identity-variant-review.json",
+  "confirmed_count": 3,
+  "held_count": 0,
+  "records": [
+    {
+      "club": "Bishop's Cleeve FC",
+      "fchd_match": "Bishops Cleeve",
+      "fchd_ground_candidate": "Everyone's Energy Stadium",
+      "current_ground": "Everyone's Energy Stadium",
+      "postcode": "GL52 3PD",
+      "classification": "MECHANICAL_NAME_VARIANT",
+      "decision": "IDENTITY_CONFIRMED",
+      "evidence_note": "Current club contact material identifies Bishops Cleeve Football Club at Everyone's Energy Stadium, GL52 3PD; apostrophe difference is a name-format variant.",
+      "evidence_url": "https://bishopscleevefc.ktckts.com/contactus",
+      "venue_name_note": null,
+      "promotion_state": "PROMOTION_CANDIDATE_NOT_PUBLISHED"
+    },
+    {
+      "club": "Horsham YMCA FC",
+      "fchd_match": "Horsham YM",
+      "fchd_ground_candidate": "Gorings Mead",
+      "current_ground": "Gorings Mead",
+      "postcode": "RH13 5BP",
+      "classification": "PLAUSIBLE_IDENTITY_VARIANT",
+      "decision": "IDENTITY_CONFIRMED",
+      "evidence_note": "Current club material identifies Horsham YM Football Club as formerly Horsham YMCA FC and gives Gorings Mead, RH13 5BP.",
+      "evidence_url": "https://www.horshamymfc.co.uk/contact/1021",
+      "venue_name_note": null,
+      "promotion_state": "PROMOTION_CANDIDATE_NOT_PUBLISHED"
+    },
+    {
+      "club": "Pershore Town 88 FC",
+      "fchd_match": "Pershore Town",
+      "fchd_ground_candidate": "Recruit 12 Community Stadium",
+      "current_ground": "That Carpet Place Community Stadium",
+      "postcode": "WR10 1QU",
+      "classification": "PLAUSIBLE_IDENTITY_VARIANT",
+      "decision": "IDENTITY_CONFIRMED",
+      "evidence_note": "Current Pershore Town material and club history support Pershore Town / Pershore Town 88 as the same club at WR10 1QU. Current venue branding supersedes the older FCHD sponsor name Recruit 12 Community Stadium.",
+      "evidence_url": "https://www.pershoretownfc.co.uk/contact",
+      "venue_name_note": "Use current venue name at promotion time; do not silently retain the older FCHD sponsored ground name.",
+      "promotion_state": "PROMOTION_CANDIDATE_NOT_PUBLISHED"
+    }
+  ],
+  "held": []
+}
