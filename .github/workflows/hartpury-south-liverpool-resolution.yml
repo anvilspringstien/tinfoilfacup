@@ -1,0 +1,23 @@
+name: Hartpury and South Liverpool resolution (v7.9.12)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/publish_hartpury_and_south_liverpool.py'
+      - '.github/workflows/hartpury-south-liverpool-resolution.yml'
+permissions: {contents: write}
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Publish Hartpury canonical home and verify South Liverpool
+        run: python updater/publish_hartpury_and_south_liverpool.py
+      - name: Re-run Ground Health
+        run: python updater/ground_health.py
+      - name: Commit resolution and Ground Health
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html updater/ground-approval-ledger.json hartpury-south-liverpool-resolution.md updater/hartpury-south-liverpool-resolution.json ground-health.md updater/ground-health.json
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Publish Hartpury and South Liverpool resolution v7.9.12"; git push; fi
