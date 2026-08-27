@@ -1,14 +1,14 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **27/08/2026, 10:47:41 UTC**
+Last checked: **27/08/2026, 11:50:45 UTC**
 
 **Resolution-aware verification/triage only. Nothing is published automatically.**
 
 - 🟢 Approved candidates: **0**
-- 🟡 One human decision required: **34**
+- 🟡 One human decision required: **31**
 - 🔴 Genuine ground research required: **37**
-- ✅ Resolved since earlier verification: **6**
-- ⚪ Current actionable exception total: **71**
+- ✅ Resolved since earlier verification: **3**
+- ⚪ Current actionable exception total: **68**
 
 Clubs that now have a canonical `GROUNDS` record are removed from the actionable totals rather than being reported forever as stale exceptions.
 
@@ -22,7 +22,6 @@ None.
 - **Barwell FC** — Crown Skip Hire Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
 - **Bedworth United FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
 - **Belper United FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
-- **Bishop's Cleeve FC** — Everyone's Energy Stadium • GL52 3PD • Mechanical apostrophe/name-format variant; confirm current ground once
 - **Broadfields United FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Cobham FC** — Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
 - **Corby Town FC** — Steel Park • NN17 2AE • separation `0.908 km` • Verify current ground/postcode once (750m–2km centroid difference)
@@ -36,9 +35,7 @@ None.
 - **Hayes & Yeading United FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
 - **Hertford Town FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Hinckley AFC** — UK Flooring Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
-- **Horsham YMCA FC** — FCHD: **Horsham YM** • Gorings Mead • RH13 5BP • Plausible name variant; confirm identity
 - **Nuneaton Town FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
-- **Pershore Town 88 FC** — FCHD: **Pershore Town** • Recruit 12 Community Stadium • WR10 1QU • Plausible name variant; confirm identity
 - **Rayners Lane FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Romulus FC** — Domino's Stadium • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
 - **Soul Tower Hamlets FC** — Mile End Stadium • E14 7TW • separation `0.458 km` • Approve shared-ground relationship
@@ -95,12 +92,9 @@ None.
 
 ## ✅ Resolved since earlier verification
 
-- **Beaconsfield Town FC** — Holloways Park • HP9 2SE — Canonical GROUNDS record now present
-- **Bradford (Park Avenue) FC** — Horsfall Community Stadium • BD6 2NG — Canonical GROUNDS record now present
-- **Frickley Athletic FC** — Westfield Lane • WF9 2EQ — Canonical GROUNDS record now present
-- **Heybridge Swifts FC** — Scraley Road Stadium • CM9 8JA — Canonical GROUNDS record now present
-- **Sutton Athletic FC** — Lower Road Ground • BR8 7RZ — Canonical GROUNDS record now present
-- **Wormley Rovers FC** — Wormley Sports Club • EN10 7QE — Canonical GROUNDS record now present
+- **Bishop's Cleeve FC** — Everyone's Energy Stadium • GL52 3PD — Canonical GROUNDS record now present
+- **Horsham YMCA FC** — Gorings Mead • RH13 5BP — Canonical GROUNDS record now present
+- **Pershore Town 88 FC** — That Carpet Place Community Stadium • WR10 1QU — Canonical GROUNDS record now present
 
 ## Rules
 

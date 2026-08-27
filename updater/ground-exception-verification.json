@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-08-27T10:47:41.865994+00:00",
+  "checked_at": "2026-08-27T11:50:45.575715+00:00",
   "mode": "resolution-aware verification/triage",
-  "active_total": 71,
-  "resolved_total": 6,
+  "active_total": 68,
+  "resolved_total": 3,
   "counts": {
     "APPROVED_CANDIDATE": 0,
-    "HUMAN_DECISION": 34,
+    "HUMAN_DECISION": 31,
     "GROUND_RESEARCH": 37
   },
   "records": [
@@ -681,22 +681,6 @@
       "reason": "Postcode failure or >2km disagreement"
     },
     {
-      "club": "Bishop's Cleeve FC",
-      "discovery_confidence": "REVIEW",
-      "fchd_match": "Bishops Cleeve",
-      "ground_candidate": "Everyone's Energy Stadium",
-      "postcode": "GL52 3PD",
-      "flags": [],
-      "distance_km": null,
-      "raw_lines": [
-        "Everyone's Energy Stadium",
-        "Kayte Lane",
-        "Bishops Cleeve"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Mechanical apostrophe/name-format variant; confirm current ground once"
-    },
-    {
       "club": "Darlaston Town FC",
       "discovery_confidence": "REVIEW",
       "fchd_match": "Harleston Town",
@@ -727,37 +711,6 @@
       ],
       "state": "GROUND_RESEARCH",
       "reason": "Unsafe fuzzy match; independent identity research required"
-    },
-    {
-      "club": "Horsham YMCA FC",
-      "discovery_confidence": "REVIEW",
-      "fchd_match": "Horsham YM",
-      "ground_candidate": "Gorings Mead",
-      "postcode": "RH13 5BP",
-      "flags": [],
-      "distance_km": null,
-      "raw_lines": [
-        "Gorings Mead",
-        "Horsham"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Plausible name variant; confirm identity"
-    },
-    {
-      "club": "Pershore Town 88 FC",
-      "discovery_confidence": "REVIEW",
-      "fchd_match": "Pershore Town",
-      "ground_candidate": "Recruit 12 Community Stadium",
-      "postcode": "WR10 1QU",
-      "flags": [],
-      "distance_km": null,
-      "raw_lines": [
-        "Recruit 12 Community Stadium",
-        "King George's Way",
-        "Pershore"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Plausible name variant; confirm identity"
     },
     {
       "club": "Retford FC",
@@ -1130,44 +1083,23 @@
   ],
   "resolved_since_verification": [
     {
-      "club": "Beaconsfield Town FC",
-      "ground": "Holloways Park",
-      "postcode": "HP9 2SE",
+      "club": "Bishop's Cleeve FC",
+      "ground": "Everyone's Energy Stadium",
+      "postcode": "GL52 3PD",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Bradford (Park Avenue) FC",
-      "ground": "Horsfall Community Stadium",
-      "postcode": "BD6 2NG",
+      "club": "Horsham YMCA FC",
+      "ground": "Gorings Mead",
+      "postcode": "RH13 5BP",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     },
     {
-      "club": "Frickley Athletic FC",
-      "ground": "Westfield Lane",
-      "postcode": "WF9 2EQ",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Heybridge Swifts FC",
-      "ground": "Scraley Road Stadium",
-      "postcode": "CM9 8JA",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Sutton Athletic FC",
-      "ground": "Lower Road Ground",
-      "postcode": "BR8 7RZ",
-      "resolution": "Canonical GROUNDS record now present",
-      "previous_state": "HUMAN_DECISION"
-    },
-    {
-      "club": "Wormley Rovers FC",
-      "ground": "Wormley Sports Club",
-      "postcode": "EN10 7QE",
+      "club": "Pershore Town 88 FC",
+      "ground": "That Carpet Place Community Stadium",
+      "postcode": "WR10 1QU",
       "resolution": "Canonical GROUNDS record now present",
       "previous_state": "HUMAN_DECISION"
     }
