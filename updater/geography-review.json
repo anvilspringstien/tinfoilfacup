@@ -1,0 +1,110 @@
+{
+  "checked_at": "2026-08-27T10:11:59.704757+00:00",
+  "version": "7.7.5",
+  "mode": "PROPOSAL ONLY",
+  "counts": {
+    "CONFIRMED": 3,
+    "CHANGED": 3,
+    "AMBIGUOUS": 1
+  },
+  "records": [
+    {
+      "club": "Beaconsfield Town FC",
+      "old_ground": "Holloways Park",
+      "old_postcode": "HP9 2SF",
+      "distance_km": 1.445,
+      "status": "CHANGED",
+      "current_ground": "Holloways Park",
+      "current_postcode": "HP9 2SE",
+      "note": "Current club/venue sources consistently use HP9 2SE; the queued HP9 2SF is stale/incorrect.",
+      "sources": [
+        "https://www.beaconsfieldtownfc.co.uk/a/about-beaconsfield-town-fc-69433.html",
+        "https://www.hollowayspark.co.uk/contact-bookings"
+      ]
+    },
+    {
+      "club": "Bradford (Park Avenue) FC",
+      "old_ground": "Horsfall Community Stadium",
+      "old_postcode": "BD6 1JQ",
+      "distance_km": 0.798,
+      "status": "CHANGED",
+      "current_ground": "Horsfall Community Stadium",
+      "current_postcode": "BD6 2NG",
+      "note": "Current Bradford (Park Avenue) material and the associated sports foundation use Cemetery Road, BD6 2NG.",
+      "sources": [
+        "https://bpafc.com/",
+        "https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/5117786/contact-information"
+      ]
+    },
+    {
+      "club": "Corby Town FC",
+      "old_ground": "Steel Park",
+      "old_postcode": "NN17 2AE",
+      "distance_km": 0.908,
+      "status": "AMBIGUOUS",
+      "current_ground": "Steel Park",
+      "current_postcode": null,
+      "note": "Current club pages conflict: the stadium information page gives NN17 2AE while the club contact page gives NN17 2FB. Do not promote until resolved.",
+      "sources": [
+        "https://www.corbytown.co.uk/a/steel-park-49382.html?page=2",
+        "https://www.corbytown.co.uk/contact"
+      ]
+    },
+    {
+      "club": "Frickley Athletic FC",
+      "old_ground": "Westfield Lane",
+      "old_postcode": "WF9 2EQ",
+      "distance_km": 0.849,
+      "status": "CONFIRMED",
+      "current_ground": "Westfield Lane",
+      "current_postcode": "WF9 2EQ",
+      "note": "Current club contact information and current NCEL club data agree on Westfield Lane, WF9 2EQ.",
+      "sources": [
+        "https://www.pitchero.com/clubs/frickleyathletic/contact",
+        "https://ncefl.org.uk/teams/frickleyathletic/"
+      ]
+    },
+    {
+      "club": "Heybridge Swifts FC",
+      "old_ground": "First Call Community Stadium",
+      "old_postcode": "CM9 8JA",
+      "distance_km": 0.75,
+      "status": "CONFIRMED",
+      "current_ground": "Scraley Road Stadium",
+      "current_postcode": "CM9 8JA",
+      "note": "Current/local-authority and 2026 fixture evidence place Heybridge Swifts at Scraley Road, CM9 8JA. Sponsor naming may vary.",
+      "sources": [
+        "https://www.maldon.gov.uk/publications/uniform/pages/PublicRegister.html",
+        "https://www.halsteadtownfc.com/fixtures/1025"
+      ]
+    },
+    {
+      "club": "Sutton Athletic FC",
+      "old_ground": "Lower Road Ground",
+      "old_postcode": "BR8 7RZ",
+      "distance_km": 0.86,
+      "status": "CONFIRMED",
+      "current_ground": "Lower Road Ground",
+      "current_postcode": "BR8 7RZ",
+      "note": "Current club and SCEFL sources agree on Lower Road, Hextable, BR8 7RZ; sponsor naming varies.",
+      "sources": [
+        "https://www.suttonathletic.co.uk/contact/",
+        "https://scefl.com/sceflclub-sutton"
+      ]
+    },
+    {
+      "club": "Wormley Rovers FC",
+      "old_ground": "Wormley Sports Club",
+      "old_postcode": "EN10 7QF",
+      "distance_km": 0.835,
+      "status": "CHANGED",
+      "current_ground": "Wormley Sports Club",
+      "current_postcode": "EN10 7QE",
+      "note": "Current Wormley Sports Club pages use Church Lane, EN10 7QE; the queued EN10 7QF is stale/incorrect.",
+      "sources": [
+        "https://wormleysports.club/",
+        "https://www.broxbourne.gov.uk/downloads/file/4612/indoor-and-outdoor-sports-facilities-strategy-2023-2033"
+      ]
+    }
+  ]
+}
