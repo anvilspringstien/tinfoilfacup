@@ -1,25 +1,16 @@
 {
-  "checked_at": "2026-08-27T15:18:13.017316+00:00",
+  "checked_at": "2026-08-27T15:19:49.309342+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 489,
-    "critical_items": 2,
-    "review_items": 12,
-    "shared_postcodes": 12,
+    "complete_verified": 491,
+    "critical_items": 0,
+    "review_items": 13,
+    "shared_postcodes": 13,
     "known_approved_groundshares": 15,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 0
   },
-  "missing_or_incomplete": [
-    [
-      "Romulus FC",
-      "No canonical ground record"
-    ],
-    [
-      "Sutton Coldfield Town FC",
-      "No canonical ground record"
-    ]
-  ],
+  "missing_or_incomplete": [],
   "shared_postcodes": [
     [
       "L30 1NY",
@@ -103,6 +94,13 @@
       [
         "Walthamstow FC",
         "West Essex FC"
+      ]
+    ],
+    [
+      "B72 1NL",
+      [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
       ]
     ]
   ],

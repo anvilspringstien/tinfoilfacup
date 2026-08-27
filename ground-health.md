@@ -1,16 +1,15 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **489**
-- 🔴 Critical ground-data items: **2**
-- 🟡 Review items: **12**
+- 🟢 Complete verified club-ground records: **491**
+- 🔴 Critical ground-data items: **0**
+- 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **15**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
 
-- **Romulus FC** — No canonical ground record
-- **Sutton Coldfield Town FC** — No canonical ground record
+None.
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -26,6 +25,7 @@
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
 - **E14 7TW** — Soul Tower Hamlets FC, Sporting Bengal United FC
 - **E17 4JP** — Walthamstow FC, West Essex FC
+- **B72 1NL** — Romulus FC, Sutton Coldfield Town FC
 
 ## 🏟️ Known approved groundshares
 

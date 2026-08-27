@@ -1,6 +1,6 @@
 {
-  "version": "7.9.12",
-  "updated_at": "2026-08-27T15:18:12.930823+00:00",
+  "version": "7.9.13",
+  "updated_at": "2026-08-27T15:19:49.229367+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -252,6 +252,19 @@
       "source_url": "https://www.southern-football-league.co.uk/articles/hartpury-fc-announce-temporary-groundshare-agreement-at-the-kmm-energy-stadium",
       "recorded_at": "2026-08-27T15:18:12.930823+00:00",
       "approval_source": "v7.9.12 time-bounded venue handling"
+    }
+  ],
+  "held_groundshare_relationships": [
+    {
+      "clubs": [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
+      ],
+      "postcode": "B72 1NL",
+      "status": "HELD_FOR_MORE_EVIDENCE",
+      "reason": "Each club now has an independently evidenced current canonical ground record at Coles Lane. Shared current venue does not by itself establish tenant/host direction or a groundshare relationship, so no relationship is approved.",
+      "recorded_at": "2026-08-27T15:19:49.229367+00:00",
+      "source": "v7.9.13 independent canonical verification"
     }
   ]
 }

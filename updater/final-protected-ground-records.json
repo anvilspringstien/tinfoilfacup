@@ -1,0 +1,46 @@
+{
+  "published_at": "2026-08-27T15:19:49.229367+00:00",
+  "version": "7.9.13",
+  "canonical_records_added": 2,
+  "existing_records_overwritten": 0,
+  "groundshare_relationships_approved": 0,
+  "held_relationships_recorded": 1,
+  "records": [
+    {
+      "name": "Romulus FC",
+      "ground": "The Central Ground",
+      "postcode": "B72 1NL",
+      "lat": 52.556733,
+      "lon": -1.818659,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Independent current 2026/27 venue evidence: https://runcorn.town/2026-27-fixtures-released/",
+      "ground_source": "Independent current 2026/27 MFL opponent fixture schedule plus 2026/27 FA Cup venue evidence place Romulus home fixtures at Central Ground, Coles Lane",
+      "coordinate_source": "FCHD mapped Central Ground/Coles Lane coordinate"
+    },
+    {
+      "name": "Sutton Coldfield Town FC",
+      "ground": "The Domino's Arena",
+      "postcode": "B72 1NL",
+      "lat": 52.556733,
+      "lon": -1.818659,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Independent current 2026/27 venue evidence: https://www.sctfc.com/ground",
+      "ground_source": "Current official Sutton Coldfield Town ground page and 2026/27 first-team site",
+      "coordinate_source": "FCHD mapped Central Ground/Coles Lane coordinate"
+    }
+  ],
+  "held": {
+    "clubs": [
+      "Romulus FC",
+      "Sutton Coldfield Town FC"
+    ],
+    "postcode": "B72 1NL",
+    "status": "HELD_FOR_MORE_EVIDENCE",
+    "reason": "Each club now has an independently evidenced current canonical ground record at Coles Lane. Shared current venue does not by itself establish tenant/host direction or a groundshare relationship, so no relationship is approved.",
+    "recorded_at": "2026-08-27T15:19:49.229367+00:00",
+    "source": "v7.9.13 independent canonical verification"
+  },
+  "competition_json_changed": false
+}
