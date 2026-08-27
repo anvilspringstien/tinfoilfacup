@@ -1,0 +1,57 @@
+{
+  "checked_at": "2026-08-27T11:38:10.098912+00:00",
+  "version": "7.8.0",
+  "mode": "DRY RUN",
+  "confirmed_identity_candidates": 3,
+  "ready_to_promote": 3,
+  "held": 0,
+  "skipped_safety": 0,
+  "overwrites": 0,
+  "published": false,
+  "promotion_records": [
+    {
+      "name": "Bishop's Cleeve FC",
+      "ground": "Everyone's Energy Stadium",
+      "postcode": "GL52 3PD",
+      "lat": 51.937467,
+      "lon": -2.058,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.9 identity confirmation + FCHD 2025-26 coordinate candidate",
+      "ground_source": "https://bishopscleevefc.ktckts.com/contactus",
+      "coordinate_source": "https://fchd.info/maps/GAZ.htm",
+      "identity_validation": "v7.7.9",
+      "fchd_identity": "Bishops Cleeve"
+    },
+    {
+      "name": "Horsham YMCA FC",
+      "ground": "Gorings Mead",
+      "postcode": "RH13 5BP",
+      "lat": 51.057658,
+      "lon": -0.323934,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.9 identity confirmation + FCHD 2025-26 coordinate candidate",
+      "ground_source": "https://www.horshamymfc.co.uk/contact/1021",
+      "coordinate_source": "https://fchd.info/maps/GAZ.htm",
+      "identity_validation": "v7.7.9",
+      "fchd_identity": "Horsham YM"
+    },
+    {
+      "name": "Pershore Town 88 FC",
+      "ground": "That Carpet Place Community Stadium",
+      "postcode": "WR10 1QU",
+      "lat": 52.112785,
+      "lon": -2.073418,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "v7.7.9 identity confirmation + FCHD 2025-26 coordinate candidate",
+      "ground_source": "https://www.pershoretownfc.co.uk/contact",
+      "coordinate_source": "https://fchd.info/maps/GAZ.htm",
+      "identity_validation": "v7.7.9",
+      "fchd_identity": "Pershore Town"
+    }
+  ],
+  "held_records": [],
+  "skipped_records": []
+}
