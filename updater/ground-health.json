@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T12:34:11.871853+00:00",
+  "checked_at": "2026-08-27T13:18:18.960066+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 430,
-    "critical_items": 60,
-    "review_items": 12,
-    "shared_postcodes": 11,
-    "known_approved_groundshares": 4,
+    "complete_verified": 436,
+    "critical_items": 54,
+    "review_items": 13,
+    "shared_postcodes": 12,
+    "known_approved_groundshares": 6,
     "unverified": 1
   },
   "missing_or_incomplete": [
@@ -23,10 +23,6 @@
       "No canonical ground record"
     ],
     [
-      "Barwell FC",
-      "No canonical ground record"
-    ],
-    [
       "Belper United FC",
       "No canonical ground record"
     ],
@@ -40,10 +36,6 @@
     ],
     [
       "Bovey Tracey FC",
-      "No canonical ground record"
-    ],
-    [
-      "Broadfields United FC",
       "No canonical ground record"
     ],
     [
@@ -127,10 +119,6 @@
       "No canonical ground record"
     ],
     [
-      "Hinckley AFC",
-      "No canonical ground record"
-    ],
-    [
       "Keighley Town FC",
       "No canonical ground record"
     ],
@@ -168,10 +156,6 @@
     ],
     [
       "Prestwich Heys AFC",
-      "No canonical ground record"
-    ],
-    [
-      "Rayners Lane FC",
       "No canonical ground record"
     ],
     [
@@ -227,15 +211,7 @@
       "No canonical ground record"
     ],
     [
-      "Walthamstow FC",
-      "No canonical ground record"
-    ],
-    [
       "Wells City FC",
-      "No canonical ground record"
-    ],
-    [
-      "West Essex FC",
       "No canonical ground record"
     ],
     [
@@ -328,6 +304,13 @@
         "Soul Tower Hamlets FC",
         "Sporting Bengal United FC"
       ]
+    ],
+    [
+      "E17 4JP",
+      [
+        "Walthamstow FC",
+        "West Essex FC"
+      ]
     ]
   ],
   "known_approved_groundshares": [
@@ -353,6 +336,18 @@
       "postcode": "CV12 8NN",
       "tenant": "Nuneaton Town FC",
       "host": "Bedworth United FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "HA2 0XH",
+      "tenant": "Broadfields United FC",
+      "host": "Rayners Lane FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "LE9 8FQ",
+      "tenant": "Hinckley AFC",
+      "host": "Barwell FC",
       "season": "2026-27"
     }
   ],

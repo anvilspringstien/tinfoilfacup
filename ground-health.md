@@ -1,10 +1,10 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **430**
-- 🔴 Critical ground-data items: **60**
-- 🟡 Review items: **12**
+- 🟢 Complete verified club-ground records: **436**
+- 🔴 Critical ground-data items: **54**
+- 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares suppressed from warnings: **4**
+- 🏟️ Known approved groundshares suppressed from warnings: **6**
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -19,6 +19,7 @@
 - **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
 - **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
 - **E14 7TW** — Soul Tower Hamlets FC, Sporting Bengal United FC
+- **E17 4JP** — Walthamstow FC, West Essex FC
 
 ## 🏟️ Known approved groundshares
 
@@ -26,3 +27,5 @@
 - **Hackney Wick FC** → Witham Town FC • CM8 1UN • 2026-27
 - **Faversham Strike Force FC** → Whitstable Town FC • CT5 1QP • 2026-27
 - **Nuneaton Town FC** → Bedworth United FC • CV12 8NN • 2026-27
+- **Broadfields United FC** → Rayners Lane FC • HA2 0XH • 2026-27
+- **Hinckley AFC** → Barwell FC • LE9 8FQ • 2026-27
