@@ -1,6 +1,6 @@
 {
   "version": "7.7.2",
-  "updated_at": "2026-08-26T22:00:33.884735+00:00",
+  "updated_at": "2026-08-27T12:21:43.148397+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -12,6 +12,42 @@
       "source_url": "https://www.pitchero.com/clubs/pottersbartownfc/news/afc-welwyn-and-afc-welwyn-reserves-confirmed-as-ground-share-2914146.html",
       "approved_at": "2026-08-26T22:00:33.884735+00:00",
       "status": "current"
+    },
+    {
+      "tenant": "Hackney Wick FC",
+      "host": "Witham Town FC",
+      "ground": "Simarco Stadium",
+      "postcode": "CM8 1UN",
+      "season": "2026-27",
+      "evidence": "Current 2026/27 Essex Senior League reporting explicitly lists Hackney Wick as groundsharing at Witham Town; independent current league-opponent reporting also describes Hackney Wick as playing at Witham.",
+      "source_url": "https://www.harwichandparkeston.com/news/shrimpers-staying-in-esl-2979068.html",
+      "approved_at": "2026-08-27T12:21:43.148397+00:00",
+      "status": "current",
+      "approval_source": "v7.8.3 human confirmation"
+    },
+    {
+      "tenant": "Faversham Strike Force FC",
+      "host": "Whitstable Town FC",
+      "ground": "The Belmont Stadium / YMS Stadium",
+      "postcode": "CT5 1QP",
+      "season": "2026-27",
+      "evidence": "Faversham Strike Force announced in April 2025 that its Men's First Team would groundshare with Whitstable Town for the next two seasons. Whitstable's July 2026 match report still describes Strike Force as sharing its stadium, confirming the arrangement remains current in 2026/27.",
+      "source_url": "https://www.favershamstrikeforce.co.uk/news/groundshare-with-whitstable-town-fc-for-mens-first-team-next-season",
+      "approved_at": "2026-08-27T12:21:43.148397+00:00",
+      "status": "current",
+      "approval_source": "v7.8.3 human confirmation"
+    },
+    {
+      "tenant": "Nuneaton Town FC",
+      "host": "Bedworth United FC",
+      "ground": "The Oval",
+      "postcode": "CV12 8NN",
+      "season": "2026-27",
+      "evidence": "Nuneaton Town's current match-day information explicitly says its home games are at The Oval, home of Bedworth United FC, under a pitch-hire agreement, and gives CV12 8NN. This explicitly establishes Bedworth as host and Nuneaton as tenant for the current period.",
+      "source_url": "https://www.nuneatontownfc.co.uk/match-day-information",
+      "approved_at": "2026-08-27T12:21:43.148397+00:00",
+      "status": "current",
+      "approval_source": "v7.8.3 human confirmation"
     }
   ],
   "approved_exceptions": [
@@ -30,5 +66,22 @@
       "rule_version": "7.6.9"
     }
   ],
-  "venue_corrections": []
+  "venue_corrections": [],
+  "known_shared_venues": [
+    {
+      "clubs": [
+        "Soul Tower Hamlets FC",
+        "Sporting Bengal United FC"
+      ],
+      "relationship_type": "confirmed_shared_venue_undirected",
+      "ground": "Mile End Stadium",
+      "postcode": "E14 7TW",
+      "season": "2026-27",
+      "evidence": "Current 2026/27 Essex Senior League reporting explicitly lists SOUL Tower Hamlets and Sporting Bengal United as groundsharing with each other at Mile End Stadium. The evidence supports the shared relationship but not a reliable host/tenant direction, so direction remains unresolved.",
+      "source_url": "https://www.harwichandparkeston.com/news/shrimpers-staying-in-esl-2979068.html",
+      "approved_at": "2026-08-27T12:21:43.148397+00:00",
+      "status": "current",
+      "approval_source": "v7.8.3 human confirmation"
+    }
+  ]
 }

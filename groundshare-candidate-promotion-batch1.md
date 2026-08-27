@@ -1,8 +1,8 @@
 # Tin Foil FA Cup — Groundshare Candidate Promotion — Batch 1
 
-Last checked: **27/08/2026, 12:17:31 UTC**
+Last checked: **27/08/2026, 12:21:43 UTC**
 
-Mode: **DRY RUN**
+Mode: **PUBLISH**
 
 - Confirmed relationships: **4**
 - Directed relationships: **3**
@@ -12,7 +12,7 @@ Mode: **DRY RUN**
 - Groundshare ledger relationships ready: **4**
 - Held relationships: **1**
 - Existing canonical records overwritten: **0**
-- Published: **NO**
+- Published: **YES**
 
 ## Promotion plan
 
