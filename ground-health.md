@@ -1,10 +1,10 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **412**
-- 🔴 Critical ground-data items: **78**
+- 🟢 Complete verified club-ground records: **413**
+- 🔴 Critical ground-data items: **77**
 - 🟡 Review items: **11**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares suppressed from warnings: **0**
+- 🏟️ Known approved groundshares suppressed from warnings: **1**
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -21,4 +21,4 @@
 
 ## 🏟️ Known approved groundshares
 
-None.
+- **AFC Welwyn** → Potters Bar Town FC • EN6 1QB • 2026-27

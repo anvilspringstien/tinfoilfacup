@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Approved Groundshare Pair Promotion
 
-- Mode: **DRY RUN**
+- Mode: **PUBLISH**
 - Tenant: **AFC Welwyn** — already canonical ✅
 - Host: **Potters Bar Town FC** — missing; validated candidate found ✅
 - Approved venue: **Lantern Stadium • EN6 1QB**
@@ -8,7 +8,7 @@
 - Tenant candidate agrees with approved venue/postcode: **✅**
 - Host candidate agrees with approved venue/postcode: **✅**
 - Missing canonical records ready to promote: **1**
-- Canonical GROUNDS changed: **NO**
+- Canonical GROUNDS changed: **YES**
 
 ## Promotion plan
 

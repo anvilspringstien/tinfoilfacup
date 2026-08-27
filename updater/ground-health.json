@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T09:10:24.568097+00:00",
+  "checked_at": "2026-08-27T09:30:17.936586+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 412,
-    "critical_items": 78,
+    "complete_verified": 413,
+    "critical_items": 77,
     "review_items": 11,
     "shared_postcodes": 10,
-    "known_approved_groundshares": 0,
+    "known_approved_groundshares": 1,
     "unverified": 1
   },
   "missing_or_incomplete": [
@@ -211,10 +211,6 @@
       "No canonical ground record"
     ],
     [
-      "Potters Bar Town FC",
-      "No canonical ground record"
-    ],
-    [
       "Prestwich Heys AFC",
       "No canonical ground record"
     ],
@@ -395,7 +391,14 @@
       ]
     ]
   ],
-  "known_approved_groundshares": [],
+  "known_approved_groundshares": [
+    {
+      "postcode": "EN6 1QB",
+      "tenant": "AFC Welwyn",
+      "host": "Potters Bar Town FC",
+      "season": "2026-27"
+    }
+  ],
   "unverified": [
     [
       "South Liverpool FC",
