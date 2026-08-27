@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-08-27T10:10:12.229631+00:00",
+  "checked_at": "2026-08-27T10:47:41.865994+00:00",
   "mode": "resolution-aware verification/triage",
-  "active_total": 77,
-  "resolved_total": 0,
+  "active_total": 71,
+  "resolved_total": 6,
   "counts": {
     "APPROVED_CANDIDATE": 0,
-    "HUMAN_DECISION": 40,
+    "HUMAN_DECISION": 34,
     "GROUND_RESEARCH": 37
   },
   "records": [
@@ -571,42 +571,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Beaconsfield Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Beaconsfield Town",
-      "ground_candidate": "Holloways Park",
-      "postcode": "HP9 2SF",
-      "flags": [
-        "LOCATION_DIFFERENCE_GT_750M"
-      ],
-      "distance_km": 1.445,
-      "raw_lines": [
-        "Holloways Park",
-        "Windsor Road",
-        "Beaconsfield"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
-    },
-    {
-      "club": "Bradford (Park Avenue) FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Bradford Park Avenue",
-      "ground_candidate": "Horsfall Community Stadium",
-      "postcode": "BD6 1JQ",
-      "flags": [
-        "LOCATION_DIFFERENCE_GT_750M"
-      ],
-      "distance_km": 0.798,
-      "raw_lines": [
-        "Horsfall Community Stadium",
-        "Cemetery Road",
-        "Bradford"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
-    },
-    {
       "club": "Corby Town FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Corby Town",
@@ -621,77 +585,6 @@
         "Jimmy Kane Way",
         "Rockingham Road",
         "Corby"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
-    },
-    {
-      "club": "Frickley Athletic FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Frickley Athletic",
-      "ground_candidate": "Westfield Lane",
-      "postcode": "WF9 2EQ",
-      "flags": [
-        "LOCATION_DIFFERENCE_GT_750M"
-      ],
-      "distance_km": 0.849,
-      "raw_lines": [
-        "Westfield Lane",
-        "South Elmsall"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
-    },
-    {
-      "club": "Heybridge Swifts FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Heybridge Swifts",
-      "ground_candidate": "First Call Community Stadium",
-      "postcode": "CM9 8JA",
-      "flags": [
-        "LOCATION_DIFFERENCE_GT_750M"
-      ],
-      "distance_km": 0.75,
-      "raw_lines": [
-        "First Call Community Stadium",
-        "Scraley Road",
-        "Heybridge"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
-    },
-    {
-      "club": "Sutton Athletic FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Sutton Athletic",
-      "ground_candidate": "Lower Road Ground",
-      "postcode": "BR8 7RZ",
-      "flags": [
-        "LOCATION_DIFFERENCE_GT_750M"
-      ],
-      "distance_km": 0.86,
-      "raw_lines": [
-        "Lower Road Ground",
-        "Lower Road",
-        "Hextable"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
-    },
-    {
-      "club": "Wormley Rovers FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Wormley Rovers",
-      "ground_candidate": "Wormley Sports Club",
-      "postcode": "EN10 7QF",
-      "flags": [
-        "LOCATION_DIFFERENCE_GT_750M"
-      ],
-      "distance_km": 0.835,
-      "raw_lines": [
-        "Wormley Sports Club",
-        "Church Lane",
-        "Wormley"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Verify current ground/postcode once (750m–2km centroid difference)"
@@ -1235,6 +1128,49 @@
       "reason": "No FCHD candidate; another free/public source required"
     }
   ],
-  "resolved_since_verification": [],
+  "resolved_since_verification": [
+    {
+      "club": "Beaconsfield Town FC",
+      "ground": "Holloways Park",
+      "postcode": "HP9 2SE",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Bradford (Park Avenue) FC",
+      "ground": "Horsfall Community Stadium",
+      "postcode": "BD6 2NG",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Frickley Athletic FC",
+      "ground": "Westfield Lane",
+      "postcode": "WF9 2EQ",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Heybridge Swifts FC",
+      "ground": "Scraley Road Stadium",
+      "postcode": "CM9 8JA",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Sutton Athletic FC",
+      "ground": "Lower Road Ground",
+      "postcode": "BR8 7RZ",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Wormley Rovers FC",
+      "ground": "Wormley Sports Club",
+      "postcode": "EN10 7QE",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    }
+  ],
   "rules_version": "7.7.4"
 }

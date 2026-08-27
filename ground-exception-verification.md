@@ -1,14 +1,14 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **27/08/2026, 10:10:12 UTC**
+Last checked: **27/08/2026, 10:47:41 UTC**
 
 **Resolution-aware verification/triage only. Nothing is published automatically.**
 
 - 🟢 Approved candidates: **0**
-- 🟡 One human decision required: **40**
+- 🟡 One human decision required: **34**
 - 🔴 Genuine ground research required: **37**
-- ✅ Resolved since earlier verification: **0**
-- ⚪ Current actionable exception total: **77**
+- ✅ Resolved since earlier verification: **6**
+- ⚪ Current actionable exception total: **71**
 
 Clubs that now have a canonical `GROUNDS` record are removed from the actionable totals rather than being reported forever as stale exceptions.
 
@@ -20,11 +20,9 @@ None.
 
 - **Balham FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
 - **Barwell FC** — Crown Skip Hire Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
-- **Beaconsfield Town FC** — Holloways Park • HP9 2SF • separation `1.445 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Bedworth United FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
 - **Belper United FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
 - **Bishop's Cleeve FC** — Everyone's Energy Stadium • GL52 3PD • Mechanical apostrophe/name-format variant; confirm current ground once
-- **Bradford (Park Avenue) FC** — Horsfall Community Stadium • BD6 1JQ • separation `0.798 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Broadfields United FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Cobham FC** — Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
 - **Corby Town FC** — Steel Park • NN17 2AE • separation `0.908 km` • Verify current ground/postcode once (750m–2km centroid difference)
@@ -33,12 +31,10 @@ None.
 - **Enfield FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Epsom & Ewell FC** — Cobham FC: Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
 - **Faversham Strike Force FC** — The Belmont Stadium • CT5 1QP • separation `0.198 km` • Approve shared-ground relationship
-- **Frickley Athletic FC** — Westfield Lane • WF9 2EQ • separation `0.849 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Grays Athletic FC** — EMR Stadium • RM18 8NL • separation `0.159 km` • Approve shared-ground relationship
 - **Hackney Wick FC** — Simarco Stadium • CM8 1UN • separation `0.072 km` • Approve shared-ground relationship
 - **Hayes & Yeading United FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
 - **Hertford Town FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
-- **Heybridge Swifts FC** — First Call Community Stadium • CM9 8JA • separation `0.75 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Hinckley AFC** — UK Flooring Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
 - **Horsham YMCA FC** — FCHD: **Horsham YM** • Gorings Mead • RH13 5BP • Plausible name variant; confirm identity
 - **Nuneaton Town FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
@@ -49,7 +45,6 @@ None.
 - **Southall FC** — SkyEx Community Stadium • UB4 0SL • separation `0.169 km` • Approve shared-ground relationship
 - **Sporting Bengal United FC** — Mile End Stadium • E14 7TW • separation `0.458 km` • Approve shared-ground relationship
 - **Sporting Khalsa FC** — Guardian Warehousing Stadium • WV13 3BB • separation `0.204 km` • Approve shared-ground relationship
-- **Sutton Athletic FC** — Lower Road Ground • BR8 7RZ • separation `0.86 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Sutton Coldfield Town FC** — Domino's Arena • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
 - **Tilbury FC** — EMR Stadium • RM18 8NL • separation `0.159 km` • Approve shared-ground relationship
 - **Tooting & Mitcham United FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
@@ -57,7 +52,6 @@ None.
 - **West Essex FC** — Matchday Centre • E17 4JP • separation `0.086 km` • Approve shared-ground relationship
 - **Whitstable Town FC** — The Belmont Stadium • CT5 1QP • separation `0.198 km` • Approve shared-ground relationship
 - **Witham Town FC** — Simarco Stadium • CM8 1UN • separation `0.072 km` • Approve shared-ground relationship
-- **Wormley Rovers FC** — Wormley Sports Club • EN10 7QF • separation `0.835 km` • Verify current ground/postcode once (750m–2km centroid difference)
 
 ## 🔴 Genuine ground research required
 
@@ -101,7 +95,12 @@ None.
 
 ## ✅ Resolved since earlier verification
 
-None.
+- **Beaconsfield Town FC** — Holloways Park • HP9 2SE — Canonical GROUNDS record now present
+- **Bradford (Park Avenue) FC** — Horsfall Community Stadium • BD6 2NG — Canonical GROUNDS record now present
+- **Frickley Athletic FC** — Westfield Lane • WF9 2EQ — Canonical GROUNDS record now present
+- **Heybridge Swifts FC** — Scraley Road Stadium • CM9 8JA — Canonical GROUNDS record now present
+- **Sutton Athletic FC** — Lower Road Ground • BR8 7RZ — Canonical GROUNDS record now present
+- **Wormley Rovers FC** — Wormley Sports Club • EN10 7QE — Canonical GROUNDS record now present
 
 ## Rules
 
