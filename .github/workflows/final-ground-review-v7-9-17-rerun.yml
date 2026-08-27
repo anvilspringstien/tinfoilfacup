@@ -1,0 +1,20 @@
+name: Final ground review v7.9.17 rerun
+on:
+  push:
+    paths:
+      - '.github/workflows/final-ground-review-v7-9-17-rerun.yml'
+permissions:
+  contents: write
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: python updater/final_ground_review_v7_9_17.py
+      - run: python updater/ground_health.py
+      - run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@github.com"
+          git add clubfinder.html updater/ground-approval-ledger.json updater/ground-health.json ground-health.md
+          git diff --cached --quiet || git commit -m "Resolve final ground review items v7.9.17"
+          git push
