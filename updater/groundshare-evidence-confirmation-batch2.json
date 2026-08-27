@@ -1,0 +1,109 @@
+{
+  "checked_at": "2026-08-27T13:04:44.915071+00:00",
+  "version": "7.8.6",
+  "mode": "CONFIRMATION ONLY / NO PUBLISH",
+  "source": "updater/groundshare-evidence-research-batch2.json",
+  "batch": 2,
+  "confirmed_relationships": 3,
+  "directed_host_tenant_relationships": 2,
+  "confirmed_shared_venue_undirected": 1,
+  "rejected_not_current_relationships": 2,
+  "published_canonical_records": 0,
+  "confirmed": [
+    {
+      "pair_id": 6,
+      "clubs": [
+        "Walthamstow FC",
+        "West Essex FC"
+      ],
+      "postcode": "E17 4JP",
+      "ground": "Wadham Lodge Stadium / Wadham Lodge Sports Ground (Match Day Centres)",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "CONFIRMED_SHARED_VENUE_UNDIRECTED",
+      "host": null,
+      "tenant": null,
+      "evidence_note": "Current Essex Senior League club information says West Essex's Senior 1st XI groundshare at Wadham Lodge Stadium, while current FA county directory information places both Walthamstow and West Essex at Wadham Lodge, E17 4JP. West Essex's own ground announcement explicitly described sharing the stadium with Walthamstow. The shared venue is therefore supported, but because the venue is operated separately and the current evidence does not safely establish a landlord/tenant direction between the two clubs, direction remains unresolved.",
+      "sources": [
+        "https://www.essexseniorleague.co.uk/en_US/archive15032-club-info/92007845",
+        "https://www.thefa.com/-/media/cfa/essexfa/files/handbook/2025-26/section-3---club-and-competition-directory---men---senior-status.ashx",
+        "https://westessexfc.org.uk/news/club-statement-re--ground-announcement"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.5 evidence research. This does not publish canonical GROUNDS records."
+    },
+    {
+      "pair_id": 7,
+      "clubs": [
+        "Broadfields United FC",
+        "Rayners Lane FC"
+      ],
+      "postcode": "HA2 0XH",
+      "ground": "Tithe Farm Sports & Social Club",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "host": "Rayners Lane FC",
+      "tenant": "Broadfields United FC",
+      "evidence_note": "Rayners Lane's current 2026/27 official site states that Broadfields United groundshare at Tithe Farm, and Broadfields United's own club history records the move into a groundshare agreement with Rayners Lane at Tithe Farm. Current venue information also lists both clubs there. This supports Rayners Lane as the host club and Broadfields United as tenant.",
+      "sources": [
+        "https://raynerslanefc.co.uk/",
+        "https://www.broadfieldsunitedfc.co.uk/a/club-history-64122.html",
+        "https://www.tithefarmclub.com/whats-on/"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.5 evidence research. This does not publish canonical GROUNDS records."
+    },
+    {
+      "pair_id": 9,
+      "clubs": [
+        "Barwell FC",
+        "Hinckley AFC"
+      ],
+      "postcode": "LE9 8FQ",
+      "ground": "Kirkby Road",
+      "status": "HUMAN_CONFIRMED",
+      "relationship_type": "DIRECTED_HOST_TENANT",
+      "host": "Barwell FC",
+      "tenant": "Hinckley AFC",
+      "evidence_note": "Hinckley AFC's current official ground information says the club plays its home matches at Barwell FC, Kirkby Road, LE9 8FQ. A July 2026 FA Cup announcement explicitly calls Barwell the landlords when explaining a fixture move caused by Barwell also being at home. This establishes Barwell as host and Hinckley AFC as tenant for 2026/27.",
+      "sources": [
+        "https://hinckleyafc.co.uk/first-team/where-are-we/",
+        "https://hinckleyafc.co.uk/2026/07/19/friday-night-fa-cup-football-at-kirkby-road/"
+      ],
+      "confirmation_note": "Explicit human confirmation accepted from v7.8.5 evidence research. This does not publish canonical GROUNDS records."
+    }
+  ],
+  "rejected_not_current": [
+    {
+      "pair_id": 8,
+      "clubs": [
+        "Cobham FC",
+        "Epsom & Ewell FC"
+      ],
+      "postcode": "KT11 1AA",
+      "current_ground": "Chalky Lane, Chessington",
+      "status": "HUMAN_REJECTED_NOT_CURRENT",
+      "research_status": "NOT_CURRENT",
+      "evidence_note": "The queued Cobham relationship is no longer current. Epsom & Ewell's own history says the club returned to Cobham for 2025/26 but moved again in October 2025 to Chessington & Hook United. Its August 2026 FA Cup match preview identifies Chalky Lane as its 2026/27 home venue. Cobham ↔ Epsom & Ewell must therefore not be approved from the stale shared-postcode candidate.",
+      "sources": [
+        "https://epsomandewellfc.co.uk/club/history/",
+        "https://epsomandewellfc.co.uk/2026/08/match-preview-epsom-ewell-vs-chipstead-emirates-f-a-cup-extra-preliminary-round/"
+      ],
+      "confirmation_note": "Human confirmation accepts the v7.8.5 finding that this queued relationship is not current. It is excluded from groundshare promotion."
+    },
+    {
+      "pair_id": 10,
+      "clubs": [
+        "Belper United FC",
+        "Eastwood Community FC"
+      ],
+      "postcode": "NG16 3HB",
+      "current_ground": "Don Amott Arena, Mickleover",
+      "status": "HUMAN_REJECTED_NOT_CURRENT",
+      "research_status": "NOT_CURRENT",
+      "evidence_note": "The queued Eastwood relationship is no longer current. Belper United announced in March 2026 that it would leave Eastwood CFC at the end of the 2025/26 season, ending a three-year groundshare. Belper United's current official site now gives the Don Amott Arena, home of Mickleover FC, as its ground. Eastwood's current site continues to identify Coronation Park as Eastwood's home. Belper United ↔ Eastwood Community must therefore not be approved for 2026/27.",
+      "sources": [
+        "https://belperunited.co.uk/",
+        "https://www.eastwoodcfc.co.uk/"
+      ],
+      "confirmation_note": "Human confirmation accepts the v7.8.5 finding that this queued relationship is not current. It is excluded from groundshare promotion."
+    }
+  ]
+}
