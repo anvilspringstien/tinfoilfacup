@@ -1,50 +1,14 @@
 {
-  "checked_at": "2026-08-27T09:42:29.729478+00:00",
-  "mode": "triage-only",
+  "checked_at": "2026-08-27T09:53:43.637327+00:00",
+  "mode": "resolution-aware verification/triage",
+  "active_total": 77,
+  "resolved_total": 4,
   "counts": {
-    "APPROVED_CANDIDATE": 2,
-    "HUMAN_DECISION": 41,
-    "GROUND_RESEARCH": 38
+    "APPROVED_CANDIDATE": 0,
+    "HUMAN_DECISION": 40,
+    "GROUND_RESEARCH": 37
   },
   "records": [
-    {
-      "club": "AFC Mansfield",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "AFC Mansfield",
-      "ground_candidate": "Forest Town Welfare",
-      "postcode": "NG19 0EE",
-      "flags": [
-        "GROUND_NAME_MAY_BE_HOST_CLUB"
-      ],
-      "distance_km": 0.078,
-      "raw_lines": [
-        "Forest Town Welfare",
-        "Clipstone Road West",
-        "Forest Town"
-      ],
-      "state": "APPROVED_CANDIDATE",
-      "reason": "Old generic host-ground heuristic cleared"
-    },
-    {
-      "club": "AFC Welwyn",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "AFC Welwyn",
-      "ground_candidate": "Lantern Stadium",
-      "postcode": "EN6 1QB",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.143,
-      "raw_lines": [
-        "Potters Bar Town",
-        "Lantern Stadium",
-        "Parkfield",
-        "Watkins Rise",
-        "Potters Bar"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
     {
       "club": "Balham FC",
       "discovery_confidence": "HIGH",
@@ -310,24 +274,6 @@
       "reason": "Approve shared-ground relationship"
     },
     {
-      "club": "Heanor Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Heanor Town",
-      "ground_candidate": "The Town Ground",
-      "postcode": "DE75 7EN",
-      "flags": [
-        "GROUND_NAME_MAY_BE_HOST_CLUB"
-      ],
-      "distance_km": 0.172,
-      "raw_lines": [
-        "The Town Ground",
-        "Mayfield Avenue",
-        "Heanor"
-      ],
-      "state": "APPROVED_CANDIDATE",
-      "reason": "Old generic host-ground heuristic cleared"
-    },
-    {
       "club": "Hertford Town FC",
       "discovery_confidence": "HIGH",
       "fchd_match": "Hertford Town",
@@ -379,25 +325,6 @@
         "The Oval",
         "Coventry Road",
         "Bedworth"
-      ],
-      "state": "HUMAN_DECISION",
-      "reason": "Approve shared-ground relationship"
-    },
-    {
-      "club": "Potters Bar Town FC",
-      "discovery_confidence": "HIGH",
-      "fchd_match": "Potters Bar Town",
-      "ground_candidate": "Lantern Stadium",
-      "postcode": "EN6 1QB",
-      "flags": [
-        "SHARED_POSTCODE"
-      ],
-      "distance_km": 0.143,
-      "raw_lines": [
-        "Lantern Stadium",
-        "Parkfield",
-        "Watkins Rise",
-        "Potters Bar"
       ],
       "state": "HUMAN_DECISION",
       "reason": "Approve shared-ground relationship"
@@ -873,8 +800,8 @@
         "Kayte Lane",
         "Bishops Cleeve"
       ],
-      "state": "GROUND_RESEARCH",
-      "reason": "Unsafe fuzzy match; independent identity research required"
+      "state": "HUMAN_DECISION",
+      "reason": "Mechanical apostrophe/name-format variant; confirm current ground once"
     },
     {
       "club": "Darlaston Town FC",
@@ -1307,5 +1234,36 @@
       "state": "GROUND_RESEARCH",
       "reason": "No FCHD candidate; another free/public source required"
     }
-  ]
+  ],
+  "resolved_since_verification": [
+    {
+      "club": "AFC Mansfield",
+      "ground": "Forest Town Welfare",
+      "postcode": "NG19 0EE",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "APPROVED_CANDIDATE"
+    },
+    {
+      "club": "AFC Welwyn",
+      "ground": "Lantern Stadium",
+      "postcode": "EN6 1QB",
+      "resolution": "Canonical GROUNDS record now present; approved groundshare relationship recorded",
+      "previous_state": "HUMAN_DECISION"
+    },
+    {
+      "club": "Heanor Town FC",
+      "ground": "The Town Ground",
+      "postcode": "DE75 7EN",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "APPROVED_CANDIDATE"
+    },
+    {
+      "club": "Potters Bar Town FC",
+      "ground": "Lantern Stadium",
+      "postcode": "EN6 1QB",
+      "resolution": "Canonical GROUNDS record now present",
+      "previous_state": "HUMAN_DECISION"
+    }
+  ],
+  "rules_version": "7.7.4"
 }

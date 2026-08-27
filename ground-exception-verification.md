@@ -1,28 +1,29 @@
 # Tin Foil FA Cup — Ground Exception Verification
 
-Last checked: **27/08/2026, 09:42:29 UTC**
+Last checked: **27/08/2026, 09:53:43 UTC**
 
-**Verification/triage only. Nothing is published automatically.**
+**Resolution-aware verification/triage only. Nothing is published automatically.**
 
-- 🟢 Approved candidates: **2**
-- 🟡 One human decision required: **41**
-- 🔴 Genuine ground research required: **38**
+- 🟢 Approved candidates: **0**
+- 🟡 One human decision required: **40**
+- 🔴 Genuine ground research required: **37**
+- ✅ Resolved since earlier verification: **4**
+- ⚪ Current actionable exception total: **77**
 
-Generic words such as `Town` or `United` in a ground name are no longer treated as host-club evidence.
+Clubs that now have a canonical `GROUNDS` record are removed from the actionable totals rather than being reported forever as stale exceptions.
 
 ## 🟢 Approved candidates
 
-- **AFC Mansfield** — Forest Town Welfare • NG19 0EE • separation `0.078 km` • Old generic host-ground heuristic cleared
-- **Heanor Town FC** — The Town Ground • DE75 7EN • separation `0.172 km` • Old generic host-ground heuristic cleared
+None.
 
 ## 🟡 One human decision required
 
-- **AFC Welwyn** — Lantern Stadium • EN6 1QB • separation `0.143 km` • Approve shared-ground relationship
 - **Balham FC** — Imperial Fields • SM4 6BF • separation `0.056 km` • Approve shared-ground relationship
 - **Barwell FC** — Crown Skip Hire Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
 - **Beaconsfield Town FC** — Holloways Park • HP9 2SF • separation `1.445 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Bedworth United FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
 - **Belper United FC** — Coronation Park • NG16 3HB • separation `0.141 km` • Approve shared-ground relationship
+- **Bishop's Cleeve FC** — Everyone's Energy Stadium • GL52 3PD • Mechanical apostrophe/name-format variant; confirm current ground once
 - **Bradford (Park Avenue) FC** — Horsfall Community Stadium • BD6 1JQ • separation `0.798 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Broadfields United FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Cobham FC** — Reg Madwick Stadium • KT11 1AA • separation `0.177 km` • Approve shared-ground relationship
@@ -39,10 +40,9 @@ Generic words such as `Town` or `United` in a ground name are no longer treated 
 - **Hertford Town FC** — Hertingfordbury Park • SG13 8EX • separation `0.505 km` • Approve shared-ground relationship
 - **Heybridge Swifts FC** — First Call Community Stadium • CM9 8JA • separation `0.75 km` • Verify current ground/postcode once (750m–2km centroid difference)
 - **Hinckley AFC** — UK Flooring Stadium • LE9 8FQ • separation `0.214 km` • Approve shared-ground relationship
-- **Horsham YMCA FC** — Gorings Mead • RH13 5BP • Plausible name variant; confirm identity
+- **Horsham YMCA FC** — FCHD: **Horsham YM** • Gorings Mead • RH13 5BP • Plausible name variant; confirm identity
 - **Nuneaton Town FC** — The Oval • CV12 8NN • separation `0.107 km` • Approve shared-ground relationship
-- **Pershore Town 88 FC** — Recruit 12 Community Stadium • WR10 1QU • Plausible name variant; confirm identity
-- **Potters Bar Town FC** — Lantern Stadium • EN6 1QB • separation `0.143 km` • Approve shared-ground relationship
+- **Pershore Town 88 FC** — FCHD: **Pershore Town** • Recruit 12 Community Stadium • WR10 1QU • Plausible name variant; confirm identity
 - **Rayners Lane FC** — Tithe Farm Social Club • HA2 0XH • separation `0.117 km` • Approve shared-ground relationship
 - **Romulus FC** — Domino's Stadium • B72 1NL • separation `0.086 km` • Approve shared-ground relationship
 - **Soul Tower Hamlets FC** — Mile End Stadium • E14 7TW • separation `0.458 km` • Approve shared-ground relationship
@@ -64,12 +64,11 @@ Generic words such as `Town` or `United` in a ground name are no longer treated 
 - **AFC Greenwich Borough** — No FCHD candidate; another free/public source required
 - **Atherton LR FC** — No FCHD candidate; another free/public source required
 - **Billingshurst FC** — No FCHD candidate; another free/public source required
-- **Bishop's Cleeve FC** — Everyone's Energy Stadium • GL52 3PD • Unsafe fuzzy match; independent identity research required
 - **Bournemouth Poppies FC** — No FCHD candidate; another free/public source required
 - **Bovey Tracey FC** — No FCHD candidate; another free/public source required
-- **Darlaston Town FC** — Recreation Ground • IP20 9DD • Unsafe fuzzy match; independent identity research required
+- **Darlaston Town FC** — FCHD: **Harleston Town** • Recreation Ground • IP20 9DD • Unsafe fuzzy match; independent identity research required
 - **Dearne & District FC** — No FCHD candidate; another free/public source required
-- **Desborough Town FC** — Hummel Stadium • HG5 8LF • Unsafe fuzzy match; independent identity research required
+- **Desborough Town FC** — FCHD: **Knaresborough Town** • Hummel Stadium • HG5 8LF • Unsafe fuzzy match; independent identity research required
 - **Devizes Town FC** — No FCHD candidate; another free/public source required
 - **Droylsden FC** — No FCHD candidate; another free/public source required
 - **Eastbourne United AFC** — No FCHD candidate; another free/public source required
@@ -88,8 +87,8 @@ Generic words such as `Town` or `United` in a ground name are no longer treated 
 - **Nelson FC** — No FCHD candidate; another free/public source required
 - **Northampton Sileby Rangers FC** — O'Riordan Bond Sradium • NN3 6FR • Postcode failure or >2km disagreement
 - **Prestwich Heys AFC** — Adie Moran Park • M45 6WG • separation `30.354 km` • Postcode failure or >2km disagreement
-- **Retford FC** — Gtech Community Stadium • TW8 0RU • Unsafe fuzzy match; independent identity research required
-- **Retford United FC** — New Bucks Head Stadium • TF1 2TU • Unsafe fuzzy match; independent identity research required
+- **Retford FC** — FCHD: **Brentford** • Gtech Community Stadium • TW8 0RU • Unsafe fuzzy match; independent identity research required
+- **Retford United FC** — FCHD: **AFC Telford United** • New Bucks Head Stadium • TF1 2TU • Unsafe fuzzy match; independent identity research required
 - **Runcorn Town FC** — No FCHD candidate; another free/public source required
 - **SE Dons FC** — No FCHD candidate; another free/public source required
 - **Stockport Georgians FC** — No FCHD candidate; another free/public source required
@@ -100,10 +99,18 @@ Generic words such as `Town` or `United` in a ground name are no longer treated 
 - **Yarm & Eaglescliffe FC** — No FCHD candidate; another free/public source required
 - **Yateley United FC** — No FCHD candidate; another free/public source required
 
+## ✅ Resolved since earlier verification
+
+- **AFC Mansfield** — Forest Town Welfare • NG19 0EE — Canonical GROUNDS record now present
+- **AFC Welwyn** — Lantern Stadium • EN6 1QB — Canonical GROUNDS record now present; approved groundshare relationship recorded
+- **Heanor Town FC** — The Town Ground • DE75 7EN — Canonical GROUNDS record now present
+- **Potters Bar Town FC** — Lantern Stadium • EN6 1QB — Canonical GROUNDS record now present
+
 ## Rules
 
-- 🟢 clears the exception rule only; it is not auto-published.
+- Canonical clubs are excluded from actionable exception counts.
+- Bishop's Cleeve / Bishops Cleeve is treated as a punctuation/name-format variant, not an unsafe fuzzy match.
+- 🟢 clears an exception rule only; it is not auto-published.
 - 🟡 requires one explicit human approval/current-ground check.
-- 🔴 requires another free/public source.
-- Known groundshares should eventually be stored explicitly.
-- `clubfinder.html` and `competition.json` are untouched.
+- 🔴 requires another free/public source or genuine research.
+- `clubfinder.html` and `competition.json` are untouched by this verification step.
