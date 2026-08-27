@@ -1,7 +1,7 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **485**
-- 🔴 Critical ground-data items: **5**
+- 🟢 Complete verified club-ground records: **487**
+- 🔴 Critical ground-data items: **3**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **15**
@@ -9,11 +9,9 @@
 
 ## 🔴 Critical missing/incomplete canonical records
 
-- **Fleetlands FC** — No canonical ground record
 - **Hartpury FC** — No canonical ground record
 - **Romulus FC** — No canonical ground record
 - **Sutton Coldfield Town FC** — No canonical ground record
-- **Sutton United FC (Birmingham)** — No canonical ground record
 
 ## 🟡 Shared postcodes / possible groundshares
 

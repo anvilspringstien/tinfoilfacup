@@ -1,0 +1,38 @@
+{
+  "published_at": "2026-08-27T15:15:48.305351+00:00",
+  "version": "7.9.11",
+  "canonical_records_added": 2,
+  "existing_records_overwritten": 0,
+  "records": [
+    {
+      "name": "Fleetlands FC",
+      "ground": "Powder Monkey Park",
+      "postcode": "PO13 0AX",
+      "lat": 50.833547,
+      "lon": -1.171164,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.wessexleague.co.uk/premier-division",
+      "ground_source": "Current Wessex League 2026/27 Premier Division club directory and current Fleetlands site",
+      "coordinate_source": "FCHD mapped Powder Monkey Park ground coordinate"
+    },
+    {
+      "name": "Sutton United FC (Birmingham)",
+      "ground": "Coleshill Road Stadium",
+      "postcode": "B75 7BA",
+      "lat": 52.55959,
+      "lon": -1.813718,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://suttonunitedfc.co.uk/",
+      "ground_source": "Current official Sutton United first-team site and current Birmingham AFA club directory",
+      "coordinate_source": "FCHD mapped Coleshill Road ground coordinate"
+    }
+  ],
+  "held": {
+    "Hartpury FC": "Temporary five-fixture Gloucester groundshare through 3 October 2026; do not flatten into permanent canonical venue without temporal handling.",
+    "Romulus FC": "Protected; no change.",
+    "Sutton Coldfield Town FC": "Protected; no change."
+  },
+  "competition_json_changed": false
+}
