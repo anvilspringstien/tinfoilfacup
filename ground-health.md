@@ -1,7 +1,7 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **465**
-- 🔴 Critical ground-data items: **25**
+- 🟢 Complete verified club-ground records: **475**
+- 🔴 Critical ground-data items: **15**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **13**
@@ -10,30 +10,20 @@
 ## 🔴 Critical missing/incomplete canonical records
 
 - **AFC Greenwich Borough** — No canonical ground record
-- **Darlaston Town FC** — No canonical ground record
 - **Dearne & District FC** — No canonical ground record
 - **Desborough Town FC** — No canonical ground record
-- **Everett Rovers FC** — No canonical ground record
 - **Fleetlands FC** — No canonical ground record
 - **Godalming Town FC** — No canonical ground record
 - **Hartpury FC** — No canonical ground record
-- **Keighley Town FC** — No canonical ground record
 - **Knowle FC** — No canonical ground record
-- **Larkfield & New Hythe FC** — No canonical ground record
 - **Liskeard Athletic FC** — No canonical ground record
-- **Millbrook FC (Hampshire)** — No canonical ground record
-- **Retford FC** — No canonical ground record
-- **Retford United FC** — No canonical ground record
 - **Romulus FC** — No canonical ground record
 - **SE Dons FC** — No canonical ground record
 - **Stockport Georgians FC** — No canonical ground record
 - **Sturminster Newton United FC** — No canonical ground record
 - **Sutton Coldfield Town FC** — No canonical ground record
 - **Sutton United FC (Birmingham)** — No canonical ground record
-- **Wells City FC** — No canonical ground record
-- **Worsbrough Bridge Athletic FC** — No canonical ground record
 - **Yarm & Eaglescliffe FC** — No canonical ground record
-- **Yateley United FC** — No canonical ground record
 
 ## 🟡 Shared postcodes / possible groundshares
 
