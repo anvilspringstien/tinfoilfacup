@@ -1,6 +1,6 @@
 {
-  "version": "7.7.2",
-  "updated_at": "2026-08-27T13:37:46.856365+00:00",
+  "version": "7.9.3",
+  "updated_at": "2026-08-27T14:22:26.227705+00:00",
   "known_groundshares": [
     {
       "tenant": "AFC Welwyn",
@@ -120,6 +120,42 @@
       "approved_at": "2026-08-27T13:37:46.856365+00:00",
       "status": "current",
       "approval_source": "v7.8.9 human confirmation"
+    },
+    {
+      "tenant": "Epsom & Ewell FC",
+      "host": "Chessington & Hook United FC",
+      "ground": "Chalky Lane",
+      "postcode": "KT9 2NF",
+      "season": "2026-27",
+      "evidence": "Epsom & Ewell's current official venue information places its first team at Chalky Lane for 2026/27; this is a new/current relationship and does not revive rejected former pair #8 with Cobham.",
+      "source_url": "https://epsomandewellfc.co.uk/club/visiting-us/",
+      "approved_at": "2026-08-27T14:22:26.227705+00:00",
+      "status": "current",
+      "approval_source": "v7.9.3 current venue promotion after v7.9.2 validation"
+    },
+    {
+      "tenant": "Belper United FC",
+      "host": "Mickleover FC",
+      "ground": "Don Amott Arena",
+      "postcode": "DE3 9FB",
+      "season": "2026-27",
+      "evidence": "Belper United's current official contact information gives the Don Amott Arena, home of Mickleover FC, as its ground; this replaces the rejected former Eastwood relationship #10.",
+      "source_url": "https://belperunited.co.uk/contact-us/",
+      "approved_at": "2026-08-27T14:22:26.227705+00:00",
+      "status": "current",
+      "approval_source": "v7.9.3 current venue promotion after v7.9.2 validation"
+    },
+    {
+      "tenant": "Southall FC",
+      "host": "Uxbridge FC",
+      "ground": "Honeycroft",
+      "postcode": "UB7 8HX",
+      "season": "2026-27",
+      "evidence": "Southall's current official site gives Honeycroft as its home and the 2026/27 move was explicitly announced as a groundshare with Uxbridge; this does not revive rejected former pair #14 with Hayes & Yeading United.",
+      "source_url": "https://www.southallfc.com/contact",
+      "approved_at": "2026-08-27T14:22:26.227705+00:00",
+      "status": "current",
+      "approval_source": "v7.9.3 current venue promotion after v7.9.2 validation"
     }
   ],
   "approved_exceptions": [

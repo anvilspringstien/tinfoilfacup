@@ -1,10 +1,10 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **444**
-- 🔴 Critical ground-data items: **46**
+- 🟢 Complete verified club-ground records: **451**
+- 🔴 Critical ground-data items: **39**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares suppressed from warnings: **10**
+- 🏟️ Known approved groundshares suppressed from warnings: **11**
 
 ## 🟡 Shared postcodes / possible groundshares
 
@@ -23,6 +23,7 @@
 
 ## 🏟️ Known approved groundshares
 
+- **Belper United FC** → Mickleover FC • DE3 9FB • 2026-27
 - **AFC Welwyn** → Potters Bar Town FC • EN6 1QB • 2026-27
 - **Hackney Wick FC** → Witham Town FC • CM8 1UN • 2026-27
 - **Faversham Strike Force FC** → Whitstable Town FC • CT5 1QP • 2026-27

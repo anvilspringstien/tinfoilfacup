@@ -1,0 +1,137 @@
+{
+  "published_at": "2026-08-27T14:22:26.227705+00:00",
+  "version": "7.9.3",
+  "mode": "PUBLISHED / SAFE MISSING-CANONICAL PROMOTION",
+  "source_validation": "7.9.2",
+  "canonical_records_added": 7,
+  "existing_canonical_records_overwritten": 0,
+  "current_groundshares_recorded": 3,
+  "held_relationships_changed": 0,
+  "records": [
+    {
+      "name": "Epsom & Ewell FC",
+      "ground": "Chalky Lane",
+      "postcode": "KT9 2NF",
+      "lat": 51.350284,
+      "lon": -0.309281,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://epsomandewellfc.co.uk/club/visiting-us/",
+      "ground_source": "Official club current venue; Chessington & Hook United ground mapping",
+      "coordinate_source": "FCHD mapped Chessington & Hook United/Chalky Lane ground coordinate"
+    },
+    {
+      "name": "Belper United FC",
+      "ground": "Don Amott Arena",
+      "postcode": "DE3 9FB",
+      "lat": 52.92371,
+      "lon": -1.54045,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://belperunited.co.uk/contact-us/",
+      "ground_source": "Official club current venue at Mickleover FC",
+      "coordinate_source": "OpenStreetMap pitch mapping for Don Amott Arena"
+    },
+    {
+      "name": "Southall FC",
+      "ground": "Honeycroft",
+      "postcode": "UB7 8HX",
+      "lat": 51.514078,
+      "lon": -0.457668,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.southallfc.com/contact",
+      "ground_source": "Official club current venue; Uxbridge FC host",
+      "coordinate_source": "FCHD mapped Uxbridge/Honeycroft ground coordinate"
+    },
+    {
+      "name": "Cobham FC",
+      "ground": "The Reg Madgwick Stadium",
+      "postcode": "KT11 3EP",
+      "lat": 51.329232,
+      "lon": -0.416391,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.cobhamfootballclub.com/contact",
+      "ground_source": "Official club current venue/postcode",
+      "coordinate_source": "FCHD/ground mapping coordinate for Reg Madgwick Stadium"
+    },
+    {
+      "name": "Eastwood Community FC",
+      "ground": "Coronation Park",
+      "postcode": "NG16 3HB",
+      "lat": 53.01484,
+      "lon": -1.29749,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.eastwoodcfc.co.uk/contact",
+      "ground_source": "Official club current venue/postcode",
+      "coordinate_source": "FCHD mapped Coronation Park ground coordinate"
+    },
+    {
+      "name": "Hayes & Yeading United FC",
+      "ground": "The SkyEx Community Stadium",
+      "postcode": "UB4 0SL",
+      "lat": 51.508276,
+      "lon": -0.394797,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://hyufc.ktckts.com/contactus",
+      "ground_source": "Official club current venue/postcode",
+      "coordinate_source": "FCHD mapped SkyEx Community Stadium ground coordinate"
+    },
+    {
+      "name": "Corby Town FC",
+      "ground": "Steel Park",
+      "postcode": "NN17 2AE",
+      "lat": 52.506582,
+      "lon": -0.718515,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.corbytown.co.uk/a/steel-park-49382.html?page=2",
+      "ground_source": "Official club stadium page/current venue/postcode",
+      "coordinate_source": "FCHD 2025-26 mapped Steel Park ground coordinate"
+    }
+  ],
+  "relationships": [
+    {
+      "tenant": "Epsom & Ewell FC",
+      "host": "Chessington & Hook United FC",
+      "ground": "Chalky Lane",
+      "postcode": "KT9 2NF",
+      "season": "2026-27",
+      "evidence": "Epsom & Ewell's current official venue information places its first team at Chalky Lane for 2026/27; this is a new/current relationship and does not revive rejected former pair #8 with Cobham.",
+      "source_url": "https://epsomandewellfc.co.uk/club/visiting-us/"
+    },
+    {
+      "tenant": "Belper United FC",
+      "host": "Mickleover FC",
+      "ground": "Don Amott Arena",
+      "postcode": "DE3 9FB",
+      "season": "2026-27",
+      "evidence": "Belper United's current official contact information gives the Don Amott Arena, home of Mickleover FC, as its ground; this replaces the rejected former Eastwood relationship #10.",
+      "source_url": "https://belperunited.co.uk/contact-us/"
+    },
+    {
+      "tenant": "Southall FC",
+      "host": "Uxbridge FC",
+      "ground": "Honeycroft",
+      "postcode": "UB7 8HX",
+      "season": "2026-27",
+      "evidence": "Southall's current official site gives Honeycroft as its home and the 2026/27 move was explicitly announced as a groundshare with Uxbridge; this does not revive rejected former pair #14 with Hayes & Yeading United.",
+      "source_url": "https://www.southallfc.com/contact"
+    }
+  ],
+  "held": [
+    {
+      "clubs": [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
+      ],
+      "postcode": "B72 1NL",
+      "status": "HELD_FOR_MORE_EVIDENCE",
+      "reason": "Existing evidence places Romulus home matches at Coles Lane/B72 1NL but does not explicitly establish the current Romulus ↔ Sutton Coldfield Town relationship. Keep outside the correction queue."
+    }
+  ],
+  "competition_json_changed": false
+}

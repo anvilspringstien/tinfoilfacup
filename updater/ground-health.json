@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-08-27T13:39:03.595483+00:00",
+  "checked_at": "2026-08-27T14:22:26.285528+00:00",
   "counts": {
     "eligible_clubs": 491,
-    "complete_verified": 444,
-    "critical_items": 46,
+    "complete_verified": 451,
+    "critical_items": 39,
     "review_items": 13,
     "shared_postcodes": 12,
-    "known_approved_groundshares": 10,
+    "known_approved_groundshares": 11,
     "unverified": 1
   },
   "missing_or_incomplete": [
@@ -19,10 +19,6 @@
       "No canonical ground record"
     ],
     [
-      "Belper United FC",
-      "No canonical ground record"
-    ],
-    [
       "Billingshurst FC",
       "No canonical ground record"
     ],
@@ -32,14 +28,6 @@
     ],
     [
       "Bovey Tracey FC",
-      "No canonical ground record"
-    ],
-    [
-      "Cobham FC",
-      "No canonical ground record"
-    ],
-    [
-      "Corby Town FC",
       "No canonical ground record"
     ],
     [
@@ -67,14 +55,6 @@
       "No canonical ground record"
     ],
     [
-      "Eastwood Community FC",
-      "No canonical ground record"
-    ],
-    [
-      "Epsom & Ewell FC",
-      "No canonical ground record"
-    ],
-    [
       "Everett Rovers FC",
       "No canonical ground record"
     ],
@@ -92,10 +72,6 @@
     ],
     [
       "Hartpury FC",
-      "No canonical ground record"
-    ],
-    [
-      "Hayes & Yeading United FC",
       "No canonical ground record"
     ],
     [
@@ -156,10 +132,6 @@
     ],
     [
       "SE Dons FC",
-      "No canonical ground record"
-    ],
-    [
-      "Southall FC",
       "No canonical ground record"
     ],
     [
@@ -282,6 +254,12 @@
     ]
   ],
   "known_approved_groundshares": [
+    {
+      "postcode": "DE3 9FB",
+      "tenant": "Belper United FC",
+      "host": "Mickleover FC",
+      "season": "2026-27"
+    },
     {
       "postcode": "EN6 1QB",
       "tenant": "AFC Welwyn",
