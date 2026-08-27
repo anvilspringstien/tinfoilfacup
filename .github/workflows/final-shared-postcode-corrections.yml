@@ -1,0 +1,23 @@
+name: Final shared postcode corrections (v7.9.15)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/resolve_final_shared_postcode_corrections.py'
+      - '.github/workflows/final-shared-postcode-corrections.yml'
+permissions: {contents: write}
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Correct two stale venues and approve Hilltop groundshare
+        run: python updater/resolve_final_shared_postcode_corrections.py
+      - name: Re-run Ground Health
+        run: python updater/ground_health.py
+      - name: Commit corrections and Ground Health
+        run: |
+          git config user.name "Tin Foil FA Cup Ground Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html updater/ground-approval-ledger.json final-shared-postcode-corrections.md updater/final-shared-postcode-corrections.json ground-health.md updater/ground-health.json
+          if git diff --cached --quiet; then echo "No changes."; else git commit -m "Resolve final shared postcode corrections v7.9.15"; git push; fi
