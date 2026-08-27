@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-27T14:22:26.285528+00:00",
+  "checked_at": "2026-08-27T14:28:00.914275+00:00",
   "counts": {
     "eligible_clubs": 491,
     "complete_verified": 451,
@@ -7,6 +7,7 @@
     "review_items": 13,
     "shared_postcodes": 12,
     "known_approved_groundshares": 11,
+    "approved_groundshares_pending_canonical_reconciliation": 2,
     "unverified": 1
   },
   "missing_or_incomplete": [
@@ -255,12 +256,6 @@
   ],
   "known_approved_groundshares": [
     {
-      "postcode": "DE3 9FB",
-      "tenant": "Belper United FC",
-      "host": "Mickleover FC",
-      "season": "2026-27"
-    },
-    {
       "postcode": "EN6 1QB",
       "tenant": "AFC Welwyn",
       "host": "Potters Bar Town FC",
@@ -319,6 +314,32 @@
       "tenant": "Dudley Town FC",
       "host": "Sporting Khalsa FC",
       "season": "2026-27"
+    },
+    {
+      "postcode": "DE3 9FB",
+      "tenant": "Belper United FC",
+      "host": "Mickleover FC",
+      "season": "2026-27"
+    }
+  ],
+  "approved_groundshares_pending_canonical_reconciliation": [
+    {
+      "postcode": "KT9 2NF",
+      "tenant": "Epsom & Ewell FC",
+      "host": "Chessington & Hook United FC",
+      "season": "2026-27",
+      "tenant_canonical_matches": 1,
+      "host_canonical_matches": 0,
+      "reason": "Approved relationship is retained in ledger but cannot yet be reconciled to exactly one canonical tenant and host at the approved postcode."
+    },
+    {
+      "postcode": "UB7 8HX",
+      "tenant": "Southall FC",
+      "host": "Uxbridge FC",
+      "season": "2026-27",
+      "tenant_canonical_matches": 1,
+      "host_canonical_matches": 0,
+      "reason": "Approved relationship is retained in ledger but cannot yet be reconciled to exactly one canonical tenant and host at the approved postcode."
     }
   ],
   "unverified": [
