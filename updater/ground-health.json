@@ -1,46 +1,18 @@
 {
-  "checked_at": "2026-08-27T15:28:40.969723+00:00",
+  "checked_at": "2026-08-27T15:29:36.999398+00:00",
   "counts": {
     "eligible_clubs": 491,
     "complete_verified": 491,
     "critical_items": 0,
-    "review_items": 11,
-    "shared_postcodes": 11,
-    "known_approved_groundshares": 15,
-    "known_confirmed_shared_venues": 2,
+    "review_items": 5,
+    "shared_postcodes": 5,
+    "known_approved_groundshares": 20,
+    "known_confirmed_shared_venues": 3,
     "approved_groundshares_pending_canonical_reconciliation": 0,
     "unverified": 0
   },
   "missing_or_incomplete": [],
   "shared_postcodes": [
-    [
-      "L30 1NY",
-      [
-        "AFC Liverpool",
-        "Bootle FC"
-      ]
-    ],
-    [
-      "SG15 6RS",
-      [
-        "Arlesey Town FC",
-        "Baldock Town FC"
-      ]
-    ],
-    [
-      "TN26 1NJ",
-      [
-        "Ashford United FC",
-        "Kennington FC"
-      ]
-    ],
-    [
-      "RM8 2JR",
-      [
-        "Barking FC",
-        "Romford FC"
-      ]
-    ],
     [
       "NE24 3JE",
       [
@@ -56,13 +28,6 @@
       ]
     ],
     [
-      "NR30 1EY",
-      [
-        "Gorleston FC",
-        "Great Yarmouth Town FC"
-      ]
-    ],
-    [
       "NW9 7NE",
       [
         "Hendon FC",
@@ -74,13 +39,6 @@
       [
         "Kingstonian FC",
         "Raynes Park Vale FC"
-      ]
-    ],
-    [
-      "ST5 3BX",
-      [
-        "Newcastle Town FC",
-        "Stone Old Alleynians FC"
       ]
     ],
     [
@@ -181,6 +139,36 @@
       "tenant": "SE Dons FC",
       "host": "Chatham Town FC",
       "season": "2026-27"
+    },
+    {
+      "postcode": "L30 1NY",
+      "tenant": "AFC Liverpool",
+      "host": "Bootle FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "SG15 6RS",
+      "tenant": "Baldock Town FC",
+      "host": "Arlesey Town FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "TN26 1NJ",
+      "tenant": "Kennington FC",
+      "host": "Ashford United FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "RM8 2JR",
+      "tenant": "Romford FC",
+      "host": "Barking FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "ST5 3BX",
+      "tenant": "Stone Old Alleynians FC",
+      "host": "Newcastle Town FC",
+      "season": "2026-27"
     }
   ],
   "known_confirmed_shared_venues": [
@@ -201,6 +189,15 @@
       ],
       "season": "2026-27",
       "relationship_type": "confirmed_shared_venue_undirected"
+    },
+    {
+      "postcode": "NR30 1EY",
+      "clubs": [
+        "Gorleston FC",
+        "Great Yarmouth Town FC"
+      ],
+      "season": "2026-27",
+      "relationship_type": "confirmed_shared_venue_equal_rights_not_groundshare"
     }
   ],
   "approved_groundshares_pending_canonical_reconciliation": [],

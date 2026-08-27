@@ -2,10 +2,10 @@
 
 - 🟢 Complete verified club-ground records: **491**
 - 🔴 Critical ground-data items: **0**
-- 🟡 Review items: **11**
+- 🟡 Review items: **5**
 - ⚪ Eligible clubs audited: **491**
-- 🏟️ Known approved groundshares reconciled to canonical records: **15**
-- 🤝 Confirmed shared venues reconciled without forced direction: **2**
+- 🏟️ Known approved groundshares reconciled to canonical records: **20**
+- 🤝 Confirmed shared venues reconciled without forced direction: **3**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
 ## 🔴 Critical missing/incomplete canonical records
@@ -14,16 +14,10 @@ None.
 
 ## 🟡 Shared postcodes / possible groundshares
 
-- **L30 1NY** — AFC Liverpool, Bootle FC
-- **SG15 6RS** — Arlesey Town FC, Baldock Town FC
-- **TN26 1NJ** — Ashford United FC, Kennington FC
-- **RM8 2JR** — Barking FC, Romford FC
 - **NE24 3JE** — Blyth Spartans AFC, Blyth Town FC
 - **DN17 2TQ** — Bottesford Town FC, Bottlesford Town FC
-- **NR30 1EY** — Gorleston FC, Great Yarmouth Town FC
 - **NW9 7NE** — Hendon FC, Hilltop FC
 - **SW20 9DZ** — Kingstonian FC, Raynes Park Vale FC
-- **ST5 3BX** — Newcastle Town FC, Stone Old Alleynians FC
 - **B72 1NL** — Romulus FC, Sutton Coldfield Town FC
 
 ## 🏟️ Known approved groundshares
@@ -43,11 +37,17 @@ None.
 - **Southall FC** → Uxbridge FC • UB7 8HX • 2026-27
 - **AFC Greenwich Borough** → Holmesdale FC • BR2 8HQ • 2026-27
 - **SE Dons FC** → Chatham Town FC • ME4 6LR • 2026-27
+- **AFC Liverpool** → Bootle FC • L30 1NY • 2026-27
+- **Baldock Town FC** → Arlesey Town FC • SG15 6RS • 2026-27
+- **Kennington FC** → Ashford United FC • TN26 1NJ • 2026-27
+- **Romford FC** → Barking FC • RM8 2JR • 2026-27
+- **Stone Old Alleynians FC** → Newcastle Town FC • ST5 3BX • 2026-27
 
 ## 🤝 Confirmed shared venues without forced direction
 
 - **Soul Tower Hamlets FC, Sporting Bengal United FC** • E14 7TW • 2026-27
 - **Walthamstow FC, West Essex FC** • E17 4JP • 2026-27
+- **Gorleston FC, Great Yarmouth Town FC** • NR30 1EY • 2026-27
 
 ## ⏳ Approved relationships awaiting canonical counterpart
 
