@@ -1,0 +1,33 @@
+name: Ground geography promotion (v7.7.7)
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish validated records into canonical GROUNDS'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run geography candidate promotion
+        run: |
+          ARGS=()
+          if [ "${{ inputs.publish }}" = "true" ]; then ARGS+=(--publish); fi
+          python updater/promote_geography_candidates.py "${ARGS[@]}"
+      - name: Commit report / published grounds
+        run: |
+          git config user.name "Tin Foil FA Cup Geography Promotion"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-geography-promotion.md updater/geography-candidate-promotion.json
+          if [ "${{ inputs.publish }}" = "true" ]; then git add clubfinder.html; fi
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Geography candidate promotion v7.7.7"
+            git push
+          fi
