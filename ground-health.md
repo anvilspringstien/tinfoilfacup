@@ -1,7 +1,7 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **451**
-- 🔴 Critical ground-data items: **39**
+- 🟢 Complete verified club-ground records: **455**
+- 🔴 Critical ground-data items: **35**
 - 🟡 Review items: **13**
 - ⚪ Eligible clubs audited: **491**
 - 🏟️ Known approved groundshares reconciled to canonical records: **13**
@@ -23,17 +23,13 @@
 - **Everett Rovers FC** — No canonical ground record
 - **Fleetlands FC** — No canonical ground record
 - **Godalming Town FC** — No canonical ground record
-- **Handsworth FC** — No canonical ground record
 - **Hartpury FC** — No canonical ground record
 - **Keighley Town FC** — No canonical ground record
 - **Knowle FC** — No canonical ground record
 - **Larkfield & New Hythe FC** — No canonical ground record
 - **Liskeard Athletic FC** — No canonical ground record
-- **Loughborough Students FC** — No canonical ground record
 - **Millbrook FC (Hampshire)** — No canonical ground record
-- **Moulton FC** — No canonical ground record
 - **Nelson FC** — No canonical ground record
-- **Northampton Sileby Rangers FC** — No canonical ground record
 - **Prestwich Heys AFC** — No canonical ground record
 - **Retford FC** — No canonical ground record
 - **Retford United FC** — No canonical ground record

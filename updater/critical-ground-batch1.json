@@ -1,0 +1,63 @@
+{
+  "published_at": "2026-08-27T14:34:47.972231+00:00",
+  "version": "7.9.6",
+  "canonical_records_added": 4,
+  "existing_records_overwritten": 0,
+  "records": [
+    {
+      "name": "Handsworth FC",
+      "ground": "Express Worktops Stadium @ Olivers Mount",
+      "postcode": "S9 4PA",
+      "lat": 53.38468,
+      "lon": -1.39122,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.pitchero.com/clubs/handsworthfc",
+      "ground_source": "Current official Handsworth FC site, 2026/27",
+      "coordinate_source": "Geograph subject-location geotag for Olivers Mount football ground (10m precision)"
+    },
+    {
+      "name": "Loughborough Students FC",
+      "ground": "Loughborough University Stadium",
+      "postcode": "LE11 3GR",
+      "lat": 52.756975,
+      "lon": -1.242555,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://www.lboro.ac.uk/sport/facilities/stadium/",
+      "ground_source": "Current Loughborough University stadium page and venue address",
+      "coordinate_source": "FCHD mapped Loughborough University Stadium ground coordinate"
+    },
+    {
+      "name": "Moulton FC",
+      "ground": "Brunting Road",
+      "postcode": "NN3 7QF",
+      "lat": 52.285353,
+      "lon": -0.85807,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://fulltime.thefa.com/displayTeam.html?id=863869752",
+      "ground_source": "Current FA Full-Time 2026/27 home fixtures at Brunting Road; FCHD current ground/postcode",
+      "coordinate_source": "FCHD 2025-26 mapped Brunting Road ground coordinate"
+    },
+    {
+      "name": "Northampton Sileby Rangers FC",
+      "ground": "O'Riordan Bond Stadium, Fernie Fields",
+      "postcode": "NN3 6FR",
+      "lat": 52.275583,
+      "lon": -0.852269,
+      "verification": "verified",
+      "verification_label": "✅ Verified",
+      "source": "Current 2026/27 venue evidence: https://theucl.co.uk/clubs/northampton-sileby-rangers-fc/",
+      "ground_source": "Current 2026/27 United Counties League club directory and official club contact",
+      "coordinate_source": "FCHD 2025-26 mapped Fernie Fields ground coordinate"
+    }
+  ],
+  "held_from_batch": {
+    "club": "Prestwich Heys AFC",
+    "ground": "Adie Moran Park",
+    "postcode": "M45 6NT",
+    "reason": "Current venue/postcode verified; held until venue-level coordinate is evidenced to the same standard as this publication batch."
+  },
+  "competition_json_changed": false
+}
