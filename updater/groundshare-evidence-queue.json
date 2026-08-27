@@ -1,0 +1,678 @@
+{
+  "checked_at": "2026-08-27T12:01:10.899593+00:00",
+  "version": "7.8.1",
+  "mode": "PROPOSAL ONLY",
+  "source": "updater/ground-exception-verification.json",
+  "club_level_shared_warnings": 30,
+  "unique_relationships": 15,
+  "research_required": 15,
+  "approved_relationships": 0,
+  "pairs": [
+    {
+      "pair_id": 1,
+      "postcode": "B72 1NL",
+      "clubs": [
+        "Romulus FC",
+        "Sutton Coldfield Town FC"
+      ],
+      "club_records": [
+        {
+          "club": "Romulus FC",
+          "fchd_match": "Romulus",
+          "ground_candidate": "Domino's Stadium",
+          "postcode": "B72 1NL",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Sutton Coldfield Town FC",
+            "Domino's Stadium",
+            "Central Ground",
+            "Coles Lane",
+            "Sutton Coldfield"
+          ]
+        },
+        {
+          "club": "Sutton Coldfield Town FC",
+          "fchd_match": "Sutton Coldfield Town",
+          "ground_candidate": "Domino's Arena",
+          "postcode": "B72 1NL",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Domino's Arena",
+            "Central Ground",
+            "Coles Lane",
+            "Sutton Coldfield"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 2,
+      "postcode": "CM8 1UN",
+      "clubs": [
+        "Hackney Wick FC",
+        "Witham Town FC"
+      ],
+      "club_records": [
+        {
+          "club": "Hackney Wick FC",
+          "fchd_match": "Hackney Wick",
+          "ground_candidate": "Simarco Stadium",
+          "postcode": "CM8 1UN",
+          "distance_km": 0.072,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Witham Town FC",
+            "Simarco Stadium",
+            "Spa Road",
+            "Witham"
+          ]
+        },
+        {
+          "club": "Witham Town FC",
+          "fchd_match": "Witham Town",
+          "ground_candidate": "Simarco Stadium",
+          "postcode": "CM8 1UN",
+          "distance_km": 0.072,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Simarco Stadium",
+            "Spa Road",
+            "Witham"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 3,
+      "postcode": "CT5 1QP",
+      "clubs": [
+        "Faversham Strike Force FC",
+        "Whitstable Town FC"
+      ],
+      "club_records": [
+        {
+          "club": "Faversham Strike Force FC",
+          "fchd_match": "Faversham Strike Force",
+          "ground_candidate": "The Belmont Stadium",
+          "postcode": "CT5 1QP",
+          "distance_km": 0.198,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Whitstable Town FC",
+            "The Belmont Stadium",
+            "Belmont Road",
+            "Whitstable"
+          ]
+        },
+        {
+          "club": "Whitstable Town FC",
+          "fchd_match": "Whitstable Town",
+          "ground_candidate": "The Belmont Stadium",
+          "postcode": "CT5 1QP",
+          "distance_km": 0.198,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "The Belmont Stadium",
+            "Belmont Road",
+            "Whitstable"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 4,
+      "postcode": "CV12 8NN",
+      "clubs": [
+        "Bedworth United FC",
+        "Nuneaton Town FC"
+      ],
+      "club_records": [
+        {
+          "club": "Bedworth United FC",
+          "fchd_match": "Bedworth United",
+          "ground_candidate": "The Oval",
+          "postcode": "CV12 8NN",
+          "distance_km": 0.107,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "The Oval",
+            "Coventry Road",
+            "Bedworth"
+          ]
+        },
+        {
+          "club": "Nuneaton Town FC",
+          "fchd_match": "Nuneaton Town",
+          "ground_candidate": "The Oval",
+          "postcode": "CV12 8NN",
+          "distance_km": 0.107,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Bedworth United FC",
+            "The Oval",
+            "Coventry Road",
+            "Bedworth"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 5,
+      "postcode": "E14 7TW",
+      "clubs": [
+        "Soul Tower Hamlets FC",
+        "Sporting Bengal United FC"
+      ],
+      "club_records": [
+        {
+          "club": "Soul Tower Hamlets FC",
+          "fchd_match": "SOUL Tower Hamlets",
+          "ground_candidate": "Mile End Stadium",
+          "postcode": "E14 7TW",
+          "distance_km": 0.458,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Mile End Stadium",
+            "Rhodeswell Road",
+            "Tower Hamlets"
+          ]
+        },
+        {
+          "club": "Sporting Bengal United FC",
+          "fchd_match": "Sporting Bengal United",
+          "ground_candidate": "Mile End Stadium",
+          "postcode": "E14 7TW",
+          "distance_km": 0.458,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Mile End Stadium",
+            "Rhodeswell Road",
+            "Tower Hamlets"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 6,
+      "postcode": "E17 4JP",
+      "clubs": [
+        "Walthamstow FC",
+        "West Essex FC"
+      ],
+      "club_records": [
+        {
+          "club": "Walthamstow FC",
+          "fchd_match": "Walthamstow",
+          "ground_candidate": "Wadham Lodge Sports Centre",
+          "postcode": "E17 4JP",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Wadham Lodge Sports Centre",
+            "Kitchener Road",
+            "Walthamstow"
+          ]
+        },
+        {
+          "club": "West Essex FC",
+          "fchd_match": "West Essex",
+          "ground_candidate": "Matchday Centre",
+          "postcode": "E17 4JP",
+          "distance_km": 0.086,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Walthamstow FC",
+            "Matchday Centre",
+            "Wadham Lodge",
+            "Kitchener Road",
+            "Walthamstow"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 7,
+      "postcode": "HA2 0XH",
+      "clubs": [
+        "Broadfields United FC",
+        "Rayners Lane FC"
+      ],
+      "club_records": [
+        {
+          "club": "Broadfields United FC",
+          "fchd_match": "Broadfields United",
+          "ground_candidate": "Tithe Farm Social Club",
+          "postcode": "HA2 0XH",
+          "distance_km": 0.117,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Rayners Lane FC",
+            "Tithe Farm Social Club",
+            "151 Rayners Lane",
+            "Harrow"
+          ]
+        },
+        {
+          "club": "Rayners Lane FC",
+          "fchd_match": "Rayners Lane",
+          "ground_candidate": "Tithe Farm Social Club",
+          "postcode": "HA2 0XH",
+          "distance_km": 0.117,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Tithe Farm Social Club",
+            "151 Rayners Lane",
+            "Harrow"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 8,
+      "postcode": "KT11 1AA",
+      "clubs": [
+        "Cobham FC",
+        "Epsom & Ewell FC"
+      ],
+      "club_records": [
+        {
+          "club": "Cobham FC",
+          "fchd_match": "Cobham",
+          "ground_candidate": "Reg Madwick Stadium",
+          "postcode": "KT11 1AA",
+          "distance_km": 0.177,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Reg Madwick Stadium",
+            "Leg o' Mutton Field",
+            "Downside Bridge Road",
+            "Cobham"
+          ]
+        },
+        {
+          "club": "Epsom & Ewell FC",
+          "fchd_match": "Epsom & Ewell",
+          "ground_candidate": "Cobham FC: Reg Madwick Stadium",
+          "postcode": "KT11 1AA",
+          "distance_km": 0.177,
+          "flags": [
+            "SHARED_POSTCODE",
+            "GROUND_NAME_MAY_BE_HOST_CLUB"
+          ],
+          "raw_lines": [
+            "Cobham FC: Reg Madwick Stadium",
+            "Leg o' Mutton Field",
+            "Downside Bridge Road",
+            "Cobham"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 9,
+      "postcode": "LE9 8FQ",
+      "clubs": [
+        "Barwell FC",
+        "Hinckley AFC"
+      ],
+      "club_records": [
+        {
+          "club": "Barwell FC",
+          "fchd_match": "Barwell",
+          "ground_candidate": "Crown Skip Hire Stadium",
+          "postcode": "LE9 8FQ",
+          "distance_km": 0.214,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Crown Skip Hire Stadium",
+            "Kirkby Road",
+            "Barwell"
+          ]
+        },
+        {
+          "club": "Hinckley AFC",
+          "fchd_match": "Hinckley",
+          "ground_candidate": "UK Flooring Stadium",
+          "postcode": "LE9 8FQ",
+          "distance_km": 0.214,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Barwell FC",
+            "UK Flooring Stadium",
+            "Kirkby Road",
+            "Barwell"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 10,
+      "postcode": "NG16 3HB",
+      "clubs": [
+        "Belper United FC",
+        "Eastwood Community FC"
+      ],
+      "club_records": [
+        {
+          "club": "Belper United FC",
+          "fchd_match": "Belper United",
+          "ground_candidate": "Coronation Park",
+          "postcode": "NG16 3HB",
+          "distance_km": 0.141,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Eastwood Community FC",
+            "Coronation Park",
+            "Chewton Street",
+            "Eastwood"
+          ]
+        },
+        {
+          "club": "Eastwood Community FC",
+          "fchd_match": "Eastwood Community",
+          "ground_candidate": "Coronation Park",
+          "postcode": "NG16 3HB",
+          "distance_km": 0.141,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Coronation Park",
+            "Chewton Street",
+            "Eastwood"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 11,
+      "postcode": "RM18 8NL",
+      "clubs": [
+        "Grays Athletic FC",
+        "Tilbury FC"
+      ],
+      "club_records": [
+        {
+          "club": "Grays Athletic FC",
+          "fchd_match": "Grays Athletic",
+          "ground_candidate": "EMR Stadium",
+          "postcode": "RM18 8NL",
+          "distance_km": 0.159,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Tilbury FC",
+            "EMR Stadium",
+            "Chadfields",
+            "St Chad's Road",
+            "Tilbury"
+          ]
+        },
+        {
+          "club": "Tilbury FC",
+          "fchd_match": "Tilbury",
+          "ground_candidate": "EMR Stadium",
+          "postcode": "RM18 8NL",
+          "distance_km": 0.159,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "EMR Stadium",
+            "Chadfields",
+            "St Chad's Road",
+            "Tilbury"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 12,
+      "postcode": "SG13 8EX",
+      "clubs": [
+        "Enfield FC",
+        "Hertford Town FC"
+      ],
+      "club_records": [
+        {
+          "club": "Enfield FC",
+          "fchd_match": "Enfield",
+          "ground_candidate": "Hertingfordbury Park",
+          "postcode": "SG13 8EX",
+          "distance_km": 0.505,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Hertford Town FC",
+            "Hertingfordbury Park",
+            "West Street",
+            "Hertford"
+          ]
+        },
+        {
+          "club": "Hertford Town FC",
+          "fchd_match": "Hertford Town",
+          "ground_candidate": "Hertingfordbury Park",
+          "postcode": "SG13 8EX",
+          "distance_km": 0.505,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Hertingfordbury Park",
+            "West Street",
+            "Hertford"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 13,
+      "postcode": "SM4 6BF",
+      "clubs": [
+        "Balham FC",
+        "Tooting & Mitcham United FC"
+      ],
+      "club_records": [
+        {
+          "club": "Balham FC",
+          "fchd_match": "Balham",
+          "ground_candidate": "Imperial Fields",
+          "postcode": "SM4 6BF",
+          "distance_km": 0.056,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Tooting & Mitcham United",
+            "Imperial Fields",
+            "Bishopsford Road",
+            "Morden"
+          ]
+        },
+        {
+          "club": "Tooting & Mitcham United FC",
+          "fchd_match": "Tooting & Mitcham United",
+          "ground_candidate": "Imperial Fields",
+          "postcode": "SM4 6BF",
+          "distance_km": 0.056,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Imperial Fields",
+            "Bishopsford Road",
+            "Morden"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 14,
+      "postcode": "UB4 0SL",
+      "clubs": [
+        "Hayes & Yeading United FC",
+        "Southall FC"
+      ],
+      "club_records": [
+        {
+          "club": "Hayes & Yeading United FC",
+          "fchd_match": "Hayes & Yeading United",
+          "ground_candidate": "SkyEx Community Stadium",
+          "postcode": "UB4 0SL",
+          "distance_km": 0.169,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "SkyEx Community Stadium",
+            "Beaconsfield Road",
+            "Hayes"
+          ]
+        },
+        {
+          "club": "Southall FC",
+          "fchd_match": "Southall",
+          "ground_candidate": "SkyEx Community Stadium",
+          "postcode": "UB4 0SL",
+          "distance_km": 0.169,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Hayes & Yeading Unite FC",
+            "SkyEx Community Stadium",
+            "Beaconsfield Road",
+            "Hayes"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    },
+    {
+      "pair_id": 15,
+      "postcode": "WV13 3BB",
+      "clubs": [
+        "Dudley Town FC",
+        "Sporting Khalsa FC"
+      ],
+      "club_records": [
+        {
+          "club": "Dudley Town FC",
+          "fchd_match": "Dudley Town",
+          "ground_candidate": "Guardian Warehousing Arena",
+          "postcode": "WV13 3BB",
+          "distance_km": 0.204,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Sporting Khalsa FC",
+            "Guardian Warehousing Arena",
+            "Noose Lane",
+            "Willenhall"
+          ]
+        },
+        {
+          "club": "Sporting Khalsa FC",
+          "fchd_match": "Sporting Khalsa",
+          "ground_candidate": "Guardian Warehousing Stadium",
+          "postcode": "WV13 3BB",
+          "distance_km": 0.204,
+          "flags": [
+            "SHARED_POSTCODE"
+          ],
+          "raw_lines": [
+            "Guardian Warehousing Stadium",
+            "Noose Lane",
+            "Willenhall"
+          ]
+        }
+      ],
+      "relationship_status": "CURRENT_SOURCE_CONFIRMATION_REQUIRED",
+      "host_tenant_direction": "UNRESOLVED",
+      "decision_note": "Shared postcode/FCHD evidence groups these clubs for review only. It does not prove a groundshare or determine host/tenant direction."
+    }
+  ]
+}
