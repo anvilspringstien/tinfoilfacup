@@ -1,0 +1,23 @@
+name: Ground identity variant review (v7.7.8)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build proposal-only identity variant review
+        run: python updater/identity_variant_resolver.py
+      - name: Commit identity variant review
+        run: |
+          git config user.name "Tin Foil FA Cup Identity Review"
+          git config user.email "actions@users.noreply.github.com"
+          git add ground-identity-variant-review.md updater/identity-variant-review.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update identity variant review v7.7.8"
+            git push
+          fi
