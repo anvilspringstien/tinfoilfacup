@@ -2,6 +2,10 @@ name: FA Cup journey registry audit
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'updater/audit_fa_cup_journey_registry.py'
+      - '.github/workflows/fa-cup-journey-registry-audit.yml'
 
 permissions:
   contents: read
