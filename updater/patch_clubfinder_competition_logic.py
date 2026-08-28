@@ -142,7 +142,23 @@ new_won="const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWin
 if old_won in text:text=text.replace(old_won,new_won,1)
 elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
 
-required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);','if(nf.venue&&nf.venue.postcode')
+# Presentation-only: keep the live-data/version line directly beneath the search panel.
+old_layout='<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="status"></div><div id="results"></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div>'
+new_layout='<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div>'
+if old_layout in text:text=text.replace(old_layout,new_layout,1)
+elif new_layout not in text:raise SystemExit('ABORT: live-data line layout boundary not found')
+
+old_badge="e.textContent='Competition data updated: '+w;"
+new_badge="e.textContent='Clubfinder v7.6 — Competition data updated: '+w;"
+if old_badge in text:text=text.replace(old_badge,new_badge,1)
+elif new_badge not in text:raise SystemExit('ABORT: live-data badge text boundary not found')
+
+old_fallback="}else e.textContent=LIVE_DATA_STATUS.message;"
+new_fallback="}else e.textContent='Clubfinder v7.6 — '+LIVE_DATA_STATUS.message;"
+if old_fallback in text:text=text.replace(old_fallback,new_fallback,1)
+elif new_fallback not in text:raise SystemExit('ABORT: live-data fallback boundary not found')
+
+required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);','if(nf.venue&&nf.venue.postcode','Clubfinder v7.6 — Competition data updated: ','<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools">')
 for marker in required:
     if marker not in text:raise SystemExit(f'ABORT: required competition patch missing: {marker}')
 
@@ -152,4 +168,5 @@ print('Decisive scorelines override contradictory legacy winner fields.')
 print('Repeated result snapshots are deduplicated semantically.')
 print('Canonical result_history is included in journey traversal.')
 print('Canonical live fixture venues are preserved by next-round rendering.')
+print('Clubfinder v7.6 status line is positioned directly beneath the search panel.')
 print('Ground records themselves: UNTOUCHED')
