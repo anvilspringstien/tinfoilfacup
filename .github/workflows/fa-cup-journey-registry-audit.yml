@@ -7,6 +7,7 @@ on:
       - 'updater/audit_fa_cup_journey_registry.py'
       - 'updater/audit_journey_ground_coverage.py'
       - 'updater/audit_journey_source_of_truth.py'
+      - 'updater/audit_journey_promotion_readiness.py'
       - '.github/workflows/fa-cup-journey-registry-audit.yml'
 
 permissions:
@@ -36,12 +37,16 @@ jobs:
       - name: Run read-only journey source-of-truth audit
         run: python updater/audit_journey_source_of_truth.py
 
+      - name: Run read-only journey promotion readiness audit
+        run: python updater/audit_journey_promotion_readiness.py
+
       - name: Show audit summaries
         if: always()
         run: |
           if [ -f fa-cup-journey-registry-audit.md ]; then cat fa-cup-journey-registry-audit.md; fi
           if [ -f journey-ground-coverage-audit.md ]; then cat journey-ground-coverage-audit.md; fi
           if [ -f journey-source-of-truth-audit.md ]; then cat journey-source-of-truth-audit.md; fi
+          if [ -f journey-promotion-readiness-audit.md ]; then cat journey-promotion-readiness-audit.md; fi
 
       - name: Upload audit reports
         if: always()
@@ -56,6 +61,8 @@ jobs:
             updater/journey-ground-coverage-audit.json
             journey-source-of-truth-audit.md
             updater/journey-source-of-truth-audit.json
+            journey-promotion-readiness-audit.md
+            updater/journey-promotion-readiness-audit.json
           if-no-files-found: warn
 
 # SAFETY: this workflow has contents: read only and contains no commit/push/write-back step.
