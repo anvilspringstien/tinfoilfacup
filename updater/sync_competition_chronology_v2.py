@@ -29,9 +29,10 @@ def parse_results(html,date):
   c=[x for x in cells(row) if x]; joined=' '.join(c)
   pm=re.search(r'(.+?)\s+win\s+\d+\s*[-–]\s*\d+\s+on penalties',joined,re.I)
   if pm and last and last['home_score']==last['away_score']: last['winner']=strip_seed(pm.group(1)); last['decision']='penalties'; continue
-  try:fi=next(i for i,x in enumerate(c) if x.upper()=='FT')
+  try:fi=next(i for i,x in enumerate(c) if x.upper().startswith('FT'))
   except StopIteration:continue
-  # Actual rows are date | FT | home | [seed] | home score | away score | [seed] | away.
+  status=c[fi].upper()
+  # Actual rows are date | FT[/FT (AET)] | home | [seed] | home score | away score | [seed] | away.
   tail=c[fi+1:]; nums=[(i,x) for i,x in enumerate(tail) if re.fullmatch(r'\d+',x)]
   if len(nums)<2:continue
   i1,s1=nums[-2]; i2,s2=nums[-1]
@@ -42,16 +43,11 @@ def parse_results(html,date):
   # One delayed original tie was played on the replay date.
   if iso=='2026-08-25' and norm(home)==norm('Baffins Milton Rovers') and norm(away)==norm('Hartley Wintney'):rnd='Preliminary Round'
   winner=home if hs>as_ else away if as_>hs else ''
-  rec={'home':home,'away':away,'home_score':hs,'away_score':as_,'winner':winner,'status':'FT','decision':'' if winner else ('draw-replay' if rnd=='Preliminary Round' else ''),'date':iso,'round':rnd,'source_url':f'{BASE}/{date}'}; out.append(rec); last=rec
+  decision='aet' if 'AET' in status else ('' if winner else ('draw-replay' if rnd=='Preliminary Round' else ''))
+  rec={'home':home,'away':away,'home_score':hs,'away_score':as_,'winner':winner,'status':status,'decision':decision,'date':iso,'round':rnd,'source_url':f'{BASE}/{date}'}; out.append(rec); last=rec
  return out
 def preliminary_fixtures_from_results(results):
- """Use actual played original ties as the canonical Preliminary fixture list.
-
- This deliberately does not reuse Clubfinder's historical embedded schedule: that
- schedule can contain pre-result placeholders whose participants became stale after
- the Extra Preliminary Round. Replays stay in result_history and are not counted as
- separate Preliminary ties.
- """
+ """Use actual played original ties as the canonical Preliminary fixture list."""
  first_legs=[]; seen=set()
  for r in results:
   if r.get('round')!='Preliminary Round':continue
