@@ -38,15 +38,15 @@ const assertions=`
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
   const wj=buildJourney(sporting);const wcarrier=wj.carrier||sporting;
   if(!same(wcarrier.name,'Frenford'))throw new Error('W1D regression: expected Frenford custodian, got '+wcarrier.name);
-  const frenfordCurrent=currentDisplayFixture(wcarrier);
-  if(!frenfordCurrent||!same(frenfordCurrent.home,'Frenford')||!same(frenfordCurrent.away,'Haringey Borough'))throw new Error('W1D regression: Frenford replay is not current display fixture');
-  if(frenfordCurrent.kickoff!=='19:45')throw new Error('W1D regression: Frenford replay kick-off expected 19:45, got '+frenfordCurrent.kickoff);
+  const frenfordResult=resultFor(wcarrier);
+  if(!frenfordResult||!same(frenfordResult.home,'Frenford')||!same(frenfordResult.away,'Haringey Borough'))throw new Error('W1D regression: Frenford replay is not current result');
+  if(frenfordResult.kickoff!=='19:45')throw new Error('W1D regression: Frenford replay kick-off expected 19:45, got '+frenfordResult.kickoff);
 
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
   console.log('Heaton replay present: PASS');
   console.log('Emley venue:',v.ground,'•',v.postcode);
-  console.log('W1D Frenford replay kick-off:',frenfordCurrent.kickoff);
+  console.log('W1D Frenford replay kick-off:',frenfordResult.kickoff);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
