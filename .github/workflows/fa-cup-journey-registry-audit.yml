@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'updater/audit_fa_cup_journey_registry.py'
+      - 'updater/audit_journey_ground_coverage.py'
       - '.github/workflows/fa-cup-journey-registry-audit.yml'
 
 permissions:
@@ -28,14 +29,20 @@ jobs:
       - name: Run read-only journey registry audit
         run: python updater/audit_fa_cup_journey_registry.py
 
-      - name: Show audit summary
+      - name: Run read-only journey ground coverage audit
+        run: python updater/audit_journey_ground_coverage.py
+
+      - name: Show audit summaries
         if: always()
         run: |
           if [ -f fa-cup-journey-registry-audit.md ]; then
             cat fa-cup-journey-registry-audit.md
           fi
+          if [ -f journey-ground-coverage-audit.md ]; then
+            cat journey-ground-coverage-audit.md
+          fi
 
-      - name: Upload audit report
+      - name: Upload audit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -43,6 +50,9 @@ jobs:
           path: |
             fa-cup-journey-registry-audit.md
             updater/fa-cup-journey-registry-audit.json
+            updater/journey-club-verification-queue.json
+            journey-ground-coverage-audit.md
+            updater/journey-ground-coverage-audit.json
           if-no-files-found: warn
 
 # SAFETY: this workflow has contents: read only and contains no commit/push/write-back step.
