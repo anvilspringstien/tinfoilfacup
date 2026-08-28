@@ -63,14 +63,18 @@ html=HTML.read_text(encoding='utf-8')
 grounds=extract_js_array(html,'GROUNDS')
 known={norm(g.get('name') or g.get('club')) for g in grounds}
 
-fixtures=comp.get('fixtures',[]) or []
-enriched=0; already=0; unresolved=[]
-for f in fixtures:
+fixtures=comp.get('fixtures',{}) or {}
+values=list(fixtures.values()) if isinstance(fixtures,dict) else list(fixtures)
+enriched_keys=set(); already_keys=set(); unresolved=[]
+for f in values:
+    if not isinstance(f,dict):continue
     home=f.get('home') or ''
+    away=f.get('away') or ''
     if not home:continue
+    fixture_key=(norm(home),norm(away),f.get('date',''),f.get('round',''))
     v=f.get('venue') or {}
     if v.get('postcode') and not re.search(r'TBC',str(v.get('postcode')),re.I):
-        already+=1;continue
+        already_keys.add(fixture_key);continue
     if norm(home) in known:
         # Starter-club venues remain runtime-resolved from protected GROUNDS.
         continue
@@ -78,15 +82,15 @@ for f in fixtures:
     if not row:
         unresolved.append(home);continue
     f['venue']={'ground':row['ground'],'postcode':row['postcode'],'source':row['source'],'verification':'fchd-gazetteer'}
-    enriched+=1
+    enriched_keys.add(fixture_key)
 
 comp['fixtures']=fixtures
 COMP.write_text(json.dumps(comp,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 print('LATER-ROUND VENUE ENRICHMENT v7.9.21')
 print('FCHD records parsed:',len(gaz))
-print('Current fixtures:',len(fixtures))
-print('Later-round venues enriched:',enriched)
-print('Fixtures already carrying venue:',already)
+print('Fixture lookup entries:',len(values))
+print('Unique later-round fixtures enriched:',len(enriched_keys))
+print('Unique fixtures already carrying venue:',len(already_keys))
 print('Unresolved later-round home clubs:',len(set(unresolved)))
 for club in sorted(set(unresolved))[:50]:print('UNRESOLVED:',club)
 print('Protected GROUNDS array: UNTOUCHED')
