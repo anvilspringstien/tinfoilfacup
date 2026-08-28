@@ -1,14 +1,21 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **28/08/2026, 11:50:13 BST**
+Last checked: **28/08/2026, 14:55:58 BST**
 
-- 🟢 Results recorded: **0**
+## Chronology coverage
+
+- Preliminary Round ties known: **137**
+- Preliminary Round results/replays recorded: **162**
+- First Qualifying Round ties known: **112 / 112**
+- Unresolved First Qualifying opponents: **0**
+
+## Fixture health
+
+- 🟢 Played fixtures with results: **137**
 - 🟡 Recently played / grace period: **0**
 - 🔴 Results requiring confirmation: **0**
 - ⚪ Upcoming / incomplete-date fixtures: **112**
 
-A result becomes overdue **3 hours after its scheduled kick-off** if no final score exists in `results` or `result_history`.
+## 🟢 Competition chronology healthy
 
-## 🟢 No overdue results
-
-No known played fixture currently requires manual result confirmation.
+Preliminary Round history is covered, the First Qualifying draw is complete and resolved, and no played fixture is overdue a result.

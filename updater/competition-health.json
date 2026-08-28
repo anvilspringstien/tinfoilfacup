@@ -1,13 +1,37 @@
 {
-  "checked_at": "2026-08-28T11:50:13.409138+01:00",
+  "checked_at": "2026-08-28T14:55:58.512151+01:00",
   "grace_hours": 3,
+  "coverage": {
+    "preliminary_unique_fixtures": 137,
+    "preliminary_results_and_replays": 162,
+    "first_qualifying_unique_fixtures": 112,
+    "unresolved_first_qualifying": 0
+  },
   "counts": {
-    "known_fixtures": 112,
-    "complete": 0,
+    "known_fixtures": 249,
+    "complete": 137,
     "awaiting_grace": 0,
     "overdue": 0,
-    "upcoming": 112
+    "upcoming": 112,
+    "critical": 0
   },
+  "critical": [],
   "overdue": [],
-  "awaiting_grace": []
+  "awaiting_grace": [],
+  "competition_sync": {
+    "source": "Football Web Pages",
+    "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+    "synced_at": "2026-08-28T13:55:58.360945+00:00",
+    "preliminary_fixture_source": "played original ties",
+    "preliminary_unique_fixtures": 137,
+    "preliminary_results_and_replays": 161,
+    "first_qualifying_unique_fixtures": 112,
+    "result_dates": [
+      "20260821",
+      "20260822",
+      "20260823",
+      "20260825",
+      "20260826"
+    ]
+  }
 }

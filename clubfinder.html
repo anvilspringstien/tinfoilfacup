@@ -607,7 +607,7 @@ function nextProgressHtml(club,next){
   if(next.knownFixture){
     const k=next.knownFixture;
     const v=k.venue||{};
-    return '<br><strong>Next: '+esc(k.home)+' v '+esc(k.away)+'</strong> • '+esc(next.name)+
+    return '<br><strong>Next: '+esc(k.home)+' v '+esc(k.away)+'</strong> • '+esc(k.round||next.name)+
       '<br>'+esc(formatDateGB(k.date))+' • '+esc(k.kickoff)+
       ' • '+esc(v.ground||'Venue TBC')+' • '+esc(v.postcode||'Postcode TBC');
   }
@@ -648,7 +648,7 @@ function stateActions(club){
     buttons+='<a class="secondary" href="'+FA_RESULTS_URL+'" target="_blank" rel="noopener noreferrer">Verify Result</a>';
   }
   if(s.next && (s.type==='played'||s.type==='won')){
-    buttons+='<a class="secondary" href="'+s.next.drawUrl+'" target="_blank" rel="noopener noreferrer">View Next Round</a>';
+    buttons+='<a class="secondary" href="'+s.next.fixturesUrl+'" target="_blank" rel="noopener noreferrer">View Next Round</a>';
   }
   return buttons;
 }
