@@ -1,0 +1,44 @@
+name: FA Cup journey registry audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PDF parser
+        run: python -m pip install --disable-pip-version-check pypdf
+
+      - name: Run read-only journey registry audit
+        run: python updater/audit_fa_cup_journey_registry.py
+
+      - name: Show audit summary
+        if: always()
+        run: |
+          if [ -f fa-cup-journey-registry-audit.md ]; then
+            cat fa-cup-journey-registry-audit.md
+          fi
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fa-cup-journey-registry-audit
+          path: |
+            fa-cup-journey-registry-audit.md
+            updater/fa-cup-journey-registry-audit.json
+          if-no-files-found: warn
+
+# SAFETY: this workflow has contents: read only and contains no commit/push/write-back step.
