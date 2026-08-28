@@ -46,6 +46,18 @@ jobs:
 
       - name: Guard writable scope
         run: |
+          # The four gates intentionally generate transient reports. They are
+          # permitted working-tree outputs but are never staged or committed here.
+          rm -f \
+            fa-cup-journey-registry-audit.md \
+            journey-ground-coverage-audit.md \
+            journey-source-of-truth-audit.md \
+            journey-promotion-readiness-audit.md \
+            updater/fa-cup-journey-registry-audit.json \
+            updater/journey-club-verification-queue.json \
+            updater/journey-ground-coverage-audit.json \
+            updater/journey-source-of-truth-audit.json \
+            updater/journey-promotion-readiness-audit.json
           changed="$(git status --porcelain -- journey-club-registry.json)"
           other="$(git status --porcelain -- . ':!journey-club-registry.json')"
           if [ -n "$other" ]; then
