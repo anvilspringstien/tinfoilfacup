@@ -10,19 +10,27 @@ new_round="+'</strong> • '+esc(k.round||next.name)+"
 old_link='s.next.drawUrl'
 new_link='s.next.fixturesUrl'
 
-rc=text.count(old_round)
-lc=text.count(old_link)
-if rc!=1: raise SystemExit(f'ABORT: expected exactly one known-fixture round renderer, found {rc}')
-if lc!=1: raise SystemExit(f'ABORT: expected exactly one broken drawUrl reference, found {lc}')
+rc_old=text.count(old_round); rc_new=text.count(new_round)
+lc_old=text.count(old_link); lc_new=text.count(new_link)
 
-text=text.replace(old_round,new_round,1).replace(old_link,new_link,1)
+# Safe, repeatable patch: accept either exactly one old form or an already-patched form.
+if rc_old==1 and rc_new==0:
+    text=text.replace(old_round,new_round,1)
+elif not (rc_old==0 and rc_new>=1):
+    raise SystemExit(f'ABORT: unexpected round renderer state old={rc_old} new={rc_new}')
+
+if lc_old==1:
+    text=text.replace(old_link,new_link,1)
+elif lc_old!=0:
+    raise SystemExit(f'ABORT: unexpected drawUrl reference count {lc_old}')
+
 if 's.next.drawUrl' in text: raise SystemExit('ABORT: drawUrl reference remains')
 if "esc(k.round||next.name)" not in text: raise SystemExit('ABORT: live fixture round patch missing')
 
 P.write_text(text,encoding='utf-8')
 print('CLUBFINDER COMPETITION PRESENTATION PATCH: SUCCESS')
-print('Known next fixture now displays its canonical round.')
-print('View Next Round now uses fixturesUrl.')
+print('Known next fixture uses its canonical round.')
+print('View Next Round uses fixturesUrl.')
 print('Ground/location logic: UNTOUCHED')
 
 # Read-only diagnostic: expose the minified journey/custodian code without changing it.
