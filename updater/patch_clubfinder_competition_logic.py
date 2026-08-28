@@ -44,9 +44,6 @@ new_build=r'''function buildJourney(origin){
     return c;
   }
 
-  // Follow the canonical winner repeatedly, adding each new custodian's complete
-  // history, until no further hand-off is possible. This allows a journey to move
-  // through multiple clubs and replays without relying on the original embedded tie.
   const seen=new Set();
   for(let hop=0;hop<20;hop++){
     appendHistory(carrier);
@@ -70,10 +67,9 @@ new_build=r'''function buildJourney(origin){
 
 pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previousRoundsHtml',re.S)
 if 'clubObjectForWinner' not in text:
-    text,n=pat.subn(new_build+' function previousRoundsHtml',text,count=1)
+    replacement=new_build+' function previousRoundsHtml'
+    text,n=pat.subn(lambda m:replacement,text,count=1)
     if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
-else:
-    if text.count('clubObjectForWinner')<1:raise SystemExit('ABORT: custody patch marker missing')
 
 if 'clubObjectForWinner' not in text or 'for(let hop=0;hop<20;hop++)' not in text:
     raise SystemExit('ABORT: canonical custody traversal patch missing')
