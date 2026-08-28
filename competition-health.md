@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **28/08/2026, 16:38:49 BST**
+Last checked: **28/08/2026, 17:25:10 BST**
 
 ## Chronology coverage
 
