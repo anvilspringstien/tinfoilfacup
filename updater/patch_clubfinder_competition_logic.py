@@ -36,6 +36,12 @@ function canonicalResultWinner(r){
   if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
   return r.winner||'';
 }
+function sameSemanticResult(a,b){
+  if(!a||!b)return false;
+  return sameClubIdentity(a.home,b.home)&&sameClubIdentity(a.away,b.away)&&
+    Number(a.home_score)===Number(b.home_score)&&Number(a.away_score)===Number(b.away_score)&&
+    String(a.round||'')===String(b.round||'')&&String(a.decision||'')===String(b.decision||'');
+}
 function clubByDisplayName(name){
   if(!name)return null;
   const target=canonicalClubKey(name);
@@ -50,7 +56,7 @@ function groundByClubName(name){
   if(c&&(c.ground||c.postcode))return c;
   return {};
 }'''
-lookup_pat=re.compile(r'(?:function canonicalClubKey\(name\)\{.*?\}\s*function sameClubIdentity\(a,b\)\{.*?\}\s*(?:function canonicalResultWinner\(r\)\{.*?\}\s*)?)?function clubByDisplayName\(name\)\{.*?\}\s*function groundByClubName\(name\)\{.*?\}\s*(?=function completedResultVenue)',re.S)
+lookup_pat=re.compile(r'(?:function canonicalClubKey\(name\)\{.*?\}\s*function sameClubIdentity\(a,b\)\{.*?\}\s*(?:function canonicalResultWinner\(r\)\{.*?\}\s*)?(?:function sameSemanticResult\(a,b\)\{.*?\}\s*)?)?function clubByDisplayName\(name\)\{.*?\}\s*function groundByClubName\(name\)\{.*?\}\s*(?=function completedResultVenue)',re.S)
 text,n=lookup_pat.subn(lambda m:identity_block+' ',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one club/ground lookup block, replaced {n}')
 
@@ -59,7 +65,7 @@ history_fn=r'''function historicalResultsForClub(club){
   function add(r,round){
     if(!r||typeof r!=='object')return;
     if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
-    if(!out.some(x=>sameMatchResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
+    if(!out.some(x=>sameSemanticResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
   }
   const hist=liveLookup('result_history',club.name);
   if(Array.isArray(hist))for(const r of hist)add(r,r&&r.round);
@@ -88,7 +94,7 @@ new_build=r'''function buildJourney(origin){
   function appendHistory(club){
     const history=historicalResultsForClub(club);
     for(const item of history){
-      if(!breadcrumbs.some(x=>sameMatchResult(x.result,item.result)))breadcrumbs.push(item);
+      if(!breadcrumbs.some(x=>sameSemanticResult(x.result,item.result)))breadcrumbs.push(item);
     }
   }
   function resolveCarrier(){
@@ -116,7 +122,7 @@ new_build=r'''function buildJourney(origin){
   carrier=resolveCarrier();
   const unique=[];
   for(const item of breadcrumbs){
-    if(!unique.some(x=>sameMatchResult(x.result,item.result)))unique.push(item);
+    if(!unique.some(x=>sameSemanticResult(x.result,item.result)))unique.push(item);
   }
   unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return {origin,carrier,breadcrumbs:unique};
@@ -130,13 +136,14 @@ new_won="const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWin
 if old_won in text:text=text.replace(old_won,new_won,1)
 elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
 
-required=('function canonicalClubKey(','function canonicalResultWinner(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);','const c=ELIGIBLE.find(c=>canonicalClubKey(c.name)===target);')
+required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);')
 for marker in required:
     if marker not in text:raise SystemExit(f'ABORT: required competition patch missing: {marker}')
 
 P.write_text(text,encoding='utf-8')
 print('CLUBFINDER COMPETITION PATCH: SUCCESS')
 print('Decisive scorelines override contradictory legacy winner fields.')
+print('Repeated result snapshots are deduplicated semantically.')
 print('Canonical result_history is included in journey traversal.')
 print('Fixture venue lookup falls back to verified ELIGIBLE club records.')
 print('Ground records themselves: UNTOUCHED')
