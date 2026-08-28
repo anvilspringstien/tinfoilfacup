@@ -1,0 +1,1 @@
+Temporary working note for the competition chronology repair. This file can be removed once the guard is complete.
