@@ -9,7 +9,7 @@ on:
     paths:
       - "competition.json"
       - "clubfinder.html"
-      - "updater/sync_competition_chronology.py"
+      - "updater/sync_competition_chronology_v2.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Synchronise competition chronology
-        run: python updater/sync_competition_chronology.py
+        run: python updater/sync_competition_chronology_v2.py
 
       - name: Apply guarded Clubfinder competition presentation fixes
         run: python updater/patch_clubfinder_competition_logic.py
