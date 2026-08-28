@@ -6,15 +6,22 @@ ROOT=Path(__file__).resolve().parents[1]; HTML=ROOT/'clubfinder.html'
 ACCEPTED_URL='https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/accepted-exemptions-and-prize-fund/020726/the-emirates-fa-cup---list-of-clubs-accepted.ashx'; EXEMPTIONS_URL='https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/accepted-exemptions-and-prize-fund/the-emirates-fa-cup---list-of-exemptions.ashx'
 ALIASES={'Holmesdale FC':'Petts Wood & Holmesdale FC','Horsham YMCA FC':'Horsham YM FC'}
 ROUNDS=('Extra Preliminary Round','Preliminary Round','First Round Qualifying','Second Round Qualifying','Third Round Qualifying','Fourth Round Qualifying','First Round Proper','Second Round Proper','Third Round Proper')
-def pdf(url):
+def pdf_pages(url,layout=False):
  from pypdf import PdfReader; import io
- return '\n'.join((p.extract_text() or '') for p in PdfReader(io.BytesIO(urllib.request.urlopen(url,timeout=30).read())).pages)
+ data=urllib.request.urlopen(url,timeout=30).read(); reader=PdfReader(io.BytesIO(data)); out=[]
+ for p in reader.pages:
+  try:t=p.extract_text(extraction_mode='layout') if layout else p.extract_text()
+  except TypeError:t=p.extract_text()
+  out.append(t or '')
+ return out
+def pdf(url):return '\n'.join(pdf_pages(url))
 def _base(n):
  s=str(n or '').lower().replace('&',' and '); s=re.sub(r'\b(association football club|football club)\b',' ',s); s=re.sub(r'[^a-z0-9]+',' ',s).strip(); return re.sub(r'\s+',' ',s)
 def fa_key(n):
  s=_base(n); s=re.sub(r'\b(fc|cfc)\b',' ',s); return re.sub(r'\s+',' ',s).strip()
 def ground_key(n):
  s=_base(n); s=re.sub(r'\b(fc|afc|cfc)\b',' ',s); return re.sub(r'\s+',' ',s).strip()
+def compact(n):return re.sub(r'[^a-z0-9]+','',str(n or '').lower())
 def arr(t,n):
  m=re.search(rf'(?:const|let|var)\s+{re.escape(n)}\s*=\s*(\[.*?\])\s*;',t,re.S)
  if not m:raise SystemExit(f'ABORT: {n} missing')
@@ -64,22 +71,36 @@ for n,o in resolved:resolved_groups[fa_key(o)].append(n)
 merged={accepted[k]:v for k,v in resolved_groups.items() if len(v)>1}; covered=set(resolved_groups); missing=[c for c in clubs if fa_key(c) not in covered]
 if merged:raise SystemExit(f'ABORT: multiple protected origins resolve to one official identity: {merged}')
 if len(covered)!=491 or len(missing)!=252 or len(covered)+len(missing)!=743:raise SystemExit(f'ABORT: expected clean 491+252 partition; covered={len(covered)} missing={len(missing)}')
-ex_raw=pdf(EXEMPTIONS_URL); ex=[re.sub(r'\s+',' ',x).strip() for x in ex_raw.splitlines() if x.strip()]; rm={}; cur=None; headings=[]; transitions=[]; repaired_lines=[]; transition_index=None
-for i,x in enumerate(ex):
+ex_raw=pdf(EXEMPTIONS_URL); ex=[re.sub(r'\s+',' ',x).strip() for x in ex_raw.splitlines() if x.strip()]; rm={}; cur=None; headings=[]; transitions=[]; repaired_lines=[]
+for x in ex:
  r=eround(x)
  if r:cur=r;headings.append((x,r));continue
- if epr_transition(x):cur='Extra Preliminary Round';transitions.append(x);transition_index=i;continue
+ if epr_transition(x):cur='Extra Preliminary Round';transitions.append(x);continue
  names=accepted_names_in_exemption_line(x)
  if len(names)==2:repaired_lines.append({'raw':x,'clubs':names})
  for name in names:rm[fa_key(name)]=cur
 if not headings:raise SystemExit('ABORT: no official exemption headings parsed')
-if len(transitions)!=1 or transition_index is None:raise SystemExit(f'ABORT: expected one Step 4 Extra Preliminary transition, found {len(transitions)}: {transitions}')
-# The Step 4 list is visually tabular and pypdf can reorder/concatenate cells. Avoid
-# line dependence: require the full official accepted-list name to occur after the
-# exact transition. Since this is the document's final club block, the tail is scoped.
-tail=' '.join(ex[transition_index+1:])
-explicit_epr=[c for c in clubs if c in tail]
-if len(explicit_epr)!=123:raise SystemExit(f'ABORT: expected 123 full-name matches in Step 4 Extra Preliminary block, found {len(explicit_epr)}')
+if len(transitions)!=1:raise SystemExit(f'ABORT: expected one Step 4 Extra Preliminary transition, found {len(transitions)}: {transitions}')
+# Parse the two Step 4 sublists from layout-preserving extraction, independently.
+layout='\n'.join(pdf_pages(EXEMPTIONS_URL,layout=True))
+layout_norm=re.sub(r'[ \t]+',' ',layout)
+m32=re.search(r'\(32\)\s*Step\s*5\s*Promoted\s*Clubs',layout_norm,re.I)
+m91=re.search(r'\(91\)\s*Step\s*4\s*Lowest\s*Ranked\s*\(2025-26\)',layout_norm,re.I)
+if not m32 or not m91 or m91.start()<=m32.end():raise SystemExit('ABORT: Step 4 sublist markers not found in layout extraction')
+block32=layout_norm[m32.end():m91.start()]; block91=layout_norm[m91.end():]
+def names_in_block(block):
+ b=compact(block); return [c for c in clubs if compact(c) in b]
+step5_promoted=names_in_block(block32); step4_lowest=names_in_block(block91)
+# Guard against a shorter accepted name matching inside a longer accepted name.
+def embedded_false_matches(found):
+ return [(a,b) for a in found for b in found if a!=b and compact(a) in compact(b)]
+amb32=embedded_false_matches(step5_promoted); amb91=embedded_false_matches(step4_lowest)
+if amb32 or amb91:raise SystemExit(f'ABORT: substring ambiguity in Step 4 layout lists: promoted={amb32} lowest={amb91}')
+if len(step5_promoted)!=32:raise SystemExit(f'ABORT: expected 32 Step 5 promoted clubs, parsed {len(step5_promoted)}')
+if len(step4_lowest)!=91:raise SystemExit(f'ABORT: expected 91 Step 4 lowest-ranked clubs, parsed {len(step4_lowest)}')
+if set(step5_promoted)&set(step4_lowest):raise SystemExit(f'ABORT: club appears in both Step 4 sublists: {sorted(set(step5_promoted)&set(step4_lowest))}')
+explicit_epr=step5_promoted+step4_lowest
+if len(set(explicit_epr))!=123:raise SystemExit(f'ABORT: Step 4 EPR union is not 123 unique clubs: {len(set(explicit_epr))}')
 for c in explicit_epr:rm[fa_key(c)]='Extra Preliminary Round'
 counts={}
 for c in clubs:
@@ -97,8 +118,8 @@ for c in missing:
  e=candidates[0] if candidates else None
  queue.append({'club':c,'entry_round':rm.get(fa_key(c),'Extra Preliminary Round'),'existing_ground_record':e,'verification_status':'existing-ground-record-needs-registry-review' if e else 'pending'})
 existing=sum(bool(x['existing_ground_record']) for x in queue); pending=len(queue)-existing
-report={'official_accepted':743,'protected_origin_records':491,'protected_origin_ground_matches':491,'reconciled_official_origin_identities':len(covered),'identity_reconciliations':[{'origin_name':a,'official_name':b} for a,b in rec],'additional_journey_clubs':len(missing),'raw_ground_records':len(gnames),'additional_clubs_with_existing_ground_record':existing,'additional_clubs_pending_ground_verification':pending,'entry_round_counts':counts,'parsed_exemption_headings':[{'heading':h,'round':r} for h,r in headings],'step4_extra_preliminary_transition':transitions[0],'explicit_step4_extra_preliminary_clubs':len(explicit_epr),'pdf_concatenation_repairs':repaired_lines,'additional_clubs':queue,'read_only':True}
+report={'official_accepted':743,'protected_origin_records':491,'protected_origin_ground_matches':491,'reconciled_official_origin_identities':len(covered),'identity_reconciliations':[{'origin_name':a,'official_name':b} for a,b in rec],'additional_journey_clubs':len(missing),'raw_ground_records':len(gnames),'additional_clubs_with_existing_ground_record':existing,'additional_clubs_pending_ground_verification':pending,'entry_round_counts':counts,'step5_promoted_epr_clubs':len(step5_promoted),'step4_lowest_ranked_epr_clubs':len(step4_lowest),'additional_clubs':queue,'read_only':True}
 (ROOT/'updater'/'fa-cup-journey-registry-audit.json').write_text(json.dumps(report,indent=2)+'\n');(ROOT/'updater'/'journey-club-verification-queue.json').write_text(json.dumps({'clubs':queue},indent=2)+'\n')
-md=['# FA Cup Journey Registry — Read-only reconciliation','','- Official accepted clubs: **743**','- Protected origin records: **491**','- Protected origin→GROUNDS matches: **491**',f'- Reconciled official origin identities: **{len(covered)}**',f'- Additional journey clubs: **{len(missing)}**',f'- Existing ground records among additional clubs: **{existing}**',f'- Pending ground verification: **{pending}**','- Explicit Step 4 Extra Preliminary clubs parsed: **123**',f'- Concatenated PDF extraction lines repaired elsewhere: **{len(repaired_lines)}**','','## Identity reconciliations']+[f'- {a} → {b}' for a,b in rec]+['','## Entry-round population']+[f'- {r}: **{counts[r]}**' for r in ROUNDS if r in counts]+['','## Verification queue']+[f"- {x['club']} — {x['entry_round']}"+(f" — existing GROUNDS: {x['existing_ground_record']}" if x['existing_ground_record'] else '') for x in queue]+['','## Safety','- READ ONLY. Canonical Clubfinder, competition, grounds, mileage and journey data untouched.','- Separate FA identity and verified-ground identity namespaces.','- AFC is identity-significant for FA club identity; ambiguous matches fail closed.','- Exact 491 + 252 = 743 partition required.','- Entry-round totals cross-checked against official headings and the 219-tie Extra Preliminary draw.','- The 123 Step 4 non-exempt clubs must each appear by full official accepted-list name in the scoped FA PDF block.','- Concatenated PDF lines elsewhere are split only when they resolve exactly to two official accepted names.']
+md=['# FA Cup Journey Registry — Read-only reconciliation','','- Official accepted clubs: **743**','- Protected origin records: **491**','- Protected origin→GROUNDS matches: **491**',f'- Reconciled official origin identities: **{len(covered)}**',f'- Additional journey clubs: **{len(missing)}**',f'- Existing ground records among additional clubs: **{existing}**',f'- Pending ground verification: **{pending}**','- Step 5 promoted clubs entering Extra Preliminary: **32**','- Step 4 lowest-ranked clubs entering Extra Preliminary: **91**','','## Identity reconciliations']+[f'- {a} → {b}' for a,b in rec]+['','## Entry-round population']+[f'- {r}: **{counts[r]}**' for r in ROUNDS if r in counts]+['','## Verification queue']+[f"- {x['club']} — {x['entry_round']}"+(f" — existing GROUNDS: {x['existing_ground_record']}" if x['existing_ground_record'] else '') for x in queue]+['','## Safety','- READ ONLY. Canonical Clubfinder, competition, grounds, mileage and journey data untouched.','- Separate FA identity and verified-ground identity namespaces.','- AFC is identity-significant for FA club identity; ambiguous matches fail closed.','- Exact 491 + 252 = 743 partition required.','- Entry-round totals cross-checked against official headings and the 219-tie Extra Preliminary draw.','- The Step 4 exception is independently validated as 32 promoted Step 5 + 91 lowest-ranked Step 4 = 123 clubs using layout-mode PDF extraction.']
 (ROOT/'fa-cup-journey-registry-audit.md').write_text('\n'.join(md)+'\n')
-print('FA CUP JOURNEY REGISTRY AUDIT: SUCCESS');print('Protected origin-ground matches: 491');print('Covered official identities:',len(covered));print('Additional:',len(missing));print('Existing ground records:',existing);print('Pending:',pending);print('Entry rounds:',counts);print('Explicit Step 4 EPR:',len(explicit_epr));print('PDF concatenation repairs:',len(repaired_lines));print('READ ONLY')
+print('FA CUP JOURNEY REGISTRY AUDIT: SUCCESS');print('Protected origin-ground matches: 491');print('Covered official identities:',len(covered));print('Additional:',len(missing));print('Existing ground records:',existing);print('Pending:',pending);print('Entry rounds:',counts);print('Step 5 promoted EPR:',len(step5_promoted));print('Step 4 lowest-ranked EPR:',len(step4_lowest));print('READ ONLY')
