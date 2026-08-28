@@ -20,20 +20,22 @@ const assertions=`
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
   const origin=ELIGIBLE.find(c=>same(c.name,'Newton Aycliffe FC'));
   if(!origin) throw new Error('DL5 regression: Newton Aycliffe FC not found in ELIGIBLE');
-  const kendalProbe=clubByDisplayName('Kendal Town')||candidateClubByName('Kendal Town')||{name:'Kendal Town',fixture:{}};
-  console.log('KENDAL HISTORICAL RESULTS:',JSON.stringify(historicalResultsForClub(kendalProbe)));
   const j=buildJourney(origin);const carrier=j.carrier||origin;const history=(j.breadcrumbs||[]).map(x=>x.result||{});
-  console.log('JOURNEY CARRIER:',carrier&&carrier.name);
-  console.log('JOURNEY BREADCRUMBS:',JSON.stringify(j.breadcrumbs||[]));
   const hasNewtonLoss=history.some(r=>same(r.home,'Newton Aycliffe')&&same(r.away,'Kendal Town')&&Number(r.home_score)===0&&Number(r.away_score)===1);
   const hasHeatonReplay=history.some(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Kendal Town')&&Number(r.home_score)===4&&Number(r.away_score)===2);
+  const kendalHeatonDraws=history.filter(r=>same(r.home,'Kendal Town')&&same(r.away,'Heaton Stannington')&&Number(r.home_score)===2&&Number(r.away_score)===2&&/Preliminary Round/i.test(r.round||''));
   if(!hasNewtonLoss) throw new Error('DL5 render regression: Newton Aycliffe 0-1 Kendal missing from journey history');
   if(!hasHeatonReplay) throw new Error('DL5 render regression: Heaton Stannington 4-2 Kendal replay missing from journey history');
+  if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
   if(!same(carrier.name,'Heaton Stannington')) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
   const state=competitionState(carrier);if(state.type!=='won'&&state.type!=='pending')throw new Error('DL5 render regression: unexpected Heaton state '+state.type);
-  const emley=groundByClubName('Emley AFC');if(!emley||!emley.postcode||/TBC/i.test(emley.postcode))throw new Error('DL5 render regression: Emley AFC ground/postcode did not resolve');
   const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));const next=nextRoundInfo(bishop);if(!next||!next.knownFixture)throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
   const v=next.knownFixture.venue||{};if(!v.postcode||/TBC/i.test(v.postcode))throw new Error('DL5 render regression: Emley v Bishop Auckland venue/postcode still TBC');
-  console.log('CLUBFINDER RENDER REGRESSION: PASS');console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);console.log('Heaton replay present: PASS');console.log('Emley venue:',v.ground,'•',v.postcode);
+  if(!v.ground||/TBC/i.test(v.ground))throw new Error('DL5 render regression: Emley v Bishop Auckland ground still TBC');
+  console.log('CLUBFINDER RENDER REGRESSION: PASS');
+  console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
+  console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
+  console.log('Heaton replay present: PASS');
+  console.log('Emley venue:',v.ground,'•',v.postcode);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
