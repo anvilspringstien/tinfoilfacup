@@ -266,22 +266,25 @@ function nextRoundInfo(club){
   return {name:nextName,date:meta.date,drawDate:meta.drawDate,knownFixture,fixturesUrl:FA_FIXTURES_URL};
 }
 
+function canonicalClubKey(name){
+  return String(name||'').toLowerCase()
+    .replace(/&/g,' and ')
+    .replace(/\b(association football club|football club)\b/g,' ')
+    .replace(/\b(fc|afc|cfc)\b/g,' ')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim().replace(/\s+/g,' ');
+}
+function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
 function clubByDisplayName(name){
   if(!name)return null;
-  const target=norm(name);
-  return ELIGIBLE.find(c=>norm(c.name)===target) ||
-         ELIGIBLE.find(c=>norm(String(c.name||'').replace(/\s+(FC|AFC|CFC)$/,''))===target) ||
-         null;
+  const target=canonicalClubKey(name);
+  return ELIGIBLE.find(c=>canonicalClubKey(c.name)===target)||null;
 }
 function groundByClubName(name){
   if(!name)return {};
-  const target=norm(name);
-  return GROUNDS.find(g=>norm(g.name||g.club)===target) ||
-         GROUNDS.find(g=>norm(String(g.name||g.club||'').replace(/\s+(FC|AFC|CFC)$/,''))===target) ||
-         {};
-}
-
-function completedResultVenue(result){
+  const target=canonicalClubKey(name);
+  return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{};
+} function completedResultVenue(result){
   if(!result)return {ground:'Venue TBC',postcode:'Postcode TBC'};
   const homeClub=candidateClubByName(result.home);
   const hg=groundByClubName(homeClub?homeClub.name:result.home);
@@ -446,9 +449,8 @@ function historicalResultsForClub(club){
 function buildJourney(origin){
   let carrier=origin;
   const breadcrumbs=[];
-  const cn=n=>norm(String(n||'').replace(/\s+(FC|AFC|CFC)$/i,''));
   function clubObjectForWinner(name,prior){
-    return candidateClubByName(name)||{name:name,entry_round:(prior&&prior.entry_round)||'',fixture:{}};
+    return clubByDisplayName(name)||candidateClubByName(name)||{name:name,entry_round:(prior&&prior.entry_round)||'',fixture:{}};
   }
   function appendHistory(club){
     const history=historicalResultsForClub(club);
@@ -461,7 +463,7 @@ function buildJourney(origin){
     const ordered=[...breadcrumbs].sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
     for(const item of ordered){
       const r=item.result||{};
-      const participant=cn(r.home)===cn(c.name)||cn(r.away)===cn(c.name);
+      const participant=sameClubIdentity(r.home,c.name)||sameClubIdentity(r.away,c.name);
       if(participant&&r.winner&&!resultNeedsReplay(r))c=clubObjectForWinner(r.winner,c);
     }
     return c;
@@ -471,8 +473,8 @@ function buildJourney(origin){
   for(let hop=0;hop<20;hop++){
     appendHistory(carrier);
     const next=resolveCarrier();
-    const key=cn(next.name);
-    if(key===cn(carrier.name)&&seen.has(key)){carrier=next;break;}
+    const key=canonicalClubKey(next.name);
+    if(key===canonicalClubKey(carrier.name)&&seen.has(key)){carrier=next;break;}
     carrier=next;
     if(seen.has(key)){appendHistory(carrier);carrier=resolveCarrier();break;}
     seen.add(key);
@@ -576,7 +578,7 @@ function competitionState(club){
   const f=club.fixture||{},r=resultFor(club),kickoff=parseKickoff(f),now=new Date();
   if(r){
     if(resultNeedsReplay(r))return {type:'replay',title:'↻ Replay required',result:r,replay:replayFixtureFor(club),next:null};
-    const won=r.winner&&norm(r.winner)===norm(club.name);
+    const won=r.winner&&sameClubIdentity(r.winner,club.name);
     return {type:won?'won':'eliminated',title:won?'✅ Through to the next round':'❌ Eliminated from the FA Cup',result:r,next:nextRoundInfo(club)};
   }
   if(kickoff&&now<kickoff)return {type:'upcoming',title:'Upcoming FA Cup tie',next:null};
