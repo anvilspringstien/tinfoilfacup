@@ -446,49 +446,39 @@ function historicalResultsForClub(club){
 function buildJourney(origin){
   let carrier=origin;
   const breadcrumbs=[];
-
+  const cn=n=>norm(String(n||'').replace(/\s+(FC|AFC|CFC)$/i,''));
+  function clubObjectForWinner(name,prior){
+    return candidateClubByName(name)||{name:name,entry_round:(prior&&prior.entry_round)||'',fixture:{}};
+  }
   function appendHistory(club){
     const history=historicalResultsForClub(club);
     for(const item of history){
-      if(!breadcrumbs.some(x=>sameMatchResult(x.result,item.result))){
-        breadcrumbs.push(item);
-      }
+      if(!breadcrumbs.some(x=>sameMatchResult(x.result,item.result)))breadcrumbs.push(item);
     }
   }
-
-  // Start with every known result attached to the original club.
-  appendHistory(origin);
-
-  // Walk through winners in chronological order. Draws/replays retain custody
-  // until a later result provides a winner.
-  const ordered=[...breadcrumbs].sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
-  for(const item of ordered){
-    const r=item.result||{};
-    const participant=norm(r.home)===norm(carrier.name)||norm(r.away)===norm(carrier.name);
-    if(participant && r.winner && !resultNeedsReplay(r)){
-      const w=candidateClubByName(r.winner);
-      if(w)carrier=w;
+  function resolveCarrier(){
+    let c=origin;
+    const ordered=[...breadcrumbs].sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
+    for(const item of ordered){
+      const r=item.result||{};
+      const participant=cn(r.home)===cn(c.name)||cn(r.away)===cn(c.name);
+      if(participant&&r.winner&&!resultNeedsReplay(r))c=clubObjectForWinner(r.winner,c);
     }
+    return c;
   }
 
-  // If custody moved to another club, include that club's historical/live results
-  // as well (e.g. Newcastle Blue Star -> Blyth Spartans).
-  if(norm(carrier.name)!==norm(origin.name)){
+  const seen=new Set();
+  for(let hop=0;hop<20;hop++){
     appendHistory(carrier);
+    const next=resolveCarrier();
+    const key=cn(next.name);
+    if(key===cn(carrier.name)&&seen.has(key)){carrier=next;break;}
+    carrier=next;
+    if(seen.has(key)){appendHistory(carrier);carrier=resolveCarrier();break;}
+    seen.add(key);
   }
-
-  breadcrumbs.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
-
-  // Re-walk complete chronology to determine final carrier.
-  carrier=origin;
-  for(const item of breadcrumbs){
-    const r=item.result||{};
-    const participant=norm(r.home)===norm(carrier.name)||norm(r.away)===norm(carrier.name);
-    if(participant && r.winner && !resultNeedsReplay(r)){
-      const w=candidateClubByName(r.winner);
-      if(w)carrier=w;
-    }
-  }
+  appendHistory(carrier);
+  carrier=resolveCarrier();
 
   const unique=[];
   for(const item of breadcrumbs){
@@ -496,8 +486,7 @@ function buildJourney(origin){
   }
   unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return {origin,carrier,breadcrumbs:unique};
-}
-function previousRoundsHtml(journey){
+} function previousRoundsHtml(journey){
   const crumbs=journey.breadcrumbs||[];
   let body='<div class="history"><div class="history-title">Previous Rounds</div>'+
     '<div class="history-origin">Journey started with: '+esc(journey.origin.name)+'</div>';
