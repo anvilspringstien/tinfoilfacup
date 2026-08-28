@@ -39,12 +39,34 @@ function groundByClubName(name){
   const target=canonicalClubKey(name);
   return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{};
 }'''
-
-# Replace the two adjacent lookup helpers as one bounded block. This avoids relying
-# on exact whitespace/minification while still refusing to cross another function.
 lookup_pat=re.compile(r'(?:function canonicalClubKey\(name\)\{.*?\}\s*function sameClubIdentity\(a,b\)\{.*?\}\s*)?function clubByDisplayName\(name\)\{.*?\}\s*function groundByClubName\(name\)\{.*?\}\s*(?=function completedResultVenue)',re.S)
 text,n=lookup_pat.subn(lambda m:identity_block+' ',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one club/ground lookup block, replaced {n}')
+
+history_fn=r'''function historicalResultsForClub(club){
+  const out=[];
+  function add(r,round){
+    if(!r||typeof r!=='object')return;
+    if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
+    if(!out.some(x=>sameMatchResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
+  }
+  const hist=liveLookup('result_history',club.name);
+  if(Array.isArray(hist))for(const r of hist)add(r,r&&r.round);
+  add(liveLookup('results',club.name));
+  if(!out.length){
+    const f=club.fixture||{};
+    if(club.entry_round==='Extra Preliminary Round'&&f.number!=null)add(EPR_RESULTS_BY_TIE[String(f.number)]||null,club.entry_round);
+    else if(f.result&&typeof f.result==='object')add(f.result,club.entry_round||f.result.round);
+    const key=String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'');
+    add(CURRENT_RESULT_OVERRIDES[club.name]||CURRENT_RESULT_OVERRIDES[key]||null);
+    add(liveLookup('results',club.name));
+  }
+  out.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
+  return out;
+}'''
+history_pat=re.compile(r'function historicalResultsForClub\(club\)\{.*?\}\s*(?=function buildJourney)',re.S)
+text,n=history_pat.subn(lambda m:history_fn+' ',text,count=1)
+if n!=1:raise SystemExit(f'ABORT: expected one historicalResultsForClub function, replaced {n}')
 
 new_build=r'''function buildJourney(origin){
   let carrier=origin;
@@ -68,7 +90,6 @@ new_build=r'''function buildJourney(origin){
     }
     return c;
   }
-
   const seen=new Set();
   for(let hop=0;hop<20;hop++){
     appendHistory(carrier);
@@ -81,7 +102,6 @@ new_build=r'''function buildJourney(origin){
   }
   appendHistory(carrier);
   carrier=resolveCarrier();
-
   const unique=[];
   for(const item of breadcrumbs){
     if(!unique.some(x=>sameMatchResult(x.result,item.result)))unique.push(item);
@@ -98,14 +118,13 @@ new_won="const won=r.winner&&sameClubIdentity(r.winner,club.name);"
 if old_won in text:text=text.replace(old_won,new_won,1)
 elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
 
-required=('function canonicalClubKey(','sameClubIdentity(r.home,c.name)','canonicalClubKey(g.name||g.club)','const won=r.winner&&sameClubIdentity(r.winner,club.name);')
+required=('function canonicalClubKey(',"liveLookup('result_history',club.name)",'sameClubIdentity(r.home,c.name)','canonicalClubKey(g.name||g.club)','const won=r.winner&&sameClubIdentity(r.winner,club.name);')
 for marker in required:
-    if marker not in text:raise SystemExit(f'ABORT: required identity patch missing: {marker}')
+    if marker not in text:raise SystemExit(f'ABORT: required competition patch missing: {marker}')
 
 P.write_text(text,encoding='utf-8')
 print('CLUBFINDER COMPETITION PATCH: SUCCESS')
-print('Known next fixture uses its canonical round.')
-print('View Next Round uses fixturesUrl.')
-print('Custody and winner state use canonical club identity across FC/AFC/CFC variants.')
-print('Fixture venue lookup uses the same canonical club identity.')
+print('Canonical result_history is included in journey traversal.')
+print('Custody and winner state use canonical club identity.')
+print('Fixture venue lookup uses canonical club identity.')
 print('Ground records themselves: UNTOUCHED')
