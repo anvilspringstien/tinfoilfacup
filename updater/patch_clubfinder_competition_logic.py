@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import re
 
 ROOT=Path(__file__).resolve().parents[1]
 P=ROOT/'clubfinder.html'
@@ -18,15 +19,68 @@ if lc_old==1:text=text.replace(old_link,new_link,1)
 elif lc_old!=0:raise SystemExit(f'ABORT: unexpected drawUrl reference count {lc_old}')
 if 's.next.drawUrl' in text:raise SystemExit('ABORT: drawUrl reference remains')
 if "esc(k.round||next.name)" not in text:raise SystemExit('ABORT: live fixture round patch missing')
+
+new_build=r'''function buildJourney(origin){
+  let carrier=origin;
+  const breadcrumbs=[];
+  const cn=n=>norm(String(n||'').replace(/\s+(FC|AFC|CFC)$/i,''));
+  function clubObjectForWinner(name,prior){
+    return candidateClubByName(name)||{name:name,entry_round:(prior&&prior.entry_round)||'',fixture:{}};
+  }
+  function appendHistory(club){
+    const history=historicalResultsForClub(club);
+    for(const item of history){
+      if(!breadcrumbs.some(x=>sameMatchResult(x.result,item.result)))breadcrumbs.push(item);
+    }
+  }
+  function resolveCarrier(){
+    let c=origin;
+    const ordered=[...breadcrumbs].sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
+    for(const item of ordered){
+      const r=item.result||{};
+      const participant=cn(r.home)===cn(c.name)||cn(r.away)===cn(c.name);
+      if(participant&&r.winner&&!resultNeedsReplay(r))c=clubObjectForWinner(r.winner,c);
+    }
+    return c;
+  }
+
+  // Follow the canonical winner repeatedly, adding each new custodian's complete
+  // history, until no further hand-off is possible. This allows a journey to move
+  // through multiple clubs and replays without relying on the original embedded tie.
+  const seen=new Set();
+  for(let hop=0;hop<20;hop++){
+    appendHistory(carrier);
+    const next=resolveCarrier();
+    const key=cn(next.name);
+    if(key===cn(carrier.name)&&seen.has(key)){carrier=next;break;}
+    carrier=next;
+    if(seen.has(key)){appendHistory(carrier);carrier=resolveCarrier();break;}
+    seen.add(key);
+  }
+  appendHistory(carrier);
+  carrier=resolveCarrier();
+
+  const unique=[];
+  for(const item of breadcrumbs){
+    if(!unique.some(x=>sameMatchResult(x.result,item.result)))unique.push(item);
+  }
+  unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
+  return {origin,carrier,breadcrumbs:unique};
+}'''
+
+pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previousRoundsHtml',re.S)
+if 'clubObjectForWinner' not in text:
+    text,n=pat.subn(new_build+' function previousRoundsHtml',text,count=1)
+    if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
+else:
+    if text.count('clubObjectForWinner')<1:raise SystemExit('ABORT: custody patch marker missing')
+
+if 'clubObjectForWinner' not in text or 'for(let hop=0;hop<20;hop++)' not in text:
+    raise SystemExit('ABORT: canonical custody traversal patch missing')
+
 P.write_text(text,encoding='utf-8')
-print('CLUBFINDER COMPETITION PRESENTATION PATCH: SUCCESS')
+print('CLUBFINDER COMPETITION PATCH: SUCCESS')
 print('Known next fixture uses its canonical round.')
 print('View Next Round uses fixturesUrl.')
+print('Custody now follows canonical winners across multiple hand-offs/replays.')
 print('Ground/location logic: UNTOUCHED')
-
-for needle in ('function resultFor','function currentDisplayFixture','function currentCarrier','function journey','function previous','function history','The current custodian of your Tin Foil FA Cup is:'):
-    pos=text.find(needle)
-    if pos>=0:
-        start=max(0,pos-1400); end=min(len(text),pos+5200)
-        print(f'--- DIAGNOSTIC {needle} ---')
-        print(text[start:end].replace('\n',' '))
