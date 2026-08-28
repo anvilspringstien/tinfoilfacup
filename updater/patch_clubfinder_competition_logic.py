@@ -80,3 +80,15 @@ print('Known next fixture uses its canonical round.')
 print('View Next Round uses fixturesUrl.')
 print('Custody now follows canonical winners across multiple hand-offs/replays.')
 print('Ground/location logic: UNTOUCHED')
+
+# Read-only renderer diagnostics. Print every call-site context, not function definitions only.
+for needle in ('buildJourney(', 'stateHtml(', 'currentDisplayFixture(', 'carrierHtml(', 'previousRoundsHtml('):
+    print(f'--- CALL SITES {needle} ---')
+    pos=0; idx=0
+    while True:
+        pos=text.find(needle,pos)
+        if pos<0:break
+        idx+=1
+        start=max(0,pos-700); end=min(len(text),pos+1300)
+        print(f'[{idx}] '+text[start:end].replace('\n',' '))
+        pos+=len(needle)
