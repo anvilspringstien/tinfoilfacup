@@ -17,16 +17,14 @@ sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
 const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
-  console.log('LIVELOOKUP SOURCE:',typeof liveLookup==='function'?liveLookup.toString():'missing');
-  console.log('HISTORY SOURCE:',typeof historicalResultsForClub==='function'?historicalResultsForClub.toString():'missing');
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
   const origin=ELIGIBLE.find(c=>same(c.name,'Newton Aycliffe FC'));
   if(!origin) throw new Error('DL5 regression: Newton Aycliffe FC not found in ELIGIBLE');
   const kendalProbe=clubByDisplayName('Kendal Town')||candidateClubByName('Kendal Town')||{name:'Kendal Town',fixture:{}};
-  console.log('KENDAL LIVE RESULT:',JSON.stringify(liveLookup('results','Kendal Town')));
-  console.log('KENDAL LIVE HISTORY LOOKUP:',JSON.stringify(liveLookup('result_history','Kendal Town')));
   console.log('KENDAL HISTORICAL RESULTS:',JSON.stringify(historicalResultsForClub(kendalProbe)));
   const j=buildJourney(origin);const carrier=j.carrier||origin;const history=(j.breadcrumbs||[]).map(x=>x.result||{});
+  console.log('JOURNEY CARRIER:',carrier&&carrier.name);
+  console.log('JOURNEY BREADCRUMBS:',JSON.stringify(j.breadcrumbs||[]));
   const hasNewtonLoss=history.some(r=>same(r.home,'Newton Aycliffe')&&same(r.away,'Kendal Town')&&Number(r.home_score)===0&&Number(r.away_score)===1);
   const hasHeatonReplay=history.some(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Kendal Town')&&Number(r.home_score)===4&&Number(r.away_score)===2);
   if(!hasNewtonLoss) throw new Error('DL5 render regression: Newton Aycliffe 0-1 Kendal missing from journey history');
