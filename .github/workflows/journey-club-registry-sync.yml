@@ -1,0 +1,78 @@
+name: Journey Club Registry sync
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'updater/audit_fa_cup_journey_registry.py'
+      - 'updater/audit_journey_ground_coverage.py'
+      - 'updater/audit_journey_source_of_truth.py'
+      - 'updater/audit_journey_promotion_readiness.py'
+      - 'updater/build_journey_club_registry.py'
+      - '.github/workflows/journey-club-registry-sync.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PDF parser
+        run: python -m pip install --disable-pip-version-check pypdf
+
+      - name: Gate 1 — official registry reconciliation
+        run: python updater/audit_fa_cup_journey_registry.py
+
+      - name: Gate 2 — journey ground coverage
+        run: python updater/audit_journey_ground_coverage.py
+
+      - name: Gate 3 — journey source of truth
+        run: python updater/audit_journey_source_of_truth.py
+
+      - name: Gate 4 — promotion readiness
+        run: python updater/audit_journey_promotion_readiness.py
+
+      - name: Build canonical Journey Club Registry
+        run: python updater/build_journey_club_registry.py
+
+      - name: Guard writable scope
+        run: |
+          changed="$(git status --porcelain -- journey-club-registry.json)"
+          other="$(git status --porcelain -- . ':!journey-club-registry.json')"
+          if [ -n "$other" ]; then
+            echo "ABORT: unexpected files changed during registry sync"
+            echo "$other"
+            exit 1
+          fi
+          if [ -z "$changed" ]; then
+            echo "Journey Club Registry already current."
+          else
+            echo "$changed"
+          fi
+
+      - name: Commit registry only when changed
+        run: |
+          if git diff --quiet -- journey-club-registry.json && git diff --cached --quiet -- journey-club-registry.json && [ -z "$(git ls-files --others --exclude-standard journey-club-registry.json)" ]; then
+            echo "No registry change to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add journey-club-registry.json
+          git diff --cached --name-only | grep -qx 'journey-club-registry.json'
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "Sync Journey Club Registry"
+          git push
+
+# SAFETY: this workflow may write only journey-club-registry.json after all four
+# source-of-truth gates succeed. It never stages clubfinder.html, competition.json
+# or any protected GROUNDS data.
