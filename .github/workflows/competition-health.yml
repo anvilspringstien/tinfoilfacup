@@ -14,6 +14,7 @@ on:
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
+      - "updater/clubfinder_render_regression.js"
       - ".github/workflows/competition-health.yml"
 
 permissions:
@@ -39,6 +40,9 @@ jobs:
 
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
+
+      - name: Run rendered Clubfinder DL5 regression
+        run: node updater/clubfinder_render_regression.js
 
       - name: Commit canonical competition state and health report
         run: |
