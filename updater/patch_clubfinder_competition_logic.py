@@ -20,8 +20,7 @@ elif lc_old!=0:raise SystemExit(f'ABORT: unexpected drawUrl reference count {lc_
 if 's.next.drawUrl' in text:raise SystemExit('ABORT: drawUrl reference remains')
 if "esc(k.round||next.name)" not in text:raise SystemExit('ABORT: live fixture round patch missing')
 
-# One canonical club identity key for competition traversal and ground lookup.
-identity_helper=r'''function canonicalClubKey(name){
+identity_block=r'''function canonicalClubKey(name){
   return String(name||'').toLowerCase()
     .replace(/&/g,' and ')
     .replace(/\b(association football club|football club)\b/g,' ')
@@ -29,22 +28,23 @@ identity_helper=r'''function canonicalClubKey(name){
     .replace(/[^a-z0-9]+/g,' ')
     .trim().replace(/\s+/g,' ');
 }
-function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}'''
-if 'function canonicalClubKey(' not in text:
-    marker='function clubByDisplayName(name){'
-    pos=text.find(marker)
-    if pos<0:raise SystemExit('ABORT: clubByDisplayName marker not found')
-    text=text[:pos]+identity_helper+' '+text[pos:]
+function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
+function clubByDisplayName(name){
+  if(!name)return null;
+  const target=canonicalClubKey(name);
+  return ELIGIBLE.find(c=>canonicalClubKey(c.name)===target)||null;
+}
+function groundByClubName(name){
+  if(!name)return {};
+  const target=canonicalClubKey(name);
+  return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{};
+}'''
 
-old_clubby="""function clubByDisplayName(name){   if(!name)return null;   const target=norm(name);   return ELIGIBLE.find(c=>norm(c.name)===target) ||          ELIGIBLE.find(c=>norm(String(c.name||'').replace(/\\s+(FC|AFC|CFC)$/,''))===target) ||          null; }"""
-new_clubby="""function clubByDisplayName(name){   if(!name)return null;   const target=canonicalClubKey(name);   return ELIGIBLE.find(c=>canonicalClubKey(c.name)===target)||null; }"""
-if old_clubby in text:text=text.replace(old_clubby,new_clubby,1)
-elif new_clubby not in text:raise SystemExit('ABORT: unexpected clubByDisplayName implementation')
-
-old_ground="""function groundByClubName(name){   if(!name)return {};   const target=norm(name);   return GROUNDS.find(g=>norm(g.name||g.club)===target) ||          GROUNDS.find(g=>norm(String(g.name||g.club||'').replace(/\\s+(FC|AFC|CFC)$/,''))===target) ||          {}; }"""
-new_ground="""function groundByClubName(name){   if(!name)return {};   const target=canonicalClubKey(name);   return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{}; }"""
-if old_ground in text:text=text.replace(old_ground,new_ground,1)
-elif new_ground not in text:raise SystemExit('ABORT: unexpected groundByClubName implementation')
+# Replace the two adjacent lookup helpers as one bounded block. This avoids relying
+# on exact whitespace/minification while still refusing to cross another function.
+lookup_pat=re.compile(r'(?:function canonicalClubKey\(name\)\{.*?\}\s*function sameClubIdentity\(a,b\)\{.*?\}\s*)?function clubByDisplayName\(name\)\{.*?\}\s*function groundByClubName\(name\)\{.*?\}\s*(?=function completedResultVenue)',re.S)
+text,n=lookup_pat.subn(lambda m:identity_block+' ',text,count=1)
+if n!=1:raise SystemExit(f'ABORT: expected one club/ground lookup block, replaced {n}')
 
 new_build=r'''function buildJourney(origin){
   let carrier=origin;
@@ -89,12 +89,10 @@ new_build=r'''function buildJourney(origin){
   unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return {origin,carrier,breadcrumbs:unique};
 }'''
-pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previousRoundsHtml',re.S)
-replacement=new_build+' function previousRoundsHtml'
-text,n=pat.subn(lambda m:replacement,text,count=1)
+journey_pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previousRoundsHtml',re.S)
+text,n=journey_pat.subn(lambda m:new_build+' function previousRoundsHtml',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-# Make won/eliminated state use the same identity rules as journey custody.
 old_won="const won=r.winner&&norm(r.winner)===norm(club.name);"
 new_won="const won=r.winner&&sameClubIdentity(r.winner,club.name);"
 if old_won in text:text=text.replace(old_won,new_won,1)
