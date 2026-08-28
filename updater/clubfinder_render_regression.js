@@ -17,6 +17,7 @@ const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
+
   const origin=ELIGIBLE.find(c=>same(c.name,'Newton Aycliffe FC'));
   if(!origin) throw new Error('DL5 regression: Newton Aycliffe FC not found in ELIGIBLE');
   const j=buildJourney(origin);const carrier=j.carrier||origin;const history=(j.breadcrumbs||[]).map(x=>x.result||{});
@@ -28,17 +29,24 @@ const assertions=`
   if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
   if(!same(carrier.name,'Heaton Stannington')) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
   const state=competitionState(carrier);if(state.type!=='won'&&state.type!=='pending')throw new Error('DL5 render regression: unexpected Heaton state '+state.type);
-  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
-  console.log('BISHOP LIVE FIXTURE:',JSON.stringify(liveLookup('fixtures',bishop.name)));
-  console.log('NEXTROUNDINFO SOURCE:',nextRoundInfo.toString());
-  const next=nextRoundInfo(bishop);console.log('BISHOP NEXT:',JSON.stringify(next));
+  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));const next=nextRoundInfo(bishop);
   if(!next||!next.knownFixture)throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
   const v=next.knownFixture.venue||{};if(!v.postcode||/TBC/i.test(v.postcode))throw new Error('DL5 render regression: Emley v Bishop Auckland venue/postcode still TBC');
   if(!v.ground||/TBC/i.test(v.ground))throw new Error('DL5 render regression: Emley v Bishop Auckland ground still TBC');
+
+  const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
+  if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
+  const wj=buildJourney(sporting);const wcarrier=wj.carrier||sporting;
+  if(!same(wcarrier.name,'Frenford'))throw new Error('W1D regression: expected Frenford custodian, got '+wcarrier.name);
+  const frenfordCurrent=currentDisplayFixture(wcarrier);
+  if(!frenfordCurrent||!same(frenfordCurrent.home,'Frenford')||!same(frenfordCurrent.away,'Haringey Borough'))throw new Error('W1D regression: Frenford replay is not current display fixture');
+  if(frenfordCurrent.kickoff!=='19:45')throw new Error('W1D regression: Frenford replay kick-off expected 19:45, got '+frenfordCurrent.kickoff);
+
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
   console.log('Heaton replay present: PASS');
   console.log('Emley venue:',v.ground,'•',v.postcode);
+  console.log('W1D Frenford replay kick-off:',frenfordCurrent.kickoff);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
