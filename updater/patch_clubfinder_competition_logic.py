@@ -131,12 +131,18 @@ journey_pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previ
 text,n=journey_pat.subn(lambda m:new_build+' function previousRoundsHtml',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
+# Preserve an authoritative venue already attached to the canonical live fixture.
+old_known="const knownFixture=nf?resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club):null;"
+new_known="const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;"
+if old_known in text:text=text.replace(old_known,new_known,1)
+elif new_known not in text:raise SystemExit('ABORT: nextRoundInfo canonical venue boundary not found')
+
 old_won="const won=r.winner&&sameClubIdentity(r.winner,club.name);"
 new_won="const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWinner(r),club.name);"
 if old_won in text:text=text.replace(old_won,new_won,1)
 elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
 
-required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);')
+required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);','if(nf.venue&&nf.venue.postcode')
 for marker in required:
     if marker not in text:raise SystemExit(f'ABORT: required competition patch missing: {marker}')
 
@@ -145,5 +151,5 @@ print('CLUBFINDER COMPETITION PATCH: SUCCESS')
 print('Decisive scorelines override contradictory legacy winner fields.')
 print('Repeated result snapshots are deduplicated semantically.')
 print('Canonical result_history is included in journey traversal.')
-print('Fixture venue lookup falls back to verified ELIGIBLE club records.')
+print('Canonical live fixture venues are preserved by next-round rendering.')
 print('Ground records themselves: UNTOUCHED')
