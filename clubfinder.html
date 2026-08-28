@@ -262,7 +262,7 @@ function nextRoundInfo(club){
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }
-  const knownFixture=nf?resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club):null;
+  const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;
   return {name:nextName,date:meta.date,drawDate:meta.drawDate,knownFixture,fixturesUrl:FA_FIXTURES_URL};
 }
 
@@ -275,6 +275,19 @@ function canonicalClubKey(name){
     .trim().replace(/\s+/g,' ');
 }
 function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
+function canonicalResultWinner(r){
+  if(!r)return '';
+  if(r.decision==='draw-replay')return '';
+  const hs=Number(r.home_score),as=Number(r.away_score);
+  if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
+  return r.winner||'';
+}
+function sameSemanticResult(a,b){
+  if(!a||!b)return false;
+  return sameClubIdentity(a.home,b.home)&&sameClubIdentity(a.away,b.away)&&
+    Number(a.home_score)===Number(b.home_score)&&Number(a.away_score)===Number(b.away_score)&&
+    String(a.round||'')===String(b.round||'')&&String(a.decision||'')===String(b.decision||'');
+}
 function clubByDisplayName(name){
   if(!name)return null;
   const target=canonicalClubKey(name);
@@ -283,7 +296,11 @@ function clubByDisplayName(name){
 function groundByClubName(name){
   if(!name)return {};
   const target=canonicalClubKey(name);
-  return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{};
+  const g=GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target);
+  if(g)return g;
+  const c=ELIGIBLE.find(c=>canonicalClubKey(c.name)===target);
+  if(c&&(c.ground||c.postcode))return c;
+  return {};
 } function completedResultVenue(result){
   if(!result)return {ground:'Venue TBC',postcode:'Postcode TBC'};
   const homeClub=candidateClubByName(result.home);
@@ -424,17 +441,14 @@ function resultSortValue(r){
 function historicalResultsForClub(club){
   const out=[];
   function add(r,round){
-    if(!r)return;
-    if(!out.some(x=>sameMatchResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
+    if(!r||typeof r!=='object')return;
+    if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
+    if(!out.some(x=>sameSemanticResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
   }
-
-  const liveHistory=liveResultHistory(club.name);
-  if(liveHistory.length){
-    for(const r of liveHistory)add(r,r.round||club.entry_round);
-    // Latest live result may be newer than history during a transition.
-    add(liveLookup('results',club.name));
-  }else{
-    // Legacy fallback only when no canonical live history exists.
+  const hist=liveLookup('result_history',club.name);
+  if(Array.isArray(hist))for(const r of hist)add(r,r&&r.round);
+  add(liveLookup('results',club.name));
+  if(!out.length){
     const f=club.fixture||{};
     if(club.entry_round==='Extra Preliminary Round'&&f.number!=null)add(EPR_RESULTS_BY_TIE[String(f.number)]||null,club.entry_round);
     else if(f.result&&typeof f.result==='object')add(f.result,club.entry_round||f.result.round);
@@ -442,11 +456,9 @@ function historicalResultsForClub(club){
     add(CURRENT_RESULT_OVERRIDES[club.name]||CURRENT_RESULT_OVERRIDES[key]||null);
     add(liveLookup('results',club.name));
   }
-
   out.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return out;
-}
-function buildJourney(origin){
+} function buildJourney(origin){
   let carrier=origin;
   const breadcrumbs=[];
   function clubObjectForWinner(name,prior){
@@ -455,7 +467,7 @@ function buildJourney(origin){
   function appendHistory(club){
     const history=historicalResultsForClub(club);
     for(const item of history){
-      if(!breadcrumbs.some(x=>sameMatchResult(x.result,item.result)))breadcrumbs.push(item);
+      if(!breadcrumbs.some(x=>sameSemanticResult(x.result,item.result)))breadcrumbs.push(item);
     }
   }
   function resolveCarrier(){
@@ -464,11 +476,11 @@ function buildJourney(origin){
     for(const item of ordered){
       const r=item.result||{};
       const participant=sameClubIdentity(r.home,c.name)||sameClubIdentity(r.away,c.name);
-      if(participant&&r.winner&&!resultNeedsReplay(r))c=clubObjectForWinner(r.winner,c);
+      const winner=canonicalResultWinner(r);
+      if(participant&&winner&&!resultNeedsReplay(r))c=clubObjectForWinner(winner,c);
     }
     return c;
   }
-
   const seen=new Set();
   for(let hop=0;hop<20;hop++){
     appendHistory(carrier);
@@ -481,10 +493,9 @@ function buildJourney(origin){
   }
   appendHistory(carrier);
   carrier=resolveCarrier();
-
   const unique=[];
   for(const item of breadcrumbs){
-    if(!unique.some(x=>sameMatchResult(x.result,item.result)))unique.push(item);
+    if(!unique.some(x=>sameSemanticResult(x.result,item.result)))unique.push(item);
   }
   unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return {origin,carrier,breadcrumbs:unique};
@@ -578,7 +589,7 @@ function competitionState(club){
   const f=club.fixture||{},r=resultFor(club),kickoff=parseKickoff(f),now=new Date();
   if(r){
     if(resultNeedsReplay(r))return {type:'replay',title:'↻ Replay required',result:r,replay:replayFixtureFor(club),next:null};
-    const won=r.winner&&sameClubIdentity(r.winner,club.name);
+    const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWinner(r),club.name);
     return {type:won?'won':'eliminated',title:won?'✅ Through to the next round':'❌ Eliminated from the FA Cup',result:r,next:nextRoundInfo(club)};
   }
   if(kickoff&&now<kickoff)return {type:'upcoming',title:'Upcoming FA Cup tie',next:null};
