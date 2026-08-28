@@ -9,6 +9,7 @@ on:
     paths:
       - "competition.json"
       - "clubfinder.html"
+      - "updater/probe_fwp_source.py"
       - "updater/sync_competition_chronology_v2.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/competition_health.py"
@@ -23,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
+      - name: Probe public competition source
+        run: python updater/probe_fwp_source.py
 
       - name: Synchronise competition chronology
         run: python updater/sync_competition_chronology_v2.py
