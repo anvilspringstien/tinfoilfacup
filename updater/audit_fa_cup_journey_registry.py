@@ -26,7 +26,7 @@ def eround(line):
  return None
 def epr_transition(line):
  u=re.sub(r'\s+',' ',line.upper()).strip()
- return ('THERE WILL BE 123 STEP 4 CLUBS' in u and 'NOT EXEMPT TO THE PRELIMINARY ROUND' in u and 'ENTER THE EXTRA PRELIMINARY ROUND' in u)
+ return u.startswith('THERE WILL BE 123 STEP 4 CLUBS THAT ARE NOT EXEMPT TO THE PRELIMINARY ROUND AND WILL INSTEAD ENTER THE')
 h=HTML.read_text(encoding='utf-8'); eligible=arr(h,'ELIGIBLE'); grounds=arr(h,'GROUNDS'); origins=[x.get('name') or x.get('club') for x in eligible if x.get('name') or x.get('club')]; gnames=[x.get('name') or x.get('club') for x in grounds if x.get('name') or x.get('club')]
 if len(origins)!=491:raise SystemExit(f'ABORT: expected 491 origins, found {len(origins)}')
 ground_keys={ground_key(g) for g in gnames}; origin_ground_missing=[n for n in origins if ground_key(n) not in ground_keys]
@@ -53,15 +53,18 @@ for n,o in resolved:resolved_groups[fa_key(o)].append(n)
 merged={accepted[k]:v for k,v in resolved_groups.items() if len(v)>1}; covered=set(resolved_groups); missing=[c for c in clubs if fa_key(c) not in covered]
 if merged:raise SystemExit(f'ABORT: multiple protected origins resolve to one official identity: {merged}')
 if len(covered)!=491 or len(missing)!=252 or len(covered)+len(missing)!=743:raise SystemExit(f'ABORT: expected clean 491+252 partition; covered={len(covered)} missing={len(missing)}')
-ex=[re.sub(r'\s+',' ',x).strip() for x in pdf(EXEMPTIONS_URL).splitlines() if x.strip()]; rm={}; cur=None; headings=[]; transitions=[]
+ex=[re.sub(r'\s+',' ',x).strip() for x in pdf(EXEMPTIONS_URL).splitlines() if x.strip()]; rm={}; cur=None; headings=[]; transitions=[]; explicit_epr=[]
 for x in ex:
  r=eround(x)
  if r:cur=r;headings.append((x,r));continue
  if epr_transition(x):cur='Extra Preliminary Round';transitions.append(x);continue
  k=fa_key(x)
- if cur and k in accepted:rm[k]=cur
+ if cur and k in accepted:
+  rm[k]=cur
+  if cur=='Extra Preliminary Round':explicit_epr.append(accepted[k])
 if not headings:raise SystemExit('ABORT: no official exemption headings parsed')
 if len(transitions)!=1:raise SystemExit(f'ABORT: expected one Step 4 Extra Preliminary transition, found {len(transitions)}: {transitions}')
+if len(explicit_epr)!=123:raise SystemExit(f'ABORT: expected 123 explicitly listed Step 4 Extra Preliminary clubs, parsed {len(explicit_epr)}')
 counts={}
 for c in clubs:
  r=rm.get(fa_key(c),'Extra Preliminary Round');counts[r]=counts.get(r,0)+1
@@ -78,8 +81,8 @@ for c in missing:
  e=candidates[0] if candidates else None
  queue.append({'club':c,'entry_round':rm.get(fa_key(c),'Extra Preliminary Round'),'existing_ground_record':e,'verification_status':'existing-ground-record-needs-registry-review' if e else 'pending'})
 existing=sum(bool(x['existing_ground_record']) for x in queue); pending=len(queue)-existing
-report={'official_accepted':743,'protected_origin_records':491,'protected_origin_ground_matches':491,'reconciled_official_origin_identities':len(covered),'identity_reconciliations':[{'origin_name':a,'official_name':b} for a,b in rec],'additional_journey_clubs':len(missing),'raw_ground_records':len(gnames),'additional_clubs_with_existing_ground_record':existing,'additional_clubs_pending_ground_verification':pending,'entry_round_counts':counts,'parsed_exemption_headings':[{'heading':h,'round':r} for h,r in headings],'step4_extra_preliminary_transition':transitions[0],'additional_clubs':queue,'read_only':True}
+report={'official_accepted':743,'protected_origin_records':491,'protected_origin_ground_matches':491,'reconciled_official_origin_identities':len(covered),'identity_reconciliations':[{'origin_name':a,'official_name':b} for a,b in rec],'additional_journey_clubs':len(missing),'raw_ground_records':len(gnames),'additional_clubs_with_existing_ground_record':existing,'additional_clubs_pending_ground_verification':pending,'entry_round_counts':counts,'parsed_exemption_headings':[{'heading':h,'round':r} for h,r in headings],'step4_extra_preliminary_transition':transitions[0],'explicit_step4_extra_preliminary_clubs':len(explicit_epr),'additional_clubs':queue,'read_only':True}
 (ROOT/'updater'/'fa-cup-journey-registry-audit.json').write_text(json.dumps(report,indent=2)+'\n');(ROOT/'updater'/'journey-club-verification-queue.json').write_text(json.dumps({'clubs':queue},indent=2)+'\n')
-md=['# FA Cup Journey Registry — Read-only reconciliation','','- Official accepted clubs: **743**','- Protected origin records: **491**','- Protected origin→GROUNDS matches: **491**',f'- Reconciled official origin identities: **{len(covered)}**',f'- Additional journey clubs: **{len(missing)}**',f'- Existing ground records among additional clubs: **{existing}**',f'- Pending ground verification: **{pending}**','','## Identity reconciliations']+[f'- {a} → {b}' for a,b in rec]+['','## Entry-round population']+[f'- {r}: **{counts[r]}**' for r in ROUNDS if r in counts]+['','## Verification queue']+[f"- {x['club']} — {x['entry_round']}"+(f" — existing GROUNDS: {x['existing_ground_record']}" if x['existing_ground_record'] else '') for x in queue]+['','## Safety','- READ ONLY. Canonical Clubfinder, competition, grounds, mileage and journey data untouched.','- Separate FA identity and verified-ground identity namespaces.','- AFC is identity-significant for FA club identity; ambiguous matches fail closed.','- Exact 491 + 252 = 743 partition required.','- Entry-round totals cross-checked against the official exemption headings and the 219-tie Extra Preliminary draw.','- The official 123-club Step 4 non-exempt instruction is treated as an explicit Extra Preliminary transition, not a synthetic heading.']
+md=['# FA Cup Journey Registry — Read-only reconciliation','','- Official accepted clubs: **743**','- Protected origin records: **491**','- Protected origin→GROUNDS matches: **491**',f'- Reconciled official origin identities: **{len(covered)}**',f'- Additional journey clubs: **{len(missing)}**',f'- Existing ground records among additional clubs: **{existing}**',f'- Pending ground verification: **{pending}**','- Explicit Step 4 Extra Preliminary clubs parsed: **123**','','## Identity reconciliations']+[f'- {a} → {b}' for a,b in rec]+['','## Entry-round population']+[f'- {r}: **{counts[r]}**' for r in ROUNDS if r in counts]+['','## Verification queue']+[f"- {x['club']} — {x['entry_round']}"+(f" — existing GROUNDS: {x['existing_ground_record']}" if x['existing_ground_record'] else '') for x in queue]+['','## Safety','- READ ONLY. Canonical Clubfinder, competition, grounds, mileage and journey data untouched.','- Separate FA identity and verified-ground identity namespaces.','- AFC is identity-significant for FA club identity; ambiguous matches fail closed.','- Exact 491 + 252 = 743 partition required.','- Entry-round totals cross-checked against official headings and the 219-tie Extra Preliminary draw.','- The 123 Step 4 non-exempt clubs must be explicitly parsed; totals alone are insufficient.']
 (ROOT/'fa-cup-journey-registry-audit.md').write_text('\n'.join(md)+'\n')
-print('FA CUP JOURNEY REGISTRY AUDIT: SUCCESS');print('Protected origin-ground matches: 491');print('Covered official identities:',len(covered));print('Additional:',len(missing));print('Existing ground records:',existing);print('Pending:',pending);print('Entry rounds:',counts);print('Parsed exemption headings:',len(headings));print('Step 4 transition:',len(transitions));print('READ ONLY')
+print('FA CUP JOURNEY REGISTRY AUDIT: SUCCESS');print('Protected origin-ground matches: 491');print('Covered official identities:',len(covered));print('Additional:',len(missing));print('Existing ground records:',existing);print('Pending:',pending);print('Entry rounds:',counts);print('Explicit Step 4 EPR:',len(explicit_epr));print('READ ONLY')
