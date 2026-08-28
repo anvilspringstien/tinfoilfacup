@@ -4,7 +4,7 @@ import json,re,urllib.request
 from datetime import datetime,timezone
 from html import unescape
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]; DATA_PATH=ROOT/'competition.json'; HTML_PATH=ROOT/'clubfinder.html'
+ROOT=Path(__file__).resolve().parents[1]; DATA_PATH=ROOT/'competition.json'
 BASE='https://www.footballwebpages.co.uk/fa-cup'; FIXTURES_URL=f'{BASE}/fixtures-results'; RESULT_DATES=['20260821','20260822','20260823','20260825','20260826']; UA='Mozilla/5.0'
 def fetch(url):
  req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'text/html,application/xhtml+xml'}); return urllib.request.urlopen(req,timeout=30).read().decode('utf-8','replace')
@@ -39,17 +39,29 @@ def parse_results(html,date):
   home=strip_seed(' '.join(tail[:i1])); away=strip_seed(' '.join(tail[i2+1:])); hs,as_=int(s1),int(s2)
   if not home or not away:continue
   rnd='Preliminary Round Replay' if iso in ('2026-08-25','2026-08-26') else 'Preliminary Round'
+  # One delayed original tie was played on the replay date.
   if iso=='2026-08-25' and norm(home)==norm('Baffins Milton Rovers') and norm(away)==norm('Hartley Wintney'):rnd='Preliminary Round'
   winner=home if hs>as_ else away if as_>hs else ''
   rec={'home':home,'away':away,'home_score':hs,'away_score':as_,'winner':winner,'status':'FT','decision':'' if winner else ('draw-replay' if rnd=='Preliminary Round' else ''),'date':iso,'round':rnd,'source_url':f'{BASE}/{date}'}; out.append(rec); last=rec
  return out
-def prelim_fixtures(html):
- m=re.search(r'const PRELIM_FIXTURES_BY_CLUB=(\{.*?\});\s*const CURRENT_RESULT_OVERRIDES=',html,re.S)
- if not m:raise SystemExit('ABORT: PRELIM_FIXTURES_BY_CLUB not found')
- uniq={}
- for f in json.loads(m.group(1)).values():
-  if isinstance(f,dict) and f.get('home') and f.get('away'): uniq.setdefault((str(f.get('number','')),norm(f['home']),norm(f['away']),f.get('date','')),{**f,'round':'Preliminary Round'})
- return list(uniq.values())
+def preliminary_fixtures_from_results(results):
+ """Use actual played original ties as the canonical Preliminary fixture list.
+
+ This deliberately does not reuse Clubfinder's historical embedded schedule: that
+ schedule can contain pre-result placeholders whose participants became stale after
+ the Extra Preliminary Round. Replays stay in result_history and are not counted as
+ separate Preliminary ties.
+ """
+ first_legs=[]; seen=set()
+ for r in results:
+  if r.get('round')!='Preliminary Round':continue
+  key=(norm(r.get('home')),norm(r.get('away')),r.get('date',''))
+  if key in seen:continue
+  seen.add(key)
+  first_legs.append({'round':'Preliminary Round','home':r['home'],'away':r['away'],'date':r['date'],'kickoff':'15:00','source_url':r.get('source_url','')})
+ first_legs.sort(key=lambda f:(f.get('date',''),norm(f.get('home')),norm(f.get('away'))))
+ for i,f in enumerate(first_legs,1):f['number']=i
+ return first_legs
 def first_qualifying(html):
  out=[]
  for row in re.findall(r'<tr\b[^>]*>.*?</tr>',html,re.I|re.S):
@@ -76,14 +88,15 @@ def add_result(data,r):
   arr=data.setdefault('result_history',{}).setdefault(club,[])
   if not any(rkey(x)==rkey(r) for x in arr):arr.append(r)
   arr.sort(key=lambda x:(x.get('date',''),0 if x.get('round')=='Preliminary Round' else 1)); data.setdefault('results',{})[club]=arr[-1]
-club_html=HTML_PATH.read_text(encoding='utf-8'); prelim=prelim_fixtures(club_html); results=[]
+results=[]
 for d in RESULT_DATES:results.extend(parse_results(fetch(f'{BASE}/{d}'),d))
+prelim=preliminary_fixtures_from_results(results)
 frq=first_qualifying(fetch(FIXTURES_URL)); prelim_count=len({(norm(f['home']),norm(f['away']),f.get('date','')) for f in prelim}); result_count=len({rkey(r) for r in results})
 if prelim_count<130:raise SystemExit(f'ABORT: Preliminary fixture coverage {prelim_count}')
 if result_count<130:raise SystemExit(f'ABORT: Preliminary result/replay coverage {result_count}')
 if len(frq)!=112:raise SystemExit(f'ABORT: First Qualifying draw expected 112 ties, got {len(frq)}')
 data=json.loads(DATA_PATH.read_text(encoding='utf-8')); data['preliminary_fixtures']=fmap(prelim)
 for r in sorted(results,key=lambda x:(x['date'],0 if x['round']=='Preliminary Round' else 1)):add_result(data,r)
-data['fixtures']=fmap(frq); data['replays']={}; data['round_dates']={**(data.get('round_dates') or {}),'Preliminary Round':'2026-08-22','First Round Qualifying':'2026-09-05'}; data['updated_at']=datetime.now(timezone.utc).isoformat(); data['competition_sync']={'source':'Football Web Pages','source_url':FIXTURES_URL,'synced_at':data['updated_at'],'preliminary_unique_fixtures':prelim_count,'preliminary_results_and_replays':result_count,'first_qualifying_unique_fixtures':len(frq),'result_dates':RESULT_DATES}
+data['fixtures']=fmap(frq); data['replays']={}; data['round_dates']={**(data.get('round_dates') or {}),'Preliminary Round':'2026-08-22','First Round Qualifying':'2026-09-05'}; data['updated_at']=datetime.now(timezone.utc).isoformat(); data['competition_sync']={'source':'Football Web Pages','source_url':FIXTURES_URL,'synced_at':data['updated_at'],'preliminary_fixture_source':'played original ties','preliminary_unique_fixtures':prelim_count,'preliminary_results_and_replays':result_count,'first_qualifying_unique_fixtures':len(frq),'result_dates':RESULT_DATES}
 tmp=DATA_PATH.with_suffix('.json.new'); tmp.write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n',encoding='utf-8'); tmp.replace(DATA_PATH)
-print('COMPETITION CHRONOLOGY SYNC v2: SUCCESS'); print('Preliminary fixtures:',prelim_count); print('Preliminary results/replays:',result_count); print('First Qualifying fixtures:',len(frq)); print('Ground/location data: UNTOUCHED')
+print('COMPETITION CHRONOLOGY SYNC v3: SUCCESS'); print('Preliminary fixtures:',prelim_count); print('Preliminary results/replays:',result_count); print('First Qualifying fixtures:',len(frq)); print('Ground/location data: UNTOUCHED')
