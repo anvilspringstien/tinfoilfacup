@@ -13,6 +13,7 @@ on:
       - "updater/sync_competition_chronology_v2.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
+      - "updater/patch_clubfinder_branding.py"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
       - "updater/clubfinder_render_regression.js"
@@ -38,6 +39,9 @@ jobs:
 
       - name: Apply guarded Clubfinder competition presentation fixes
         run: python updater/patch_clubfinder_competition_logic.py
+
+      - name: Apply guarded Clubfinder branding fixes
+        run: python updater/patch_clubfinder_branding.py
 
       - name: Audit full competition chronology
         run: python updater/competition_health.py
