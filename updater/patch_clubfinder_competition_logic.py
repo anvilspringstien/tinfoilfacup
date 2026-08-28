@@ -29,6 +29,13 @@ identity_block=r'''function canonicalClubKey(name){
     .trim().replace(/\s+/g,' ');
 }
 function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
+function canonicalResultWinner(r){
+  if(!r)return '';
+  if(r.decision==='draw-replay')return '';
+  const hs=Number(r.home_score),as=Number(r.away_score);
+  if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
+  return r.winner||'';
+}
 function clubByDisplayName(name){
   if(!name)return null;
   const target=canonicalClubKey(name);
@@ -39,7 +46,7 @@ function groundByClubName(name){
   const target=canonicalClubKey(name);
   return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{};
 }'''
-lookup_pat=re.compile(r'(?:function canonicalClubKey\(name\)\{.*?\}\s*function sameClubIdentity\(a,b\)\{.*?\}\s*)?function clubByDisplayName\(name\)\{.*?\}\s*function groundByClubName\(name\)\{.*?\}\s*(?=function completedResultVenue)',re.S)
+lookup_pat=re.compile(r'(?:function canonicalClubKey\(name\)\{.*?\}\s*function sameClubIdentity\(a,b\)\{.*?\}\s*(?:function canonicalResultWinner\(r\)\{.*?\}\s*)?)?function clubByDisplayName\(name\)\{.*?\}\s*function groundByClubName\(name\)\{.*?\}\s*(?=function completedResultVenue)',re.S)
 text,n=lookup_pat.subn(lambda m:identity_block+' ',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one club/ground lookup block, replaced {n}')
 
@@ -86,7 +93,8 @@ new_build=r'''function buildJourney(origin){
     for(const item of ordered){
       const r=item.result||{};
       const participant=sameClubIdentity(r.home,c.name)||sameClubIdentity(r.away,c.name);
-      if(participant&&r.winner&&!resultNeedsReplay(r))c=clubObjectForWinner(r.winner,c);
+      const winner=canonicalResultWinner(r);
+      if(participant&&winner&&!resultNeedsReplay(r))c=clubObjectForWinner(winner,c);
     }
     return c;
   }
@@ -113,17 +121,18 @@ journey_pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previ
 text,n=journey_pat.subn(lambda m:new_build+' function previousRoundsHtml',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-old_won="const won=r.winner&&norm(r.winner)===norm(club.name);"
-new_won="const won=r.winner&&sameClubIdentity(r.winner,club.name);"
+old_won="const won=r.winner&&sameClubIdentity(r.winner,club.name);"
+new_won="const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWinner(r),club.name);"
 if old_won in text:text=text.replace(old_won,new_won,1)
 elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
 
-required=('function canonicalClubKey(',"liveLookup('result_history',club.name)",'sameClubIdentity(r.home,c.name)','canonicalClubKey(g.name||g.club)','const won=r.winner&&sameClubIdentity(r.winner,club.name);')
+required=('function canonicalClubKey(','function canonicalResultWinner(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);','const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWinner(r),club.name);')
 for marker in required:
     if marker not in text:raise SystemExit(f'ABORT: required competition patch missing: {marker}')
 
 P.write_text(text,encoding='utf-8')
 print('CLUBFINDER COMPETITION PATCH: SUCCESS')
+print('Decisive scorelines override contradictory legacy winner fields.')
 print('Canonical result_history is included in journey traversal.')
 print('Custody and winner state use canonical club identity.')
 print('Fixture venue lookup uses canonical club identity.')
