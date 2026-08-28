@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-28T16:15:50.381058+01:00",
+  "checked_at": "2026-08-28T16:38:49.256057+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -19,9 +19,10 @@
   "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
-    "source": "Football Web Pages",
+    "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-    "synced_at": "2026-08-28T15:15:48.766367+00:00",
+    "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
+    "synced_at": "2026-08-28T15:38:47.256693+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
@@ -32,6 +33,8 @@
       "20260823",
       "20260825",
       "20260826"
-    ]
+    ],
+    "kickoffs_enriched": 150,
+    "replay_kickoffs_verified": 24
   }
 }
