@@ -26,7 +26,7 @@ const documentStub={
 };
 const localStore={};
 const sandbox={
-  console,
+  console,process,
   document:documentStub,
   localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},
   navigator:{},location:{href:'https://example.test/clubfinder.html'},
@@ -59,7 +59,8 @@ const assertions=`
   if(state.type!=='won' && state.type!=='pending') throw new Error('DL5 render regression: unexpected Heaton state '+state.type);
   const emley=groundByClubName('Emley AFC');
   if(!emley || !emley.postcode || /TBC/i.test(emley.postcode)) throw new Error('DL5 render regression: Emley AFC ground/postcode did not resolve');
-  const next=nextRoundInfo(ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC')));
+  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
+  const next=nextRoundInfo(bishop);
   if(!next||!next.knownFixture) throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
   const v=next.knownFixture.venue||{};
   if(!v.postcode || /TBC/i.test(v.postcode)) throw new Error('DL5 render regression: Emley v Bishop Auckland venue/postcode still TBC');
