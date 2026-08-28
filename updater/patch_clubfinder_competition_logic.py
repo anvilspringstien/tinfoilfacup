@@ -20,12 +20,37 @@ elif lc_old!=0:raise SystemExit(f'ABORT: unexpected drawUrl reference count {lc_
 if 's.next.drawUrl' in text:raise SystemExit('ABORT: drawUrl reference remains')
 if "esc(k.round||next.name)" not in text:raise SystemExit('ABORT: live fixture round patch missing')
 
+# One canonical club identity key for competition traversal and ground lookup.
+identity_helper=r'''function canonicalClubKey(name){
+  return String(name||'').toLowerCase()
+    .replace(/&/g,' and ')
+    .replace(/\b(association football club|football club)\b/g,' ')
+    .replace(/\b(fc|afc|cfc)\b/g,' ')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim().replace(/\s+/g,' ');
+}
+function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}'''
+if 'function canonicalClubKey(' not in text:
+    marker='function clubByDisplayName(name){'
+    pos=text.find(marker)
+    if pos<0:raise SystemExit('ABORT: clubByDisplayName marker not found')
+    text=text[:pos]+identity_helper+' '+text[pos:]
+
+old_clubby="""function clubByDisplayName(name){   if(!name)return null;   const target=norm(name);   return ELIGIBLE.find(c=>norm(c.name)===target) ||          ELIGIBLE.find(c=>norm(String(c.name||'').replace(/\\s+(FC|AFC|CFC)$/,''))===target) ||          null; }"""
+new_clubby="""function clubByDisplayName(name){   if(!name)return null;   const target=canonicalClubKey(name);   return ELIGIBLE.find(c=>canonicalClubKey(c.name)===target)||null; }"""
+if old_clubby in text:text=text.replace(old_clubby,new_clubby,1)
+elif new_clubby not in text:raise SystemExit('ABORT: unexpected clubByDisplayName implementation')
+
+old_ground="""function groundByClubName(name){   if(!name)return {};   const target=norm(name);   return GROUNDS.find(g=>norm(g.name||g.club)===target) ||          GROUNDS.find(g=>norm(String(g.name||g.club||'').replace(/\\s+(FC|AFC|CFC)$/,''))===target) ||          {}; }"""
+new_ground="""function groundByClubName(name){   if(!name)return {};   const target=canonicalClubKey(name);   return GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target)||{}; }"""
+if old_ground in text:text=text.replace(old_ground,new_ground,1)
+elif new_ground not in text:raise SystemExit('ABORT: unexpected groundByClubName implementation')
+
 new_build=r'''function buildJourney(origin){
   let carrier=origin;
   const breadcrumbs=[];
-  const cn=n=>norm(String(n||'').replace(/\s+(FC|AFC|CFC)$/i,''));
   function clubObjectForWinner(name,prior){
-    return candidateClubByName(name)||{name:name,entry_round:(prior&&prior.entry_round)||'',fixture:{}};
+    return clubByDisplayName(name)||candidateClubByName(name)||{name:name,entry_round:(prior&&prior.entry_round)||'',fixture:{}};
   }
   function appendHistory(club){
     const history=historicalResultsForClub(club);
@@ -38,7 +63,7 @@ new_build=r'''function buildJourney(origin){
     const ordered=[...breadcrumbs].sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
     for(const item of ordered){
       const r=item.result||{};
-      const participant=cn(r.home)===cn(c.name)||cn(r.away)===cn(c.name);
+      const participant=sameClubIdentity(r.home,c.name)||sameClubIdentity(r.away,c.name);
       if(participant&&r.winner&&!resultNeedsReplay(r))c=clubObjectForWinner(r.winner,c);
     }
     return c;
@@ -48,8 +73,8 @@ new_build=r'''function buildJourney(origin){
   for(let hop=0;hop<20;hop++){
     appendHistory(carrier);
     const next=resolveCarrier();
-    const key=cn(next.name);
-    if(key===cn(carrier.name)&&seen.has(key)){carrier=next;break;}
+    const key=canonicalClubKey(next.name);
+    if(key===canonicalClubKey(carrier.name)&&seen.has(key)){carrier=next;break;}
     carrier=next;
     if(seen.has(key)){appendHistory(carrier);carrier=resolveCarrier();break;}
     seen.add(key);
@@ -64,31 +89,25 @@ new_build=r'''function buildJourney(origin){
   unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return {origin,carrier,breadcrumbs:unique};
 }'''
-
 pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previousRoundsHtml',re.S)
-if 'clubObjectForWinner' not in text:
-    replacement=new_build+' function previousRoundsHtml'
-    text,n=pat.subn(lambda m:replacement,text,count=1)
-    if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
+replacement=new_build+' function previousRoundsHtml'
+text,n=pat.subn(lambda m:replacement,text,count=1)
+if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-if 'clubObjectForWinner' not in text or 'for(let hop=0;hop<20;hop++)' not in text:
-    raise SystemExit('ABORT: canonical custody traversal patch missing')
+# Make won/eliminated state use the same identity rules as journey custody.
+old_won="const won=r.winner&&norm(r.winner)===norm(club.name);"
+new_won="const won=r.winner&&sameClubIdentity(r.winner,club.name);"
+if old_won in text:text=text.replace(old_won,new_won,1)
+elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
+
+required=('function canonicalClubKey(','sameClubIdentity(r.home,c.name)','canonicalClubKey(g.name||g.club)','const won=r.winner&&sameClubIdentity(r.winner,club.name);')
+for marker in required:
+    if marker not in text:raise SystemExit(f'ABORT: required identity patch missing: {marker}')
 
 P.write_text(text,encoding='utf-8')
 print('CLUBFINDER COMPETITION PATCH: SUCCESS')
 print('Known next fixture uses its canonical round.')
 print('View Next Round uses fixturesUrl.')
-print('Custody now follows canonical winners across multiple hand-offs/replays.')
-print('Ground/location logic: UNTOUCHED')
-
-# Read-only renderer diagnostics. Print every call-site context, not function definitions only.
-for needle in ('buildJourney(', 'stateHtml(', 'currentDisplayFixture(', 'carrierHtml(', 'previousRoundsHtml('):
-    print(f'--- CALL SITES {needle} ---')
-    pos=0; idx=0
-    while True:
-        pos=text.find(needle,pos)
-        if pos<0:break
-        idx+=1
-        start=max(0,pos-700); end=min(len(text),pos+1300)
-        print(f'[{idx}] '+text[start:end].replace('\n',' '))
-        pos+=len(needle)
+print('Custody and winner state use canonical club identity across FC/AFC/CFC variants.')
+print('Fixture venue lookup uses the same canonical club identity.')
+print('Ground records themselves: UNTOUCHED')
