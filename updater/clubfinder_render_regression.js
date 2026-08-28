@@ -2,7 +2,6 @@
 const fs=require('fs');
 const vm=require('vm');
 const path=require('path');
-
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'clubfinder.html'),'utf8');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
@@ -29,7 +28,11 @@ const assertions=`
   if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
   if(!same(carrier.name,'Heaton Stannington')) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
   const state=competitionState(carrier);if(state.type!=='won'&&state.type!=='pending')throw new Error('DL5 render regression: unexpected Heaton state '+state.type);
-  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));const next=nextRoundInfo(bishop);if(!next||!next.knownFixture)throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
+  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
+  console.log('BISHOP LIVE FIXTURE:',JSON.stringify(liveLookup('fixtures',bishop.name)));
+  console.log('NEXTROUNDINFO SOURCE:',nextRoundInfo.toString());
+  const next=nextRoundInfo(bishop);console.log('BISHOP NEXT:',JSON.stringify(next));
+  if(!next||!next.knownFixture)throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
   const v=next.knownFixture.venue||{};if(!v.postcode||/TBC/i.test(v.postcode))throw new Error('DL5 render regression: Emley v Bishop Auckland venue/postcode still TBC');
   if(!v.ground||/TBC/i.test(v.ground))throw new Error('DL5 render regression: Emley v Bishop Auckland ground still TBC');
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
