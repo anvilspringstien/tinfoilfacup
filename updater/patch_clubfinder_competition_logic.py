@@ -24,3 +24,11 @@ print('CLUBFINDER COMPETITION PRESENTATION PATCH: SUCCESS')
 print('Known next fixture now displays its canonical round.')
 print('View Next Round now uses fixturesUrl.')
 print('Ground/location logic: UNTOUCHED')
+
+# Read-only diagnostic: expose the minified journey/custodian code without changing it.
+for needle in ('currentCustodian','custodian','resultFor(','nextRoundInfo(','competitionState(','historyFor('):
+    pos=text.find(needle)
+    if pos>=0:
+        start=max(0,pos-900); end=min(len(text),pos+2600)
+        print(f'--- DIAGNOSTIC {needle} ---')
+        print(text[start:end].replace('\n',' '))
