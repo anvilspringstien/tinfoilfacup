@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 DATA_PATH=ROOT/'competition.json'
 BASE='https://www.footballwebpages.co.uk/fa-cup'
-FIXTURES_URL=f'{BASE}/fixtures-results'
+FIXTURES_URL=f'{BASE}/fixtures-results/first-qualifying-round'
 KICKOFF_SOURCE_URL='https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/'
 RESULT_DATES=['20260821','20260822','20260823','20260825','20260826']
 UA='Mozilla/5.0'
