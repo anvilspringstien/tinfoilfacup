@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import re,urllib.request
 from html import unescape
-urls=['https://www.footballwebpages.co.uk/fa-cup/20260822','https://www.footballwebpages.co.uk/fa-cup/fixtures-results']
+urls=['https://www.footballwebpages.co.uk/fa-cup/20260822','https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round']
 for url in urls:
     req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Accept':'text/html,application/xhtml+xml'})
     with urllib.request.urlopen(req,timeout=30) as r: raw=r.read()
