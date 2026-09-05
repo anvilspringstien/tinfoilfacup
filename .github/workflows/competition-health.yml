@@ -13,6 +13,7 @@ on:
       - "updater/sync_competition_chronology_v2.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
+      - "updater/patch_clubfinder_result_status.py"
       - "updater/patch_clubfinder_branding.py"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
@@ -43,18 +44,21 @@ jobs:
       - name: Enrich later-round fixture venues
         run: python updater/enrich_later_round_venues.py
 
-      - name: Apply guarded Clubfinder competition presentation fixes
-        run: python updater/patch_clubfinder_competition_logic.py
-
-      - name: Apply guarded Clubfinder branding fixes
-        run: python updater/patch_clubfinder_branding.py
-
-      # Health can legitimately be red because results are late/missing. Capture that
-      # state, but do not prevent validated results and the red report being published.
+      # Build the health classification before patching Clubfinder so the exact same
+      # grace/overdue state can be embedded into the standalone page users receive.
       - name: Audit full competition chronology
         id: health_audit
         continue-on-error: true
         run: python updater/competition_health.py
+
+      - name: Apply guarded Clubfinder competition presentation fixes
+        run: python updater/patch_clubfinder_competition_logic.py
+
+      - name: Apply guarded Clubfinder result-status presentation
+        run: python updater/patch_clubfinder_result_status.py
+
+      - name: Apply guarded Clubfinder branding fixes
+        run: python updater/patch_clubfinder_branding.py
 
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
