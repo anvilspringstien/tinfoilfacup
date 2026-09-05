@@ -71,7 +71,7 @@ function tinFoilRenderResultHealthNotice(){
   const mode=matches.some(x=>x.phase==='overdue')?'overdue':'grace';
   const key=mode+'|'+matches.map(x=>x.phase+':'+x.tie.home+'|'+x.tie.away).join(';');
   if(box&&box.dataset.healthKey===key)return;
-  if(!box){box=document.createElement('div');box.id='tinFoilResultHealthNotice';const target=tinFoilResultHealthTarget();if(!target)return;target.insertAdjacentElement('afterend',box)}
+  if(!box){box=document.createElement('div');box.id='tinFoilResultHealthNotice';const target=tinFoilResultHealthTarget();if(!target||typeof target.insertAdjacentElement!=='function')return;target.insertAdjacentElement('afterend',box)}
   box.dataset.healthKey=key;
   box.className='tin-foil-result-health tin-foil-result-health--'+mode;
   box.setAttribute('role','status');
@@ -89,9 +89,9 @@ function tinFoilStartResultHealthNotice(){
     const observer=new MutationObserver(()=>{if(queued)return;queued=true;setTimeout(()=>{queued=false;tinFoilRenderResultHealthNotice()},0)});
     roots.forEach(root=>observer.observe(root,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden','style','class']}));
   }
-  document.addEventListener('click',()=>setTimeout(tinFoilRenderResultHealthNotice,0));
+  if(document&&typeof document.addEventListener==='function')document.addEventListener('click',()=>setTimeout(tinFoilRenderResultHealthNotice,0));
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',tinFoilStartResultHealthNotice);else setTimeout(tinFoilStartResultHealthNotice,0);
+if(document.readyState==='loading'&&typeof document.addEventListener==='function')document.addEventListener('DOMContentLoaded',tinFoilStartResultHealthNotice);else setTimeout(tinFoilStartResultHealthNotice,0);
 /* TIN_FOIL_RESULT_HEALTH_END */'''.replace('__PAYLOAD__', payload_json)
 
 if begin in text or end in text:
@@ -116,7 +116,6 @@ for marker in required:
     if marker not in text:
         raise SystemExit(f'ABORT: required result-health marker missing: {marker}')
 
-# Guard against accidentally presenting internal red-health language to users.
 if '🔴 Result awaiting confirmation' in text:
     raise SystemExit('ABORT: public outstanding-result state must not be red')
 
