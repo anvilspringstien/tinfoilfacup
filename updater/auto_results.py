@@ -18,6 +18,10 @@ def norm(s):
  return re.sub(r"[^a-z0-9]+"," ",s).strip()
 
 
+def strip_seed(s):
+ return re.sub(r"^\(\d+\)\s*|\s*\(\d+\)$","",(s or "").strip()).strip()
+
+
 def fetch(u):
  q=urllib.request.Request(u,headers={"User-Agent":"Mozilla/5.0 TinFoilFACupUpdater/7.6","Accept":"text/html,application/xhtml+xml"})
  return urllib.request.urlopen(q,timeout=30).read().decode("utf-8","replace")
@@ -87,7 +91,7 @@ def parse_fwp(html,known):
     pair=(i,a,b); break
   if not pair:continue
   i,hs,as_=pair
-  home=" ".join(tail[:i]).strip(); away=tail[i+2].strip()
+  home=strip_seed(" ".join(tail[:i]).strip()); away=strip_seed(tail[i+2].strip())
   # Attendance is after away and therefore ignored.
   if not home or not away:continue
   match=next((f for f in known if norm(f.get("home"))==norm(home) and norm(f.get("away"))==norm(away)),None)
@@ -130,9 +134,12 @@ def main():
   primary.append({"home":f["home"],"away":f["away"],"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":f.get("date",""),"round":f.get("round","FA Cup"),"source_url":a.url})
 
  fallback_html=fetch(FWP_URL); fallback,unmatched,ft_rows=parse_fwp(fallback_html,known)
+ report={"checked_at":datetime.now(timezone.utc).isoformat(),"primary_source_url":a.url,"fallback_source_url":FWP_URL,"known_ties":len(known),"primary_results_detected":len(primary),"fallback_ft_rows":ft_rows,"fallback_results_detected":len(fallback),"new_results":[],"ambiguous":amb,"unmatched_fallback_rows":unmatched,"source_disagreements":[]}
  if ft_rows and not fallback:
+  (ROOT/"updater/results-pilot-report.json").write_text(json.dumps(report,indent=2)+"\n")
   raise SystemExit(f"Parser health failure: FWP contains {ft_rows} FT rows but zero canonical results were parsed.")
  if unmatched:
+  (ROOT/"updater/results-pilot-report.json").write_text(json.dumps(report,indent=2)+"\n")
   raise SystemExit("Publication blocked: FWP completed rows did not map to canonical ties: "+str(unmatched[:10]))
 
  # Cross-source agreement is required whenever both sources detect the same tie.
@@ -144,13 +151,16 @@ def main():
    if k in by_tie and (by_tie[k][1]["home_score"],by_tie[k][1]["away_score"])!=(r["home_score"],r["away_score"]):
     disagreements.append([r["home"],r["away"],by_tie[k][0],by_tie[k][1]["home_score"],by_tie[k][1]["away_score"],source_name,r["home_score"],r["away_score"]])
    else: by_tie[k]=(source_name,r)
- if disagreements:raise SystemExit("Publication blocked: sources disagree: "+str(disagreements[:10]))
+ report["source_disagreements"]=disagreements
+ if disagreements:
+  (ROOT/"updater/results-pilot-report.json").write_text(json.dumps(report,indent=2)+"\n")
+  raise SystemExit("Publication blocked: sources disagree: "+str(disagreements[:10]))
 
  detected=dedupe(primary+fallback)
  new=[r for r in detected if not any(same(x,r) for x in existing)]
+ report["new_results"]=new
  print("Known ties checked:",len(known));print("Primary results detected:",len(primary));print("Fallback FT rows seen:",ft_rows);print("Fallback canonical results detected:",len(fallback));print("New unambiguous results:",len(new));print("Ambiguous ties rejected:",len(amb))
  for r in new:print(r["home"],r["home_score"],"-",r["away_score"],r["away"])
- report={"checked_at":datetime.now(timezone.utc).isoformat(),"primary_source_url":a.url,"fallback_source_url":FWP_URL,"known_ties":len(known),"primary_results_detected":len(primary),"fallback_ft_rows":ft_rows,"fallback_results_detected":len(fallback),"new_results":new,"ambiguous":amb,"unmatched_fallback_rows":unmatched,"source_disagreements":disagreements}
  (ROOT/"updater/results-pilot-report.json").write_text(json.dumps(report,indent=2)+"\n")
  if a.publish and amb:raise SystemExit("Publication blocked: ambiguous primary candidates.")
  if a.publish:
