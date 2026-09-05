@@ -471,21 +471,7 @@ function historicalResultsForClub(club){
   }
   out.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return out;
-} /* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */
-const tinFoilBaseNextRoundInfo=nextRoundInfo;
-nextRoundInfo=function(club){
-  const info=tinFoilBaseNextRoundInfo(club);
-  if(!info||!info.knownFixture)return info;
-  const fixture=info.knownFixture||{};
-  const target=String(info.name||'').trim().toLowerCase();
-  const actual=String(fixture.round||'').trim().toLowerCase();
-  if(target&&actual&&target!==actual){
-    return {...info,knownFixture:null};
-  }
-  return info;
-};
-/* TIN_FOIL_NEXT_ROUND_INTEGRITY_END */
-function buildJourney(origin){
+} function buildJourney(origin){
   let carrier=origin;
   const candidates=[];
   function clubObjectForWinner(name,prior){
@@ -525,7 +511,21 @@ function buildJourney(origin){
   appendHistory(carrier);
   const resolved=resolveChain();
   return {origin,carrier:resolved.carrier,breadcrumbs:resolved.breadcrumbs};
-} function previousRoundsHtml(journey){
+} /* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */
+const tinFoilBaseNextRoundInfo=nextRoundInfo;
+nextRoundInfo=function(club){
+  const info=tinFoilBaseNextRoundInfo(club);
+  if(!info||!info.knownFixture)return info;
+  const fixture=info.knownFixture||{};
+  const target=String(info.name||'').trim().toLowerCase();
+  const actual=String(fixture.round||'').trim().toLowerCase();
+  if(target&&actual&&target!==actual){
+    return {...info,knownFixture:null};
+  }
+  return info;
+};
+/* TIN_FOIL_NEXT_ROUND_INTEGRITY_END */
+function previousRoundsHtml(journey){
   const crumbs=journey.breadcrumbs||[];
   let body='<div class="history"><div class="history-title">Previous Rounds</div>'+
     '<div class="history-origin">Journey started with: '+esc(journey.origin.name)+'</div>';
@@ -714,7 +714,7 @@ function tinFoilConfirm(message){
   });
 }
 /* TIN_FOIL_RESULT_HEALTH_BEGIN */
-const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-05T23:24:42.726442+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[{"round":"First Round Qualifying","home":"Crowborough Athletic","away":"AFC Whyteleafe","date":"2026-09-05","kickoff":"15:00","source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"},{"round":"First Round Qualifying","home":"Lewes","away":"Cray Wanderers","date":"2026-09-05","kickoff":"15:00","venue":{"ground":"The Dripping Pan","postcode":"BN7 2XA","source":"https://fchd.info/maps/GAZ.htm","verification":"fchd-gazetteer"},"source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"},{"round":"First Round Qualifying","home":"Lye Town","away":"Racing Club Warwick","date":"2026-09-05","kickoff":"15:00","source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"},{"round":"First Round Qualifying","home":"Stamford","away":"Mickleover","date":"2026-09-05","kickoff":"15:00","venue":{"ground":"Zeeco Stadium","postcode":"PE9 1US","source":"https://fchd.info/maps/GAZ.htm","verification":"fchd-gazetteer"},"source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"}]};
+const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-05T23:26:16.785774+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[{"round":"First Round Qualifying","home":"Crowborough Athletic","away":"AFC Whyteleafe","date":"2026-09-05","kickoff":"15:00","source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"},{"round":"First Round Qualifying","home":"Lewes","away":"Cray Wanderers","date":"2026-09-05","kickoff":"15:00","venue":{"ground":"The Dripping Pan","postcode":"BN7 2XA","source":"https://fchd.info/maps/GAZ.htm","verification":"fchd-gazetteer"},"source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"},{"round":"First Round Qualifying","home":"Lye Town","away":"Racing Club Warwick","date":"2026-09-05","kickoff":"15:00","source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"},{"round":"First Round Qualifying","home":"Stamford","away":"Mickleover","date":"2026-09-05","kickoff":"15:00","venue":{"ground":"Zeeco Stadium","postcode":"PE9 1US","source":"https://fchd.info/maps/GAZ.htm","verification":"fchd-gazetteer"},"source_url":"https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round","section":"fixtures","scheduled":"2026-09-05T15:00:00+01:00","deadline":"2026-09-05T18:00:00+01:00"}]};
 function tinFoilHealthKey(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function tinFoilHealthTextHasClub(text,name){
   const hay=' '+tinFoilHealthKey(text)+' ',needle=' '+tinFoilHealthKey(name)+' ';
