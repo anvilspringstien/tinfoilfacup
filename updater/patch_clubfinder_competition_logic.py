@@ -81,7 +81,10 @@ history_fn=r'''function historicalResultsForClub(club){
   out.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return out;
 }'''
-history_pat=re.compile(r'function historicalResultsForClub\(club\)\{.*?\}\s*(?=function buildJourney)',re.S)
+# A previously published next-round guard may sit between this function and
+# buildJourney. Include it in the replacement boundary so the patcher can
+# recover cleanly; the journey-integrity patch reinstalls the guard afterwards.
+history_pat=re.compile(r'function historicalResultsForClub\(club\)\{.*?\}\s*(?:/\* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN \*/.*?/\* TIN_FOIL_NEXT_ROUND_INTEGRITY_END \*/\s*)?(?=function buildJourney)',re.S)
 text,n=history_pat.subn(lambda m:history_fn+' ',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one historicalResultsForClub function, replaced {n}')
 
@@ -127,11 +130,10 @@ new_build=r'''function buildJourney(origin){
   unique.sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
   return {origin,carrier,breadcrumbs:unique};
 }'''
-journey_pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*function previousRoundsHtml',re.S)
+journey_pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*(?:/\* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN \*/.*?/\* TIN_FOIL_NEXT_ROUND_INTEGRITY_END \*/\s*)?function previousRoundsHtml',re.S)
 text,n=journey_pat.subn(lambda m:new_build+' function previousRoundsHtml',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-# Preserve an authoritative venue already attached to the canonical live fixture.
 old_known="const knownFixture=nf?resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club):null;"
 new_known="const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;"
 if old_known in text:text=text.replace(old_known,new_known,1)
@@ -142,7 +144,6 @@ new_won="const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWin
 if old_won in text:text=text.replace(old_won,new_won,1)
 elif new_won not in text:raise SystemExit('ABORT: competitionState winner comparison not found')
 
-# Presentation-only: keep the live-data/version line directly beneath the search panel.
 old_layout='<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="status"></div><div id="results"></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div>'
 new_layout='<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div>'
 if old_layout in text:text=text.replace(old_layout,new_layout,1)
