@@ -5,6 +5,7 @@ Responsibilities:
 1. Always fetch the live competition snapshot with cache-busting/no-store semantics.
 2. Return Previous Rounds breadcrumbs only for the actual Tin Foil FA Cup custody chain.
 3. Never present the just-played/current-round fixture as the known fixture for the next round.
+4. Present next-round dates in a human-friendly British format.
 """
 from pathlib import Path
 import re
@@ -91,6 +92,29 @@ if pos < 0:
     raise SystemExit('ABORT: previousRoundsHtml insertion boundary not found')
 text = text[:pos] + next_guard + '\n' + text[pos:]
 
+# Human-facing next-round dates should never leak the canonical ISO storage form.
+old_date = "'<br>'+esc(next.date)+"
+new_date = "'<br>'+esc(tinFoilDisplayDate(next.date))+"
+if old_date in text:
+    text = text.replace(old_date, new_date, 1)
+elif new_date not in text:
+    raise SystemExit('ABORT: next-round date renderer boundary not found')
+
+helper = r'''function tinFoilDisplayDate(value){
+  if(!value)return 'Date TBC';
+  const raw=String(value).trim();
+  const d=new Date(raw+'T12:00:00');
+  if(Number.isNaN(d.getTime()))return raw;
+  return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+'''
+if 'function tinFoilDisplayDate(value)' not in text:
+    state_marker = 'function stateHtml(club)'
+    state_pos = text.find(state_marker)
+    if state_pos < 0:
+        raise SystemExit('ABORT: stateHtml insertion boundary not found')
+    text = text[:state_pos] + helper + text[state_pos:]
+
 required = (
     "fetch(u,{cache:'no-store'})",
     "+'t='+Date.now()",
@@ -100,6 +124,9 @@ required = (
     'breadcrumbs:resolved.breadcrumbs',
     'const tinFoilBaseNextRoundInfo=nextRoundInfo;',
     'return {...info,knownFixture:null};',
+    'function tinFoilDisplayDate(value)',
+    "weekday:'long',day:'numeric',month:'long',year:'numeric'",
+    "'<br>'+esc(tinFoilDisplayDate(next.date))+",
 )
 for required_marker in required:
     if required_marker not in text:
@@ -113,5 +140,6 @@ print('CLUBFINDER JOURNEY INTEGRITY PATCH: SUCCESS')
 print('Live competition fetch: cache-busted + no-store')
 print('Previous Rounds: filtered to actual custody chain')
 print('Next Round: stale current-round fixture suppressed')
+print('Next Round date: long-form en-GB display')
 print('Competition data itself: UNTOUCHED')
 print('Ground records: UNTOUCHED')
