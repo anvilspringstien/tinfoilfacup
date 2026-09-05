@@ -1,4 +1,4 @@
-name: Scan FA Cup results (v7.5 pilot)
+name: Scan FA Cup results (v7.6 guarded)
 on:
   workflow_dispatch:
     inputs:
@@ -12,11 +12,18 @@ on:
         type: boolean
         default: false
   schedule:
-    # Check hourly. auto_results.py only publishes unambiguous results that
-    # are actually present on the FA results page; repeated runs are idempotent.
+    # Hourly independent scan. The importer cross-checks a structural fallback
+    # source and refuses a silent green run when FT rows cannot be parsed.
     - cron: "17 * * * *"
+  push:
+    paths:
+      - "updater/auto_results.py"
+      - ".github/workflows/scan-results.yml"
 permissions:
   contents: write
+concurrency:
+  group: fa-cup-result-scan-main
+  cancel-in-progress: false
 jobs:
   scan:
     runs-on: ubuntu-latest
@@ -35,6 +42,7 @@ jobs:
             python updater/auto_results.py --url "$SOURCE_URL"
           fi
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: results-pilot-report
           path: updater/results-pilot-report.json
@@ -44,4 +52,10 @@ jobs:
           git config user.name "Tin Foil FA Cup Updater"
           git config user.email "actions@users.noreply.github.com"
           git add competition.json
-          if git diff --cached --quiet; then echo "No new results."; else git commit -m "Auto-import validated FA Cup results"; git push; fi
+          if git diff --cached --quiet; then
+            echo "No new results."
+          else
+            git commit -m "Auto-import validated FA Cup results"
+            git pull --rebase origin main
+            git push
+          fi
