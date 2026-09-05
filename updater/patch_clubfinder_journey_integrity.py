@@ -66,9 +66,6 @@ text, n = journey_pat.subn(lambda m: new_build + ' function previousRoundsHtml',
 if n != 1:
     raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-# nextRoundInfo historically reused club.fixture even after that fixture had become
-# the completed First Qualifying tie. Keep the round label/date, but only expose a
-# knownFixture when the fixture itself belongs to the round being described.
 next_guard = r'''
 /* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */
 const tinFoilBaseNextRoundInfo=nextRoundInfo;
@@ -85,20 +82,14 @@ nextRoundInfo=function(club){
 };
 /* TIN_FOIL_NEXT_ROUND_INTEGRITY_END */
 '''.strip()
-marker = 'function buildJourney(origin){'
-start = text.find('/* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */')
-if start >= 0:
-    end_marker = '/* TIN_FOIL_NEXT_ROUND_INTEGRITY_END */'
-    end = text.find(end_marker, start)
-    if end < 0:
-        raise SystemExit('ABORT: incomplete next-round integrity block')
-    end += len(end_marker)
-    text = text[:start] + next_guard + text[end:]
-else:
-    pos = text.find(marker)
-    if pos < 0:
-        raise SystemExit('ABORT: buildJourney insertion boundary not found')
-    text = text[:pos] + next_guard + '\n' + text[pos:]
+# Place this AFTER buildJourney. The upstream competition patcher deliberately
+# replaces buildJourney on every health run, so it will remove this block first;
+# this patch then reinstalls it. That keeps both patchers safely idempotent.
+marker = 'function previousRoundsHtml'
+pos = text.find(marker)
+if pos < 0:
+    raise SystemExit('ABORT: previousRoundsHtml insertion boundary not found')
+text = text[:pos] + next_guard + '\n' + text[pos:]
 
 required = (
     "fetch(u,{cache:'no-store'})",
