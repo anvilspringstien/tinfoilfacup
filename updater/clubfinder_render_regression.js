@@ -17,6 +17,7 @@ const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
+  const compactState=(club)=>{const s=competitionState(club);return {club:club.name,type:s&&s.type,round:s&&s.round,result:s&&s.result?{home:s.result.home,away:s.result.away,home_score:s.result.home_score,away_score:s.result.away_score,round:s.result.round}:null,next:typeof nextRoundInfo==='function'?nextRoundInfo(club):null};};
 
   const origin=ELIGIBLE.find(c=>same(c.name,'Newton Aycliffe FC'));
   if(!origin) throw new Error('DL5 regression: Newton Aycliffe FC not found in ELIGIBLE');
@@ -44,6 +45,8 @@ const assertions=`
   if(!frenfordLoss)throw new Error('W1D regression: Frenford 0-4 Enfield Town missing from journey history');
   if(!same(wcarrier.name,'Enfield Town'))throw new Error('W1D regression: expected live custodian Enfield Town after Frenford loss, got '+wcarrier.name);
 
+  console.log('STATUS DIAGNOSTIC HEATON:',JSON.stringify(compactState(carrier)));
+  console.log('STATUS DIAGNOSTIC ENFIELD:',JSON.stringify(compactState(wcarrier)));
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
