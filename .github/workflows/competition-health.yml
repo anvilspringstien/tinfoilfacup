@@ -1,4 +1,4 @@
-name: Competition health monitor (v7.9.22)
+name: Competition health monitor (v7.9.23)
 
 on:
   workflow_dispatch:
@@ -13,11 +13,13 @@ on:
       - "updater/sync_competition_chronology_v2.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
+      - "updater/patch_clubfinder_journey_integrity.py"
       - "updater/patch_clubfinder_result_status.py"
       - "updater/patch_clubfinder_branding.py"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
       - "updater/clubfinder_render_regression.js"
+      - "updater/journey_integrity_regression.js"
       - ".github/workflows/competition-health.yml"
 
 permissions:
@@ -54,6 +56,9 @@ jobs:
       - name: Apply guarded Clubfinder competition presentation fixes
         run: python updater/patch_clubfinder_competition_logic.py
 
+      - name: Apply guarded Clubfinder journey integrity fixes
+        run: python updater/patch_clubfinder_journey_integrity.py
+
       - name: Apply guarded Clubfinder result-status presentation
         run: python updater/patch_clubfinder_result_status.py
 
@@ -65,6 +70,9 @@ jobs:
 
       - name: Run rendered Clubfinder DL5 regression
         run: node updater/clubfinder_render_regression.js
+
+      - name: Run all-club journey integrity regression
+        run: node updater/journey_integrity_regression.js
 
       - name: Commit canonical competition state and health report
         run: |
