@@ -1,4 +1,4 @@
-name: Competition health monitor (v7.9.21)
+name: Competition health monitor (v7.9.22)
 
 on:
   workflow_dispatch:
@@ -22,6 +22,12 @@ on:
 permissions:
   contents: write
 
+# Do not let overlapping scheduled/push runs race each other while writing
+# competition.json and competition-health.md.
+concurrency:
+  group: competition-health-main
+  cancel-in-progress: false
+
 jobs:
   health:
     runs-on: ubuntu-latest
@@ -43,7 +49,11 @@ jobs:
       - name: Apply guarded Clubfinder branding fixes
         run: python updater/patch_clubfinder_branding.py
 
+      # Health can legitimately be red because results are late/missing. Capture that
+      # state, but do not prevent validated results and the red report being published.
       - name: Audit full competition chronology
+        id: health_audit
+        continue-on-error: true
         run: python updater/competition_health.py
 
       - name: Run competition regression guard
@@ -61,6 +71,7 @@ jobs:
             echo "Competition state and health report unchanged."
           else
             git commit -m "Update canonical competition chronology"
+            git pull --rebase origin main
             git push
           fi
 
@@ -72,3 +83,9 @@ jobs:
           path: |
             competition-health.md
             updater/competition-health.json
+
+      - name: Fail run if competition health is critical
+        if: ${{ steps.health_audit.outcome == 'failure' }}
+        run: |
+          echo "Competition health report was published, but the audit is critical."
+          exit 1
