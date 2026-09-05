@@ -17,7 +17,6 @@ const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
-  const compactState=(club)=>{const s=competitionState(club);return {club:club.name,type:s&&s.type,round:s&&s.round,result:s&&s.result?{home:s.result.home,away:s.result.away,home_score:s.result.home_score,away_score:s.result.away_score,round:s.result.round}:null,next:typeof nextRoundInfo==='function'?nextRoundInfo(club):null};};
 
   const origin=ELIGIBLE.find(c=>same(c.name,'Newton Aycliffe FC'));
   if(!origin) throw new Error('DL5 regression: Newton Aycliffe FC not found in ELIGIBLE');
@@ -29,7 +28,13 @@ const assertions=`
   if(!hasHeatonReplay) throw new Error('DL5 render regression: Heaton Stannington 4-2 Kendal replay missing from journey history');
   if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
   if(!same(carrier.name,'Heaton Stannington')) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
-  const state=competitionState(carrier);if(state.type!=='won'&&state.type!=='pending')throw new Error('DL5 render regression: unexpected Heaton state '+state.type);
+  const state=competitionState(carrier);
+  if(state.type!=='won')throw new Error('DL5 render regression: Heaton should be a confirmed First Qualifying winner, got '+state.type);
+  if(!state.result||!same(state.result.home,'Heaton Stannington')||!same(state.result.away,'Knaresborough Town')||Number(state.result.home_score)!==1||Number(state.result.away_score)!==0)throw new Error('DL5 render regression: Heaton 1-0 Knaresborough result not driving winner state');
+  const heatonNext=nextRoundInfo(carrier);
+  if(!heatonNext||heatonNext.name!=='Second Round Qualifying')throw new Error('DL5 render regression: expected Second Round Qualifying after Heaton win');
+  if(heatonNext.knownFixture)throw new Error('DL5 render regression: played Heaton-Knaresborough First Qualifying tie leaked into Second Round Qualifying fixture');
+
   const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));const next=nextRoundInfo(bishop);
   if(!next||!next.knownFixture)throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
   const v=next.knownFixture.venue||{};if(!v.postcode||/TBC/i.test(v.postcode))throw new Error('DL5 render regression: Emley v Bishop Auckland venue/postcode still TBC');
@@ -44,15 +49,18 @@ const assertions=`
   const frenfordLoss=whistory.find(r=>same(r.home,'Frenford')&&same(r.away,'Enfield Town')&&Number(r.home_score)===0&&Number(r.away_score)===4);
   if(!frenfordLoss)throw new Error('W1D regression: Frenford 0-4 Enfield Town missing from journey history');
   if(!same(wcarrier.name,'Enfield Town'))throw new Error('W1D regression: expected live custodian Enfield Town after Frenford loss, got '+wcarrier.name);
+  const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: Enfield should be confirmed First Qualifying winner');
+  const enfieldNext=nextRoundInfo(wcarrier);if(!enfieldNext||enfieldNext.name!=='Second Round Qualifying'||enfieldNext.knownFixture)throw new Error('W1D regression: Frenford-Enfield current tie leaked into Enfield next-round fixture');
 
-  console.log('STATUS DIAGNOSTIC HEATON:',JSON.stringify(compactState(carrier)));
-  console.log('STATUS DIAGNOSTIC ENFIELD:',JSON.stringify(compactState(wcarrier)));
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
+  console.log('Heaton First Qualifying result: 1-0 Knaresborough — PASS');
+  console.log('Heaton next round: Second Round Qualifying, fixture not yet known — PASS');
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
   console.log('Heaton replay present: PASS');
   console.log('Emley venue:',v.ground,'•',v.postcode);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
+  console.log('W1D current-tie/next-round separation: PASS');
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
