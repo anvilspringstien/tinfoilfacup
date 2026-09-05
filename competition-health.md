@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **04/09/2026, 08:25:40 BST**
+Last checked: **05/09/2026, 21:54:02 BST**
 
 ## Chronology coverage
 
@@ -11,11 +11,18 @@ Last checked: **04/09/2026, 08:25:40 BST**
 
 ## Fixture health
 
-- 🟢 Played fixtures with results: **137**
+- 🟢 Played fixtures with results: **241**
 - 🟡 Recently played / grace period: **0**
-- 🔴 Results requiring confirmation: **0**
-- ⚪ Upcoming / incomplete-date fixtures: **112**
+- 🔴 Results requiring confirmation: **4**
+- ⚪ Upcoming / incomplete-date fixtures: **4**
 
-## 🟢 Competition chronology healthy
+## 🔴 Critical competition-data issues
 
-Preliminary Round history is covered, the First Qualifying draw is complete and resolved, and no played fixture is overdue a result.
+- 4 played fixtures are overdue a result.
+
+## Results requiring confirmation
+
+- **Crowborough Athletic v AFC Whyteleafe** — First Round Qualifying — 2026-09-05 • 15:00
+- **Lewes v Cray Wanderers** — First Round Qualifying — 2026-09-05 • 15:00
+- **Lye Town v Racing Club Warwick** — First Round Qualifying — 2026-09-05 • 15:00
+- **Stamford v Mickleover** — First Round Qualifying — 2026-09-05 • 15:00
