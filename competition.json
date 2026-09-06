@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-09-05T22:51:24.100182+00:00",
+  "updated_at": "2026-09-06T00:38:12.538740+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -5937,17 +5937,15 @@
     },
     "Lye Town": {
       "home": "Lye Town",
-      "away": "Lichfield City",
-      "home_score": 6,
-      "away_score": 0,
-      "winner": "Lye Town",
+      "away": "Racing Club Warwick",
+      "home_score": 1,
+      "away_score": 5,
+      "winner": "Racing Club Warwick",
       "status": "FT",
       "decision": "",
-      "date": "2026-08-22",
-      "round": "Preliminary Round",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
-      "kickoff": "15:00",
-      "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      "date": "2026-09-05",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     },
     "Lye Town AFC": {
       "home": "Lye Town",
@@ -13437,6 +13435,18 @@
       "status": "FT",
       "decision": "",
       "date": "2026-09-05",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+    },
+    "Racing Club Warwick": {
+      "home": "Lye Town",
+      "away": "Racing Club Warwick",
+      "home_score": 1,
+      "away_score": 5,
+      "winner": "Racing Club Warwick",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-05",
+      "round": "First Round Qualifying",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     }
   },
@@ -30887,6 +30897,18 @@
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
         "kickoff": "15:00",
         "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      },
+      {
+        "home": "Lye Town",
+        "away": "Racing Club Warwick",
+        "home_score": 1,
+        "away_score": 5,
+        "winner": "Racing Club Warwick",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-05",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ],
     "Lye Town AFC": [
@@ -42824,6 +42846,20 @@
         "status": "FT",
         "decision": "",
         "date": "2026-09-05",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+      }
+    ],
+    "Racing Club Warwick": [
+      {
+        "home": "Lye Town",
+        "away": "Racing Club Warwick",
+        "home_score": 1,
+        "away_score": 5,
+        "winner": "Racing Club Warwick",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-05",
+        "round": "First Round Qualifying",
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ]
