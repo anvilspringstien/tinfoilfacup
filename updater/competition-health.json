@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-05T23:51:25.436573+01:00",
+  "checked_at": "2026-09-06T08:23:58.565225+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -9,85 +9,26 @@
   },
   "counts": {
     "known_fixtures": 249,
-    "complete": 241,
+    "complete": 245,
     "awaiting_grace": 0,
-    "overdue": 4,
+    "overdue": 0,
     "upcoming": 4,
-    "critical": 1
+    "critical": 0
   },
-  "critical": [
-    "4 played fixtures are overdue a result."
-  ],
-  "overdue": [
-    {
-      "round": "First Round Qualifying",
-      "home": "Crowborough Athletic",
-      "away": "AFC Whyteleafe",
-      "date": "2026-09-05",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
-      "section": "fixtures",
-      "scheduled": "2026-09-05T15:00:00+01:00",
-      "deadline": "2026-09-05T18:00:00+01:00"
-    },
-    {
-      "round": "First Round Qualifying",
-      "home": "Lewes",
-      "away": "Cray Wanderers",
-      "date": "2026-09-05",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Dripping Pan",
-        "postcode": "BN7 2XA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      },
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
-      "section": "fixtures",
-      "scheduled": "2026-09-05T15:00:00+01:00",
-      "deadline": "2026-09-05T18:00:00+01:00"
-    },
-    {
-      "round": "First Round Qualifying",
-      "home": "Lye Town",
-      "away": "Racing Club Warwick",
-      "date": "2026-09-05",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
-      "section": "fixtures",
-      "scheduled": "2026-09-05T15:00:00+01:00",
-      "deadline": "2026-09-05T18:00:00+01:00"
-    },
-    {
-      "round": "First Round Qualifying",
-      "home": "Stamford",
-      "away": "Mickleover",
-      "date": "2026-09-05",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Zeeco Stadium",
-        "postcode": "PE9 1US",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      },
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
-      "section": "fixtures",
-      "scheduled": "2026-09-05T15:00:00+01:00",
-      "deadline": "2026-09-05T18:00:00+01:00"
-    }
-  ],
+  "critical": [],
+  "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-09-05T22:51:24.100182+00:00",
+    "synced_at": "2026-09-06T07:23:56.515747+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
     "first_qualifying_canonical_fixtures": 112,
-    "first_qualifying_live_upcoming": 8,
-    "first_qualifying_live_results": 104,
+    "first_qualifying_live_upcoming": 4,
+    "first_qualifying_live_results": 108,
     "first_qualifying_live_rows_observed": 112,
     "result_dates": [
       "20260821",
