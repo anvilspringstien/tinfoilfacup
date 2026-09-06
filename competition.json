@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-09-06T07:23:56.515747+00:00",
+  "updated_at": "2026-09-06T14:25:09.406404+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -2788,18 +2788,16 @@
       "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
     },
     "Bishop Auckland": {
-      "home": "Crook Town",
+      "home": "Emley AFC",
       "away": "Bishop Auckland",
-      "home_score": 0,
-      "away_score": 3,
-      "winner": "Bishop Auckland",
+      "home_score": 1,
+      "away_score": 1,
+      "winner": "",
       "status": "FT",
       "decision": "",
-      "date": "2026-08-22",
-      "round": "Preliminary Round",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
-      "kickoff": "15:00",
-      "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     },
     "Crook Town FC": {
       "home": "Crook Town",
@@ -13599,6 +13597,30 @@
       "status": "FT",
       "decision": "",
       "date": "2026-09-05",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+    },
+    "Emley": {
+      "home": "Emley AFC",
+      "away": "Bishop Auckland",
+      "home_score": 1,
+      "away_score": 1,
+      "winner": "",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+    },
+    "Emley AFC": {
+      "home": "Emley AFC",
+      "away": "Bishop Auckland",
+      "home_score": 1,
+      "away_score": 1,
+      "winner": "",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     }
   },
@@ -25457,6 +25479,18 @@
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
         "kickoff": "15:00",
         "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      },
+      {
+        "home": "Emley AFC",
+        "away": "Bishop Auckland",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ],
     "Crook Town FC": [
@@ -43304,6 +43338,34 @@
         "status": "FT",
         "decision": "",
         "date": "2026-09-05",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+      }
+    ],
+    "Emley": [
+      {
+        "home": "Emley AFC",
+        "away": "Bishop Auckland",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+      }
+    ],
+    "Emley AFC": [
+      {
+        "home": "Emley AFC",
+        "away": "Bishop Auckland",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ]
