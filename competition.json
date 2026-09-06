@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-09-06T14:25:09.406404+00:00",
+  "updated_at": "2026-09-06T17:23:47.473272+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -847,17 +847,15 @@
     },
     "Ascot United": {
       "home": "Ascot United",
-      "away": "Penn & Tylers Green",
-      "home_score": 2,
+      "away": "Pagham",
+      "home_score": 1,
       "away_score": 1,
-      "winner": "Ascot United",
+      "winner": "",
       "status": "FT",
       "decision": "",
-      "date": "2026-08-22",
-      "round": "Preliminary Round",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
-      "kickoff": "15:00",
-      "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     },
     "Penn & Tylers Green FC": {
       "home": "Ascot United",
@@ -2458,18 +2456,16 @@
       "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
     },
     "Cobham": {
-      "home": "Cobham",
-      "away": "Littlehampton Town",
-      "home_score": 3,
+      "home": "Southall",
+      "away": "Cobham",
+      "home_score": 2,
       "away_score": 1,
-      "winner": "Cobham",
+      "winner": "Southall",
       "status": "FT",
       "decision": "",
-      "date": "2026-08-22",
-      "round": "Preliminary Round",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
-      "kickoff": "15:00",
-      "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     },
     "Knowle FC": {
       "round": "First Round Qualifying",
@@ -2884,18 +2880,16 @@
       "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
     },
     "Southall": {
-      "home": "Deal Town",
-      "away": "Southall",
-      "home_score": 1,
-      "away_score": 2,
+      "home": "Southall",
+      "away": "Cobham",
+      "home_score": 2,
+      "away_score": 1,
       "winner": "Southall",
       "status": "FT",
       "decision": "",
-      "date": "2026-08-22",
-      "round": "Preliminary Round",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
-      "kickoff": "15:00",
-      "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     },
     "Southall FC": {
       "home": "Deal Town",
@@ -6662,18 +6656,16 @@
       "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
     },
     "Pagham": {
-      "home": "Pagham",
-      "away": "Balham",
-      "home_score": 2,
-      "away_score": 0,
-      "winner": "Pagham",
+      "home": "Ascot United",
+      "away": "Pagham",
+      "home_score": 1,
+      "away_score": 1,
+      "winner": "",
       "status": "FT",
       "decision": "",
-      "date": "2026-08-22",
-      "round": "Preliminary Round",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
-      "kickoff": "15:00",
-      "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
     },
     "Peacehaven & Telscombe": {
       "home": "Peacehaven & Telscombe",
@@ -13617,6 +13609,30 @@
       "home_score": 1,
       "away_score": 1,
       "winner": "",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+    },
+    "Stourbridge": {
+      "home": "Stourbridge",
+      "away": "Rushall Olympic",
+      "home_score": 1,
+      "away_score": 3,
+      "winner": "Rushall Olympic",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-06",
+      "round": "First Round Qualifying",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+    },
+    "Rushall Olympic": {
+      "home": "Stourbridge",
+      "away": "Rushall Olympic",
+      "home_score": 1,
+      "away_score": 3,
+      "winner": "Rushall Olympic",
       "status": "FT",
       "decision": "",
       "date": "2026-09-06",
@@ -22009,6 +22025,18 @@
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
         "kickoff": "15:00",
         "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      },
+      {
+        "home": "Ascot United",
+        "away": "Pagham",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ],
     "Penn & Tylers Green FC": [
@@ -24941,6 +24969,18 @@
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
         "kickoff": "15:00",
         "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      },
+      {
+        "home": "Southall",
+        "away": "Cobham",
+        "home_score": 2,
+        "away_score": 1,
+        "winner": "Southall",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ],
     "Knowle FC": [
@@ -25603,6 +25643,18 @@
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
         "kickoff": "15:00",
         "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      },
+      {
+        "home": "Southall",
+        "away": "Cobham",
+        "home_score": 2,
+        "away_score": 1,
+        "winner": "Southall",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ],
     "Southall FC": [
@@ -32381,6 +32433,18 @@
         "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822",
         "kickoff": "15:00",
         "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
+      },
+      {
+        "home": "Ascot United",
+        "away": "Pagham",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
       }
     ],
     "Peacehaven & Telscombe": [
@@ -43362,6 +43426,34 @@
         "home_score": 1,
         "away_score": 1,
         "winner": "",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+      }
+    ],
+    "Stourbridge": [
+      {
+        "home": "Stourbridge",
+        "away": "Rushall Olympic",
+        "home_score": 1,
+        "away_score": 3,
+        "winner": "Rushall Olympic",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-06",
+        "round": "First Round Qualifying",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+      }
+    ],
+    "Rushall Olympic": [
+      {
+        "home": "Stourbridge",
+        "away": "Rushall Olympic",
+        "home_score": 1,
+        "away_score": 3,
+        "winner": "Rushall Olympic",
         "status": "FT",
         "decision": "",
         "date": "2026-09-06",
