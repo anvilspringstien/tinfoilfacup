@@ -2,15 +2,17 @@
 """Guarded FA Cup result importer with independent fallback parsing.
 
 Primary source remains configurable. FootballWebPages is also parsed structurally
-against the canonical tie list. A source containing FT rows is not allowed to
-silently yield zero parsed results: that is treated as a parser/source-health
-failure rather than a green run.
+against the canonical First Qualifying tie list. Once the competition advances,
+that list is read from round_fixtures rather than the active next-round fixture
+map. A source containing FT rows is not allowed to silently yield zero parsed
+results: that is treated as a parser/source-health failure rather than a green run.
 """
 import argparse,html as H,json,re,urllib.request
 from datetime import datetime,timezone
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]; DATA=ROOT/"competition.json"
 FWP_URL="https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round"
+SCAN_ROUND="First Round Qualifying"
 
 
 def norm(s):
@@ -40,13 +42,34 @@ def cells(row):
  return [clean(x) for x in re.findall(r"<t[dh]\b[^>]*>(.*?)</t[dh]>",row,re.I|re.S)]
 
 
+def fixture_values(src):
+ vals=src.values() if isinstance(src,dict) else (src or [])
+ return [f for f in vals if isinstance(f,dict) and f.get("home") and f.get("away")]
+
+
 def ties(d):
+ """Return the canonical First Qualifying scan set even after active-round promotion."""
  out=[];seen=set()
- for sec in ("fixtures","replays"):
-  vals=(d.get(sec,{}) or {}).values()
-  for f in vals:
-   if not isinstance(f,dict) or not f.get("home") or not f.get("away"):continue
-   k=(norm(f["home"]),norm(f["away"]),f.get("date",""))
+ archive=(d.get("round_fixtures") or {}).get(SCAN_ROUND)
+ if archive is not None:
+  sources=[archive]
+ elif d.get("source_round")==SCAN_ROUND:
+  sources=[d.get("fixtures") or {}]
+ else:
+  sources=[]
+
+ # Replay fixtures are kept separately from the archived original draw. Include
+ # only First Qualifying replay records so a later active round cannot pollute the
+ # fixed First Qualifying fallback scan.
+ replay_src=[]
+ for f in fixture_values(d.get("replays") or {}):
+  rnd=str(f.get("round") or "")
+  if not rnd or SCAN_ROUND.lower() in rnd.lower(): replay_src.append(f)
+ sources.append(replay_src)
+
+ for src in sources:
+  for f in fixture_values(src):
+   k=(norm(f["home"]),norm(f["away"]),f.get("date",""),f.get("round",""))
    if k not in seen:seen.add(k);out.append(f)
  return out
 
@@ -99,7 +122,7 @@ def parse_fwp(html,known):
    unmatched.append([home,away]); continue
   date=match.get("date","") or current_date
   winner=match["home"] if hs>as_ else match["away"] if as_>hs else ""
-  parsed.append({"home":match["home"],"away":match["away"],"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":date,"round":match.get("round","FA Cup"),"source_url":FWP_URL})
+  parsed.append({"home":match["home"],"away":match["away"],"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":date,"round":match.get("round",SCAN_ROUND),"source_url":FWP_URL})
  return parsed,unmatched,ft_rows
 
 
@@ -124,6 +147,8 @@ def dedupe(rs):
 def main():
  ap=argparse.ArgumentParser();ap.add_argument("--url",default="https://www.thefa.com/competitions/thefacup/results");ap.add_argument("--publish",action="store_true");a=ap.parse_args()
  d=json.loads(DATA.read_text()); known=ties(d); existing=sum((v for v in (d.get("result_history",{}) or {}).values() if isinstance(v,list)),[])
+ if len([f for f in known if str(f.get("round") or "").lower()==SCAN_ROUND.lower()])<112:
+  raise SystemExit(f"Scanner health failure: canonical {SCAN_ROUND} archive is incomplete ({len(known)} known scan ties).")
 
  primary_html=fetch(a.url); txt=textify(primary_html); primary=[]; amb=[]
  for f in known:
@@ -131,10 +156,10 @@ def main():
   if len(c)>1:amb.append([f["home"],f["away"],sorted(c)]);continue
   if len(c)!=1:continue
   hs,as_=next(iter(c)); winner=f["home"] if hs>as_ else f["away"] if as_>hs else ""
-  primary.append({"home":f["home"],"away":f["away"],"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":f.get("date",""),"round":f.get("round","FA Cup"),"source_url":a.url})
+  primary.append({"home":f["home"],"away":f["away"],"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":f.get("date",""),"round":f.get("round",SCAN_ROUND),"source_url":a.url})
 
  fallback_html=fetch(FWP_URL); fallback,unmatched,ft_rows=parse_fwp(fallback_html,known)
- report={"checked_at":datetime.now(timezone.utc).isoformat(),"primary_source_url":a.url,"fallback_source_url":FWP_URL,"known_ties":len(known),"primary_results_detected":len(primary),"fallback_ft_rows":ft_rows,"fallback_results_detected":len(fallback),"new_results":[],"ambiguous":amb,"unmatched_fallback_rows":unmatched,"source_disagreements":[]}
+ report={"checked_at":datetime.now(timezone.utc).isoformat(),"scan_round":SCAN_ROUND,"active_round":d.get("source_round",""),"primary_source_url":a.url,"fallback_source_url":FWP_URL,"known_ties":len(known),"primary_results_detected":len(primary),"fallback_ft_rows":ft_rows,"fallback_results_detected":len(fallback),"new_results":[],"ambiguous":amb,"unmatched_fallback_rows":unmatched,"source_disagreements":[]}
  if ft_rows and not fallback:
   (ROOT/"updater/results-pilot-report.json").write_text(json.dumps(report,indent=2)+"\n")
   raise SystemExit(f"Parser health failure: FWP contains {ft_rows} FT rows but zero canonical results were parsed.")
@@ -159,7 +184,7 @@ def main():
  detected=dedupe(primary+fallback)
  new=[r for r in detected if not any(same(x,r) for x in existing)]
  report["new_results"]=new
- print("Known ties checked:",len(known));print("Primary results detected:",len(primary));print("Fallback FT rows seen:",ft_rows);print("Fallback canonical results detected:",len(fallback));print("New unambiguous results:",len(new));print("Ambiguous ties rejected:",len(amb))
+ print("Scan round:",SCAN_ROUND);print("Active round preserved:",d.get("source_round","UNKNOWN"));print("Known ties checked:",len(known));print("Primary results detected:",len(primary));print("Fallback FT rows seen:",ft_rows);print("Fallback canonical results detected:",len(fallback));print("New unambiguous results:",len(new));print("Ambiguous ties rejected:",len(amb))
  for r in new:print(r["home"],r["home_score"],"-",r["away_score"],r["away"])
  (ROOT/"updater/results-pilot-report.json").write_text(json.dumps(report,indent=2)+"\n")
  if a.publish and amb:raise SystemExit("Publication blocked: ambiguous primary candidates.")
