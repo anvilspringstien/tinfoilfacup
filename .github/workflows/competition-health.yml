@@ -15,6 +15,7 @@ on:
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_journey_integrity.py"
       - "updater/patch_clubfinder_result_status.py"
+      - "updater/patch_clubfinder_stats_integrity.py"
       - "updater/patch_clubfinder_branding.py"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
@@ -59,6 +60,9 @@ jobs:
 
       - name: Apply guarded Clubfinder result-status presentation
         run: python updater/patch_clubfinder_result_status.py
+
+      - name: Apply guarded Clubfinder Stats integrity fixes
+        run: python updater/patch_clubfinder_stats_integrity.py
 
       - name: Apply guarded Clubfinder branding fixes
         run: python updater/patch_clubfinder_branding.py
