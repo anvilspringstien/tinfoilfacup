@@ -11,6 +11,14 @@ def norm(s):
     s=re.sub(r'\b(fc|afc|cfc)\b',' ',s)
     return re.sub(r'[^a-z0-9]+',' ',s).strip()
 
+def unique_fixtures(src):
+    vals=src.values() if isinstance(src,dict) else (src or [])
+    out={}
+    for f in vals:
+        if not isinstance(f,dict) or not f.get('home') or not f.get('away'): continue
+        out[(norm(f['home']),norm(f['away']),f.get('date',''))]=f
+    return out
+
 def all_results():
     out=[]; seen=set()
     for r in (DATA.get('results') or {}).values():
@@ -40,25 +48,33 @@ require_result('Heaton Stannington','Kendal Town',4,2,'2026-08-25')
 require_result('Prescot Cables','Litherland Remyca',1,0,'2026-08-25')
 require_result('Frenford','Haringey Borough',3,2,'2026-08-25')
 
-prelim=DATA.get('preliminary_fixtures') or {}
-unique={}
-vals=prelim.values() if isinstance(prelim,dict) else prelim
-for f in vals:
-    if isinstance(f,dict) and f.get('home') and f.get('away'):
-        unique[(norm(f['home']),norm(f['away']),f.get('date',''))]=f
-if len(unique)<130:
-    raise SystemExit(f'PRELIMINARY FIXTURE COVERAGE TOO LOW: {len(unique)}')
+prelim=unique_fixtures(DATA.get('preliminary_fixtures') or {})
+if len(prelim)<130:
+    raise SystemExit(f'PRELIMINARY FIXTURE COVERAGE TOO LOW: {len(prelim)}')
 
-fixtures=DATA.get('fixtures') or {}
-vals=fixtures.values() if isinstance(fixtures,dict) else fixtures
-future=[]
-for f in vals:
-    if not isinstance(f,dict) or not f.get('home') or not f.get('away'): continue
-    future.append(f)
+# First Qualifying must remain permanently auditable even after the active fixture
+# map advances. Before the first transition it is still the active map; afterwards
+# auto_draw.py archives it in round_fixtures.
+round_archive=DATA.get('round_fixtures') or {}
+firstq_source=round_archive.get('First Round Qualifying')
+if firstq_source is None and DATA.get('source_round')=='First Round Qualifying':
+    firstq_source=DATA.get('fixtures') or {}
+firstq=unique_fixtures(firstq_source or {})
+if len(firstq)!=112:
+    raise SystemExit(f'FIRST QUALIFYING FIXTURE COVERAGE IS NOT 112 TIES: {len(firstq)}')
+for f in firstq.values():
     if f.get('conditional') or ' or ' in f.get('home','').lower() or ' or ' in f.get('away','').lower():
         raise SystemExit(f'UNRESOLVED FIRST QUALIFYING FIXTURE: {f.get("home")} v {f.get("away")}')
-if len({(norm(f['home']),norm(f['away']),f.get('date','')) for f in future})!=112:
-    raise SystemExit('FIRST QUALIFYING FIXTURE COVERAGE IS NOT 112 TIES')
+
+# The active map must agree with its own declared source_tie_count, regardless of
+# which round is current. This replaces the old assumption that fixtures is always
+# the 112-tie First Qualifying draw.
+active=unique_fixtures(DATA.get('fixtures') or {})
+declared=DATA.get('source_tie_count')
+if declared is not None and len(active)!=int(declared):
+    raise SystemExit(f'ACTIVE FIXTURE COVERAGE {len(active)} DOES NOT MATCH source_tie_count {declared}')
+if not active:
+    raise SystemExit('ACTIVE FIXTURE MAP IS EMPTY')
 
 if 's.next.drawUrl' in HTML:
     raise SystemExit('BROKEN NEXT-ROUND LINK PROPERTY STILL PRESENT')
@@ -66,6 +82,8 @@ if "esc(k.round||next.name)" not in HTML:
     raise SystemExit('KNOWN FIXTURE ROUND LABEL DOES NOT USE LIVE FIXTURE ROUND')
 
 print('COMPETITION REGRESSION GUARD: PASS')
-print('Preliminary ties:',len(unique))
-print('First Qualifying ties:',len({(norm(f['home']),norm(f['away']),f.get('date','')) for f in future}))
+print('Preliminary ties:',len(prelim))
+print('First Qualifying ties preserved:',len(firstq))
+print('Active round:',DATA.get('source_round','UNKNOWN'))
+print('Active ties:',len(active))
 print('Representative chronology results: PASS')
