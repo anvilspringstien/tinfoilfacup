@@ -35,10 +35,20 @@ const assertions=`
   if(!heatonNext||heatonNext.name!=='Second Round Qualifying')throw new Error('DL5 render regression: expected Second Round Qualifying after Heaton win');
   if(heatonNext.knownFixture)throw new Error('DL5 render regression: played Heaton-Knaresborough First Qualifying tie leaked into Second Round Qualifying fixture');
 
-  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));const next=nextRoundInfo(bishop);
-  if(!next||!next.knownFixture)throw new Error('DL5 render regression: Bishop Auckland next fixture missing');
-  const v=next.knownFixture.venue||{};if(!v.postcode||/TBC/i.test(v.postcode))throw new Error('DL5 render regression: Emley v Bishop Auckland venue/postcode still TBC');
-  if(!v.ground||/TBC/i.test(v.ground))throw new Error('DL5 render regression: Emley v Bishop Auckland ground still TBC');
+  const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
+  if(!bishop)throw new Error('DL5 regression: Bishop Auckland FC not found in ELIGIBLE');
+  const bishopHistory=historicalResultsForClub(bishop).map(x=>x.result||{});
+  const bishopDraw=bishopHistory.find(r=>same(r.home,'Emley AFC')&&same(r.away,'Bishop Auckland')&&Number(r.home_score)===1&&Number(r.away_score)===1&&/First Round Qualifying/i.test(r.round||''));
+  if(!bishopDraw)throw new Error('DL5 render regression: Emley 1-1 Bishop Auckland First Qualifying draw missing');
+  if(!resultNeedsReplay(bishopDraw))throw new Error('DL5 render regression: Emley-Bishop Auckland draw must remain unresolved pending replay');
+  const bishopState=competitionState(bishop);
+  if(bishopState.type==='won'||bishopState.type==='eliminated')throw new Error('DL5 render regression: unresolved Emley-Bishop Auckland draw incorrectly resolved as '+bishopState.type);
+  const bishopNext=nextRoundInfo(bishop);
+  if(bishopNext&&bishopNext.knownFixture)throw new Error('DL5 render regression: Emley-Bishop Auckland First Qualifying tie leaked into a later-round fixture while replay is unresolved');
+  const bishopFixture=liveLookup('fixtures',bishop.name)||{};
+  const bv=bishopFixture.venue||{};
+  if(!bv.postcode||/TBC/i.test(bv.postcode))throw new Error('DL5 render regression: Emley-Bishop Auckland current fixture venue/postcode still TBC');
+  if(!bv.ground||/TBC/i.test(bv.ground))throw new Error('DL5 render regression: Emley-Bishop Auckland current fixture ground still TBC');
 
   const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
@@ -58,7 +68,8 @@ const assertions=`
   console.log('Heaton next round: Second Round Qualifying, fixture not yet known — PASS');
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
   console.log('Heaton replay present: PASS');
-  console.log('Emley venue:',v.ground,'•',v.postcode);
+  console.log('Emley-Bishop Auckland replay-pending state: PASS');
+  console.log('Emley-Bishop Auckland venue:',bv.ground,'•',bv.postcode);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
   console.log('W1D current-tie/next-round separation: PASS');
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
