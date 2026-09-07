@@ -20,6 +20,7 @@ on:
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
       - "updater/clubfinder_render_regression.js"
+      - "updater/clubfinder_stats_regression.js"
       - "updater/journey_integrity_regression.js"
       - ".github/workflows/competition-health.yml"
 
@@ -72,6 +73,9 @@ jobs:
 
       - name: Run rendered Clubfinder DL5 regression
         run: node updater/clubfinder_render_regression.js
+
+      - name: Run canonical DL5 4RQ Stats regression
+        run: node updater/clubfinder_stats_regression.js
 
       - name: Run all-club journey integrity regression
         run: node updater/journey_integrity_regression.js
