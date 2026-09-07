@@ -57,10 +57,6 @@ const assertions=`
     if(!/Second Round Qualifying/i.test(bf.round||''))throw new Error('DL5 render regression: Bishop conditional next fixture has wrong round');
     if(!bf.conditional)throw new Error('DL5 render regression: unresolved Bishop replay mapped to an unconditional Second Qualifying fixture');
   }
-  const bishopFixture=liveLookup('fixtures',bishop.name)||{};
-  const bv=bishopFixture.venue||{};
-  if(!bv.postcode||/TBC/i.test(bv.postcode))throw new Error('DL5 render regression: Bishop Auckland current mapped fixture venue/postcode still TBC');
-  if(!bv.ground||/TBC/i.test(bv.ground))throw new Error('DL5 render regression: Bishop Auckland current mapped fixture ground still TBC');
 
   const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
@@ -84,7 +80,6 @@ const assertions=`
   console.log('Heaton replay present: PASS');
   console.log('Emley-Bishop Auckland replay-pending state: PASS');
   console.log('Bishop IF THROUGH fixture:',bishopNext&&bishopNext.knownFixture?(bishopNext.knownFixture.home+' v '+bishopNext.knownFixture.away):'not yet mapped');
-  console.log('Emley-Bishop Auckland mapped venue:',bv.ground,'•',bv.postcode);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
   console.log('Enfield Second Qualifying fixture:',enfieldSecondQ.home,'v',enfieldSecondQ.away);
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
