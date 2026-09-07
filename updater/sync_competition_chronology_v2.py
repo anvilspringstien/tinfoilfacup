@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Guarded canonical sync for FA Cup chronology.
 
-The First Qualifying draw in competition.json is the canonical 112-tie baseline.
-Live source pages are allowed to replace upcoming `v` rows with `FT` result rows
-without making the draw appear incomplete. Live rows can enrich/update canonical
-fixtures and results, but can never shrink the canonical draw.
+The First Qualifying draw is a permanent canonical 112-tie baseline. Before the
+competition advances it lives in `fixtures`; after a guarded draw transition it
+lives in `round_fixtures["First Round Qualifying"]`. Live source pages may enrich
+that historical baseline and its results, but this sync must never replace a later
+active-round fixture map or clear later replay state.
 """
 import json,re,urllib.request
 from datetime import datetime,timezone
@@ -17,7 +18,7 @@ BASE='https://www.footballwebpages.co.uk/fa-cup'
 FIXTURES_URL=f'{BASE}/fixtures-results/first-qualifying-round'
 KICKOFF_SOURCE_URL='https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/'
 RESULT_DATES=['20260821','20260822','20260823','20260825','20260826']
-UA='Mozilla/5.0 TinFoilFACupCompetitionHealth/7.9.22'
+UA='Mozilla/5.0 TinFoilFACupCompetitionHealth/7.9.24'
 EXPECTED_FRQ=112
 
 
@@ -122,7 +123,6 @@ def live_first_qualifying(html):
     for row in re.findall(r'<tr\b[^>]*>.*?</tr>',html,re.I|re.S):
         c=[x for x in cells(row) if x]
         if not c:continue
-        # Date headings such as 'Friday 4th September 2026'.
         heading=' '.join(c)
         dm=re.search(r'(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(20\d{2})',heading)
         if dm:
@@ -131,7 +131,6 @@ def live_first_qualifying(html):
         try:vi=next(i for i,x in enumerate(c) if x.lower()=='v')
         except StopIteration:vi=-1
         if vi>=0:
-            # Common row: date, time, home, v, away. Some pages omit repeated date.
             date_s=c[vi-3] if vi>=3 else ''
             time=c[vi-2] if vi>=2 else ''
             home=c[vi-1] if vi>=1 else ''
@@ -143,14 +142,12 @@ def live_first_qualifying(html):
             continue
         try:fi=next(i for i,x in enumerate(c) if x.upper().startswith('FT'))
         except StopIteration:continue
-        # FWP result rows are normally: date, FT, home, hs, as, away, [attd].
         tail=c[fi+1:]
         nums=[(i,x) for i,x in enumerate(tail) if re.fullmatch(r'\d+',x)]
         if len(nums)<2:continue
         i1,s1=nums[0]; i2,s2=nums[1]
         if i1<1 or i2+1>=len(tail):continue
         home=strip_seed(' '.join(tail[:i1])); away=strip_seed(tail[i2+1])
-        # If the first cell is a numeric date, use it; otherwise use current heading.
         iso=current_date
         if fi>0:
             m=re.fullmatch(r'(\d{1,2})/(\d{1,2})/(20\d{2})',c[fi-1])
@@ -164,8 +161,12 @@ def live_first_qualifying(html):
 
 
 def canonical_fixtures(data):
+    """Load the permanent First Qualifying baseline without assuming it is active."""
+    archived=(data.get('round_fixtures') or {}).get('First Round Qualifying')
+    source=archived if archived is not None else (data.get('fixtures') or {})
+    vals=source.values() if isinstance(source,dict) else (source or [])
     out=[]; seen=set()
-    for f in (data.get('fixtures') or {}).values():
+    for f in vals:
         if not isinstance(f,dict) or not f.get('home') or not f.get('away'):continue
         if f.get('round')!='First Round Qualifying':continue
         k=(norm(f['home']),norm(f['away']))
@@ -220,20 +221,16 @@ if len(canonical)!=EXPECTED_FRQ:raise SystemExit(f'ABORT: canonical First Qualif
 if not frenford or frenford.get('kickoff')!='19:45':raise SystemExit(f"ABORT: Frenford replay kick-off unresolved: {None if not frenford else frenford.get('kickoff')}")
 if replays_without_time:raise SystemExit(f'ABORT: {len(replays_without_time)} Preliminary replays lack kick-off times')
 
-# Every live row must map to the canonical draw. Unknown ties block publication.
 unmatched=[]
 for row in live_upcoming+live_results:
     if not any(same_tie(row,f) for f in canonical):unmatched.append(f"{row.get('home')} v {row.get('away')}")
 if unmatched:raise SystemExit('ABORT: live First Qualifying rows not in canonical draw: '+', '.join(unmatched[:10]))
 
-# Enrich canonical fixtures from still-upcoming rows; never replace/shrink the draw.
 for live in live_upcoming:
     for f in canonical:
         if same_tie(live,f):
             f.update({k:v for k,v in live.items() if v not in (None,'')}); break
 
-# A matchday page can legitimately have fewer than 112 upcoming rows. Coverage means
-# upcoming + completed rows observed, while canonical remains exactly 112.
 observed_keys={(norm(x['home']),norm(x['away'])) for x in live_upcoming+live_results}
 if not observed_keys:
     raise SystemExit('ABORT: no First Qualifying rows observed on live source')
@@ -245,8 +242,14 @@ for r in sorted(results,key=lambda x:(x['date'],0 if x['round']=='Preliminary Ro
 # Merge live First Qualifying results only after canonical tie validation.
 for r in sorted(live_results,key=lambda x:(x['date'],norm(x['home']))):add_result(data,r)
 
-data['fixtures']=fmap(canonical)
-data['replays']={}
+# Before the competition advances, enrich the active First Qualifying map. After
+# advancement, enrich only its archive. Never regress `fixtures` from a later draw
+# back to First Qualifying, and never clear replay state owned by the results path.
+if data.get('source_round')=='First Round Qualifying':
+    data['fixtures']=fmap(canonical)
+else:
+    data.setdefault('round_fixtures',{})['First Round Qualifying']=canonical
+
 data['round_dates']={**(data.get('round_dates') or {}),'Preliminary Round':'2026-08-22','First Round Qualifying':'2026-09-05'}
 data['updated_at']=datetime.now(timezone.utc).isoformat()
 data['competition_sync']={
@@ -263,12 +266,13 @@ data['competition_sync']={
     'first_qualifying_live_rows_observed':len(observed_keys),
     'result_dates':RESULT_DATES,
     'kickoffs_enriched':kickoff_enriched,
-    'replay_kickoffs_verified':len(replay_results)
+    'replay_kickoffs_verified':len(replay_results),
+    'active_round_preserved':data.get('source_round','')
 }
 tmp=DATA_PATH.with_suffix('.json.new')
 tmp.write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 tmp.replace(DATA_PATH)
-print('COMPETITION CHRONOLOGY SYNC v3.2: SUCCESS')
+print('COMPETITION CHRONOLOGY SYNC v3.3: SUCCESS')
 print('Preliminary fixtures:',prelim_count)
 print('Preliminary results/replays:',result_count)
 print('First Qualifying canonical fixtures:',len(canonical))
@@ -278,4 +282,5 @@ print('First Qualifying live rows observed:',len(observed_keys))
 print('Kick-offs enriched:',kickoff_enriched)
 print('Replay kick-offs verified:',len(replay_results))
 print('Frenford v Haringey Borough replay kick-off:',frenford['kickoff'])
+print('Active round preserved:',data.get('source_round','UNKNOWN'))
 print('Ground/location data: UNTOUCHED')
