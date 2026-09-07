@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: fa-cup-draw-scan-main
@@ -53,8 +54,10 @@ jobs:
           path: updater/draw-watch-report.json
 
       - name: Commit validated new draw
+        id: commit_draw
         if: ${{ github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish }}
         run: |
+          echo "published=false" >> "$GITHUB_OUTPUT"
           git config user.name "Tin Foil FA Cup Draw Watcher"
           git config user.email "actions@users.noreply.github.com"
           git add competition.json updater/draw-watch-report.json
@@ -69,5 +72,16 @@ jobs:
               git commit -m "Auto-import validated FA Cup draw"
               git pull --rebase origin main
               git push
+              echo "published=true" >> "$GITHUB_OUTPUT"
             fi
           fi
+
+      # Commits created with GITHUB_TOKEN deliberately do not trigger ordinary
+      # push workflows. Explicit workflow_dispatch is therefore required so a
+      # promoted draw always gets the same chronology, Clubfinder and regression
+      # checks as a human-authored competition.json change.
+      - name: Dispatch Competition Health after promotion
+        if: ${{ steps.commit_draw.outputs.published == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run competition-health.yml --ref main
