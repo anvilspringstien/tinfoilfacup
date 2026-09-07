@@ -12,7 +12,7 @@ DATE=sys.argv[3] if len(sys.argv)>3 else '2026-09-05'
 if not SOURCE_URL:
     raise SystemExit('Usage: update_draw.py SOURCE_URL [ROUND] [YYYY-MM-DD]')
 
-UA={'User-Agent':'Mozilla/5.0 TinFoilFACupDataUpdater/1.1'}
+UA={'User-Agent':'Mozilla/5.0 TinFoilFACupDataUpdater/1.2'}
 
 def fetch(url):
     req=urllib.request.Request(url,headers=UA)
@@ -51,7 +51,7 @@ def discover(raw,base):
         low=url.lower(); score=0
         if '.ashx' in low or '.pdf' in low: score+=10
         if 'fa-cup' in low or 'facup' in low or 'emirates-fa-cup' in low: score+=5
-        if '1q' in low or 'qualifying' in low or 'draw' in low: score+=5
+        if 'qualifying' in low or 'draw' in low: score+=5
         if 'thefa.com' in low: score+=2
         if score: scored.append((score,url))
     scored.sort(reverse=True)
@@ -62,6 +62,21 @@ def pdf_text(raw):
     pdf.write_bytes(raw)
     subprocess.run(['pdftotext','-layout',str(pdf),str(txt)],check=True)
     return txt.read_text(errors='ignore')
+
+def norm(s):
+    s=(s or '').lower().replace('&',' and ')
+    s=re.sub(r'\b(fc|afc|cfc)\b',' ',s)
+    return re.sub(r'[^a-z0-9]+',' ',s).strip()
+
+def unique_fixture_values(src):
+    vals=src.values() if isinstance(src,dict) else (src or [])
+    out=[]; seen=set()
+    for f in vals:
+        if not isinstance(f,dict) or not f.get('home') or not f.get('away'): continue
+        key=(norm(f['home']),norm(f['away']),f.get('date',''))
+        if key not in seen:
+            seen.add(key); out.append(dict(f))
+    return out
 
 raw,ctype,final=fetch(SOURCE_URL)
 if raw[:4]==b'%PDF' or 'pdf' in ctype.lower() or '.ashx' in final.lower() or '.pdf' in final.lower():
@@ -96,6 +111,15 @@ for home,away in ties:
     for club in clubs:
         fixtures[club]=rec
         fixtures.setdefault(suffix.sub('',club),rec)
+
+# A manual round advance must be as safe as the automatic watcher: preserve the
+# outgoing active draw before replacing fixtures. Result/custody history remains
+# untouched in its own results/result_history sections.
+old_round=data.get('source_round')
+if old_round and old_round!=ROUND:
+    old_fixtures=unique_fixture_values(data.get('fixtures') or {})
+    if old_fixtures:
+        data.setdefault('round_fixtures',{}).setdefault(old_round,old_fixtures)
 
 data['fixtures']=fixtures
 data['updated_at']=datetime.now(timezone.utc).isoformat()
