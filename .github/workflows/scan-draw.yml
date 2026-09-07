@@ -33,7 +33,10 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_PUBLISH: ${{ inputs.publish }}
         run: |
-          if [ "$EVENT_NAME" = "schedule" ] || [ "$INPUT_PUBLISH" = "true" ]; then
+          # Scheduled scans and guarded watcher-code pushes publish only after
+          # auto_draw.py has passed its structural validation. Manual runs may
+          # still request a dry run by setting publish=false.
+          if [ "$EVENT_NAME" = "schedule" ] || [ "$EVENT_NAME" = "push" ] || [ "$INPUT_PUBLISH" = "true" ]; then
             python updater/auto_draw.py --publish
           else
             python updater/auto_draw.py
@@ -50,7 +53,7 @@ jobs:
           path: updater/draw-watch-report.json
 
       - name: Commit validated new draw
-        if: ${{ github.event_name == 'schedule' || inputs.publish }}
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish }}
         run: |
           git config user.name "Tin Foil FA Cup Draw Watcher"
           git config user.email "actions@users.noreply.github.com"
