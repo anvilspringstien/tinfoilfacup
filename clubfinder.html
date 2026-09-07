@@ -721,7 +721,7 @@ function tinFoilConfirm(message){
   });
 }
 /* TIN_FOIL_RESULT_HEALTH_BEGIN */
-const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-07T13:54:45.961301+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
+const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-07T15:50:35.114078+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
 function tinFoilHealthKey(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function tinFoilHealthTextHasClub(text,name){
   const hay=' '+tinFoilHealthKey(text)+' ',needle=' '+tinFoilHealthKey(name)+' ';
@@ -772,7 +772,42 @@ function tinFoilStartResultHealthNotice(){
   if(document&&typeof document.addEventListener==='function')document.addEventListener('click',()=>setTimeout(tinFoilRenderResultHealthNotice,0));
 }
 if(document.readyState==='loading'&&typeof document.addEventListener==='function')document.addEventListener('DOMContentLoaded',tinFoilStartResultHealthNotice);else setTimeout(tinFoilStartResultHealthNotice,0);
-/* TIN_FOIL_RESULT_HEALTH_END */const JOURNEY_STORAGE_KEY='tinFoilFACupJourney_v7';
+/* TIN_FOIL_RESULT_HEALTH_END *//* TIN_FOIL_STATS_INTEGRITY_BEGIN */
+function tinFoilStatsWinnerFromFixture(text){
+  const s=String(text||'').replace(/\s+/g,' ').trim();
+  const m=s.match(/^(.+?)\s*\((\d+)\)\s*v\s*\((\d+)\)\s*(.+)$/i);
+  if(!m)return '';
+  const hs=Number(m[2]),as=Number(m[3]);
+  if(!Number.isFinite(hs)||!Number.isFinite(as)||hs===as)return '';
+  return (hs>as?m[1]:m[4]).trim();
+}
+function tinFoilRepairStatsCustodyTable(){
+  if(!document||typeof document.querySelectorAll!=='function')return;
+  for(const table of document.querySelectorAll('table')){
+    const heads=[...table.querySelectorAll('th')].map(x=>String(x.textContent||'').trim().toUpperCase());
+    const fixtureCol=heads.findIndex(x=>x==='FIXTURE');
+    const winnerCol=heads.findIndex(x=>x.includes('WINNER')&&x.includes('CUSTODIAN'));
+    if(fixtureCol<0||winnerCol<0)continue;
+    for(const row of table.querySelectorAll('tbody tr')){
+      const cells=[...row.querySelectorAll('td')];
+      if(!cells[fixtureCol]||!cells[winnerCol])continue;
+      const winner=tinFoilStatsWinnerFromFixture(cells[fixtureCol].textContent||'');
+      if(winner)cells[winnerCol].textContent=winner;
+    }
+  }
+}
+function tinFoilStartStatsIntegrity(){
+  tinFoilRepairStatsCustodyTable();
+  if(typeof MutationObserver==='function'){
+    let queued=false;
+    const observer=new MutationObserver(()=>{if(queued)return;queued=true;setTimeout(()=>{queued=false;tinFoilRepairStatsCustodyTable()},0)});
+    const root=document.getElementById('wrap')||document.body;
+    if(root)observer.observe(root,{subtree:true,childList:true,characterData:true});
+  }
+  if(document&&typeof document.addEventListener==='function')document.addEventListener('click',()=>setTimeout(tinFoilRepairStatsCustodyTable,0));
+}
+if(document.readyState==='loading'&&typeof document.addEventListener==='function')document.addEventListener('DOMContentLoaded',tinFoilStartStatsIntegrity);else setTimeout(tinFoilStartStatsIntegrity,0);
+/* TIN_FOIL_STATS_INTEGRITY_END */const JOURNEY_STORAGE_KEY='tinFoilFACupJourney_v7';
 function loadSavedJourney(){try{return JSON.parse(localStorage.getItem(JOURNEY_STORAGE_KEY)||'null')}catch(e){return null}}
 function saveJourney(origin,postcode){const s={originName:origin.name,postcode,ended:false,selectedAt:new Date().toISOString()};localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));return s}
 function updateSavedJourney(p){const s=loadSavedJourney();if(!s)return null;const n=Object.assign({},s,p);localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(n));return n}
