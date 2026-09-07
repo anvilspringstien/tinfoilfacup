@@ -57,6 +57,14 @@ def unique_count(obj):
     for f in vals:
         if isinstance(f,dict) and f.get('home') and f.get('away'):seen.add((norm(f['home']),norm(f['away']),f.get('date',''),f.get('round','')))
     return len(seen)
+def unique_conditional(obj):
+    vals=obj.values() if isinstance(obj,dict) else (obj or []);found={}
+    for f in vals:
+        if not isinstance(f,dict) or not f.get('home') or not f.get('away'):continue
+        if not (f.get('conditional') or ' or ' in str(f.get('home','')).lower() or ' or ' in str(f.get('away','')).lower()):continue
+        key=(norm(f['home']),norm(f['away']),f.get('date',''),f.get('round',''))
+        found.setdefault(key,f)
+    return list(found.values())
 
 data=json.loads(DATA.read_text(encoding='utf-8'));now=datetime.now(timezone.utc).astimezone(UK)
 fixtures=unique_fixtures(data);results=all_results(data)
@@ -79,10 +87,7 @@ if firstq_source is None and data.get('source_round')=='First Round Qualifying':
 firstq_ties=unique_count(firstq_source or {})
 active_round=data.get('source_round','')
 active_ties=unique_count(data.get('fixtures') or {})
-active_unresolved=[]
-vals=(data.get('fixtures') or {}).values() if isinstance(data.get('fixtures'),dict) else (data.get('fixtures') or [])
-for f in vals:
-    if isinstance(f,dict) and (f.get('conditional') or ' or ' in str(f.get('home','')).lower() or ' or ' in str(f.get('away','')).lower()):active_unresolved.append(f)
+active_unresolved=unique_conditional(data.get('fixtures') or {})
 critical=[]
 if not sync:critical.append('Canonical competition chronology has not been synchronised.')
 if prelim_ties<MIN_PRELIMINARY_TIES:critical.append(f'Preliminary fixture coverage too low: {prelim_ties}.')
@@ -90,18 +95,20 @@ if prelim_results<MIN_PRELIMINARY_RESULTS:critical.append(f'Preliminary result/r
 if firstq_ties!=112:critical.append(f'Archived First Qualifying fixture coverage is {firstq_ties}; expected 112.')
 expected=EXPECTED_ACTIVE_TIES.get(active_round)
 if expected is not None and active_ties!=expected:critical.append(f'{active_round} fixture coverage is {active_ties}; expected {expected}.')
+if data.get('source_tie_count') is not None and active_ties!=int(data.get('source_tie_count')):critical.append(f'Active fixture coverage {active_ties} does not match source_tie_count {data.get("source_tie_count")}.')
 if overdue:critical.append(f'{len(overdue)} played fixtures are overdue a result.')
 payload={'checked_at':now.isoformat(),'grace_hours':GRACE_HOURS,'coverage':{'preliminary_unique_fixtures':prelim_ties,'preliminary_results_and_replays':prelim_results,'first_qualifying_unique_fixtures':firstq_ties,'active_round':active_round,'active_round_unique_fixtures':active_ties,'active_round_conditional_slots':len(active_unresolved)},'counts':{'known_fixtures':len(fixtures),'complete':len(complete),'awaiting_grace':len(recent),'overdue':len(overdue),'upcoming':len(upcoming),'critical':len(critical)},'critical':critical,'overdue':overdue,'awaiting_grace':recent,'competition_sync':sync}
 JSON_REPORT.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 lines=['# Tin Foil FA Cup — Competition Health','',f"Last checked: **{now.strftime('%d/%m/%Y, %H:%M:%S %Z')}**",'','## Chronology coverage','',f'- Preliminary Round ties known: **{prelim_ties}**',f'- Preliminary Round results/replays recorded: **{prelim_results}**',f'- First Qualifying Round ties preserved: **{firstq_ties} / 112**',f'- Active round: **{active_round or "Unknown"}**',f'- Active-round ties: **{active_ties}**',f'- Active-round conditional/replay slots: **{len(active_unresolved)}**','','## Fixture health','',f'- 🟢 Played fixtures with results: **{len(complete)}**',f'- 🟡 Recently played / grace period: **{len(recent)}**',f'- 🔴 Results requiring confirmation: **{len(overdue)}**',f'- ⚪ Upcoming / incomplete-date fixtures: **{len(upcoming)}**','']
 if critical:lines += ['## 🔴 Critical competition-data issues','']+[f'- {x}' for x in critical]
 else:lines += ['## 🟢 Competition chronology healthy','',f'Preliminary and First Qualifying chronology is preserved, the active **{active_round}** draw has canonical coverage, and no played fixture is overdue a result.']
+if active_unresolved:lines += ['','## Conditional active-round slots','',f'{len(active_unresolved)} unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.']
 if overdue:
     lines += ['','## Results requiring confirmation','']
     for f in sorted(overdue,key=lambda x:x.get('scheduled','')):lines.append(f"- **{f.get('home')} v {f.get('away')}** — {f.get('round','Round TBC')} — {f.get('date','Date TBC')} • {f.get('kickoff','15:00')}")
 REPORT.write_text('\n'.join(lines)+'\n',encoding='utf-8')
-print('COMPETITION HEALTH v7.9.24')
-print('Preliminary ties:',prelim_ties);print('Preliminary results/replays:',prelim_results);print('First Qualifying ties preserved:',firstq_ties);print('Active round:',active_round);print('Active ties:',active_ties);print('Active conditional/replay slots:',len(active_unresolved));print('RESULTS REQUIRING CONFIRMATION:',len(overdue));print('CRITICAL:',len(critical))
+print('COMPETITION HEALTH v7.9.25')
+print('Preliminary ties:',prelim_ties);print('Preliminary results/replays:',prelim_results);print('First Qualifying ties preserved:',firstq_ties);print('Active round:',active_round);print('Active ties:',active_ties);print('Unique active conditional/replay slots:',len(active_unresolved));print('RESULTS REQUIRING CONFIRMATION:',len(overdue));print('CRITICAL:',len(critical))
 for x in critical:print('CRITICAL ITEM:',x)
 print('Reports written: competition-health.md, updater/competition-health.json')
 if critical:raise SystemExit(1)
