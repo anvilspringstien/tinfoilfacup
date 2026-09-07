@@ -1,0 +1,70 @@
+name: Scan FA Cup draw (guarded)
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish a newly validated official draw?"
+        required: true
+        type: boolean
+        default: true
+  schedule:
+    - cron: "37 * * * *"
+  push:
+    paths:
+      - "updater/auto_draw.py"
+      - ".github/workflows/scan-draw.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fa-cup-draw-scan-main
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Detect and validate next official FA draw
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_PUBLISH: ${{ inputs.publish }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ] || [ "$INPUT_PUBLISH" = "true" ]; then
+            python updater/auto_draw.py --publish
+          else
+            python updater/auto_draw.py
+          fi
+
+      - name: Validate canonical JSON
+        run: python -m json.tool competition.json >/dev/null
+
+      - name: Upload draw-watch report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draw-watch-report
+          path: updater/draw-watch-report.json
+
+      - name: Commit validated new draw
+        if: ${{ github.event_name == 'schedule' || inputs.publish }}
+        run: |
+          git config user.name "Tin Foil FA Cup Draw Watcher"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition.json updater/draw-watch-report.json
+          if git diff --cached --quiet; then
+            echo "No new official draw to publish."
+          else
+            # Do not create hourly report-only commits: competition.json must have changed.
+            if git diff --cached --quiet -- competition.json; then
+              echo "Official draw state unchanged; report retained only as workflow artifact."
+              git reset
+            else
+              git commit -m "Auto-import validated FA Cup draw"
+              git pull --rebase origin main
+              git push
+            fi
+          fi
