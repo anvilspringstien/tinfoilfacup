@@ -3,7 +3,8 @@
 
 Presentation-only guard. A decisive displayed scoreline determines the winner / next
 custodian; a stale legacy winner field must never override the score. This version
-repairs the actual rendered journey-row structure, not only HTML tables.
+also patches the generated Stats certificate HTML at its source, so the saved/printed
+journey cannot bypass canonical custody via r.winner.
 """
 from pathlib import Path
 import re
@@ -25,6 +26,17 @@ function tinFoilStatsWinnerFromFixture(text){
   const p=tinFoilStatsFixtureParts(text);
   if(!p||!Number.isFinite(p.homeScore)||!Number.isFinite(p.awayScore)||p.homeScore===p.awayScore)return '';
   return p.homeScore>p.awayScore?p.home:p.away;
+}
+function tinFoilCertificateWinner(r){
+  if(r){
+    const hs=Number(r.home_score),as=Number(r.away_score);
+    if(Number.isFinite(hs)&&Number.isFinite(as)){
+      if(hs===as)return '';
+      return (hs>as?String(r.home||''):String(r.away||'')).trim();
+    }
+  }
+  if(typeof canonicalResultWinner==='function')return canonicalResultWinner(r)||'';
+  return r&&r.winner?r.winner:'';
 }
 function tinFoilStatsDisplayClubKey(name){
   return String(name||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
@@ -108,13 +120,32 @@ else:
         raise SystemExit('ABORT: saved-journey JS boundary not found')
     text = text.replace(boundary, js + boundary, 1)
 
-for marker in ('function tinFoilStatsFixtureParts(', 'function tinFoilStatsRepairRenderedRow(', 'function tinFoilRepairStatsCustodyRows(', 'target.textContent=winner;'):
+# The Stats/Print certificate is generated as an HTML string. Patch that source
+# expression itself so it cannot bypass canonical custody with the legacy r.winner.
+old_cert = "certEsc(r.winner||'')"
+new_cert = "certEsc(tinFoilCertificateWinner(r))"
+if new_cert not in text:
+    count = text.count(old_cert)
+    if count != 1:
+        raise SystemExit(f'ABORT: expected exactly one legacy certificate winner expression, found {count}')
+    text = text.replace(old_cert, new_cert, 1)
+
+for marker in (
+    'function tinFoilStatsFixtureParts(',
+    'function tinFoilCertificateWinner(',
+    'function tinFoilStatsRepairRenderedRow(',
+    'function tinFoilRepairStatsCustodyRows(',
+    'target.textContent=winner;',
+    new_cert,
+):
     if marker not in text:
         raise SystemExit(f'ABORT: required Stats integrity marker missing: {marker}')
+if old_cert in text:
+    raise SystemExit('ABORT: legacy certificate r.winner renderer still present')
 
 HTML.write_text(text, encoding='utf-8')
 print('CLUBFINDER STATS INTEGRITY PATCH: SUCCESS')
-print('Rendered Stats journey rows are reconciled from their decisive scorelines.')
-print('Works with div/grid Stats markup as well as table-like markup.')
-print('Draw rows remain unchanged until replay/result resolution.')
+print('Generated Stats certificate now derives Winner / Next Custodian from the decisive scoreline.')
+print('Rendered-page reconciliation remains as defence in depth.')
+print('Draw rows remain unresolved until replay/result resolution.')
 print('Competition data and canonical custody logic: UNTOUCHED')
