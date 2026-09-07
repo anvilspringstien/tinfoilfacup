@@ -17,6 +17,14 @@ const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
+  const assertSecondQFixture=(next,club,label)=>{
+    if(!next||next.name!=='Second Round Qualifying')throw new Error(label+': expected Second Round Qualifying next-round metadata');
+    if(!next.knownFixture)throw new Error(label+': Second Round Qualifying draw is published but Clubfinder has no known fixture');
+    const f=next.knownFixture||{};
+    if(!/Second Round Qualifying/i.test(f.round||''))throw new Error(label+': known fixture has wrong round '+(f.round||'UNKNOWN'));
+    if(!same(f.home,club.name)&&!same(f.away,club.name))throw new Error(label+': known fixture does not contain current custodian '+club.name+' ('+(f.home||'?')+' v '+(f.away||'?')+')');
+    return f;
+  };
 
   const origin=ELIGIBLE.find(c=>same(c.name,'Newton Aycliffe FC'));
   if(!origin) throw new Error('DL5 regression: Newton Aycliffe FC not found in ELIGIBLE');
@@ -32,8 +40,8 @@ const assertions=`
   if(state.type!=='won')throw new Error('DL5 render regression: Heaton should be a confirmed First Qualifying winner, got '+state.type);
   if(!state.result||!same(state.result.home,'Heaton Stannington')||!same(state.result.away,'Knaresborough Town')||Number(state.result.home_score)!==1||Number(state.result.away_score)!==0)throw new Error('DL5 render regression: Heaton 1-0 Knaresborough result not driving winner state');
   const heatonNext=nextRoundInfo(carrier);
-  if(!heatonNext||heatonNext.name!=='Second Round Qualifying')throw new Error('DL5 render regression: expected Second Round Qualifying after Heaton win');
-  if(heatonNext.knownFixture)throw new Error('DL5 render regression: played Heaton-Knaresborough First Qualifying tie leaked into Second Round Qualifying fixture');
+  const heatonSecondQ=assertSecondQFixture(heatonNext,carrier,'DL5 render regression');
+  if(same(heatonSecondQ.home,'Knaresborough Town')||same(heatonSecondQ.away,'Knaresborough Town'))throw new Error('DL5 render regression: played Heaton-Knaresborough First Qualifying tie leaked into Second Round Qualifying fixture');
 
   const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
   if(!bishop)throw new Error('DL5 regression: Bishop Auckland FC not found in ELIGIBLE');
@@ -44,11 +52,15 @@ const assertions=`
   const bishopState=competitionState(bishop);
   if(bishopState.type==='won'||bishopState.type==='eliminated')throw new Error('DL5 render regression: unresolved Emley-Bishop Auckland draw incorrectly resolved as '+bishopState.type);
   const bishopNext=nextRoundInfo(bishop);
-  if(bishopNext&&bishopNext.knownFixture)throw new Error('DL5 render regression: Emley-Bishop Auckland First Qualifying tie leaked into a later-round fixture while replay is unresolved');
+  if(bishopNext&&bishopNext.knownFixture){
+    const bf=bishopNext.knownFixture||{};
+    if(!/Second Round Qualifying/i.test(bf.round||''))throw new Error('DL5 render regression: Bishop conditional next fixture has wrong round');
+    if(!bf.conditional)throw new Error('DL5 render regression: unresolved Bishop replay mapped to an unconditional Second Qualifying fixture');
+  }
   const bishopFixture=liveLookup('fixtures',bishop.name)||{};
   const bv=bishopFixture.venue||{};
-  if(!bv.postcode||/TBC/i.test(bv.postcode))throw new Error('DL5 render regression: Emley-Bishop Auckland current fixture venue/postcode still TBC');
-  if(!bv.ground||/TBC/i.test(bv.ground))throw new Error('DL5 render regression: Emley-Bishop Auckland current fixture ground still TBC');
+  if(!bv.postcode||/TBC/i.test(bv.postcode))throw new Error('DL5 render regression: Bishop Auckland current mapped fixture venue/postcode still TBC');
+  if(!bv.ground||/TBC/i.test(bv.ground))throw new Error('DL5 render regression: Bishop Auckland current mapped fixture ground still TBC');
 
   const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
@@ -60,18 +72,21 @@ const assertions=`
   if(!frenfordLoss)throw new Error('W1D regression: Frenford 0-4 Enfield Town missing from journey history');
   if(!same(wcarrier.name,'Enfield Town'))throw new Error('W1D regression: expected live custodian Enfield Town after Frenford loss, got '+wcarrier.name);
   const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: Enfield should be confirmed First Qualifying winner');
-  const enfieldNext=nextRoundInfo(wcarrier);if(!enfieldNext||enfieldNext.name!=='Second Round Qualifying'||enfieldNext.knownFixture)throw new Error('W1D regression: Frenford-Enfield current tie leaked into Enfield next-round fixture');
+  const enfieldNext=nextRoundInfo(wcarrier);
+  const enfieldSecondQ=assertSecondQFixture(enfieldNext,wcarrier,'W1D regression');
+  if(same(enfieldSecondQ.home,'Frenford')||same(enfieldSecondQ.away,'Frenford'))throw new Error('W1D regression: played Frenford-Enfield First Qualifying tie leaked into Enfield next-round fixture');
 
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
   console.log('Heaton First Qualifying result: 1-0 Knaresborough — PASS');
-  console.log('Heaton next round: Second Round Qualifying, fixture not yet known — PASS');
+  console.log('Heaton Second Qualifying fixture:',heatonSecondQ.home,'v',heatonSecondQ.away);
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
   console.log('Heaton replay present: PASS');
   console.log('Emley-Bishop Auckland replay-pending state: PASS');
-  console.log('Emley-Bishop Auckland venue:',bv.ground,'•',bv.postcode);
+  console.log('Bishop IF THROUGH fixture:',bishopNext&&bishopNext.knownFixture?(bishopNext.knownFixture.home+' v '+bishopNext.knownFixture.away):'not yet mapped');
+  console.log('Emley-Bishop Auckland mapped venue:',bv.ground,'•',bv.postcode);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
-  console.log('W1D current-tie/next-round separation: PASS');
+  console.log('Enfield Second Qualifying fixture:',enfieldSecondQ.home,'v',enfieldSecondQ.away);
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
