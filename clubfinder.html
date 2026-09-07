@@ -721,7 +721,7 @@ function tinFoilConfirm(message){
   });
 }
 /* TIN_FOIL_RESULT_HEALTH_BEGIN */
-const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-07T15:50:35.114078+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
+const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-07T16:16:50.117060+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
 function tinFoilHealthKey(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function tinFoilHealthTextHasClub(text,name){
   const hay=' '+tinFoilHealthKey(text)+' ',needle=' '+tinFoilHealthKey(name)+' ';
@@ -773,38 +773,84 @@ function tinFoilStartResultHealthNotice(){
 }
 if(document.readyState==='loading'&&typeof document.addEventListener==='function')document.addEventListener('DOMContentLoaded',tinFoilStartResultHealthNotice);else setTimeout(tinFoilStartResultHealthNotice,0);
 /* TIN_FOIL_RESULT_HEALTH_END *//* TIN_FOIL_STATS_INTEGRITY_BEGIN */
-function tinFoilStatsWinnerFromFixture(text){
+function tinFoilStatsFixtureParts(text){
   const s=String(text||'').replace(/\s+/g,' ').trim();
   const m=s.match(/^(.+?)\s*\((\d+)\)\s*v\s*\((\d+)\)\s*(.+)$/i);
-  if(!m)return '';
-  const hs=Number(m[2]),as=Number(m[3]);
-  if(!Number.isFinite(hs)||!Number.isFinite(as)||hs===as)return '';
-  return (hs>as?m[1]:m[4]).trim();
+  if(!m)return null;
+  return {home:m[1].trim(),homeScore:Number(m[2]),awayScore:Number(m[3]),away:m[4].trim()};
 }
-function tinFoilRepairStatsCustodyTable(){
-  if(!document||typeof document.querySelectorAll!=='function')return;
-  for(const table of document.querySelectorAll('table')){
-    const heads=[...table.querySelectorAll('th')].map(x=>String(x.textContent||'').trim().toUpperCase());
-    const fixtureCol=heads.findIndex(x=>x==='FIXTURE');
-    const winnerCol=heads.findIndex(x=>x.includes('WINNER')&&x.includes('CUSTODIAN'));
-    if(fixtureCol<0||winnerCol<0)continue;
-    for(const row of table.querySelectorAll('tbody tr')){
-      const cells=[...row.querySelectorAll('td')];
-      if(!cells[fixtureCol]||!cells[winnerCol])continue;
-      const winner=tinFoilStatsWinnerFromFixture(cells[fixtureCol].textContent||'');
-      if(winner)cells[winnerCol].textContent=winner;
-    }
+function tinFoilStatsWinnerFromFixture(text){
+  const p=tinFoilStatsFixtureParts(text);
+  if(!p||!Number.isFinite(p.homeScore)||!Number.isFinite(p.awayScore)||p.homeScore===p.awayScore)return '';
+  return p.homeScore>p.awayScore?p.home:p.away;
+}
+function tinFoilStatsDisplayClubKey(name){
+  return String(name||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+}
+function tinFoilStatsFixtureCount(text){
+  const s=String(text||'').replace(/\s+/g,' ');
+  const re=/(?:^|\s)([^|]{1,100}?)\s*\(\d+\)\s*v\s*\(\d+\)\s*([^|]{1,100}?)(?=$|\s{2,}|\n)/ig;
+  let n=0; while(re.exec(s)&&n<3)n++; return n;
+}
+function tinFoilStatsLeafElements(root){
+  if(!root||typeof root.querySelectorAll!=='function')return [];
+  return [...root.querySelectorAll('*')].filter(e=>!e.children||e.children.length===0);
+}
+function tinFoilStatsRepairRenderedRow(row){
+  if(!row)return false;
+  const leaves=tinFoilStatsLeafElements(row);
+  let fixtureLeaf=null,parts=null;
+  for(const leaf of leaves){
+    const p=tinFoilStatsFixtureParts(leaf.textContent||'');
+    if(p){fixtureLeaf=leaf;parts=p;break;}
   }
+  if(!fixtureLeaf||!parts||parts.homeScore===parts.awayScore)return false;
+  const winner=parts.homeScore>parts.awayScore?parts.home:parts.away;
+  const homeKey=tinFoilStatsDisplayClubKey(parts.home),awayKey=tinFoilStatsDisplayClubKey(parts.away);
+  const candidates=leaves.filter(leaf=>{
+    if(leaf===fixtureLeaf)return false;
+    const k=tinFoilStatsDisplayClubKey(leaf.textContent||'');
+    return k&&(k===homeKey||k===awayKey);
+  });
+  if(!candidates.length)return false;
+  const target=candidates[candidates.length-1];
+  if(tinFoilStatsDisplayClubKey(target.textContent||'')===tinFoilStatsDisplayClubKey(winner))return false;
+  target.textContent=winner;
+  return true;
+}
+function tinFoilStatsFindRenderedRow(fixtureLeaf){
+  let node=fixtureLeaf;
+  let best=null;
+  for(let depth=0;node&&depth<8;depth++,node=node.parentElement){
+    const count=tinFoilStatsFixtureCount(node.textContent||'');
+    if(count===1)best=node;
+    else if(count>1)break;
+  }
+  return best;
+}
+function tinFoilRepairStatsCustodyRows(){
+  if(!document||typeof document.querySelectorAll!=='function')return 0;
+  let repaired=0;
+  const leaves=[...document.querySelectorAll('*')].filter(e=>!e.children||e.children.length===0);
+  const seen=new Set();
+  for(const leaf of leaves){
+    if(!tinFoilStatsFixtureParts(leaf.textContent||''))continue;
+    const row=tinFoilStatsFindRenderedRow(leaf);
+    if(!row||seen.has(row))continue;
+    seen.add(row);
+    if(tinFoilStatsRepairRenderedRow(row))repaired++;
+  }
+  return repaired;
 }
 function tinFoilStartStatsIntegrity(){
-  tinFoilRepairStatsCustodyTable();
+  tinFoilRepairStatsCustodyRows();
   if(typeof MutationObserver==='function'){
     let queued=false;
-    const observer=new MutationObserver(()=>{if(queued)return;queued=true;setTimeout(()=>{queued=false;tinFoilRepairStatsCustodyTable()},0)});
+    const observer=new MutationObserver(()=>{if(queued)return;queued=true;setTimeout(()=>{queued=false;tinFoilRepairStatsCustodyRows()},0)});
     const root=document.getElementById('wrap')||document.body;
     if(root)observer.observe(root,{subtree:true,childList:true,characterData:true});
   }
-  if(document&&typeof document.addEventListener==='function')document.addEventListener('click',()=>setTimeout(tinFoilRepairStatsCustodyTable,0));
+  if(document&&typeof document.addEventListener==='function')document.addEventListener('click',()=>setTimeout(tinFoilRepairStatsCustodyRows,0));
 }
 if(document.readyState==='loading'&&typeof document.addEventListener==='function')document.addEventListener('DOMContentLoaded',tinFoilStartStatsIntegrity);else setTimeout(tinFoilStartStatsIntegrity,0);
 /* TIN_FOIL_STATS_INTEGRITY_END */const JOURNEY_STORAGE_KEY='tinFoilFACupJourney_v7';
