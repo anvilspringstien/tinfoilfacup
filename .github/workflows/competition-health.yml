@@ -11,7 +11,6 @@ on:
       - "clubfinder.html"
       - "updater/probe_fwp_source.py"
       - "updater/sync_competition_chronology_v2.py"
-      - "updater/sync_second_qualifying_draw.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_journey_integrity.py"
@@ -41,9 +40,6 @@ jobs:
 
       - name: Synchronise competition chronology
         run: python updater/sync_competition_chronology_v2.py
-
-      - name: Synchronise Second Qualifying draw
-        run: python updater/sync_second_qualifying_draw.py
 
       - name: Enrich later-round fixture venues
         run: python updater/enrich_later_round_venues.py
