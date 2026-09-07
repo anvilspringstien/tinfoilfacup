@@ -721,7 +721,7 @@ function tinFoilConfirm(message){
   });
 }
 /* TIN_FOIL_RESULT_HEALTH_BEGIN */
-const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-07T16:17:19.074349+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
+const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-07T16:35:30.883179+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
 function tinFoilHealthKey(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function tinFoilHealthTextHasClub(text,name){
   const hay=' '+tinFoilHealthKey(text)+' ',needle=' '+tinFoilHealthKey(name)+' ';
@@ -783,6 +783,17 @@ function tinFoilStatsWinnerFromFixture(text){
   const p=tinFoilStatsFixtureParts(text);
   if(!p||!Number.isFinite(p.homeScore)||!Number.isFinite(p.awayScore)||p.homeScore===p.awayScore)return '';
   return p.homeScore>p.awayScore?p.home:p.away;
+}
+function tinFoilCertificateWinner(r){
+  if(r){
+    const hs=Number(r.home_score),as=Number(r.away_score);
+    if(Number.isFinite(hs)&&Number.isFinite(as)){
+      if(hs===as)return '';
+      return (hs>as?String(r.home||''):String(r.away||'')).trim();
+    }
+  }
+  if(typeof canonicalResultWinner==='function')return canonicalResultWinner(r)||'';
+  return r&&r.winner?r.winner:'';
 }
 function tinFoilStatsDisplayClubKey(name){
   return String(name||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
@@ -969,7 +980,7 @@ function journeyCertificate(origin){
       '<div class="jr-fixture">'+certEsc(resultLinePlain(r))+'</div>'+
       '<div class="jr-date">'+certEsc(dateLabel(r.date))+'</div>'+
       '<div class="jr-venue">'+certEsc(v.ground)+'<br>'+certEsc(v.postcode)+'</div>'+
-      '<div class="jr-winner">'+certEsc(r.winner||'')+'</div>'+
+      '<div class="jr-winner">'+certEsc(tinFoilCertificateWinner(r))+'</div>'+
     '</div>';
   }).join('') :
   '<div class="journey-empty">Your first Tin Foil FA Cup tie is still ahead.</div>';
