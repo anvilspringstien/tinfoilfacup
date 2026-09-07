@@ -6,6 +6,21 @@ ROOT=Path(__file__).resolve().parents[1]
 DATA=json.loads((ROOT/'competition.json').read_text(encoding='utf-8'))
 HTML=(ROOT/'clubfinder.html').read_text(encoding='utf-8')
 
+EXPECTED_ACTIVE_TIES={
+    'First Round Qualifying':112,
+    'Second Round Qualifying':80,
+    'Third Round Qualifying':40,
+    'Fourth Round Qualifying':32,
+    'First Round Proper':40,
+    'Second Round Proper':20,
+    'Third Round Proper':32,
+    'Fourth Round Proper':16,
+    'Fifth Round Proper':8,
+    'Quarter Final':4,
+    'Semi Final':2,
+    'Final':1,
+}
+
 def norm(s):
     s=(s or '').lower().replace('&',' and ')
     s=re.sub(r'\b(fc|afc|cfc)\b',' ',s)
@@ -66,13 +81,17 @@ for f in firstq.values():
     if f.get('conditional') or ' or ' in f.get('home','').lower() or ' or ' in f.get('away','').lower():
         raise SystemExit(f'UNRESOLVED FIRST QUALIFYING FIXTURE: {f.get("home")} v {f.get("away")}')
 
-# The active map must agree with its own declared source_tie_count, regardless of
-# which round is current. This replaces the old assumption that fixtures is always
-# the 112-tie First Qualifying draw.
+# The active map must agree with both its declared source_tie_count and the
+# canonical Emirates FA Cup round size. This catches cross-competition ingestion
+# and partial/full-draw parser failures before Clubfinder can rely on the data.
 active=unique_fixtures(DATA.get('fixtures') or {})
+active_round=DATA.get('source_round','')
 declared=DATA.get('source_tie_count')
 if declared is not None and len(active)!=int(declared):
     raise SystemExit(f'ACTIVE FIXTURE COVERAGE {len(active)} DOES NOT MATCH source_tie_count {declared}')
+expected=EXPECTED_ACTIVE_TIES.get(active_round)
+if expected is not None and len(active)!=expected:
+    raise SystemExit(f'{active_round.upper()} FIXTURE COVERAGE IS NOT {expected} TIES: {len(active)}')
 if not active:
     raise SystemExit('ACTIVE FIXTURE MAP IS EMPTY')
 
@@ -84,6 +103,7 @@ if "esc(k.round||next.name)" not in HTML:
 print('COMPETITION REGRESSION GUARD: PASS')
 print('Preliminary ties:',len(prelim))
 print('First Qualifying ties preserved:',len(firstq))
-print('Active round:',DATA.get('source_round','UNKNOWN'))
+print('Active round:',active_round)
 print('Active ties:',len(active))
+print('Canonical active-round tie count: PASS')
 print('Representative chronology results: PASS')
