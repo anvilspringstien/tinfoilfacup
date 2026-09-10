@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from pathlib import Path
 
+# Guarded one-time repair hook: keeping this file in the result-scan watch list
+# also gives the live scanner an explicit push event after the workflow update.
 ROOT=Path(__file__).resolve().parents[1]
 AUTO=ROOT/'updater'/'auto_results.py'
 RENDER=ROOT/'updater'/'clubfinder_render_regression.js'
