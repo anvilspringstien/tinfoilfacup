@@ -243,7 +243,13 @@ function resolveConditionalSide(side,carrier){
   const a=drawAlternatives(side);
   if(a.length<=1)return side;
   const n=carrier&&carrier.name?carrier.name:String(carrier||'');
-  for(const x of a)if(norm(x)===norm(n))return x;
+  const carrierKey=canonicalClubKey(n);
+  for(const x of a)if(canonicalClubKey(x)===carrierKey)return x;
+  const compatible=a.filter(x=>{
+    const k=canonicalClubKey(x);
+    return k&&carrierKey&&(carrierKey.startsWith(k+' ')||k.startsWith(carrierKey+' '));
+  });
+  if(compatible.length===1)return n;
   return side;
 }
 function resolveLiveFixtureForCarrier(f,carrier){
@@ -263,13 +269,14 @@ function resolveLiveFixtureForCarrier(f,carrier){
 }
 function nextRoundInfo(club){
   const cr=resultFor(club),current=(cr&&cr.round)?cr.round:(club.entry_round||'');
+  const progressionRound=String(current||'').replace(/\s+Replay$/i,'');
   let nextName='Next Round';
-  if(current==='Extra Preliminary Round')nextName='Preliminary Round';
-  else if(current==='Preliminary Round'||current==='Preliminary Round Replay')nextName='First Round Qualifying';
-  else if(current==='First Round Qualifying')nextName='Second Round Qualifying';
-  else if(current==='Second Round Qualifying')nextName='Third Round Qualifying';
-  else if(current==='Third Round Qualifying')nextName='Fourth Round Qualifying';
-  else if(current==='Fourth Round Qualifying')nextName='First Round Proper';
+  if(progressionRound==='Extra Preliminary Round')nextName='Preliminary Round';
+  else if(progressionRound==='Preliminary Round')nextName='First Round Qualifying';
+  else if(progressionRound==='First Round Qualifying')nextName='Second Round Qualifying';
+  else if(progressionRound==='Second Round Qualifying')nextName='Third Round Qualifying';
+  else if(progressionRound==='Third Round Qualifying')nextName='Fourth Round Qualifying';
+  else if(progressionRound==='Fourth Round Qualifying')nextName='First Round Proper';
   const meta=ROUND_META[nextName]||{date:'TBC',drawDate:'TBC'};
   let nf=liveLookup('fixtures',club.name);
   if(!nf&&nextName==='Preliminary Round'){
@@ -721,7 +728,7 @@ function tinFoilConfirm(message){
   });
 }
 /* TIN_FOIL_RESULT_HEALTH_BEGIN */
-const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-10T10:28:22.026331+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
+const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-10T11:05:14.962908+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
 function tinFoilHealthKey(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function tinFoilHealthTextHasClub(text,name){
   const hay=' '+tinFoilHealthKey(text)+' ',needle=' '+tinFoilHealthKey(name)+' ';
