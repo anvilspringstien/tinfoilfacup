@@ -290,9 +290,9 @@ function canonicalClubKey(name){
 function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
 function canonicalResultWinner(r){
   if(!r)return '';
-  if(r.decision==='draw-replay')return '';
   const hs=Number(r.home_score),as=Number(r.away_score);
   if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
+  if(r.decision==='draw-replay')return '';
   return r.winner||'';
 }
 function sameSemanticResult(a,b){
@@ -721,7 +721,7 @@ function tinFoilConfirm(message){
   });
 }
 /* TIN_FOIL_RESULT_HEALTH_BEGIN */
-const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-10T08:27:54.342673+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
+const TIN_FOIL_RESULT_HEALTH={"checked_at":"2026-09-10T09:42:13.291294+01:00","grace_hours":3,"awaiting_grace":[],"overdue":[]};
 function tinFoilHealthKey(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(association football club|football club|fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
 function tinFoilHealthTextHasClub(text,name){
   const hay=' '+tinFoilHealthKey(text)+' ',needle=' '+tinFoilHealthKey(name)+' ';
