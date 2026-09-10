@@ -42,28 +42,41 @@ jobs:
           INPUT_PUBLISH: ${{ inputs.publish }}
         run: |
           SOURCE_URL="${INPUT_SOURCE_URL:-https://www.thefa.com/competitions/thefacup/results}"
-          # Pushes affecting the guarded result scanner are themselves validated by
-          # this workflow, so publish only what passes the same source-consensus gates.
           if [ "$EVENT_NAME" = "schedule" ] || [ "$EVENT_NAME" = "push" ] || [ "$INPUT_PUBLISH" = "true" ]; then
             python updater/auto_results.py --url "$SOURCE_URL" --publish
           else
             python updater/auto_results.py --url "$SOURCE_URL"
           fi
+      - name: Audit repaired competition chronology
+        run: python updater/competition_health.py
+      - name: Rebuild Clubfinder competition presentation
+        run: |
+          python updater/patch_clubfinder_competition_logic.py
+          python updater/patch_clubfinder_journey_integrity.py
+          python updater/patch_clubfinder_result_status.py
+          python updater/patch_clubfinder_stats_integrity.py
+          python updater/patch_clubfinder_branding.py
+      - name: Run Clubfinder competition regressions
+        run: |
+          python updater/competition_regression_guard.py
+          node updater/clubfinder_render_regression.js
+          node updater/clubfinder_stats_regression.js
+          node updater/journey_integrity_regression.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: results-pilot-report
           path: updater/results-pilot-report.json
-      - name: Commit validated data and guarded replay fix
+      - name: Commit validated competition data and Clubfinder
         if: ${{ github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish }}
         run: |
           git config user.name "Tin Foil FA Cup Updater"
           git config user.email "actions@users.noreply.github.com"
-          git add competition.json updater/auto_results.py updater/patch_clubfinder_competition_logic.py updater/clubfinder_render_regression.js
+          git add competition.json clubfinder.html competition-health.md updater/competition-health.json updater/auto_results.py updater/patch_clubfinder_competition_logic.py updater/clubfinder_render_regression.js
           if git diff --cached --quiet; then
-            echo "No new results or guarded scanner changes."
+            echo "No new results or Clubfinder changes."
           else
-            git commit -m "Resolve final First Qualifying replays"
+            git commit -m "Resolve replay journeys in Clubfinder v7.6"
             git pull --rebase origin main
             git push
           fi
