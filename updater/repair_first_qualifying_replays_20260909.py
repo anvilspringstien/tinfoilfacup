@@ -6,9 +6,10 @@ replays staged at the opposite venue could be invisible. The generic scanner fix
 lives in auto_results.py; this repair closes the already-played round without
 waiting for a source page to re-render its historical rows.
 
-Safety: each replay is written only if its corresponding 5 September drawn first
-leg is already present in canonical result_history/results. Existing identical
-replay rows are left untouched. Conflicting decisive rows abort publication.
+Safety: each replay is written only if its corresponding drawn first leg is
+already present with the exact clubs and score. Older canonical result rows may
+lack the fixture date, so the prerequisite deliberately does not require it.
+Existing identical replay rows are left untouched; conflicting replay rows abort.
 """
 from pathlib import Path
 from datetime import datetime, timezone
@@ -28,6 +29,10 @@ def aliases(n):
     if not suf.search(n):out|={n+' FC',n+' AFC'}
     return {x for x in out if x}
 
+def score_int(v):
+    try:return int(v)
+    except:return -999
+
 def all_results(d):
     out=[];seen=set()
     for r in (d.get('results') or {}).values():
@@ -42,8 +47,10 @@ def all_results(d):
             if k not in seen:seen.add(k);out.append(r)
     return out
 
-def same_score(r,home,away,hs,as_,date):
-    return norm(r.get('home'))==norm(home) and norm(r.get('away'))==norm(away) and int(r.get('home_score',-999))==hs and int(r.get('away_score',-999))==as_ and r.get('date')==date
+def same_score(r,home,away,hs,as_,date=None):
+    ok=(norm(r.get('home'))==norm(home) and norm(r.get('away'))==norm(away)
+        and score_int(r.get('home_score'))==hs and score_int(r.get('away_score'))==as_)
+    return ok and (date is None or r.get('date')==date)
 
 def same_pair(r,a,b):
     return {norm(r.get('home')),norm(r.get('away'))}=={norm(a),norm(b)}
@@ -58,15 +65,15 @@ def merge(d,r):
 
 repairs=[
     {
-      'first':('Emley AFC','Bishop Auckland',1,1,'2026-09-05'),
+      'first':('Emley AFC','Bishop Auckland',1,1),
       'replay':{'home':'Bishop Auckland','away':'Emley AFC','home_score':0,'away_score':2,'winner':'Emley AFC','status':'AET','decision':'aet','date':'2026-09-09','round':'First Round Qualifying Replay','source_url':'https://www.thefa.com/competitions/thefacup/results'}
     },
     {
-      'first':('Crowborough Athletic','AFC Whyteleafe',1,1,'2026-09-05'),
+      'first':('Crowborough Athletic','AFC Whyteleafe',1,1),
       'replay':{'home':'AFC Whyteleafe','away':'Crowborough Athletic','home_score':2,'away_score':3,'winner':'Crowborough Athletic','status':'FT','decision':'','date':'2026-09-09','round':'First Round Qualifying Replay','source_url':'https://www.thefa.com/competitions/thefacup/results'}
     },
     {
-      'first':('Banbury United','Exmouth Town',0,0,'2026-09-05'),
+      'first':('Banbury United','Exmouth Town',0,0),
       'replay':{'home':'Exmouth Town','away':'Banbury United','home_score':2,'away_score':1,'winner':'Exmouth Town','status':'FT','decision':'','date':'2026-09-09','round':'First Round Qualifying Replay','source_url':'https://www.thefa.com/competitions/thefacup/results'}
     },
 ]
@@ -75,12 +82,12 @@ d=json.loads(DATA.read_text(encoding='utf-8'))
 existing=all_results(d)
 added=[]
 for item in repairs:
-    fh,fa,fhs,fas,fd=item['first']; rr=item['replay']
-    if not any(same_score(x,fh,fa,fhs,fas,fd) for x in existing):
-        raise SystemExit(f'ABORT: prerequisite first-leg draw missing: {fh} {fhs}-{fas} {fa} {fd}')
+    fh,fa,fhs,fas=item['first']; rr=item['replay']
+    if not any(same_score(x,fh,fa,fhs,fas) for x in existing):
+        raise SystemExit(f'ABORT: prerequisite first-leg draw missing: {fh} {fhs}-{fas} {fa}')
     exact=next((x for x in existing if same_score(x,rr['home'],rr['away'],rr['home_score'],rr['away_score'],rr['date'])),None)
     if exact:continue
-    conflicts=[x for x in existing if same_pair(x,rr['home'],rr['away']) and x.get('date')==rr['date'] and (x.get('home_score'),x.get('away_score'))!=(rr['home_score'],rr['away_score'])]
+    conflicts=[x for x in existing if same_pair(x,rr['home'],rr['away']) and x.get('date')==rr['date'] and (score_int(x.get('home_score')),score_int(x.get('away_score')))!=(rr['home_score'],rr['away_score'])]
     if conflicts:
         raise SystemExit(f"ABORT: conflicting replay result already present for {rr['home']} v {rr['away']}: {conflicts}")
     merge(d,rr); existing.append(rr); added.append(rr)
