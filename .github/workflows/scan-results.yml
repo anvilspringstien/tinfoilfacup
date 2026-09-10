@@ -20,6 +20,8 @@ on:
       - "updater/auto_results.py"
       - "updater/apply_replay_orientation_fix.py"
       - "updater/repair_first_qualifying_replays_20260909.py"
+      - "updater/patch_clubfinder_replay_progression.py"
+      - "updater/replay_progression_regression.js"
       - ".github/workflows/scan-results.yml"
 permissions:
   contents: write
@@ -52,6 +54,7 @@ jobs:
       - name: Rebuild Clubfinder competition presentation
         run: |
           python updater/patch_clubfinder_competition_logic.py
+          python updater/patch_clubfinder_replay_progression.py
           python updater/patch_clubfinder_journey_integrity.py
           python updater/patch_clubfinder_result_status.py
           python updater/patch_clubfinder_stats_integrity.py
@@ -60,6 +63,7 @@ jobs:
         run: |
           python updater/competition_regression_guard.py
           node updater/clubfinder_render_regression.js
+          node updater/replay_progression_regression.js
           node updater/clubfinder_stats_regression.js
           node updater/journey_integrity_regression.js
       - uses: actions/upload-artifact@v4
@@ -72,7 +76,7 @@ jobs:
         run: |
           git config user.name "Tin Foil FA Cup Updater"
           git config user.email "actions@users.noreply.github.com"
-          git add competition.json clubfinder.html competition-health.md updater/competition-health.json updater/auto_results.py updater/patch_clubfinder_competition_logic.py updater/clubfinder_render_regression.js
+          git add competition.json clubfinder.html competition-health.md updater/competition-health.json updater/auto_results.py updater/patch_clubfinder_competition_logic.py updater/patch_clubfinder_replay_progression.py updater/clubfinder_render_regression.js updater/replay_progression_regression.js
           if git diff --cached --quiet; then
             echo "No new results or Clubfinder changes."
           else
