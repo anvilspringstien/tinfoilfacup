@@ -59,13 +59,16 @@ jobs:
           python updater/patch_clubfinder_result_status.py
           python updater/patch_clubfinder_stats_integrity.py
           python updater/patch_clubfinder_branding.py
-      - name: Run Clubfinder competition regressions
-        run: |
-          python updater/competition_regression_guard.py
-          node updater/clubfinder_render_regression.js
-          node updater/replay_progression_regression.js
-          node updater/clubfinder_stats_regression.js
-          node updater/journey_integrity_regression.js
+      - name: Run competition regression guard
+        run: python updater/competition_regression_guard.py
+      - name: Run rendered Clubfinder regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run systemic replay progression regression
+        run: node updater/replay_progression_regression.js
+      - name: Run Clubfinder Stats regression
+        run: node updater/clubfinder_stats_regression.js
+      - name: Run all-club journey integrity regression
+        run: node updater/journey_integrity_regression.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
