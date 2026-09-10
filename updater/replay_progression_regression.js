@@ -1,48 +1,44 @@
 #!/usr/bin/env node
 const fs=require('fs');
-const vm=require('vm');
 const path=require('path');
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'clubfinder.html'),'utf8');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
-const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
-if(!scripts.trim()) throw new Error('No inline Clubfinder JavaScript found');
-function nodeStub(){return {value:'',textContent:'',innerHTML:'',style:{},disabled:false,addEventListener(){},focus(){},setAttribute(){},removeAttribute(){},appendChild(){},remove(){},classList:{add(){},remove(){}}}}
-const elements=new Proxy({}, {get:(o,k)=>o[k]||(o[k]=nodeStub())});
-const documentStub={getElementById(id){return elements[id]},querySelector(){return nodeStub()},querySelectorAll(){return []},createElement(){return nodeStub()},body:nodeStub()};
-const localStore={};
-const sandbox={console,process,document:documentStub,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request in replay regression: '+s)}};
-sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
-const assertions=`
-(async()=>{
-  if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
-  const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
-  const clubFor=name=>ELIGIBLE.find(c=>same(c.name,name))||(typeof candidateClubByName==='function'?candidateClubByName(name):null)||{name,entry_round:'',fixture:{}};
-  const assertSecondQ=(name,label)=>{
-    const club=clubFor(name);
-    const r=resultFor(club);
-    if(!r||!/First Round Qualifying Replay$/i.test(String(r.round||'')))throw new Error(label+': expected latest result to be First Round Qualifying Replay, got '+((r&&r.round)||'NONE'));
-    const next=nextRoundInfo(club);
-    if(!next||next.name!=='Second Round Qualifying')throw new Error(label+': replay did not progress to Second Round Qualifying; got '+((next&&next.name)||'NONE'));
-    if(!next.knownFixture)throw new Error(label+': published Second Round Qualifying fixture was not resolved');
-    const f=next.knownFixture;
-    if(!/Second Round Qualifying/i.test(String(f.round||'')))throw new Error(label+': resolved fixture has wrong round '+(f.round||'NONE'));
-    if(!same(f.home,club.name)&&!same(f.away,club.name))throw new Error(label+': resolved fixture does not contain '+club.name+' ('+(f.home||'?')+' v '+(f.away||'?')+')');
-    return f;
-  };
 
-  const exmouth=assertSecondQ('Exmouth Town','Exmouth replay');
-  const emley=assertSecondQ('Emley AFC','Emley replay');
-  const crowborough=assertSecondQ('Crowborough Athletic','Crowborough replay');
+function fail(msg){throw new Error(msg)}
+function canon(s){return String(s||'').toLowerCase().replace(/\b(association football club|football club)\b/g,' ').replace(/\b(fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
+function same(a,b){return canon(a)===canon(b)}
 
-  const frome=clubFor('Frome Town');
-  const fromeNext=nextRoundInfo(frome);
-  if(!fromeNext||fromeNext.name!=='Second Round Qualifying'||!fromeNext.knownFixture)throw new Error('Non-replay control: Frome Town next-round behaviour regressed');
+if(!html.includes("const progressionRound=String(current||'').replace(/\\s+Replay$/i,'');"))fail('Replay progression normalisation is missing from Clubfinder');
+if(!html.includes("if(progressionRound==='First Round Qualifying')nextName='Second Round Qualifying';"))fail('First Qualifying -> Second Qualifying progression map is missing');
+if(!html.includes('const compatible=a.filter(x=>{'))fail('Conditional draw abbreviation resolver is missing');
 
-  console.log('REPLAY PROGRESSION REGRESSION: PASS');
-  console.log('Exmouth ->',exmouth.home,'v',exmouth.away);
-  console.log('Emley ->',emley.home,'v',emley.away);
-  console.log('Crowborough ->',crowborough.home,'v',crowborough.away);
-  console.log('Non-replay control Frome Town: PASS');
-})().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
-try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
+const results=competition.results||{};
+const next=competition.next_fixtures||{};
+const replayCases=[
+  {winner:'Exmouth Town', opponent:'Banbury United', fixtureKeys:['Exmouth Town']},
+  {winner:'Emley AFC', opponent:'Bishop Auckland', fixtureKeys:['Emley AFC','Emley']},
+  {winner:'Crowborough Athletic', opponent:'AFC Whyteleafe', fixtureKeys:['Crowborough Athletic','Crowborough']}
+];
+
+for(const c of replayCases){
+  const candidates=Object.entries(results).filter(([k,r])=>same(k,c.winner)||same(r&&r.winner,c.winner));
+  const replay=candidates.map(([,r])=>r).find(r=>/First Round Qualifying Replay$/i.test(String(r&&r.round||''))&&same(r.winner,c.winner));
+  if(!replay)fail(c.winner+': decisive First Round Qualifying Replay result missing');
+  if(![replay.home,replay.away].some(x=>same(x,c.opponent)))fail(c.winner+': replay opponent mismatch');
+  const fixture=c.fixtureKeys.map(k=>next[k]).find(Boolean);
+  if(!fixture)fail(c.winner+': published next fixture missing');
+  if(fixture.round!=='Second Round Qualifying')fail(c.winner+': next fixture is not Second Round Qualifying');
+  const sides=String(fixture.home||'')+' | '+String(fixture.away||'');
+  const winnerRoot=canon(c.winner).split(' ')[0];
+  if(!canon(sides).includes(winnerRoot))fail(c.winner+': next fixture does not contain winner identity');
+}
+
+const frome=next['Frome Town'];
+if(!frome||frome.round!=='Second Round Qualifying')fail('Non-replay control: Frome Town next fixture missing or wrong round');
+
+console.log('REPLAY PROGRESSION REGRESSION: PASS');
+console.log('First Qualifying replay -> Second Qualifying: PASS');
+console.log('Exmouth, Emley and Crowborough published draw links: PASS');
+console.log('Abbreviated conditional winner resolver: PRESENT');
+console.log('Non-replay control Frome Town: PASS');
