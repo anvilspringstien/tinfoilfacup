@@ -14,7 +14,7 @@ if(!html.includes("if(progressionRound==='First Round Qualifying')nextName='Seco
 if(!html.includes('const compatible=a.filter(x=>{'))fail('Conditional draw abbreviation resolver is missing');
 
 const results=competition.results||{};
-const next=competition.next_fixtures||{};
+const next=competition.fixtures||{};
 const replayCases=[
   {winner:'Exmouth Town', opponent:'Banbury United', fixtureKeys:['Exmouth Town']},
   {winner:'Emley AFC', opponent:'Bishop Auckland', fixtureKeys:['Emley AFC','Emley']},
