@@ -31,9 +31,9 @@ identity_block=r'''function canonicalClubKey(name){
 function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
 function canonicalResultWinner(r){
   if(!r)return '';
-  if(r.decision==='draw-replay')return '';
   const hs=Number(r.home_score),as=Number(r.away_score);
   if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
+  if(r.decision==='draw-replay')return '';
   return r.winner||'';
 }
 function sameSemanticResult(a,b){

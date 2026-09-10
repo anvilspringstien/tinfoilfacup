@@ -45,18 +45,23 @@ const assertions=`
 
   const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
   if(!bishop)throw new Error('DL5 regression: Bishop Auckland FC not found in ELIGIBLE');
-  const bishopHistory=historicalResultsForClub(bishop).map(x=>x.result||{});
+  const bishopJourney=buildJourney(bishop);
+  const bishopHistory=(bishopJourney.breadcrumbs||[]).map(x=>x.result||{});
   const bishopDraw=bishopHistory.find(r=>same(r.home,'Emley AFC')&&same(r.away,'Bishop Auckland')&&Number(r.home_score)===1&&Number(r.away_score)===1&&/First Round Qualifying/i.test(r.round||''));
-  if(!bishopDraw)throw new Error('DL5 render regression: Emley 1-1 Bishop Auckland First Qualifying draw missing');
-  if(!resultNeedsReplay(bishopDraw))throw new Error('DL5 render regression: Emley-Bishop Auckland draw must remain unresolved pending replay');
-  const bishopState=competitionState(bishop);
-  if(bishopState.type==='won'||bishopState.type==='eliminated')throw new Error('DL5 render regression: unresolved Emley-Bishop Auckland draw incorrectly resolved as '+bishopState.type);
-  const bishopNext=nextRoundInfo(bishop);
-  if(bishopNext&&bishopNext.knownFixture){
-    const bf=bishopNext.knownFixture||{};
-    if(!/Second Round Qualifying/i.test(bf.round||''))throw new Error('DL5 render regression: Bishop conditional next fixture has wrong round');
-    if(!bf.conditional)throw new Error('DL5 render regression: unresolved Bishop replay mapped to an unconditional Second Qualifying fixture');
-  }
+  const bishopReplay=bishopHistory.find(r=>same(r.home,'Bishop Auckland')&&same(r.away,'Emley AFC')&&Number(r.home_score)===0&&Number(r.away_score)===2);
+  if(!bishopDraw)throw new Error('Replay regression: Emley 1-1 Bishop Auckland First Qualifying draw missing');
+  if(!bishopReplay)throw new Error('Replay regression: Bishop Auckland 0-2 Emley replay missing');
+  if(!same((bishopJourney.carrier||bishop).name,'Emley AFC'))throw new Error('Replay regression: expected Emley AFC to become custodian after Bishop replay');
+
+  const exmouth=ELIGIBLE.find(c=>same(c.name,'Exmouth Town FC'));
+  if(!exmouth)throw new Error('Replay regression: Exmouth Town FC not found in ELIGIBLE');
+  const exmouthJourney=buildJourney(exmouth);
+  const exmouthHistory=(exmouthJourney.breadcrumbs||[]).map(x=>x.result||{});
+  const exmouthDraw=exmouthHistory.find(r=>same(r.home,'Banbury United')&&same(r.away,'Exmouth Town')&&Number(r.home_score)===0&&Number(r.away_score)===0);
+  const exmouthReplay=exmouthHistory.find(r=>same(r.home,'Exmouth Town')&&same(r.away,'Banbury United')&&Number(r.home_score)===2&&Number(r.away_score)===1);
+  if(!exmouthDraw)throw new Error('Replay regression: Banbury United 0-0 Exmouth Town draw missing');
+  if(!exmouthReplay)throw new Error('Replay regression: Exmouth Town 2-1 Banbury United replay missing');
+  if(!same((exmouthJourney.carrier||exmouth).name,'Exmouth Town'))throw new Error('Replay regression: Exmouth Town should remain custodian after winning replay');
 
   const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
@@ -78,8 +83,8 @@ const assertions=`
   console.log('Heaton Second Qualifying fixture:',heatonSecondQ.home,'v',heatonSecondQ.away);
   console.log('Kendal-Heaton draw count:',kendalHeatonDraws.length);
   console.log('Heaton replay present: PASS');
-  console.log('Emley-Bishop Auckland replay-pending state: PASS');
-  console.log('Bishop IF THROUGH fixture:',bishopNext&&bishopNext.knownFixture?(bishopNext.knownFixture.home+' v '+bishopNext.knownFixture.away):'not yet mapped');
+  console.log('Bishop Auckland 0-2 Emley replay: PASS');
+  console.log('Exmouth Town 2-1 Banbury United replay: PASS');
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
   console.log('Enfield Second Qualifying fixture:',enfieldSecondQ.home,'v',enfieldSecondQ.away);
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);

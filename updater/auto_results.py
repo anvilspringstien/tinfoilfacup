@@ -118,11 +118,25 @@ def parse_fwp(html,known):
   # Attendance is after away and therefore ignored.
   if not home or not away:continue
   match=next((f for f in known if norm(f.get("home"))==norm(home) and norm(f.get("away"))==norm(away)),None)
+  reverse_replay=False
+  if not match:
+   match=next((f for f in known if norm(f.get("home"))==norm(away) and norm(f.get("away"))==norm(home)),None)
+   reverse_replay=match is not None
   if not match:
    unmatched.append([home,away]); continue
-  date=match.get("date","") or current_date
-  winner=match["home"] if hs>as_ else match["away"] if as_>hs else ""
-  parsed.append({"home":match["home"],"away":match["away"],"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":date,"round":match.get("round",SCAN_ROUND),"source_url":FWP_URL})
+  # Original ties must retain canonical orientation. A completed row with the
+  # same two clubs reversed is the replay at the opposite venue, so preserve
+  # the observed orientation/date and label it explicitly as a replay.
+  if reverse_replay:
+   out_home,out_away=home,away
+   date=current_date or match.get("date","")
+   round_name=SCAN_ROUND+" Replay"
+  else:
+   out_home,out_away=match["home"],match["away"]
+   date=match.get("date","") or current_date
+   round_name=match.get("round",SCAN_ROUND)
+  winner=out_home if hs>as_ else out_away if as_>hs else ""
+  parsed.append({"home":out_home,"away":out_away,"home_score":hs,"away_score":as_,"winner":winner,"status":"FT","decision":"","date":date,"round":round_name,"source_url":FWP_URL})
  return parsed,unmatched,ft_rows
 
 
