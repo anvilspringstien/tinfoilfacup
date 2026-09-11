@@ -29,10 +29,17 @@ const assertions=`
   if(!same(f.home,'Frome Town')||!same(f.away,'Plymouth Parkway'))throw new Error('EX8 venue regression: wrong next fixture '+(f.home||'?')+' v '+(f.away||'?'));
   const venue=f.venue||{};
   const postcode=String(venue.postcode||'').toUpperCase().replace(/\\s+/g,' ').trim();
-  if(postcode!=='BA11 2EH')throw new Error('EX8 venue regression: Frome Town v Plymouth Parkway rendered fixture postcode expected BA11 2EH, got '+(postcode||'TBC'));
-  if(!venue.ground||/TBC/i.test(String(venue.ground)))throw new Error('EX8 venue regression: Frome Town v Plymouth Parkway rendered fixture ground is TBC');
+  if(postcode!=='BA11 2EH')throw new Error('EX8 venue regression: internal Frome Town v Plymouth Parkway postcode expected BA11 2EH, got '+(postcode||'TBC'));
+  if(!venue.ground||/TBC/i.test(String(venue.ground)))throw new Error('EX8 venue regression: internal Frome Town v Plymouth Parkway ground is TBC');
+
+  if(typeof stateHtml!=='function')throw new Error('EX8 venue regression: stateHtml renderer unavailable');
+  const rendered=String(stateHtml(custodian)||'');
+  if(!rendered.includes('BA11 2EH'))throw new Error('EX8 venue regression: rendered Next block drops BA11 2EH: '+rendered.replace(/<[^>]+>/g,' ').replace(/\\s+/g,' ').trim());
+  if(/Venue TBC|Postcode TBC/i.test(rendered))throw new Error('EX8 venue regression: rendered Next block still contains venue/postcode TBC');
+
   console.log('EX8 VENUE RENDER REGRESSION: PASS');
   console.log('Sidmouth Town -> Frome Town custody: PASS');
   console.log('Next:',f.home,'v',f.away,'•',venue.ground,'•',postcode);
+  console.log('Rendered Next block includes BA11 2EH: PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
