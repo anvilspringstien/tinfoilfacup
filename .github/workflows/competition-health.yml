@@ -118,6 +118,7 @@ jobs:
           path: |
             competition-health.md
             updater/competition-health.json
+            updater/replay-reconciliation-report.json
 
       - name: Fail run if competition health is critical
         if: ${{ steps.health_audit.outcome == 'failure' }}
