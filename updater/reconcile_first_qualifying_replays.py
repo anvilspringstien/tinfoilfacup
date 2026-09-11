@@ -68,6 +68,13 @@ def score_cell(s):
     return int(m.group(1)) if m else None
 
 
+def score_int(v):
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return None
+
+
 def all_results(data):
     out, seen = [], set()
     sources = []
@@ -80,7 +87,7 @@ def all_results(data):
             continue
         ident = (
             norm(r.get("home")), norm(r.get("away")), r.get("date", ""),
-            r.get("home_score"), r.get("away_score"), str(r.get("round") or "").lower()
+            score_int(r.get("home_score")), score_int(r.get("away_score")), str(r.get("round") or "").lower()
         )
         if ident not in seen:
             seen.add(ident)
@@ -106,8 +113,8 @@ def drawn_originals(data):
                 continue
             if "replay" in str(r.get("round") or "").lower():
                 continue
-            hs, aw = r.get("home_score"), r.get("away_score")
-            if isinstance(hs, int) and isinstance(aw, int) and hs == aw:
+            hs, aw = score_int(r.get("home_score")), score_int(r.get("away_score"))
+            if hs is not None and aw is not None and hs == aw:
                 draws[key] = names
                 break
     return draws
@@ -155,7 +162,8 @@ def parse_date_page(page, date, source_url, draws):
 def same_result(a, b):
     return (
         norm(a.get("home")) == norm(b.get("home")) and norm(a.get("away")) == norm(b.get("away"))
-        and a.get("home_score") == b.get("home_score") and a.get("away_score") == b.get("away_score")
+        and score_int(a.get("home_score")) == score_int(b.get("home_score"))
+        and score_int(a.get("away_score")) == score_int(b.get("away_score"))
         and str(a.get("date") or "") == str(b.get("date") or "")
     )
 
