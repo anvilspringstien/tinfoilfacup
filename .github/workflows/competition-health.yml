@@ -16,6 +16,8 @@ on:
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
       - "updater/kt21_replay_regression.py"
+      - "updater/refresh_clubfinder_embedded_snapshot.py"
+      - "updater/embedded_snapshot_regression.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_replay_progression.py"
@@ -85,6 +87,9 @@ jobs:
       - name: Apply guarded Clubfinder branding fixes
         run: python updater/patch_clubfinder_branding.py
 
+      - name: Refresh last-known-good embedded competition snapshot
+        run: python updater/refresh_clubfinder_embedded_snapshot.py
+
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
 
@@ -96,6 +101,9 @@ jobs:
 
       - name: Run KT21 replay regression
         run: python updater/kt21_replay_regression.py
+
+      - name: Guard embedded fallback freshness
+        run: python updater/embedded_snapshot_regression.py
 
       - name: Run canonical DL5 4RQ Stats regression
         run: node updater/clubfinder_stats_regression.js
