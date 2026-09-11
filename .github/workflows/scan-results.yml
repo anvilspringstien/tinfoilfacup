@@ -33,6 +33,7 @@ on:
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/replay_progression_regression.js"
+      - "updater/law2_origin_probe.py"
       - ".github/workflows/scan-results.yml"
 permissions:
   contents: write
@@ -44,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Probe Law 2 Clubfinder origin structure
+        run: python updater/law2_origin_probe.py
       - name: Apply guarded replay-orientation fix
         run: python updater/apply_replay_orientation_fix.py
       - name: Repair verified 9 September First Qualifying replays
