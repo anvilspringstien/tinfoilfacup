@@ -12,6 +12,7 @@ on:
       - "updater/probe_fwp_source.py"
       - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
+      - "updater/sync_second_qualifying_resolved.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
       - "updater/enrich_later_round_venues.py"
@@ -48,8 +49,11 @@ jobs:
       - name: Synchronise competition chronology
         run: python updater/run_source_resilient.py --label "Competition chronology sync" -- python updater/sync_competition_chronology_v2.py
 
+      - name: Synchronise resolved Second Qualifying draw
+        run: python updater/run_source_resilient.py --label "Resolved Second Qualifying sync" -- python updater/sync_second_qualifying_resolved.py
+
       - name: Reconcile all First Qualifying replays
-        run: python updater/run_source_resilient.py --label "First Qualifying replay reconciliation" -- python updater/reconcile_first_qualifying_replays.py
+        run: python updater/reconcile_first_qualifying_replays.py
 
       - name: Guard complete First Qualifying replay coverage
         run: python updater/replay_completion_guard.py
