@@ -27,7 +27,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: fa-cup-result-scan-main
+  group: competition-state-main
   cancel-in-progress: false
 jobs:
   scan:
