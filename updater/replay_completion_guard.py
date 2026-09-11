@@ -3,10 +3,9 @@
 
 As of 11 September 2026 the 112 First Qualifying ties contain 32 drawn first
 legs. Thirty-one replays have been decided; Burgess Hill Town v Jersey Bulls is
-the sole pending replay after its 8 September fixture was postponed and moved to
-15 September. The guard requires exactly that shape, verifies every completed
-replay winner is in the Second Qualifying draw, and verifies the one pending pair
-still owns the Hanwell Town conditional slot.
+the sole pending replay after its fixture was postponed to 15 September. The
+active draw abbreviates Burgess Hill Town as "Burgess H" in the Hanwell Town
+conditional slot; only that exact legacy abbreviation is accepted here.
 """
 import json
 import re
@@ -19,7 +18,6 @@ REPLAY_ROUND = ROUND + " Replay"
 EXPECTED_TIES = 112
 EXPECTED_DRAWS = 32
 EXPECTED_DECIDED_REPLAYS = 31
-PENDING_PAIR = None
 
 
 def norm(s):
@@ -37,6 +35,13 @@ PENDING_PAIR = pair_key("Burgess Hill Town", "Jersey Bulls")
 def compatible(a, b):
     a, b = norm(a), norm(b)
     return bool(a and b and (a == b or a.startswith(b + " ") or b.startswith(a + " ")))
+
+
+def pending_alt_match(alt, want):
+    a, w = norm(alt), norm(want)
+    if w == norm("Burgess Hill Town"):
+        return a in {norm("Burgess H"), norm("Burgess Hill"), norm("Burgess Hill Town")}
+    return compatible(a, w)
 
 
 def score_int(v):
@@ -124,7 +129,7 @@ def pending_slot_present(data):
                 if not compatible(fixed, "Hanwell Town"):
                     continue
                 alts = [x.strip() for x in re.split(r"\s+or\s+", str(conditional), flags=re.I) if x.strip()]
-                if len(alts) == 2 and all(any(compatible(alt, want) for alt in alts) for want in ("Burgess Hill Town", "Jersey Bulls")):
+                if len(alts) == 2 and any(pending_alt_match(a, "Burgess Hill Town") for a in alts) and any(pending_alt_match(a, "Jersey Bulls") for a in alts):
                     return True
     return False
 
