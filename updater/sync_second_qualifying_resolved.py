@@ -3,10 +3,10 @@
 
 As of 11 September 2026, 79 of the 80 Second Qualifying ties are resolved.
 The remaining slot is legitimately conditional because Burgess Hill Town v
-Jersey Bulls finished 0-0 and its replay, originally due 8 September, was
-postponed to 15 September. We merge the 79 published resolved ties with exactly
-one retained canonical conditional fixture. Failures emit the nearby canonical
-fixture shape so no guessed alias is ever published.
+Jersey Bulls finished 0-0 and its replay was postponed to 15 September. The
+canonical draw abbreviates Burgess Hill Town as "Burgess H" in that one slot;
+this script recognises that exact legacy abbreviation without enabling general
+fuzzy club matching.
 """
 import json,re,urllib.request
 from datetime import datetime,timezone
@@ -14,7 +14,7 @@ from html import unescape
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];DATA=ROOT/"competition.json";REPORT=ROOT/"updater"/"second-qualifying-sync-report.json"
 URL="https://www.footballwebpages.co.uk/fa-cup/fixtures-results";ROUND="Second Round Qualifying";DATE="2026-09-19";EXPECTED_RESOLVED=79;EXPECTED_TOTAL=80
-PENDING_HOME="Hanwell Town";PENDING_ALTERNATIVES=("Burgess Hill Town","Jersey Bulls");UA="Mozilla/5.0 TinFoilFACupCompetitionHealth/7.9.25"
+PENDING_HOME="Hanwell Town";UA="Mozilla/5.0 TinFoilFACupCompetitionHealth/7.9.25"
 def report(stage,**details):REPORT.write_text(json.dumps({"checked_at":datetime.now(timezone.utc).isoformat(),"stage":stage,**details},indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
 def fail(stage,message,**details):report(stage,status="FAIL",message=message,**details);raise SystemExit(message)
 def fetch(url):
@@ -25,6 +25,10 @@ def norm(s):
  s=(s or "").lower().replace("&"," and ");s=re.sub(r"\b(fc|afc|cfc)\b"," ",s);return re.sub(r"[^a-z0-9]+"," ",s).strip()
 def compatible(a,b):
  a,b=norm(a),norm(b);return bool(a and b and (a==b or a.startswith(b+" ") or b.startswith(a+" ")))
+def pending_alt_match(alt,want):
+ a,w=norm(alt),norm(want)
+ if w==norm("Burgess Hill Town"):return a in {norm("Burgess H"),norm("Burgess Hill"),norm("Burgess Hill Town")}
+ return compatible(a,w)
 def parse_time(s):
  s=(s or "").strip().lower().replace(" ","");m=re.fullmatch(r"(\d{1,2})(?::(\d{2}))?(am|pm)",s)
  if m:
@@ -67,21 +71,18 @@ def pending_fixture(fixtures):
   for fixed,conditional in ((home,away),(away,home)):
    if not compatible(fixed,PENDING_HOME):continue
    alts=conditional_alternatives(conditional)
-   if len(alts)==2 and all(any(compatible(alt,want) for alt in alts) for want in PENDING_ALTERNATIVES):matches.append(dict(f))
+   if len(alts)==2 and any(pending_alt_match(a,"Burgess Hill Town") for a in alts) and any(pending_alt_match(a,"Jersey Bulls") for a in alts):matches.append(dict(f))
  return matches
-def candidate_pending(fixtures):
- needles=("hanwell","burgess hill","jersey bulls")
- return [f for f in fixtures if any(n in (str(f.get("home","")).lower()+" "+str(f.get("away","")).lower()) for n in needles)]
 def has_fixture(fixtures,a,b):
  target=tuple(sorted((norm(a),norm(b))));return any(tuple(sorted((norm(f["home"]),norm(f["away"]))))==target for f in fixtures)
 def main():
  data=json.loads(DATA.read_text(encoding="utf-8"));resolved=parse(fetch(URL))
- if len(resolved)!=EXPECTED_RESOLVED:fail("parse",f"SECOND QUALIFYING RESOLVED SYNC: ABORT - expected {EXPECTED_RESOLVED} currently resolved ties, found {len(resolved)}",parsed_count=len(resolved),parsed_fixtures=[f"{f['home']} v {f['away']}" for f in resolved])
+ if len(resolved)!=EXPECTED_RESOLVED:fail("parse",f"SECOND QUALIFYING RESOLVED SYNC: ABORT - expected {EXPECTED_RESOLVED} currently resolved ties, found {len(resolved)}",parsed_count=len(resolved))
  current=unique_fixtures(data.get("fixtures") or {});pending=pending_fixture(current)
- if len(pending)!=1:fail("pending_slot",f"SECOND QUALIFYING RESOLVED SYNC: ABORT - expected exactly one retained Hanwell/Burgess Hill/Jersey conditional slot, found {len(pending)}",current_unique=len(current),matches=pending,candidates=candidate_pending(current))
+ if len(pending)!=1:fail("pending_slot",f"SECOND QUALIFYING RESOLVED SYNC: ABORT - expected exactly one retained Hanwell/Burgess Hill/Jersey conditional slot, found {len(pending)}",current_unique=len(current),matches=pending)
  required=[("Hampton & Richmond Borough","Crowborough Athletic"),("Dulwich Hamlet","Welling United"),("Thame United","Exmouth Town"),("Needham Market","Braintree Town"),("Hemel Hempstead Town","Wingate & Finchley")];missing=[f"{a} v {b}" for a,b in required if not has_fixture(resolved,a,b)]
  if missing:fail("canaries","SECOND QUALIFYING RESOLVED SYNC: ABORT - required resolved fixtures missing",missing=missing)
  retained=pending[0];retained.update({"round":ROUND,"date":DATE});final=resolved+[retained]
  if len(final)!=EXPECTED_TOTAL:fail("final_count",f"SECOND QUALIFYING RESOLVED SYNC: ABORT - expected {EXPECTED_TOTAL} total ties after retaining pending slot, found {len(final)}")
- data["fixtures"]=fmap(final);data["source_round"]=ROUND;data.setdefault("round_dates",{})[ROUND]=DATE;data["updated_at"]=datetime.now(timezone.utc).isoformat();data["second_qualifying_sync"]={"source":"Football Web Pages + retained pending replay slot","source_url":URL,"synced_at":data["updated_at"],"resolved_fixtures":len(resolved),"pending_replay_slots":1,"total_fixtures":len(final),"pending":"Hanwell Town v Burgess Hill Town or Jersey Bulls"};DATA.write_text(json.dumps(data,indent=2,ensure_ascii=False)+"\n",encoding="utf-8");report("complete",status="PASS",resolved_ties=len(resolved),pending_slots=1,total_ties=len(final),pending_fixture=retained);print("SECOND QUALIFYING RESOLVED SYNC: PASS");print("Resolved ties:",len(resolved));print("Pending replay slots: 1");print("Total ties:",len(final))
+ data["fixtures"]=fmap(final);data["source_round"]=ROUND;data.setdefault("round_dates",{})[ROUND]=DATE;data["updated_at"]=datetime.now(timezone.utc).isoformat();data["second_qualifying_sync"]={"source":"Football Web Pages + retained pending replay slot","source_url":URL,"synced_at":data["updated_at"],"resolved_fixtures":len(resolved),"pending_replay_slots":1,"total_fixtures":len(final),"pending":"Hanwell Town v Burgess H or Jersey Bulls"};DATA.write_text(json.dumps(data,indent=2,ensure_ascii=False)+"\n",encoding="utf-8");report("complete",status="PASS",resolved_ties=len(resolved),pending_slots=1,total_ties=len(final),pending_fixture=retained);print("SECOND QUALIFYING RESOLVED SYNC: PASS");print("Resolved ties:",len(resolved));print("Pending replay slots: 1");print("Total ties:",len(final))
 if __name__=="__main__":main()
