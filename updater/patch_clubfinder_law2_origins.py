@@ -10,6 +10,17 @@ ALL={'Extra Preliminary Round','Preliminary Round',*NEW}
 # records; it adds the 160 later qualifying entrants only. The separate FA
 # reconciliation remains responsible for any legacy entry-label correction.
 EXPECTED={'Extra Preliminary Round':437,'Preliminary Round':54,'First Round Qualifying':88,'Second Round Qualifying':48,'Fourth Round Qualifying':24}
+# Explicit current-club evidence overrides stale supporting-gazetteer records.
+# Warrington Rylands' official club pages give WA2 7RZ for the Quickline
+# Logistics Arena; the companion FCHD candidate currently contains WA3 7RZ.
+LOCATION_OVERRIDES={
+ 'warrington rylands':{
+  'ground':'The Quickline Logistics Arena',
+  'postcode':'WA2 7RZ',
+  'source':'https://warringtonrylandsfc.co.uk/arena',
+  'ground_source':'Official Warrington Rylands current arena page',
+ }
+}
 def norm(s):
  s=str(s or '').lower().replace('&',' and ');s=re.sub(r'\b(fc|afc|cfc)\b',' ',s);return re.sub(r'[^a-z0-9]+',' ',s).strip()
 def locate(t,n):
@@ -69,9 +80,14 @@ oldby={norm(x.get('name')):x for x in old};support=[];need=[]
 for x in selected:
  k=norm(x['club'])
  if k in gby:continue
- ev=[e for e in (x.get('supporting_ground_evidence') or []) if e.get('ground') and e.get('postcode')]
- if len(ev)!=1:raise SystemExit(f"ABORT: {x['club']} has {len(ev)} usable supporting home-ground candidates")
- e=ev[0];pc=str(e['postcode']).strip().upper();o=oldby.get(k) or {};r={'name':x['club'],'ground':e['ground'],'postcode':pc,'verification':'supporting-evidence','verification_label':'⚠️ Unverified','source':e.get('source') or 'FCHD gazetteer candidate evidence','ground_source':'Law 2 supporting home-ground evidence; not automatically verified','law2_origin_location':True}
+ override=LOCATION_OVERRIDES.get(k)
+ if override:
+  e=override
+ else:
+  ev=[e for e in (x.get('supporting_ground_evidence') or []) if e.get('ground') and e.get('postcode')]
+  if len(ev)!=1:raise SystemExit(f"ABORT: {x['club']} has {len(ev)} usable supporting home-ground candidates")
+  e=ev[0]
+ pc=str(e['postcode']).strip().upper();o=oldby.get(k) or {};r={'name':x['club'],'ground':e['ground'],'postcode':pc,'verification':'supporting-evidence','verification_label':'⚠️ Unverified','source':e.get('source') or 'FCHD gazetteer candidate evidence','ground_source':e.get('ground_source') or 'Law 2 supporting home-ground evidence; not automatically verified','law2_origin_location':True}
  if o.get('postcode')==pc and o.get('lat') is not None and o.get('lon') is not None:r.update(lat=float(o['lat']),lon=float(o['lon']),coordinate_source=o.get('coordinate_source') or 'Postcodes.io postcode centroid')
  else:need.append(pc)
  support.append(r)
@@ -115,7 +131,7 @@ newgb="""  const g=GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target);
   const s=LAW2_ORIGIN_LOCATIONS.find(g=>canonicalClubKey(g.name||g.club)===target);
   if(s)return s;
   const c=ELIGIBLE.find(c=>canonicalClubKey(c.name)===target);"""
-if oldgb in text:text=text.replace(oldgb,newgb,1)
+if oldgb in text:text.replace(oldgb,newgb,1)
 elif newgb not in text:raise SystemExit('ABORT: groundByClubName boundary changed')
 oldprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n\n  if(!crumbs.length){"""
 newprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n  const entryRound=journey.origin.entry_round||'';\n  if(entryRound&&entryRound!=='Extra Preliminary Round'){\n    body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '+esc(entryRound)+'.</div>';\n  }\n\n  if(!crumbs.length){"""
