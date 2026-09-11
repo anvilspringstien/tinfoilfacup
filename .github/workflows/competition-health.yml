@@ -12,6 +12,8 @@ on:
       - "updater/probe_fwp_source.py"
       - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
+      - "updater/reconcile_first_qualifying_replays.py"
+      - "updater/replay_completion_guard.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_replay_progression.py"
@@ -45,6 +47,12 @@ jobs:
 
       - name: Synchronise competition chronology
         run: python updater/run_source_resilient.py --label "Competition chronology sync" -- python updater/sync_competition_chronology_v2.py
+
+      - name: Reconcile all First Qualifying replays
+        run: python updater/run_source_resilient.py --label "First Qualifying replay reconciliation" -- python updater/reconcile_first_qualifying_replays.py
+
+      - name: Guard complete First Qualifying replay coverage
+        run: python updater/replay_completion_guard.py
 
       - name: Enrich later-round fixture venues
         run: python updater/enrich_later_round_venues.py
