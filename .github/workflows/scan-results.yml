@@ -21,6 +21,8 @@ on:
       - "updater/run_source_resilient.py"
       - "updater/apply_replay_orientation_fix.py"
       - "updater/repair_first_qualifying_replays_20260909.py"
+      - "updater/reconcile_first_qualifying_replays.py"
+      - "updater/replay_completion_guard.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/replay_progression_regression.js"
       - ".github/workflows/scan-results.yml"
@@ -38,6 +40,10 @@ jobs:
         run: python updater/apply_replay_orientation_fix.py
       - name: Repair verified 9 September First Qualifying replays
         run: python updater/repair_first_qualifying_replays_20260909.py
+      - name: Reconcile all First Qualifying replays
+        run: python updater/run_source_resilient.py --label "First Qualifying replay reconciliation" -- python updater/reconcile_first_qualifying_replays.py
+      - name: Guard complete First Qualifying replay coverage
+        run: python updater/replay_completion_guard.py
       - name: Scan and validate
         env:
           EVENT_NAME: ${{ github.event_name }}
