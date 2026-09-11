@@ -9,16 +9,8 @@
       "postcode": "KT22 9AS",
       "verified_at": "2026-09-11",
       "sources": [
-        {
-          "type": "official_club",
-          "url": "https://leatherheadfc.com/contact-us/",
-          "note": "Leatherhead FC contact page gives Fetcham Grove, Guildford Road, Leatherhead, Surrey, KT22 9AS."
-        },
-        {
-          "type": "companies_house",
-          "url": "https://find-and-update.company-information.service.gov.uk/company/03067144",
-          "note": "Independent address corroboration for Leatherhead Football Club Limited at Fetcham Grove, Guildford Road, Leatherhead, Surrey, KT22 9AS."
-        }
+        {"type": "official_club", "url": "https://leatherheadfc.com/contact-us/", "note": "Leatherhead FC contact page gives Fetcham Grove, Guildford Road, Leatherhead, Surrey, KT22 9AS."},
+        {"type": "companies_house", "url": "https://find-and-update.company-information.service.gov.uk/company/03067144", "note": "Independent address corroboration for Leatherhead Football Club Limited at Fetcham Grove, Guildford Road, Leatherhead, Surrey, KT22 9AS."}
       ]
     },
     {
@@ -27,104 +19,32 @@
       "postcode": "RH4 1DX",
       "verified_at": "2026-09-11",
       "sources": [
-        {
-          "type": "official_club",
-          "url": "https://dwfc.co.uk/contact-us/",
-          "note": "Dorking Wanderers contact page gives Meadowbank Stadium, Mill Lane, Dorking, Surrey, RH4 1DX."
-        },
-        {
-          "type": "companies_house",
-          "url": "https://find-and-update.company-information.service.gov.uk/company/08964370",
-          "note": "Independent address corroboration for Dorking Wanderers Football Club Limited at Meadowbank Football Ground, Mill Lane, Dorking, RH4 1DX."
-        }
+        {"type": "official_club", "url": "https://dwfc.co.uk/contact-us/", "note": "Dorking Wanderers contact page gives Meadowbank Stadium, Mill Lane, Dorking, Surrey, RH4 1DX."},
+        {"type": "companies_house", "url": "https://find-and-update.company-information.service.gov.uk/company/08964370", "note": "Independent address corroboration for Dorking Wanderers Football Club Limited at Meadowbank Football Ground, Mill Lane, Dorking, RH4 1DX."}
       ]
     },
-    {
-      "club": "Altrincham FC",
-      "ground": "J Davidson Stadium",
-      "postcode": "WA15 8AP",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://altrinchamfc.com/pages/contact-us",
-          "note": "Altrincham FC contact page identifies the J. Davidson Stadium at Moss Lane, Hale, Altrincham, WA15 8AP."
-        }
-      ]
-    },
-    {
-      "club": "Boreham Wood FC",
-      "ground": "Meadow Park",
-      "postcode": "WD6 5AL",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://www.borehamwoodfootballclub.co.uk/directory/",
-          "note": "Boreham Wood FC directory gives Mangata Developments Stadium, Meadow Park, Broughinge Road, Borehamwood, WD6 5AL."
-        }
-      ]
-    },
+    {"club": "Altrincham FC", "ground": "J Davidson Stadium", "postcode": "WA15 8AP", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://altrinchamfc.com/pages/contact-us", "note": "Altrincham FC contact page identifies the J. Davidson Stadium at Moss Lane, Hale, Altrincham, WA15 8AP."}]},
+    {"club": "Boreham Wood FC", "ground": "Meadow Park", "postcode": "WD6 5AL", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.borehamwoodfootballclub.co.uk/directory/", "note": "Boreham Wood FC directory gives Mangata Developments Stadium, Meadow Park, Broughinge Road, Borehamwood, WD6 5AL."}]},
     {
       "club": "Carlisle United AFC",
       "ground": "Brunton Park",
       "postcode": "CA1 1LL",
       "verified_at": "2026-09-11",
       "sources": [
-        {
-          "type": "official_club",
-          "url": "https://www.carlisleunited.co.uk/company-details",
-          "note": "Carlisle United company details page gives Brunton Park, Warwick Road, Carlisle, CA1 1LL."
-        },
-        {
-          "type": "companies_house",
-          "url": "https://find-and-update.company-information.service.gov.uk/company/00175280",
-          "note": "Companies House corroborates Brunton Park, Warwick Road, Carlisle, CA1 1LL."
-        }
+        {"type": "official_club", "url": "https://www.carlisleunited.co.uk/company-details", "note": "Carlisle United company details page gives Brunton Park, Warwick Road, Carlisle, CA1 1LL."},
+        {"type": "companies_house", "url": "https://find-and-update.company-information.service.gov.uk/company/00175280", "note": "Companies House corroborates Brunton Park, Warwick Road, Carlisle, CA1 1LL."}
       ]
     },
-    {
-      "club": "Eastleigh FC",
-      "ground": "Silverlake Stadium",
-      "postcode": "SO50 9HT",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://eastleighfc.com/club/contact/",
-          "note": "Eastleigh FC contact page gives The Silverlake Stadium, Stoneham Lane, Eastleigh, Hampshire, SO50 9HT."
-        }
-      ]
-    },
-    {
-      "club": "FC Halifax Town",
-      "ground": "The Shay Stadium",
-      "postcode": "HX1 2YT",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://fchalifaxtown.com/club/contact-us/",
-          "note": "FC Halifax Town contact page gives The Shay Stadium, Halifax, West Yorkshire, HX1 2YT."
-        }
-      ]
-    },
+    {"club": "Eastleigh FC", "ground": "Silverlake Stadium", "postcode": "SO50 9HT", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://eastleighfc.com/club/contact/", "note": "Eastleigh FC contact page gives The Silverlake Stadium, Stoneham Lane, Eastleigh, Hampshire, SO50 9HT."}]},
+    {"club": "FC Halifax Town", "ground": "The Shay Stadium", "postcode": "HX1 2YT", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://fchalifaxtown.com/club/contact-us/", "note": "FC Halifax Town contact page gives The Shay Stadium, Halifax, West Yorkshire, HX1 2YT."}]},
     {
       "club": "Hartlepool United FC",
       "ground": "Victoria Park",
       "postcode": "TS24 8BZ",
       "verified_at": "2026-09-11",
       "sources": [
-        {
-          "type": "official_club",
-          "url": "https://www.hartlepoolunited.co.uk/club/contact-us/",
-          "note": "Hartlepool United contact page gives Victoria Park, Clarence Road, Hartlepool, TS24 8BZ."
-        },
-        {
-          "type": "companies_house",
-          "url": "https://find-and-update.company-information.service.gov.uk/company/00098191",
-          "note": "Companies House corroborates Victoria Park, Clarence Road, Hartlepool, TS24 8BZ."
-        }
+        {"type": "official_club", "url": "https://www.hartlepoolunited.co.uk/club/contact-us/", "note": "Hartlepool United contact page gives Victoria Park, Clarence Road, Hartlepool, TS24 8BZ."},
+        {"type": "companies_house", "url": "https://find-and-update.company-information.service.gov.uk/company/00098191", "note": "Companies House corroborates Victoria Park, Clarence Road, Hartlepool, TS24 8BZ."}
       ]
     },
     {
@@ -133,82 +53,26 @@
       "postcode": "DY10 1NB",
       "verified_at": "2026-09-11",
       "sources": [
-        {
-          "type": "official_club",
-          "url": "https://harriers.co.uk/internal/get-in-touch",
-          "note": "Kidderminster Harriers contact page gives Aggborough Stadium, Hoo Road, Kidderminster, Worcestershire, DY10 1NB."
-        },
-        {
-          "type": "companies_house",
-          "url": "https://find-and-update.company-information.service.gov.uk/company/00484523",
-          "note": "Companies House corroborates Aggborough Stadium, Hoo Road, Kidderminster, Worcestershire, DY10 1NB."
-        }
+        {"type": "official_club", "url": "https://harriers.co.uk/internal/get-in-touch", "note": "Kidderminster Harriers contact page gives Aggborough Stadium, Hoo Road, Kidderminster, Worcestershire, DY10 1NB."},
+        {"type": "companies_house", "url": "https://find-and-update.company-information.service.gov.uk/company/00484523", "note": "Companies House corroborates Aggborough Stadium, Hoo Road, Kidderminster, Worcestershire, DY10 1NB."}
       ]
     },
-    {
-      "club": "Scunthorpe United FC",
-      "ground": "Attis Arena",
-      "postcode": "DN15 8TD",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://www.scunthorpe-united.co.uk/contact",
-          "note": "Scunthorpe United contact page gives The Attis Arena, Jack Brownsword Way, Scunthorpe, North Lincolnshire, DN15 8TD."
-        }
-      ]
-    },
-    {
-      "club": "Sutton United FC",
-      "ground": "VBS Community Stadium",
-      "postcode": "SM1 2EY",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://www.suttonunited.net/about/",
-          "note": "Sutton United about page gives VBS Community Stadium, Gander Green Lane, Sutton, SM1 2EY."
-        }
-      ]
-    },
-    {
-      "club": "Wealdstone FC",
-      "ground": "Grosvenor Vale",
-      "postcode": "HA4 6JQ",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://www.wealdstone-fc.com/company-info",
-          "note": "Wealdstone FC company information identifies The Vale, Grosvenor Vale, Ruislip, HA4 6JQ, and the registered office at Grosvenor Vale, Ruislip, HA4 6JQ."
-        }
-      ]
-    },
-    {
-      "club": "Woking FC",
-      "ground": "Laithwaite Community Stadium",
-      "postcode": "GU22 9AA",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://wokingfc.co.uk/09/10/stadium-update/",
-          "note": "Woking FC stadium update gives Laithwaite Community Stadium, Kingfield Road, Woking, Surrey, GU22 9AA."
-        }
-      ]
-    },
-    {
-      "club": "Worthing FC",
-      "ground": "Sussex Transport Community Stadium",
-      "postcode": "BN14 7HQ",
-      "verified_at": "2026-09-11",
-      "sources": [
-        {
-          "type": "official_club",
-          "url": "https://worthingfc.com/visit-us/",
-          "note": "Worthing FC find-us page gives Sussex Transport Community Stadium, Woodside Road, Worthing, West Sussex, BN14 7HQ."
-        }
-      ]
-    }
+    {"club": "Scunthorpe United FC", "ground": "Attis Arena", "postcode": "DN15 8TD", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.scunthorpe-united.co.uk/contact", "note": "Scunthorpe United contact page gives The Attis Arena, Jack Brownsword Way, Scunthorpe, North Lincolnshire, DN15 8TD."}]},
+    {"club": "Sutton United FC", "ground": "VBS Community Stadium", "postcode": "SM1 2EY", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.suttonunited.net/about/", "note": "Sutton United about page gives VBS Community Stadium, Gander Green Lane, Sutton, SM1 2EY."}]},
+    {"club": "Wealdstone FC", "ground": "Grosvenor Vale", "postcode": "HA4 6JQ", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.wealdstone-fc.com/company-info", "note": "Wealdstone FC company information identifies The Vale, Grosvenor Vale, Ruislip, HA4 6JQ, and the registered office at Grosvenor Vale, Ruislip, HA4 6JQ."}]},
+    {"club": "Woking FC", "ground": "Laithwaite Community Stadium", "postcode": "GU22 9AA", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://wokingfc.co.uk/09/10/stadium-update/", "note": "Woking FC stadium update gives Laithwaite Community Stadium, Kingfield Road, Woking, Surrey, GU22 9AA."}]},
+    {"club": "Worthing FC", "ground": "Sussex Transport Community Stadium", "postcode": "BN14 7HQ", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://worthingfc.com/visit-us/", "note": "Worthing FC find-us page gives Sussex Transport Community Stadium, Woodside Road, Worthing, West Sussex, BN14 7HQ."}]},
+    {"club": "Alfreton Town FC", "ground": "Impact Arena", "postcode": "DE55 7FZ", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://alfretontownfootballclub.com/", "note": "Alfreton Town FC official site gives Impact Arena Stadium, North Street, Alfreton, Derbyshire, DE55 7FZ."}]},
+    {"club": "Alvechurch FC", "ground": "Lye Meadow", "postcode": "B48 7RS", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.alvechurchfc.club/contact", "note": "Alvechurch FC contact page gives Lye Meadow, 53 Redditch Road, Alvechurch, B48 7RS."}]},
+    {"club": "Ashton United FC", "ground": "Hurst Cross Stadium", "postcode": "OL6 8DY", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.ashtonunited.org/a/company-details-51774.html", "note": "Ashton United company details give Hurst Cross Stadium, Surrey Street, Ashton-under-Lyne, OL6 8DY."}]},
+    {"club": "Bath City FC", "ground": "Twerton Park", "postcode": "BA2 1DB", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.bathcityfc.com/how-to-find-us/", "note": "Bath City FC states its ground is Twerton Park, Twerton, Bath, BA2 1DB."}]},
+    {"club": "Bishop's Stortford FC", "ground": "Woodside Park", "postcode": "CM23 5RG", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://bsfc.co.uk/", "note": "Bishop's Stortford FC official site gives Woodside Park, Dunmow Road, Bishop's Stortford, CM23 5RG."}]},
+    {"club": "Brackley Town FC", "ground": "St James Park", "postcode": "NN13 7EJ", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://www.brackleytownfc.com/contact", "note": "Brackley Town FC contact page gives St James Park, Churchill Way, Brackley, NN13 7EJ."}]},
+    {"club": "Chesham United FC", "ground": "The Meadow", "postcode": "HP5 1NE", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://cheshamunited.co.uk/club/contact-us/", "note": "Chesham United contact page gives The Meadow, Amy Lane, Chesham, Buckinghamshire, HP5 1NE."}]},
+    {"club": "Halesowen Town FC", "ground": "The Grove", "postcode": "B63 3TB", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://ht-fc.co.uk/contact-us/", "note": "Halesowen Town FC contact page gives The Grove, Old Hawne Lane, Halesowen, B63 3TB."}]},
+    {"club": "Hitchin Town FC", "ground": "Top Field", "postcode": "SG5 1NU", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://hitchintownfc.club/contacts/", "note": "Hitchin Town FC contact page gives Top Field, Fishponds Road, Hitchin, Hertfordshire, SG5 1NU."}]},
+    {"club": "Lewes FC", "ground": "The Dripping Pan", "postcode": "BN7 2XA", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://lewesfc.com/matchday-information/", "note": "Lewes FC matchday information gives The Dripping Pan, Mountfield Road, Lewes, BN7 2XA."}]},
+    {"club": "Needham Market FC", "ground": "Bloomfields", "postcode": "IP6 8DA", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://needhammarketfc.co.uk/index.html", "note": "Needham Market FC official site gives Bloomfields, Quinton Road, Needham Market, Suffolk, IP6 8DA."}]},
+    {"club": "Marine FC", "ground": "Marine Travel Arena", "postcode": "L23 3AS", "verified_at": "2026-09-11", "sources": [{"type": "official_club", "url": "https://marinefc.com/event/marine-fc-vs-radcliffe-6/", "note": "Marine FC's 2026/27 match page gives The Marine Travel Arena, College Road, Crosby, Liverpool, L23 3AS."}]}
   ]
 }
