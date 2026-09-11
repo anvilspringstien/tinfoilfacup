@@ -1,7 +1,9 @@
 # Tin Foil FA Cup — Ground Health
 
 - 🟢 Complete verified canonical club-ground records: **497**
-- 🟦 Law 2 supporting origin locations: **154**
+- ✅ Verified Law 2 supplemental origin locations: **0**
+- 🟢 Total verified selectable origins: **497**
+- 🟦 Law 2 supporting origin locations awaiting verification: **154**
 - ⚪ Selectable origin location coverage: **651/651**
 - 🔴 Critical ground-data items: **0**
 - 🟡 Review items: **0**
@@ -10,7 +12,7 @@
 - 🤝 Confirmed shared venues reconciled without forced direction: **3**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
-Supporting Law 2 origin locations are usable for distance selection but remain explicitly unverified until promoted through the guarded ground process.
+Supporting Law 2 origin locations are usable for distance selection but remain explicitly unverified until promoted through the guarded verified-location ledger.
 
 ## 🔴 Critical missing/incomplete origin locations
 
