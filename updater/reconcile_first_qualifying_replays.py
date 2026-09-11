@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 """Reconcile every completed 2026-27 FA Cup First Qualifying replay.
 
-The original result scanner intentionally anchors itself to the 112 canonical
-First Qualifying ties. Football Web Pages now exposes replay results on the
-FA Cup date pages, so this pass explicitly audits the replay window (7-9 Sep),
-matches rows back to drawn original ties without assuming venue orientation,
-publishes missing decisive replays, and resolves conditional Second Qualifying
-fixture sides once a replay winner is known.
-
-This script is safe to run repeatedly. It refuses partial replay coverage and
-never invents a result or winner.
+Uses the archived 112 First Qualifying fixtures as the canonical tie set, then
+identifies the drawn first legs from recorded scores. This deliberately does not
+require legacy result rows to carry a round label. Replay rows are discovered
+from the FA Cup date pages for 7-9 September, matched by unordered club pair,
+and merged idempotently. Known conditional Second Qualifying draw slots are
+resolved once a replay winner is verified.
 """
 import html as H
 import json
@@ -22,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "competition.json"
 ROUND = "First Round Qualifying"
 REPLAY_ROUND = ROUND + " Replay"
+EXPECTED_TIES = 112
 EXPECTED_DRAWS = 31
 REPLAY_DATES = {
     "2026-09-07": "https://www.footballwebpages.co.uk/fa-cup/20260907",
@@ -45,14 +43,15 @@ def compatible(a, b):
     return bool(a and b and (a == b or a.startswith(b + " ") or b.startswith(a + " ")))
 
 
+def fixture_values(src):
+    return list(src.values()) if isinstance(src, dict) else list(src or [])
+
+
 def fetch(url):
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0 TinFoilFACupUpdater/7.6",
-            "Accept": "text/html,application/xhtml+xml",
-        },
-    )
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 TinFoilFACupUpdater/7.6",
+        "Accept": "text/html,application/xhtml+xml",
+    })
     return urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
 
 
@@ -69,35 +68,49 @@ def score_cell(s):
     return int(m.group(1)) if m else None
 
 
-def history_rows(data):
-    seen = set()
-    out = []
+def all_results(data):
+    out, seen = [], set()
+    sources = []
+    sources.extend((data.get("results") or {}).values())
     for rows in (data.get("result_history") or {}).values():
-        if not isinstance(rows, list):
+        if isinstance(rows, list):
+            sources.extend(rows)
+    for r in sources:
+        if not isinstance(r, dict):
             continue
-        for r in rows:
-            if not isinstance(r, dict):
-                continue
-            ident = (
-                norm(r.get("home")), norm(r.get("away")), r.get("date", ""),
-                r.get("round", ""), r.get("home_score"), r.get("away_score")
-            )
-            if ident in seen:
-                continue
+        ident = (
+            norm(r.get("home")), norm(r.get("away")), r.get("date", ""),
+            r.get("home_score"), r.get("away_score"), str(r.get("round") or "").lower()
+        )
+        if ident not in seen:
             seen.add(ident)
             out.append(r)
     return out
 
 
+def archived_ties(data):
+    src = (data.get("round_fixtures") or {}).get(ROUND)
+    ties = [f for f in fixture_values(src) if isinstance(f, dict) and f.get("home") and f.get("away")]
+    if len(ties) != EXPECTED_TIES:
+        raise SystemExit(f"Replay reconciliation blocked: expected {EXPECTED_TIES} archived First Qualifying ties, found {len(ties)}")
+    return {pair_key(f["home"], f["away"]): (f["home"], f["away"]) for f in ties}
+
+
 def drawn_originals(data):
-    out = {}
-    for r in history_rows(data):
-        if str(r.get("round") or "").lower() != ROUND.lower():
-            continue
-        hs, aw = r.get("home_score"), r.get("away_score")
-        if isinstance(hs, int) and isinstance(aw, int) and hs == aw:
-            out[pair_key(r.get("home"), r.get("away"))] = (r.get("home"), r.get("away"))
-    return out
+    ties = archived_ties(data)
+    results = all_results(data)
+    draws = {}
+    for key, names in ties.items():
+        for r in results:
+            if pair_key(r.get("home"), r.get("away")) != key:
+                continue
+            if "replay" in str(r.get("round") or "").lower():
+                continue
+            hs, aw = r.get("home_score"), r.get("away_score")
+            if isinstance(hs, int) and isinstance(aw, int) and hs == aw:
+                draws[key] = names
+                break
+    return draws
 
 
 def parse_date_page(page, date, source_url, draws):
@@ -110,16 +123,15 @@ def parse_date_page(page, date, source_url, draws):
             continue
         status = c[fi].upper()
         tail = c[fi + 1:]
-        pair = None
+        score = None
         for i in range(len(tail) - 1):
-            hs = score_cell(tail[i])
-            aw = score_cell(tail[i + 1])
+            hs, aw = score_cell(tail[i]), score_cell(tail[i + 1])
             if hs is not None and aw is not None and i >= 1 and i + 2 < len(tail):
-                pair = (i, hs, aw)
+                score = (i, hs, aw)
                 break
-        if not pair:
+        if not score:
             continue
-        i, hs, aw = pair
+        i, hs, aw = score
         home = " ".join(tail[:i]).strip()
         away = tail[i + 2].strip()
         key = pair_key(home, away)
@@ -127,18 +139,12 @@ def parse_date_page(page, date, source_url, draws):
             continue
         if hs == aw:
             raise SystemExit(f"Replay reconciliation blocked: replay still level after FT: {home} {hs}-{aw} {away}")
-        winner = home if hs > aw else away
         result = {
-            "home": home,
-            "away": away,
-            "home_score": hs,
-            "away_score": aw,
-            "winner": winner,
-            "status": "FT",
+            "home": home, "away": away, "home_score": hs, "away_score": aw,
+            "winner": home if hs > aw else away,
+            "status": "AET" if "AET" in status else "FT",
             "decision": "aet" if "AET" in status else "",
-            "date": date,
-            "round": REPLAY_ROUND,
-            "source_url": source_url,
+            "date": date, "round": REPLAY_ROUND, "source_url": source_url,
         }
         if key in found and found[key] != result:
             raise SystemExit(f"Replay reconciliation blocked: conflicting rows for {home} v {away}")
@@ -148,27 +154,27 @@ def parse_date_page(page, date, source_url, draws):
 
 def same_result(a, b):
     return (
-        pair_key(a.get("home"), a.get("away")) == pair_key(b.get("home"), b.get("away"))
-        and str(a.get("round") or "").lower() == str(b.get("round") or "").lower()
-        and a.get("home_score") == b.get("home_score")
-        and a.get("away_score") == b.get("away_score")
-        and norm(a.get("home")) == norm(b.get("home"))
-        and norm(a.get("away")) == norm(b.get("away"))
+        norm(a.get("home")) == norm(b.get("home")) and norm(a.get("away")) == norm(b.get("away"))
+        and a.get("home_score") == b.get("home_score") and a.get("away_score") == b.get("away_score")
+        and str(a.get("date") or "") == str(b.get("date") or "")
     )
+
+
+def aliases(name):
+    suffix = re.compile(r"\s+(FC|AFC|CFC)$", re.I)
+    out = {name, suffix.sub("", name)}
+    if not suffix.search(name):
+        out |= {name + " FC", name + " AFC"}
+    return {x for x in out if x}
 
 
 def merge(data, result):
     changed = False
-    names = {
-        result["home"], result["away"],
-        re.sub(r"\s+(FC|AFC|CFC)$", "", result["home"], flags=re.I),
-        re.sub(r"\s+(FC|AFC|CFC)$", "", result["away"], flags=re.I),
-    }
-    for club in names:
+    for club in aliases(result["home"]) | aliases(result["away"]):
         rows = data.setdefault("result_history", {}).setdefault(club, [])
         if not any(same_result(x, result) for x in rows if isinstance(x, dict)):
             rows.append(dict(result))
-            rows.sort(key=lambda x: x.get("date", ""))
+            rows.sort(key=lambda x: (x.get("date", ""), 0 if "Replay" not in str(x.get("round", "")) else 1))
             changed = True
         current = (data.setdefault("results", {}) or {}).get(club)
         if not isinstance(current, dict) or not same_result(current, result):
@@ -179,28 +185,25 @@ def merge(data, result):
 
 def resolve_conditional_side(side, winners):
     text = str(side or "")
-    alternatives = [x.strip() for x in re.split(r"\s+or\s+", text, flags=re.I) if x.strip()]
-    if len(alternatives) <= 1:
+    alts = [x.strip() for x in re.split(r"\s+or\s+", text, flags=re.I) if x.strip()]
+    if len(alts) <= 1:
         return text
-    matches = []
-    for winner in winners:
-        if sum(1 for alt in alternatives if compatible(alt, winner)) == 1:
-            matches.append(winner)
+    matches = [winner for winner in winners if sum(1 for alt in alts if compatible(alt, winner)) == 1]
     matches = list(dict.fromkeys(matches))
     return matches[0] if len(matches) == 1 else text
 
 
-def fixture_values(src):
-    return src.values() if isinstance(src, dict) else (src or [])
-
-
-def resolve_next_round(data, winners):
-    changed = 0
+def second_round_sources(data):
     sources = [data.get("fixtures") or {}]
     rf = data.get("round_fixtures") or {}
     if "Second Round Qualifying" in rf:
         sources.append(rf["Second Round Qualifying"])
-    for src in sources:
+    return sources
+
+
+def resolve_next_round(data, winners):
+    changed = 0
+    for src in second_round_sources(data):
         for f in fixture_values(src):
             if not isinstance(f, dict):
                 continue
@@ -214,60 +217,46 @@ def resolve_next_round(data, winners):
 
 
 def winner_in_next_round(data, winner):
-    sources = [data.get("fixtures") or {}]
-    rf = data.get("round_fixtures") or {}
-    if "Second Round Qualifying" in rf:
-        sources.append(rf["Second Round Qualifying"])
-    for src in sources:
+    for src in second_round_sources(data):
         for f in fixture_values(src):
-            if not isinstance(f, dict):
-                continue
-            if compatible(f.get("home"), winner) or compatible(f.get("away"), winner):
+            if isinstance(f, dict) and (compatible(f.get("home"), winner) or compatible(f.get("away"), winner)):
                 return True
     return False
 
 
 def main():
-    data = json.loads(DATA.read_text())
+    data = json.loads(DATA.read_text(encoding="utf-8"))
     draws = drawn_originals(data)
     if len(draws) != EXPECTED_DRAWS:
         raise SystemExit(f"Replay reconciliation blocked: expected {EXPECTED_DRAWS} drawn First Qualifying ties, found {len(draws)}")
 
     discovered = {}
     for date, url in REPLAY_DATES.items():
-        rows = parse_date_page(fetch(url), date, url, draws)
-        for key, result in rows.items():
+        for key, result in parse_date_page(fetch(url), date, url, draws).items():
             if key in discovered and discovered[key] != result:
-                raise SystemExit(f"Replay reconciliation blocked: duplicate/conflicting replay for {key}")
+                raise SystemExit(f"Replay reconciliation blocked: conflicting replay for {key}")
             discovered[key] = result
 
     missing = sorted(set(draws) - set(discovered))
-    unexpected = sorted(set(discovered) - set(draws))
-    if missing or unexpected or len(discovered) != EXPECTED_DRAWS:
-        raise SystemExit(
-            f"Replay reconciliation blocked: discovered {len(discovered)}/{EXPECTED_DRAWS}; "
-            f"missing={missing[:10]} unexpected={unexpected[:10]}"
-        )
+    if missing or len(discovered) != EXPECTED_DRAWS:
+        raise SystemExit(f"Replay reconciliation blocked: discovered {len(discovered)}/{EXPECTED_DRAWS}; missing={missing[:10]}")
 
-    added = 0
-    for result in discovered.values():
-        if merge(data, result):
-            added += 1
-
+    changed = sum(1 for result in discovered.values() if merge(data, result))
     winners = [r["winner"] for r in discovered.values()]
     resolved = resolve_next_round(data, winners)
     unlinked = sorted(w for w in winners if not winner_in_next_round(data, w))
     if unlinked:
         raise SystemExit("Replay reconciliation blocked: replay winners missing from Second Qualifying draw: " + ", ".join(unlinked))
 
-    if added or resolved:
+    if changed or resolved:
         data["updated_at"] = datetime.now(timezone.utc).isoformat()
-        DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     print("FIRST QUALIFYING REPLAY RECONCILIATION: PASS")
+    print("Archived First Qualifying ties:", EXPECTED_TIES)
     print("Drawn original ties:", len(draws))
     print("Completed replays discovered:", len(discovered))
-    print("Replay records added/updated:", added)
+    print("Replay records added/updated:", changed)
     print("Conditional Second Qualifying sides resolved:", resolved)
     print("Replay winners linked to Second Qualifying:", len(winners))
 
