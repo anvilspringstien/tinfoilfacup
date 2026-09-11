@@ -142,6 +142,7 @@ jobs:
         run: node updater/journey_integrity_regression.js
 
       - name: Commit canonical competition state and health report
+        if: ${{ github.ref_name == 'main' }}
         run: |
           git config user.name "Tin Foil FA Cup Health Monitor"
           git config user.email "actions@users.noreply.github.com"
