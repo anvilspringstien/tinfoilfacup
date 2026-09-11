@@ -22,7 +22,13 @@ on:
       - "updater/sync_second_qualifying_resolved.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
+      - "updater/enrich_later_round_venues.py"
+      - "updater/enrich_replay_kickoffs_and_active_venues.py"
+      - "updater/propagate_active_fixture_venues.py"
+      - "updater/kickoff_venue_regression.py"
       - "updater/kt21_replay_regression.py"
+      - "updater/kt21_venue_render_regression.js"
+      - "updater/ex8_venue_render_regression.js"
       - "updater/refresh_clubfinder_embedded_snapshot.py"
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
@@ -31,7 +37,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: competition-state-main
+  group: competition-state-${{ github.ref_name }}
   cancel-in-progress: false
 jobs:
   scan:
@@ -60,6 +66,14 @@ jobs:
           else
             python updater/run_source_resilient.py --label "FA Cup result scan" -- python updater/auto_results.py --url "$SOURCE_URL"
           fi
+      - name: Enrich later-round fixture venues
+        run: python updater/enrich_later_round_venues.py
+      - name: Enrich replay kick-offs and active fixture venues
+        run: python updater/enrich_replay_kickoffs_and_active_venues.py
+      - name: Propagate verified venues across active fixture copies
+        run: python updater/propagate_active_fixture_venues.py
+      - name: Guard enriched replay kick-offs and active venues
+        run: python updater/kickoff_venue_regression.py
       - name: Audit repaired competition chronology
         run: python updater/competition_health.py
       - name: Rebuild Clubfinder competition presentation
@@ -75,6 +89,10 @@ jobs:
         run: python updater/competition_regression_guard.py
       - name: Run rendered Clubfinder regression
         run: node updater/clubfinder_render_regression.js
+      - name: Run rendered EX8 venue regression
+        run: node updater/ex8_venue_render_regression.js
+      - name: Run rendered KT21 venue regression
+        run: node updater/kt21_venue_render_regression.js
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
       - name: Run KT21 replay regression
@@ -100,6 +118,6 @@ jobs:
             echo "No new results or Clubfinder changes."
           else
             git commit -m "Resolve replay journeys in Clubfinder v7.6"
-            git pull --rebase origin main
-            git push
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi

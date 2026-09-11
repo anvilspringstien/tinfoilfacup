@@ -1,4 +1,5 @@
-name: Competition health monitor (v7.9.28)
+# KT21 venue integrity guard
+name: Competition health monitor (v7.9.29)
 
 on:
   workflow_dispatch:
@@ -16,6 +17,7 @@ on:
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
       - "updater/kt21_replay_regression.py"
+      - "updater/kt21_venue_render_regression.js"
       - "updater/refresh_clubfinder_embedded_snapshot.py"
       - "updater/embedded_snapshot_regression.py"
       - "updater/enrich_later_round_venues.py"
@@ -111,6 +113,9 @@ jobs:
 
       - name: Run rendered EX8 venue regression
         run: node updater/ex8_venue_render_regression.js
+
+      - name: Run rendered KT21 venue regression
+        run: node updater/kt21_venue_render_regression.js
 
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
