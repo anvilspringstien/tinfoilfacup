@@ -5,11 +5,10 @@ import json,re,urllib.request
 ROOT=Path(__file__).resolve().parents[1]; HTML=ROOT/'clubfinder.html'; REGISTRY=ROOT/'journey-club-registry.json'
 NEW={'First Round Qualifying','Second Round Qualifying','Fourth Round Qualifying'}
 ALL={'Extra Preliminary Round','Preliminary Round',*NEW}
-# The protected v7.6 data currently carries a 437/54 split across its first two
-# entry labels. This patch deliberately does not rewrite those protected 491
-# records; it adds the 160 later qualifying entrants only. The separate FA
-# reconciliation remains responsible for any legacy entry-label correction.
-EXPECTED={'Extra Preliminary Round':437,'Preliminary Round':54,'First Round Qualifying':88,'Second Round Qualifying':48,'Fourth Round Qualifying':24}
+EXPECTED={'Extra Preliminary Round':438,'Preliminary Round':53,'First Round Qualifying':88,'Second Round Qualifying':48,'Fourth Round Qualifying':24}
+# Official FA reconciliation found one legacy protected origin label drift:
+# Kendal Town FC is an Extra Preliminary Round entrant, not Preliminary.
+ENTRY_ROUND_CORRECTIONS={'kendal town':'Extra Preliminary Round'}
 # Explicit current-club evidence overrides stale supporting-gazetteer records.
 # Warrington Rylands' official club pages give WA2 7RZ for the Quickline
 # Logistics Arena; the companion FCHD candidate currently contains WA3 7RZ.
@@ -63,6 +62,9 @@ if len(selected)!=160:raise SystemExit(f'ABORT: expected 160 additional Law 2 cl
 elig,es,ee=arr(text,'ELIGIBLE');grounds,_,_=arr(text,'GROUNDS')
 if len({norm(x.get('name')) for x in elig})!=len(elig):raise SystemExit('ABORT: duplicate ELIGIBLE identity')
 by={norm(x.get('name')):x for x in elig};gby={norm(x.get('name') or x.get('club')):x for x in grounds}
+for key,rnd in ENTRY_ROUND_CORRECTIONS.items():
+ if key not in by:raise SystemExit(f'ABORT: entry-round correction target missing: {key}')
+ by[key]['entry_round']=rnd
 for x in selected:
  k=norm(x['club'])
  if k not in by:
@@ -141,4 +143,4 @@ if 'const top=rows.slice(0,3);' not in text:raise SystemExit('ABORT: nearest-thr
 for marker in ('const LAW2_ORIGIN_LOCATIONS=','LAW2_ORIGIN_LOCATIONS.find',"enters the competition at '+esc(entryRound)+'."):
  if marker not in text:raise SystemExit('ABORT: Law 2 marker missing: '+marker)
 HTML.write_text(text,encoding='utf-8')
-print('CLUBFINDER LAW 2 ORIGIN EXPANSION: SUCCESS');print('Selectable Law 2 origins:',len(elig));print('Entry rounds:',counts);print('Additional qualifying origins:',len(selected));print('Supplemental supporting home-ground locations:',len(support));print('Protected GROUNDS array: UNTOUCHED');print('Nearest journeys returned: 3');print('Proper-round-only origins: EXCLUDED')
+print('CLUBFINDER LAW 2 ORIGIN EXPANSION: SUCCESS');print('Selectable Law 2 origins:',len(elig));print('Entry rounds:',counts);print('Additional qualifying origins:',len(selected));print('Supplemental supporting home-ground locations:',len(support));print('Corrected entry round: Kendal Town FC -> Extra Preliminary Round');print('Protected GROUNDS array: UNTOUCHED');print('Nearest journeys returned: 3');print('Proper-round-only origins: EXCLUDED')
