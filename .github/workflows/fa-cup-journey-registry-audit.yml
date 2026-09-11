@@ -31,6 +31,9 @@ jobs:
       - name: Install PDF parser
         run: python -m pip install --disable-pip-version-check pypdf
 
+      - name: Project guarded Law 2 origins into Clubfinder
+        run: python updater/patch_clubfinder_law2_origins.py
+
       - name: Run read-only journey registry audit
         run: python updater/audit_fa_cup_journey_registry.py
 
