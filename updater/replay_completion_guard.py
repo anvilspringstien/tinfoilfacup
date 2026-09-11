@@ -33,6 +33,13 @@ def compatible(a, b):
     return bool(a and b and (a == b or a.startswith(b + " ") or b.startswith(a + " ")))
 
 
+def score_int(v):
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return None
+
+
 def fixture_values(src):
     return list(src.values()) if isinstance(src, dict) else list(src or [])
 
@@ -48,7 +55,7 @@ def all_results(data):
             continue
         ident = (
             norm(r.get("home")), norm(r.get("away")), r.get("date", ""),
-            str(r.get("round") or "").lower(), r.get("home_score"), r.get("away_score")
+            str(r.get("round") or "").lower(), score_int(r.get("home_score")), score_int(r.get("away_score"))
         )
         if ident not in seen:
             seen.add(ident)
@@ -73,8 +80,8 @@ def drawn_ties(data, rows):
                 continue
             if "replay" in str(r.get("round") or "").lower():
                 continue
-            hs, aw = r.get("home_score"), r.get("away_score")
-            if isinstance(hs, int) and isinstance(aw, int) and hs == aw:
+            hs, aw = score_int(r.get("home_score")), score_int(r.get("away_score"))
+            if hs is not None and aw is not None and hs == aw:
                 draws[key] = fixture
                 break
     return draws
@@ -116,8 +123,8 @@ def main():
             continue
         if str(r.get("round") or "").lower() != REPLAY_ROUND.lower():
             continue
-        hs, aw = r.get("home_score"), r.get("away_score")
-        if not isinstance(hs, int) or not isinstance(aw, int) or hs == aw:
+        hs, aw = score_int(r.get("home_score")), score_int(r.get("away_score"))
+        if hs is None or aw is None or hs == aw:
             continue
         winner = r.get("winner") or (r.get("home") if hs > aw else r.get("away"))
         replays[key] = (r, winner)
