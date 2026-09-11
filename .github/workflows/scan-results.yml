@@ -33,6 +33,9 @@ on:
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/replay_progression_regression.js"
+      - "updater/patch_clubfinder_law2_origins.py"
+      - "updater/law2_origin_regression.js"
+      - "journey-club-registry.json"
       - ".github/workflows/scan-results.yml"
 permissions:
   contents: write
@@ -84,6 +87,7 @@ jobs:
           python updater/patch_clubfinder_result_status.py
           python updater/patch_clubfinder_stats_integrity.py
           python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_law2_origins.py
           python updater/refresh_clubfinder_embedded_snapshot.py
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
@@ -93,6 +97,8 @@ jobs:
         run: node updater/ex8_venue_render_regression.js
       - name: Run rendered KT21 venue regression
         run: node updater/kt21_venue_render_regression.js
+      - name: Run Law 2 origin regression
+        run: node updater/law2_origin_regression.js
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
       - name: Run KT21 replay regression
