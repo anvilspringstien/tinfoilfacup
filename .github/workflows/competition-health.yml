@@ -1,4 +1,4 @@
-name: Competition health monitor (v7.9.27)
+name: Competition health monitor (v7.9.28)
 
 on:
   workflow_dispatch:
@@ -31,6 +31,7 @@ on:
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
       - "updater/clubfinder_render_regression.js"
+      - "updater/ex8_venue_render_regression.js"
       - "updater/replay_progression_regression.js"
       - "updater/clubfinder_stats_regression.js"
       - "updater/journey_integrity_regression.js"
@@ -107,6 +108,9 @@ jobs:
 
       - name: Run rendered Clubfinder DL5 regression
         run: node updater/clubfinder_render_regression.js
+
+      - name: Run rendered EX8 venue regression
+        run: node updater/ex8_venue_render_regression.js
 
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
