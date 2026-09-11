@@ -47,8 +47,7 @@ def clean_text(raw):
 
 
 def parse_time(text):
-    s = str(text or "").strip().lower().replace(" ", "")
-    s = s.replace(".", ":")
+    s = str(text or "").strip().lower().replace(" ", "").replace(".", ":")
     m = re.fullmatch(r"(\d{1,2})(?::(\d{2}))?(am|pm)?", s)
     if not m:
         return None
@@ -113,7 +112,8 @@ def replay_source_details(replays):
         for url in links:
             raw = fetch(url); fetched += 1
             text = clean_text(raw)
-            if norm(REPLAY_ROUND) not in norm(text):
+            nt = norm(text)
+            if "first qualifying round replay" not in nt and "first round qualifying replay" not in nt:
                 continue
             pages.append((url, text))
         for r in rows:
@@ -136,12 +136,10 @@ def replay_source_details(replays):
 
 def apply_replay_kickoffs(data, details):
     changed = 0
-    for container in ((data.get("result_history") or {}).values(), [(data.get("results") or {})]):
-        if isinstance(container, list) and container and isinstance(container[0], dict):
-            pass
     rows = []
     for arr in (data.get("result_history") or {}).values():
-        if isinstance(arr, list): rows.extend(x for x in arr if isinstance(x, dict))
+        if isinstance(arr, list):
+            rows.extend(x for x in arr if isinstance(x, dict))
     rows.extend(x for x in (data.get("results") or {}).values() if isinstance(x, dict))
     for r in rows:
         if str(r.get("round") or "") != REPLAY_ROUND:
