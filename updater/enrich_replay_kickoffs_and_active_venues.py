@@ -89,9 +89,15 @@ def discover_match_pages(date):
     page = fetch(f"{FWP_BASE}/fa-cup/{ymd}")
     links = []
     for href in re.findall(r'href=["\']([^"\']+)["\']', page, flags=re.I):
-        if "/match/2026-2027/fa-cup/" not in href:
-            continue
-        url = urllib.parse.urljoin(FWP_BASE, href)
+        marker = href.find("/match/2026-2027/fa-cup/")
+        if marker < 0:
+            marker = href.find("match/2026-2027/fa-cup/")
+            if marker < 0:
+                continue
+            path = "/" + href[marker:]
+        else:
+            path = href[marker:]
+        url = urllib.parse.urljoin(FWP_BASE, path)
         if url not in links:
             links.append(url)
     return links
