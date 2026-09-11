@@ -1,5 +1,5 @@
-# KT21 venue integrity guard
-name: Competition health monitor (v7.9.29)
+# Law 2 origin + KT21 venue integrity guards
+name: Competition health monitor (v7.10.0)
 
 on:
   workflow_dispatch:
@@ -10,6 +10,7 @@ on:
     paths:
       - "competition.json"
       - "clubfinder.html"
+      - "journey-club-registry.json"
       - "updater/probe_fwp_source.py"
       - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
@@ -30,6 +31,8 @@ on:
       - "updater/patch_clubfinder_result_status.py"
       - "updater/patch_clubfinder_stats_integrity.py"
       - "updater/patch_clubfinder_branding.py"
+      - "updater/patch_clubfinder_law2_origins.py"
+      - "updater/law2_origin_regression.js"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
       - "updater/clubfinder_render_regression.js"
@@ -102,6 +105,9 @@ jobs:
       - name: Apply guarded Clubfinder branding fixes
         run: python updater/patch_clubfinder_branding.py
 
+      - name: Apply guarded Law 2 origin expansion
+        run: python updater/patch_clubfinder_law2_origins.py
+
       - name: Refresh last-known-good embedded competition snapshot
         run: python updater/refresh_clubfinder_embedded_snapshot.py
 
@@ -116,6 +122,9 @@ jobs:
 
       - name: Run rendered KT21 venue regression
         run: node updater/kt21_venue_render_regression.js
+
+      - name: Run Law 2 origin regression
+        run: node updater/law2_origin_regression.js
 
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
