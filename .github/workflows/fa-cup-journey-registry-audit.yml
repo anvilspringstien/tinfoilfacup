@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - 'clubfinder.html'
+      - 'journey-club-registry.json'
+      - 'updater/patch_clubfinder_law2_origins.py'
       - 'updater/audit_fa_cup_journey_registry.py'
       - 'updater/audit_journey_ground_coverage.py'
       - 'updater/audit_journey_source_of_truth.py'
