@@ -1,0 +1,169 @@
+# Law 2 Origin Location Verification Audit
+
+This is a **read-only** review queue for the 160 clubs added to Clubfinder by the Law 2 expansion. Promotion requires current authoritative evidence and is never inferred from FCHD-only supporting data.
+
+- Added Law 2 origins audited: **160**
+- ✅ Already verified in protected GROUNDS: **6**
+- ✅ Verified in guarded Law 2 supplemental layer: **2**
+- ⚠️ Remaining supporting-evidence review queue: **152**
+
+## Remaining review queue by entry round
+
+- **First Round Qualifying: 81**
+- **Fourth Round Qualifying: 24**
+- **Second Round Qualifying: 47**
+
+## Remaining clubs
+
+- **AFC Fylde** — Mill Farm Sports Village • PR4 3JZ • Fourth Round Qualifying
+- **AFC Telford United** — New Bucks Head Stadium • TF1 2TU • Second Round Qualifying
+- **AFC Totton** — Snows Stadium • SO40 2RW • Second Round Qualifying
+- **AFC Whyteleafe** — Church Road • CR3 0AR • First Round Qualifying
+- **Aldershot Town FC** — EBB Stadium at The Recreation Ground • GU11 1TW • Fourth Round Qualifying
+- **Alfreton Town FC** — Impact Arena • DE55 7FZ • First Round Qualifying
+- **Altrincham FC** — J Davidson Stadium • WA15 8AP • Fourth Round Qualifying
+- **Alvechurch FC** — Lye Meadow • B48 7RS • First Round Qualifying
+- **Anstey Nomads FC** — Cropston Road • LE7 7BP • First Round Qualifying
+- **Ashton United FC** — Hurst Cross Stadium • OL6 8DY • First Round Qualifying
+- **Aveley FC** — Parkside • RM15 4PX • First Round Qualifying
+- **Avro FC** — Vestacare Stadium • OL8 3JH • First Round Qualifying
+- **Bamber Bridge FC** — SFC Stadium at Irongate • PR5 6UX • First Round Qualifying
+- **Banbury United FC** — Spencer Stadium • OX16 5AB • First Round Qualifying
+- **Barrow AFC** — Holker Street Ground • LA14 5UW • Fourth Round Qualifying
+- **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
+- **Bath City FC** — Twerton Park • BA2 1DB • First Round Qualifying
+- **Bedford Town FC** — The Eyrie • MK44 3LW • Second Round Qualifying
+- **Berkhamsted FC** — Glencar Community Stadium • HP4 2AL • First Round Qualifying
+- **Billericay Town FC** — New Lodge • CM12 9SA • Second Round Qualifying
+- **Bishop's Stortford FC** — Woodside Park • CM23 5RG • First Round Qualifying
+- **Boreham Wood FC** — Meadow Park • WD6 5AL • Fourth Round Qualifying
+- **Boston United FC** — Boston Community Stadium • PE21 7NE • Fourth Round Qualifying
+- **Brackley Town FC** — St James Park • NN13 7EJ • Second Round Qualifying
+- **Bracknell Town FC** — SB Stadium • GU47 9BJ • First Round Qualifying
+- **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
+- **Brentwood Town FC** — The Arena • CM15 9NN • First Round Qualifying
+- **Bromsgrove Sporting FC** — UK Electrical Stadium • B61 0DR • First Round Qualifying
+- **Burgess Hill Town FC** — Medical Travel Compared Stadium • RH15 8DL • First Round Qualifying
+- **Bury FC** — Gigg Lane • BL9 9HR • First Round Qualifying
+- **Bury Town FC** — The Getaway Cars Stadium • IP33 1XP • First Round Qualifying
+- **Buxton FC** — The Silverlands • SK17 6QH • Second Round Qualifying
+- **Carlisle United AFC** — Brunton Park • CA1 1LL • Fourth Round Qualifying
+- **Carshalton Athletic FC** — War Memorial Sports Ground • SM5 2PW • First Round Qualifying
+- **Chelmsford City FC** — Melbourne Stadium • CM1 2EH • Second Round Qualifying
+- **Chertsey Town FC** — Alwyns Lane • KT16 9DW • First Round Qualifying
+- **Chesham United FC** — The Meadow • HP5 1NE • Second Round Qualifying
+- **Cheshunt FC** — Cheshunt Stadium • EN8 8RU • First Round Qualifying
+- **Chester FC** — Deva Stadium • CH1 4LT • Second Round Qualifying
+- **Chichester City FC** — Oaklands Park • PO19 6AR • First Round Qualifying
+- **Chippenham Town FC** — Hardenhuish Park • SN14 6LR • First Round Qualifying
+- **Chorley FC** — Victory Park Stadium • PR7 3DU • Second Round Qualifying
+- **Cray Wanderers FC** — Flamingo Park • BR7 6HL • First Round Qualifying
+- **Curzon Ashton FC** — Tameside Stadium • OL7 9HG • First Round Qualifying
+- **Dagenham & Redbridge FC** — Chigwell Construction Stadium • RM10 7XL • Second Round Qualifying
+- **Darlington FC** — Blackwell Meadows • DL1 5NR • Second Round Qualifying
+- **Dartford FC** — Princes Park Stadium • DA1 1RT • First Round Qualifying
+- **Dover Athletic FC** — Crabble Athletic Ground • CT17 0JB • Second Round Qualifying
+- **Dulwich Hamlet FC** — Champion Hill Stadium • SE22 8BD • First Round Qualifying
+- **Eastbourne Borough FC** — Priory Lane • BN23 7QH • First Round Qualifying
+- **Eastleigh FC** — Silverlake Stadium • SO50 9HT • Fourth Round Qualifying
+- **Ebbsfleet United FC** — Stonebridge Road • DA11 9GN • Second Round Qualifying
+- **Emley AFC** — Fantastic Media Welfare Ground • HD8 9RE • First Round Qualifying
+- **Enfield Town FC** — Queen Elizabeth II Stadium • EN1 3PL • First Round Qualifying
+- **Evesham United FC** — Spiers & Hartwell Stadium • WR11 2LZ • First Round Qualifying
+- **Farnborough FC** — Sanders Transport Community Stadium • GU14 8UD • Second Round Qualifying
+- **Farnham Town FC** — The Memorial Ground • GU9 7DY • Second Round Qualifying
+- **FC Halifax Town** — The Shay Stadium • HX1 2YT • Fourth Round Qualifying
+- **Folkestone Invicta FC** — Alcaline Stadium • CT19 5JU • Second Round Qualifying
+- **Forest Green Rovers FC** — The Bolt New Lawn • GL6 0ET • Fourth Round Qualifying
+- **Frome Town FC** — Badgers Hill • BA11 2EH • First Round Qualifying
+- **Gainsborough Trinity FC** — The Kai Group Stadium • DN21 2QW • First Round Qualifying
+- **Gateshead FC** — International Stadium • NE10 0EF • Fourth Round Qualifying
+- **Gloucester City FC** — Tiger Turf Stadium • GL2 5FD • First Round Qualifying
+- **Gosport Borough FC** — AEI Stadium • PO12 3SX • First Round Qualifying
+- **Guiseley AFC** — Nethermoor Park • LS20 8BT • First Round Qualifying
+- **Halesowen Town FC** — The Grove • B63 3TB • First Round Qualifying
+- **Hampton & Richmond Borough FC** — Beveree Stadium • TW12 2BX • Second Round Qualifying
+- **Hanwell Town FC** — Powerday Stadium • UB6 8TL • First Round Qualifying
+- **Hanworth Villa FC** — Rectory Meadow • TW13 6PN • First Round Qualifying
+- **Harborough Town FC** — Bowden's Park • LE16 9HF • Second Round Qualifying
+- **Harrogate Town AFC** — Exercise Stadium • HG2 7SA • Fourth Round Qualifying
+- **Hartlepool United FC** — Victoria Park • TS24 8BZ • Fourth Round Qualifying
+- **Havant & Waterlooville FC** — Westleigh Park • PO9 5TH • First Round Qualifying
+- **Hebburn Town FC** — Green Energy Sports Ground • NE31 1UN • Second Round Qualifying
+- **Hednesford Town FC** — Keys Park • WS12 2DZ • Second Round Qualifying
+- **Hemel Hempstead Town FC** — Vauxhall Road • HP2 4HW • Second Round Qualifying
+- **Hereford FC** — Edgar Street • HR4 9JU • Second Round Qualifying
+- **Hitchin Town FC** — Top Field • SG5 1NU • First Round Qualifying
+- **Hornchurch FC** — The Stadium • RM14 2LX • Fourth Round Qualifying
+- **Horsham FC** — Hop Oast Community Stadium • RH13 0AB • Second Round Qualifying
+- **Hyde United FC** — Project Solar Stadium • SK14 5PL • First Round Qualifying
+- **Ilkeston Town FC** — New Manor Ground • DE7 8JF • First Round Qualifying
+- **Kettering Town FC** — Latimer Park • NN15 5PS • First Round Qualifying
+- **Kidderminster Harriers FC** — Aggborough Stadium • DY10 1NB • Fourth Round Qualifying
+- **King's Lynn Town FC** — The Walks Stadium • PE30 5PB • Second Round Qualifying
+- **Lancaster City FC** — Giant Axe • LA1 5PE • First Round Qualifying
+- **Leamington FC** — Your Co-Op Community Stadium • CV33 9QB • First Round Qualifying
+- **Leek Town FC** — F.Ball Community Stadium • ST13 8LD • First Round Qualifying
+- **Leighton Town FC** — Freed Veneers Community Stadium • LU7 1RX • First Round Qualifying
+- **Leiston FC** — Leiston Town Athletic Association • IP16 4DQ • First Round Qualifying
+- **Lewes FC** — The Dripping Pan • BN7 2XA • First Round Qualifying
+- **Macclesfield FC** — Leasing.com Stadium • SK11 7SP • Second Round Qualifying
+- **Maidenhead United FC** — York Road • SL6 1SF • Second Round Qualifying
+- **Maidstone United FC** — Gallagher Stadium • ME14 1LQ • Second Round Qualifying
+- **Maldon & Tiptree FC** — Maldon Stadium • CM9 5JQ • First Round Qualifying
+- **Malvern Town FC** — HD Anywhere Community Stadium • WR14 2EQ • First Round Qualifying
+- **Marine FC** — Marine Travel Arena • L23 3AS • Second Round Qualifying
+- **Merthyr Town FC** — Penydarren Park • CF47 8RF • Second Round Qualifying
+- **Morecambe FC** — Mazuma Mobile Stadium • LA4 4TB • Second Round Qualifying
+- **Needham Market FC** — Bloomfields • IP6 8DA • First Round Qualifying
+- **Oxford City FC** — RAW Charging Stadium • OX3 0NQ • Second Round Qualifying
+- **Peterborough Sports FC** — 651 Lincoln Road • PE1 3HA • First Round Qualifying
+- **Plymouth Parkway FC** — Bolitho Park • PL5 3JG • First Round Qualifying
+- **Quorn FC** — Farley Way Stadium • LE12 8RB • First Round Qualifying
+- **Racing Club Warwick FC** — Townsend Meadow • CV34 6JP • First Round Qualifying
+- **Radcliffe FC** — Neuven Stadium • M26 3PE • Second Round Qualifying
+- **Ramsgate FC** — Southwood Stadium • CT11 0AN • First Round Qualifying
+- **Real Bedford FC** — Ledger Stadium • MK44 3SB • First Round Qualifying
+- **Redcar Athletic FC** — Green Lane • TS10 3RW • First Round Qualifying
+- **Redditch United FC** — The Valley Stadium • B97 4RN • First Round Qualifying
+- **Rushall Olympic FC** — Dales Lane • WS4 1LJ • First Round Qualifying
+- **Salisbury FC** — Raymond McEnhill Stadium • SP4 6PU • Second Round Qualifying
+- **Scarborough Athletic FC** — Flamingo Land Stadium • YO11 2JW • Second Round Qualifying
+- **Scunthorpe United FC** — Attis Arena • DN15 8TD • Fourth Round Qualifying
+- **Slough Town FC** — Arbour Park • SL2 5AY • Second Round Qualifying
+- **Solihull Moors FC** — Armco Arena • B91 2PP • Fourth Round Qualifying
+- **South Shields FC** — 1st Cloud Arena • NE32 3UP • Second Round Qualifying
+- **Southend United FC** — Roots Hall • SS2 6NQ • Fourth Round Qualifying
+- **Southport FC** — The Big Help Stadium • PR8 6JZ • Second Round Qualifying
+- **Spalding United FC** — Sir Halley Stewart Field • PE11 1DA • Second Round Qualifying
+- **Spennymoor Town FC** — Brewery Field • DL16 6JN • Second Round Qualifying
+- **St Albans City FC** — Clarence Park • AL1 4PL • First Round Qualifying
+- **Stamford AFC** — Zeeco Stadium • PE9 1US • First Round Qualifying
+- **Stanway Rovers FC** — The Hawthorns • CO3 0PG • First Round Qualifying
+- **Stockton Town FC** — Bishopton Road West • TS19 0QD • First Round Qualifying
+- **Stourbridge FC** — War Memorial Athletic Ground • DY8 4HN • First Round Qualifying
+- **Stratford Town FC** — Arden Garages Stadium • CV37 7BZ • First Round Qualifying
+- **Sutton United FC** — VBS Community Stadium • SM1 2EY • Fourth Round Qualifying
+- **Tamworth FC** — The Lamb Ground • B77 1AA • Fourth Round Qualifying
+- **Taunton Town FC** — Wordsworth Drive • TA1 2HG • First Round Qualifying
+- **Three Bridges FC** — Jubilee Field • RH10 1LQ • First Round Qualifying
+- **Tonbridge Angels FC** — Longmead Stadium • TN10 3JF • Second Round Qualifying
+- **Torquay United FC** — Plainmoor • TQ1 3PS • Second Round Qualifying
+- **Truro City FC** — Truro City Stadium • TR4 9AN • Second Round Qualifying
+- **Walton & Hersham FC** — Elmbridge Xcel Sports Hub • KT12 2JP • Second Round Qualifying
+- **Warrington Rylands FC** — The Quickline Logistics Arena • WA2 7RZ • First Round Qualifying
+- **Warrington Town FC** — Cal Delivery Stadium • WA4 2RS • First Round Qualifying
+- **Wealdstone FC** — Grosvenor Vale • HA4 6JQ • Fourth Round Qualifying
+- **Welling United FC** — Park View Road • DA16 1SY • First Round Qualifying
+- **Weston Super Mare FC** — Woodspring Stadium • BS24 9AA • Second Round Qualifying
+- **Whitby Town FC** — Towbar Express Stadium • YO21 3HZ • First Round Qualifying
+- **Whitehawk FC** — Enclosed Ground • BN2 5TS • First Round Qualifying
+- **Wimborne Town FC** — Wyatt Homes Stadium • BH21 2FU • First Round Qualifying
+- **Wingate & Finchley FC** — Maurice Rebak Stadium • N12 0PD • First Round Qualifying
+- **Woking FC** — Laithwaite Community Stadium • GU22 9AA • Fourth Round Qualifying
+- **Worcester City FC** — Sixways Stadium • WR3 8ZE • First Round Qualifying
+- **Workington AFC** — Borough Park • CA14 2DT • First Round Qualifying
+- **Worksop Town FC** — The Windsor Foodservice Stadium • S80 1UJ • Second Round Qualifying
+- **Worthing FC** — Sussex Transport Community Stadium • BN14 7HQ • Fourth Round Qualifying
+- **Yate Town FC** — South West Interiors Stadium • BS37 7LE • First Round Qualifying
+- **Yeovil Town FC** — Huish Park • BA22 8YF • Fourth Round Qualifying
