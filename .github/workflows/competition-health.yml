@@ -15,6 +15,7 @@ on:
       - "updater/sync_second_qualifying_resolved.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
+      - "updater/kt21_replay_regression.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_replay_progression.py"
@@ -61,8 +62,6 @@ jobs:
       - name: Enrich later-round fixture venues
         run: python updater/enrich_later_round_venues.py
 
-      # Build the health classification before patching Clubfinder so the exact same
-      # grace/overdue state can be embedded into the standalone page users receive.
       - name: Audit full competition chronology
         id: health_audit
         continue-on-error: true
@@ -94,6 +93,9 @@ jobs:
 
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
+
+      - name: Run KT21 replay regression
+        run: python updater/kt21_replay_regression.py
 
       - name: Run canonical DL5 4RQ Stats regression
         run: node updater/clubfinder_stats_regression.js
