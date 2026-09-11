@@ -7,6 +7,10 @@ in competition.json. This stage copies a verified venue only to records that
 represent the same fixture (same home/away, with compatible round/date), and
 never overwrites a conflicting verified venue.
 
+Repeated canonical fixture rows are expected in competition.json. They are
+validated as a group: all verified venue copies for one semantic fixture must
+agree before that venue can be propagated.
+
 No venue is guessed here: this script only propagates venue data that has
 already been verified by the guarded enrichment stages.
 """
@@ -67,6 +71,15 @@ def same_fixture(candidate, source):
     return True
 
 
+def semantic_key(row):
+    return (
+        norm(row.get("home")),
+        norm(row.get("away")),
+        str(row.get("round") or "").strip(),
+        str(row.get("date") or "").strip(),
+    )
+
+
 def walk_dicts(obj, path="$", seen=None):
     if seen is None:
         seen = set()
@@ -84,20 +97,29 @@ def walk_dicts(obj, path="$", seen=None):
             yield from walk_dicts(value, f"{path}[{i}]", seen)
 
 
-def canonical_active_fixtures(data):
-    rows = []
+def canonical_active_groups(data):
+    groups = {}
     for f in fixture_values(data.get("fixtures") or {}):
         if not isinstance(f, dict) or not f.get("home") or not f.get("away"):
             continue
         if has_played_score(f) or not valid_venue(f):
             continue
-        rows.append(f)
-    return rows
+        groups.setdefault(semantic_key(f), []).append(f)
+
+    canonical = []
+    for key, rows in groups.items():
+        postcodes = {venue_postcode(r) for r in rows}
+        if len(postcodes) != 1:
+            label = f"{rows[0].get('home')} v {rows[0].get('away')}"
+            raise SystemExit(f"ABORT: conflicting verified canonical venues for {label}: {sorted(postcodes)}")
+        canonical.append((rows[0], len(rows)))
+    return canonical
 
 
 def main():
     data = json.loads(COMP.read_text(encoding="utf-8"))
-    sources = canonical_active_fixtures(data)
+    groups = canonical_active_groups(data)
+    sources = [source for source, _count in groups]
     all_rows = list(walk_dicts(data))
     changed = 0
     matched_copies = 0
@@ -142,8 +164,13 @@ def main():
     anchor_counts = {}
     for home, away, postcode in anchors:
         source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
-        if len(source_matches) != 1:
-            raise SystemExit(f"ABORT: expected one canonical active fixture for {home} v {away}, found {len(source_matches)}")
+        if not source_matches:
+            raise SystemExit(f"ABORT: canonical active fixture not found for {home} v {away}")
+        source_postcodes = {venue_postcode(s) for s in source_matches}
+        if source_postcodes != {postcode}:
+            raise SystemExit(
+                f"ABORT: canonical venue group for {home} v {away} expected {postcode}, got {sorted(source_postcodes)}"
+            )
         source = source_matches[0]
         copies = [(path, row) for path, row in all_rows if same_fixture(row, source)]
         if not copies:
@@ -161,7 +188,8 @@ def main():
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "status": "PASS",
-        "canonical_active_fixtures_with_verified_venues": len(sources),
+        "canonical_verified_semantic_fixtures": len(sources),
+        "canonical_verified_fixture_rows": sum(count for _source, count in groups),
         "semantic_fixture_copies_examined": matched_copies,
         "fixture_copies_updated": changed,
         "anchor_copy_counts": anchor_counts,
@@ -169,7 +197,8 @@ def main():
     }
     REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print("ACTIVE FIXTURE VENUE COPY CONSISTENCY: PASS")
-    print("Canonical verified active fixtures:", len(sources))
+    print("Canonical verified semantic fixtures:", len(sources))
+    print("Canonical verified fixture rows:", sum(count for _source, count in groups))
     print("Semantic fixture copies examined:", matched_copies)
     print("Fixture copies updated:", changed)
     for name, count in anchor_counts.items():
