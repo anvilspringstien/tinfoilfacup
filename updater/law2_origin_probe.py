@@ -19,28 +19,10 @@ def snippet(label, token, before=500, after=1400):
 
 eligible=arr('ELIGIBLE'); grounds=arr('GROUNDS')
 print('LAW2 PROBE eligible count:',len(eligible))
-print('LAW2 PROBE eligible sample:',json.dumps(eligible[0],ensure_ascii=False,sort_keys=True))
-print('LAW2 PROBE ground sample:',json.dumps(grounds[0],ensure_ascii=False,sort_keys=True))
 for club in ('Leatherhead FC','Epsom & Ewell FC','Newton Aycliffe FC'):
     x=next((r for r in eligible if (r.get('name') or r.get('club'))==club),None)
     g=next((r for r in grounds if (r.get('name') or r.get('club'))==club),None)
     print('LAW2 PROBE club',club,'eligible=',json.dumps(x,ensure_ascii=False,sort_keys=True),'ground=',json.dumps(g,ensure_ascii=False,sort_keys=True))
-for fn in ('previousRoundsHtml','stateHtml','carrierHtml','journeyMapUrl','getGround','groundForClub','renderResults','findNearest','searchClubs','doSearch','handleSearch'):
-    m=re.search(rf'function\s+{fn}\s*\([^)]*\)\s*\{{',text)
-    if m:
-        print('LAW2 PROBE function',fn,':',text[m.start():m.start()+1800].replace('\n','\\n'))
-    else:
-        print('LAW2 PROBE function',fn,': NOT FOUND')
-for label,token in (
-    ('unverified-copy','Unverified Location'),
-    ('verified-copy','Verified Location'),
-    ('eligible-find','ELIGIBLE.find'),
-    ('eligible-map','ELIGIBLE.map'),
-    ('eligible-filter','ELIGIBLE.filter'),
-    ('ground-find','GROUNDS.find'),
-    ('slice-three','.slice(0,3)'),
-    ('eligible-count','eligible clubs found'),
-    ('verification-field','.verification'),
-    ('find-button','findBtn'),
-):
-    snippet(label,token)
+snippet('nearest-search','const rows=[]',before=4200,after=5200)
+snippet('find-ground','function findGround',before=400,after=1500)
+snippet('previous-rounds','function previousRoundsHtml',before=200,after=1300)
