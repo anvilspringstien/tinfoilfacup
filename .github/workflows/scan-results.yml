@@ -12,8 +12,6 @@ on:
         type: boolean
         default: false
   schedule:
-    # Hourly independent scan. The importer cross-checks a structural fallback
-    # source and refuses a silent green run when FT rows cannot be parsed.
     - cron: "17 * * * *"
   push:
     paths:
@@ -21,8 +19,10 @@ on:
       - "updater/run_source_resilient.py"
       - "updater/apply_replay_orientation_fix.py"
       - "updater/repair_first_qualifying_replays_20260909.py"
+      - "updater/sync_second_qualifying_resolved.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
+      - "updater/kt21_replay_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/replay_progression_regression.js"
       - ".github/workflows/scan-results.yml"
@@ -40,8 +40,10 @@ jobs:
         run: python updater/apply_replay_orientation_fix.py
       - name: Repair verified 9 September First Qualifying replays
         run: python updater/repair_first_qualifying_replays_20260909.py
+      - name: Synchronise resolved Second Qualifying draw
+        run: python updater/run_source_resilient.py --label "Resolved Second Qualifying sync" -- python updater/sync_second_qualifying_resolved.py
       - name: Reconcile all First Qualifying replays
-        run: python updater/run_source_resilient.py --label "First Qualifying replay reconciliation" -- python updater/reconcile_first_qualifying_replays.py
+        run: python updater/reconcile_first_qualifying_replays.py
       - name: Guard complete First Qualifying replay coverage
         run: python updater/replay_completion_guard.py
       - name: Scan and validate
@@ -72,6 +74,8 @@ jobs:
         run: node updater/clubfinder_render_regression.js
       - name: Run systemic replay progression regression
         run: node updater/replay_progression_regression.js
+      - name: Run KT21 replay regression
+        run: python updater/kt21_replay_regression.py
       - name: Run Clubfinder Stats regression
         run: node updater/clubfinder_stats_regression.js
       - name: Run all-club journey integrity regression
