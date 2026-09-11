@@ -1,4 +1,4 @@
-name: Ground health monitor (v7.9.19)
+name: Ground health monitor (v7.10.0)
 
 on:
   workflow_dispatch:
@@ -10,6 +10,7 @@ on:
       - 'clubfinder.html'
       - 'updater/ground-approval-ledger.json'
       - 'updater/ground_health.py'
+      - 'updater/patch_clubfinder_law2_origins.py'
       - 'updater/export_test_postcodes.py'
       - '.github/workflows/ground-health.yml'
 
@@ -22,7 +23,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Audit canonical ground coverage and shared venues
+      - name: Build Law 2 origin view
+        run: python updater/patch_clubfinder_law2_origins.py
+
+      - name: Audit canonical and Law 2 supporting ground coverage
         run: python updater/ground_health.py
 
       - name: Validate Ground Health baseline
@@ -33,11 +37,12 @@ jobs:
           d=json.loads(Path('updater/ground-health.json').read_text())
           c=d['counts']
           problems=[]
-          if c.get('complete_verified') != c.get('eligible_clubs'): problems.append(f"verified coverage {c.get('complete_verified')}/{c.get('eligible_clubs')}")
+          if c.get('eligible_clubs') != 651: problems.append(f"eligible origin population {c.get('eligible_clubs')}/651")
+          if c.get('selectable_location_coverage') != c.get('eligible_clubs'): problems.append(f"selectable location coverage {c.get('selectable_location_coverage')}/{c.get('eligible_clubs')}")
           if c.get('critical_items') != 0: problems.append(f"critical items {c.get('critical_items')}")
           if c.get('review_items') != 0: problems.append(f"review items {c.get('review_items')}")
           if c.get('approved_groundshares_pending_canonical_reconciliation') != 0: problems.append(f"pending groundshare reconciliations {c.get('approved_groundshares_pending_canonical_reconciliation')}")
-          if c.get('unverified') != 0: problems.append(f"unverified records {c.get('unverified')}")
+          if c.get('unverified') != 0: problems.append(f"unverified canonical records {c.get('unverified')}")
           print('GROUND HEALTH BASELINE', c)
           if problems: raise SystemExit('Ground Health drift detected: ' + '; '.join(problems))
           PY
@@ -46,7 +51,7 @@ jobs:
         run: python updater/export_test_postcodes.py
 
       - name: Commit health report and tester list
-        if: always()
+        if: ${{ github.ref_name == 'main' }}
         run: |
           git config user.name "Tin Foil FA Cup Ground Monitor"
           git config user.email "actions@users.noreply.github.com"
