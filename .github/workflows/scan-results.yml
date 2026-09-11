@@ -44,6 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
       - name: Apply guarded replay-orientation fix
         run: python updater/apply_replay_orientation_fix.py
       - name: Repair verified 9 September First Qualifying replays
