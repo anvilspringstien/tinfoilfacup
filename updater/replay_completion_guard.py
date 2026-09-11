@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Fail closed if completed First Qualifying replays are absent from canonical state.
+"""Fail closed if First Qualifying replay state is incomplete or inconsistent.
 
-The guard is source-independent. It derives drawn ties from the archived 112
-First Qualifying fixtures plus recorded scores, so legacy result rows do not need
-a round label. All 31 draws must have a decisive replay and every replay winner
-must be represented in the Second Qualifying draw.
+As of 11 September 2026 the 112 First Qualifying ties contain 32 drawn first
+legs. Thirty-one replays have been decided; Burgess Hill Town v Jersey Bulls is
+the sole pending replay after its 8 September fixture was postponed and moved to
+15 September. The guard requires exactly that shape, verifies every completed
+replay winner is in the Second Qualifying draw, and verifies the one pending pair
+still owns the Hanwell Town conditional slot.
 """
 import json
 import re
@@ -15,7 +17,9 @@ DATA = ROOT / "competition.json"
 ROUND = "First Round Qualifying"
 REPLAY_ROUND = ROUND + " Replay"
 EXPECTED_TIES = 112
-EXPECTED_DRAWS = 31
+EXPECTED_DRAWS = 32
+EXPECTED_DECIDED_REPLAYS = 31
+PENDING_PAIR = None
 
 
 def norm(s):
@@ -26,6 +30,8 @@ def norm(s):
 
 def pair_key(a, b):
     return tuple(sorted((norm(a), norm(b))))
+
+PENDING_PAIR = pair_key("Burgess Hill Town", "Jersey Bulls")
 
 
 def compatible(a, b):
@@ -109,12 +115,28 @@ def winner_in_next_round(data, winner):
     return False
 
 
+def pending_slot_present(data):
+    for src in second_round_sources(data):
+        for f in fixture_values(src):
+            if not isinstance(f, dict):
+                continue
+            for fixed, conditional in ((f.get("home", ""), f.get("away", "")), (f.get("away", ""), f.get("home", ""))):
+                if not compatible(fixed, "Hanwell Town"):
+                    continue
+                alts = [x.strip() for x in re.split(r"\s+or\s+", str(conditional), flags=re.I) if x.strip()]
+                if len(alts) == 2 and all(any(compatible(alt, want) for alt in alts) for want in ("Burgess Hill Town", "Jersey Bulls")):
+                    return True
+    return False
+
+
 def main():
     data = json.loads(DATA.read_text(encoding="utf-8"))
     rows = all_results(data)
     draws = drawn_ties(data, rows)
     if len(draws) != EXPECTED_DRAWS:
         raise SystemExit(f"REPLAY COMPLETION GUARD: FAIL - expected {EXPECTED_DRAWS} First Qualifying draws, found {len(draws)}")
+    if PENDING_PAIR not in draws:
+        raise SystemExit("REPLAY COMPLETION GUARD: FAIL - Burgess Hill Town v Jersey Bulls 0-0 first leg not present among drawn ties")
 
     replays = {}
     for r in rows:
@@ -129,19 +151,26 @@ def main():
         winner = r.get("winner") or (r.get("home") if hs > aw else r.get("away"))
         replays[key] = (r, winner)
 
-    missing = sorted(set(draws) - set(replays))
-    if missing:
-        raise SystemExit("REPLAY COMPLETION GUARD: FAIL - completed replay missing for: " + "; ".join(" / ".join(x) for x in missing))
+    if len(replays) != EXPECTED_DECIDED_REPLAYS:
+        raise SystemExit(f"REPLAY COMPLETION GUARD: FAIL - expected {EXPECTED_DECIDED_REPLAYS} decisive completed replays, found {len(replays)}")
+
+    missing = set(draws) - set(replays)
+    if missing != {PENDING_PAIR}:
+        raise SystemExit("REPLAY COMPLETION GUARD: FAIL - replay completion gap is not the sole postponed Burgess Hill Town / Jersey Bulls tie: " + "; ".join(" / ".join(x) for x in sorted(missing)))
+
+    if not pending_slot_present(data):
+        raise SystemExit("REPLAY COMPLETION GUARD: FAIL - postponed Burgess Hill Town / Jersey Bulls replay is not retained in Hanwell Town's Second Qualifying slot")
 
     unlinked = sorted(winner for _, winner in replays.values() if not winner_in_next_round(data, winner))
     if unlinked:
-        raise SystemExit("REPLAY COMPLETION GUARD: FAIL - replay winners absent from Second Qualifying draw: " + ", ".join(unlinked))
+        raise SystemExit("REPLAY COMPLETION GUARD: FAIL - completed replay winners absent from Second Qualifying draw: " + ", ".join(unlinked))
 
     print("REPLAY COMPLETION GUARD: PASS")
     print("Archived First Qualifying ties:", EXPECTED_TIES)
-    print("First Qualifying draws:", len(draws))
-    print("Decisive replays:", len(replays))
-    print("Replay winners linked to Second Qualifying:", len(replays))
+    print("Drawn first legs:", len(draws))
+    print("Decisive completed replays:", len(replays))
+    print("Pending postponed replays: 1 (Burgess Hill Town v Jersey Bulls)")
+    print("Completed replay winners linked to Second Qualifying:", len(replays))
 
 
 if __name__ == "__main__":
