@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "policy": "Only locations independently checked against current authoritative club/competition sources may be promoted from Law 2 supporting evidence to verified.",
+  "verified_locations": [
+    {
+      "club": "Leatherhead FC",
+      "ground": "Fetcham Grove",
+      "postcode": "KT22 9AS",
+      "verified_at": "2026-09-11",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://leatherheadfc.com/contact-us/",
+          "note": "Leatherhead FC contact page gives Fetcham Grove, Guildford Road, Leatherhead, Surrey, KT22 9AS."
+        },
+        {
+          "type": "companies_house",
+          "url": "https://find-and-update.company-information.service.gov.uk/company/03067144",
+          "note": "Independent address corroboration for Leatherhead Football Club Limited at Fetcham Grove, Guildford Road, Leatherhead, Surrey, KT22 9AS."
+        }
+      ]
+    },
+    {
+      "club": "Dorking Wanderers FC",
+      "ground": "Meadowbank Stadium",
+      "postcode": "RH4 1DX",
+      "verified_at": "2026-09-11",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://dwfc.co.uk/contact-us/",
+          "note": "Dorking Wanderers contact page gives Meadowbank Stadium, Mill Lane, Dorking, Surrey, RH4 1DX."
+        },
+        {
+          "type": "companies_house",
+          "url": "https://find-and-update.company-information.service.gov.uk/company/08964370",
+          "note": "Independent address corroboration for Dorking Wanderers Football Club Limited at Meadowbank Football Ground, Mill Lane, Dorking, RH4 1DX."
+        }
+      ]
+    }
+  ]
+}
