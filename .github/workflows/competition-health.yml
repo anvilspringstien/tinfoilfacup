@@ -10,6 +10,7 @@ on:
       - "competition.json"
       - "clubfinder.html"
       - "updater/probe_fwp_source.py"
+      - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
@@ -40,10 +41,10 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Probe public competition source
-        run: python updater/probe_fwp_source.py
+        run: python updater/run_source_resilient.py --label "Football Web Pages probe" -- python updater/probe_fwp_source.py
 
       - name: Synchronise competition chronology
-        run: python updater/sync_competition_chronology_v2.py
+        run: python updater/run_source_resilient.py --label "Competition chronology sync" -- python updater/sync_competition_chronology_v2.py
 
       - name: Enrich later-round fixture venues
         run: python updater/enrich_later_round_venues.py
