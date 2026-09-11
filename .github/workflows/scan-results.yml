@@ -23,6 +23,8 @@ on:
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
       - "updater/kt21_replay_regression.py"
+      - "updater/refresh_clubfinder_embedded_snapshot.py"
+      - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/replay_progression_regression.js"
       - ".github/workflows/scan-results.yml"
@@ -68,6 +70,7 @@ jobs:
           python updater/patch_clubfinder_result_status.py
           python updater/patch_clubfinder_stats_integrity.py
           python updater/patch_clubfinder_branding.py
+          python updater/refresh_clubfinder_embedded_snapshot.py
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
       - name: Run rendered Clubfinder regression
@@ -76,6 +79,8 @@ jobs:
         run: node updater/replay_progression_regression.js
       - name: Run KT21 replay regression
         run: python updater/kt21_replay_regression.py
+      - name: Guard embedded fallback freshness
+        run: python updater/embedded_snapshot_regression.py
       - name: Run Clubfinder Stats regression
         run: node updater/clubfinder_stats_regression.js
       - name: Run all-club journey integrity regression
