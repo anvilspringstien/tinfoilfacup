@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **14**
-- ⚠️ Remaining supporting-evidence review queue: **140**
+- ✅ Verified in guarded Law 2 supplemental layer: **26**
+- ⚠️ Remaining supporting-evidence review queue: **128**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 81**
+- **First Round Qualifying: 72**
 - **Fourth Round Qualifying: 12**
-- **Second Round Qualifying: 47**
+- **Second Round Qualifying: 44**
 
 ## Remaining clubs
 
@@ -20,23 +20,17 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **AFC Totton** — Snows Stadium • SO40 2RW • Second Round Qualifying
 - **AFC Whyteleafe** — Church Road • CR3 0AR • First Round Qualifying
 - **Aldershot Town FC** — EBB Stadium at The Recreation Ground • GU11 1TW • Fourth Round Qualifying
-- **Alfreton Town FC** — Impact Arena • DE55 7FZ • First Round Qualifying
-- **Alvechurch FC** — Lye Meadow • B48 7RS • First Round Qualifying
 - **Anstey Nomads FC** — Cropston Road • LE7 7BP • First Round Qualifying
-- **Ashton United FC** — Hurst Cross Stadium • OL6 8DY • First Round Qualifying
 - **Aveley FC** — Parkside • RM15 4PX • First Round Qualifying
 - **Avro FC** — Vestacare Stadium • OL8 3JH • First Round Qualifying
 - **Bamber Bridge FC** — SFC Stadium at Irongate • PR5 6UX • First Round Qualifying
 - **Banbury United FC** — Spencer Stadium • OX16 5AB • First Round Qualifying
 - **Barrow AFC** — Holker Street Ground • LA14 5UW • Fourth Round Qualifying
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
-- **Bath City FC** — Twerton Park • BA2 1DB • First Round Qualifying
 - **Bedford Town FC** — The Eyrie • MK44 3LW • Second Round Qualifying
 - **Berkhamsted FC** — Glencar Community Stadium • HP4 2AL • First Round Qualifying
 - **Billericay Town FC** — New Lodge • CM12 9SA • Second Round Qualifying
-- **Bishop's Stortford FC** — Woodside Park • CM23 5RG • First Round Qualifying
 - **Boston United FC** — Boston Community Stadium • PE21 7NE • Fourth Round Qualifying
-- **Brackley Town FC** — St James Park • NN13 7EJ • Second Round Qualifying
 - **Bracknell Town FC** — SB Stadium • GU47 9BJ • First Round Qualifying
 - **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
 - **Brentwood Town FC** — The Arena • CM15 9NN • First Round Qualifying
@@ -48,7 +42,6 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Carshalton Athletic FC** — War Memorial Sports Ground • SM5 2PW • First Round Qualifying
 - **Chelmsford City FC** — Melbourne Stadium • CM1 2EH • Second Round Qualifying
 - **Chertsey Town FC** — Alwyns Lane • KT16 9DW • First Round Qualifying
-- **Chesham United FC** — The Meadow • HP5 1NE • Second Round Qualifying
 - **Cheshunt FC** — Cheshunt Stadium • EN8 8RU • First Round Qualifying
 - **Chester FC** — Deva Stadium • CH1 4LT • Second Round Qualifying
 - **Chichester City FC** — Oaklands Park • PO19 6AR • First Round Qualifying
@@ -76,7 +69,6 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Gloucester City FC** — Tiger Turf Stadium • GL2 5FD • First Round Qualifying
 - **Gosport Borough FC** — AEI Stadium • PO12 3SX • First Round Qualifying
 - **Guiseley AFC** — Nethermoor Park • LS20 8BT • First Round Qualifying
-- **Halesowen Town FC** — The Grove • B63 3TB • First Round Qualifying
 - **Hampton & Richmond Borough FC** — Beveree Stadium • TW12 2BX • Second Round Qualifying
 - **Hanwell Town FC** — Powerday Stadium • UB6 8TL • First Round Qualifying
 - **Hanworth Villa FC** — Rectory Meadow • TW13 6PN • First Round Qualifying
@@ -87,7 +79,6 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Hednesford Town FC** — Keys Park • WS12 2DZ • Second Round Qualifying
 - **Hemel Hempstead Town FC** — Vauxhall Road • HP2 4HW • Second Round Qualifying
 - **Hereford FC** — Edgar Street • HR4 9JU • Second Round Qualifying
-- **Hitchin Town FC** — Top Field • SG5 1NU • First Round Qualifying
 - **Hornchurch FC** — The Stadium • RM14 2LX • Fourth Round Qualifying
 - **Horsham FC** — Hop Oast Community Stadium • RH13 0AB • Second Round Qualifying
 - **Hyde United FC** — Project Solar Stadium • SK14 5PL • First Round Qualifying
@@ -99,16 +90,13 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Leek Town FC** — F.Ball Community Stadium • ST13 8LD • First Round Qualifying
 - **Leighton Town FC** — Freed Veneers Community Stadium • LU7 1RX • First Round Qualifying
 - **Leiston FC** — Leiston Town Athletic Association • IP16 4DQ • First Round Qualifying
-- **Lewes FC** — The Dripping Pan • BN7 2XA • First Round Qualifying
 - **Macclesfield FC** — Leasing.com Stadium • SK11 7SP • Second Round Qualifying
 - **Maidenhead United FC** — York Road • SL6 1SF • Second Round Qualifying
 - **Maidstone United FC** — Gallagher Stadium • ME14 1LQ • Second Round Qualifying
 - **Maldon & Tiptree FC** — Maldon Stadium • CM9 5JQ • First Round Qualifying
 - **Malvern Town FC** — HD Anywhere Community Stadium • WR14 2EQ • First Round Qualifying
-- **Marine FC** — Marine Travel Arena • L23 3AS • Second Round Qualifying
 - **Merthyr Town FC** — Penydarren Park • CF47 8RF • Second Round Qualifying
 - **Morecambe FC** — Mazuma Mobile Stadium • LA4 4TB • Second Round Qualifying
-- **Needham Market FC** — Bloomfields • IP6 8DA • First Round Qualifying
 - **Oxford City FC** — RAW Charging Stadium • OX3 0NQ • Second Round Qualifying
 - **Peterborough Sports FC** — 651 Lincoln Road • PE1 3HA • First Round Qualifying
 - **Plymouth Parkway FC** — Bolitho Park • PL5 3JG • First Round Qualifying
