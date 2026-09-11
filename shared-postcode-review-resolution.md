@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Shared Postcode Review Resolution
 
-Resolved: **27/08/2026, 15:29:36 UTC**
+Resolved: **11/09/2026, 21:50:31 UTC**
 
 - Directed current groundshares approved: **5**
 - Confirmed shared venues without forced direction: **1**

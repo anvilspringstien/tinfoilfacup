@@ -1,8 +1,10 @@
 {
-  "checked_at": "2026-09-11T21:50:06.504385+00:00",
+  "checked_at": "2026-09-11T21:50:31.172889+00:00",
   "counts": {
-    "eligible_clubs": 491,
-    "complete_verified": 491,
+    "eligible_clubs": 651,
+    "complete_verified": 497,
+    "law2_supporting_locations": 154,
+    "selectable_location_coverage": 651,
     "critical_items": 0,
     "review_items": 0,
     "shared_postcodes": 0,
@@ -12,6 +14,7 @@
     "unverified": 0
   },
   "missing_or_incomplete": [],
+  "invalid_supporting_locations": [],
   "shared_postcodes": [],
   "known_approved_groundshares": [
     {
@@ -105,6 +108,24 @@
       "season": "2026-27"
     },
     {
+      "postcode": "NW9 7NE",
+      "tenant": "Hilltop FC",
+      "host": "Hendon FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "TW19 7BH",
+      "tenant": "Kingstonian FC",
+      "host": "Ashford Town (Middx) FC",
+      "season": "2026-27"
+    },
+    {
+      "postcode": "B72 1NL",
+      "tenant": "Romulus FC",
+      "host": "Sutton Coldfield Town FC",
+      "season": "2026-27"
+    },
+    {
       "postcode": "L30 1NY",
       "tenant": "AFC Liverpool",
       "host": "Bootle FC",
@@ -132,24 +153,6 @@
       "postcode": "ST5 3BX",
       "tenant": "Stone Old Alleynians FC",
       "host": "Newcastle Town FC",
-      "season": "2026-27"
-    },
-    {
-      "postcode": "NW9 7NE",
-      "tenant": "Hilltop FC",
-      "host": "Hendon FC",
-      "season": "2026-27"
-    },
-    {
-      "postcode": "TW19 7BH",
-      "tenant": "Kingstonian FC",
-      "host": "Ashford Town (Middx) FC",
-      "season": "2026-27"
-    },
-    {
-      "postcode": "B72 1NL",
-      "tenant": "Romulus FC",
-      "host": "Sutton Coldfield Town FC",
       "season": "2026-27"
     }
   ],

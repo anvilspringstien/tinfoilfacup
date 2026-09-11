@@ -1,14 +1,22 @@
 # Tin Foil FA Cup — Ground Health
 
-- 🟢 Complete verified club-ground records: **491**
+- 🟢 Complete verified canonical club-ground records: **497**
+- 🟦 Law 2 supporting origin locations: **154**
+- ⚪ Selectable origin location coverage: **651/651**
 - 🔴 Critical ground-data items: **0**
 - 🟡 Review items: **0**
-- ⚪ Eligible clubs audited: **491**
+- ⚪ Eligible clubs audited: **651**
 - 🏟️ Known approved groundshares reconciled to canonical records: **23**
 - 🤝 Confirmed shared venues reconciled without forced direction: **3**
 - ⏳ Approved groundshares pending canonical host/tenant reconciliation: **0**
 
-## 🔴 Critical missing/incomplete canonical records
+Supporting Law 2 origin locations are usable for distance selection but remain explicitly unverified until promoted through the guarded ground process.
+
+## 🔴 Critical missing/incomplete origin locations
+
+None.
+
+## 🔴 Invalid Law 2 supporting locations
 
 None.
 
@@ -33,14 +41,14 @@ No unexplained shared postcodes found.
 - **Southall FC** → Uxbridge FC • UB7 8HX • 2026-27
 - **AFC Greenwich Borough** → Holmesdale FC • BR2 8HQ • 2026-27
 - **SE Dons FC** → Chatham Town FC • ME4 6LR • 2026-27
+- **Hilltop FC** → Hendon FC • NW9 7NE • 2026-27
+- **Kingstonian FC** → Ashford Town (Middx) FC • TW19 7BH • 2026-27
+- **Romulus FC** → Sutton Coldfield Town FC • B72 1NL • 2026-27
 - **AFC Liverpool** → Bootle FC • L30 1NY • 2026-27
 - **Baldock Town FC** → Arlesey Town FC • SG15 6RS • 2026-27
 - **Kennington FC** → Ashford United FC • TN26 1NJ • 2026-27
 - **Romford FC** → Barking FC • RM8 2JR • 2026-27
 - **Stone Old Alleynians FC** → Newcastle Town FC • ST5 3BX • 2026-27
-- **Hilltop FC** → Hendon FC • NW9 7NE • 2026-27
-- **Kingstonian FC** → Ashford Town (Middx) FC • TW19 7BH • 2026-27
-- **Romulus FC** → Sutton Coldfield Town FC • B72 1NL • 2026-27
 
 ## 🤝 Confirmed shared venues without forced direction
 
