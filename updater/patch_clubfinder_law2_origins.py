@@ -131,7 +131,7 @@ newgb="""  const g=GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target);
   const s=LAW2_ORIGIN_LOCATIONS.find(g=>canonicalClubKey(g.name||g.club)===target);
   if(s)return s;
   const c=ELIGIBLE.find(c=>canonicalClubKey(c.name)===target);"""
-if oldgb in text:text.replace(oldgb,newgb,1)
+if oldgb in text:text=text.replace(oldgb,newgb,1)
 elif newgb not in text:raise SystemExit('ABORT: groundByClubName boundary changed')
 oldprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n\n  if(!crumbs.length){"""
 newprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n  const entryRound=journey.origin.entry_round||'';\n  if(entryRound&&entryRound!=='Extra Preliminary Round'){\n    body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '+esc(entryRound)+'.</div>';\n  }\n\n  if(!crumbs.length){"""
