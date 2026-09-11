@@ -51,6 +51,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Probe public competition source
         run: python updater/run_source_resilient.py --label "Football Web Pages probe" -- python updater/probe_fwp_source.py
