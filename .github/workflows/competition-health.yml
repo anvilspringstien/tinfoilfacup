@@ -1,4 +1,4 @@
-name: Competition health monitor (v7.9.25)
+name: Competition health monitor (v7.9.26)
 
 on:
   workflow_dispatch:
@@ -19,6 +19,7 @@ on:
       - "updater/refresh_clubfinder_embedded_snapshot.py"
       - "updater/embedded_snapshot_regression.py"
       - "updater/enrich_later_round_venues.py"
+      - "updater/enrich_replay_kickoffs_and_active_venues.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/patch_clubfinder_journey_integrity.py"
@@ -63,6 +64,9 @@ jobs:
 
       - name: Enrich later-round fixture venues
         run: python updater/enrich_later_round_venues.py
+
+      - name: Enrich replay kick-offs and active fixture venues
+        run: python updater/enrich_replay_kickoffs_and_active_venues.py
 
       - name: Audit full competition chronology
         id: health_audit
@@ -134,6 +138,7 @@ jobs:
             updater/competition-health.json
             updater/replay-reconciliation-report.json
             updater/second-qualifying-sync-report.json
+            updater/kickoff-venue-enrichment-report.json
 
       - name: Fail run if competition health is critical
         if: ${{ steps.health_audit.outcome == 'failure' }}
