@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Project guarded Law 2 origins into Clubfinder
+        run: python updater/patch_clubfinder_law2_origins.py
+
       - name: Audit canonical and Law 2 supporting ground coverage
         run: python updater/ground_health.py
 
@@ -48,7 +51,7 @@ jobs:
         run: python updater/export_test_postcodes.py
 
       - name: Commit health report and tester list
-        if: always()
+        if: ${{ always() && github.ref_name == 'main' }}
         run: |
           git config user.name "Tin Foil FA Cup Ground Monitor"
           git config user.email "actions@users.noreply.github.com"
