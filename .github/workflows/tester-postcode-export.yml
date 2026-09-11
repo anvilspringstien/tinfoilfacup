@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'updater/export_test_postcodes.py'
+      - 'updater/patch_clubfinder_law2_origins.py'
       - '.github/workflows/tester-postcode-export.yml'
 permissions:
   contents: write
@@ -12,9 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Export verified club postcodes
+      - name: Build Law 2 origin view
+        run: python updater/patch_clubfinder_law2_origins.py
+      - name: Export Law 2 club postcodes
         run: python updater/export_test_postcodes.py
       - name: Commit tester list
+        if: ${{ github.ref_name == 'main' }}
         run: |
           git config user.name "Tin Foil FA Cup Tester Export"
           git config user.email "actions@users.noreply.github.com"
