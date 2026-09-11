@@ -1,5 +1,5 @@
 # Law 2 origin + KT21 venue integrity guards
-name: Competition health monitor (v7.10.0)
+name: Competition health monitor (v7.10.1)
 
 on:
   workflow_dispatch:
@@ -32,6 +32,9 @@ on:
       - "updater/patch_clubfinder_stats_integrity.py"
       - "updater/patch_clubfinder_branding.py"
       - "updater/patch_clubfinder_law2_origins.py"
+      - "updater/law2-verified-location-ledger.json"
+      - "updater/promote_verified_law2_locations.py"
+      - "updater/audit_law2_location_verification.py"
       - "updater/law2_origin_regression.js"
       - "updater/competition_health.py"
       - "updater/competition_regression_guard.py"
@@ -108,6 +111,12 @@ jobs:
       - name: Apply guarded Law 2 origin expansion
         run: python updater/patch_clubfinder_law2_origins.py
 
+      - name: Promote independently verified Law 2 locations
+        run: python updater/promote_verified_law2_locations.py
+
+      - name: Audit Law 2 location verification queue
+        run: python updater/audit_law2_location_verification.py
+
       - name: Refresh last-known-good embedded competition snapshot
         run: python updater/refresh_clubfinder_embedded_snapshot.py
 
@@ -146,7 +155,7 @@ jobs:
         run: |
           git config user.name "Tin Foil FA Cup Health Monitor"
           git config user.email "actions@users.noreply.github.com"
-          git add competition.json clubfinder.html competition-health.md updater/competition-health.json
+          git add competition.json clubfinder.html competition-health.md updater/competition-health.json law2-location-verification-audit.md updater/law2-location-verification-audit.json
           if git diff --cached --quiet; then
             echo "Competition state and health report unchanged."
           else
@@ -163,6 +172,8 @@ jobs:
           path: |
             competition-health.md
             updater/competition-health.json
+            law2-location-verification-audit.md
+            updater/law2-location-verification-audit.json
             updater/replay-reconciliation-report.json
             updater/second-qualifying-sync-report.json
             updater/kickoff-venue-enrichment-report.json

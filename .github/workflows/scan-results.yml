@@ -34,6 +34,9 @@ on:
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/replay_progression_regression.js"
       - "updater/patch_clubfinder_law2_origins.py"
+      - "updater/law2-verified-location-ledger.json"
+      - "updater/promote_verified_law2_locations.py"
+      - "updater/audit_law2_location_verification.py"
       - "updater/law2_origin_regression.js"
       - "journey-club-registry.json"
       - ".github/workflows/scan-results.yml"
@@ -88,6 +91,8 @@ jobs:
           python updater/patch_clubfinder_stats_integrity.py
           python updater/patch_clubfinder_branding.py
           python updater/patch_clubfinder_law2_origins.py
+          python updater/promote_verified_law2_locations.py
+          python updater/audit_law2_location_verification.py
           python updater/refresh_clubfinder_embedded_snapshot.py
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
@@ -119,7 +124,7 @@ jobs:
         run: |
           git config user.name "Tin Foil FA Cup Updater"
           git config user.email "actions@users.noreply.github.com"
-          git add competition.json clubfinder.html competition-health.md updater/competition-health.json updater/auto_results.py updater/patch_clubfinder_competition_logic.py updater/patch_clubfinder_replay_progression.py updater/clubfinder_render_regression.js updater/replay_progression_regression.js
+          git add competition.json clubfinder.html competition-health.md updater/competition-health.json law2-location-verification-audit.md updater/law2-location-verification-audit.json updater/auto_results.py updater/patch_clubfinder_competition_logic.py updater/patch_clubfinder_replay_progression.py updater/clubfinder_render_regression.js updater/replay_progression_regression.js
           if git diff --cached --quiet; then
             echo "No new results or Clubfinder changes."
           else

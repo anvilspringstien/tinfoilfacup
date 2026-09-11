@@ -38,7 +38,7 @@ for g in G:
 for g in S: support[norm(g.get("name") or g.get("club"))].append(g)
 uk=re.compile(r"^(GIR 0AA|(?:[A-Z]{1,2}\d[A-Z\d]?|\d[A-Z]{2})\s*\d[A-Z]{2})$",re.I)
 names={norm(x.get("name")):x.get("name") for x in E if x.get("name")}
-miss=[];bad=[];coords=[];unv=[];conf=[];good=[];support_good=[];support_bad=[];shared=[];known=[];known_shared=[];known_keys=set();pending=[]
+miss=[];bad=[];coords=[];unv=[];conf=[];good=[];support_good=[];support_verified=[];support_bad=[];shared=[];known=[];known_shared=[];known_keys=set();pending=[]
 for k,n in names.items():
  rs=by.get(k,[])
  if rs:
@@ -53,14 +53,16 @@ for k,n in names.items():
  ss=support.get(k,[])
  if len(ss)!=1:
   miss.append((n,"No canonical ground record or unique Law 2 supporting location")); continue
- g=ss[0];pc=(g.get("postcode") or "").upper();reasons=[]
+ g=ss[0];pc=(g.get("postcode") or "").upper();reasons=[]; verification=(g.get("verification") or "").lower()
  if not g.get("ground"):reasons.append("ground name missing")
  if not pc:reasons.append("postcode missing")
  elif not uk.match(pc):reasons.append("postcode invalid")
  if g.get("lat") is None or g.get("lon") is None:reasons.append("coordinates missing")
- if (g.get("verification") or "").lower()!="supporting-evidence":reasons.append("supporting-evidence marker missing")
- if not g.get("source"):reasons.append("source missing")
+ if verification not in ("supporting-evidence","verified"):reasons.append("verification marker invalid")
+ if verification=="supporting-evidence" and not g.get("source"):reasons.append("source missing")
+ if verification=="verified" and not g.get("verified_sources"):reasons.append("verified source provenance missing")
  if reasons:support_bad.append((n,g.get("ground",""),pc,"; ".join(reasons)))
+ elif verification=="verified":support_verified.append(n)
  else:support_good.append(n)
 for tk,a in approved.items():
  trs=by.get(tk,[]); hk=norm(a["host"]); hrs=by.get(hk,[]); pc=a["postcode"]
@@ -83,10 +85,10 @@ for pc,rs in pcd.items():
  if len(clubs)<=1: continue
  if (pc,tuple(sorted(norm(c) for c in clubs))) in known_keys: continue
  shared.append((pc,clubs))
-critical=len(miss)+len(conf)+len(support_bad); review=len(bad)+len(coords)+len(unv)+len(shared); selectable=len(good)+len(support_good)
-counts={"eligible_clubs":len(names),"complete_verified":len(good),"law2_supporting_locations":len(support_good),"selectable_location_coverage":selectable,"critical_items":critical,"review_items":review,"shared_postcodes":len(shared),"known_approved_groundshares":len(known),"known_confirmed_shared_venues":len(known_shared),"approved_groundshares_pending_canonical_reconciliation":len(pending),"unverified":len(unv)}
+critical=len(miss)+len(conf)+len(support_bad); review=len(bad)+len(coords)+len(unv)+len(shared); selectable=len(good)+len(support_good)+len(support_verified); verified_total=len(good)+len(support_verified)
+counts={"eligible_clubs":len(names),"complete_verified_canonical":len(good),"law2_verified_supplemental":len(support_verified),"complete_verified_total":verified_total,"law2_supporting_locations":len(support_good),"selectable_location_coverage":selectable,"critical_items":critical,"review_items":review,"shared_postcodes":len(shared),"known_approved_groundshares":len(known),"known_confirmed_shared_venues":len(known_shared),"approved_groundshares_pending_canonical_reconciliation":len(pending),"unverified":len(unv)}
 (R/"updater/ground-health.json").write_text(json.dumps({"checked_at":datetime.now(timezone.utc).isoformat(),"counts":counts,"missing_or_incomplete":miss,"invalid_supporting_locations":support_bad,"shared_postcodes":shared,"known_approved_groundshares":known,"known_confirmed_shared_venues":known_shared,"approved_groundshares_pending_canonical_reconciliation":pending,"unverified":unv},indent=2)+"\n")
-lines=["# Tin Foil FA Cup — Ground Health","",f"- 🟢 Complete verified canonical club-ground records: **{len(good)}**",f"- 🟦 Law 2 supporting origin locations: **{len(support_good)}**",f"- ⚪ Selectable origin location coverage: **{selectable}/{len(names)}**",f"- 🔴 Critical ground-data items: **{critical}**",f"- 🟡 Review items: **{review}**",f"- ⚪ Eligible clubs audited: **{len(names)}**",f"- 🏟️ Known approved groundshares reconciled to canonical records: **{len(known)}**",f"- 🤝 Confirmed shared venues reconciled without forced direction: **{len(known_shared)}**",f"- ⏳ Approved groundshares pending canonical host/tenant reconciliation: **{len(pending)}**","","Supporting Law 2 origin locations are usable for distance selection but remain explicitly unverified until promoted through the guarded ground process.","","## 🔴 Critical missing/incomplete origin locations",""]
+lines=["# Tin Foil FA Cup — Ground Health","",f"- 🟢 Complete verified canonical club-ground records: **{len(good)}**",f"- ✅ Verified Law 2 supplemental origin locations: **{len(support_verified)}**",f"- 🟢 Total verified selectable origins: **{verified_total}**",f"- 🟦 Law 2 supporting origin locations awaiting verification: **{len(support_good)}**",f"- ⚪ Selectable origin location coverage: **{selectable}/{len(names)}**",f"- 🔴 Critical ground-data items: **{critical}**",f"- 🟡 Review items: **{review}**",f"- ⚪ Eligible clubs audited: **{len(names)}**",f"- 🏟️ Known approved groundshares reconciled to canonical records: **{len(known)}**",f"- 🤝 Confirmed shared venues reconciled without forced direction: **{len(known_shared)}**",f"- ⏳ Approved groundshares pending canonical host/tenant reconciliation: **{len(pending)}**","","Supporting Law 2 origin locations are usable for distance selection but remain explicitly unverified until promoted through the guarded verified-location ledger.","","## 🔴 Critical missing/incomplete origin locations",""]
 lines += [f"- **{club}** — {reason}" for club,reason in miss] or ["None."]
 lines += ["","## 🔴 Invalid Law 2 supporting locations",""]
 lines += [f"- **{club}** — {ground} • {pc} — {reason}" for club,ground,pc,reason in support_bad] or ["None."]
@@ -99,4 +101,4 @@ lines += [f"- **{', '.join(x['clubs'])}** • {x['postcode']} • {x['season'] o
 lines += ["","## ⏳ Approved relationships awaiting canonical counterpart",""]
 lines += [f"- **{x['tenant']}** → {x['host']} • {x['postcode']} • {x['season'] or 'Current period'} — canonical tenant matches: {x['tenant_canonical_matches']}; canonical host matches: {x['host_canonical_matches']}" for x in pending] or ["None."]
 (R/"ground-health.md").write_text("\n".join(lines)+"\n")
-print("GROUND HEALTH v7.10.0",counts)
+print("GROUND HEALTH v7.10.1",counts)

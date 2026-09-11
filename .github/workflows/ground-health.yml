@@ -1,4 +1,4 @@
-name: Ground health monitor (v7.10.0)
+name: Ground health monitor (v7.10.1)
 
 on:
   workflow_dispatch:
@@ -11,6 +11,9 @@ on:
       - 'updater/ground-approval-ledger.json'
       - 'updater/ground_health.py'
       - 'updater/patch_clubfinder_law2_origins.py'
+      - 'updater/law2-verified-location-ledger.json'
+      - 'updater/promote_verified_law2_locations.py'
+      - 'updater/audit_law2_location_verification.py'
       - 'updater/export_test_postcodes.py'
       - '.github/workflows/ground-health.yml'
 
@@ -26,7 +29,13 @@ jobs:
       - name: Build Law 2 origin view
         run: python updater/patch_clubfinder_law2_origins.py
 
-      - name: Audit canonical and Law 2 supporting ground coverage
+      - name: Promote independently verified Law 2 locations
+        run: python updater/promote_verified_law2_locations.py
+
+      - name: Audit Law 2 verification queue
+        run: python updater/audit_law2_location_verification.py
+
+      - name: Audit canonical and Law 2 ground coverage
         run: python updater/ground_health.py
 
       - name: Validate Ground Health baseline
@@ -43,6 +52,7 @@ jobs:
           if c.get('review_items') != 0: problems.append(f"review items {c.get('review_items')}")
           if c.get('approved_groundshares_pending_canonical_reconciliation') != 0: problems.append(f"pending groundshare reconciliations {c.get('approved_groundshares_pending_canonical_reconciliation')}")
           if c.get('unverified') != 0: problems.append(f"unverified canonical records {c.get('unverified')}")
+          if c.get('law2_verified_supplemental',0) < 2: problems.append(f"verified Law 2 supplemental locations {c.get('law2_verified_supplemental',0)}/2")
           print('GROUND HEALTH BASELINE', c)
           if problems: raise SystemExit('Ground Health drift detected: ' + '; '.join(problems))
           PY
@@ -55,12 +65,13 @@ jobs:
         run: |
           git config user.name "Tin Foil FA Cup Ground Monitor"
           git config user.email "actions@users.noreply.github.com"
-          git add ground-health.md updater/ground-health.json tester-club-postcodes.csv
+          git add ground-health.md updater/ground-health.json law2-location-verification-audit.md updater/law2-location-verification-audit.json tester-club-postcodes.csv
           if git diff --cached --quiet; then
             echo "Ground Health outputs unchanged."
           else
             git commit -m "Update Ground Health outputs"
-            git push
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
       - name: Upload Ground Health report
@@ -71,4 +82,6 @@ jobs:
           path: |
             ground-health.md
             updater/ground-health.json
+            law2-location-verification-audit.md
+            updater/law2-location-verification-audit.json
             tester-club-postcodes.csv
