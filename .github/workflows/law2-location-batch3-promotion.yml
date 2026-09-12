@@ -1,0 +1,80 @@
+name: Law 2 location Batch 3 promotion
+
+on:
+  push:
+    branches:
+      - audit/law2-location-sweep-3-20260912
+    paths:
+      - 'updater/law2-verified-location-ledger.json'
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Promote only ledger-matched verified locations
+        run: python updater/promote_verified_law2_locations.py
+
+      - name: Rebuild Law 2 location verification audit
+        run: python updater/audit_law2_location_verification.py
+
+      - name: Law 2 origin regression
+        run: node updater/law2_origin_regression.js
+
+      - name: Assert Batch 3 totals
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('updater/law2-location-verification-audit.json').read_text())
+          c=p['counts']
+          r=p['remaining_review_by_entry_round']
+          assert c.get('verified-canonical') == 6, c
+          assert c.get('verified-supplemental') == 34, c
+          assert c.get('review-supporting-evidence') == 120, c
+          assert r == {
+              'First Round Qualifying': 67,
+              'Fourth Round Qualifying': 12,
+              'Second Round Qualifying': 41,
+          }, r
+          print('Batch 3 totals: PASS')
+          PY
+
+      - name: Guard writable scope
+        run: |
+          changed="$(git status --porcelain)"
+          echo "$changed"
+          other="$(git status --porcelain -- . \
+            ':!clubfinder.html' \
+            ':!law2-location-verification-audit.md' \
+            ':!updater/law2-location-verification-audit.json')"
+          if [ -n "$other" ]; then
+            echo "ABORT: unexpected files changed during Law 2 promotion"
+            echo "$other"
+            exit 1
+          fi
+          git diff --quiet -- competition.json
+
+      - name: Commit guarded promotion outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add clubfinder.html law2-location-verification-audit.md updater/law2-location-verification-audit.json
+          test "$(git diff --cached --name-only | wc -l)" -eq 3
+          git commit -m "Promote verified Law 2 location Batch 3"
+          git push
+
+# SAFETY: this workflow can promote only records already present in the reviewed
+# ledger and exactly matching the supplemental club/ground/postcode data. The
+# protected GROUNDS array and competition.json are not writable targets.
