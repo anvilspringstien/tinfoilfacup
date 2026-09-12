@@ -4,33 +4,29 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **34**
-- ⚠️ Remaining supporting-evidence review queue: **120**
+- ✅ Verified in guarded Law 2 supplemental layer: **38**
+- ⚠️ Remaining supporting-evidence review queue: **116**
 
 ## Remaining review queue by entry round
 
 - **First Round Qualifying: 67**
-- **Fourth Round Qualifying: 12**
-- **Second Round Qualifying: 41**
+- **Fourth Round Qualifying: 9**
+- **Second Round Qualifying: 40**
 
 ## Remaining clubs
 
 - **AFC Fylde** — Mill Farm Sports Village • PR4 3JZ • Fourth Round Qualifying
-- **AFC Telford United** — New Bucks Head Stadium • TF1 2TU • Second Round Qualifying
 - **AFC Totton** — Snows Stadium • SO40 2RW • Second Round Qualifying
 - **AFC Whyteleafe** — Church Road • CR3 0AR • First Round Qualifying
-- **Aldershot Town FC** — EBB Stadium at The Recreation Ground • GU11 1TW • Fourth Round Qualifying
 - **Anstey Nomads FC** — Cropston Road • LE7 7BP • First Round Qualifying
 - **Aveley FC** — Parkside • RM15 4PX • First Round Qualifying
 - **Avro FC** — Vestacare Stadium • OL8 3JH • First Round Qualifying
 - **Bamber Bridge FC** — SFC Stadium at Irongate • PR5 6UX • First Round Qualifying
 - **Banbury United FC** — Spencer Stadium • OX16 5AB • First Round Qualifying
-- **Barrow AFC** — Holker Street Ground • LA14 5UW • Fourth Round Qualifying
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
 - **Bedford Town FC** — The Eyrie • MK44 3LW • Second Round Qualifying
 - **Berkhamsted FC** — Glencar Community Stadium • HP4 2AL • First Round Qualifying
 - **Billericay Town FC** — New Lodge • CM12 9SA • Second Round Qualifying
-- **Boston United FC** — Boston Community Stadium • PE21 7NE • Fourth Round Qualifying
 - **Bracknell Town FC** — SB Stadium • GU47 9BJ • First Round Qualifying
 - **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
 - **Brentwood Town FC** — The Arena • CM15 9NN • First Round Qualifying
