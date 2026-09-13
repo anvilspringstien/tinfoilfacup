@@ -11,8 +11,8 @@ Read-only structural audit of the current production `clubfinder.html`. No Clubf
 ## Broad composition
 
 - Inline `<script>` content: **3,057,170 bytes (2985.5 KiB, 2.92 MiB)** (99.8% of file)
-- Inline `<style>` content: **11,986 bytes (11.7 KiB, 0.01 MiB)** (0.4% of file)
-- Remaining HTML/tag shell: **-4,499 bytes (-4.4 KiB, -0.00 MiB)** (-0.1% of file)
+- Outer-page `<style>` content: **6,078 bytes (5.9 KiB, 0.01 MiB)** (0.2% of file)
+- Remaining HTML/tag shell: **1,409 bytes (1.4 KiB, 0.00 MiB)** (0.0% of file)
 - Embedded base64 data URIs: **1,112,624 bytes (1086.5 KiB, 1.06 MiB)** across **8** URI(s) (36.3% of file)
 
 ## Largest JavaScript assignments (heuristic)
