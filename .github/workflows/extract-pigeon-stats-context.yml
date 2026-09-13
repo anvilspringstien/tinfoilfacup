@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Extract Stats function
+      - name: Extract targeted Stats context
         run: python updater/extract_pigeon_stats_context.py
 
       - name: Commit extracted context
@@ -24,5 +24,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add updater/pigeon_stats_context.txt
-          git commit -m "Extract Clubfinder Stats context [skip ci]"
+          git commit -m "Refresh Clubfinder Stats context [skip ci]"
           git push
