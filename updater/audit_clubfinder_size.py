@@ -12,11 +12,20 @@ raw = text.encode('utf-8')
 def fmt(n):
     return f"{n:,} bytes ({n/1024:.1f} KiB, {n/1024/1024:.2f} MiB)"
 
-styles = re.findall(r'<style[^>]*>([\s\S]*?)</style>', text, flags=re.I)
-scripts = re.findall(r'<script[^>]*>([\s\S]*?)</script>', text, flags=re.I)
-style_bytes = sum(len(x.encode('utf-8')) for x in styles)
-script_bytes = sum(len(x.encode('utf-8')) for x in scripts)
-shell_bytes = len(raw) - style_bytes - script_bytes
+# Measure the real outer document blocks only. The Stats certificate contains
+# literal <style> markup inside JavaScript strings, so a whole-file regex would
+# double count that text.
+script_matches = list(re.finditer(r'<script[^>]*>([\s\S]*?)</script>', text, flags=re.I))
+script_ranges = [(m.start(), m.end()) for m in script_matches]
+script_bytes = sum(len(m.group(1).encode('utf-8')) for m in script_matches)
+
+def inside_script(pos):
+    return any(a <= pos < b for a, b in script_ranges)
+
+style_matches = [m for m in re.finditer(r'<style[^>]*>([\s\S]*?)</style>', text, flags=re.I) if not inside_script(m.start())]
+style_bytes = sum(len(m.group(1).encode('utf-8')) for m in style_matches)
+# Everything not inside the content of the actual outer script/style blocks.
+shell_bytes = len(raw) - script_bytes - style_bytes
 
 # Data URIs are a prime suspect in a standalone evolutionary build.
 data_uris = re.findall(r'data:([\w.+-]+/[\w.+-]+);base64,([A-Za-z0-9+/=]+)', text)
@@ -37,7 +46,6 @@ for m in assign_re.finditer(text):
     depth = {'(':0, '[':0, '{':0}
     quote = None
     esc = False
-    template_expr_depth = 0
     while i < len(text):
         ch = text[i]
         if quote:
@@ -85,7 +93,6 @@ for m in string_re.finditer(text):
 large_strings.sort(reverse=True)
 
 comp_size = COMP.stat().st_size if COMP.exists() else 0
-
 gz = gzip.compress(raw, compresslevel=9)
 
 lines = []
@@ -103,7 +110,7 @@ lines += [
     '## Broad composition',
     '',
     f'- Inline `<script>` content: **{fmt(script_bytes)}** ({script_bytes/len(raw)*100:.1f}% of file)',
-    f'- Inline `<style>` content: **{fmt(style_bytes)}** ({style_bytes/len(raw)*100:.1f}% of file)',
+    f'- Outer-page `<style>` content: **{fmt(style_bytes)}** ({style_bytes/len(raw)*100:.1f}% of file)',
     f'- Remaining HTML/tag shell: **{fmt(shell_bytes)}** ({shell_bytes/len(raw)*100:.1f}% of file)',
     f'- Embedded base64 data URIs: **{fmt(data_uri_total)}** across **{len(data_uri_rows)}** URI(s) ({data_uri_total/len(raw)*100:.1f}% of file)',
     '',
