@@ -1,0 +1,28 @@
+name: Extract Pigeon Stats Context
+
+on:
+  push:
+    branches:
+      - feature/pigeon-miles-stats
+    paths:
+      - .github/workflows/extract-pigeon-stats-context.yml
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract Stats function
+        run: python updater/extract_pigeon_stats_context.py
+
+      - name: Commit extracted context
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add updater/pigeon_stats_context.txt
+          git commit -m "Extract Clubfinder Stats context [skip ci]"
+          git push
