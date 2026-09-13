@@ -1,0 +1,23 @@
+name: Verify Pigeon Miles Stats
+
+on:
+  push:
+    branches:
+      - feature/pigeon-miles-stats
+    paths:
+      - .github/workflows/verify-pigeon-miles-stats.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Pigeon Miles Stats tests
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+
+      - name: Run full Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
