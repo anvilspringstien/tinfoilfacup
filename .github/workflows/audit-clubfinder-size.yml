@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/audit-clubfinder-size.yml
       - updater/audit_clubfinder_size.py
+      - updater/audit_clubfinder_payload_classification.py
+      - updater/pigeon_miles_runtime_regression.js
 
 permissions:
   contents: write
@@ -16,16 +18,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Run Clubfinder size audit
         run: python updater/audit_clubfinder_size.py
-      - name: Commit audit report
+
+      - name: Run payload classification audit
+        run: python updater/audit_clubfinder_payload_classification.py
+
+      - name: Verify embedded snapshot equivalence
+        run: python updater/embedded_snapshot_regression.py
+
+      - name: Verify Pigeon Miles source guards
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+
+      - name: Verify Pigeon Miles runtime calculation
+        run: node updater/pigeon_miles_runtime_regression.js
+
+      - name: Run full Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+
+      - name: Commit audit reports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add clubfinder-size-audit.md
+          git add clubfinder-size-audit.md clubfinder-payload-classification.md
           if git diff --cached --quiet; then
             echo "No report changes."
             exit 0
           fi
-          git commit -m "Report Clubfinder size audit [skip ci]"
+          git commit -m "Report Clubfinder payload classification [skip ci]"
           git push
