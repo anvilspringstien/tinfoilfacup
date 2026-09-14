@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "policy": "Promote only where current direct official-club material supports the present home ground and postcode. Hold stale-only, conflicting, or indirect evidence fail-closed.",
+  "verified_locations": [
+    {
+      "club": "Hampton & Richmond Borough FC",
+      "ground": "Beveree Stadium",
+      "postcode": "TW12 2BX",
+      "sources": [{"type":"official_club","url":"https://hamrichfc.com/pages/contact","note":"Current official contact page gives Beveree Stadium, Beaver Close, Hampton, Middlesex, TW12 2BX."}]
+    },
+    {
+      "club": "Hanwell Town FC",
+      "ground": "Oliver Connell & Son Community Stadium",
+      "postcode": "UB6 8TL",
+      "sources": [{"type":"official_club","url":"https://www.hanwelltown.com/","note":"Current official club site identifies the Oliver Connell & Son Community Stadium, Reynolds Field, Hanwell, UB6 8TL as Hanwell Town's home."}]
+    },
+    {
+      "club": "Hanworth Villa FC",
+      "ground": "Rectory Meadow",
+      "postcode": "TW13 6PN",
+      "sources": [{"type":"official_club","url":"https://www.hanworthvilla.co.uk/map-directions","note":"Official directions page gives Hanworth Villa FC, Rectory Meadow, Park Road, Hanworth, Middlesex, TW13 6PN."}]
+    },
+    {
+      "club": "Harborough Town FC",
+      "ground": "Harborough Town Community Football Ground",
+      "postcode": "LE16 9HF",
+      "sources": [{"type":"official_club","url":"https://harboroughtownfc.org/contact/","note":"Official contact page gives Harborough Town Community Football Ground, Northampton Road, Market Harborough, LE16 9HF."}]
+    },
+    {
+      "club": "Havant & Waterlooville FC",
+      "ground": "Westleigh Park",
+      "postcode": "PO9 5TH",
+      "sources": [{"type":"official_club","url":"https://havantandwaterloovillefc.co.uk/club/directions-parking/","note":"Current official club directions page gives Westleigh Park, Martin Road, Havant, Hampshire, PO9 5TH."}]
+    },
+    {
+      "club": "Hebburn Town FC",
+      "ground": "The Trustmark Group Stadium",
+      "postcode": "NE31 1UN",
+      "sources": [{"type":"official_club","url":"https://hebburntownfc.com/ground","note":"Official ground page identifies The Trustmark Group Stadium as Hebburn Town's home at South Drive, Hebburn, NE31 1UN."}]
+    },
+    {
+      "club": "Hednesford Town FC",
+      "ground": "Keys Park",
+      "postcode": "WS12 2DZ",
+      "sources": [{"type":"official_club","url":"https://www.hednesfordtownfc.com/club","note":"Current official club information gives Hednesford Town Football Club, Keys Park Road, Hednesford, Staffordshire, WS12 2DZ."}]
+    },
+    {
+      "club": "Hemel Hempstead Town FC",
+      "ground": "The Focus Community Arena",
+      "postcode": "HP2 4HW",
+      "sources": [{"type":"official_club","url":"https://www.hemelfc.com/visitor-information","note":"Current official visitor information gives The Focus Community Arena, Vauxhall Road, Hemel Hempstead, Herts, HP2 4HW."}]
+    },
+    {
+      "club": "Hereford FC",
+      "ground": "MandM Edgar Street Stadium",
+      "postcode": "HR4 9JU",
+      "sources": [{"type":"official_club","url":"https://herefordfc.co.uk/about-us/contact-us/","note":"Current official contact page gives Hereford FC, MandM Edgar Street Stadium, Edgar Street, Hereford, HR4 9JU."}]
+    }
+  ],
+  "held_for_review": [
+    {
+      "club": "Harrogate Town AFC",
+      "ground": "Exercise Stadium",
+      "postcode": "HG2 7SA",
+      "reason": "Official-club PDFs support The Exercise Stadium, Wetherby Road, HG2 7SA, but the directly recovered address document is from 2024/25 rather than the current 2026/27 season. Held fail-closed for a fresher direct club source."
+    }
+  ]
+}

@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **75**
-- ⚠️ Remaining supporting-evidence review queue: **79**
+- ✅ Verified in guarded Law 2 supplemental layer: **84**
+- ⚠️ Remaining supporting-evidence review queue: **70**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 43**
+- **First Round Qualifying: 40**
 - **Fourth Round Qualifying: 8**
-- **Second Round Qualifying: 28**
+- **Second Round Qualifying: 22**
 
 ## Remaining clubs
 
@@ -22,16 +22,7 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Forest Green Rovers FC** — The Bolt New Lawn • GL6 0ET • Fourth Round Qualifying
 - **Gateshead FC** — International Stadium • NE10 0EF • Fourth Round Qualifying
 - **Gloucester City FC** — Tiger Turf Stadium • GL2 5FD • First Round Qualifying
-- **Hampton & Richmond Borough FC** — Beveree Stadium • TW12 2BX • Second Round Qualifying
-- **Hanwell Town FC** — Powerday Stadium • UB6 8TL • First Round Qualifying
-- **Hanworth Villa FC** — Rectory Meadow • TW13 6PN • First Round Qualifying
-- **Harborough Town FC** — Bowden's Park • LE16 9HF • Second Round Qualifying
 - **Harrogate Town AFC** — Exercise Stadium • HG2 7SA • Fourth Round Qualifying
-- **Havant & Waterlooville FC** — Westleigh Park • PO9 5TH • First Round Qualifying
-- **Hebburn Town FC** — Green Energy Sports Ground • NE31 1UN • Second Round Qualifying
-- **Hednesford Town FC** — Keys Park • WS12 2DZ • Second Round Qualifying
-- **Hemel Hempstead Town FC** — Vauxhall Road • HP2 4HW • Second Round Qualifying
-- **Hereford FC** — Edgar Street • HR4 9JU • Second Round Qualifying
 - **Hornchurch FC** — The Stadium • RM14 2LX • Fourth Round Qualifying
 - **Horsham FC** — Hop Oast Community Stadium • RH13 0AB • Second Round Qualifying
 - **Hyde United FC** — Project Solar Stadium • SK14 5PL • First Round Qualifying
