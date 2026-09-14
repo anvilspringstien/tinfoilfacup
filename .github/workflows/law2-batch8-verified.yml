@@ -30,13 +30,14 @@ jobs:
           from pathlib import Path
           d=json.loads(Path('updater/law2-location-verification-audit.json').read_text())
           remaining=d['counts'].get('review-supporting-evidence',0)
-          if remaining != 50:
-              raise SystemExit(f'Expected 50 remaining Law 2 review records, got {remaining}')
+          if remaining != 51:
+              raise SystemExit(f'Expected 51 remaining Law 2 review records, got {remaining}')
           state={x['club']:x['state'] for x in d['clubs']}
-          promoted=['Leiston FC','Macclesfield FC','Maidenhead United FC','Maldon & Tiptree FC','Malvern Town FC','Merthyr Town FC','Morecambe FC','Oxford City FC','Peterborough Sports FC','Plymouth Parkway FC','Quorn FC']
+          promoted=['Leiston FC','Macclesfield FC','Maidenhead United FC','Maldon & Tiptree FC','Malvern Town FC','Merthyr Town FC','Morecambe FC','Oxford City FC','Peterborough Sports FC','Quorn FC']
           for club in promoted:
               if state.get(club)!='verified-supplemental': raise SystemExit(f'{club} not verified after promotion: {state.get(club)}')
-          print('BATCH 8 EXPECTATION: PASS — 11 promoted, 50 remaining')
+          if state.get('Plymouth Parkway FC')!='review-supporting-evidence': raise SystemExit('Plymouth Parkway FC should remain fail-closed')
+          print('BATCH 8 EXPECTATION: PASS — 10 promoted, 51 remaining')
           PY
       - name: Run Law 2 origin regression
         run: node updater/law2_origin_regression.js
