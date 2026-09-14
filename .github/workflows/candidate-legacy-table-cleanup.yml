@@ -1,0 +1,89 @@
+name: Legacy Table Cleanup Production Candidate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - candidate/legacy-table-cleanup
+    paths:
+      - .github/workflows/candidate-legacy-table-cleanup.yml
+      - updater/build_legacy_table_cleanup_candidate.py
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-regress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch reviewed EPR canonical candidate
+        run: |
+          git fetch origin audit/epr-canonicalization
+          git show origin/audit/epr-canonicalization:epr-canonical-candidate.json > /tmp/epr-canonical-candidate.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/epr-canonical-candidate.json',encoding='utf-8'))
+          assert len(p.get('candidate_rows') or []) == 218
+          assert not (p.get('excluded_rows') or [])
+          print('Reviewed EPR candidate: 218 sourced rows, 0 unresolved')
+          PY
+
+      - name: Build candidate and remove both legacy table payloads
+        run: python updater/build_legacy_table_cleanup_candidate.py /tmp/epr-canonical-candidate.json
+
+      - name: Refresh embedded competition snapshot
+        run: python updater/refresh_clubfinder_embedded_snapshot.py
+
+      - name: Verify embedded snapshot equivalence
+        run: python updater/embedded_snapshot_regression.py
+
+      - name: Verify legacy tables are empty and canonical proof points exist
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re
+          h=Path('clubfinder.html').read_text(encoding='utf-8')
+          for name in ('PRELIM_FIXTURES_BY_CLUB','EPR_RESULTS_BY_TIE'):
+              m=re.search(r'\bconst\s+'+name+r'\s*=\s*\{\s*\}',h)
+              assert m, f'{name} is not empty'
+          d=json.loads(Path('competition.json').read_text(encoding='utf-8'))
+          rh=d.get('result_history') or {}
+          def short(v):
+              v=re.sub(r'\(\d+\)','',str(v or ''))
+              return re.sub(r'\s+(FC|AFC|CFC)$','',v,flags=re.I).strip().lower()
+          assert any(short(x.get('home'))=='newton aycliffe' and short(x.get('away'))=='kendal town' and x.get('home_score')==0 and x.get('away_score')==1 for x in rh.get('Newton Aycliffe FC',[]))
+          assert any(str(x.get('decision') or '').lower()=='walkover' and short(x.get('winner'))=='marske united' for x in rh.get('Marske United FC',[]))
+          assert any(str(x.get('decision') or '').lower()=='walkover' and short(x.get('winner'))=='abbey hulton united' for x in rh.get('Abbey Hulton United FC',[]))
+          print('Both legacy tables empty; canonical EPR proof points present')
+          PY
+
+      - name: Run Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+
+      - name: Run Stats certificate regression
+        run: node updater/clubfinder_stats_regression.js
+
+      - name: Run journey integrity regression
+        run: node updater/journey_integrity_regression.js
+
+      - name: Run replay progression regression
+        run: node updater/replay_progression_regression.js
+
+      - name: Run Pigeon Miles regression
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+
+      - name: Commit proven production candidate
+        run: |
+          git config user.name "Tin Foil FA Cup Candidate Builder"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition.json clubfinder.html legacy-table-cleanup-candidate.md
+          if git diff --cached --quiet; then
+            echo "No candidate changes to commit"
+          else
+            git commit -m "Canonicalize EPR history and remove legacy Clubfinder tables"
+            git push
+          fi
