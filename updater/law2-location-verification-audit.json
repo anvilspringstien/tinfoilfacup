@@ -2,14 +2,14 @@
   "season": "2026-27",
   "added_law2_origins": 160,
   "counts": {
-    "review-supporting-evidence": 17,
+    "review-supporting-evidence": 11,
     "verified-canonical": 6,
-    "verified-supplemental": 137
+    "verified-supplemental": 143
   },
   "remaining_review_by_entry_round": {
-    "First Round Qualifying": 8,
-    "Fourth Round Qualifying": 5,
-    "Second Round Qualifying": 4
+    "First Round Qualifying": 5,
+    "Fourth Round Qualifying": 3,
+    "Second Round Qualifying": 3
   },
   "clubs": [
     {
@@ -335,10 +335,10 @@
     {
       "club": "Chichester City FC",
       "entry_round": "First Round Qualifying",
-      "state": "review-supporting-evidence",
-      "ground": "Oaklands Park",
+      "state": "verified-supplemental",
+      "ground": "Countrywide Gas Stadium",
       "postcode": "PO19 6AR",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "source": "Guarded Law 2 verified-location ledger"
     },
     {
       "club": "Chippenham Town FC",
@@ -951,10 +951,10 @@
     {
       "club": "Rushall Olympic FC",
       "entry_round": "First Round Qualifying",
-      "state": "review-supporting-evidence",
+      "state": "verified-supplemental",
       "ground": "Dales Lane",
       "postcode": "WS4 1LJ",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "source": "Guarded Law 2 verified-location ledger"
     },
     {
       "club": "Salisbury FC",
@@ -999,18 +999,18 @@
     {
       "club": "Solihull Moors FC",
       "entry_round": "Fourth Round Qualifying",
-      "state": "review-supporting-evidence",
-      "ground": "Armco Arena",
+      "state": "verified-supplemental",
+      "ground": "ARMCO Arena",
       "postcode": "B91 2PP",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "source": "Guarded Law 2 verified-location ledger"
     },
     {
       "club": "South Shields FC",
       "entry_round": "Second Round Qualifying",
-      "state": "review-supporting-evidence",
-      "ground": "1st Cloud Arena",
+      "state": "verified-supplemental",
+      "ground": "Wolf Competitions Stadium",
       "postcode": "NE32 3UP",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "source": "Guarded Law 2 verified-location ledger"
     },
     {
       "club": "Southend United FC",
@@ -1119,10 +1119,10 @@
     {
       "club": "Three Bridges FC",
       "entry_round": "First Round Qualifying",
-      "state": "review-supporting-evidence",
+      "state": "verified-supplemental",
       "ground": "Jubilee Field",
       "postcode": "RH10 1LQ",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "source": "Guarded Law 2 verified-location ledger"
     },
     {
       "club": "Tonbridge Angels FC",
@@ -1287,10 +1287,10 @@
     {
       "club": "Yeovil Town FC",
       "entry_round": "Fourth Round Qualifying",
-      "state": "review-supporting-evidence",
+      "state": "verified-supplemental",
       "ground": "Huish Park",
       "postcode": "BA22 8YF",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "source": "Guarded Law 2 verified-location ledger"
     }
   ],
   "read_only": true,
