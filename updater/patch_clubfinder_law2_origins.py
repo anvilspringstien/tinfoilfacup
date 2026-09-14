@@ -10,14 +10,20 @@ EXPECTED={'Extra Preliminary Round':438,'Preliminary Round':53,'First Round Qual
 # Kendal Town FC is an Extra Preliminary Round entrant, not Preliminary.
 ENTRY_ROUND_CORRECTIONS={'kendal town':'Extra Preliminary Round'}
 # Explicit current-club evidence overrides stale supporting-gazetteer records.
-# Warrington Rylands' official club pages give WA2 7RZ for the Quickline
-# Logistics Arena; the companion FCHD candidate currently contains WA3 7RZ.
+# These overrides change only the Law 2 supplemental origin layer; protected
+# GROUNDS remain untouched.
 LOCATION_OVERRIDES={
  'warrington rylands':{
   'ground':'The Quickline Logistics Arena',
   'postcode':'WA2 7RZ',
   'source':'https://warringtonrylandsfc.co.uk/arena',
   'ground_source':'Official Warrington Rylands current arena page',
+ },
+ 'anstey nomads':{
+  'ground':'Callingtons Community Complex',
+  'postcode':'LE7 7BP',
+  'source':'https://www.pitchero.com/clubs/ansteynomads2/contact',
+  'ground_source':'Official Anstey Nomads current club contact page',
  }
 }
 def norm(s):
