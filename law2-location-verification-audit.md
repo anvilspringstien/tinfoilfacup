@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **110**
-- ⚠️ Remaining supporting-evidence review queue: **44**
+- ✅ Verified in guarded Law 2 supplemental layer: **119**
+- ⚠️ Remaining supporting-evidence review queue: **35**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 25**
-- **Fourth Round Qualifying: 7**
-- **Second Round Qualifying: 12**
+- **First Round Qualifying: 20**
+- **Fourth Round Qualifying: 6**
+- **Second Round Qualifying: 9**
 
 ## Remaining clubs
 
@@ -30,15 +30,6 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Rushall Olympic FC** — Dales Lane • WS4 1LJ • First Round Qualifying
 - **Solihull Moors FC** — Armco Arena • B91 2PP • Fourth Round Qualifying
 - **South Shields FC** — 1st Cloud Arena • NE32 3UP • Second Round Qualifying
-- **Southend United FC** — Roots Hall • SS2 6NQ • Fourth Round Qualifying
-- **Southport FC** — The Big Help Stadium • PR8 6JZ • Second Round Qualifying
-- **Spalding United FC** — Sir Halley Stewart Field • PE11 1DA • Second Round Qualifying
-- **Spennymoor Town FC** — Brewery Field • DL16 6JN • Second Round Qualifying
-- **St Albans City FC** — Clarence Park • AL1 4PL • First Round Qualifying
-- **Stamford AFC** — Zeeco Stadium • PE9 1US • First Round Qualifying
-- **Stanway Rovers FC** — The Hawthorns • CO3 0PG • First Round Qualifying
-- **Stockton Town FC** — Bishopton Road West • TS19 0QD • First Round Qualifying
-- **Stourbridge FC** — War Memorial Athletic Ground • DY8 4HN • First Round Qualifying
 - **Stratford Town FC** — Arden Garages Stadium • CV37 7BZ • First Round Qualifying
 - **Tamworth FC** — The Lamb Ground • B77 1AA • Fourth Round Qualifying
 - **Taunton Town FC** — Wordsworth Drive • TA1 2HG • First Round Qualifying
