@@ -26,8 +26,8 @@ def locate(t,n):
 def compact(x): return json.dumps(x,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 text=HTML.read_text(encoding='utf-8'); evidence=json.loads(EVIDENCE.read_text(encoding='utf-8')); ledger=json.loads(LEDGER.read_text(encoding='utf-8'))
 items=evidence.get('verified_locations') or []; holds=evidence.get('held_for_review') or []
-if len(items)!=7: raise SystemExit(f'ABORT: expected 7 verified batch items, got {len(items)}')
-if len(holds)!=10: raise SystemExit(f'ABORT: expected 10 held items, got {len(holds)}')
+if len(items)!=6: raise SystemExit(f'ABORT: expected 6 verified batch items, got {len(items)}')
+if len(holds)!=11: raise SystemExit(f'ABORT: expected 11 held items, got {len(holds)}')
 p=locate(text,'LAW2_ORIGIN_LOCATIONS'); rows=json.loads(text[p[0]:p[1]]); by={norm(x.get('name') or x.get('club')):x for x in rows}
 for item in items:
     club=item['club']; row=by.get(norm(club))
