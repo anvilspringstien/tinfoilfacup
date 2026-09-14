@@ -11,14 +11,17 @@ READ ONLY. Production data unchanged.
   '<div class="g"><div class="g-label">Clubs<br>Encountered</div><div class="icon-circle"><img src="DATA_IMAGE_REDACTED" alt="Clubs Encountered"></div><div class="g-num">'+clubs.length+'</div></div>'+
   '<div class="g"><div class="g-label">Goals<br>Seen</div><div class="icon-circle"><img src="DATA_IMAGE_REDACTED" alt="Goals Seen"></div><div class="g-num">'+goals+'</div></div>'+
   '<div class="g"><div class="g-label">Grounds<br>Visited</div><div class="icon-circle"><img src="DATA_IMAGE_REDACTED" alt="Grounds Visited"></div><div class="g-num">'+grounds+'</div></div>'+
+  /* TIN_FOIL_PIGEON_MILES_GLANCE */
+  '<div class="g"><div class="g-label">Pigeon<br>Miles</div><div class="icon-circle" style="font-size:34px;line-height:1;display:flex;align-items:center;justify-content:center" aria-label="Pigeon Miles">🐦</div><div class="g-num">'+certEsc(pigeonMilesDisplay)+'</div></div>'+
   '</div></section>
 ```
 
 ## Current Pigeon Miles placement
 
 ```html
- class="g-label">Goals<br>Seen</div><div class="icon-circle"><img src="DATA_IMAGE_REDACTED" alt="Goals Seen"></div><div class="g-num">'+goals+'</div></div>'+
-  '<div class="g"><div class="g-label">Grounds<br>Visited</div><div class="icon-circle"><img src="DATA_IMAGE_REDACTED" alt="Grounds Visited"></div><div class="g-num">'+grounds+'</div></div>'+
+ass="g-num">'+grounds+'</div></div>'+
+  /* TIN_FOIL_PIGEON_MILES_GLANCE */
+  '<div class="g"><div class="g-label">Pigeon<br>Miles</div><div class="icon-circle" style="font-size:34px;line-height:1;display:flex;align-items:center;justify-content:center" aria-label="Pigeon Miles">🐦</div><div class="g-num">'+certEsc(pigeonMilesDisplay)+'</div></div>'+
   '</div></section>'+
 
   '<section class="section"><div class="section-title">THE JOURNEY SO FAR</div><div class="journey-head"><div>Round</div><div>Fixture</div><div>Date</div><div>Venue</div><div>Winner / Next Custodian</div></div>'+historyRows+'</section>'+
