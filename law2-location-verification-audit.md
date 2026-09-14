@@ -4,25 +4,18 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **38**
-- ⚠️ Remaining supporting-evidence review queue: **116**
+- ✅ Verified in guarded Law 2 supplemental layer: **45**
+- ⚠️ Remaining supporting-evidence review queue: **109**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 67**
-- **Fourth Round Qualifying: 9**
+- **First Round Qualifying: 61**
+- **Fourth Round Qualifying: 8**
 - **Second Round Qualifying: 40**
 
 ## Remaining clubs
 
-- **AFC Fylde** — Mill Farm Sports Village • PR4 3JZ • Fourth Round Qualifying
 - **AFC Totton** — Snows Stadium • SO40 2RW • Second Round Qualifying
-- **AFC Whyteleafe** — Church Road • CR3 0AR • First Round Qualifying
-- **Anstey Nomads FC** — Cropston Road • LE7 7BP • First Round Qualifying
-- **Aveley FC** — Parkside • RM15 4PX • First Round Qualifying
-- **Avro FC** — Vestacare Stadium • OL8 3JH • First Round Qualifying
-- **Bamber Bridge FC** — SFC Stadium at Irongate • PR5 6UX • First Round Qualifying
-- **Banbury United FC** — Spencer Stadium • OX16 5AB • First Round Qualifying
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
 - **Bedford Town FC** — The Eyrie • MK44 3LW • Second Round Qualifying
 - **Berkhamsted FC** — Glencar Community Stadium • HP4 2AL • First Round Qualifying
