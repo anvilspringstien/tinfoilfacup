@@ -18,10 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract Stats At-a-Glance snippets
+      - name: Extract current Stats At-a-Glance snippets
         run: python updater/audit_pigeon_miles_at_a_glance.py
       - name: Apply Pigeon Miles At-a-Glance patch
         run: python updater/patch_pigeon_miles_at_a_glance.py
+      - name: Record patched Stats At-a-Glance layout
+        run: python updater/audit_pigeon_miles_at_a_glance.py
       - name: Run Pigeon Miles At-a-Glance regression
         run: python -m unittest tests.test_pigeon_miles_at_a_glance -v
       - name: Run existing Pigeon Miles regression
