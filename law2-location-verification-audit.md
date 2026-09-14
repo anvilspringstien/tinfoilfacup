@@ -4,30 +4,21 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **51**
-- ⚠️ Remaining supporting-evidence review queue: **103**
+- ✅ Verified in guarded Law 2 supplemental layer: **60**
+- ⚠️ Remaining supporting-evidence review queue: **94**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 57**
+- **First Round Qualifying: 52**
 - **Fourth Round Qualifying: 8**
-- **Second Round Qualifying: 38**
+- **Second Round Qualifying: 34**
 
 ## Remaining clubs
 
 - **AFC Totton** — Snows Stadium • SO40 2RW • Second Round Qualifying
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
 - **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
-- **Burgess Hill Town FC** — Medical Travel Compared Stadium • RH15 8DL • First Round Qualifying
-- **Bury Town FC** — The Getaway Cars Stadium • IP33 1XP • First Round Qualifying
-- **Buxton FC** — The Silverlands • SK17 6QH • Second Round Qualifying
-- **Chelmsford City FC** — Melbourne Stadium • CM1 2EH • Second Round Qualifying
-- **Chertsey Town FC** — Alwyns Lane • KT16 9DW • First Round Qualifying
-- **Cheshunt FC** — Cheshunt Stadium • EN8 8RU • First Round Qualifying
-- **Chester FC** — Deva Stadium • CH1 4LT • Second Round Qualifying
 - **Chichester City FC** — Oaklands Park • PO19 6AR • First Round Qualifying
-- **Chorley FC** — Victory Park Stadium • PR7 3DU • Second Round Qualifying
-- **Cray Wanderers FC** — Flamingo Park • BR7 6HL • First Round Qualifying
 - **Dagenham & Redbridge FC** — Chigwell Construction Stadium • RM10 7XL • Second Round Qualifying
 - **Darlington FC** — Blackwell Meadows • DL1 5NR • Second Round Qualifying
 - **Dartford FC** — Princes Park Stadium • DA1 1RT • First Round Qualifying
