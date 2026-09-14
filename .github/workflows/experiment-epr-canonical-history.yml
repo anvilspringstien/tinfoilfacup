@@ -1,0 +1,50 @@
+name: Experiment EPR Canonical History
+
+on:
+  push:
+    branches:
+      - experiment/epr-canonical-history
+    paths:
+      - .github/workflows/experiment-epr-canonical-history.yml
+      - updater/experiment_epr_canonical_history.py
+      - updater/epr_canonical_history_regression.py
+      - epr-canonical-candidate.json
+
+permissions:
+  contents: write
+
+jobs:
+  regress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare canonical EPR working copy and blank legacy table
+        run: python updater/experiment_epr_canonical_history.py
+      - name: Refresh embedded competition snapshot
+        run: python updater/refresh_clubfinder_embedded_snapshot.py
+      - name: Verify embedded snapshot equivalence
+        run: python updater/embedded_snapshot_regression.py
+      - name: Verify canonical EPR migration and walkovers
+        run: python updater/epr_canonical_history_regression.py
+      - name: Run Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run Stats certificate regression
+        run: node updater/clubfinder_stats_regression.js
+      - name: Run journey integrity regression
+        run: node updater/journey_integrity_regression.js
+      - name: Run replay progression regression
+        run: node updater/replay_progression_regression.js
+      - name: Run Pigeon Miles regression
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+      - name: Record experiment report only
+        run: |
+          git config user.name "Tin Foil FA Cup Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -- clubfinder.html competition.json
+          git add epr-canonical-history-experiment.md
+          if git diff --cached --quiet; then
+            echo "No experiment report changes"
+          else
+            git commit -m "Record EPR canonical history experiment"
+            git push
+          fi
