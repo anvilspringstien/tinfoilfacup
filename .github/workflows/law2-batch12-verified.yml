@@ -1,0 +1,61 @@
+name: Law 2 Batch 12 Verified Candidate
+
+on:
+  push:
+    branches:
+      - audit/law2-batch12-final
+    paths:
+      - .github/workflows/law2-batch12-verified.yml
+      - updater/law2-batch12-evidence.json
+      - updater/apply_law2_batch12_verified.py
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-regress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare reviewed batch and canonical ledger
+        run: python updater/apply_law2_batch12_verified.py
+      - name: Promote through established guarded Law 2 mechanism
+        run: python updater/promote_verified_law2_locations.py
+      - name: Re-audit Law 2 verification queue
+        run: python updater/audit_law2_location_verification.py
+      - name: Verify batch result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('updater/law2-location-verification-audit.json').read_text())
+          remaining=d['counts'].get('review-supporting-evidence',0)
+          if remaining != 10:
+              raise SystemExit(f'Expected 10 remaining Law 2 review records, got {remaining}')
+          state={x['club']:x['state'] for x in d['clubs']}
+          promoted=['Chichester City FC','Gateshead FC','Rushall Olympic FC','Solihull Moors FC','South Shields FC','Three Bridges FC','Yeovil Town FC']
+          for club in promoted:
+              if state.get(club)!='verified-supplemental': raise SystemExit(f'{club} not verified after promotion: {state.get(club)}')
+          held=['AFC Totton','Basingstoke Town FC','Braintree Town FC','Forest Green Rovers FC','Gloucester City FC','Harrogate Town AFC','Horsham FC','Plymouth Parkway FC','Real Bedford FC','Redditch United FC']
+          for club in held:
+              if state.get(club)!='review-supporting-evidence': raise SystemExit(f'{club} should remain fail-closed')
+          print('BATCH 12 EXPECTATION: PASS — 7 promoted, 10 remaining')
+          PY
+      - name: Run Law 2 origin regression
+        run: node updater/law2_origin_regression.js
+      - name: Run Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run Stats certificate regression
+        run: node updater/clubfinder_stats_regression.js
+      - name: Run journey integrity regression
+        run: node updater/journey_integrity_regression.js
+      - name: Run replay progression regression
+        run: node updater/replay_progression_regression.js
+      - name: Run Pigeon Miles regression
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+      - name: Commit proven batch candidate
+        run: |
+          git config user.name "Tin Foil FA Cup Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html updater/law2-verified-location-ledger.json updater/law2-location-verification-audit.json law2-location-verification-audit.md
+          if git diff --cached --quiet; then echo "No candidate changes"; else git commit -m "Verify twelfth Law 2 location batch" && git push; fi
