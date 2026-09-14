@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "policy": "Promote only where current direct official-club material supports the present home ground and postcode. Hold postcode conflicts or indirect-only evidence fail-closed.",
+  "verified_locations": [
+    {
+      "club": "Farnham Town FC",
+      "ground": "The Memorial Ground",
+      "postcode": "GU9 7DY",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://farnhamtownfc.co.uk/contact-us/",
+          "note": "Official contact page gives The Memorial Ground, Mead Lane, Farnham, Surrey, GU9 7DY."
+        }
+      ]
+    },
+    {
+      "club": "Folkestone Invicta FC",
+      "ground": "Alcaline Stadium",
+      "postcode": "CT19 5JU",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://folkestoneinvictafc.co.uk/teams/first-team/",
+          "note": "Current official first-team page gives Alcaline Stadium, Cheriton Road, Folkestone, Kent, CT19 5JU."
+        }
+      ]
+    },
+    {
+      "club": "Frome Town FC",
+      "ground": "Badgers Hill Stadium",
+      "postcode": "BA11 2EH",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://frometownfc.com/club/our-stadium/",
+          "note": "Official stadium page identifies Badgers Hill Stadium as Frome Town FC's home and gives 48 Berkley Road, Frome, BA11 2EH."
+        }
+      ]
+    },
+    {
+      "club": "Gainsborough Trinity FC",
+      "ground": "Kal Group Stadium",
+      "postcode": "DN21 2QW",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.gainsboroughtrinity.com/news/team-news/1904-friendly-preview-03-fc-halifax-town-h",
+          "note": "Current official club match preview identifies The Northolme, aka the Kal Group Stadium, using postcode DN21 2QW."
+        }
+      ]
+    },
+    {
+      "club": "Gosport Borough FC",
+      "ground": "AEI Stadium",
+      "postcode": "PO12 3SX",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://gosportboroughfc.com/contact/",
+          "note": "Official contact page gives AEI Stadium, Privett Road, Gosport, Hampshire, PO12 3SX."
+        }
+      ]
+    }
+  ],
+  "held_for_review": [
+    {
+      "club": "Forest Green Rovers FC",
+      "ground": "The Bolt New Lawn",
+      "postcode": "GL6 0ET",
+      "reason": "Current official club material gives The New Lawn, Another Way, Nailsworth, GL6 0FG, conflicting with the existing supporting record's GL6 0ET. Requires explicit postcode/coordinate correction before promotion."
+    },
+    {
+      "club": "Gateshead FC",
+      "ground": "International Stadium",
+      "postcode": "NE10 0EF",
+      "reason": "Current public sources support Gateshead International Stadium, NE10 0EF, but this review did not recover a direct current official-club page carrying the venue postcode. Held fail-closed under the established direct-club-source rule."
+    },
+    {
+      "club": "Gloucester City FC",
+      "ground": "Tiger Turf Stadium",
+      "postcode": "GL2 5FD",
+      "reason": "Current official club stadium page gives The KMM Energy Stadium, Sudmeadow Road, Gloucester, GL2 5HD, conflicting with the existing supporting record's GL2 5FD. Requires explicit postcode/coordinate correction before promotion."
+    }
+  ]
+}

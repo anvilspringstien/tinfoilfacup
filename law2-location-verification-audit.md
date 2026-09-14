@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **70**
-- ⚠️ Remaining supporting-evidence review queue: **84**
+- ✅ Verified in guarded Law 2 supplemental layer: **75**
+- ⚠️ Remaining supporting-evidence review queue: **79**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 46**
+- **First Round Qualifying: 43**
 - **Fourth Round Qualifying: 8**
-- **Second Round Qualifying: 30**
+- **Second Round Qualifying: 28**
 
 ## Remaining clubs
 
@@ -19,14 +19,9 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
 - **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
 - **Chichester City FC** — Oaklands Park • PO19 6AR • First Round Qualifying
-- **Farnham Town FC** — The Memorial Ground • GU9 7DY • Second Round Qualifying
-- **Folkestone Invicta FC** — Alcaline Stadium • CT19 5JU • Second Round Qualifying
 - **Forest Green Rovers FC** — The Bolt New Lawn • GL6 0ET • Fourth Round Qualifying
-- **Frome Town FC** — Badgers Hill • BA11 2EH • First Round Qualifying
-- **Gainsborough Trinity FC** — The Kai Group Stadium • DN21 2QW • First Round Qualifying
 - **Gateshead FC** — International Stadium • NE10 0EF • Fourth Round Qualifying
 - **Gloucester City FC** — Tiger Turf Stadium • GL2 5FD • First Round Qualifying
-- **Gosport Borough FC** — AEI Stadium • PO12 3SX • First Round Qualifying
 - **Hampton & Richmond Borough FC** — Beveree Stadium • TW12 2BX • Second Round Qualifying
 - **Hanwell Town FC** — Powerday Stadium • UB6 8TL • First Round Qualifying
 - **Hanworth Villa FC** — Rectory Meadow • TW13 6PN • First Round Qualifying
