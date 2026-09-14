@@ -5,7 +5,7 @@ REVIEW ONLY. Production data unchanged.
 - Sourced candidate rows: **218**
 - Excluded / unresolved legacy rows: **0**
 
-Normal scored rows are reconciled against Football Web Pages. Winners are derived from decisive source scorelines, not legacy winner fields. Two administrative outcomes are explicitly sourced and represented without invented scores.
+Normal scored rows are reconciled against Football Web Pages for date, status and score. Clubfinder’s existing canonical club names are retained in the candidate so FWP half-time-score annotations never become part of club identity. Winners are derived from decisive source scorelines, not legacy winner fields. Two administrative outcomes are explicitly sourced and represented without invented scores.
 
 ## Administrative outcomes
 
