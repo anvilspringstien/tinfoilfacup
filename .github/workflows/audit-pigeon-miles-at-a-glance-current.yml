@@ -1,0 +1,49 @@
+name: Audit Pigeon Miles At a Glance Current
+
+on:
+  push:
+    branches:
+      - feature/pigeon-miles-at-a-glance-current
+    paths:
+      - .github/workflows/audit-pigeon-miles-at-a-glance-current.yml
+      - updater/audit_pigeon_miles_at_a_glance.py
+      - updater/patch_pigeon_miles_at_a_glance.py
+      - tests/test_pigeon_miles_at_a_glance.py
+
+permissions:
+  contents: write
+
+jobs:
+  audit-and-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract current Stats At-a-Glance snippets
+        run: python updater/audit_pigeon_miles_at_a_glance.py
+      - name: Apply Pigeon Miles At-a-Glance patch
+        run: python updater/patch_pigeon_miles_at_a_glance.py
+      - name: Record patched Stats At-a-Glance layout
+        run: python updater/audit_pigeon_miles_at_a_glance.py
+      - name: Run Pigeon Miles At-a-Glance regression
+        run: python -m unittest tests.test_pigeon_miles_at_a_glance -v
+      - name: Run existing Pigeon Miles regression
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+      - name: Run Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run Stats certificate regression
+        run: node updater/clubfinder_stats_regression.js
+      - name: Run journey integrity regression
+        run: node updater/journey_integrity_regression.js
+      - name: Run replay progression regression
+        run: node updater/replay_progression_regression.js
+      - name: Commit candidate and audit report
+        run: |
+          git config user.name "Tin Foil FA Cup Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html pigeon-miles-at-a-glance-audit.md
+          if git diff --cached --quiet; then
+            echo "No candidate changes"
+          else
+            git commit -m "Add Pigeon Miles to Stats At a Glance"
+            git push
+          fi
