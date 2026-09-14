@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-14",
+  "verified_locations": [
+    {
+      "club": "Bedford Town FC",
+      "ground": "The Eyrie",
+      "postcode": "MK44 3LW",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.pitchero.com/clubs/bedfordtownfootballclub/contact",
+          "note": "Bedford Town FC contact page gives The Eyrie Stadium, Meadow Lane, Cardington, Bedfordshire, MK44 3LW."
+        }
+      ]
+    },
+    {
+      "club": "Berkhamsted FC",
+      "ground": "Glencar Community Stadium",
+      "postcode": "HP4 2AL",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.pitchero.com/clubs/berkhamstedfootballclub/contact",
+          "note": "Berkhamsted FC contact page gives The Glencar Community Stadium, Broadwater, Lower Kings Road, Berkhamsted, HP4 2AL."
+        }
+      ]
+    },
+    {
+      "club": "Billericay Town FC",
+      "ground": "New Lodge",
+      "postcode": "CM12 9SA",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.billericaytownfc.co.uk/commercial/",
+          "note": "Billericay Town FC official site gives New Lodge, Blunts Wall Road, Billericay, Essex, CM12 9SA."
+        }
+      ]
+    },
+    {
+      "club": "Bracknell Town FC",
+      "ground": "SB Stadium",
+      "postcode": "GU47 9BJ",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.bracknelltownfc.com/how-to-find-us/",
+          "note": "Bracknell Town FC gives Bottom Meadow, Sandhurst Memorial Park, Yorktown Road, Sandhurst, Berkshire, GU47 9BJ and identifies the SB Stadium at the site."
+        }
+      ]
+    },
+    {
+      "club": "Brentwood Town FC",
+      "ground": "The Arena",
+      "postcode": "CM15 9NN",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.brentwoodtownfc.co.uk/news/",
+          "note": "Brentwood Town FC official site gives The Arena, The Brentwood Centre, Doddinghurst Road, Brentwood, Essex, CM15 9NN."
+        }
+      ]
+    },
+    {
+      "club": "Bromsgrove Sporting FC",
+      "ground": "UK Electrical Stadium",
+      "postcode": "B61 0DR",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://bromsgrovesporting.co.uk/match-preview-anstey-nomads-saturday-home/",
+          "note": "Bromsgrove Sporting FC current 2026/27 match information gives The UK Electrical Stadium, Birmingham Road, Bromsgrove, B61 0DR."
+        }
+      ]
+    }
+  ],
+  "held_for_review": [
+    {
+      "club": "Basingstoke Town FC",
+      "ground": "Hampshire FA Ground",
+      "postcode": "RG23 8BD",
+      "reason": "2026/27 directory evidence supports RG23 8BD, but no direct current official-club source was recovered in this review. Remains fail-closed pending primary-source confirmation."
+    },
+    {
+      "club": "Braintree Town FC",
+      "ground": "Cressing Road Stadium",
+      "postcode": "CM7 3RD",
+      "reason": "Current official club material gives the stadium postcode as CM7 3DE, conflicting with the supporting record's CM7 3RD. Hold for explicit postcode/coordinate correction rather than silently promote."
+    }
+  ]
+}
