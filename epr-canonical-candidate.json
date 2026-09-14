@@ -1,6 +1,10 @@
 {
-  "schema": "review-only-epr-canonical-candidate-v1",
-  "source": "Football Web Pages",
+  "schema": "review-only-epr-canonical-candidate-v2",
+  "sources": [
+    "Football Web Pages",
+    "Marske United FC",
+    "FBref"
+  ],
   "candidate_rows": [
     {
       "legacy_tie_id": "1",
@@ -12,6 +16,8 @@
       "away_score": 2,
       "winner": "West Auckland Town(0)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -25,6 +31,8 @@
       "away_score": 0,
       "winner": "Carlisle City(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -38,6 +46,8 @@
       "away_score": 2,
       "winner": "(0)Consett AFC",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -51,6 +61,8 @@
       "away_score": 2,
       "winner": "Easington Colliery(0)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -64,6 +76,8 @@
       "away_score": 3,
       "winner": "(2)Bishop Auckland",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -77,6 +91,8 @@
       "away_score": 2,
       "winner": "(1)Bridlington Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -90,6 +106,8 @@
       "away_score": 1,
       "winner": "Shildon(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -103,8 +121,26 @@
       "away_score": 0,
       "winner": "Ashington AFC(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
+    },
+    {
+      "round": "Extra Preliminary Round",
+      "date": "2026-08-08",
+      "home": "Marske United",
+      "away": "Boro Rangers",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Marske United",
+      "status": "W/O",
+      "decision": "walkover",
+      "source_url": "https://www.marskeunitedfc.org/news/seasiders-given-emirates-fa-cup-extrapreliminary-round-bye-2991492.html",
+      "source_note": "Boro Rangers withdrew; Marske United were given a bye into the Preliminary Round.",
+      "legacy_tie_id": "9",
+      "source_kind": "administrative-outcome",
+      "legacy_decision": "walkover"
     },
     {
       "legacy_tie_id": "10",
@@ -116,6 +152,8 @@
       "away_score": 2,
       "winner": "(1)Redcar Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -129,6 +167,8 @@
       "away_score": 1,
       "winner": "(1)Thornaby",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -142,6 +182,8 @@
       "away_score": 0,
       "winner": "Crook Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -155,6 +197,8 @@
       "away_score": 1,
       "winner": "(0)Kendal Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -168,6 +212,8 @@
       "away_score": 1,
       "winner": "Knaresborough Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -181,6 +227,8 @@
       "away_score": 0,
       "winner": "Blyth Spartans(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -194,6 +242,8 @@
       "away_score": 0,
       "winner": "Euxton Villa",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -207,6 +257,8 @@
       "away_score": 0,
       "winner": "1874 Northwich(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -220,6 +272,8 @@
       "away_score": 1,
       "winner": "Liversedge(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -233,6 +287,8 @@
       "away_score": 3,
       "winner": "(0)Horbury Town",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -246,6 +302,8 @@
       "away_score": 0,
       "winner": "Campion AFC(3)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -259,6 +317,8 @@
       "away_score": 1,
       "winner": "Garforth Town",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -272,6 +332,8 @@
       "away_score": 0,
       "winner": "Wythenshawe",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -285,6 +347,8 @@
       "away_score": 0,
       "winner": "Ossett United",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -298,6 +362,8 @@
       "away_score": 2,
       "winner": "(1)Trafford",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -311,6 +377,8 @@
       "away_score": 1,
       "winner": "Litherland Remyca",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -324,6 +392,8 @@
       "away_score": 1,
       "winner": "Thackley(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -337,6 +407,8 @@
       "away_score": 0,
       "winner": "Clitheroe",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -350,6 +422,8 @@
       "away_score": 2,
       "winner": "Witton Albion",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -363,6 +437,8 @@
       "away_score": 2,
       "winner": "North Ferriby",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -376,6 +452,8 @@
       "away_score": 2,
       "winner": "Cheadle Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -389,6 +467,8 @@
       "away_score": 3,
       "winner": "Irlam Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -402,6 +482,8 @@
       "away_score": 0,
       "winner": "Mossley",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -415,6 +497,8 @@
       "away_score": 4,
       "winner": "South Liverpool",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -428,6 +512,8 @@
       "away_score": 2,
       "winner": "Nelson",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -441,6 +527,8 @@
       "away_score": 2,
       "winner": "(0)Prestwich Heys",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -454,6 +542,8 @@
       "away_score": 0,
       "winner": null,
       "status": "FT",
+      "decision": "pens 1-4",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "pens 1-4"
     },
@@ -467,6 +557,8 @@
       "away_score": 2,
       "winner": "(1)Parkgate",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -480,6 +572,8 @@
       "away_score": 0,
       "winner": "Northwich Victoria",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -493,6 +587,8 @@
       "away_score": 0,
       "winner": "Atherton Collieries",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -506,6 +602,8 @@
       "away_score": 2,
       "winner": "(0)Tadcaster Albion",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -519,6 +617,8 @@
       "away_score": 0,
       "winner": "Droylsden",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -532,6 +632,8 @@
       "away_score": 1,
       "winner": "(0)Longridge Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -545,6 +647,8 @@
       "away_score": 2,
       "winner": "(1)Hanley Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -558,6 +662,8 @@
       "away_score": 1,
       "winner": "Pershore Town(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -571,6 +677,8 @@
       "away_score": 0,
       "winner": "Rugby Borough",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -584,6 +692,8 @@
       "away_score": 5,
       "winner": "(0)Nuneaton Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -597,6 +707,8 @@
       "away_score": 0,
       "winner": "Stafford Rangers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -610,6 +722,8 @@
       "away_score": 3,
       "winner": "(0)Boldmere St Michaels",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -623,6 +737,8 @@
       "away_score": 2,
       "winner": "Mickleover",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -636,6 +752,8 @@
       "away_score": 1,
       "winner": "Shifnal Town(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -649,6 +767,8 @@
       "away_score": 0,
       "winner": "Lye Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -662,6 +782,8 @@
       "away_score": 3,
       "winner": "Sutton United (West Midlands)(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -675,6 +797,8 @@
       "away_score": 3,
       "winner": "Wolverhampton City",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -688,6 +812,8 @@
       "away_score": 1,
       "winner": "Romulus(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -701,6 +827,8 @@
       "away_score": 1,
       "winner": "Newcastle Town(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -714,6 +842,8 @@
       "away_score": 3,
       "winner": "Coventry United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -727,6 +857,8 @@
       "away_score": 1,
       "winner": "Ashby Ivanhoe(1)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -740,6 +872,8 @@
       "away_score": 2,
       "winner": "(1)Whitchurch Alport",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -753,6 +887,8 @@
       "away_score": 2,
       "winner": "(1)Droitwich Spa",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -766,6 +902,8 @@
       "away_score": 1,
       "winner": "Chasetown(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -779,6 +917,8 @@
       "away_score": 1,
       "winner": "Knowle(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -792,6 +932,8 @@
       "away_score": 2,
       "winner": "(1)Bedworth United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -805,6 +947,8 @@
       "away_score": 5,
       "winner": "(0)Lutterworth Town",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -818,6 +962,8 @@
       "away_score": 1,
       "winner": null,
       "status": "FT",
+      "decision": "pens 5-6",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "pens 5-6"
     },
@@ -831,8 +977,26 @@
       "away_score": 0,
       "winner": "Rugby Town(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
+    },
+    {
+      "round": "Extra Preliminary Round Replay",
+      "date": "2026-08-11",
+      "home": "Abbey Hulton United",
+      "away": "Kidsgrove Athletic",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Abbey Hulton United",
+      "status": "Awarded",
+      "decision": "walkover",
+      "source_url": "https://fbref.com/en/matches/2026-08-11",
+      "source_note": "Replay listed for 11 August and match awarded to Abbey Hulton United after the 8 August 0-0 first tie.",
+      "legacy_tie_id": "66",
+      "source_kind": "administrative-outcome",
+      "legacy_decision": "walkover"
     },
     {
       "legacy_tie_id": "67",
@@ -844,6 +1008,8 @@
       "away_score": 1,
       "winner": "(1)Northampton Sileby Rangers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -857,6 +1023,8 @@
       "away_score": 2,
       "winner": "(1)Boston Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -870,6 +1038,8 @@
       "away_score": 5,
       "winner": "(4)AFC Rushden & Diamonds",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -883,6 +1053,8 @@
       "away_score": 7,
       "winner": "(2)Barton Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -896,6 +1068,8 @@
       "away_score": 4,
       "winner": "Wellingborough Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -909,6 +1083,8 @@
       "away_score": 3,
       "winner": "(0)Bourne Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -922,6 +1098,8 @@
       "away_score": 0,
       "winner": "AFC Mansfield(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -935,6 +1113,8 @@
       "away_score": 2,
       "winner": "(0)Retford FC",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -948,6 +1128,8 @@
       "away_score": 2,
       "winner": "(0)Long Eaton United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -961,6 +1143,8 @@
       "away_score": 3,
       "winner": "Bottesford Town(4)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -974,6 +1158,8 @@
       "away_score": 1,
       "winner": "Northampton ON Chenecks(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -987,6 +1173,8 @@
       "away_score": 2,
       "winner": "(0)Lincoln United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1000,6 +1188,8 @@
       "away_score": 1,
       "winner": "Corby Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1013,6 +1203,8 @@
       "away_score": 2,
       "winner": "(0)Eastwood CFC",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1026,6 +1218,8 @@
       "away_score": 0,
       "winner": "Desborough Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1039,6 +1233,8 @@
       "away_score": 2,
       "winner": "Sherwood Colliery(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1052,6 +1248,8 @@
       "away_score": 1,
       "winner": "Woodbridge Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1065,6 +1263,8 @@
       "away_score": 2,
       "winner": "Ipswich Wanderers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1078,6 +1278,8 @@
       "away_score": 1,
       "winner": "March Town United(1)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1091,6 +1293,8 @@
       "away_score": 1,
       "winner": "Histon(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1104,6 +1308,8 @@
       "away_score": 2,
       "winner": "Halstead Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1117,6 +1323,8 @@
       "away_score": 3,
       "winner": "Fakenham Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1130,6 +1338,8 @@
       "away_score": 1,
       "winner": "(0)Newmarket Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1143,6 +1353,8 @@
       "away_score": 2,
       "winner": "St Neots Town(2)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1156,6 +1368,8 @@
       "away_score": 2,
       "winner": "(1)Dereham Town",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1169,6 +1383,8 @@
       "away_score": 0,
       "winner": "Yaxley(2)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1182,6 +1398,8 @@
       "away_score": 2,
       "winner": "(0)Little Oakley",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1195,6 +1413,8 @@
       "away_score": 0,
       "winner": "Mulbarton Wanderers(4)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1208,6 +1428,8 @@
       "away_score": 4,
       "winner": "(1)Cambridge City",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1221,6 +1443,8 @@
       "away_score": 1,
       "winner": "Harleston Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1234,6 +1458,8 @@
       "away_score": 1,
       "winner": "Brantham Athletic(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1247,6 +1473,8 @@
       "away_score": 2,
       "winner": "(0)Cornard United",
       "status": "FT (AET)",
+      "decision": "a.e.t.",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "a.e.t."
     },
@@ -1260,6 +1488,8 @@
       "away_score": 3,
       "winner": "(1)Wisbech Town",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1273,6 +1503,8 @@
       "away_score": 2,
       "winner": "(2)Mildenhall Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1286,6 +1518,8 @@
       "away_score": 0,
       "winner": "Baldock Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1299,6 +1533,8 @@
       "away_score": 1,
       "winner": "Woodford Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1312,6 +1548,8 @@
       "away_score": 1,
       "winner": "Harefield United(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1325,6 +1563,8 @@
       "away_score": 0,
       "winner": "North Greenford United(4)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1338,6 +1578,8 @@
       "away_score": 1,
       "winner": "London Lions(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1351,6 +1593,8 @@
       "away_score": 0,
       "winner": "Kings Langley",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1364,6 +1608,8 @@
       "away_score": 1,
       "winner": "Hendon",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1377,6 +1623,8 @@
       "away_score": 2,
       "winner": "Sawbridgeworth Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1390,6 +1638,8 @@
       "away_score": 2,
       "winner": "(1)Dunstable",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1403,6 +1653,8 @@
       "away_score": 1,
       "winner": "Concord Rangers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1416,6 +1668,8 @@
       "away_score": 5,
       "winner": "(1)Grays Athletic",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1429,6 +1683,8 @@
       "away_score": 0,
       "winner": "Buckhurst Hill(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1442,6 +1698,8 @@
       "away_score": 0,
       "winner": "Tilbury",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1455,6 +1713,8 @@
       "away_score": 3,
       "winner": "Hayes & Yeading United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1468,6 +1728,8 @@
       "away_score": 1,
       "winner": "Witham Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1481,6 +1743,8 @@
       "away_score": 1,
       "winner": "(0)Frenford",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1494,6 +1758,8 @@
       "away_score": 0,
       "winner": "Haringey Borough(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1507,6 +1773,8 @@
       "away_score": 0,
       "winner": "White Ensign(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1520,6 +1788,8 @@
       "away_score": 1,
       "winner": "Hutton(1)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -1533,6 +1803,8 @@
       "away_score": 1,
       "winner": "Leverstock Green(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1546,6 +1818,8 @@
       "away_score": 2,
       "winner": "(1)Takeley",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1559,6 +1833,8 @@
       "away_score": 1,
       "winner": "Romford(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1572,6 +1848,8 @@
       "away_score": 4,
       "winner": "Cockfosters",
       "status": "FT (AET)",
+      "decision": "a.e.t.",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "a.e.t."
     },
@@ -1585,6 +1863,8 @@
       "away_score": 1,
       "winner": "(0)West Essex",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1598,6 +1878,8 @@
       "away_score": 0,
       "winner": "Enfield",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1611,6 +1893,8 @@
       "away_score": 1,
       "winner": "Stotfold(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1624,6 +1908,8 @@
       "away_score": 0,
       "winner": "Hullbridge Sports(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1637,6 +1923,8 @@
       "away_score": 0,
       "winner": "Clapton Community(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1650,6 +1938,8 @@
       "away_score": 1,
       "winner": "Brislington",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1663,6 +1953,8 @@
       "away_score": 1,
       "winner": "Portishead Town(2)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1676,6 +1968,8 @@
       "away_score": 1,
       "winner": "Marlow",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1689,6 +1983,8 @@
       "away_score": 2,
       "winner": "(1)North Leigh",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -1702,6 +1998,8 @@
       "away_score": 2,
       "winner": "(2)Mangotsfield United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1715,6 +2013,8 @@
       "away_score": 2,
       "winner": "(0)Cirencester Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1728,6 +2028,8 @@
       "away_score": 2,
       "winner": "(1)Fairford Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1741,6 +2043,8 @@
       "away_score": 3,
       "winner": "Flackwell Heath",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": ""
     },
@@ -1754,6 +2058,8 @@
       "away_score": 1,
       "winner": "Windsor & Eton",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1767,6 +2073,8 @@
       "away_score": 0,
       "winner": "Wells City(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1780,6 +2088,8 @@
       "away_score": 2,
       "winner": "(1)Wallingford & Crowmarsh",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1793,6 +2103,8 @@
       "away_score": 3,
       "winner": null,
       "status": "FT",
+      "decision": "pens 6-7",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "pens 6-7"
     },
@@ -1806,6 +2118,8 @@
       "away_score": 2,
       "winner": "Ascot United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1819,6 +2133,8 @@
       "away_score": 1,
       "winner": "Swindon Supermarine(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1832,6 +2148,8 @@
       "away_score": 4,
       "winner": "(3)Milton Keynes Irish",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1845,6 +2163,8 @@
       "away_score": 3,
       "winner": "(2)Penn & Tylers Green",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1858,6 +2178,8 @@
       "away_score": 3,
       "winner": "(1)Larkhall Athletic",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1871,6 +2193,8 @@
       "away_score": 1,
       "winner": "Slimbridge(1)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -1884,6 +2208,8 @@
       "away_score": 0,
       "winner": "Wokingham Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -1897,6 +2223,8 @@
       "away_score": 0,
       "winner": "Didcot Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1910,6 +2238,8 @@
       "away_score": 2,
       "winner": "(1)Winslow United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1923,6 +2253,8 @@
       "away_score": 6,
       "winner": "(6)Longlevens",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1936,6 +2268,8 @@
       "away_score": 2,
       "winner": "(2)Risborough Rangers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1949,6 +2283,8 @@
       "away_score": 0,
       "winner": "Reading City(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1962,6 +2298,8 @@
       "away_score": 1,
       "winner": "Thatcham Town(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1975,6 +2313,8 @@
       "away_score": 2,
       "winner": "Beckenham Town(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -1988,6 +2328,8 @@
       "away_score": 3,
       "winner": "Eastbourne Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2001,6 +2343,8 @@
       "away_score": 3,
       "winner": "(2)Petts Wood & Holmesdale",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -2014,6 +2358,8 @@
       "away_score": 3,
       "winner": "East Grinstead Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2027,6 +2373,8 @@
       "away_score": 5,
       "winner": "(3)Crowborough Athletic",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2040,6 +2388,8 @@
       "away_score": 0,
       "winner": "Balham(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2053,6 +2403,8 @@
       "away_score": 0,
       "winner": "Littlehampton Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -2066,6 +2418,8 @@
       "away_score": 6,
       "winner": "(3)SE Dons",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2079,6 +2433,8 @@
       "away_score": 0,
       "winner": "Midhurst & Easebourne",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2092,6 +2448,8 @@
       "away_score": 1,
       "winner": "Kingstonian(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -2105,6 +2463,8 @@
       "away_score": 0,
       "winner": "Punjab United(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2118,6 +2478,8 @@
       "away_score": 2,
       "winner": "Peacehaven & Telscombe",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2131,6 +2493,8 @@
       "away_score": 1,
       "winner": "Virginia Water(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2144,6 +2508,8 @@
       "away_score": 1,
       "winner": "(1)Tunbridge Wells",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2157,6 +2523,8 @@
       "away_score": 1,
       "winner": "Deal Town(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2170,6 +2538,8 @@
       "away_score": 1,
       "winner": "Erith & Belvedere(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -2183,6 +2553,8 @@
       "away_score": 1,
       "winner": "Cobham(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2196,6 +2568,8 @@
       "away_score": 2,
       "winner": "(2)Pagham",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -2209,6 +2583,8 @@
       "away_score": 1,
       "winner": "AFC Greenwich Borough",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2222,6 +2598,8 @@
       "away_score": 3,
       "winner": "(0)Camberley Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -2235,6 +2613,8 @@
       "away_score": 2,
       "winner": "(1)Sheerwater",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2248,6 +2628,8 @@
       "away_score": 1,
       "winner": "Whitstable Town(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2261,6 +2643,8 @@
       "away_score": 3,
       "winner": "Raynes Park Vale",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -2274,6 +2658,8 @@
       "away_score": 2,
       "winner": "Sheppey United(3)",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -2287,6 +2673,8 @@
       "away_score": 0,
       "winner": "Bognor Regis Town(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2300,6 +2688,8 @@
       "away_score": 2,
       "winner": "Newhaven",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -2313,6 +2703,8 @@
       "away_score": 4,
       "winner": "Haywards Heath Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260809",
       "legacy_decision": ""
     },
@@ -2326,6 +2718,8 @@
       "away_score": 1,
       "winner": "Redhill(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2339,6 +2733,8 @@
       "away_score": 1,
       "winner": "Hassocks",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2352,6 +2748,8 @@
       "away_score": 0,
       "winner": "Bedfont(2)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2365,6 +2763,8 @@
       "away_score": 1,
       "winner": "Sutton Common Rovers(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2378,6 +2778,8 @@
       "away_score": 1,
       "winner": "Rusthall(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2391,6 +2793,8 @@
       "away_score": 2,
       "winner": "Faversham Town(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2404,6 +2808,8 @@
       "away_score": 5,
       "winner": "(2)Corinthian",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -2417,6 +2823,8 @@
       "away_score": 1,
       "winner": "(1)Snodland Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260807",
       "legacy_decision": ""
     },
@@ -2430,6 +2838,8 @@
       "away_score": 0,
       "winner": "Epsom & Ewell(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2443,6 +2853,8 @@
       "away_score": 2,
       "winner": "Bearsted",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2456,6 +2868,8 @@
       "away_score": 7,
       "winner": "(4)Erith Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2469,6 +2883,8 @@
       "away_score": 0,
       "winner": "Westbury United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2482,6 +2898,8 @@
       "away_score": 1,
       "winner": "Tadley Calleva(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2495,6 +2913,8 @@
       "away_score": 0,
       "winner": "Portland United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2508,6 +2928,8 @@
       "away_score": 3,
       "winner": "Baffins Milton Rovers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2521,6 +2943,8 @@
       "away_score": 3,
       "winner": "Shepton Mallet",
       "status": "FT (AET)",
+      "decision": "a.e.t.",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "a.e.t."
     },
@@ -2534,6 +2958,8 @@
       "away_score": 3,
       "winner": "Hamble Club",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2547,6 +2973,8 @@
       "away_score": 2,
       "winner": "AFC Stoneham",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2560,6 +2988,8 @@
       "away_score": 0,
       "winner": "Laverstock & Ford(3)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2573,6 +3003,8 @@
       "away_score": 1,
       "winner": "(1)Melksham Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2586,6 +3018,8 @@
       "away_score": 1,
       "winner": "Petersfield Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2599,6 +3033,8 @@
       "away_score": 3,
       "winner": "Badshot Lea(5)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2612,6 +3048,8 @@
       "away_score": 0,
       "winner": "Millbrook(0)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2625,6 +3063,8 @@
       "away_score": 0,
       "winner": "Devizes Town(1)",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2638,6 +3078,8 @@
       "away_score": 4,
       "winner": "Hartley Wintney",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2651,6 +3093,8 @@
       "away_score": 2,
       "winner": "(2)Yateley United",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260811",
       "legacy_decision": "replay"
     },
@@ -2664,6 +3108,8 @@
       "away_score": 3,
       "winner": "Fleetlands",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2677,6 +3123,8 @@
       "away_score": 0,
       "winner": "Andover New Street",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2690,6 +3138,8 @@
       "away_score": 2,
       "winner": "Downton",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2703,6 +3153,8 @@
       "away_score": 6,
       "winner": "Barnstaple Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2716,6 +3168,8 @@
       "away_score": 3,
       "winner": "Exmouth Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2729,6 +3183,8 @@
       "away_score": 3,
       "winner": "Street",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2742,6 +3198,8 @@
       "away_score": 0,
       "winner": "Willand Rovers",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2755,6 +3213,8 @@
       "away_score": 0,
       "winner": "Falmouth Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2768,6 +3228,8 @@
       "away_score": 3,
       "winner": "Brixham AFC",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2781,6 +3243,8 @@
       "away_score": 0,
       "winner": "Ivybridge Town",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     },
@@ -2794,6 +3258,8 @@
       "away_score": 0,
       "winner": "St Blazey",
       "status": "FT",
+      "decision": "replay",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260812",
       "legacy_decision": "replay"
     },
@@ -2807,38 +3273,11 @@
       "away_score": 2,
       "winner": "Bridgwater United",
       "status": "FT",
+      "decision": "",
+      "source_kind": "football-web-pages",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260808",
       "legacy_decision": ""
     }
   ],
-  "excluded_rows": [
-    {
-      "legacy_tie_id": "9",
-      "legacy": {
-        "home": "Marske United",
-        "away": "Boro Rangers",
-        "home_score": null,
-        "away_score": null,
-        "status": "FT",
-        "decision": "walkover",
-        "date": "2026-08-08",
-        "winner": "Marske United FC"
-      },
-      "matching_source_rows": []
-    },
-    {
-      "legacy_tie_id": "66",
-      "legacy": {
-        "home": "Abbey Hulton United",
-        "away": "Kidsgrove Athletic",
-        "home_score": null,
-        "away_score": null,
-        "status": "FT",
-        "decision": "walkover",
-        "date": "2026-08-08",
-        "winner": "Abbey Hulton United FC"
-      },
-      "matching_source_rows": []
-    }
-  ]
+  "excluded_rows": []
 }

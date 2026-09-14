@@ -2,12 +2,16 @@
 
 REVIEW ONLY. Production data unchanged.
 
-- Source-exact candidate rows: **216**
-- Excluded / unresolved legacy rows: **2**
+- Sourced candidate rows: **218**
+- Excluded / unresolved legacy rows: **0**
 
-Winners are derived from decisive FWP scorelines only. Drawn scorelines are intentionally left without a winner here; legacy decision text is retained as review metadata, not treated as source proof.
+Normal scored rows are reconciled against Football Web Pages. Winners are derived from decisive source scorelines, not legacy winner fields. Two administrative outcomes are explicitly sourced and represented without invented scores.
+
+## Administrative outcomes
+
+- Tie 9 — Marske United v Boro Rangers: Boro Rangers withdrew; Marske were given a bye into the Preliminary Round. Source: Marske United FC.
+- Tie 66 — Kidsgrove Athletic drew 0-0 with Abbey Hulton United on 8 August; the scheduled 11 August replay was awarded to Abbey Hulton. Source: FBref match schedule, corroborating the advancement shown in subsequent competition results.
 
 ## Excluded rows
 
-- Tie 9: Marske United None-None Boro Rangers; decision='walkover'; winner='Marske United FC'
-- Tie 66: Abbey Hulton United None-None Kidsgrove Athletic; decision='walkover'; winner='Abbey Hulton United FC'
+None.
