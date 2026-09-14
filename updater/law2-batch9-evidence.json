@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "policy": "Promote only where current direct official-club material supports the present home ground and postcode. Hold insufficiently direct or unresolved evidence fail-closed.",
+  "verified_locations": [
+    {"club":"Racing Club Warwick FC","ground":"Townsend Meadow","postcode":"CV34 6JP","sources":[{"type":"official_club","url":"https://www.pitchero.com/clubs/racingclubwarwickfootballclub/contact","note":"Current club contact page gives Townsend Meadow, Hampton Road, Warwick, Warwickshire, CV34 6JP."}]},
+    {"club":"Radcliffe FC","ground":"Neuven Stadium","postcode":"M26 3PE","sources":[{"type":"official_club","url":"https://radcliffefc.com/radcliffe-fc-soccer-school-may-2026/","note":"Current May 2026 official club page footer gives Neuven Stadium, Colshaw Close East, Manchester, Greater Manchester, M26 3PE."}]},
+    {"club":"Ramsgate FC","ground":"The WW Martin Community Stadium, Southwood","postcode":"CT11 0AN","sources":[{"type":"official_club","url":"https://ramsgatefc.co.uk/contact-us/","note":"Current official contact page gives Prices Avenue, Ramsgate, Kent, CT11 0AN and identifies the ground as The WW Martin Community Stadium, Southwood."}]},
+    {"club":"Redcar Athletic FC","ground":"Green Lane","postcode":"TS10 3RW","sources":[{"type":"official_club","url":"https://redcarathletic.co.uk/football/senior-teams/mens-first-team/","note":"Current official men's first-team page states Redcar Athletic are based at Green Lane, TS10 3RW."}]},
+    {"club":"Salisbury FC","ground":"Raymond McEnhill Stadium","postcode":"SP4 6PU","sources":[{"type":"official_club","url":"https://salisburyfc.co.uk/live-commentaries/","note":"Current official club page footer gives Raymond McEnhill (Ray Mac) Stadium, Partridge Way, Old Sarum, near Salisbury, SP4 6PU."}]},
+    {"club":"Scarborough Athletic FC","ground":"Scarborough Sports Village","postcode":"YO11 2JW","sources":[{"type":"official_club","url":"https://www.scarboroughathletic.com/news/boro-v-telford-match-info-2026-09-02-120621","note":"Current September 2026 official match information gives Scarborough Sports Village postcode YO11 2JW."}]},
+    {"club":"Slough Town FC","ground":"Arbour Park","postcode":"SL2 5AY","sources":[{"type":"official_club","url":"https://www.sloughtownfc.com/how-to-find-us","note":"Current official directions page gives Arbour Park and explicitly states sat-nav postcode SL2 5AY."}]}
+  ],
+  "held_for_review": [
+    {"club":"Real Bedford FC","ground":"Ledger Stadium","postcode":"MK44 3SB","reason":"No sufficiently direct current official-club page carrying both the present first-team venue and postcode was recovered in this review."},
+    {"club":"Redditch United FC","ground":"The Valley Stadium","postcode":"B97 4RN","reason":"Current official club material confirms The Valley Stadium, but this review did not recover a direct current official-club page carrying B97 4RN. Held fail-closed."},
+    {"club":"Rushall Olympic FC","ground":"Dales Lane","postcode":"WS4 1LJ","reason":"Current affiliated/community material supports Rushall Olympic FC at Dales Lane, WS4 1LJ, but no direct current first-team official-club source carrying the postcode was recovered. Held fail-closed."}
+  ]
+}
