@@ -4,26 +4,20 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **45**
-- ⚠️ Remaining supporting-evidence review queue: **109**
+- ✅ Verified in guarded Law 2 supplemental layer: **51**
+- ⚠️ Remaining supporting-evidence review queue: **103**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 61**
+- **First Round Qualifying: 57**
 - **Fourth Round Qualifying: 8**
-- **Second Round Qualifying: 40**
+- **Second Round Qualifying: 38**
 
 ## Remaining clubs
 
 - **AFC Totton** — Snows Stadium • SO40 2RW • Second Round Qualifying
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
-- **Bedford Town FC** — The Eyrie • MK44 3LW • Second Round Qualifying
-- **Berkhamsted FC** — Glencar Community Stadium • HP4 2AL • First Round Qualifying
-- **Billericay Town FC** — New Lodge • CM12 9SA • Second Round Qualifying
-- **Bracknell Town FC** — SB Stadium • GU47 9BJ • First Round Qualifying
 - **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
-- **Brentwood Town FC** — The Arena • CM15 9NN • First Round Qualifying
-- **Bromsgrove Sporting FC** — UK Electrical Stadium • B61 0DR • First Round Qualifying
 - **Burgess Hill Town FC** — Medical Travel Compared Stadium • RH15 8DL • First Round Qualifying
 - **Bury Town FC** — The Getaway Cars Stadium • IP33 1XP • First Round Qualifying
 - **Buxton FC** — The Silverlands • SK17 6QH • Second Round Qualifying
