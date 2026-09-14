@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "policy": "Promote only where current direct official-club material supports the present home ground and existing postcode. Postcode conflicts remain fail-closed pending explicit coordinate correction.",
+  "verified_locations": [
+    {"club":"Chichester City FC","ground":"Countrywide Gas Stadium","postcode":"PO19 6AR","sources":[{"type":"official_club","url":"https://www.pitchero.com/clubs/chichestercityfc/contact","note":"Current club contact gives Countrywide Gas Stadium, Oaklands Way, Chichester, PO19 6AR."}]},
+    {"club":"Rushall Olympic FC","ground":"Dales Lane","postcode":"WS4 1LJ","sources":[{"type":"official_club","url":"https://rushallolympicfc.ktckts.com/contactus","note":"Current club ticketing contact gives Rushall Olympic FC, Dales Lane, Rushall, Walsall, WS4 1LJ."}]},
+    {"club":"Solihull Moors FC","ground":"ARMCO Arena","postcode":"B91 2PP","sources":[{"type":"official_club","url":"https://www.solihullmoorsfc.co.uk/the-moors-family","note":"Current official club page gives Damson Park, Damson Parkway, Solihull, B91 2PP and separately notes B92 9EJ as the satnav postcode; canonical ground address remains B91 2PP."}]},
+    {"club":"South Shields FC","ground":"Wolf Competitions Stadium","postcode":"NE32 3UP","sources":[{"type":"official_club","url":"https://southshieldsfc.ticketco.events/uk/en/e/south_shields_fc_v_southport_fc07112026","note":"Current 2026 club ticketing material gives the ground at Shaftesbury Avenue, NE32 3UP and identifies Wolf Competitions Stadium."}]},
+    {"club":"Three Bridges FC","ground":"Jubilee Field","postcode":"RH10 1LQ","sources":[{"type":"official_club","url":"https://threebridgesfc.ktckts.com/contactus","note":"Current club ticketing contact gives Jubilee Walk, Three Bridges, Crawley, RH10 1LQ."}]},
+    {"club":"Yeovil Town FC","ground":"Huish Park","postcode":"BA22 8YF","sources":[{"type":"official_club","url":"https://ytfc.net/","note":"Current official club site gives Huish Park, Lufton Way, Brympton d'Evercy, Yeovil, BA22 8YF."}]}
+  ],
+  "held_for_review": [
+    {"club":"AFC Totton","reason":"Current official club material conflicts internally between SO40 2DE contact/footer and SO40 2RW current match details/company address; coordinate decision required."},
+    {"club":"Basingstoke Town FC","reason":"2026/27 directory evidence supports RG23 8BD but direct current club ground-address evidence remains insufficient under the strict rule."},
+    {"club":"Braintree Town FC","reason":"Current evidence supports CM7 3DE rather than supplemental CM7 3RD; explicit postcode/coordinate correction required."},
+    {"club":"Forest Green Rovers FC","reason":"Current 2026/27 ticketing gives The New Lawn GL6 0FG rather than supplemental GL6 0ET; explicit postcode/coordinate correction required."},
+    {"club":"Gateshead FC","reason":"Current public evidence supports Gateshead International Stadium NE10 0EF, but a direct current official-club address page was not recovered; remains fail-closed under the strict source rule."},
+    {"club":"Gloucester City FC","reason":"Current official club site gives KMM Energy Stadium GL2 5HD rather than supplemental GL2 5FD; explicit postcode/coordinate correction required."},
+    {"club":"Harrogate Town AFC","reason":"Current 2026 evidence renames the ground Marcy Fitness Stadium and Companies House gives HG2 7RY while supplemental record has Exercise Stadium HG2 7SA; explicit address/coordinate review required."},
+    {"club":"Horsham FC","reason":"Current official club material gives RH13 0AD rather than supplemental RH13 0AB; explicit postcode/coordinate correction required."},
+    {"club":"Plymouth Parkway FC","reason":"Current official club fixtures give Bolitho Park PL5 3JH rather than supplemental PL5 3JG; explicit postcode/coordinate correction required."},
+    {"club":"Real Bedford FC","reason":"Current official club material gives Ledger Stadium MK44 3LW rather than supplemental MK44 3SB; explicit postcode/coordinate correction required."},
+    {"club":"Redditch United FC","reason":"Current official club matchday information gives B97 4AU rather than supplemental B97 4RN; explicit postcode/coordinate correction required."}
+  ]
+}
