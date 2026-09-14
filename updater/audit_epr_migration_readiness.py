@@ -39,18 +39,22 @@ def norm(v):
 def rows(obj):
     out=[]
     for k,v in obj.items():
-        if isinstance(v,dict) and all(x in v for x in ('home','away','home_score','away_score')):
+        if isinstance(v,dict) and 'home' in v and 'away' in v:
             out.append((str(k),v))
     return out
 
 data=rows(extract('EPR_RESULTS_BY_TIE'))
 fields={}
-draws=[]; decisive=[]; inconsistent=[]; missing_winner=[]; dates={}; sources=0; decisions={}
+draws=[]; decisive=[]; inconsistent=[]; missing_winner=[]; unplayed=[]
+dates={}; sources=0; decisions={}
 for key,r in data:
     for f in r: fields[f]=fields.get(f,0)+1
     dates[str(r.get('date'))]=dates.get(str(r.get('date')),0)+1
     if r.get('source_url'): sources+=1
     decisions[str(r.get('decision') or '')]=decisions.get(str(r.get('decision') or ''),0)+1
+    if r.get('home_score') is None or r.get('away_score') is None:
+        unplayed.append((key,r))
+        continue
     hs,as_=int(r['home_score']),int(r['away_score'])
     w=r.get('winner')
     if hs==as_:
@@ -65,6 +69,7 @@ print('EPR MIGRATION READINESS AUDIT')
 print('Rows:',len(data))
 print('Decisive scorelines:',len(decisive))
 print('Drawn scorelines:',len(draws))
+print('Unplayed / null-score rows:',len(unplayed))
 print('Decisive rows whose winner field conflicts with scoreline:',len(inconsistent))
 print('Decisive rows missing winner field:',len(missing_winner))
 print('Rows with source_url:',sources)
@@ -82,11 +87,17 @@ if draws:
     for key,r in draws[:50]:
         print(f'- tie {key}: {r["home"]} {r["home_score"]}-{r["away_score"]} {r["away"]}; stored winner={r.get("winner")!r}; date={r.get("date")}; decision={r.get("decision")!r}')
 
+if unplayed:
+    print('\nUNPLAYED / NULL-SCORE ROWS (first 50):')
+    for key,r in unplayed[:50]:
+        print(f'- tie {key}: {r.get("home")} v {r.get("away")}; scores={r.get("home_score")}-{r.get("away_score")}; date={r.get("date")}; winner={r.get("winner")!r}')
+
 print('\nMIGRATION VERDICT:')
-if inconsistent or draws or sources < len(data):
+if inconsistent or draws or unplayed or sources < len(data):
     print('NOT SAFE TO COPY BLINDLY into canonical competition results.')
     if inconsistent: print('- Winner semantics must be normalised from decisive scorelines.')
     if draws: print('- Drawn ties need replay chronology/decision handling rather than an invented winner.')
+    if unplayed: print('- Null-score entries are fixture/status records, not completed results.')
     if sources < len(data): print('- Source provenance is incomplete in the legacy table.')
 else:
     print('Structurally clean for canonical migration, subject to provenance review.')
