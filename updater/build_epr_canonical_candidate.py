@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Build a review-only canonical EPR candidate from exact FWP matches.
+"""Build a review-only canonical EPR candidate from sourced legacy outcomes.
 
-Only source rows that match a legacy protected tie by teams/orientation/score are
-included. Ambiguous walkover/status cases are excluded and listed separately.
-No production data is modified.
+Most rows are matched exactly to Football Web Pages by teams/orientation/score.
+Two exceptional administrative outcomes are represented explicitly from separate
+source evidence: Boro Rangers' withdrawal (Marske bye) and the replay awarded to
+Abbey Hulton after Kidsgrove's 0-0 first tie. No production data is modified.
 """
 from pathlib import Path
 import json,re
@@ -17,6 +18,23 @@ ALIASES={
  'atherton lr':'atherton laburnum rovers','irlam':'irlam town','eastwood community':'eastwood cfc',
  'bedfont sports club':'bedfont sports','royal wootton bassett town':'royal wootton bassett',
  'varndeanians':'varndenians','sherborne town':'sherbourne town','bournemouth poppies':'bournemouth'
+}
+
+# Exceptional administrative outcomes which do not appear as normal scored FWP
+# rows. These are deliberately explicit rather than inferred from the old table.
+ADMIN_OUTCOMES={
+ '9':{
+   'round':'Extra Preliminary Round','date':'2026-08-08','home':'Marske United','away':'Boro Rangers',
+   'home_score':None,'away_score':None,'winner':'Marske United','status':'W/O','decision':'walkover',
+   'source_url':'https://www.marskeunitedfc.org/news/seasiders-given-emirates-fa-cup-extrapreliminary-round-bye-2991492.html',
+   'source_note':'Boro Rangers withdrew; Marske United were given a bye into the Preliminary Round.'
+ },
+ '66':{
+   'round':'Extra Preliminary Round Replay','date':'2026-08-11','home':'Abbey Hulton United','away':'Kidsgrove Athletic',
+   'home_score':None,'away_score':None,'winner':'Abbey Hulton United','status':'Awarded','decision':'walkover',
+   'source_url':'https://fbref.com/en/matches/2026-08-11',
+   'source_note':'Replay listed for 11 August and match awarded to Abbey Hulton United after the 8 August 0-0 first tie.'
+ }
 }
 
 def extract(name):
@@ -67,22 +85,34 @@ legacy=extract('EPR_RESULTS_BY_TIE')
 candidate=[]; excluded=[]
 for key,r in legacy.items():
  if not isinstance(r,dict) or not all(x in r for x in ('home','away','home_score','away_score')):continue
+ key=str(key)
+ if key in ADMIN_OUTCOMES:
+  a=dict(ADMIN_OUTCOMES[key])
+  a.update({'legacy_tie_id':key,'source_kind':'administrative-outcome','legacy_decision':r.get('decision') or ''})
+  candidate.append(a)
+  continue
  nh,na=norm(r.get('home')),norm(r.get('away')); hs,as_=num(r.get('home_score')),num(r.get('away_score'))
  hits=[s for s in source if s['nh']==nh and s['na']==na and s['home_score']==hs and s['away_score']==as_]
  if len(hits)==1:
   s=hits[0]
-  candidate.append({'legacy_tie_id':str(key),'round':s['round'],'date':s['date'],'home':s['home'],'away':s['away'],
+  candidate.append({'legacy_tie_id':key,'round':s['round'],'date':s['date'],'home':s['home'],'away':s['away'],
                     'home_score':s['home_score'],'away_score':s['away_score'],'winner':winner(s['home'],s['home_score'],s['away'],s['away_score']),
-                    'status':s['status'],'source_url':s['source_url'],'legacy_decision':r.get('decision') or ''})
+                    'status':s['status'],'decision':r.get('decision') or '', 'source_kind':'football-web-pages',
+                    'source_url':s['source_url'],'legacy_decision':r.get('decision') or ''})
  else:
-  excluded.append({'legacy_tie_id':str(key),'legacy':r,'matching_source_rows':hits})
+  excluded.append({'legacy_tie_id':key,'legacy':r,'matching_source_rows':hits})
 
-payload={'schema':'review-only-epr-canonical-candidate-v1','source':'Football Web Pages','candidate_rows':candidate,'excluded_rows':excluded}
+payload={'schema':'review-only-epr-canonical-candidate-v2','sources':['Football Web Pages','Marske United FC','FBref'],
+         'candidate_rows':candidate,'excluded_rows':excluded}
 OUT.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 lines=['# Extra Preliminary canonical candidate','', 'REVIEW ONLY. Production data unchanged.','',
-       f'- Source-exact candidate rows: **{len(candidate)}**',f'- Excluded / unresolved legacy rows: **{len(excluded)}**','',
-       'Winners are derived from decisive FWP scorelines only. Drawn scorelines are intentionally left without a winner here; legacy decision text is retained as review metadata, not treated as source proof.','',
+       f'- Sourced candidate rows: **{len(candidate)}**',f'- Excluded / unresolved legacy rows: **{len(excluded)}**','',
+       'Normal scored rows are reconciled against Football Web Pages. Winners are derived from decisive source scorelines, not legacy winner fields. Two administrative outcomes are explicitly sourced and represented without invented scores.','',
+       '## Administrative outcomes','',
+       '- Tie 9 — Marske United v Boro Rangers: Boro Rangers withdrew; Marske were given a bye into the Preliminary Round. Source: Marske United FC.',
+       '- Tie 66 — Kidsgrove Athletic drew 0-0 with Abbey Hulton United on 8 August; the scheduled 11 August replay was awarded to Abbey Hulton. Source: FBref match schedule, corroborating the advancement shown in subsequent competition results.','',
        '## Excluded rows','']
+if not excluded: lines.append('None.')
 for x in excluded:
  r=x['legacy']; lines.append(f'- Tie {x["legacy_tie_id"]}: {r.get("home")} {r.get("home_score")}-{r.get("away_score")} {r.get("away")}; decision={r.get("decision")!r}; winner={r.get("winner")!r}')
 MD.write_text('\n'.join(lines)+'\n',encoding='utf-8')
