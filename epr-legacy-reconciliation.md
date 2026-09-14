@@ -4,14 +4,13 @@ READ ONLY. No production data changed.
 
 - Legacy rows inspected: **218**
 - Football Web Pages dated rows available: **260**
-- Exact same orientation + score matches after known club-alias normalisation: **215**
+- Exact same orientation + score matches after known club-alias normalisation: **216**
 - Exact score/team matches with home/away reversed: **0**
 - Team-pair matches but score/status differs: **1**
-- No source pair found in audited dates: **2**
+- No source pair found in audited dates: **1**
 
 ## Alias normalisation used
 
-- `afc varndeanians` → `afc varndenians`
 - `atherton lr` → `atherton laburnum rovers`
 - `bedfont sports club` → `bedfont sports`
 - `bournemouth poppies` → `bournemouth`
@@ -19,6 +18,7 @@ READ ONLY. No production data changed.
 - `irlam` → `irlam town`
 - `royal wootton bassett town` → `royal wootton bassett`
 - `sherborne town` → `sherbourne town`
+- `varndeanians` → `varndenians`
 
 ## Orientation differences
 
@@ -32,7 +32,6 @@ None.
 ## Unmatched legacy rows
 
 - Tie 9: **Marske United None-None Boro Rangers**; legacy decision=`walkover`; legacy winner=`Marske United FC`
-- Tie 155: **AFC Varndeanians 1-3 Eastbourne Town**; legacy decision=``; legacy winner=`Eastbourne Town FC`
 
 ## Migration rule
 
