@@ -1,0 +1,28 @@
+name: Experiment No Legacy Preliminary Tables
+
+on:
+  push:
+    branches:
+      - experiment/no-legacy-prelim
+    paths:
+      - .github/workflows/experiment-no-legacy-prelim.yml
+      - updater/experiment_disable_legacy_prelim_tables.py
+
+permissions:
+  contents: read
+
+jobs:
+  regress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Disable legacy preliminary fallback tables in working copy
+        run: python updater/experiment_disable_legacy_prelim_tables.py
+      - name: Verify canonical embedded competition snapshot remains intact
+        run: python updater/embedded_snapshot_regression.py
+      - name: Verify Pigeon Miles source guards
+        run: python -m unittest tests/test_pigeon_miles_stats_patch.py
+      - name: Run Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run Stats certificate regression
+        run: node updater/clubfinder_stats_regression.js
