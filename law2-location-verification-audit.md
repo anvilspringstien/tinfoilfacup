@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **60**
-- ⚠️ Remaining supporting-evidence review queue: **94**
+- ✅ Verified in guarded Law 2 supplemental layer: **70**
+- ⚠️ Remaining supporting-evidence review queue: **84**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 52**
+- **First Round Qualifying: 46**
 - **Fourth Round Qualifying: 8**
-- **Second Round Qualifying: 34**
+- **Second Round Qualifying: 30**
 
 ## Remaining clubs
 
@@ -19,16 +19,6 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Basingstoke Town FC** — Hampshire FA Ground • RG23 8BD • First Round Qualifying
 - **Braintree Town FC** — Cressing Road Stadium • CM7 3RD • Second Round Qualifying
 - **Chichester City FC** — Oaklands Park • PO19 6AR • First Round Qualifying
-- **Dagenham & Redbridge FC** — Chigwell Construction Stadium • RM10 7XL • Second Round Qualifying
-- **Darlington FC** — Blackwell Meadows • DL1 5NR • Second Round Qualifying
-- **Dartford FC** — Princes Park Stadium • DA1 1RT • First Round Qualifying
-- **Dulwich Hamlet FC** — Champion Hill Stadium • SE22 8BD • First Round Qualifying
-- **Eastbourne Borough FC** — Priory Lane • BN23 7QH • First Round Qualifying
-- **Ebbsfleet United FC** — Stonebridge Road • DA11 9GN • Second Round Qualifying
-- **Emley AFC** — Fantastic Media Welfare Ground • HD8 9RE • First Round Qualifying
-- **Enfield Town FC** — Queen Elizabeth II Stadium • EN1 3PL • First Round Qualifying
-- **Evesham United FC** — Spiers & Hartwell Stadium • WR11 2LZ • First Round Qualifying
-- **Farnborough FC** — Sanders Transport Community Stadium • GU14 8UD • Second Round Qualifying
 - **Farnham Town FC** — The Memorial Ground • GU9 7DY • Second Round Qualifying
 - **Folkestone Invicta FC** — Alcaline Stadium • CT19 5JU • Second Round Qualifying
 - **Forest Green Rovers FC** — The Bolt New Lawn • GL6 0ET • Fourth Round Qualifying
