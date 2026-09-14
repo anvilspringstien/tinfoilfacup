@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **84**
-- ⚠️ Remaining supporting-evidence review queue: **70**
+- ✅ Verified in guarded Law 2 supplemental layer: **93**
+- ⚠️ Remaining supporting-evidence review queue: **61**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 40**
-- **Fourth Round Qualifying: 8**
-- **Second Round Qualifying: 22**
+- **First Round Qualifying: 33**
+- **Fourth Round Qualifying: 7**
+- **Second Round Qualifying: 21**
 
 ## Remaining clubs
 
@@ -23,16 +23,7 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Gateshead FC** — International Stadium • NE10 0EF • Fourth Round Qualifying
 - **Gloucester City FC** — Tiger Turf Stadium • GL2 5FD • First Round Qualifying
 - **Harrogate Town AFC** — Exercise Stadium • HG2 7SA • Fourth Round Qualifying
-- **Hornchurch FC** — The Stadium • RM14 2LX • Fourth Round Qualifying
 - **Horsham FC** — Hop Oast Community Stadium • RH13 0AB • Second Round Qualifying
-- **Hyde United FC** — Project Solar Stadium • SK14 5PL • First Round Qualifying
-- **Ilkeston Town FC** — New Manor Ground • DE7 8JF • First Round Qualifying
-- **Kettering Town FC** — Latimer Park • NN15 5PS • First Round Qualifying
-- **King's Lynn Town FC** — The Walks Stadium • PE30 5PB • Second Round Qualifying
-- **Lancaster City FC** — Giant Axe • LA1 5PE • First Round Qualifying
-- **Leamington FC** — Your Co-Op Community Stadium • CV33 9QB • First Round Qualifying
-- **Leek Town FC** — F.Ball Community Stadium • ST13 8LD • First Round Qualifying
-- **Leighton Town FC** — Freed Veneers Community Stadium • LU7 1RX • First Round Qualifying
 - **Leiston FC** — Leiston Town Athletic Association • IP16 4DQ • First Round Qualifying
 - **Macclesfield FC** — Leasing.com Stadium • SK11 7SP • Second Round Qualifying
 - **Maidenhead United FC** — York Road • SL6 1SF • Second Round Qualifying

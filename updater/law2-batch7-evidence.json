@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "policy": "Promote only where current direct official-club material supports the present home ground and postcode. Hold postcode conflicts or insufficiently current evidence fail-closed.",
+  "verified_locations": [
+    {"club":"Hornchurch FC","ground":"Hornchurch Stadium","postcode":"RM14 2LX","sources":[{"type":"official_club","url":"https://hornchurchfc.com/club/","note":"Current official club page gives Hornchurch Stadium, Bridge Avenue, Upminster, Essex, RM14 2LX."}]},
+    {"club":"Hyde United FC","ground":"Project Solar Stadium","postcode":"SK14 5PL","sources":[{"type":"official_club","url":"https://hydeunited.co.uk/guide/","note":"Official stadium guide identifies the Project Solar Stadium as Hyde United's home."},{"type":"official_club","url":"https://hydeunited.co.uk/author/tonyhydeunited-co-uk/","note":"Official club material gives Project Solar Stadium, Walker Lane, Hyde, Cheshire, SK14 5PL."}]},
+    {"club":"Ilkeston Town FC","ground":"Microlise New Manor Ground","postcode":"DE7 8JF","sources":[{"type":"official_club","url":"https://ilkestontownfc.co.uk/contact/","note":"Current official contact page gives Microlise New Manor Ground, Awsworth Road, Ilkeston, Derbyshire, DE7 8JF."}]},
+    {"club":"Kettering Town FC","ground":"Latimer Park","postcode":"NN15 5PS","sources":[{"type":"official_club","url":"https://www.ketteringtownfc.com/contact-us/","note":"Current official directions page gives Polwell Lane, Burton Latimer, NN15 5PS and directions to the Latimer Park entrance."},{"type":"official_club","url":"https://www.ketteringtownfc.com/event/kettering-town-vs-stratford-town/","note":"Official 2026 match page identifies Latimer Park, NN15 5PS as the home venue."}]},
+    {"club":"King's Lynn Town FC","ground":"The Docherty Walks Stadium","postcode":"PE30 5PB","sources":[{"type":"official_club","url":"https://www.kltown.co.uk/contact","note":"Current official contact page gives King's Lynn Town FC, The Walks, Tennyson Road, King's Lynn, Norfolk, PE30 5PB."},{"type":"official_club","url":"https://www.thelinnets.co.uk/theclub.php","note":"Official club information names The Docherty Walks Stadium at Tennyson Road, King's Lynn, PE30 5PB."}]},
+    {"club":"Lancaster City FC","ground":"The Giant Axe","postcode":"LA1 5PE","sources":[{"type":"official_club","url":"https://www.pitchero.com/clubs/lancastercity/","note":"Current official club site footer gives The Giant Axe, West Road, Lancaster, Lancashire, LA1 5PE."}]},
+    {"club":"Leamington FC","ground":"Your Co-op Community Stadium","postcode":"CV33 9QB","sources":[{"type":"official_club","url":"https://leamingtonfc.co.uk/index.php/club/admission-prices","note":"Current 2026/27 official admission page identifies Your Co-op Community Stadium as the first-team home."},{"type":"official_club","url":"https://www.leamingtonfc.co.uk/index.php/component/content/article/11-news2/2882-community-stadium-local-engagement-session-on-fusilier-s-way?Itemid=355","note":"Current official club page gives Your Co-op Community Stadium, Harbury Lane, Leamington Spa, CV33 9QB."}]},
+    {"club":"Leek Town FC","ground":"The F. Ball Community Stadium","postcode":"ST13 8LD","sources":[{"type":"official_club","url":"https://www.leektown.co.uk/","note":"Current official club site gives The F. Ball Community Stadium, Macclesfield Road, Leek, Staffordshire, ST13 8LD."}]},
+    {"club":"Leighton Town FC","ground":"Freed Veneers Community Stadium At Bell Close","postcode":"LU7 1RX","sources":[{"type":"official_club","url":"https://www.leightontownfc.co.uk/contact","note":"Current official contact page gives Freed Veneers Community Stadium At Bell Close, Lake Street, Leighton Buzzard, Bedfordshire, LU7 1RX."}]}
+  ],
+  "held_for_review": [
+    {"club":"Horsham FC","ground":"Hop Oast Community Stadium","postcode":"RH13 0AB","reason":"Current official club material gives The Hop Oast Stadium at RH13 0AD, conflicting with the supporting record's RH13 0AB. Requires explicit postcode/coordinate correction before promotion."}
+  ]
+}
