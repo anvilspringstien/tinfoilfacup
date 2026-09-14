@@ -30,16 +30,15 @@ jobs:
           from pathlib import Path
           d=json.loads(Path('updater/law2-location-verification-audit.json').read_text())
           remaining=d['counts'].get('review-supporting-evidence',0)
-          if remaining != 10:
-              raise SystemExit(f'Expected 10 remaining Law 2 review records, got {remaining}')
+          if remaining != 11: raise SystemExit(f'Expected 11 remaining Law 2 review records, got {remaining}')
           state={x['club']:x['state'] for x in d['clubs']}
-          promoted=['Chichester City FC','Gateshead FC','Rushall Olympic FC','Solihull Moors FC','South Shields FC','Three Bridges FC','Yeovil Town FC']
+          promoted=['Chichester City FC','Rushall Olympic FC','Solihull Moors FC','South Shields FC','Three Bridges FC','Yeovil Town FC']
           for club in promoted:
               if state.get(club)!='verified-supplemental': raise SystemExit(f'{club} not verified after promotion: {state.get(club)}')
-          held=['AFC Totton','Basingstoke Town FC','Braintree Town FC','Forest Green Rovers FC','Gloucester City FC','Harrogate Town AFC','Horsham FC','Plymouth Parkway FC','Real Bedford FC','Redditch United FC']
+          held=['AFC Totton','Basingstoke Town FC','Braintree Town FC','Forest Green Rovers FC','Gateshead FC','Gloucester City FC','Harrogate Town AFC','Horsham FC','Plymouth Parkway FC','Real Bedford FC','Redditch United FC']
           for club in held:
               if state.get(club)!='review-supporting-evidence': raise SystemExit(f'{club} should remain fail-closed')
-          print('BATCH 12 EXPECTATION: PASS — 7 promoted, 10 remaining')
+          print('BATCH 12 EXPECTATION: PASS — 6 promoted, 11 remaining')
           PY
       - name: Run Law 2 origin regression
         run: node updater/law2_origin_regression.js
