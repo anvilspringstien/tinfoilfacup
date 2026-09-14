@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **93**
-- ⚠️ Remaining supporting-evidence review queue: **61**
+- ✅ Verified in guarded Law 2 supplemental layer: **103**
+- ⚠️ Remaining supporting-evidence review queue: **51**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 33**
+- **First Round Qualifying: 28**
 - **Fourth Round Qualifying: 7**
-- **Second Round Qualifying: 21**
+- **Second Round Qualifying: 16**
 
 ## Remaining clubs
 
@@ -24,17 +24,7 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Gloucester City FC** — Tiger Turf Stadium • GL2 5FD • First Round Qualifying
 - **Harrogate Town AFC** — Exercise Stadium • HG2 7SA • Fourth Round Qualifying
 - **Horsham FC** — Hop Oast Community Stadium • RH13 0AB • Second Round Qualifying
-- **Leiston FC** — Leiston Town Athletic Association • IP16 4DQ • First Round Qualifying
-- **Macclesfield FC** — Leasing.com Stadium • SK11 7SP • Second Round Qualifying
-- **Maidenhead United FC** — York Road • SL6 1SF • Second Round Qualifying
-- **Maldon & Tiptree FC** — Maldon Stadium • CM9 5JQ • First Round Qualifying
-- **Malvern Town FC** — HD Anywhere Community Stadium • WR14 2EQ • First Round Qualifying
-- **Merthyr Town FC** — Penydarren Park • CF47 8RF • Second Round Qualifying
-- **Morecambe FC** — Mazuma Mobile Stadium • LA4 4TB • Second Round Qualifying
-- **Oxford City FC** — RAW Charging Stadium • OX3 0NQ • Second Round Qualifying
-- **Peterborough Sports FC** — 651 Lincoln Road • PE1 3HA • First Round Qualifying
 - **Plymouth Parkway FC** — Bolitho Park • PL5 3JG • First Round Qualifying
-- **Quorn FC** — Farley Way Stadium • LE12 8RB • First Round Qualifying
 - **Racing Club Warwick FC** — Townsend Meadow • CV34 6JP • First Round Qualifying
 - **Radcliffe FC** — Neuven Stadium • M26 3PE • Second Round Qualifying
 - **Ramsgate FC** — Southwood Stadium • CT11 0AN • First Round Qualifying
