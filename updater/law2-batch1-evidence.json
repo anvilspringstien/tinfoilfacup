@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "verified_locations": [
+    {
+      "club": "AFC Fylde",
+      "ground": "Mill Farm Sports Village",
+      "postcode": "PR4 3JZ",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://shop.afcfylde.co.uk/policies/contact-information",
+          "note": "AFC Fylde contact information gives Mill Farm Sports Village, Preston, PR4 3JZ."
+        }
+      ]
+    },
+    {
+      "club": "Anstey Nomads FC",
+      "ground": "Callingtons Community Complex",
+      "postcode": "LE7 7BP",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.pitchero.com/clubs/ansteynomads2/contact",
+          "note": "Anstey Nomads' club contact page gives Callingtons Community Complex, Cropston Road, Anstey, LE7 7BP."
+        }
+      ]
+    },
+    {
+      "club": "Aveley FC",
+      "ground": "Parkside",
+      "postcode": "RM15 4PX",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.pitchero.com/clubs/aveley/teams/435",
+          "note": "Aveley Football Club's club page gives Parkside, Park Lane, Aveley, Essex, RM15 4PX."
+        }
+      ]
+    },
+    {
+      "club": "Avro FC",
+      "ground": "Vestacare Stadium",
+      "postcode": "OL8 3JH",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.avrofc.co.uk/contact-us-general-information/",
+          "note": "Avro FC contact page gives The Vestacare Stadium, White Bank Road, Oldham, OL8 3JH."
+        }
+      ]
+    },
+    {
+      "club": "Bamber Bridge FC",
+      "ground": "Irongate Stadium",
+      "postcode": "PR5 6UX",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.pitchero.com/clubs/bamberbridge/contact",
+          "note": "Bamber Bridge club contact page gives Irongate Stadium, Irongate, Bamber Bridge, Preston, PR5 6UX."
+        }
+      ]
+    },
+    {
+      "club": "Banbury United FC",
+      "ground": "The TUGO Community Stadium",
+      "postcode": "OX16 5AB",
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://www.banburyunitedfc.co.uk/contact",
+          "note": "Banbury United contact page gives The TUGO Community Stadium, Station Approach, Banbury, OX16 5AB."
+        }
+      ]
+    },
+    {
+      "club": "AFC Whyteleafe",
+      "ground": "Flamingo Park",
+      "postcode": "BR7 6HL",
+      "latitude": 51.429584,
+      "longitude": 0.081342,
+      "sources": [
+        {
+          "type": "official_club",
+          "url": "https://afcwhyteleafe.com/2026/05/07/club-statement-the-next-chapter/",
+          "note": "AFC Whyteleafe states its first team will play 2026/27 home matches at Flamingo Park, sharing with Cray Wanderers."
+        },
+        {
+          "type": "official_club",
+          "url": "https://www.cray-wanderers.com/contact/",
+          "note": "Cray Wanderers gives Flamingo Park Sports & Leisure, Sidcup By-Pass, Chislehurst, BR7 6HL."
+        },
+        {
+          "type": "postcode_geodata",
+          "url": "https://www.getthedata.com/postcode/BR7-6HL",
+          "note": "Open Postcode Geo gives BR7 6HL centroid 51.429584, 0.081342."
+        }
+      ]
+    }
+  ],
+  "held_for_review": [
+    {
+      "club": "AFC Totton",
+      "reason": "Current official club pages use SO40 2DE for the stadium while legacy/supporting data used SO40 2RW; hold until the origin coordinate/postcode correction is handled explicitly rather than silently promoting the old record.",
+      "source": "https://www.afctotton.com/club-info/snows-stadium"
+    }
+  ]
+}
