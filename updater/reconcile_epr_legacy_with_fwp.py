@@ -13,6 +13,17 @@ HTML=(ROOT/'clubfinder.html').read_text(encoding='utf-8')
 SRC=json.loads((ROOT/'epr-authoritative-source-audit.json').read_text(encoding='utf-8'))
 OUT=ROOT/'epr-legacy-reconciliation.md'
 
+ALIASES={
+    'atherton lr':'atherton laburnum rovers',
+    'irlam':'irlam town',
+    'eastwood community':'eastwood cfc',
+    'bedfont sports club':'bedfont sports',
+    'royal wootton bassett town':'royal wootton bassett',
+    'afc varndeanians':'afc varndenians',
+    'sherborne town':'sherbourne town',
+    'bournemouth poppies':'bournemouth',
+}
+
 
 def extract(name):
     m=re.search(r'\bconst\s+'+re.escape(name)+r'\s*=',HTML)
@@ -40,7 +51,8 @@ def norm(v):
     s=re.sub(r'\([^)]*\)',' ',s)
     s=re.sub(r'\b(afc|fc)\b',' ',s)
     s=s.replace('town 88','town')
-    return ' '.join(re.sub(r'[^a-z0-9]+',' ',s).split())
+    s=' '.join(re.sub(r'[^a-z0-9]+',' ',s).split())
+    return ALIASES.get(s,s)
 
 
 def score(v):
@@ -81,10 +93,14 @@ lines=['# Extra Preliminary legacy reconciliation','',
        'READ ONLY. No production data changed.','',
        f'- Legacy rows inspected: **{sum(len(v) for v in cats.values())}**',
        f'- Football Web Pages dated rows available: **{len(source)}**',
-       f'- Exact same orientation + score matches: **{len(cats["exact"])}**',
+       f'- Exact same orientation + score matches after known club-alias normalisation: **{len(cats["exact"])}**',
        f'- Exact score/team matches with home/away reversed: **{len(cats["swapped"])}**',
        f'- Team-pair matches but score/status differs: **{len(cats["pair_only"])}**',
        f'- No source pair found in audited dates: **{len(cats["unmatched"])}**','']
+
+lines += ['## Alias normalisation used','']
+for a,b in sorted(ALIASES.items()): lines.append(f'- `{a}` → `{b}`')
+lines.append('')
 
 for cat,title in [('swapped','Orientation differences'),('pair_only','Same clubs, different recorded score/status'),('unmatched','Unmatched legacy rows')]:
     lines += [f'## {title}','']
@@ -96,7 +112,7 @@ for cat,title in [('swapped','Orientation differences'),('pair_only','Same clubs
     lines.append('')
 
 lines += ['## Migration rule','',
-          'Only exact dated source matches should be auto-promoted. Orientation differences may be normal replay/home-away differences and require chronology-aware handling. Pair-only and unmatched rows remain fail-closed for manual review.','']
+          'Only exact dated source matches should be auto-promoted. Known club-name aliases above are identity normalisation only, not score/result overrides. Pair-only and unmatched rows remain fail-closed for manual review.','']
 OUT.write_text('\n'.join(lines),encoding='utf-8')
 print('EPR LEGACY RECONCILIATION COMPLETE')
 for k,v in cats.items(): print(k,len(v))
