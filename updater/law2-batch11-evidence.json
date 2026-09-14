@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviewed_at": "2026-09-14",
+  "policy": "Promote only where current direct official-club material supports the present home ground and postcode. Hold unresolved records fail-closed.",
+  "verified_locations": [
+    {"club":"Stratford Town FC","ground":"The Arden Garages Stadium","postcode":"CV37 7BZ","sources":[{"type":"official_club","url":"https://stratfordtownfc.co.uk/","note":"Current official site gives The Arden Garages Stadium, Knights Lane, Tiddington, Stratford upon Avon, CV37 7BZ."}]},
+    {"club":"Tamworth FC","ground":"The Lamb Ground","postcode":"B77 1AA","sources":[{"type":"official_club","url":"https://www.tamworthfootballclub.com/news/matchday-preview-tamworth-fc-vs-west-ham-united-pl2-2965180.html","note":"Official current matchday information gives The Lamb Ground, Kettlebrook Road, Tamworth, B77 1AA."}]},
+    {"club":"Taunton Town FC","ground":"Wordsworth Drive","postcode":"TA1 2HG","sources":[{"type":"official_club","url":"https://tauntontown.com/fixtures/","note":"Current 2026 official first-team fixtures list home matches at Wordsworth Drive, Taunton, TA1 2HG."}]},
+    {"club":"Tonbridge Angels FC","ground":"Yeomans Community Stadium","postcode":"TN10 3JF","sources":[{"type":"official_club","url":"https://tonbridgeangels.co.uk/about-us/","note":"Current official club page gives Yeomans Community Stadium, Darenth Avenue, Tonbridge, TN10 3JF."}]},
+    {"club":"Truro City FC","ground":"Truro Sports Hub","postcode":"TR4 9AN","sources":[{"type":"official_club","url":"https://trurocity.co.uk/contact-us/","note":"Current official contact page gives Truro Sports Hub, West Langarth, Threemilestone, Truro, TR4 9AN."}]},
+    {"club":"Walton & Hersham FC","ground":"Elmbridge Xcel Sports Hub","postcode":"KT12 2JP","sources":[{"type":"official_club","url":"https://waltonhershamfc.com/club/how-to-find-us/","note":"Current official directions page gives Elmbridge Xcel Sports Hub, Waterside Drive, Walton-on-Thames, Surrey, KT12 2JP."}]},
+    {"club":"Warrington Rylands FC","ground":"Quickline Logistics Arena","postcode":"WA2 7RZ","sources":[{"type":"official_club","url":"https://warringtonrylandsfc.co.uk/contact","note":"Current official contact page gives Quickline Logistics Arena, Gorsey Lane, Warrington, WA2 7RZ."}]},
+    {"club":"Warrington Town FC","ground":"Winner Recruitment Stadium","postcode":"WA4 2RS","sources":[{"type":"official_club","url":"https://www.pitchero.com/clubs/warringtontown/contact","note":"Current club contact page gives Winner Recruitment Stadium, Common Lane, Warrington, WA4 2RS."}]},
+    {"club":"Welling United FC","ground":"The Anthony Martin Community Stadium","postcode":"DA16 1SY","sources":[{"type":"official_club","url":"https://wellingunited.com/2026/08/tickets-welling-united-vs-ramsgate/","note":"Current 2026 official club material identifies the home venue as The Anthony Martin Community Stadium; site footer gives Park View Road, Welling, Kent, DA16 1SY."}]},
+    {"club":"Weston Super Mare FC","ground":"The Optima Stadium","postcode":"BS24 9AA","sources":[{"type":"official_club","url":"https://wsmafc.co.uk/","note":"Current official club site gives The Optima Stadium, Winterstoke Road, Weston-super-Mare, Somerset, BS24 9AA."}]},
+    {"club":"Whitby Town FC","ground":"Towbar Express Stadium","postcode":"YO21 3HZ","sources":[{"type":"official_club","url":"https://www.whitbytownfc.com/contact","note":"Current official contact page gives Towbar Express Stadium, Upgang Lane, Whitby, North Yorkshire, YO21 3HZ."}]},
+    {"club":"Whitehawk FC","ground":"The Enclosed Ground","postcode":"BN2 5TS","sources":[{"type":"official_club","url":"https://whitehawkfc.com/","note":"Current official club site gives The Enclosed Ground, East Brighton Park, Brighton, BN2 5TS."}]},
+    {"club":"Wimborne Town FC","ground":"The Wyatt Homes Stadium","postcode":"BH21 2FU","sources":[{"type":"official_club","url":"https://wimbornetownfc.co.uk/contact-us/","note":"Current official contact page gives The Wyatt Homes Stadium, 16 Ainsley Road, Wimborne, Dorset, BH21 2FU."}]},
+    {"club":"Wingate & Finchley FC","ground":"The Maurice Rebak Stadium","postcode":"N12 0PD","sources":[{"type":"official_club","url":"https://wingatefinchley.com/pages/visit-fans-guide","note":"Current official visiting fans guide gives The Maurice Rebak Stadium, Summers Lane, Finchley, N12 0PD."}]},
+    {"club":"Worcester City FC","ground":"Sixways Stadium","postcode":"WR3 8ZE","sources":[{"type":"official_club","url":"https://worcestercityfc.org/contact-us/","note":"Current official contact page gives Worcester City Football Club, Sixways Stadium, Warriors Way, Worcester, WR3 8ZE."}]},
+    {"club":"Workington AFC","ground":"Borough Park","postcode":"CA14 2DT","sources":[{"type":"official_club","url":"https://www.workingtonafc.com/club-contacts","note":"Current official club contacts give Workington AFC, Borough Park, Workington, Cumbria, CA14 2DT."}]},
+    {"club":"Worksop Town FC","ground":"The KC Sofas Stadium","postcode":"S80 1UJ","sources":[{"type":"official_club","url":"https://www.worksoptownfc.com/club-info/club-information","note":"Current official company details give The KC Sofas Stadium, Babbage Way, Worksop, S80 1UJ."}]},
+    {"club":"Yate Town FC","ground":"The South West Interiors Stadium","postcode":"BS37 7LE","sources":[{"type":"official_club","url":"https://yatetownfc.co.uk/","note":"Current official club site gives The South West Interiors Stadium, Lodge Road, Yate, BS37 7LE."}]}
+  ],
+  "held_for_review": [
+    {"club":"Three Bridges FC","ground":"Jubilee Field","postcode":"RH10 1LQ","reason":"No sufficiently direct current official-club page carrying both the present first-team ground and postcode was recovered in this review."},
+    {"club":"Yeovil Town FC","ground":"Huish Park","postcode":"BA22 8YF","reason":"No sufficiently direct current official-club address page was recovered in this review; held fail-closed pending fresh direct evidence."}
+  ]
+}
