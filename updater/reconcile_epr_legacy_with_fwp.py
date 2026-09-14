@@ -19,7 +19,7 @@ ALIASES={
     'eastwood community':'eastwood cfc',
     'bedfont sports club':'bedfont sports',
     'royal wootton bassett town':'royal wootton bassett',
-    'afc varndeanians':'afc varndenians',
+    'varndeanians':'varndenians',
     'sherborne town':'sherbourne town',
     'bournemouth poppies':'bournemouth',
 }
