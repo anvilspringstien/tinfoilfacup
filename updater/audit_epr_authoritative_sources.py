@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Read-only audit of authoritative 2026-27 FA Cup Extra Preliminary source pages.
+"""Read-only audit of 2026-27 FA Cup Extra Preliminary source pages.
 
-Fetches Football Web Pages date pages covering the Extra Preliminary Round and
-its replays with a normal browser user-agent, enumerates all HTML tables pandas
-can parse, and writes a compact JSON/Markdown inspection report. No production
-data is changed.
+Football Web Pages is the project's standard results source. Fetch the relevant
+round/replay date pages with a browser user-agent and preserve every parsed row
+for reconciliation against Clubfinder's legacy EPR table. Production data is
+never modified.
 """
 from __future__ import annotations
 
@@ -45,9 +45,9 @@ def fetch_html(url):
 
 
 def main():
-    report = {"pages": []}
+    report = {"pages": [], "source": "Football Web Pages"}
     md = ["# Extra Preliminary authoritative source audit", "", "READ ONLY. Production data unchanged.", ""]
-    total_tables = 0
+    total_tables = total_rows = 0
     for date, expected_round, url in PAGES:
         page = {"date": date, "expected_round": expected_round, "url": url, "tables": []}
         md += [f"## {date} — {expected_round}", "", f"Source: {url}", ""]
@@ -56,45 +56,38 @@ def main():
             tables = pd.read_html(StringIO(html))
         except Exception as exc:
             page["error"] = f"{type(exc).__name__}: {exc}"
-            md.append(f"ERROR: {page['error']}")
-            md.append("")
+            md += [f"ERROR: {page['error']}", ""]
             report["pages"].append(page)
             continue
         page["html_bytes"] = len(html.encode("utf-8"))
         total_tables += len(tables)
-        md.append(f"HTML bytes: **{page['html_bytes']}**")
-        md.append(f"Parsed tables: **{len(tables)}**")
-        md.append("")
+        md += [f"HTML bytes: **{page['html_bytes']}**", f"Parsed tables: **{len(tables)}**", ""]
         for idx, df in enumerate(tables):
             columns = [str(c) for c in df.columns]
-            sample = []
-            for _, row in df.head(12).iterrows():
-                sample.append([clean_cell(v) for v in row.tolist()])
+            rows = [[clean_cell(v) for v in row.tolist()] for _, row in df.iterrows()]
+            total_rows += len(rows)
             item = {
                 "index": idx,
                 "shape": [int(df.shape[0]), int(df.shape[1])],
                 "columns": columns,
-                "sample": sample,
+                "rows": rows,
+                "sample": rows[:12],
             }
             page["tables"].append(item)
-            md += [
-                f"### Table {idx}",
-                f"Shape: {df.shape[0]} × {df.shape[1]}",
-                f"Columns: `{columns}`",
-                "",
-            ]
-            for row in sample[:8]:
+            md += [f"### Table {idx}", f"Shape: {df.shape[0]} × {df.shape[1]}", f"Columns: `{columns}`", ""]
+            for row in rows[:8]:
                 md.append("- " + " | ".join("" if v is None else str(v) for v in row))
             md.append("")
         report["pages"].append(page)
 
     report["total_tables"] = total_tables
+    report["total_rows"] = total_rows
     OUT_JSON.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     OUT_MD.write_text("\n".join(md) + "\n", encoding="utf-8")
     print("EPR AUTHORITATIVE SOURCE AUDIT: COMPLETE")
     print("Pages:", len(PAGES))
     print("Tables parsed:", total_tables)
-    print("Wrote:", OUT_JSON.name, "and", OUT_MD.name)
+    print("Rows preserved:", total_rows)
     print("READ ONLY. Production main untouched.")
 
 
