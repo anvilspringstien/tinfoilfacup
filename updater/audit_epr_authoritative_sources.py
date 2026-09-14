@@ -2,12 +2,15 @@
 """Read-only audit of authoritative 2026-27 FA Cup Extra Preliminary source pages.
 
 Fetches Football Web Pages date pages covering the Extra Preliminary Round and
-its replays, enumerates all HTML tables pandas can parse, and writes a compact
-JSON/Markdown inspection report. No production data is changed.
+its replays with a normal browser user-agent, enumerates all HTML tables pandas
+can parse, and writes a compact JSON/Markdown inspection report. No production
+data is changed.
 """
 from __future__ import annotations
 
+from io import StringIO
 from pathlib import Path
+from urllib.request import Request, urlopen
 import json
 import pandas as pd
 
@@ -24,6 +27,8 @@ PAGES = [
     ("2026-08-18", "Extra Preliminary Round Replay", "https://www.footballwebpages.co.uk/fa-cup/20260818"),
 ]
 
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/152 Safari/537.36"
+
 
 def clean_cell(v):
     if pd.isna(v):
@@ -31,6 +36,12 @@ def clean_cell(v):
     if isinstance(v, float) and v.is_integer():
         return int(v)
     return str(v).strip()
+
+
+def fetch_html(url):
+    req = Request(url, headers={"User-Agent": UA, "Accept": "text/html,application/xhtml+xml"})
+    with urlopen(req, timeout=30) as response:
+        return response.read().decode("utf-8", errors="replace")
 
 
 def main():
@@ -41,14 +52,17 @@ def main():
         page = {"date": date, "expected_round": expected_round, "url": url, "tables": []}
         md += [f"## {date} — {expected_round}", "", f"Source: {url}", ""]
         try:
-            tables = pd.read_html(url)
+            html = fetch_html(url)
+            tables = pd.read_html(StringIO(html))
         except Exception as exc:
             page["error"] = f"{type(exc).__name__}: {exc}"
             md.append(f"ERROR: {page['error']}")
             md.append("")
             report["pages"].append(page)
             continue
+        page["html_bytes"] = len(html.encode("utf-8"))
         total_tables += len(tables)
+        md.append(f"HTML bytes: **{page['html_bytes']}**")
         md.append(f"Parsed tables: **{len(tables)}**")
         md.append("")
         for idx, df in enumerate(tables):
