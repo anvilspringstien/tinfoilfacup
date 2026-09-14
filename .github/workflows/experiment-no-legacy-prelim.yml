@@ -8,6 +8,7 @@ on:
       - .github/workflows/experiment-no-legacy-prelim.yml
       - updater/experiment_disable_legacy_prelim_tables.py
       - updater/audit_epr_canonical_coverage.py
+      - updater/audit_epr_migration_readiness.py
 
 permissions:
   contents: read
@@ -20,6 +21,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compare legacy EPR results with canonical competition data
         run: python updater/audit_epr_canonical_coverage.py
+      - name: Assess legacy EPR migration readiness
+        run: python updater/audit_epr_migration_readiness.py
 
   regress:
     strategy:
