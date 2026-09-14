@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **119**
-- ⚠️ Remaining supporting-evidence review queue: **35**
+- ✅ Verified in guarded Law 2 supplemental layer: **137**
+- ⚠️ Remaining supporting-evidence review queue: **17**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 20**
-- **Fourth Round Qualifying: 6**
-- **Second Round Qualifying: 9**
+- **First Round Qualifying: 8**
+- **Fourth Round Qualifying: 5**
+- **Second Round Qualifying: 4**
 
 ## Remaining clubs
 
@@ -30,23 +30,5 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Rushall Olympic FC** — Dales Lane • WS4 1LJ • First Round Qualifying
 - **Solihull Moors FC** — Armco Arena • B91 2PP • Fourth Round Qualifying
 - **South Shields FC** — 1st Cloud Arena • NE32 3UP • Second Round Qualifying
-- **Stratford Town FC** — Arden Garages Stadium • CV37 7BZ • First Round Qualifying
-- **Tamworth FC** — The Lamb Ground • B77 1AA • Fourth Round Qualifying
-- **Taunton Town FC** — Wordsworth Drive • TA1 2HG • First Round Qualifying
 - **Three Bridges FC** — Jubilee Field • RH10 1LQ • First Round Qualifying
-- **Tonbridge Angels FC** — Longmead Stadium • TN10 3JF • Second Round Qualifying
-- **Truro City FC** — Truro City Stadium • TR4 9AN • Second Round Qualifying
-- **Walton & Hersham FC** — Elmbridge Xcel Sports Hub • KT12 2JP • Second Round Qualifying
-- **Warrington Rylands FC** — The Quickline Logistics Arena • WA2 7RZ • First Round Qualifying
-- **Warrington Town FC** — Cal Delivery Stadium • WA4 2RS • First Round Qualifying
-- **Welling United FC** — Park View Road • DA16 1SY • First Round Qualifying
-- **Weston Super Mare FC** — Woodspring Stadium • BS24 9AA • Second Round Qualifying
-- **Whitby Town FC** — Towbar Express Stadium • YO21 3HZ • First Round Qualifying
-- **Whitehawk FC** — Enclosed Ground • BN2 5TS • First Round Qualifying
-- **Wimborne Town FC** — Wyatt Homes Stadium • BH21 2FU • First Round Qualifying
-- **Wingate & Finchley FC** — Maurice Rebak Stadium • N12 0PD • First Round Qualifying
-- **Worcester City FC** — Sixways Stadium • WR3 8ZE • First Round Qualifying
-- **Workington AFC** — Borough Park • CA14 2DT • First Round Qualifying
-- **Worksop Town FC** — The Windsor Foodservice Stadium • S80 1UJ • Second Round Qualifying
-- **Yate Town FC** — South West Interiors Stadium • BS37 7LE • First Round Qualifying
 - **Yeovil Town FC** — Huish Park • BA22 8YF • Fourth Round Qualifying
