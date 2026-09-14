@@ -24,6 +24,12 @@ LOCATION_OVERRIDES={
   'postcode':'LE7 7BP',
   'source':'https://www.pitchero.com/clubs/ansteynomads2/contact',
   'ground_source':'Official Anstey Nomads current club contact page',
+ },
+ 'bamber bridge':{
+  'ground':'Irongate Stadium',
+  'postcode':'PR5 6UX',
+  'source':'https://www.pitchero.com/clubs/bamberbridge/contact/',
+  'ground_source':'Official Bamber Bridge club contact page',
  }
 }
 def norm(s):
