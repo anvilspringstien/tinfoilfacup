@@ -13,8 +13,9 @@
     {"club":"Morecambe FC","ground":"Halo Aerospace Stadium","postcode":"LA4 4TB","sources":[{"type":"official_club","url":"https://morecambefc.com/","note":"Current official club site identifies Halo Aerospace Stadium, Christie Way, Morecambe, Lancashire, LA4 4TB."}]},
     {"club":"Oxford City FC","ground":"The MGroup Stadium","postcode":"OX3 0NQ","sources":[{"type":"official_club","url":"https://www.oxfordcityfc.co.uk/information","note":"Current official club information gives The MGroup Stadium, Marsh Lane, Marston, Oxford, OX3 0NQ."}]},
     {"club":"Peterborough Sports FC","ground":"651 Lincoln Road","postcode":"PE1 3HA","sources":[{"type":"official_club","url":"https://psfc.co.uk/","note":"Current official club site gives Peterborough Sports FC, 651 Lincoln Road, Peterborough, PE1 3HA."}]},
-    {"club":"Plymouth Parkway FC","ground":"Bolitho Park","postcode":"PL5 3JH","sources":[{"type":"official_club","url":"https://www.ppfc.co.uk/contact-us/","note":"Current official contact page gives Bolitho Park, St Peters Road, Plymouth, PL5 3JH."}]},
     {"club":"Quorn FC","ground":"The Stotto Stadium","postcode":"LE12 8RB","sources":[{"type":"official_club","url":"https://www.quornfc.co.uk/contact-us","note":"Current official contact page gives The Stotto Stadium, Farley Way, Quorn, Loughborough, LE12 8RB."}]}
   ],
-  "held_for_review": []
+  "held_for_review": [
+    {"club":"Plymouth Parkway FC","ground":"Bolitho Park","postcode":"PL5 3JG","reason":"Current official club contact page gives Bolitho Park as PL5 3JH, conflicting with the supporting record's PL5 3JG. Requires explicit postcode/coordinate correction before promotion."}
+  ]
 }
