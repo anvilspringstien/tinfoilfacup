@@ -27,8 +27,16 @@ original_keys=len(rh)
 appended=0
 created_keys=0
 
+def clean_team(name):
+    s=str(name or '').strip()
+    # Football Web Pages appends/prepends parenthesised half-time scores to club
+    # names, e.g. Newton Aycliffe(0) and (1)Kendal Town. They are not identity.
+    s=re.sub(r'^\(\d+\)\s*','',s)
+    s=re.sub(r'\s*\(\d+\)$','',s)
+    return s.strip()
+
 def short_name(name):
-    return re.sub(r'\s+(FC|AFC|CFC)$','',str(name or ''),flags=re.I).strip()
+    return re.sub(r'\s+(FC|AFC|CFC)$','',clean_team(name),flags=re.I).strip()
 
 def semantic_key(r):
     return (
@@ -58,8 +66,9 @@ ALIASES={
 }
 
 def keys_for_team(name):
-    vals=[str(name),short_name(name)]
-    vals += ALIASES.get(str(name),[])
+    name=clean_team(name)
+    vals=[name,short_name(name)]
+    vals += ALIASES.get(name,[])
     vals += ALIASES.get(short_name(name),[])
     out=[]
     for v in vals:
@@ -69,6 +78,9 @@ def keys_for_team(name):
 
 for src in rows:
     r={k:src.get(k) for k in ('round','date','home','away','home_score','away_score','winner','status','decision','source_url')}
+    r['home']=clean_team(r.get('home'))
+    r['away']=clean_team(r.get('away'))
+    r['winner']=clean_team(r.get('winner')) if r.get('winner') else None
     # Keep administrative walkovers scoreless. Do not invent a played match.
     if str(r.get('decision') or '').lower()=='walkover':
         r['home_score']=None; r['away_score']=None
