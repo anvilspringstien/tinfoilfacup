@@ -9,6 +9,7 @@ on:
       - updater/audit_epr_authoritative_sources.py
       - updater/reconcile_epr_legacy_with_fwp.py
       - updater/build_epr_canonical_candidate.py
+      - updater/audit_epr_runtime_path.py
 
 permissions:
   contents: write
@@ -26,11 +27,13 @@ jobs:
         run: python updater/reconcile_epr_legacy_with_fwp.py
       - name: Build review-only canonical EPR candidate
         run: python updater/build_epr_canonical_candidate.py
+      - name: Audit EPR runtime lookup path
+        run: python updater/audit_epr_runtime_path.py
       - name: Commit audit reports
         run: |
           git config user.name "Tin Foil FA Cup Audit"
           git config user.email "actions@users.noreply.github.com"
-          git add epr-authoritative-source-audit.json epr-authoritative-source-audit.md epr-legacy-reconciliation.md epr-canonical-candidate.json epr-canonical-candidate.md
+          git add epr-authoritative-source-audit.json epr-authoritative-source-audit.md epr-legacy-reconciliation.md epr-canonical-candidate.json epr-canonical-candidate.md epr-runtime-path-audit.md
           if git diff --cached --quiet; then
             echo "No audit report changes"
           else
