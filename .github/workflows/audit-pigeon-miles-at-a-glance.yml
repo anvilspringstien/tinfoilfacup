@@ -7,25 +7,37 @@ on:
     paths:
       - .github/workflows/audit-pigeon-miles-at-a-glance.yml
       - updater/audit_pigeon_miles_at_a_glance.py
+      - updater/patch_pigeon_miles_at_a_glance.py
+      - tests/test_pigeon_miles_at_a_glance.py
 
 permissions:
   contents: write
 
 jobs:
-  audit:
+  audit-and-patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Extract Stats At-a-Glance snippets
         run: python updater/audit_pigeon_miles_at_a_glance.py
-      - name: Commit audit report
+      - name: Apply Pigeon Miles At-a-Glance patch
+        run: python updater/patch_pigeon_miles_at_a_glance.py
+      - name: Run Pigeon Miles At-a-Glance regression
+        run: python -m unittest tests.test_pigeon_miles_at_a_glance -v
+      - name: Run existing Pigeon Miles regression
+        run: python -m unittest tests.test_pigeon_miles_stats_patch -v
+      - name: Run Clubfinder render regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run Stats certificate regression
+        run: node updater/clubfinder_stats_regression.js
+      - name: Commit candidate and audit report
         run: |
           git config user.name "Tin Foil FA Cup Audit"
           git config user.email "actions@users.noreply.github.com"
-          git add pigeon-miles-at-a-glance-audit.md
+          git add clubfinder.html pigeon-miles-at-a-glance-audit.md
           if git diff --cached --quiet; then
-            echo "No audit report changes"
+            echo "No candidate changes"
           else
-            git commit -m "Record Pigeon Miles At-a-Glance audit"
+            git commit -m "Add Pigeon Miles to Stats At a Glance"
             git push
           fi
