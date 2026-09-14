@@ -26,8 +26,8 @@ def locate(t,n):
 def compact(x): return json.dumps(x,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 text=HTML.read_text(encoding='utf-8'); evidence=json.loads(EVIDENCE.read_text(encoding='utf-8')); ledger=json.loads(LEDGER.read_text(encoding='utf-8'))
 items=evidence.get('verified_locations') or []; holds=evidence.get('held_for_review') or []
-if len(items)!=11: raise SystemExit(f'ABORT: expected 11 verified batch items, got {len(items)}')
-if holds: raise SystemExit(f'ABORT: expected no held items, got {len(holds)}')
+if len(items)!=10: raise SystemExit(f'ABORT: expected 10 verified batch items, got {len(items)}')
+if len(holds)!=1: raise SystemExit(f'ABORT: expected 1 held item, got {len(holds)}')
 p=locate(text,'LAW2_ORIGIN_LOCATIONS'); rows=json.loads(text[p[0]:p[1]]); by={norm(x.get('name') or x.get('club')):x for x in rows}
 for item in items:
     club=item['club']; row=by.get(norm(club))
@@ -36,6 +36,10 @@ for item in items:
     old_pc=str(row.get('postcode') or '').strip().upper(); new_pc=str(item['postcode']).strip().upper()
     if old_pc!=new_pc: raise SystemExit(f'ABORT: postcode drift needs explicit coordinate review for {club}: {old_pc} -> {new_pc}')
     row['ground']=item['ground']; row['ground_source']='Law 2 independently reviewed current home-ground evidence'
+for held in holds:
+    row=by.get(norm(held['club']))
+    if not row: raise SystemExit(f'ABORT: held supplemental record missing for {held["club"]}')
+    if str(row.get('verification') or '').lower()=='verified': raise SystemExit(f'ABORT: held club unexpectedly verified: {held["club"]}')
 text=text[:p[0]]+compact(rows)+text[p[1]:]; HTML.write_text(text,encoding='utf-8')
 existing=ledger.setdefault('verified_locations',[]); existing_by={norm(x.get('club')):x for x in existing}
 for item in items:
@@ -44,4 +48,4 @@ for item in items:
         if existing_by[key]!=canonical: raise SystemExit(f'ABORT: ledger already contains differing record for {item["club"]}')
     else: existing.append(canonical)
 ledger['verified_locations']=existing; LEDGER.write_text(json.dumps(ledger,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-print('LAW 2 BATCH 8 PREPARATION: SUCCESS'); print('Reviewed promotions prepared:',len(items))
+print('LAW 2 BATCH 8 PREPARATION: SUCCESS'); print('Reviewed promotions prepared:',len(items)); print('Held for review:',', '.join(x['club'] for x in holds))
