@@ -4,14 +4,14 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 
 - Added Law 2 origins audited: **160**
 - ✅ Already verified in protected GROUNDS: **6**
-- ✅ Verified in guarded Law 2 supplemental layer: **103**
-- ⚠️ Remaining supporting-evidence review queue: **51**
+- ✅ Verified in guarded Law 2 supplemental layer: **110**
+- ⚠️ Remaining supporting-evidence review queue: **44**
 
 ## Remaining review queue by entry round
 
-- **First Round Qualifying: 28**
+- **First Round Qualifying: 25**
 - **Fourth Round Qualifying: 7**
-- **Second Round Qualifying: 16**
+- **Second Round Qualifying: 12**
 
 ## Remaining clubs
 
@@ -25,16 +25,9 @@ This is a **read-only** review queue for the 160 clubs added to Clubfinder by th
 - **Harrogate Town AFC** — Exercise Stadium • HG2 7SA • Fourth Round Qualifying
 - **Horsham FC** — Hop Oast Community Stadium • RH13 0AB • Second Round Qualifying
 - **Plymouth Parkway FC** — Bolitho Park • PL5 3JG • First Round Qualifying
-- **Racing Club Warwick FC** — Townsend Meadow • CV34 6JP • First Round Qualifying
-- **Radcliffe FC** — Neuven Stadium • M26 3PE • Second Round Qualifying
-- **Ramsgate FC** — Southwood Stadium • CT11 0AN • First Round Qualifying
 - **Real Bedford FC** — Ledger Stadium • MK44 3SB • First Round Qualifying
-- **Redcar Athletic FC** — Green Lane • TS10 3RW • First Round Qualifying
 - **Redditch United FC** — The Valley Stadium • B97 4RN • First Round Qualifying
 - **Rushall Olympic FC** — Dales Lane • WS4 1LJ • First Round Qualifying
-- **Salisbury FC** — Raymond McEnhill Stadium • SP4 6PU • Second Round Qualifying
-- **Scarborough Athletic FC** — Flamingo Land Stadium • YO11 2JW • Second Round Qualifying
-- **Slough Town FC** — Arbour Park • SL2 5AY • Second Round Qualifying
 - **Solihull Moors FC** — Armco Arena • B91 2PP • Fourth Round Qualifying
 - **South Shields FC** — 1st Cloud Arena • NE32 3UP • Second Round Qualifying
 - **Southend United FC** — Roots Hall • SS2 6NQ • Fourth Round Qualifying
