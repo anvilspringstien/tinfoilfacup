@@ -5,6 +5,11 @@ Most rows are matched exactly to Football Web Pages by teams/orientation/score.
 Two exceptional administrative outcomes are represented explicitly from separate
 source evidence: Boro Rangers' withdrawal (Marske bye) and the replay awarded to
 Abbey Hulton after Kidsgrove's 0-0 first tie. No production data is modified.
+
+For source-matched rows, Football Web Pages supplies date/status/score proof while
+the existing Clubfinder legacy row supplies the canonical club display names.
+This deliberately avoids importing FWP's parenthesised half-time-score annotations
+as part of club identity.
 """
 from pathlib import Path
 import json,re
@@ -20,8 +25,6 @@ ALIASES={
  'varndeanians':'varndenians','sherborne town':'sherbourne town','bournemouth poppies':'bournemouth'
 }
 
-# Exceptional administrative outcomes which do not appear as normal scored FWP
-# rows. These are deliberately explicit rather than inferred from the old table.
 ADMIN_OUTCOMES={
  '9':{
    'round':'Extra Preliminary Round','date':'2026-08-08','home':'Marske United','away':'Boro Rangers',
@@ -95,19 +98,20 @@ for key,r in legacy.items():
  hits=[s for s in source if s['nh']==nh and s['na']==na and s['home_score']==hs and s['away_score']==as_]
  if len(hits)==1:
   s=hits[0]
-  candidate.append({'legacy_tie_id':key,'round':s['round'],'date':s['date'],'home':s['home'],'away':s['away'],
-                    'home_score':s['home_score'],'away_score':s['away_score'],'winner':winner(s['home'],s['home_score'],s['away'],s['away_score']),
+  home=r.get('home'); away=r.get('away')
+  candidate.append({'legacy_tie_id':key,'round':s['round'],'date':s['date'],'home':home,'away':away,
+                    'home_score':s['home_score'],'away_score':s['away_score'],'winner':winner(home,s['home_score'],away,s['away_score']),
                     'status':s['status'],'decision':r.get('decision') or '', 'source_kind':'football-web-pages',
-                    'source_url':s['source_url'],'legacy_decision':r.get('decision') or ''})
+                    'source_url':s['source_url'],'source_home':s['home'],'source_away':s['away'],'legacy_decision':r.get('decision') or ''})
  else:
   excluded.append({'legacy_tie_id':key,'legacy':r,'matching_source_rows':hits})
 
-payload={'schema':'review-only-epr-canonical-candidate-v2','sources':['Football Web Pages','Marske United FC','FBref'],
+payload={'schema':'review-only-epr-canonical-candidate-v3','sources':['Football Web Pages','Marske United FC','FBref'],
          'candidate_rows':candidate,'excluded_rows':excluded}
 OUT.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 lines=['# Extra Preliminary canonical candidate','', 'REVIEW ONLY. Production data unchanged.','',
        f'- Sourced candidate rows: **{len(candidate)}**',f'- Excluded / unresolved legacy rows: **{len(excluded)}**','',
-       'Normal scored rows are reconciled against Football Web Pages. Winners are derived from decisive source scorelines, not legacy winner fields. Two administrative outcomes are explicitly sourced and represented without invented scores.','',
+       'Normal scored rows are reconciled against Football Web Pages for date, status and score. Clubfinder’s existing canonical club names are retained in the candidate so FWP half-time-score annotations never become part of club identity. Winners are derived from decisive source scorelines, not legacy winner fields. Two administrative outcomes are explicitly sourced and represented without invented scores.','',
        '## Administrative outcomes','',
        '- Tie 9 — Marske United v Boro Rangers: Boro Rangers withdrew; Marske were given a bye into the Preliminary Round. Source: Marske United FC.',
        '- Tie 66 — Kidsgrove Athletic drew 0-0 with Abbey Hulton United on 8 August; the scheduled 11 August replay was awarded to Abbey Hulton. Source: FBref match schedule, corroborating the advancement shown in subsequent competition results.','',
