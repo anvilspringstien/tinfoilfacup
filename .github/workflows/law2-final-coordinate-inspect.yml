@@ -1,0 +1,13 @@
+name: Law 2 Final Coordinate Inspection
+on:
+  push:
+    branches: [audit/law2-final-coordinate-reconciliation]
+    paths:
+      - updater/inspect_law2_final_coordinates.py
+      - .github/workflows/law2-final-coordinate-inspect.yml
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python updater/inspect_law2_final_coordinates.py
