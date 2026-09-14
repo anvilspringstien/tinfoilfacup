@@ -1,0 +1,31 @@
+name: Audit Law 2 Batch 1
+
+on:
+  push:
+    branches:
+      - audit/law2-batch1
+    paths:
+      - .github/workflows/audit-law2-batch1.yml
+      - updater/audit_law2_batch1.py
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract batch records
+        run: python updater/audit_law2_batch1.py
+      - name: Commit audit report
+        run: |
+          git config user.name "Tin Foil FA Cup Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add law2-batch1-audit.json law2-batch1-audit.md
+          if git diff --cached --quiet; then
+            echo "No audit changes"
+          else
+            git commit -m "Record first Law 2 validation batch"
+            git push
+          fi
