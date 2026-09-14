@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "tffac-clubfinder-counter",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-14",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CLUBFINDER_COUNTER",
+        "class_name": "ClubfinderCounter"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["ClubfinderCounter"]
+    }
+  ],
+  "vars": {
+    "ALLOWED_ORIGINS": ""
+  }
+}
