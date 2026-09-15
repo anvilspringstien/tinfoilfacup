@@ -2,7 +2,7 @@
 """Guarded 491 -> 651 Law 2 origin expansion for Clubfinder v7.6."""
 from pathlib import Path
 import json,re,urllib.request
-ROOT=Path(__file__).resolve().parents[1]; HTML=ROOT/'clubfinder.html'; REGISTRY=ROOT/'journey-club-registry.json'
+ROOT=Path(__file__).resolve().parents[1]; HTML=ROOT/'clubfinder.html'; REGISTRY=ROOT/'journey-club-registry.json'; LEDGER=ROOT/'updater'/'law2-verified-location-ledger.json'
 NEW={'First Round Qualifying','Second Round Qualifying','Fourth Round Qualifying'}
 ALL={'Extra Preliminary Round','Preliminary Round',*NEW}
 EXPECTED={'Extra Preliminary Round':438,'Preliminary Round':53,'First Round Qualifying':88,'Second Round Qualifying':48,'Fourth Round Qualifying':24}
@@ -11,7 +11,8 @@ EXPECTED={'Extra Preliminary Round':438,'Preliminary Round':53,'First Round Qual
 ENTRY_ROUND_CORRECTIONS={'kendal town':'Extra Preliminary Round'}
 # Explicit current-club evidence overrides stale supporting-gazetteer records.
 # These overrides change only the Law 2 supplemental origin layer; protected
-# GROUNDS remain untouched.
+# GROUNDS remain untouched. The independently reviewed ledger below is preferred
+# for every club it covers, so these remain as defence-in-depth anchors.
 LOCATION_OVERRIDES={
  'warrington rylands':{
   'ground':'The Quickline Logistics Arena',
@@ -69,8 +70,17 @@ def geocode(postcodes):
  miss=[x for x in pcs if x not in out]
  if miss:raise SystemExit('ABORT: no coordinates for '+', '.join(miss))
  return out
-text=HTML.read_text(encoding='utf-8');reg=json.loads(REGISTRY.read_text(encoding='utf-8'));selected=[x for x in reg.get('clubs',[]) if x.get('entry_round') in NEW]
+text=HTML.read_text(encoding='utf-8');reg=json.loads(REGISTRY.read_text(encoding='utf-8'));ledger=json.loads(LEDGER.read_text(encoding='utf-8'));selected=[x for x in reg.get('clubs',[]) if x.get('entry_round') in NEW]
 if len(selected)!=160:raise SystemExit(f'ABORT: expected 160 additional Law 2 clubs, found {len(selected)}')
+# Reviewed ledger is the canonical source for supplemental Law 2 locations it covers.
+# It is independently audited and must contain an official-club source before use.
+reviewed={}
+for item in ledger.get('verified_locations') or []:
+ k=norm(item.get('club'))
+ sources=item.get('sources') or []
+ official=next((s for s in sources if s.get('type')=='official_club' and s.get('url')),None)
+ if not k or not item.get('ground') or not item.get('postcode') or not official:continue
+ reviewed[k]={'ground':item['ground'],'postcode':str(item['postcode']).strip().upper(),'source':official['url'],'ground_source':'Guarded Law 2 verified-location ledger; official club source'}
 elig,es,ee=arr(text,'ELIGIBLE');grounds,_,_=arr(text,'GROUNDS')
 if len({norm(x.get('name')) for x in elig})!=len(elig):raise SystemExit('ABORT: duplicate ELIGIBLE identity')
 by={norm(x.get('name')):x for x in elig};gby={norm(x.get('name') or x.get('club')):x for x in grounds}
@@ -90,13 +100,15 @@ for c in elig:
 if counts!=EXPECTED:raise SystemExit(f'ABORT: Law 2 entry-round cohort drift: {counts}')
 old=[];p=locate(text,'LAW2_ORIGIN_LOCATIONS')
 if p:old=json.loads(text[p[0]:p[1]])
-oldby={norm(x.get('name')):x for x in old};support=[];need=[]
+oldby={norm(x.get('name')):x for x in old};support=[];need=[];reviewed_used=0
 for x in selected:
  k=norm(x['club'])
  if k in gby:continue
- override=LOCATION_OVERRIDES.get(k)
- if override:
-  e=override
+ # Prefer independently reviewed current location over stale supporting evidence.
+ # Explicit anchors remain fallback only; neither path ever alters protected GROUNDS.
+ e=reviewed.get(k) or LOCATION_OVERRIDES.get(k)
+ if e:
+  if k in reviewed:reviewed_used+=1
  else:
   ev=[e for e in (x.get('supporting_ground_evidence') or []) if e.get('ground') and e.get('postcode')]
   if len(ev)!=1:raise SystemExit(f"ABORT: {x['club']} has {len(ev)} usable supporting home-ground candidates")
@@ -155,4 +167,4 @@ if 'const top=rows.slice(0,3);' not in text:raise SystemExit('ABORT: nearest-thr
 for marker in ('const LAW2_ORIGIN_LOCATIONS=','LAW2_ORIGIN_LOCATIONS.find',"enters the competition at '+esc(entryRound)+'."):
  if marker not in text:raise SystemExit('ABORT: Law 2 marker missing: '+marker)
 HTML.write_text(text,encoding='utf-8')
-print('CLUBFINDER LAW 2 ORIGIN EXPANSION: SUCCESS');print('Selectable Law 2 origins:',len(elig));print('Entry rounds:',counts);print('Additional qualifying origins:',len(selected));print('Supplemental supporting home-ground locations:',len(support));print('Corrected entry round: Kendal Town FC -> Extra Preliminary Round');print('Protected GROUNDS array: UNTOUCHED');print('Nearest journeys returned: 3');print('Proper-round-only origins: EXCLUDED')
+print('CLUBFINDER LAW 2 ORIGIN EXPANSION: SUCCESS');print('Selectable Law 2 origins:',len(elig));print('Entry rounds:',counts);print('Additional qualifying origins:',len(selected));print('Supplemental supporting home-ground locations:',len(support));print('Reviewed ledger locations applied:',reviewed_used);print('Corrected entry round: Kendal Town FC -> Extra Preliminary Round');print('Protected GROUNDS array: UNTOUCHED');print('Nearest journeys returned: 3');print('Proper-round-only origins: EXCLUDED')
