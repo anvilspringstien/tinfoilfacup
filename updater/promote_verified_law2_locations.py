@@ -4,6 +4,9 @@
 This does not alter protected GROUNDS. It only changes verification state inside the
 Law 2 supplemental origin layer, and only when club, ground and postcode exactly
 match the independently-reviewed ledger.
+
+All missing/drifted reviewed locations are collected before aborting so a guarded
+run reports the complete reconciliation queue rather than only the first mismatch.
 """
 from pathlib import Path
 import json,re
@@ -45,20 +48,38 @@ rows=json.loads(text[p[0]:p[1]])
 by={norm(x.get('name') or x.get('club')):x for x in rows}
 verified=ledger.get('verified_locations') or []
 if not verified: raise SystemExit('ABORT: verified location ledger is empty')
-promoted=[]
+
+# First pass: validate the complete reviewed set without mutating any row.
+# Keep fail-closed behaviour, but report every reconciliation problem together.
+problems=[]
 for item in verified:
-    key=norm(item.get('club'))
+    club=item.get('club')
+    key=norm(club)
     row=by.get(key)
-    if not row: raise SystemExit(f"ABORT: supplemental Law 2 location missing for {item.get('club')}")
+    if not row:
+        problems.append(f"supplemental Law 2 location missing for {club}")
+        continue
     expected_ground=str(item.get('ground') or '').strip()
     expected_pc=str(item.get('postcode') or '').strip().upper()
     actual_ground=str(row.get('ground') or '').strip()
     actual_pc=str(row.get('postcode') or '').strip().upper()
     if norm(actual_ground)!=norm(expected_ground) or actual_pc!=expected_pc:
-        raise SystemExit(f"ABORT: reviewed location drift for {item.get('club')}: {actual_ground} {actual_pc} != {expected_ground} {expected_pc}")
+        problems.append(f"reviewed location drift for {club}: {actual_ground} {actual_pc} != {expected_ground} {expected_pc}")
     sources=item.get('sources') or []
     if not any(s.get('type')=='official_club' and s.get('url') for s in sources):
-        raise SystemExit(f"ABORT: {item.get('club')} lacks official-club verification source")
+        problems.append(f"{club} lacks official-club verification source")
+
+if problems:
+    print(f'LAW 2 VERIFIED LOCATION PROMOTION: ABORT — {len(problems)} review problem(s)')
+    for problem in problems:
+        print('-',problem)
+    raise SystemExit(1)
+
+# Second pass: promotion occurs only when the whole reviewed set is clean.
+promoted=[]
+for item in verified:
+    row=by[norm(item.get('club'))]
+    sources=item.get('sources') or []
     row['verification']='verified'
     row['verification_label']='✅ Verified'
     row['verification_source']='Guarded Law 2 verified-location ledger'
