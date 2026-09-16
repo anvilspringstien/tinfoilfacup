@@ -1703,12 +1703,30 @@ function openCampaignStatsFromDeck(){
 $("openDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(0); };
 $("deckStatsBtn").onclick=()=>{ openCampaignStatsFromDeck(); };
 $("statsOpenDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(index); };
-$("exitBtn").onclick=()=>{
+$("exitBtn").onclick=(e)=>{
+  // C13 EXIT DIAGNOSTIC — temporary instrumentation only.
+  // It deliberately does NOT close this window, so the exact branch remains visible.
+  e.preventDefault();
+  e.stopPropagation();
   let cf=null;
-  try{ if(window.opener && !window.opener.closed && window.opener.TFFC_IS_CLUBFINDER) cf=window.opener; }catch(e){}
-  if(!cf){ try{ const named=window.open("","TFFC_CLUBFINDER"); if(named && !named.closed && named.TFFC_IS_CLUBFINDER) cf=named; else if(named && named!==window) named.close(); }catch(e){} }
-  if(cf){ cf.focus(); window.close(); return; }
-  $("feedback").textContent="Clubfinder tab not found. Please return to the Clubfinder tab.";
+  let openerState="none";
+  let namedState="not tried";
+  try{
+    if(window.opener){
+      openerState=window.opener.closed ? "closed" : (window.opener.TFFC_IS_CLUBFINDER ? "Clubfinder found" : "open, not marked Clubfinder");
+      if(!window.opener.closed && window.opener.TFFC_IS_CLUBFINDER) cf=window.opener;
+    }
+  }catch(err){ openerState="error: "+err.name; }
+  if(!cf){
+    try{
+      const named=window.open("","TFFC_CLUBFINDER");
+      if(named && !named.closed && named.TFFC_IS_CLUBFINDER){ cf=named; namedState="Clubfinder found"; }
+      else { namedState=named ? (named.closed ? "closed" : "open, not marked Clubfinder") : "no window returned"; if(named && named!==window) named.close(); }
+    }catch(err){ namedState="error: "+err.name; }
+  } else { namedState="not needed"; }
+  const result=cf ? "CLUBFINDER FOUND — normal code would now focus Clubfinder and call window.close()." : "CLUBFINDER NOT FOUND — normal code would show the fallback message.";
+  $("feedback").textContent="EXIT TEST | opener: "+openerState+" | named: "+namedState+" | "+result;
+  console.log("TFFC C13 EXIT TEST",{openerState,namedState,clubfinderFound:!!cf,windowName:window.name});
 };
 overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
 $("prev").onclick=()=>{if(index>0){index--;render()}};
