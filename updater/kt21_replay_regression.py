@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Regression guard for the replay defects exposed by postcode KT21 2HS.
+"""Regression guard for replay defects exposed by postcode KT21 2HS.
 
-This is intentionally data-level rather than postcode-distance logic: it locks
-in the two custody/next-round chains that were previously stale while also
-protecting the one genuinely unresolved First Qualifying replay.
+This is intentionally data-level rather than postcode-distance logic. It locks
+in decisive replay -> next-round progression for known chains, including the
+former Hanwell/Burgess Hill/Jersey conditional slot now that the postponed
+replay has been resolved.
 """
 import json
 import re
@@ -92,12 +93,17 @@ def main():
     if not has_fixture(fixtures, "Dulwich Hamlet", "Welling United"):
         failures.append("Welling United not linked to Dulwich Hamlet")
 
-    if conditional_count(fixtures) != 1:
-        failures.append(f"expected exactly 1 unresolved Second Qualifying conditional slot, found {conditional_count(fixtures)}")
+    # This was the final unresolved First Qualifying replay. The regression now
+    # protects the completed transition rather than preserving its old temporary
+    # conditional placeholder.
+    if not has_result(rows, "Jersey Bulls", 1, 3, "Burgess Hill Town", "First Round Qualifying Replay"):
+        failures.append("missing decisive Jersey Bulls 1-3 Burgess Hill Town replay")
+    if not has_fixture(fixtures, "Hanwell Town", "Burgess Hill Town"):
+        failures.append("Burgess Hill Town not linked to Hanwell Town after replay resolution")
 
-    pending = [f for f in fixtures if compatible(f.get("home"), "Hanwell Town") and "jersey bulls" in norm(f.get("away"))]
-    if not pending:
-        failures.append("genuine Hanwell Town / Burgess Hill Town or Jersey Bulls pending slot not preserved")
+    remaining = conditional_count(fixtures)
+    if remaining != 0:
+        failures.append(f"expected 0 unresolved Second Qualifying conditional slots after all First Qualifying replays resolved, found {remaining}")
 
     if failures:
         raise SystemExit("KT21 REPLAY REGRESSION: FAIL\n- " + "\n- ".join(failures))
@@ -105,7 +111,8 @@ def main():
     print("KT21 REPLAY REGRESSION: PASS")
     print("Crowborough Athletic -> Hampton & Richmond Borough: PASS")
     print("Welling United 2-1 Faversham Town -> Dulwich Hamlet: PASS")
-    print("Single genuine pending replay slot preserved: PASS")
+    print("Jersey Bulls 1-3 Burgess Hill Town -> Hanwell Town: PASS")
+    print("Stale Second Qualifying conditional slots: 0")
 
 
 if __name__ == "__main__":
