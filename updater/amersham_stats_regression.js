@@ -59,12 +59,13 @@ const assertions=`
   }
   if(!Number.isFinite(Number(pigeon.miles))||Number(pigeon.miles)<=0)throw new Error('HP7 Stats regression: Pigeon Miles must be a positive number');
 
-  const source=${JSON.stringify(html)};
-  if(!/function venueForResult\(r\)\{\s*const v=completedResultVenue\(r\);/m.test(source)){
-    throw new Error('HP7 Stats regression: Stats venueForResult does not delegate to completedResultVenue');
+  if(typeof journeyCertificate!=='function')throw new Error('HP7 Stats regression: journeyCertificate missing');
+  const certSource=String(journeyCertificate).replace(/\\s+/g,' ');
+  if(!certSource.includes('function venueForResult(r){ const v=completedResultVenue(r);')){
+    throw new Error('HP7 Stats regression: loaded Stats venueForResult does not delegate to completedResultVenue');
   }
-  if(!source.includes('await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult)')){
-    throw new Error('HP7 Stats regression: Stats certificate is not using canonical venueForResult for Pigeon Miles');
+  if(!certSource.includes('await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult)')){
+    throw new Error('HP7 Stats regression: loaded Stats certificate is not using canonical venueForResult for Pigeon Miles');
   }
   console.log('HP7 STATS REGRESSION: PASS');
   console.log('Campaign: Amersham Town -> North Leigh -> Windsor & Eton');
