@@ -52,9 +52,17 @@ const assertions=`
   const rendered=String(document.getElementById('results').innerHTML||'');
   if(!rendered)throw new Error('HP7 regression: go() produced no rendered Campaign cards');
   if(/Replay details TBC/i.test(rendered))throw new Error('HP7 regression: resolved Amersham ancestry fell back to Replay details TBC');
-  if(/↻\s*Replay required/i.test(rendered))throw new Error('HP7 regression: resolved Amersham ancestry rendered as an unresolved replay');
+  if(/↻\\s*Replay required/i.test(rendered))throw new Error('HP7 regression: resolved Amersham ancestry rendered as an unresolved replay');
   if(!/current custodian of your Tin Foil FA Cup/i.test(rendered))throw new Error('HP7 regression: resolved Amersham card did not render a current custodian');
-  if(!/Windsor\s*&(?:amp;)?\s*Eton/i.test(rendered))throw new Error('HP7 regression: expected Windsor & Eton to be visible as resolved custodian/history');
+  if(!/Windsor\\s*&(?:amp;)?\\s*Eton/i.test(rendered)){
+    console.error('HP7 RENDERED OUTPUT BEGIN');
+    console.error(rendered);
+    console.error('HP7 RENDERED OUTPUT END');
+    const debugJourney=tinFoilJourneyForRender(amersham);
+    console.error('HP7 render-boundary carrier:',(debugJourney.carrier||amersham).name);
+    console.error('HP7 render-boundary crumbs:',(debugJourney.breadcrumbs||[]).map(x=>{const r=x.result||{};return [r.round,r.home,r.home_score,r.away_score,r.away,r.winner,r.decision].join(' | ')}).join('\\n'));
+    throw new Error('HP7 regression: expected Windsor & Eton to be visible as resolved custodian/history');
+  }
 
   const journey=tinFoilJourneyForRender(amersham);
   if(!same((journey.carrier||amersham).name,'Windsor & Eton'))throw new Error('HP7 regression: render-boundary custodian expected Windsor & Eton, got '+((journey.carrier||amersham).name));
