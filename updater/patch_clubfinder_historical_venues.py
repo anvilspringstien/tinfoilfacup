@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Make every Clubfinder historical-result consumer honour canonical result.venue.
+"""Make Clubfinder historical-result consumers honour canonical result.venue.
 
 Match-specific venue data in competition.json takes precedence over club-home
-fallbacks. This keeps the main Campaign card, Stats/Print and Pigeon Miles on the
-same canonical historical venue.
+fallbacks. This keeps the main Campaign card and any still-present Stats/Print
+or Pigeon Miles helpers on the same canonical historical venue.
+
+Some older helper functions have been retired by later Clubfinder patches. The
+canonical completedResultVenue hook remains mandatory; legacy consumers are
+patched when present rather than being required as an implementation detail.
 """
 from pathlib import Path
 import re
@@ -34,14 +38,17 @@ text, n = pat.subn(lambda m: completed, text, count=1)
 if n != 1:
     raise SystemExit(f'ABORT: expected one completedResultVenue function, replaced {n}')
 
+optional_replacements = []
+
 venue_stats = r'''  function venueForStats(r){
     const v=completedResultVenue(r);
     return {ground:v.ground||'Venue TBC',postcode:v.postcode||'Postcode TBC'};
   }'''
 pat = re.compile(r'^  function venueForStats\(r\)\{.*?^  \}', re.S | re.M)
 text, n = pat.subn(lambda m: venue_stats, text, count=1)
-if n != 1:
-    raise SystemExit(f'ABORT: expected one venueForStats function, replaced {n}')
+if n > 1:
+    raise SystemExit(f'ABORT: expected at most one venueForStats function, replaced {n}')
+optional_replacements.append(('venueForStats', n))
 
 venue_result = r'''  function venueForResult(r){
     const v=completedResultVenue(r);
@@ -49,25 +56,40 @@ venue_result = r'''  function venueForResult(r){
   }'''
 pat = re.compile(r'^  function venueForResult\(r\)\{.*?^  \}', re.S | re.M)
 text, n = pat.subn(lambda m: venue_result, text, count=1)
-if n != 1:
-    raise SystemExit(f'ABORT: expected one venueForResult function, replaced {n}')
+if n > 1:
+    raise SystemExit(f'ABORT: expected at most one venueForResult function, replaced {n}')
+optional_replacements.append(('venueForResult', n))
 
 pat = re.compile(r'^ function venueForChallenge\(r\)\{.*\}$', re.M)
 text, n = pat.subn(" function venueForChallenge(r){return completedResultVenue(r);}", text, count=1)
-if n != 1:
-    raise SystemExit(f'ABORT: expected one venueForChallenge function, replaced {n}')
+if n > 1:
+    raise SystemExit(f'ABORT: expected at most one venueForChallenge function, replaced {n}')
+optional_replacements.append(('venueForChallenge', n))
 
-required = (
+# Mandatory canonical behaviour: the helper itself must prefer result.venue.
+for marker in (
+    "function completedResultVenue(result){",
     "const rv=result.venue||{};",
-    "function venueForChallenge(r){return completedResultVenue(r);}",
-    "const v=completedResultVenue(r);",
-)
-for marker in required:
+    "const homeClub=candidateClubByName(result.home);",
+):
     if marker not in text:
         raise SystemExit(f'ABORT: historical venue consumption marker missing: {marker}')
 
+# If a legacy helper still exists, it must now delegate to completedResultVenue.
+for name, replaced in optional_replacements:
+    if replaced and name == 'venueForChallenge' and "function venueForChallenge(r){return completedResultVenue(r);}" not in text:
+        raise SystemExit('ABORT: venueForChallenge did not delegate to completedResultVenue')
+    if replaced and name in ('venueForStats', 'venueForResult'):
+        marker = f'function {name}(r){{'
+        start = text.find(marker)
+        if start < 0 or 'const v=completedResultVenue(r);' not in text[start:start + 260]:
+            raise SystemExit(f'ABORT: {name} did not delegate to completedResultVenue')
+
 HTML.write_text(text, encoding='utf-8')
 print('CLUBFINDER HISTORICAL VENUE PATCH: SUCCESS')
-print('Main Campaign, Stats/Print and Pigeon Miles now prefer canonical result.venue.')
+print('Main Campaign historical venue resolver prefers canonical result.venue.')
+for name, replaced in optional_replacements:
+    print(f'{name}:', 'PATCHED' if replaced else 'RETIRED / NOT PRESENT')
+print('Later Stats, journey and historical Campaign regressions remain behavioural guards.')
 print('Verified match overrides and club-ground lookup remain guarded fallbacks.')
 print('Competition data: UNTOUCHED')
