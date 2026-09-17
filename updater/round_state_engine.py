@@ -165,11 +165,24 @@ def classify_observation(fixture, observation, history=None):
         if pair_key(row) == pair_key(fixture) and base_round(row.get("round")) == round_name
     ]
 
+    duplicate_candidate = dict(obs)
+    if status.startswith("FT"):
+        hs, ass = score_pair(duplicate_candidate)
+        if isinstance(hs, int) and isinstance(ass, int) and hs != ass and not duplicate_candidate.get("winner"):
+            duplicate_candidate["winner"] = _winner_from_score(duplicate_candidate)
     for previous in relevant:
-        candidate = dict(obs)
+        candidate = dict(duplicate_candidate)
         candidate["round"] = previous.get("round") or round_name
         if same_result(previous, candidate):
             return {"kind": "duplicate", "result": previous, "reason": "already-recorded"}
+
+    same_date_conflicts = [
+        row for row in relevant
+        if str(row.get("date") or "")
+        and str(row.get("date") or "") == str(obs.get("date") or "")
+    ]
+    if same_date_conflicts:
+        raise ValueError("conflicting observation for a date already recorded for this tie")
 
     earlier_draws = [
         row for row in relevant
