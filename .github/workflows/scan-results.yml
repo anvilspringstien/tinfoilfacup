@@ -31,6 +31,7 @@ on:
       - "updater/conditional_resolution_regression.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
+      - "updater/reconcile_result_history_aliases.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/enrich_replay_kickoffs_and_active_venues.py"
       - "updater/propagate_active_fixture_venues.py"
@@ -98,6 +99,10 @@ jobs:
           else
             python updater/run_source_resilient.py --label "FA Cup active-round result scan" -- python updater/auto_round_results.py --url "$SOURCE_URL"
           fi
+      - name: Reconcile replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py
+      - name: Guard replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py --check
       - name: Guard complete First Qualifying replay coverage
         run: python updater/replay_completion_guard.py
       - name: Enrich later-round fixture venues
@@ -125,6 +130,8 @@ jobs:
           python updater/audit_law2_location_verification.py
           python updater/patch_clubfinder_historical_venues.py
           python updater/refresh_clubfinder_embedded_snapshot.py
+      - name: Re-check replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py --check
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
       - name: Run rendered Clubfinder regression
@@ -165,5 +172,11 @@ jobs:
           else
             git commit -m "Resolve replay journeys in Clubfinder v7.6"
             git pull --rebase origin "${GITHUB_REF_NAME}"
+            echo "Re-running critical publish guards after rebase..."
+            python updater/reconcile_result_history_aliases.py --check
+            python updater/extra_preliminary_replay_regression.py
+            node updater/amersham_card_render_regression.js
+            node updater/historical_journey_regression.js
+            node updater/journey_integrity_regression.js
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
