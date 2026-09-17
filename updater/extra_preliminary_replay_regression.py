@@ -8,11 +8,27 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'competition.json').read_text(encoding='utf-8'))
 EXPECTED_ORIGINAL_TIES = 219
 
+# Keep identity matching aligned with sync_extra_preliminary_chronology.py.
+# These are matching aliases only; display/stored club names are untouched.
+TEAM_IDENTITY_ALIASES = {
+    'bedfont sports club': 'bedfont sports',
+    'bournemouth poppies': 'bournemouth',
+    'atherton lr': 'atherton laburnum rovers',
+    'irlam': 'irlam town',
+    'eastwood community': 'eastwood',
+    'millbrook hampshire': 'millbrook',
+    'royal wootton bassett town': 'royal wootton bassett',
+    'sherbourne town': 'sherborne town',
+    'sutton united birmingham': 'sutton united west midlands',
+    'varndeanians': 'varndenians',
+}
+
 
 def norm(s):
     s = str(s or '').lower().replace('&', ' and ')
     s = re.sub(r'\b(fc|afc|cfc|football club)\b', ' ', s)
-    return re.sub(r'[^a-z0-9]+', ' ', s).strip()
+    s = re.sub(r'[^a-z0-9]+', ' ', s).strip()
+    return TEAM_IDENTITY_ALIASES.get(s, s)
 
 
 def semantic_key(row):
