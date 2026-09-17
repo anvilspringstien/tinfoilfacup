@@ -4,8 +4,10 @@
 Responsibilities:
 1. Always fetch the live competition snapshot with cache-busting/no-store semantics.
 2. Return Previous Rounds breadcrumbs only for the actual Tin Foil FA Cup custody chain.
-3. Never present the just-played/current-round fixture as the known fixture for the next round.
-4. Present next-round dates in a human-friendly British format.
+3. Re-resolve the displayed custodian from the resolved breadcrumb chronology at the render boundary.
+4. Do not render the first Campaign card until the live competition refresh attempt has finished.
+5. Never present the just-played/current-round fixture as the known fixture for the next round.
+6. Present next-round dates in a human-friendly British format.
 """
 from pathlib import Path
 import re
@@ -67,6 +69,29 @@ text, n = journey_pat.subn(lambda m: new_build + ' function previousRoundsHtml',
 if n != 1:
     raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
+render_helper = r'''function tinFoilJourneyForRender(origin){
+  const journey=buildJourney(origin);
+  let carrier=origin;
+  const ordered=[...(journey.breadcrumbs||[])].sort((a,b)=>resultSortValue(a.result)-resultSortValue(b.result));
+  for(const item of ordered){
+    const r=item.result||{};
+    const participant=sameClubIdentity(r.home,carrier.name)||sameClubIdentity(r.away,carrier.name);
+    if(!participant)continue;
+    const winner=canonicalResultWinner(r);
+    if(winner&&!resultNeedsReplay(r)){
+      carrier=clubByDisplayName(winner)||candidateClubByName(winner)||{name:winner,entry_round:carrier.entry_round||'',fixture:{}};
+    }
+  }
+  return {...journey,carrier};
+}
+'''
+if 'function tinFoilJourneyForRender(origin)' not in text:
+    marker = 'function previousRoundsHtml'
+    pos = text.find(marker)
+    if pos < 0:
+        raise SystemExit('ABORT: previousRoundsHtml render-helper boundary not found')
+    text = text[:pos] + render_helper + text[pos:]
+
 next_guard = r'''
 /* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */
 const tinFoilBaseNextRoundInfo=nextRoundInfo;
@@ -83,14 +108,32 @@ nextRoundInfo=function(club){
 };
 /* TIN_FOIL_NEXT_ROUND_INTEGRITY_END */
 '''.strip()
-# Place this AFTER buildJourney. The upstream competition patcher deliberately
-# replaces buildJourney on every health run, so it will remove this block first;
-# this patch then reinstalls it. That keeps both patchers safely idempotent.
 marker = 'function previousRoundsHtml'
 pos = text.find(marker)
 if pos < 0:
     raise SystemExit('ABORT: previousRoundsHtml insertion boundary not found')
 text = text[:pos] + next_guard + '\n' + text[pos:]
+
+old_render_journey = 'j=buildJourney(origin),c=j.carrier||origin'
+new_render_journey = 'j=tinFoilJourneyForRender(origin),c=j.carrier||origin'
+if old_render_journey in text:
+    text = text.replace(old_render_journey, new_render_journey, 1)
+elif new_render_journey not in text:
+    raise SystemExit('ABORT: Campaign card journey-selection boundary not found')
+
+old_go = "async function go(){\n const input=document.getElementById('postcode')"
+new_go = "async function go(){\n await tinFoilCompetitionReady;\n const input=document.getElementById('postcode')"
+if old_go in text:
+    text = text.replace(old_go, new_go, 1)
+elif new_go not in text:
+    raise SystemExit('ABORT: Campaign go() readiness boundary not found')
+
+old_boot = '\nrefreshCompetitionData(false);\n</script>'
+new_boot = '\nconst tinFoilCompetitionReady=refreshCompetitionData(false);\n</script>'
+if old_boot in text:
+    text = text.replace(old_boot, new_boot, 1)
+elif new_boot not in text:
+    raise SystemExit('ABORT: competition refresh bootstrap boundary not found')
 
 # Human-facing next-round dates should never leak the canonical ISO storage form.
 old_date = "'<br>'+esc(next.date)+"
@@ -122,6 +165,10 @@ required = (
     'function resolveChain(){',
     'if(!participant)continue;',
     'breadcrumbs:resolved.breadcrumbs',
+    'function tinFoilJourneyForRender(origin)',
+    'j=tinFoilJourneyForRender(origin),c=j.carrier||origin',
+    'await tinFoilCompetitionReady;',
+    'const tinFoilCompetitionReady=refreshCompetitionData(false);',
     'const tinFoilBaseNextRoundInfo=nextRoundInfo;',
     'return {...info,knownFixture:null};',
     'function tinFoilDisplayDate(value)',
@@ -134,10 +181,14 @@ for required_marker in required:
 
 if "cache:force?'no-store':'default'" in text:
     raise SystemExit('ABORT: stale default-cache live competition fetch remains')
+if '\nrefreshCompetitionData(false);\n</script>' in text:
+    raise SystemExit('ABORT: untracked competition refresh bootstrap remains')
 
 P.write_text(text, encoding='utf-8')
 print('CLUBFINDER JOURNEY INTEGRITY PATCH: SUCCESS')
 print('Live competition fetch: cache-busted + no-store')
+print('First Campaign render waits for live competition refresh attempt')
+print('Campaign card custodian: re-resolved from decisive breadcrumb chronology')
 print('Previous Rounds: filtered to actual custody chain')
 print('Next Round: stale current-round fixture suppressed')
 print('Next Round date: long-form en-GB display')

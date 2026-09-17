@@ -43,7 +43,10 @@ on:
       - "updater/refresh_clubfinder_embedded_snapshot.py"
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
+      - "updater/patch_clubfinder_journey_integrity.py"
       - "updater/patch_clubfinder_historical_venues.py"
+      - "updater/clubfinder_render_regression.js"
+      - "updater/amersham_card_render_regression.js"
       - "updater/replay_progression_regression.js"
       - "updater/historical_journey_regression.js"
       - "updater/patch_clubfinder_law2_origins.py"
@@ -126,6 +129,8 @@ jobs:
         run: python updater/competition_regression_guard.py
       - name: Run rendered Clubfinder regression
         run: node updater/clubfinder_render_regression.js
+      - name: Run rendered HP7 Amersham card regression
+        run: node updater/amersham_card_render_regression.js
       - name: Run rendered EX8 venue regression
         run: node updater/ex8_venue_render_regression.js
       - name: Run rendered KT21 venue regression
