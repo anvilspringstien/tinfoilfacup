@@ -67,13 +67,23 @@ history_fn=r'''function historicalResultsForClub(club){
     if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
     if(!out.some(x=>sameSemanticResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
   }
+  const f=club.fixture||{};
+  if(club.entry_round==='Extra Preliminary Round'&&f.number!=null){
+    add(EPR_RESULTS_BY_TIE[String(f.number)]||null,club.entry_round);
+  }
   const hist=liveLookup('result_history',club.name);
   if(Array.isArray(hist))for(const r of hist)add(r,r&&r.round);
+  /* Result-history alias buckets can be uneven after chronology repairs. Scan
+     every canonical bucket for semantic participation, then deduplicate, so
+     an incomplete exact-name bucket cannot hide an earlier tie. */
+  const allHistory=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
+  for(const arr of Object.values(allHistory)){
+    if(!Array.isArray(arr))continue;
+    for(const r of arr)add(r,r&&r.round);
+  }
   add(liveLookup('results',club.name));
   if(!out.length){
-    const f=club.fixture||{};
-    if(club.entry_round==='Extra Preliminary Round'&&f.number!=null)add(EPR_RESULTS_BY_TIE[String(f.number)]||null,club.entry_round);
-    else if(f.result&&typeof f.result==='object')add(f.result,club.entry_round||f.result.round);
+    if(f.result&&typeof f.result==='object')add(f.result,club.entry_round||f.result.round);
     const key=String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'');
     add(CURRENT_RESULT_OVERRIDES[club.name]||CURRENT_RESULT_OVERRIDES[key]||null);
     add(liveLookup('results',club.name));
@@ -159,7 +169,7 @@ new_fallback="}else e.textContent='Clubfinder v7.6 — '+LIVE_DATA_STATUS.messag
 if old_fallback in text:text=text.replace(old_fallback,new_fallback,1)
 elif new_fallback not in text:raise SystemExit('ABORT: live-data fallback boundary not found')
 
-required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'const winner=canonicalResultWinner(r);','if(nf.venue&&nf.venue.postcode','Clubfinder v7.6 — Competition data updated: ','<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools">')
+required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'Object.values(allHistory)','const winner=canonicalResultWinner(r);','if(nf.venue&&nf.venue.postcode','Clubfinder v7.6 — Competition data updated: ','<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools">')
 for marker in required:
     if marker not in text:raise SystemExit(f'ABORT: required competition patch missing: {marker}')
 
@@ -167,7 +177,7 @@ P.write_text(text,encoding='utf-8')
 print('CLUBFINDER COMPETITION PATCH: SUCCESS')
 print('Decisive scorelines override contradictory legacy winner fields.')
 print('Repeated result snapshots are deduplicated semantically.')
-print('Canonical result_history is included in journey traversal.')
+print('Canonical result_history is merged across alias buckets for journey traversal.')
 print('Canonical live fixture venues are preserved by next-round rendering.')
 print('Clubfinder v7.6 status line is positioned directly beneath the search panel.')
 print('Ground records themselves: UNTOUCHED')
