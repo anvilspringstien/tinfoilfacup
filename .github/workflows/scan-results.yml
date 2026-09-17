@@ -17,6 +17,8 @@ on:
     paths:
       - "updater/auto_results.py"
       - "updater/run_source_resilient.py"
+      - "updater/sync_extra_preliminary_chronology.py"
+      - "updater/extra_preliminary_replay_regression.py"
       - "updater/apply_replay_orientation_fix.py"
       - "updater/repair_first_qualifying_replays_20260909.py"
       - "updater/sync_second_qualifying_resolved.py"
@@ -26,6 +28,8 @@ on:
       - "updater/enrich_later_round_venues.py"
       - "updater/enrich_replay_kickoffs_and_active_venues.py"
       - "updater/propagate_active_fixture_venues.py"
+      - "updater/historical-match-venue-ledger.json"
+      - "updater/propagate_historical_match_venues.py"
       - "updater/kickoff_venue_regression.py"
       - "updater/kt21_replay_regression.py"
       - "updater/kt21_venue_render_regression.js"
@@ -33,7 +37,9 @@ on:
       - "updater/refresh_clubfinder_embedded_snapshot.py"
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
+      - "updater/patch_clubfinder_historical_venues.py"
       - "updater/replay_progression_regression.js"
+      - "updater/historical_journey_regression.js"
       - "updater/patch_clubfinder_law2_origins.py"
       - "updater/law2-verified-location-ledger.json"
       - "updater/promote_verified_law2_locations.py"
@@ -51,6 +57,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Synchronise complete Extra Preliminary chronology
+        run: python updater/run_source_resilient.py --label "Extra Preliminary chronology sync" -- python updater/sync_extra_preliminary_chronology.py
+      - name: Guard Extra Preliminary replay ancestry
+        run: python updater/extra_preliminary_replay_regression.py
       - name: Apply guarded replay-orientation fix
         run: python updater/apply_replay_orientation_fix.py
       - name: Repair verified 9 September First Qualifying replays
@@ -81,6 +91,8 @@ jobs:
         run: python updater/enrich_replay_kickoffs_and_active_venues.py
       - name: Propagate verified venues across active fixture copies
         run: python updater/propagate_active_fixture_venues.py
+      - name: Propagate verified historical match venues
+        run: python updater/propagate_historical_match_venues.py
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
       - name: Audit repaired competition chronology
@@ -96,6 +108,7 @@ jobs:
           python updater/patch_clubfinder_law2_origins.py
           python updater/promote_verified_law2_locations.py
           python updater/audit_law2_location_verification.py
+          python updater/patch_clubfinder_historical_venues.py
           python updater/refresh_clubfinder_embedded_snapshot.py
       - name: Run competition regression guard
         run: python updater/competition_regression_guard.py
@@ -117,6 +130,8 @@ jobs:
         run: node updater/clubfinder_stats_regression.js
       - name: Run all-club journey integrity regression
         run: node updater/journey_integrity_regression.js
+      - name: Run historical Campaign regression
+        run: node updater/historical_journey_regression.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
