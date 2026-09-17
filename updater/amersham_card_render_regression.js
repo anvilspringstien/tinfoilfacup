@@ -63,6 +63,12 @@ const assertions=`
     console.error('HP7 render-boundary crumbs:',(debugJourney.breadcrumbs||[]).map(x=>{const r=x.result||{};return [r.round,r.home,r.home_score,r.away_score,r.away,r.winner,r.decision].join(' | ')}).join('\\n'));
     throw new Error('HP7 regression: expected Windsor & Eton to be visible as resolved custodian/history');
   }
+  if(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered)){
+    console.error('HP7 HISTORICAL VENUE RENDER BEGIN');
+    console.error(rendered);
+    console.error('HP7 HISTORICAL VENUE RENDER END');
+    throw new Error('HP7 regression: rendered Petts Wood & Holmesdale v Windsor & Eton historical venue must be The New Inn Stadium, BR2 8HQ');
+  }
 
   const journey=tinFoilJourneyForRender(amersham);
   if(!same((journey.carrier||amersham).name,'Windsor & Eton'))throw new Error('HP7 regression: render-boundary custodian expected Windsor & Eton, got '+((journey.carrier||amersham).name));
@@ -74,6 +80,7 @@ const assertions=`
   console.log('HP7 0EJ go() render: PASS');
   console.log('Resolved custodian: Windsor & Eton');
   console.log('Replay details TBC absent: PASS');
+  console.log('Petts Wood historical venue rendered: The New Inn Stadium, BR2 8HQ — PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
