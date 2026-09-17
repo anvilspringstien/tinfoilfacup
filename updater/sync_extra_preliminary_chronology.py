@@ -169,16 +169,23 @@ def parse_results(raw, url, date):
 
     for kind, value in parser.events:
         if kind == 'heading':
-            # Every new page heading closes the previous result section unless
-            # it is exactly the original Extra Preliminary Round heading.
-            # This prevents sidebar/latest-result FT rows from inheriting the
-            # last competition state seen on the page.
-            in_original_section = heading_key(value) == 'extra preliminary round'
+            # Page headings (normally the date) are not round boundaries.
+            # FWP marks each competition round inside the table itself.
             continue
-        if kind != 'row' or not in_original_section:
+        if kind != 'row':
             continue
 
         cells = [c.strip() for c in value if c.strip()]
+        if len(cells) == 1:
+            # Round boundaries are rendered as one-cell table-title rows such
+            # as <th colspan="6">Extra Preliminary Round</th>. Every title row
+            # resets state, preventing replay/other-round FT rows from leaking
+            # into the original chronology.
+            in_original_section = heading_key(cells[0]) == 'extra preliminary round'
+            continue
+        if not in_original_section:
+            continue
+
         status_i = next((i for i, cell in enumerate(cells) if cell.upper().startswith('FT')), None)
         if status_i is None or len(cells) < status_i + 5:
             continue
