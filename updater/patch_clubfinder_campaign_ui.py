@@ -67,19 +67,46 @@ bridge_end = beta.find("async function journeyCertificate", bridge_start)
 if bridge_start < 0 or bridge_end < 0:
     raise SystemExit("ABORT: Candidate 13 bridge block not found")
 bridge = beta[bridge_start:bridge_end]
-bridge = bridge.replace("window.open('challenges-beta.html','_blank');", "window.open('beta/challenges-beta.html','_blank');")
-bridge = bridge.replace(
-    "function venueForStats(r){\n    if(!r)",
-    "function venueForStats(r){\n    if(typeof completedResultVenue==='function')return completedResultVenue(r);\n    if(!r)",
-    1,
-)
-bridge = bridge.replace(
-    "function venueForChallenge(r){if(!r)",
-    "function venueForChallenge(r){if(typeof completedResultVenue==='function')return completedResultVenue(r);if(!r)",
-    1,
-)
-if "beta/challenges-beta.html" not in bridge or "completedResultVenue" not in bridge:
-    raise SystemExit("ABORT: production Challenges bridge adaptation failed")
+
+# Production Clubfinder sits one directory above the BETA deck. Accept Candidate
+# formatting/path drift but always reconcile to the one production-relative target.
+production_target = "window.open('beta/challenges-beta.html','_blank');"
+if production_target not in bridge:
+    bridge, launch_n = re.subn(
+        r"window\.open\(\s*(['\"])[^'\"]*challenges[^'\"]*\1\s*,\s*(['\"])_blank\2\s*\);",
+        production_target,
+        bridge,
+        count=1,
+        flags=re.I,
+    )
+    if launch_n != 1:
+        raise SystemExit("ABORT: Candidate 13 Challenges launch call not found")
+
+# Reuse Clubfinder's canonical historical-result venue resolver wherever the
+# Candidate bridge still declares its local venue helpers. The fallback bodies
+# remain intact for defensive compatibility.
+if "function venueForStats(r){" in bridge and "function venueForStats(r){\n    if(typeof completedResultVenue==='function')" not in bridge:
+    bridge, n = re.subn(
+        r"function venueForStats\(r\)\{",
+        "function venueForStats(r){\n    if(typeof completedResultVenue==='function')return completedResultVenue(r);",
+        bridge,
+        count=1,
+    )
+    if n != 1:
+        raise SystemExit("ABORT: Candidate 13 Stats venue resolver adaptation failed")
+if "function venueForChallenge(r){" in bridge and "function venueForChallenge(r){if(typeof completedResultVenue==='function')" not in bridge:
+    bridge, n = re.subn(
+        r"function venueForChallenge\(r\)\{",
+        "function venueForChallenge(r){if(typeof completedResultVenue==='function')return completedResultVenue(r);",
+        bridge,
+        count=1,
+    )
+    if n != 1:
+        raise SystemExit("ABORT: Candidate 13 Challenge venue resolver adaptation failed")
+if production_target not in bridge:
+    raise SystemExit("ABORT: production Challenges path adaptation failed")
+if ("function venueForStats(r){" in bridge or "function venueForChallenge(r){" in bridge) and "completedResultVenue" not in bridge:
+    raise SystemExit("ABORT: canonical historical venue resolver was not wired into Candidate bridge")
 
 # Remove an older bridge if present, then insert the canonical adapted bridge.
 existing_bridge = re.compile(
@@ -155,7 +182,7 @@ required = [
     "const TIN_FOIL_CHALLENGE_BRIDGE_KEY='tffc.clubfinderCampaign.v1';",
     "window.name='TFFC_CLUBFINDER'",
     "window.tffcOpenStatsFromChallenges",
-    "window.open('beta/challenges-beta.html','_blank');",
+    production_target,
     "async function journeyCertificate(origin, suppliedWindow=null, returnMode=\"clubfinder\")",
     "Back to Challenges",
     ".challenges-launch{background:#e4bb26!important;color:#111!important}",
