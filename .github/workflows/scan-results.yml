@@ -48,6 +48,7 @@ on:
       - "updater/patch_clubfinder_historical_venues.py"
       - "updater/clubfinder_render_regression.js"
       - "updater/amersham_card_render_regression.js"
+      - "updater/amersham_stats_regression.js"
       - "updater/replay_progression_regression.js"
       - "updater/historical_journey_regression.js"
       - "updater/patch_clubfinder_law2_origins.py"
@@ -138,6 +139,8 @@ jobs:
         run: node updater/clubfinder_render_regression.js
       - name: Run rendered HP7 Amersham card regression
         run: node updater/amersham_card_render_regression.js
+      - name: Run HP7 Amersham Stats and Pigeon Miles regression
+        run: node updater/amersham_stats_regression.js
       - name: Run rendered EX8 venue regression
         run: node updater/ex8_venue_render_regression.js
       - name: Run rendered KT21 venue regression
@@ -176,6 +179,7 @@ jobs:
             python updater/reconcile_result_history_aliases.py --check
             python updater/extra_preliminary_replay_regression.py
             node updater/amersham_card_render_regression.js
+            node updater/amersham_stats_regression.js
             node updater/historical_journey_regression.js
             node updater/journey_integrity_regression.js
             git push origin "HEAD:${GITHUB_REF_NAME}"
