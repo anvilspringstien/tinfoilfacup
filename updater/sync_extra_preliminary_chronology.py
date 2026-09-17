@@ -100,12 +100,15 @@ def parse_results(raw, url, date):
         if kind != 'row':
             continue
         cells = [c.strip() for c in value if c.strip()]
-        if len(cells) < 5 or not cells[0].upper().startswith('FT'):
+        status_i = next((i for i, cell in enumerate(cells) if cell.upper().startswith('FT')), None)
+        if status_i is None or len(cells) < status_i + 5:
             continue
-        hs, away_score = score_int(cells[2]), score_int(cells[3])
-        if hs is None or away_score is None:
+        home = cells[status_i + 1]
+        hs = score_int(cells[status_i + 2])
+        away_score = score_int(cells[status_i + 3])
+        away = cells[status_i + 4]
+        if hs is None or away_score is None or not home or not away:
             continue
-        home, away = cells[1], cells[4]
         winner = home if hs > away_score else away if away_score > hs else ''
         out.append({
             'round': 'Extra Preliminary Round',
@@ -128,7 +131,7 @@ def source_probe(raw, compact):
     lo = max(0, idx - 600) if idx >= 0 else 0
     hi = min(len(raw), idx + 1200) if idx >= 0 else min(len(raw), 1800)
     snippet = re.sub(r'\s+', ' ', raw[lo:hi])
-    print(f'SOURCE PROBE {compact}: bytes={len(raw)} tr={raw.lower().count("<tr")} td={raw.lower().count("<td")} FT={len(re.findall(r"\\bFT\\b", raw, re.I))} anchor={anchor!r} index={idx}')
+    print(f'SOURCE PROBE {compact}: bytes={len(raw)} tr={raw.lower().count("<tr")} td={raw.lower().count("<td")} anchor={anchor!r} index={idx}')
     print('SOURCE PROBE SNIPPET:', snippet)
 
 
