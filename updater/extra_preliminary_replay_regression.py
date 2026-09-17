@@ -83,6 +83,28 @@ if len(original_by_pair) != EXPECTED_ORIGINAL_TIES:
             lines.extend('  ' + row_label(row) for row in rows)
     raise SystemExit('\n'.join(lines))
 
+# Aylesbury United v Flackwell Heath is the known abandoned/rearranged edge
+# case. The 7 August match was abandoned; the completed 12 August 2-3 fixture
+# is therefore the original tie, not a replay. Keep this explicit so a source
+# label cannot silently recreate false replay ancestry.
+aylesbury_pair = frozenset((norm('Aylesbury United'), norm('Flackwell Heath')))
+aylesbury_original = [
+    row for row in originals
+    if pair_key(row) == aylesbury_pair
+    and str(row.get('date') or '') == '2026-08-12'
+    and row.get('home_score') == 2
+    and row.get('away_score') == 3
+    and norm(row.get('home')) == norm('Aylesbury United')
+    and norm(row.get('away')) == norm('Flackwell Heath')
+]
+aylesbury_replay = [row for row in replays if pair_key(row) == aylesbury_pair]
+if len(aylesbury_original) != 1 or aylesbury_replay:
+    raise SystemExit(
+        'AYLESBURY-FLACKWELL ABANDONED/REARRANGED REGRESSION FAILED: '
+        f'originals={[row_label(row) for row in aylesbury_original]} '
+        f'replays={[row_label(row) for row in aylesbury_replay]}'
+    )
+
 missing = []
 not_drawn = []
 for replay in replays:
@@ -115,4 +137,5 @@ print('Original ties retained:', len(originals))
 print('Distinct draw pairs retained:', len(original_by_pair))
 print('Replay records checked:', len(replays))
 print('Every replay has an earlier drawn first leg: PASS')
+print('Aylesbury abandoned -> rearranged original chronology: PASS')
 print('Amersham 2-2 -> 1-2 chronology: PASS')
