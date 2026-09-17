@@ -7,6 +7,7 @@ const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'clubfinder.html'),'utf8');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 
+// Campaign UI gate v2: structural Pigeon-card repair + Challenges launcher.
 // This regression is already run by both publishers and again immediately
 // before a production push. Reuse that protected choke-point to ensure the
 // Campaign UI cannot disappear while chronology/Stats remain green.
