@@ -112,6 +112,10 @@ def aliases(name):
     return {x for x in out if x}
 
 
+def strip_hidden_half_time(name):
+    return re.sub(r'\(\d+\)$', '', str(name or '')).strip()
+
+
 def score_int(value):
     value = str(value or '').strip()
     return int(value) if re.fullmatch(r'\d+', value) else None
@@ -170,6 +174,13 @@ def semantic_key(row):
     )
 
 
+def cleaned_semantic_key(row):
+    cleaned = dict(row)
+    cleaned['home'] = strip_hidden_half_time(row.get('home'))
+    cleaned['away'] = strip_hidden_half_time(row.get('away'))
+    return semantic_key(cleaned)
+
+
 def describe_key(key):
     home, away, date, hs, ass = key
     score = 'AWARDED' if hs is None and ass is None else f'{hs}-{ass}'
@@ -215,6 +226,33 @@ def unique_round_rows(data, round_name):
     return found
 
 
+def purge_exact_parser_artifacts(data, bad_keys):
+    if not bad_keys:
+        return False
+    changed = False
+    history = data.get('result_history') or {}
+    for club, arr in history.items():
+        if not isinstance(arr, list):
+            continue
+        kept = [
+            row for row in arr
+            if not (
+                isinstance(row, dict)
+                and row.get('round') == 'Extra Preliminary Round'
+                and semantic_key(row) in bad_keys
+            )
+        ]
+        if len(kept) != len(arr):
+            history[club] = kept
+            changed = True
+    results = data.get('results') or {}
+    for club, row in list(results.items()):
+        if isinstance(row, dict) and row.get('round') == 'Extra Preliminary Round' and semantic_key(row) in bad_keys:
+            del results[club]
+            changed = True
+    return changed
+
+
 def main():
     data = json.loads(DATA_PATH.read_text(encoding='utf-8'))
     before = unique_round_rows(data, 'Extra Preliminary Round')
@@ -235,7 +273,7 @@ def main():
     for row in parsed:
         played.setdefault(semantic_key(row), row)
 
-    # Hidden half-time annotations must never leak into canonical team names.
+    # Hidden half-time annotations must never leak into newly parsed team names.
     polluted = [
         f"{row.get('home')} v {row.get('away')}"
         for row in played.values()
@@ -295,7 +333,35 @@ def main():
     if len(amersham) != 1 or amersham[0]['home_score'] != 2 or amersham[0]['away_score'] != 2:
         raise SystemExit(f'ABORT: Amersham regression row missing or unexpected: source={amersham_source} canonical={amersham_canonical}')
 
-    changed = False
+    # Repair only old rows that become an exact live-source match after removing
+    # a trailing hidden half-time score. Any other unmatched old row is a hard
+    # failure so historical differences cannot be silently normalised away.
+    source_keys = set(all_ties)
+    parser_artifact_keys = set()
+    unexpected_old = []
+    for key, row in before.items():
+        if key in source_keys:
+            continue
+        cleaned_key = cleaned_semantic_key(row)
+        had_hidden_half_time = (
+            strip_hidden_half_time(row.get('home')) != str(row.get('home') or '').strip()
+            or strip_hidden_half_time(row.get('away')) != str(row.get('away') or '').strip()
+        )
+        if had_hidden_half_time and cleaned_key in source_keys:
+            parser_artifact_keys.add(key)
+        else:
+            unexpected_old.append(key)
+
+    if unexpected_old:
+        print('UNEXPECTED PRE-EXISTING EXTRA PRELIMINARY ROWS:')
+        for key in sorted(unexpected_old):
+            print('  ', describe_key(key))
+        raise SystemExit(
+            f'ABORT: {len(unexpected_old)} pre-existing Extra Preliminary row(s) do not match the verified 219-tie chronology '
+            'and are not exact hidden-half-time parser artefacts.'
+        )
+
+    changed = purge_exact_parser_artifacts(data, parser_artifact_keys)
     for row in sorted(all_ties.values(), key=round_order):
         changed = add_result(data, row) or changed
     after = unique_round_rows(data, 'Extra Preliminary Round')
@@ -319,7 +385,8 @@ def main():
             'walkovers': 1,
             'original_ties': len(after),
             'drawn_first_legs_visible': len(draws),
-            'new_original_results_restored': restored,
+            'parser_artifacts_repaired': len(parser_artifact_keys),
+            'net_original_ties_restored': restored,
         }
         DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
@@ -327,8 +394,9 @@ def main():
     print('Played source ties visible:', len(played))
     print('Verified walkovers:', 1)
     print('Canonical ties before:', len(before))
+    print('Parser artefact rows repaired:', len(parser_artifact_keys))
     print('Canonical ties after:', len(after))
-    print('Original ties restored:', restored)
+    print('Net original ties restored:', restored)
     print('Marske United v Boro Rangers walkover: PASS')
     print('Amersham anchor: North Leigh 2-2 Amersham Town: PASS')
     print('Competition state changed:', 'YES' if changed else 'NO (idempotent)')
