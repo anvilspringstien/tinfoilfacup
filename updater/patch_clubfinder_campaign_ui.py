@@ -9,6 +9,7 @@ Presentation/integration only:
 The Candidate 13 files are read-only reference material. This patch never modifies them.
 """
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML = ROOT / 'clubfinder.html'
@@ -19,35 +20,91 @@ beta = BETA.read_text(encoding='utf-8')
 PIGEON_MARKER = '/* TIN_FOIL_PIGEON_MILES_GLANCE */'
 BRIDGE_MARKER = "const TIN_FOIL_CHALLENGE_BRIDGE_KEY='tffc.clubfinderCampaign.v1';"
 
+
+def card_bounds(source, label_pos):
+    """Return the JS-string bounds of the .g card containing label_pos."""
+    starts = [
+        source.rfind("'<div class=\"g\">", 0, label_pos),
+        source.rfind("'<div class=\\\"g\\\">", 0, label_pos),
+    ]
+    start = max(starts)
+    if start < 0:
+        return None
+    end_tokens = ["</div></div>'+", "</div></div>' +"]
+    candidates = []
+    for token in end_tokens:
+        p = source.find(token, label_pos)
+        if p >= 0:
+            candidates.append((p + len(token), token))
+    if not candidates:
+        return None
+    end = min(candidates, key=lambda x: x[0])[0]
+    return start, end
+
+
 # Candidate 13 carries the approved six-roundel artwork as an inline data URI.
-beta_label = "'<div class=\"g\"><div class=\"g-label\">Pigeon<br>Miles</div><div class=\"icon-circle\"><img src=\"data:image/png;base64,"
-bp = beta.find(beta_label)
-if bp < 0:
-    raise SystemExit('ABORT: approved Pigeon Miles card not found in frozen BETA reference')
-be = beta.find("</div></div>'+", bp)
-if be < 0:
-    raise SystemExit('ABORT: approved Pigeon Miles card end not found')
-approved_pigeon_card = beta[bp:be + len("</div></div>'+ ".rstrip())]
+beta_label = 'Pigeon<br>Miles'
+bp_label = beta.find(beta_label)
+if bp_label < 0:
+    raise SystemExit('ABORT: approved Pigeon Miles label not found in frozen BETA reference')
+bounds = card_bounds(beta, bp_label)
+if not bounds:
+    raise SystemExit('ABORT: approved Pigeon Miles card bounds not found')
+bp, be = bounds
+approved_pigeon_card = beta[bp:be]
 if 'alt="Pigeon Miles Flown"' not in approved_pigeon_card:
     raise SystemExit('ABORT: approved Pigeon Miles artwork marker missing')
+if 'pigeonMilesDisplay' not in approved_pigeon_card:
+    raise SystemExit('ABORT: approved Pigeon Miles card is not wired to live mileage display')
+# Keep the mileage figure together on narrow devices without changing the value.
+approved_pigeon_card = approved_pigeon_card.replace(
+    '<div class="g-num">', '<div class="g-num" style="white-space:nowrap">', 1
+)
 
-pm = text.find(PIGEON_MARKER)
-if pm < 0:
-    raise SystemExit('ABORT: production Pigeon Miles At-a-Glance marker missing')
-ps = text.find("'<div class=\"g\"><div class=\"g-label\">Pigeon<br>Miles", pm)
-pe = text.find("</div></div>'+", ps)
-if ps < 0 or pe < 0:
-    raise SystemExit('ABORT: production Pigeon Miles card not found')
-pe += len("</div></div>'+")
-text = text[:ps] + approved_pigeon_card + text[pe:]
+# Restore the At-a-Glance Pigeon card structurally. Current production may have
+# an old emoji card, no card at all, or the already-correct card; all three must
+# converge idempotently to exactly one approved image card.
+label_positions = [m.start() for m in re.finditer(re.escape(beta_label), text)]
+existing_card_bounds = []
+for lp in label_positions:
+    b = card_bounds(text, lp)
+    if b and b not in existing_card_bounds:
+        existing_card_bounds.append(b)
 
-# Keep the approved card value on one line on narrow devices.
+if existing_card_bounds:
+    # Prefer the card in the Stats certificate: it contains the live
+    # pigeonMilesDisplay expression. There must not be multiple live cards.
+    live = [b for b in existing_card_bounds if 'pigeonMilesDisplay' in text[b[0]:b[1]]]
+    if len(live) != 1:
+        raise SystemExit(f'ABORT: expected one live Pigeon Miles card, found {len(live)}')
+    ps, pe = live[0]
+    prefix_start = ps
+    marker_pos = text.rfind(PIGEON_MARKER, max(0, ps - 120), ps)
+    if marker_pos >= 0:
+        prefix_start = marker_pos
+    text = text[:prefix_start] + PIGEON_MARKER + '\n  ' + approved_pigeon_card + text[pe:]
+else:
+    grounds_label = 'Grounds<br>Visited'
+    gp = text.find(grounds_label)
+    if gp < 0:
+        raise SystemExit('ABORT: Stats Grounds Visited At-a-Glance card not found')
+    section_end = text.find("  '</div></section>'+", gp)
+    if section_end < 0:
+        section_end = text.find("'</div></section>'+", gp)
+    if section_end < 0:
+        raise SystemExit('ABORT: Stats At-a-Glance section end not found')
+    insertion = "  " + PIGEON_MARKER + "\n  " + approved_pigeon_card + "\n"
+    text = text[:section_end] + insertion + text[section_end:]
+
+# Keep all At-a-Glance numeric values intact on a single line. This is a pure
+# layout rule; the displayed Pigeon Miles calculation remains unchanged.
 gnum_old = '.g-num{font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:20pt;font-weight:700;line-height:1}'
 gnum_new = '.g-num{font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:20pt;font-weight:700;line-height:1;white-space:nowrap}'
 if gnum_new not in text:
-    if text.count(gnum_old) != 1:
-        raise SystemExit(f'ABORT: expected one Stats g-num style anchor, found {text.count(gnum_old)}')
-    text = text.replace(gnum_old, gnum_new, 1)
+    if text.count(gnum_old) == 1:
+        text = text.replace(gnum_old, gnum_new, 1)
+    elif 'white-space:nowrap' not in approved_pigeon_card:
+        raise SystemExit('ABORT: no safe Stats g-num no-wrap anchor found')
 
 # Copy the tested Candidate 13 bridge, changing only the production-relative URL.
 if BRIDGE_MARKER not in text:
@@ -112,7 +169,7 @@ if 'class="round challenges-launch"' not in toolbar:
     text = text[:tool_start] + toolbar + text[tool_end:]
 
 required = [
-    PIGEON_MARKER, 'alt="Pigeon Miles Flown"', gnum_new, BRIDGE_MARKER,
+    PIGEON_MARKER, 'alt="Pigeon Miles Flown"', 'pigeonMilesDisplay', BRIDGE_MARKER,
     "window.open('beta/challenges-beta.html','_blank');", "window.name='TFFC_CLUBFINDER'",
     'window.tffcOpenStatsFromChallenges=', 'async function openChallenges(origin)',
     'async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder")',
@@ -121,8 +178,12 @@ required = [
 for item in required:
     if item not in text:
         raise SystemExit('ABORT: required Campaign UI marker missing: ' + item)
-if '>🐦</div>' in text[text.find(PIGEON_MARKER):text.find(PIGEON_MARKER)+1000]:
+marker_pos = text.find(PIGEON_MARKER)
+card_window = text[marker_pos:marker_pos + max(2500, len(approved_pigeon_card) + 500)]
+if '🐦' in card_window:
     raise SystemExit('ABORT: emoji Pigeon Miles fallback remains')
+if card_window.count('alt="Pigeon Miles Flown"') != 1:
+    raise SystemExit('ABORT: approved Pigeon Miles image must appear exactly once in its card')
 if text.count('class="round challenges-launch"') != 1:
     raise SystemExit('ABORT: Challenges launcher must appear exactly once in Campaign toolbar')
 
