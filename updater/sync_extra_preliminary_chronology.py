@@ -26,6 +26,23 @@ EXPECTED_PLAYED_TIES = 218
 MAX_ARCHIVE_SHRINK = 3
 UA = 'TinFoilFACupExtraPreliminaryChronology/1.0 (+https://anvilspringstien.github.io/tinfoilfacup/)'
 PROBE_ANCHORS = {'20260807': 'Ascot United', '20260808': 'North Leigh', '20260809': 'Beverley Town'}
+
+# Exact identity aliases observed between the existing canonical chronology and
+# Football Web Pages. These are matching aliases only: stored/display names are
+# not rewritten. Keep this list deliberately narrow and source-verified.
+TEAM_IDENTITY_ALIASES = {
+    'bedfont sports club': 'bedfont sports',
+    'bournemouth poppies': 'bournemouth',
+    'atherton lr': 'atherton laburnum rovers',
+    'irlam': 'irlam town',
+    'eastwood community': 'eastwood',
+    'millbrook hampshire': 'millbrook',
+    'royal wootton bassett town': 'royal wootton bassett',
+    'sherbourne town': 'sherborne town',
+    'sutton united birmingham': 'sutton united west midlands',
+    'varndeanians': 'varndenians',
+}
+
 WALKOVER = {
     'round': 'Extra Preliminary Round',
     'date': '2026-08-08',
@@ -101,7 +118,8 @@ def fetch(url):
 def norm(s):
     s = str(s or '').lower().replace('&', ' and ')
     s = re.sub(r'\b(fc|afc|cfc|football club)\b', ' ', s)
-    return re.sub(r'[^a-z0-9]+', ' ', s).strip()
+    s = re.sub(r'[^a-z0-9]+', ' ', s).strip()
+    return TEAM_IDENTITY_ALIASES.get(s, s)
 
 
 def aliases(name):
