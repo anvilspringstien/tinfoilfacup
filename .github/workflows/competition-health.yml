@@ -1,5 +1,5 @@
-# Law 2 origin + KT21 venue integrity guards
-name: Competition health monitor (v7.10.1)
+# Law 2 origin + replay-history integrity guards
+name: Competition health monitor (v7.10.2)
 
 on:
   workflow_dispatch:
@@ -17,6 +17,10 @@ on:
       - "updater/sync_second_qualifying_resolved.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
+      - "updater/reconcile_result_history_aliases.py"
+      - "updater/extra_preliminary_replay_regression.py"
+      - "updater/amersham_card_render_regression.js"
+      - "updater/historical_journey_regression.js"
       - "updater/kt21_replay_regression.py"
       - "updater/kt21_venue_render_regression.js"
       - "updater/refresh_clubfinder_embedded_snapshot.py"
@@ -69,6 +73,15 @@ jobs:
 
       - name: Reconcile all First Qualifying replays
         run: python updater/reconcile_first_qualifying_replays.py
+
+      - name: Reconcile replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py
+
+      - name: Guard replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py --check
+
+      - name: Guard Extra Preliminary replay ancestry
+        run: python updater/extra_preliminary_replay_regression.py
 
       - name: Guard complete First Qualifying replay coverage
         run: python updater/replay_completion_guard.py
@@ -126,6 +139,9 @@ jobs:
       - name: Run rendered Clubfinder DL5 regression
         run: node updater/clubfinder_render_regression.js
 
+      - name: Run rendered HP7 Amersham card regression
+        run: node updater/amersham_card_render_regression.js
+
       - name: Run rendered EX8 venue regression
         run: node updater/ex8_venue_render_regression.js
 
@@ -150,6 +166,9 @@ jobs:
       - name: Run all-club journey integrity regression
         run: node updater/journey_integrity_regression.js
 
+      - name: Run historical Campaign regression
+        run: node updater/historical_journey_regression.js
+
       - name: Commit canonical competition state and health report
         if: ${{ github.ref_name == 'main' }}
         run: |
@@ -161,6 +180,12 @@ jobs:
           else
             git commit -m "Update canonical competition chronology"
             git pull --rebase origin "${GITHUB_REF_NAME}"
+            echo "Re-running critical publish guards after rebase..."
+            python updater/reconcile_result_history_aliases.py --check
+            python updater/extra_preliminary_replay_regression.py
+            node updater/amersham_card_render_regression.js
+            node updater/historical_journey_regression.js
+            node updater/journey_integrity_regression.js
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
