@@ -2,9 +2,11 @@
 """Restore the complete 2026-27 FA Cup Extra Preliminary Round chronology.
 
 Football Web Pages date pages are used because the round-summary page no longer
-exposes the completed round. The write is fail-closed: all 219 original ties must
-be parsed before competition.json is touched. Existing later results/replays are
-preserved and remain the latest result for each club.
+exposes the completed round. The write is fail-closed: the canonical chronology
+must remain all 219 original ties. If the historical source later drops a small
+number of already-verified rows, an exact canonical superset may be retained;
+contradictions or substantial source loss still abort. Existing later
+results/replays are preserved and remain the latest result for each club.
 """
 import json
 import re
@@ -19,6 +21,7 @@ DATA_PATH = ROOT / 'competition.json'
 BASE = 'https://www.footballwebpages.co.uk/fa-cup'
 RESULT_DATES = ('20260807', '20260808', '20260809')
 EXPECTED_TIES = 219
+MAX_ARCHIVE_SHRINK = 3
 UA = 'TinFoilFACupExtraPreliminaryChronology/1.0 (+https://anvilspringstien.github.io/tinfoilfacup/)'
 PROBE_ANCHORS = {'20260807': 'Ascot United', '20260808': 'North Leigh', '20260809': 'Beverley Town'}
 
@@ -145,6 +148,11 @@ def semantic_key(row):
     )
 
 
+def describe_key(key):
+    home, away, date, hs, ass = key
+    return f'{date}: {home} {hs}-{ass} {away}'
+
+
 def same_result(a, b):
     return semantic_key(a) == semantic_key(b)
 
@@ -185,6 +193,9 @@ def unique_round_rows(data, round_name):
 
 
 def main():
+    data = json.loads(DATA_PATH.read_text(encoding='utf-8'))
+    before = unique_round_rows(data, 'Extra Preliminary Round')
+
     parsed = []
     per_date = {}
     raw_by_date = {}
@@ -201,25 +212,47 @@ def main():
     for row in parsed:
         unique.setdefault(semantic_key(row), row)
 
-    if len(unique) != EXPECTED_TIES:
+    source_complete = len(unique) == EXPECTED_TIES
+    if not source_complete:
         for compact, raw in raw_by_date.items():
             source_probe(raw, compact)
-        raise SystemExit(
-            f'ABORT: Extra Preliminary source coverage expected {EXPECTED_TIES} ties, got {len(unique)}; '
-            f'per-date={per_date}'
+
+        missing_count = EXPECTED_TIES - len(unique)
+        source_keys = set(unique)
+        canonical_keys = set(before)
+        safe_archive_shrink = (
+            0 < missing_count <= MAX_ARCHIVE_SHRINK
+            and len(before) == EXPECTED_TIES
+            and source_keys.issubset(canonical_keys)
         )
+        if not safe_archive_shrink:
+            raise SystemExit(
+                f'ABORT: Extra Preliminary source coverage expected {EXPECTED_TIES} ties, got {len(unique)}; '
+                f'per-date={per_date}; canonical={len(before)}'
+            )
+
+        missing = sorted(canonical_keys - source_keys)
+        print('EXTRA PRELIMINARY SOURCE ARCHIVE SHRINK DETECTED')
+        print(f'Live historical source exposes {len(unique)}/{EXPECTED_TIES} previously verified ties.')
+        print('Canonical chronology remains complete and every live source row is an exact semantic subset: PASS')
+        for key in missing:
+            print('Source no longer exposes:', describe_key(key))
+        print('Verified canonical 219-tie chronology retained; no historical row removed.')
 
     draws = [row for row in unique.values() if row['home_score'] == row['away_score']]
     if len(draws) < 40:
-        raise SystemExit(f'ABORT: expected at least 40 drawn Extra Preliminary ties, got {len(draws)}')
+        raise SystemExit(f'ABORT: expected at least 40 drawn Extra Preliminary ties in current source, got {len(draws)}')
 
-    amersham = [row for row in unique.values()
-                if norm(row['home']) == norm('North Leigh') and norm(row['away']) == norm('Amersham Town')]
+    # The Amersham anchor must exist either in the current source or in the
+    # already-verified canonical chronology when a source-archive row vanished.
+    amersham_source = [row for row in unique.values()
+                       if norm(row['home']) == norm('North Leigh') and norm(row['away']) == norm('Amersham Town')]
+    amersham_canonical = [row for row in before.values()
+                          if norm(row['home']) == norm('North Leigh') and norm(row['away']) == norm('Amersham Town')]
+    amersham = amersham_source or amersham_canonical
     if len(amersham) != 1 or amersham[0]['home_score'] != 2 or amersham[0]['away_score'] != 2:
-        raise SystemExit(f'ABORT: Amersham regression source row missing or unexpected: {amersham}')
+        raise SystemExit(f'ABORT: Amersham regression row missing or unexpected: source={amersham_source} canonical={amersham_canonical}')
 
-    data = json.loads(DATA_PATH.read_text(encoding='utf-8'))
-    before = unique_round_rows(data, 'Extra Preliminary Round')
     changed = False
     for row in sorted(unique.values(), key=round_order):
         changed = add_result(data, row) or changed
@@ -236,15 +269,16 @@ def main():
             'source': 'Football Web Pages date pages',
             'source_urls': [f'{BASE}/{d}' for d in RESULT_DATES],
             'synced_at': now,
+            'source_ties_visible': len(unique),
+            'source_complete': source_complete,
             'original_ties': len(after),
-            'drawn_first_legs': len(draws),
+            'drawn_first_legs_visible': len(draws),
             'new_original_results_restored': restored,
         }
         DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
     print('EXTRA PRELIMINARY CHRONOLOGY: PASS')
-    print('Source ties:', len(unique))
-    print('Drawn first legs:', len(draws))
+    print('Source ties visible:', len(unique))
     print('Canonical ties before:', len(before))
     print('Canonical ties after:', len(after))
     print('Original results restored:', restored)
