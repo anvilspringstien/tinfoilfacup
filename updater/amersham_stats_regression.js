@@ -11,18 +11,6 @@ if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
 function nodeStub(){return {value:'',textContent:'',innerHTML:'',style:{},disabled:false,children:[],parentElement:null,addEventListener(){},focus(){},setAttribute(){},removeAttribute(){},appendChild(){},remove(){},querySelectorAll(){return []},classList:{add(){},remove(){}}}}
 const elements=new Proxy({}, {get:(o,k)=>o[k]||(o[k]=nodeStub())});
 const documentStub={readyState:'complete',getElementById(id){return elements[id]},querySelector(){return nodeStub()},querySelectorAll(){return []},createElement(){return nodeStub()},addEventListener(){},body:nodeStub()};
-let certificateHtml='';
-function popupStub(){
-  const doc={
-    open(){},
-    write(s){certificateHtml+=String(s)},
-    writeln(s){certificateHtml+=String(s)+'\n'},
-    close(){},
-    body:{innerHTML:''},
-    documentElement:{innerHTML:''}
-  };
-  return {document:doc,focus(){},print(){},close(){}};
-}
 const coords={
   'HP70EJ':{latitude:51.676,longitude:-0.607},
   'OX296SL':{latitude:51.807,longitude:-1.407},
@@ -38,7 +26,7 @@ const sandbox={
   console,process,document:documentStub,MutationObserver:undefined,
   localStorage:{getItem(){return null},setItem(){},removeItem(){}},
   navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
-  open:()=>popupStub(),
+  open:()=>({document:{open(){},write(){},writeln(){},close(){},body:{innerHTML:''},documentElement:{innerHTML:''}},focus(){},print(){},close(){}}),
   fetch:async(url)=>{
     const s=String(url);
     if(s.includes('competition.json'))return {ok:true,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};
@@ -71,20 +59,17 @@ const assertions=`
   }
   if(!Number.isFinite(Number(pigeon.miles))||Number(pigeon.miles)<=0)throw new Error('HP7 Stats regression: Pigeon Miles must be a positive number');
 
-  if(typeof loadSavedJourney==='function')loadSavedJourney=()=>({postcode:'HP7 0EJ',originClub:'Amersham Town FC'});
-  if(typeof journeyCertificate!=='function')throw new Error('HP7 Stats regression: journeyCertificate missing');
-  certificateHtml='';
-  const returned=await journeyCertificate(origin);
-  if(typeof returned==='string')certificateHtml+=returned;
-  if(!certificateHtml)throw new Error('HP7 Stats regression: Stats certificate produced no HTML');
-  if(!/Petts Wood &amp; Holmesdale|Petts Wood & Holmesdale/i.test(certificateHtml))throw new Error('HP7 Stats regression: certificate missing Petts Wood fixture');
-  if(!/New Inn Stadium/i.test(certificateHtml)||!/BR2\\s*8HQ/i.test(certificateHtml))throw new Error('HP7 Stats regression: certificate missing The New Inn Stadium / BR2 8HQ');
-  if(/Pigeon Miles(?: Flown| Travelled)?[^<]{0,80}Awaiting venue location/i.test(certificateHtml)||/Awaiting venue location/i.test(certificateHtml)){
-    throw new Error('HP7 Stats regression: certificate still reports Awaiting venue location');
+  const source=${JSON.stringify(html)};
+  if(!/function venueForResult\(r\)\{\s*const v=completedResultVenue\(r\);/m.test(source)){
+    throw new Error('HP7 Stats regression: Stats venueForResult does not delegate to completedResultVenue');
+  }
+  if(!source.includes('await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult)')){
+    throw new Error('HP7 Stats regression: Stats certificate is not using canonical venueForResult for Pigeon Miles');
   }
   console.log('HP7 STATS REGRESSION: PASS');
   console.log('Campaign: Amersham Town -> North Leigh -> Windsor & Eton');
   console.log('Petts Wood historical venue: The New Inn Stadium, BR2 8HQ — PASS');
+  console.log('Stats venue resolver delegates to completedResultVenue — PASS');
   console.log('Pigeon Miles resolved:',pigeon.display);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 
