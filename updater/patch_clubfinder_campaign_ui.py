@@ -149,9 +149,13 @@ if return_body not in text:
 
 challenge_css = '.challenges-launch{background:#e4bb26!important;color:#111!important}.challenges-launch:hover{filter:brightness(.92)}'
 if challenge_css not in text:
-    if text.count('</style></head><body>') != 1:
-        raise SystemExit('ABORT: main style closing anchor not unique')
-    text = text.replace('</style></head><body>', challenge_css + '</style></head><body>', 1)
+    # There are legitimately two identical closing sequences: the first is the
+    # real Clubfinder document, the later one is inside the generated Stats HTML.
+    # Style only the first/main document and reject an implausible boundary.
+    main_style_close = text.find('</style></head><body>')
+    if main_style_close < 0 or main_style_close > 100000:
+        raise SystemExit('ABORT: main Clubfinder style closing boundary not found safely')
+    text = text[:main_style_close] + challenge_css + text[main_style_close:]
 
 tool_start = text.find("if(selected&&!showOriginal)tools=")
 tool_end = text.find("else if(selected&&showOriginal)tools=", tool_start)
