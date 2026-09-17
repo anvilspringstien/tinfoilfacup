@@ -44,7 +44,7 @@ TEAM_IDENTITY_ALIASES = {
     'millbrook hampshire': 'millbrook',
     'royal wootton bassett town': 'royal wootton bassett',
     'sherbourne town': 'sherborne town',
-    'st helens town': 'fc st helens',
+    'st helens town': 'st helens',
     'sutton united birmingham': 'sutton united west midlands',
     'varndeanians': 'varndenians',
 }
