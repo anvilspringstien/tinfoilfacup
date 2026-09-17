@@ -20,6 +20,7 @@ on:
       - "updater/reconcile_result_history_aliases.py"
       - "updater/extra_preliminary_replay_regression.py"
       - "updater/amersham_card_render_regression.js"
+      - "updater/amersham_stats_regression.js"
       - "updater/historical_journey_regression.js"
       - "updater/kt21_replay_regression.py"
       - "updater/kt21_venue_render_regression.js"
@@ -28,6 +29,8 @@ on:
       - "updater/enrich_later_round_venues.py"
       - "updater/enrich_replay_kickoffs_and_active_venues.py"
       - "updater/propagate_active_fixture_venues.py"
+      - "updater/historical-match-venue-ledger.json"
+      - "updater/propagate_historical_match_venues.py"
       - "updater/kickoff_venue_regression.py"
       - "updater/patch_clubfinder_competition_logic.py"
       - "updater/patch_clubfinder_replay_progression.py"
@@ -36,6 +39,7 @@ on:
       - "updater/patch_clubfinder_stats_integrity.py"
       - "updater/patch_clubfinder_branding.py"
       - "updater/patch_clubfinder_law2_origins.py"
+      - "updater/patch_clubfinder_historical_venues.py"
       - "updater/law2-verified-location-ledger.json"
       - "updater/promote_verified_law2_locations.py"
       - "updater/audit_law2_location_verification.py"
@@ -95,6 +99,9 @@ jobs:
       - name: Propagate verified venues across active fixture copies
         run: python updater/propagate_active_fixture_venues.py
 
+      - name: Propagate verified historical match venues
+        run: python updater/propagate_historical_match_venues.py
+
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
 
@@ -130,6 +137,9 @@ jobs:
       - name: Audit Law 2 location verification queue
         run: python updater/audit_law2_location_verification.py
 
+      - name: Apply canonical historical venue consumption
+        run: python updater/patch_clubfinder_historical_venues.py
+
       - name: Refresh last-known-good embedded competition snapshot
         run: python updater/refresh_clubfinder_embedded_snapshot.py
 
@@ -141,6 +151,9 @@ jobs:
 
       - name: Run rendered HP7 Amersham card regression
         run: node updater/amersham_card_render_regression.js
+
+      - name: Run HP7 Amersham Stats and Pigeon Miles regression
+        run: node updater/amersham_stats_regression.js
 
       - name: Run rendered EX8 venue regression
         run: node updater/ex8_venue_render_regression.js
@@ -184,6 +197,7 @@ jobs:
             python updater/reconcile_result_history_aliases.py --check
             python updater/extra_preliminary_replay_regression.py
             node updater/amersham_card_render_regression.js
+            node updater/amersham_stats_regression.js
             node updater/historical_journey_regression.js
             node updater/journey_integrity_regression.js
             git push origin "HEAD:${GITHUB_REF_NAME}"
