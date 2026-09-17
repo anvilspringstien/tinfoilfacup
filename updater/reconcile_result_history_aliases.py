@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Keep existing result-history identity aliases semantically identical.
+"""Keep replay-participant result-history identity aliases semantically identical.
 
 Clubfinder origins use canonical eligible-club names (often with FC/AFC suffixes),
-while source updaters can encounter suffix-free names. A decisive result that exists
+while source updaters can encounter suffix-free names. A decisive replay that exists
 only in one alias bucket can therefore leave a Campaign stranded on an earlier draw.
 
-Default mode repairs existing alias buckets in competition.json. --check is read-only
-and fails closed if any existing aliases for the same club identity contain different
-chronology, or if their latest `results` pointer disagrees with that chronology.
+Default mode repairs existing alias buckets for clubs whose chronology contains a
+replay. --check is read-only and fails closed if any of those aliases contain a
+different chronology, or if their latest `results` pointer disagrees with it.
 """
 import argparse
 import copy
@@ -58,6 +58,10 @@ def involves(row, identity):
     return norm(row.get("home")) == identity or norm(row.get("away")) == identity
 
 
+def is_replay(row):
+    return "replay" in str(row.get("round") or "").lower()
+
+
 def merge_row(existing, incoming):
     """Fill blank metadata without replacing already populated canonical values."""
     out = dict(existing)
@@ -102,11 +106,11 @@ def check(data):
     replay_rows = 0
     for identity, aliases in identity_groups(data).items():
         canonical = canonical_rows(data, identity, aliases)
-        canonical_keys = [semantic_key(row) for row in canonical]
-        if not canonical_keys:
+        if not canonical or not any(is_replay(row) for row in canonical):
             continue
+        canonical_keys = [semantic_key(row) for row in canonical]
         checked += 1
-        replay_rows += sum(1 for row in canonical if str(row.get("round") or "").lower().endswith(" replay"))
+        replay_rows += sum(1 for row in canonical if is_replay(row))
         expected = set(canonical_keys)
         for alias in aliases:
             rows = [row for row in (history.get(alias, []) or []) if isinstance(row, dict) and involves(row, identity)]
@@ -115,7 +119,7 @@ def check(data):
                 missing = expected - actual
                 extra = actual - expected
                 failures.append(
-                    f"{alias}: chronology differs from identity '{identity}' "
+                    f"{alias}: replay-participant chronology differs from identity '{identity}' "
                     f"(missing={len(missing)}, extra={len(extra)})"
                 )
                 continue
@@ -144,7 +148,7 @@ def check(data):
     if failures:
         raise SystemExit("RESULT HISTORY ALIAS GUARD: FAIL\n" + "\n".join(f"- {item}" for item in failures[:50]))
     print("RESULT HISTORY ALIAS GUARD: PASS")
-    print("Alias identity groups checked:", checked)
+    print("Replay-participant alias groups checked:", checked)
     print("Replay rows protected across alias groups:", replay_rows)
     print("Amersham Town FC/bare/AFC decisive replay parity: PASS")
 
@@ -155,7 +159,7 @@ def repair(data):
     changed_aliases = []
     for identity, aliases in identity_groups(data).items():
         canonical = canonical_rows(data, identity, aliases)
-        if not canonical:
+        if not canonical or not any(is_replay(row) for row in canonical):
             continue
         canonical_keys = [semantic_key(row) for row in canonical]
         for alias in aliases:
