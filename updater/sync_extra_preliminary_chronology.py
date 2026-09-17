@@ -20,6 +20,7 @@ BASE = 'https://www.footballwebpages.co.uk/fa-cup'
 RESULT_DATES = ('20260807', '20260808', '20260809')
 EXPECTED_TIES = 219
 UA = 'TinFoilFACupExtraPreliminaryChronology/1.0 (+https://anvilspringstien.github.io/tinfoilfacup/)'
+PROBE_ANCHORS = {'20260807': 'Ascot United', '20260808': 'North Leigh', '20260809': 'Beverley Town'}
 
 
 class PageParser(HTMLParser):
@@ -121,6 +122,16 @@ def parse_results(raw, url, date):
     return out
 
 
+def source_probe(raw, compact):
+    anchor = PROBE_ANCHORS.get(compact, '')
+    idx = raw.lower().find(anchor.lower()) if anchor else -1
+    lo = max(0, idx - 600) if idx >= 0 else 0
+    hi = min(len(raw), idx + 1200) if idx >= 0 else min(len(raw), 1800)
+    snippet = re.sub(r'\s+', ' ', raw[lo:hi])
+    print(f'SOURCE PROBE {compact}: bytes={len(raw)} tr={raw.lower().count("<tr")} td={raw.lower().count("<td")} FT={len(re.findall(r"\\bFT\\b", raw, re.I))} anchor={anchor!r} index={idx}')
+    print('SOURCE PROBE SNIPPET:', snippet)
+
+
 def semantic_key(row):
     return (
         norm(row.get('home')),
@@ -173,10 +184,13 @@ def unique_round_rows(data, round_name):
 def main():
     parsed = []
     per_date = {}
+    raw_by_date = {}
     for compact in RESULT_DATES:
         date = datetime.strptime(compact, '%Y%m%d').date().isoformat()
         url = f'{BASE}/{compact}'
-        rows = parse_results(fetch(url), url, date)
+        raw = fetch(url)
+        raw_by_date[compact] = raw
+        rows = parse_results(raw, url, date)
         per_date[date] = len(rows)
         parsed.extend(rows)
 
@@ -185,6 +199,8 @@ def main():
         unique.setdefault(semantic_key(row), row)
 
     if len(unique) != EXPECTED_TIES:
+        for compact, raw in raw_by_date.items():
+            source_probe(raw, compact)
         raise SystemExit(
             f'ABORT: Extra Preliminary source coverage expected {EXPECTED_TIES} ties, got {len(unique)}; '
             f'per-date={per_date}'
