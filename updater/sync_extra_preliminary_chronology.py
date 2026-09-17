@@ -49,6 +49,7 @@ class PageParser(HTMLParser):
         self.events = []
         self.row = []
         self.cell = None
+        self.cell_export = None
 
     def handle_starttag(self, tag, attrs):
         self.stack.append(tag)
@@ -58,6 +59,10 @@ class PageParser(HTMLParser):
             self.row = []
         if tag in ('td', 'th'):
             self.cell = []
+            # Football Web Pages embeds hidden half-time scores inside team
+            # cells, e.g. North Leigh(2). Its data-export attribute contains
+            # the canonical team name and must take precedence over cell text.
+            self.cell_export = dict(attrs).get('data-export')
 
     def handle_data(self, data):
         if self.stack and self.stack[-1] in ('h2', 'h3', 'h4'):
@@ -67,9 +72,11 @@ class PageParser(HTMLParser):
 
     def handle_endtag(self, tag):
         if tag in ('td', 'th') and self.cell is not None:
-            txt = ' '.join(''.join(self.cell).split())
+            raw = self.cell_export if self.cell_export is not None else ''.join(self.cell)
+            txt = ' '.join(str(raw).split())
             self.row.append(unescape(txt))
             self.cell = None
+            self.cell_export = None
         if tag == 'tr' and self.row:
             self.events.append(('row', self.row))
             self.row = []
@@ -227,6 +234,16 @@ def main():
     played = {}
     for row in parsed:
         played.setdefault(semantic_key(row), row)
+
+    # Hidden half-time annotations must never leak into canonical team names.
+    polluted = [
+        f"{row.get('home')} v {row.get('away')}"
+        for row in played.values()
+        if re.search(r'\(\d+\)$', str(row.get('home') or ''))
+        or re.search(r'\(\d+\)$', str(row.get('away') or ''))
+    ]
+    if polluted:
+        raise SystemExit(f'ABORT: hidden half-time score leaked into parsed team name(s): {polluted[:5]}')
 
     source_complete = len(played) == EXPECTED_PLAYED_TIES
     if len(played) > EXPECTED_PLAYED_TIES:
