@@ -2,9 +2,16 @@
 const fs=require('fs');
 const vm=require('vm');
 const path=require('path');
+const childProcess=require('child_process');
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'clubfinder.html'),'utf8');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
+
+// This regression is already run by both publishers and again immediately
+// before a production push. Reuse that protected choke-point to ensure the
+// Campaign UI cannot disappear while chronology/Stats remain green.
+childProcess.execFileSync(process.execPath,[path.join(ROOT,'updater','clubfinder_campaign_ui_regression.js')],{cwd:ROOT,stdio:'inherit'});
+
 const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
 if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
 
