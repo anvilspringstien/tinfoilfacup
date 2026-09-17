@@ -106,14 +106,23 @@ if gnum_new not in text:
     elif 'white-space:nowrap' not in approved_pigeon_card:
         raise SystemExit('ABORT: no safe Stats g-num no-wrap anchor found')
 
-# Copy the tested Candidate 13 bridge, changing only the production-relative URL.
+# Copy the tested Candidate 13 bridge, changing only the production-relative
+# Challenges filename. Do not depend on Candidate 13 using any particular
+# window.open spelling: preserve its tested opener/focus logic byte-for-byte
+# apart from the relative path needed by production.
 if BRIDGE_MARKER not in text:
     bs = beta.find(BRIDGE_MARKER)
     bridge_end = beta.find('async function journeyCertificate', bs)
     if bs < 0 or bridge_end < 0:
         raise SystemExit('ABORT: Candidate 13 bridge block not found')
     bridge = beta[bs:bridge_end]
-    bridge = bridge.replace("window.open('challenges-beta.html','_blank');", "window.open('beta/challenges-beta.html','_blank');")
+    if 'challenges-beta.html' not in bridge:
+        raise SystemExit('ABORT: Candidate 13 bridge has no Challenges target')
+    bridge = re.sub(r'(?<!beta/)challenges-beta\.html', 'beta/challenges-beta.html', bridge)
+    if 'beta/challenges-beta.html' not in bridge:
+        raise SystemExit('ABORT: production Challenges path rewrite failed')
+    if 'beta/beta/challenges-beta.html' in bridge:
+        raise SystemExit('ABORT: production Challenges path was double-prefixed')
     # Use production's canonical historical venue resolver when present.
     old_venue_stats = "  function venueForStats(r){\n    if(!r)return {ground:'Venue TBC',postcode:'Postcode TBC'};"
     new_venue_stats = "  function venueForStats(r){\n    if(typeof completedResultVenue==='function')return completedResultVenue(r);\n    if(!r)return {ground:'Venue TBC',postcode:'Postcode TBC'};"
@@ -174,7 +183,7 @@ if 'class="round challenges-launch"' not in toolbar:
 
 required = [
     PIGEON_MARKER, 'alt="Pigeon Miles Flown"', 'pigeonMilesDisplay', BRIDGE_MARKER,
-    "window.open('beta/challenges-beta.html','_blank');", "window.name='TFFC_CLUBFINDER'",
+    'beta/challenges-beta.html', "window.name='TFFC_CLUBFINDER'", 'TFFC_CHALLENGES',
     'window.tffcOpenStatsFromChallenges=', 'async function openChallenges(origin)',
     'async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder")',
     'Back to Challenges', challenge_css, 'class="round challenges-launch"',
@@ -182,6 +191,8 @@ required = [
 for item in required:
     if item not in text:
         raise SystemExit('ABORT: required Campaign UI marker missing: ' + item)
+if 'beta/beta/challenges-beta.html' in text:
+    raise SystemExit('ABORT: production Challenges path is double-prefixed')
 marker_pos = text.find(PIGEON_MARKER)
 card_window = text[marker_pos:marker_pos + max(2500, len(approved_pigeon_card) + 500)]
 if '🐦' in card_window:
