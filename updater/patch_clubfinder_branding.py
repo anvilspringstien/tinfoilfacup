@@ -8,6 +8,7 @@ modal while preserving the same OK/Cancel behaviour.
 """
 from pathlib import Path
 import re
+import runpy
 
 ROOT = Path(__file__).resolve().parents[1]
 P = ROOT / 'clubfinder.html'
@@ -153,3 +154,8 @@ print(f'Share title: {TITLE}')
 print('Branded confirmation heading: Tin Foil FA Cup says')
 print('Native confirm() prompts remaining: 0')
 print('Club, ground, mileage, fixture, custodian and journey logic: UNTOUCHED')
+
+# Shared post-branding UI reconciliation. Both production publishers already run
+# this branding patch, so one guarded hook protects Scan Results and Competition Health.
+runpy.run_path(str(ROOT / 'updater' / 'patch_clubfinder_campaign_ui.py'), run_name='__main__')
+runpy.run_path(str(ROOT / 'updater' / 'clubfinder_ui_regression.py'), run_name='__main__')
