@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guard every Extra Preliminary replay against a retained drawn first leg."""
+"""Guard every Extra Preliminary replay against a retained original tie."""
 import json
 import re
 from pathlib import Path
@@ -56,6 +56,12 @@ def pair_key(row):
     return frozenset((norm(row.get('home')), norm(row.get('away'))))
 
 
+def row_label(row):
+    hs, ass = row.get('home_score'), row.get('away_score')
+    score = f'{hs}-{ass}' if hs is not None and ass is not None else str(row.get('status') or row.get('decision') or 'no-score')
+    return f"{row.get('date')}: {row.get('home')} {score} {row.get('away')}"
+
+
 originals = unique_round('Extra Preliminary Round')
 replays = unique_round('Extra Preliminary Round Replay')
 if len(originals) != EXPECTED_ORIGINAL_TIES:
@@ -64,6 +70,18 @@ if len(originals) != EXPECTED_ORIGINAL_TIES:
 original_by_pair = {}
 for row in originals:
     original_by_pair.setdefault(pair_key(row), []).append(row)
+
+# A 219-row chronology is only valid if it also represents the FA's 219
+# distinct draw ties. This catches a duplicate result row masquerading as a
+# missing original tie before replay ancestry is assessed.
+duplicate_pairs = {pair: rows for pair, rows in original_by_pair.items() if len(rows) > 1}
+if len(original_by_pair) != EXPECTED_ORIGINAL_TIES:
+    lines = [f'EXTRA PRELIMINARY DISTINCT DRAW-PAIR COVERAGE IS {len(original_by_pair)}; expected {EXPECTED_ORIGINAL_TIES}.']
+    if duplicate_pairs:
+        lines.append('DUPLICATE ORIGINAL PAIR(S):')
+        for rows in duplicate_pairs.values():
+            lines.extend('  ' + row_label(row) for row in rows)
+    raise SystemExit('\n'.join(lines))
 
 missing = []
 not_drawn = []
@@ -94,6 +112,7 @@ if len(amersham_original) != 1 or len(amersham_replay) != 1:
 
 print('EXTRA PRELIMINARY REPLAY REGRESSION: PASS')
 print('Original ties retained:', len(originals))
+print('Distinct draw pairs retained:', len(original_by_pair))
 print('Replay records checked:', len(replays))
 print('Every replay has an earlier drawn first leg: PASS')
 print('Amersham 2-2 -> 1-2 chronology: PASS')
