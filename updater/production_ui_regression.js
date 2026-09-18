@@ -115,6 +115,7 @@ const assertions=`
     'YOUR TIN FOIL FA CUP CAMPAIGN',
     'THE CAMPAIGN SO FAR',
     'Pigeon Miles Flown',
+    'Pigeon Miles Flown:',
     'grid-template-columns:repeat(6,minmax(0,1fr))',
     '.g:last-child{grid-column:auto}'
   ]){
@@ -142,6 +143,8 @@ const assertions=`
   console.log('PROTECTED PRODUCTION UI REGRESSION: PASS');
   console.log('Campaign terminology: PASS');
   console.log('Yellow Challenges launcher + Candidate 13 bridge: PASS');
+  if(html.includes('Pigeon Miles Travelled:')||html.includes('Pigeon Miles Traveled:'))throw new Error('Production UI regression: retired Pigeon Miles travel wording remains');
+  console.log('Pigeon Miles wording is universally Flown: PASS');
   console.log('Pigeon Miles approved roundel + six-column no-wrap layout: PASS');
   console.log('HP7 bridge custodian: Windsor & Eton — PASS');
   console.log('HP7 bridge Petts Wood venue: BR2 8HQ — PASS');
