@@ -64,6 +64,12 @@ elif new_update not in text: raise SystemExit('ABORT: updated Campaign identity 
 if 'async function go(){' in text: text=text.replace('async function go(){','async function go(userInitiated=false){',1)
 elif 'async function go(userInitiated=false){' not in text: raise SystemExit('ABORT: Clubfinder go() signature boundary drifted')
 
+ready_line="const tinFoilCompetitionReady=refreshCompetitionData(false);"
+restore_call="Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});"
+if restore_call not in text:
+    if text.count(ready_line)!=1: raise SystemExit('ABORT: refresh restore boundary drifted')
+    text=text.replace(ready_line,ready_line+"\n"+restore_call,1)
+
 top_line="  const top=rows.slice(0,3);if(!top.length)throw Error('No eligible clubs could be returned.');"
 top_new=top_line+"\n  if(userInitiated)tinFoilBeginSearchIdentity();"
 if top_new not in text:
@@ -108,7 +114,7 @@ if legacy_call_sign_header in text: text=text.replace(legacy_call_sign_header,un
 elif legacy_header in text: text=text.replace(legacy_header,unified_header,1)
 elif unified_header not in text: raise SystemExit('ABORT: unified Stats header boundary drifted')
 
-required=('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',"TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json'",'TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY','tinFoilRecoverCampaignIdentity(saved)','tinFoilPersistCampaignIdentityBackup(n)','Tango Foxtrot 2 Alpha Charlie','async function go(userInitiated=false)','if(userInitiated)tinFoilBeginSearchIdentity();',"addEventListener('click',()=>go(true))",'searchNumber=identity.searchNumber','data-tin-foil-campaign-identity','tinFoilBackfillExistingCampaignIdentity(n,sequence);','campaignCallSign=tinFoilSavedCallSign')
+required=('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',"TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json'",'TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY','tinFoilRecoverCampaignIdentity(saved)','tinFoilPersistCampaignIdentityBackup(n)','tinFoilRestoreSavedCampaignOnLoad','Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});','Tango Foxtrot 2 Alpha Charlie','async function go(userInitiated=false)','if(userInitiated)tinFoilBeginSearchIdentity();',"addEventListener('click',()=>go(true))",'searchNumber=identity.searchNumber','data-tin-foil-campaign-identity','tinFoilBackfillExistingCampaignIdentity(n,sequence);','campaignCallSign=tinFoilSavedCallSign')
 for marker in required:
     if marker not in text: raise SystemExit('ABORT: Campaign identity marker missing: '+marker)
 if text.count('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN')!=1: raise SystemExit('ABORT: Campaign identity source must appear exactly once')
@@ -120,5 +126,6 @@ print('Internal redraws: do not increment')
 print('Campaign choice: adopts search number + Pigeon Call Sign')
 print('Existing Campaign identity: preserved')
 print('Campaign identity backup / Challenges bridge: recovery guarded')
+print('Refresh: saved Campaign redraws through go(false) without incrementing counter')
 print('Identity-less active Campaign: repaired by next successful issued number')
 print('Counter failure: non-blocking and harmless')
