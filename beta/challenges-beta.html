@@ -1752,7 +1752,7 @@ $("maybeLater").onclick=(e)=>{
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  window.location.href='clubfinder-beta.html';
+  window.location.replace('clubfinder-beta.html?from=challenges-exit-v2');
 };
 $("deckStatsBtn").onclick=()=>{ tinFoilOpenCanonicalStats(); };
 $("statsOpenDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(index); };
@@ -1760,7 +1760,7 @@ $("exitBtn").onclick=(e)=>{
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  window.location.href='clubfinder-beta.html';
+  window.location.replace('clubfinder-beta.html?from=challenges-exit-v2');
 };
 overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
 $("prev").onclick=()=>{if(index>0){index--;render()}};
