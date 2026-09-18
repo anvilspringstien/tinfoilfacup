@@ -142,8 +142,17 @@ const assertions=`
   const g=findGround(origin)||{};
   lookup=async()=>({lat:Number(g.lat),lon:Number(g.lon),postcode:'HP7 0EJ'});
   geocodeClubPostcodes=async()=>{};
-  document.getElementById('postcode').value='HP7 0EJ';
-  await go();
+
+  // A plain browser refresh starts with an empty rendered finder but must redraw
+  // the saved Campaign without issuing another counter number.
+  document.getElementById('postcode').value='';
+  document.getElementById('results').innerHTML='';
+  TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
+  const refreshSequence=TIN_FOIL_SEARCH_SEQUENCE;
+  await tinFoilRestoreSavedCampaignOnLoad();
+  if(TIN_FOIL_SEARCH_SEQUENCE!==refreshSequence)throw new Error('Production UI regression: refresh redraw incremented search sequence');
+  if(tinFoilCurrentSearchNumber()!==null)throw new Error('Production UI regression: refresh redraw minted a counter number');
+  if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('Production UI regression: refresh redraw did not restore Campaign postcode');
 
   const rendered=String(document.getElementById('results').innerHTML||'');
   for(const required of [
