@@ -25,7 +25,7 @@ card=("  /* TIN_FOIL_PIGEON_MILES_GLANCE */\n"
       "<div class=\"g-num\">'+certEsc(pigeonMilesDisplay)+'</div></div>'+\n")
 text=text[:section_end]+card+text[section_end:]
 
-required=[marker,'Pigeon<br>Miles','🐦',"certEsc(pigeonMilesDisplay)",'Pigeon Miles Travelled:','2*hav(start,venue)']
+required=[marker,'Pigeon<br>Miles','🐦',"certEsc(pigeonMilesDisplay)",'Pigeon Miles Flown:','2*hav(start,venue)']
 for s in required:
     if s not in text: raise SystemExit('ABORT: required marker missing: '+s)
 if text.count(marker)!=1: raise SystemExit('ABORT: At-a-Glance marker count is not one')
