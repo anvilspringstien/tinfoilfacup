@@ -156,7 +156,15 @@ function tinFoilBackfillExistingCampaignIdentity(number,sequence){
   const n=tinFoilNormaliseSearchNumber(number);
   if(!n||sequence!==TIN_FOIL_SEARCH_SEQUENCE)return;
   const saved=loadSavedJourney();
-  if(!saved||saved.ended||saved.searchNumber)return;
+  // Only a real positive counter value means this Campaign already has an
+  // identity. Legacy/null/string placeholders must not block repair.
+  if(!saved||saved.ended||tinFoilNormaliseSearchNumber(saved.searchNumber))return;
+  const input=document.getElementById('postcode');
+  const currentPostcode=tinFoilCampaignPostcodeKey(input&&input.value);
+  const savedPostcode=tinFoilCampaignPostcodeKey(saved.postcode);
+  // A search may be exploring another postcode while a Campaign remains saved.
+  // Only repair the existing Campaign from a search for that Campaign postcode.
+  if(currentPostcode&&savedPostcode&&currentPostcode!==savedPostcode)return;
   updateSavedJourney({searchNumber:n,callSign:tinFoilCallSignFromSearchNumber(n)});
   tinFoilRefreshCampaignIdentityDisplay();
 }
@@ -167,9 +175,11 @@ function tinFoilBeginSearchIdentity(){
   if(typeof updateLiveDataBadge==='function')updateLiveDataBadge();
   const p=tinFoilIssueSearchNumber().then(n=>{
     if(sequence!==TIN_FOIL_SEARCH_SEQUENCE)return null;
-    tinFoilSetCurrentSearchNumber(n);
+    // Bind/persist first, then make the number current. The final display
+    // refresh therefore reads the repaired Campaign identity, not stale state.
     tinFoilBackfillChosenCampaignIdentity(n,sequence);
     tinFoilBackfillExistingCampaignIdentity(n,sequence);
+    tinFoilSetCurrentSearchNumber(n);
     return n;
   }).catch(()=>null);
   TIN_FOIL_SEARCH_NUMBER_PROMISE=p;
@@ -203,8 +213,12 @@ async function tinFoilRestoreSavedCampaignOnLoad(){
   if(!saved||!saved.postcode)return false;
   const input=document.getElementById('postcode');
   if(!input)return false;
-  // Browsers may restore the previous form value on refresh. A saved Campaign is
-  // authoritative here, so always repopulate it and redraw the Campaign.
+  // A refresh is not a new search: restore the Campaign's existing number into
+  // the housekeeping badge without touching the counter service.
+  const savedNumber=tinFoilNormaliseSearchNumber(saved.searchNumber);
+  if(savedNumber)tinFoilSetCurrentSearchNumber(savedNumber);
+  // Browsers may restore or clear the form value on refresh. The saved Campaign
+  // is authoritative here, so always repopulate it and redraw.
   input.value=String(saved.postcode).toUpperCase();
   await go(false);
   return true;
