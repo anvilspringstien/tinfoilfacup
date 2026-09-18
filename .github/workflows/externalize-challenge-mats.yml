@@ -1,0 +1,98 @@
+name: Externalize Challenge Deck mat assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/externalize-challenge-mats.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  externalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Externalize Challenge mat artwork
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, json, base64
+
+          src = Path("beta/challenges-beta.html")
+          assets = Path("beta/assets/challenge-mats")
+          text = src.read_text(encoding="utf-8")
+
+          m = re.search(r'const ART = (\{.*?\});', text, re.S)
+          assert m, "ART table not found"
+          art = json.loads(m.group(1))
+          expected = [f"{i:02d}" for i in range(28)]
+          assert list(art) == expected, f"Unexpected mat IDs: {list(art)}"
+
+          assets.mkdir(parents=True, exist_ok=True)
+          written = 0
+          for mat_id, faces in art.items():
+              for side in ("front", "back"):
+                  uri = faces[side]
+                  prefix = "data:image/webp;base64,"
+                  assert uri.startswith(prefix), f"{mat_id} {side} is not an embedded WebP"
+                  payload = base64.b64decode(uri[len(prefix):])
+                  filename = f"mat-{mat_id}-{side}.webp"
+                  (assets / filename).write_bytes(payload)
+                  faces[side] = f"assets/challenge-mats/{filename}"
+                  written += 1
+
+          assert written == 56, f"Expected 56 WebPs, wrote {written}"
+
+          replacement = json.dumps(art, separators=(",", ":"))
+          text = text[:m.start(1)] + replacement + text[m.end(1):]
+
+          old = 'const img=document.createElement("img"); img.src=ART[c.id]?.front || CANONICAL_CUP; img.alt="";'
+          new = 'const img=document.createElement("img"); img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front || CANONICAL_CUP; img.alt="";'
+          assert text.count(old) == 1, f"Expected one Trophy Cabinet image constructor, found {text.count(old)}"
+          text = text.replace(old, new, 1)
+
+          src.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Verify Stage 1 invariants
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          html = Path("beta/challenges-beta.html").read_text(encoding="utf-8")
+          assets = sorted(Path("beta/assets/challenge-mats").glob("*.webp"))
+
+          assert len(assets) == 56, f"Expected 56 mat assets, found {len(assets)}"
+          assert "data:image/webp;base64," not in html, "Embedded WebPs remain in HTML"
+          assert html.count("data:image/png;base64,") == 7, "Stage 2 Stats PNGs changed unexpectedly"
+          assert 'img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front' in html
+          assert html.count("assets/challenge-mats/") == 56, "ART does not contain 56 external mat paths"
+
+          print(f"Stage 1 HTML: {Path('beta/challenges-beta.html').stat().st_size:,} bytes")
+          print(f"External mat WebPs: {len(assets)}")
+          print("Embedded WebPs: 0")
+          print("Embedded Stats PNGs: 7")
+          PY
+
+      - name: Commit Stage 1 BETA only
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/challenges-beta.html beta/assets/challenge-mats
+          if git diff --cached --quiet; then
+            echo "No Stage 1 changes to commit."
+            exit 0
+          fi
+          git commit -m "Externalize Challenge Deck mat assets"
+          git pull --rebase origin main
+          git push origin HEAD:main
