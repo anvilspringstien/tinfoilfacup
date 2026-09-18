@@ -45,6 +45,7 @@ on:
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/patch_clubfinder_journey_integrity.py"
+      - "updater/patch_clubfinder_branding.py"
       - "updater/patch_clubfinder_historical_venues.py"
       - "updater/clubfinder_render_regression.js"
       - "updater/amersham_card_render_regression.js"
@@ -173,6 +174,11 @@ jobs:
         run: node updater/historical_venue_regression.js
       - name: Run protected production UI regression
         run: node updater/production_ui_regression.js
+      - name: Guard production presentation patch idempotency
+        run: |
+          python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_production_ui.py
+          node updater/production_ui_regression.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:

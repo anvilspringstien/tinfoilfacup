@@ -15,7 +15,7 @@ text = P.read_text(encoding='utf-8')
 
 TITLE = 'Tin Foil FA Cup Clubfinder v7.6'
 URL = 'https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html'
-DESCRIPTION = 'Find your three nearest eligible clubs and follow your Tin Foil FA Cup Journey.'
+DESCRIPTION = 'Find your three nearest eligible clubs and follow your Tin Foil FA Cup Campaign.'
 
 # ---- Share / social preview metadata -------------------------------------------------
 text, n = re.subn(r'<title>.*?</title>', f'<title>{TITLE}</title>', text, count=1, flags=re.S)
@@ -109,23 +109,26 @@ if js_marker not in text:
 
 old_choose="function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!confirm('Replace your saved Tin Foil FA Cup Journey with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
 new_choose="async function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!await tinFoilConfirm('Replace your saved Tin Foil FA Cup Journey with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
+new_choose_campaign=new_choose.replace('Tin Foil FA Cup Journey','Tin Foil FA Cup Campaign')
 if old_choose in text:
     text=text.replace(old_choose,new_choose,1)
-elif new_choose not in text:
+elif new_choose not in text and new_choose_campaign not in text:
     raise SystemExit('ABORT: chooseJourney confirmation boundary not found')
 
 old_end="function endMyJourney(){if(confirm('End your Tin Foil FA Cup Journey here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
 new_end="async function endMyJourney(){if(await tinFoilConfirm('End your Tin Foil FA Cup Journey here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
+new_end_campaign=new_end.replace('Tin Foil FA Cup Journey','Tin Foil FA Cup Campaign')
 if old_end in text:
     text=text.replace(old_end,new_end,1)
-elif new_end not in text:
+elif new_end not in text and new_end_campaign not in text:
     raise SystemExit('ABORT: endMyJourney confirmation boundary not found')
 
 old_hard="function hardResetFinder(){\n if(!confirm('Hard Reset will forget the saved Tin Foil FA Cup Journey in this browser and return the finder to a first-time-user state. Continue?'))return;"
 new_hard="async function hardResetFinder(){\n if(!await tinFoilConfirm('Hard Reset will forget the saved Tin Foil FA Cup Journey in this browser and return the finder to a first-time-user state. Continue?'))return;"
+new_hard_campaign=new_hard.replace('Tin Foil FA Cup Journey','Tin Foil FA Cup Campaign')
 if old_hard in text:
     text=text.replace(old_hard,new_hard,1)
-elif new_hard not in text:
+elif new_hard not in text and new_hard_campaign not in text:
     raise SystemExit('ABORT: hardResetFinder confirmation boundary not found')
 
 # No browser-native confirmation should remain. This prevents a future stray

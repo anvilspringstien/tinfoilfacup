@@ -161,8 +161,9 @@ if oldgb in text:text=text.replace(oldgb,newgb,1)
 elif newgb not in text:raise SystemExit('ABORT: groundByClubName boundary changed')
 oldprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n\n  if(!crumbs.length){"""
 newprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n  const entryRound=journey.origin.entry_round||'';\n  if(entryRound&&entryRound!=='Extra Preliminary Round'){\n    body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '+esc(entryRound)+'.</div>';\n  }\n\n  if(!crumbs.length){"""
+campaignprev=newprev.replace('Journey started with: ','This Campaign starts with: ')
 if oldprev in text:text=text.replace(oldprev,newprev,1)
-elif newprev not in text:raise SystemExit('ABORT: previousRoundsHtml boundary changed')
+elif newprev not in text and campaignprev not in text:raise SystemExit('ABORT: previousRoundsHtml boundary changed')
 if 'const top=rows.slice(0,3);' not in text:raise SystemExit('ABORT: nearest-three selector changed')
 for marker in ('const LAW2_ORIGIN_LOCATIONS=','LAW2_ORIGIN_LOCATIONS.find',"enters the competition at '+esc(entryRound)+'."):
  if marker not in text:raise SystemExit('ABORT: Law 2 marker missing: '+marker)
