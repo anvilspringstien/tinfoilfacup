@@ -45,6 +45,7 @@ on:
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/patch_clubfinder_journey_integrity.py"
+      - "updater/patch_clubfinder_branding.py"
       - "updater/patch_clubfinder_historical_venues.py"
       - "updater/clubfinder_render_regression.js"
       - "updater/amersham_card_render_regression.js"
