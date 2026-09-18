@@ -57,6 +57,7 @@ export class ClubfinderCounter extends DurableObject {
 
   increment() {
     this.sql.exec("UPDATE usage_counter SET total = total + 1 WHERE id = 1");
+    return this.value();
   }
 
   value() {
@@ -68,8 +69,7 @@ export class ClubfinderCounter extends DurableObject {
     const path = new URL(request.url).pathname;
 
     if (request.method === "POST" && path === "/increment") {
-      this.increment();
-      return new Response(null, { status: 204 });
+      return json({ number: this.increment() });
     }
 
     if (request.method === "GET" && path === "/value") {
@@ -100,10 +100,12 @@ export default {
 
       const id = env.CLUBFINDER_COUNTER.idFromName(COUNTER_NAME);
       const stub = env.CLUBFINDER_COUNTER.get(id);
-      await stub.fetch("https://counter.internal/increment", { method: "POST" });
+      const response = await stub.fetch("https://counter.internal/increment", { method: "POST" });
+      const { number } = await response.json();
 
-      // Deliberately do not expose the private total to Clubfinder users.
-      return new Response(null, { status: 204, headers: cors });
+      // Expose only the number issued by this successful search.
+      // The arbitrary current total remains available only through /admin/count.
+      return json({ number }, 200, cors);
     }
 
     if (request.method === "GET" && url.pathname === "/admin/count") {
