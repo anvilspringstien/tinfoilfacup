@@ -115,13 +115,13 @@ text=text.replace('.g:last-child{grid-column:1/-1}', '.g:last-child{grid-column:
 
 generic_card=(
     "  /* TIN_FOIL_PIGEON_MILES_GLANCE */\n"
-    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br>Miles</div>"
+    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br>Miles<br>Flown</div>"
     "<div class=\"icon-circle\" style=\"font-size:34px;line-height:1;display:flex;align-items:center;justify-content:center\" aria-label=\"Pigeon Miles\">🐦</div>"
     "<div class=\"g-num\">'+certEsc(pigeonMilesDisplay)+'</div></div>'+"
 )
 approved_card=(
     "  /* TIN_FOIL_PIGEON_MILES_GLANCE */\n"
-    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br>Miles</div>"
+    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br>Miles<br>Flown</div>"
     "<div class=\"icon-circle\"><img src=\""+roundel+"\" alt=\"Pigeon Miles Flown\"></div>"
     "<div class=\"g-num\">'+certEsc(pigeonMilesDisplay)+'</div></div>'+"
 )
@@ -131,7 +131,7 @@ elif approved_card not in text:
     # Tolerate a prior approved card with the same marker by replacing only that card.
     card_pat=re.compile(
         r'  /\* TIN_FOIL_PIGEON_MILES_GLANCE \*/\n'
-        r"  '<div class=\\?\"g\\?\"><div class=\\?\"g-label\\?\">Pigeon<br>Miles</div>.*?"
+        r"  '<div class=\\?\"g\\?\"><div class=\\?\"g-label\\?\">Pigeon<br>Miles(?:<br>Flown)?</div>.*?"
         r"<div class=\\?\"g-num\\?\">\'\+certEsc\(pigeonMilesDisplay\)\+\'</div></div>\'\+",
         re.S,
     )
@@ -156,6 +156,7 @@ required=(
     'completedResultVenue(r)',
     'Pigeon Miles Flown',
     'Pigeon Miles Flown:',
+    'Pigeon<br>Miles<br>Flown',
     'grid-template-columns:repeat(6,minmax(0,1fr))',
     '.g:last-child{grid-column:auto}',
     'certEsc(pigeonMilesDisplay)',
@@ -174,6 +175,7 @@ for forbidden in (
     '>🐦</div><div class="g-num">',
     'Pigeon Miles Travelled:',
     'Pigeon Miles Traveled:',
+    '<div class="g-label">Pigeon<br>Miles</div>',
 ):
     if forbidden in text:
         raise SystemExit('ABORT: retired production UI marker remains: '+forbidden)
