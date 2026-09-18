@@ -124,7 +124,24 @@ const assertions=`
   const autoBackfilled=loadSavedJourney();
   if(Number(autoBackfilled.searchNumber)!==9842)throw new Error('Production UI regression: issued search number did not attach to existing Campaign');
   if(autoBackfilled.callSign!=='Tango Foxtrot 2 Alpha Charlie 09842')throw new Error('Production UI regression: existing Campaign Pigeon Call Sign was not backfilled');
-  if(!String(document.getElementById('results').innerHTML||'').includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('Production UI regression: existing Campaign did not reveal backfilled Pigeon Call Sign');
+  if(!tinFoilCampaignIdentityHtml(autoBackfilled).includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('Production UI regression: repaired Campaign identity cannot render its Pigeon Call Sign');
+
+  // Now reproduce the browser sequence that exposed the bug: the user leaves a
+  // saved Campaign underneath a blank Clubfinder and refreshes. It must redraw,
+  // restore the SAME # into the badge, reveal the Pigeon Call Sign, and make no
+  // additional counter request.
+  document.getElementById('postcode').value='';
+  document.getElementById('results').innerHTML='';
+  TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
+  const refreshCalls=getCounterIncrementCalls();
+  const refreshSequenceAfterBackfill=TIN_FOIL_SEARCH_SEQUENCE;
+  await tinFoilRestoreSavedCampaignOnLoad();
+  if(getCounterIncrementCalls()!==refreshCalls)throw new Error('Production UI regression: refresh issued a new counter number');
+  if(TIN_FOIL_SEARCH_SEQUENCE!==refreshSequenceAfterBackfill)throw new Error('Production UI regression: refresh changed search sequence');
+  if(tinFoilCurrentSearchNumber()!==9842)throw new Error('Production UI regression: refresh did not restore saved Campaign #09842');
+  const refreshedBackfilled=String(document.getElementById('results').innerHTML||'');
+  if(!refreshedBackfilled.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('Production UI regression: refresh did not redraw saved Campaign Pigeon Call Sign');
+  if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('Production UI regression: refresh did not restore saved Campaign postcode');
   tinFoilClearCurrentSearchIdentity();
 
   // Recover a Campaign that was chosen while the counter was unavailable.
