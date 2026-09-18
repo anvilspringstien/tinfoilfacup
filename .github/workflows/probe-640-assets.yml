@@ -1,4 +1,4 @@
-name: Probe 640 Challenge Mat encoding
+name: Install 640 Challenge Mat baseline
 
 on:
   push:
@@ -6,51 +6,123 @@ on:
       - '.github/workflows/probe-640-assets.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  probe:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install --quiet pillow
-      - name: Probe encoding
+      - name: Rebuild and verify all 56 mats
         run: |
+          cat > /tmp/expected.tsv <<'EOF'
+          mat-00-back.webp	145134	566acaa952a6a3de1231525c93e3e75aba5d5a723220bc096e09449b25715c1a
+          mat-00-front.webp	193388	59d505872555fcfde1e3122690d6278afa850469e5de6f677301cc4434fc39a7
+          mat-01-back.webp	154410	6ef6b8ac0dd63bc69ef96a005420e6a84b8298051f9da530026ecf6df499e23d
+          mat-01-front.webp	177706	8ce14ed831216f407d8a853f0f6edd2162c8a95239df38b2ef50f77503255608
+          mat-02-back.webp	152660	21b72ab13235137161a26790635c85d759a2cf9588d4b828cbd0bfd4e237dd67
+          mat-02-front.webp	192360	a4bd1fc5afb360ab4062872b8cd98952606f893ebdabbf928621c91458d9d411
+          mat-03-back.webp	174074	a78484984a602b8a6f53ab56ef7f8dd87870a321d3013b7b2cfcba446df6d6bb
+          mat-03-front.webp	214836	2491383f0838b8b6100690d8482eed44f71ebd0f036a7b406daecdf4f8027c3d
+          mat-04-back.webp	181330	a8493cb8fc49ddad8a9df56a927764d934b815e1171b2b441e6353f34ec751ad
+          mat-04-front.webp	196062	6340955b72ca330c9d872fd15a93c506a3c585f9c3ce757c8db1cacddc0dd997
+          mat-05-back.webp	150218	2910363e49731b5ba4b639f3f73d09bbbc328d3618df80a453189e0454a02815
+          mat-05-front.webp	201126	24d9902347fd267bef0b7c62a8fff2dbb9253e937f7156c94de7d4eadbec2711
+          mat-06-back.webp	176872	923a810c67001008fb0597f7c3639f736550dc469b24bd600b332a65a74ec6bc
+          mat-06-front.webp	226068	2a6d6e51a94417f3f5d6c62ec3761d48cc966c830a8da1cf45edf4e858e5a572
+          mat-07-back.webp	203632	5dfe72c581a5d03f193aa52c45103a64108b5651a3e7e2c114ad44c2be395e28
+          mat-07-front.webp	219802	165fb95efe683a4fd34ad1115f6029c70f220f020b2177d8e6fec2d70457843f
+          mat-08-back.webp	203598	6702ea57f5ce41c726d108454080ade72a1069ea3a04ffb4027c6d0c5645b931
+          mat-08-front.webp	218888	b5a65bb461942361f75b599674a4ca82c28c465bf16957506c36ced99c36f469
+          mat-09-back.webp	158850	4943245fa5cb5beb6b2e889dbec2491fb87f685d375f8e8357ab4d6ab2c567ab
+          mat-09-front.webp	176714	91d0310483f8c72a93786287b4baaa1853ac2dcdac28db3d73e8de14826479a0
+          mat-10-back.webp	183712	9cc7e7384518da9442068771b33a91e4a5c8d36bfbe2fa84fd60a245950a458c
+          mat-10-front.webp	209006	dd882b5b9648cb962f8e2aff777893aa96189589926d0c5419f05daa58b89b85
+          mat-11-back.webp	164250	ab9f4578bd06be8e84f5ed56d887802bdf5966b7aa3f939ed86e47ca638a3753
+          mat-11-front.webp	195766	3545ada78fed035b3c0d9d7f8f78123c491cb94777499fa1686b18e11408b0eb
+          mat-12-back.webp	137180	fa80341436204cf22de6ad99e36a9c32213b902c5bc2c1d87809ebf80652b550
+          mat-12-front.webp	195850	efba32ec1dd44725860f4b855601333c6d49d399fcf78117ef1b35a285ada270
+          mat-13-back.webp	123838	1bb389d75c3fca890371a69d358875024d4c02b1691a545b11b30e30af6cc871
+          mat-13-front.webp	203102	e8e6ed78f5c010746304053a0333a0934739f9a808f42d70a642c4649c33f700
+          mat-14-back.webp	139044	529451cadf5dd669d013dd871d27481b81e13121e45a705a554c310284fb6c46
+          mat-14-front.webp	190458	5669fee405a902c80d036ae1fdcf5685d300360003d57b2f40845d544256dd3c
+          mat-15-back.webp	177788	fabba267b7a889255c4ed7e9d4c15edc211c1168e626ff6d8921db54c03700d4
+          mat-15-front.webp	204274	954c07839e99d2ec10b247477427ec673eddb892dd174c9c578c9ffe4132fc97
+          mat-16-back.webp	137760	5c300b008cc5269a525ed5744248c19b704f905f159e1a83c143984d2660b273
+          mat-16-front.webp	179106	fd168082ac2728b371fc4ce33e2d2b3c26ae01aa449344df3765218fdbcf6970
+          mat-17-back.webp	176084	ecb69319c6cf2eef511b9923f5a1ca4b46da58e34518ad8aa0ace1bc06fcdf1f
+          mat-17-front.webp	157952	7ab9e8e92413b11bbc6b78f77f50614cae64179264a887011748607af7269937
+          mat-18-back.webp	139782	39e78da24aa098083357886908307ad02be6efa715609762514fab1708aab01e
+          mat-18-front.webp	177128	0fd5d226643984e76355bc8d498c90bfdf0895bd5c646c4c662d8c3ca820f9a4
+          mat-19-back.webp	160518	89ad898d882ae7dcfcc34c54c3932224f9c1e72e75a89ddff8861c63ae784893
+          mat-19-front.webp	179126	a2d0be19ea1ddb1285331f694c0c7503f0d444ee48c7cdf1144327b38077b10c
+          mat-20-back.webp	178688	78ec0d7ac00192f763a9e2fa6be8c7d6fd19d3771dd9be46e149590e8f3764b4
+          mat-20-front.webp	148098	118aa39e530fb324f8e224aca91613c1929f83ab23959395d08847b292014f15
+          mat-21-back.webp	152280	69ee11467faa83692ec70f1bf7e2ca25c5738122bd6b8852c81420f17f865e6e
+          mat-21-front.webp	148786	d6ad941280ac0a9c553265fc5fbee98f837b8648830e2f605b297b622d2d346e
+          mat-22-back.webp	164468	404b0aa5007e12c860894ac5dbac9df1936a749f937b13b9a70d0e18d422655e
+          mat-22-front.webp	158890	c4031fad653ac540cbbe7ee41e4dba9febd57097b4f8553567a83c798e50ca50
+          mat-23-back.webp	146592	c7bba01c3175ed6891fd7afeeed81e1a08454d93bf919896e5ac5f7447f34ecc
+          mat-23-front.webp	179650	8901e0de78c11697d6a177dbfd9c18d88c411795ff46593c83292795da23ef3a
+          mat-24-back.webp	139708	569d9aa84ab6727519bc61b26ec5ac45f30f722e24e55782561298aa3add7262
+          mat-24-front.webp	155816	6d6096149ce803fffebf53ca8d5f03f84ecab968b11d2d226f293d27c8444e36
+          mat-25-back.webp	155216	03fd2cd035d40d24346313b8cef5dcbe322647a7219c727b177e66629eed53be
+          mat-25-front.webp	185158	f2e5a6d4059eece55190f16420c6422a287ed75322b478e2e4059824f473efa9
+          mat-26-back.webp	189904	3422c8a8e14de1e35f7efcb7e91121c4ec15ab23b582944f4d6ce090b8758404
+          mat-26-front.webp	165812	4d548f6abb7cbce9a7da4085bed3b828901c2d78608b6da8e7301d7892863c64
+          mat-27-back.webp	192716	05a73d0bc5038b353547674419cb2be131c430423c4a5b544b36c160eb55f717
+          mat-27-front.webp	161916	c19c68eac92f30716d406c2800b71b3c889086da5b2ec4e48f4ec0e908e74644
+          EOF
           python - <<'PY'
           from PIL import Image
           from pathlib import Path
-          import hashlib, io
+          import hashlib
 
-          src = Path('beta/assets/challenge-mats/mat-00-front.webp')
-          target_hash = '59d505872555fcfde1e3122690d6278afa850469e5de6f677301cc4434fc39a7'
-          target_size = 193388
-          im = Image.open(src).convert('RGB')
-          print('SOURCE', im.size, src.stat().st_size, hashlib.sha256(src.read_bytes()).hexdigest())
+          root = Path('beta/assets/challenge-mats')
+          expected = {}
+          for line in Path('/tmp/expected.tsv').read_text().splitlines():
+              if not line.strip():
+                  continue
+              name, size, sha = line.strip().split()
+              expected[name] = (int(size), sha)
 
-          filters = {
-              'LANCZOS': Image.Resampling.LANCZOS,
-              'BICUBIC': Image.Resampling.BICUBIC,
-              'BILINEAR': Image.Resampling.BILINEAR,
-              'HAMMING': Image.Resampling.HAMMING,
-              'BOX': Image.Resampling.BOX,
-          }
-          nearest = []
-          for fname, filt in filters.items():
-              resized = im.resize((640,640), filt)
-              for q in range(70, 101):
-                  for method in range(0, 7):
-                      b = io.BytesIO()
-                      resized.save(b, 'WEBP', quality=q, method=method)
-                      data = b.getvalue()
-                      h = hashlib.sha256(data).hexdigest()
-                      if h == target_hash:
-                          print('EXACT_MATCH', fname, 'quality', q, 'method', method, 'size', len(data))
-                          raise SystemExit(0)
-                      nearest.append((abs(len(data)-target_size), len(data), fname, q, method, h))
-          for row in sorted(nearest)[:25]:
-              print('NEAREST', row)
-          print('NO_EXACT_MATCH')
+          files = sorted(root.glob('mat-*.webp'))
+          assert len(files) == 56, f'Expected 56 mats, found {len(files)}'
+          assert set(p.name for p in files) == set(expected), 'Filename set differs from tested 640 baseline'
+
+          for p in files:
+              with Image.open(p) as im:
+                  out = im.convert('RGB').resize((640, 640), Image.Resampling.LANCZOS)
+                  out.save(p, 'WEBP', quality=90, method=6)
+
+          total = 0
+          mismatches = []
+          for p in files:
+              with Image.open(p) as im:
+                  if im.size != (640, 640):
+                      mismatches.append(f'{p.name}: dimensions {im.size}')
+              data = p.read_bytes()
+              total += len(data)
+              want_size, want_sha = expected[p.name]
+              got_sha = hashlib.sha256(data).hexdigest()
+              if len(data) != want_size or got_sha != want_sha:
+                  mismatches.append(f'{p.name}: size {len(data)}/{want_size}, sha {got_sha}/{want_sha}')
+
+          assert total == 9773150, f'Total mat bytes {total}, expected 9773150'
+          assert not mismatches, '\n'.join(mismatches)
+          print(f'VERIFIED: 56 exact 640x640 baseline mats, {total} bytes')
           PY
+      - name: Commit 640 baseline
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/assets/challenge-mats/*.webp
+          git diff --cached --stat
+          git commit -m "Replace Challenge Mats with 640px baseline"
+          git push
