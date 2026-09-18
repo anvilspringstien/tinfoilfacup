@@ -309,15 +309,70 @@ def observation_key(item):
     )
 
 
+def semantic_observation_key(item):
+    obs = item["observation"]
+    return (
+        tuple(sorted(pair_key(obs))),
+        norm(obs.get("home")),
+        norm(obs.get("away")),
+        str(obs.get("status") or "").upper(),
+        obs.get("home_score"),
+        obs.get("away_score"),
+        norm(obs.get("winner")),
+        str(obs.get("decision") or "").lower(),
+    )
+
+
+def _date_distance_days(left, right):
+    try:
+        a = datetime.fromisoformat(str(left)).date()
+        b = datetime.fromisoformat(str(right)).date()
+    except (TypeError, ValueError):
+        return None
+    return abs((a - b).days)
+
+
 def dedupe_observations(items):
-    out = {}
+    exact = {}
     for item in items:
         key = observation_key(item)
-        existing = out.get(key)
+        existing = exact.get(key)
         if existing and existing["observation"].get("source_url") != item["observation"].get("source_url"):
             continue
-        out[key] = item
-    return sorted(out.values(), key=lambda item: observation_key(item))
+        exact[key] = item
+
+    rows = sorted(exact.values(), key=lambda item: observation_key(item))
+    out = []
+    for item in rows:
+        obs = item["observation"]
+        source = obs.get("source_url")
+        status = str(obs.get("status") or "").upper()
+        collapsed = False
+
+        # The fixtures/results and live pages can briefly publish the same
+        # completed match under adjacent calendar headings. Collapse only that
+        # narrow cross-source disagreement. Same-source rows remain distinct, so
+        # genuine replay chronology is never erased by this rule.
+        if status.startswith("FT"):
+            semantic_key = semantic_observation_key(item)
+            for index, existing in enumerate(out):
+                old_obs = existing["observation"]
+                if old_obs.get("source_url") == source:
+                    continue
+                if semantic_observation_key(existing) != semantic_key:
+                    continue
+                distance = _date_distance_days(old_obs.get("date"), obs.get("date"))
+                if distance is None or distance > 1:
+                    continue
+                if str(obs.get("date") or "") < str(old_obs.get("date") or ""):
+                    out[index] = item
+                collapsed = True
+                break
+
+        if not collapsed:
+            out.append(item)
+
+    return sorted(out, key=lambda item: observation_key(item))
 
 
 def aliases(name):
