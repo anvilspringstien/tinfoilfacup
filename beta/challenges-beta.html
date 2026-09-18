@@ -51,6 +51,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .nav[disabled]{opacity:.35;cursor:not-allowed}
 .cardstage{height:100%;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;perspective:1500px;touch-action:pan-y}
 .flipcard{width:min(650px,92vw,calc(94vh - 330px));height:auto;aspect-ratio:1;position:relative;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1);cursor:pointer;outline:none}
+.flipcard.instant-reset{transition:none!important}
 .flipcard:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px}
 .flipcard.flipped{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;background:#d7c49d;box-shadow:0 18px 45px rgba(0,0,0,.38);border:2px solid #3b2c1d}
@@ -1451,6 +1452,40 @@ body.tffc-stats-view .hero.beta-splash{display:none}body.tffc-stats-view #stats{
 <script>
 const CHALLENGES = [{"id":"00","title":"The Four Laws","subtitle":"It’s The Law!","type":"foundation","motto":"FOUR LAWS. ONE GLORIOUS CAMPAIGN.","behaviour":"reference"},{"id":"01","title":"The First Law","subtitle":"Get Your Blue Peter Badge","type":"honour","motto":"THE FIRST LAW. ALWAYS AND FOREVER.","behaviour":"prerequisite"},{"id":"02","title":"The Second Law","subtitle":"Get to your first Qualifying Tie","type":"campaign","motto":"GET TO YOUR FIRST QUALIFYING TIE.","behaviour":"first_qualifying_tie"},{"id":"03","title":"The Fourth Law","subtitle":"First Tie. First Pie.","type":"honour","motto":"FIRST TIE. FIRST PIE.","behaviour":"simple"},{"id":"04","title":"The Dogs Bollocks","subtitle":"Tin Foil FA Cup. Dog. Camera.","type":"honour","motto":"EVERY GROUND NEEDS A GOOD DOG.","behaviour":"simple"},{"id":"05","title":"The Graduate","subtitle":"Complete the Qualifying School","type":"campaign","motto":"1ST. 2ND. 3RD. GRADUATE.","behaviour":"three_qualifying"},{"id":"06","title":"The Pie’d Piper","subtitle":"4 ties, 4 pies","type":"honour","motto":"4 TIES. 4 PIES.","behaviour":"four_ties_honour"},{"id":"07","title":"Rockerfeller","subtitle":"Donate £5 to Site Upkeep","type":"honour","motto":"EVERY LITTLE HELPS.","behaviour":"simple"},{"id":"08","title":"Ding Ding Ding","subtitle":"The First Round — And a Right Proper One at that!","type":"campaign","motto":"THE FIRST ROUND PROPER.","behaviour":"first_round_proper"},{"id":"09","title":"Cop That!","subtitle":"Snap a pic with a match-day Copper","type":"honour","motto":"HELLO, HELLO, HELLO!","behaviour":"simple"},{"id":"10","title":"Ad Astra","subtitle":"Do Something Special on Your Campaign","type":"honour","motto":"TO THE STARS!","behaviour":"simple"},{"id":"11","title":"Away Days","subtitle":"Get to Three Away Ties","type":"campaign","motto":"RETURN TICKET TO GLORY.","behaviour":"three_away_ties"},{"id":"12","title":"Graffiti Artista","subtitle":"Purchase TFFC Stickers and be just like Banksy, but without the spray can!","type":"comingsoon","motto":"WE’RE STILL MAKING THE BLOODY STICKERS.","behaviour":"coming_soon"},{"id":"13","title":"The Difficult Second Round","subtitle":"All Downhill From Here!","type":"campaign","motto":"ALL DOWNHILL FROM HERE!","behaviour":"second_round_proper"},{"id":"14","title":"The Third Law","subtitle":"No Tickets? You’re OUT!","type":"honour","motto":"NO TICKETS? YOU’RE OUT!","behaviour":"end_campaign"},{"id":"15","title":"Fashionista","subtitle":"Wear TFFAC Merch at a Tie!","type":"comingsoon","motto":"TIN FOIL. HIGH FASHION.","behaviour":"coming_soon"},{"id":"16","title":"Doing A Richard","subtitle":"Get to the 3rd Round","type":"campaign","motto":"YOU’VE DONE A RICHARD!","behaviour":"third_round_proper"},{"id":"17","title":"A Proclaimer","subtitle":"Travel 500 Pigeon Miles","type":"campaign","motto":"TRAVEL 500 PIGEON MILES.","behaviour":"pigeon_500"},{"id":"18","title":"Giant Killer","subtitle":"Beat a club at least two levels above","type":"campaign","motto":"SMALL CLUBS. BIG STORIES.","behaviour":"giant_killer"},{"id":"19","title":"Seeing Double","subtitle":"Travel 1000 Pigeon Miles","type":"campaign","motto":"TRAVEL 1000 PIGEON MILES.","behaviour":"pigeon_1000"},{"id":"20","title":"The Fourth Be With You","subtitle":"Get to the Fourth Round","type":"campaign","motto":"THE FOURTH BE WITH YOU.","behaviour":"fourth_round_proper"},{"id":"21","title":"Boot Room Boy","subtitle":"Start a New Chat in The Boot Room","type":"comingsoon","motto":"PUT THE KETTLE ON.","behaviour":"coming_soon"},{"id":"22","title":"A Beethoven","subtitle":"Get to the Fifth Round","type":"campaign","motto":"DA DA DA DAAAAA!","behaviour":"fifth_round_proper"},{"id":"23","title":"Scorcese","subtitle":"Upload a video to your socials!","type":"honour","motto":"THAT’S A WRAP!","behaviour":"simple"},{"id":"24","title":"Been There, Done That!","subtitle":"Tin Foil FA Cup Tee Shirt Purchase","type":"comingsoon","motto":"BEEN THERE. DONE THAT. GOT THE TEE SHIRT.","behaviour":"coming_soon"},{"id":"25","title":"Quartermeister!","subtitle":"Get to The Quarter Finals!","type":"campaign","motto":"REPORT TO THE QUARTERMEISTER!","behaviour":"quarter_finals"},{"id":"26","title":"Get A Semi On!","subtitle":"Get to The Semi Finals!","type":"campaign","motto":"GET TO THE SEMI FINALS!","behaviour":"semi_finals"},{"id":"27","title":"Wembley Wizard","subtitle":"The Final!","type":"campaign","motto":"FROM THE FIRST TIE TO THE FINAL.","behaviour":"the_final"}];
 const ART = {"00":{"front":"assets/challenge-mats/mat-00-front.webp","back":"assets/challenge-mats/mat-00-back.webp"},"01":{"front":"assets/challenge-mats/mat-01-front.webp","back":"assets/challenge-mats/mat-01-back.webp"},"02":{"front":"assets/challenge-mats/mat-02-front.webp","back":"assets/challenge-mats/mat-02-back.webp"},"03":{"front":"assets/challenge-mats/mat-03-front.webp","back":"assets/challenge-mats/mat-03-back.webp"},"04":{"front":"assets/challenge-mats/mat-04-front.webp","back":"assets/challenge-mats/mat-04-back.webp"},"05":{"front":"assets/challenge-mats/mat-05-front.webp","back":"assets/challenge-mats/mat-05-back.webp"},"06":{"front":"assets/challenge-mats/mat-06-front.webp","back":"assets/challenge-mats/mat-06-back.webp"},"07":{"front":"assets/challenge-mats/mat-07-front.webp","back":"assets/challenge-mats/mat-07-back.webp"},"08":{"front":"assets/challenge-mats/mat-08-front.webp","back":"assets/challenge-mats/mat-08-back.webp"},"09":{"front":"assets/challenge-mats/mat-09-front.webp","back":"assets/challenge-mats/mat-09-back.webp"},"10":{"front":"assets/challenge-mats/mat-10-front.webp","back":"assets/challenge-mats/mat-10-back.webp"},"11":{"front":"assets/challenge-mats/mat-11-front.webp","back":"assets/challenge-mats/mat-11-back.webp"},"12":{"front":"assets/challenge-mats/mat-12-front.webp","back":"assets/challenge-mats/mat-12-back.webp"},"13":{"front":"assets/challenge-mats/mat-13-front.webp","back":"assets/challenge-mats/mat-13-back.webp"},"14":{"front":"assets/challenge-mats/mat-14-front.webp","back":"assets/challenge-mats/mat-14-back.webp"},"15":{"front":"assets/challenge-mats/mat-15-front.webp","back":"assets/challenge-mats/mat-15-back.webp"},"16":{"front":"assets/challenge-mats/mat-16-front.webp","back":"assets/challenge-mats/mat-16-back.webp"},"17":{"front":"assets/challenge-mats/mat-17-front.webp","back":"assets/challenge-mats/mat-17-back.webp"},"18":{"front":"assets/challenge-mats/mat-18-front.webp","back":"assets/challenge-mats/mat-18-back.webp"},"19":{"front":"assets/challenge-mats/mat-19-front.webp","back":"assets/challenge-mats/mat-19-back.webp"},"20":{"front":"assets/challenge-mats/mat-20-front.webp","back":"assets/challenge-mats/mat-20-back.webp"},"21":{"front":"assets/challenge-mats/mat-21-front.webp","back":"assets/challenge-mats/mat-21-back.webp"},"22":{"front":"assets/challenge-mats/mat-22-front.webp","back":"assets/challenge-mats/mat-22-back.webp"},"23":{"front":"assets/challenge-mats/mat-23-front.webp","back":"assets/challenge-mats/mat-23-back.webp"},"24":{"front":"assets/challenge-mats/mat-24-front.webp","back":"assets/challenge-mats/mat-24-back.webp"},"25":{"front":"assets/challenge-mats/mat-25-front.webp","back":"assets/challenge-mats/mat-25-back.webp"},"26":{"front":"assets/challenge-mats/mat-26-front.webp","back":"assets/challenge-mats/mat-26-back.webp"},"27":{"front":"assets/challenge-mats/mat-27-front.webp","back":"assets/challenge-mats/mat-27-back.webp"}};
+
+// Stage 1 external-art warmup.
+// Keep the slim HTML, but begin fetching the mat artwork once the page is interactive
+// so rapid flick/flip browsing does not outrun the network.
+const ART_PRELOAD_CACHE=new Map();
+function preloadArt(src, priority="low"){
+  if(!src) return Promise.resolve(false);
+  if(ART_PRELOAD_CACHE.has(src)) return ART_PRELOAD_CACHE.get(src);
+  const p=new Promise(resolve=>{
+    const img=new Image();
+    try{ img.fetchPriority=priority; }catch(_){}
+    img.decoding="async";
+    img.onload=()=>resolve(true);
+    img.onerror=()=>resolve(false);
+    img.src=src;
+  });
+  ART_PRELOAD_CACHE.set(src,p);
+  return p;
+}
+function preloadMatAt(i, priority="low"){
+  const c=CHALLENGES[i];
+  if(!c) return;
+  const art=ART[c.id];
+  if(!art) return;
+  preloadArt(art.front,priority);
+  preloadArt(art.back,priority);
+}
+function warmChallengeArt(){
+  preloadMatAt(0,"high");
+  for(let i=1;i<CHALLENGES.length;i++) preloadMatAt(i,"low");
+}
+if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:900});
+else setTimeout(warmChallengeArt,120);
+
 window.name='TFFC_CHALLENGES';
 const STORE_KEY = "tffc.challengeDeck.v1";
 const CLUBFINDER_BRIDGE_KEY = "tffc.clubfinderCampaign.v1";
@@ -1576,7 +1611,13 @@ function buildFace(el, c, side) {
   const src = ART[c.id]?.[side==="front"?"front":"back"];
   el.innerHTML = "";
   if (src) {
-    const img=document.createElement("img"); img.src=src; img.alt=`${c.title} ${side} artwork`; el.appendChild(img);
+    preloadArt(src,"high");
+    const img=document.createElement("img");
+    img.decoding="async";
+    try{ img.fetchPriority="high"; }catch(_){}
+    img.src=src;
+    img.alt=`${c.title} ${side} artwork`;
+    el.appendChild(img);
   } else {
     el.innerHTML=`<div class="placeholder">${CANONICAL_CUP?`<img class="cup" src="${CANONICAL_CUP}" alt="">`:""}<div><h3>${c.title}</h3><p>${c.subtitle}</p></div></div>`;
   }
@@ -1584,9 +1625,21 @@ function buildFace(el, c, side) {
 function render() {
   const c=CHALLENGES[index];
 
+  // If the user navigates while a flip animation is still running, reset the old
+  // card instantly before swapping in the next artwork. This prevents transient
+  // face compositing/blank frames during rapid browsing.
+  flipcard.classList.add("instant-reset");
+  flipped=false;
+  flipcard.classList.remove("flipped");
+  flipcard.setAttribute("aria-pressed","false");
+  void flipcard.offsetWidth;
+
   buildFace(front,c,"front"); buildFace(back,c,"back");
   flipcard.classList.toggle("coming-soon-mat",c.type==="comingsoon");
-  flipped=false; flipcard.classList.remove("flipped"); flipcard.setAttribute("aria-pressed","false");
+  preloadMatAt(index,"high");
+  preloadMatAt(index+1,"high");
+  preloadMatAt(index-1,"low");
+  requestAnimationFrame(()=>flipcard.classList.remove("instant-reset"));
   $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
   $("verifyBadge").textContent=verificationLabel(c);
   $("verifyHelp").textContent=verificationHelp(c);
