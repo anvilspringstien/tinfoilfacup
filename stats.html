@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tin Foil FA Cup — Campaign Stats</title>
+<style>
+:root{--teal:#084c61;--yellow:#e4bb26;--paper:#fbfaf4;--ink:#111;--muted:#5b666a;--line:#d9d5c9}
+*{box-sizing:border-box}
+body{margin:0;background:#e9ece9;color:var(--ink);font-family:Poppins,Arial,Helvetica,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 16px 50px}
+.nav{display:flex;justify-content:center;gap:12px;margin:0 0 18px}
+.nav button{min-width:150px;height:42px;border-radius:9px;border:2px solid #fff;font:700 13px/1 Arial,sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.32)}
+.nav .campaign{background:var(--teal);color:#fff}
+.nav .challenges{background:var(--yellow);color:#111;border-color:#fff2ad}
+.sheet{background:var(--paper);border:1px solid #d8d6cf;box-shadow:0 8px 28px rgba(0,0,0,.15);padding:30px}
+.hero{display:grid;grid-template-columns:1fr 180px;gap:28px;align-items:start;border-bottom:2px solid var(--teal);padding-bottom:24px}
+.eyebrow{font:700 12px/1.3 Arial,sans-serif;letter-spacing:.16em;color:var(--teal)}
+h1{font-size:32px;line-height:1.05;margin:7px 0 12px;text-transform:uppercase}
+.star{font-size:26px;margin:3px 0 12px}
+.identity{display:grid;grid-template-columns:max-content 1fr;gap:5px 12px;font-size:14px}
+.identity .label{font-weight:800;text-transform:uppercase;color:#364b53}
+.identity .value{font-weight:700}
+.call-sign{margin-top:15px;padding:10px 12px;border-left:5px solid var(--yellow);background:#f1ead1;font-weight:800}
+.hero img{width:100%;height:auto;display:block}
+.section{margin-top:28px}
+.section h2{font-size:17px;letter-spacing:.09em;margin:0 0 17px;text-transform:uppercase;color:var(--teal)}
+.glance{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.metric{text-align:center;min-width:0}
+.metric img{display:block;width:96px;height:96px;max-width:100%;margin:0 auto 8px}
+.metric .title{font-size:11px;text-transform:uppercase;font-weight:800;line-height:1.18;min-height:26px}
+.metric .value{font-size:28px;font-weight:900;line-height:1.1;margin-top:4px}
+.metric .sub{font-size:10px;color:var(--muted);margin-top:2px}
+.table-wrap{overflow-x:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line)}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#455d65}
+.next{border:1px solid #cfd8d9;border-left:6px solid var(--teal);padding:14px 16px;background:#f6f8f7}
+.next .round{font-weight:900;text-transform:uppercase}
+.next .fixture{font-size:18px;font-weight:800;margin-top:5px}
+.next .meta,.next .venue{font-size:12px;color:#4c5d63;margin-top:4px}
+.secondary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.smallstat{border-top:3px solid var(--teal);padding:10px;background:#f3f2eb}
+.smallstat b{display:block;font-size:24px}
+.smallstat span{font-size:10px;text-transform:uppercase;font-weight:800}
+.foot{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+.print{border:0;background:none;text-decoration:underline;cursor:pointer;font:inherit;color:var(--teal);font-weight:700}
+.empty{padding:30px;text-align:center}
+@media(max-width:850px){.glance{grid-template-columns:repeat(3,1fr)}.hero{grid-template-columns:1fr 135px}.secondary{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.wrap{padding:12px 8px 30px}.sheet{padding:18px 12px}.nav{gap:8px}.nav button{min-width:0;flex:1}.hero{grid-template-columns:1fr 92px;gap:12px}h1{font-size:25px}.identity{grid-template-columns:1fr}.identity .label{margin-top:6px}.glance{grid-template-columns:repeat(2,1fr)}.secondary{grid-template-columns:repeat(2,1fr)}}
+@media print{body{background:#fff}.wrap{max-width:none;padding:0}.nav,.print{display:none}.sheet{box-shadow:none;border:0;padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav" aria-label="Stats navigation">
+    <button class="campaign" id="campaignBtn">Campaign</button>
+    <button class="challenges" id="challengesBtn">Challenges</button>
+  </div>
+  <main class="sheet" id="sheet"></main>
+</div>
+<script>
+const BRIDGE_KEY='tffc.clubfinderCampaign.v1';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadBridge(){try{return JSON.parse(localStorage.getItem(BRIDGE_KEY)||'null')}catch(e){return null}}
+function metric(icon,title,value,sub=''){return '<div class="metric"><img src="'+icon+'" alt=""><div class="title">'+esc(title)+'</div><div class="value">'+esc(value)+'</div>'+(sub?'<div class="sub">'+esc(sub)+'</div>':'')+'</div>'}
+function render(){
+ const bridge=loadBridge(),s=bridge&&bridge.statsSnapshot;
+ const root=document.getElementById('sheet');
+ if(!s){root.innerHTML='<div class="empty"><h1>Campaign Stats</h1><p>No current Campaign snapshot is available.</p><p>Return to Clubfinder and open Stats from your Campaign.</p></div>';return}
+ const call=s.callSign||bridge.callSign||'';
+ const history=Array.isArray(s.history)?s.history:[];
+ const rows=history.length?history.map(h=>'<tr><td>'+esc(h.round)+'</td><td>'+esc(h.fixture)+'</td><td>'+esc(h.date)+'</td><td>'+esc(h.ground)+(h.postcode?'<br>'+esc(h.postcode):'')+'</td><td>'+esc(h.winner||'—')+'</td></tr>').join(''):'<tr><td colspan="5">No completed tie recorded yet.</td></tr>';
+ const next=s.nextUp||{};
+ root.innerHTML=
+ '<section class="hero"><div><div class="eyebrow">STATS</div><h1>Your Tin Foil FA Cup Campaign</h1><div class="star">★</div><div class="identity">'+
+ '<div class="label">Started with:</div><div class="value">'+esc(s.origin||bridge.originName||'—')+'</div>'+
+ '<div class="label">Current custodian:</div><div class="value">'+esc(s.currentCustodian||bridge.currentCustodian||'—')+'</div>'+
+ '<div class="label">Season:</div><div class="value">'+esc(s.season||'2026–27')+'</div></div>'+
+ (call?'<div class="call-sign">Pigeon Call Sign: '+esc(call)+'</div>':'')+
+ '</div><img src="beta/tin-foil-fa-cup-four-laws-beta.png" alt="Tin Foil FA Cup — The Four Laws"></section>'+
+ '<section class="section"><h2>At a Glance</h2><div class="glance">'+
+ metric('assets/stats/rounds-completed.svg','Rounds Completed',s.rounds??0,'Rounds Completed')+
+ metric('assets/stats/matches-played.svg','Matches Played',s.matches??0,'Matches Played')+
+ metric('assets/stats/clubs-encountered.svg','Clubs Encountered',s.clubs??0,'Clubs Encountered')+
+ metric('assets/stats/goals-seen.svg','Goals Seen',s.goals??0,'Goals Seen')+
+ metric('assets/stats/grounds-visited.svg','Grounds Visited',s.grounds??0,'Grounds Visited')+
+ metric('assets/stats/pigeon-miles-flown.svg','Pigeon Miles',s.pigeonMiles??0,'Pigeon Miles Flown')+
+ '</div></section>'+
+ '<section class="section"><h2>The Campaign So Far</h2><div class="table-wrap"><table><thead><tr><th>Round</th><th>Fixture</th><th>Date</th><th>Venue</th><th>Winner / Next Custodian</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>'+
+ '<section class="section"><h2>Next Up</h2><div class="next"><div class="round">'+esc(next.round||'Upcoming Round TBC')+'</div><div class="fixture">'+esc(next.fixture||'Next fixture TBC')+'</div><div class="meta">'+esc(next.meta||'Date TBC')+'</div>'+(next.venue?'<div class="venue">'+esc(next.venue)+'</div>':'')+'</div></section>'+
+ '<section class="section"><h2>Campaign Record</h2><div class="secondary">'+
+ '<div class="smallstat"><b>'+esc(s.homeGames??0)+'</b><span>Home Ties</span></div>'+
+ '<div class="smallstat"><b>'+esc(s.awayGames??0)+'</b><span>Away Ties</span></div>'+
+ '<div class="smallstat"><b>'+esc(s.wins??0)+'</b><span>Wins</span></div>'+
+ '<div class="smallstat"><b>'+esc(s.draws??0)+'</b><span>Draws</span></div>'+
+ '<div class="smallstat"><b>'+esc(s.defeats??0)+'</b><span>Defeats</span></div></div></section>'+
+ '<div class="foot"><span>Pigeon Miles Flown are measured as the pigeon flies from the Campaign postcode to each tie venue and back.</span><button class="print" onclick="window.print()">Print / Save as PDF</button></div>';
+}
+document.getElementById('campaignBtn').addEventListener('click',()=>{window.location.href='clubfinder.html'});
+document.getElementById('challengesBtn').addEventListener('click',()=>{window.location.href='beta/challenges-beta.html'});
+render();
+</script>
+</body>
+</html>
