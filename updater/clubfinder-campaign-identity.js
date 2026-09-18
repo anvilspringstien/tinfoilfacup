@@ -196,4 +196,15 @@ function tinFoilCampaignIdentityHtml(saved){
   const callSign=tinFoilSavedCallSign(saved);
   return '<div class="campaign-identity" data-tin-foil-campaign-identity'+(callSign?'':' hidden')+'>'+(callSign?'Pigeon Call Sign: '+esc(callSign):'')+'</div>';
 }
+async function tinFoilRestoreSavedCampaignOnLoad(){
+  const q=new URLSearchParams(window.location.search||'');
+  if(q.get('stats')==='1')return false;
+  const saved=loadSavedJourney();
+  if(!saved||!saved.postcode)return false;
+  const input=document.getElementById('postcode');
+  if(!input||String(input.value||'').trim())return false;
+  input.value=String(saved.postcode).toUpperCase();
+  await go(false);
+  return true;
+}
 /* TIN_FOIL_CAMPAIGN_IDENTITY_END */
