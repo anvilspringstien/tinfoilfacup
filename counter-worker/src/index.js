@@ -95,6 +95,17 @@ export default {
       return json({ ok: true, service: "tffac-clubfinder-counter" });
     }
 
+    // Public, non-mutating contract probe. This exposes no count or user data;
+    // it only identifies the response contract expected by Clubfinder.
+    if (request.method === "GET" && url.pathname === "/contract") {
+      return json({
+        ok: true,
+        service: "tffac-clubfinder-counter",
+        contract_version: 2,
+        increment_response: "number"
+      });
+    }
+
     if (request.method === "OPTIONS" && url.pathname === "/increment") {
       const cors = corsHeaders(request, env);
       if (cors === null) return new Response(null, { status: 403 });
