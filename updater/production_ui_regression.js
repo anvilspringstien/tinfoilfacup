@@ -143,9 +143,10 @@ const assertions=`
   lookup=async()=>({lat:Number(g.lat),lon:Number(g.lon),postcode:'HP7 0EJ'});
   geocodeClubPostcodes=async()=>{};
 
-  // A plain browser refresh starts with an empty rendered finder but must redraw
-  // the saved Campaign without issuing another counter number.
-  document.getElementById('postcode').value='';
+  // Chrome and other browsers may restore the previous postcode field on a plain
+  // refresh while the rendered results are empty. The saved Campaign must still
+  // redraw without issuing another counter number.
+  document.getElementById('postcode').value='HP7 0EJ';
   document.getElementById('results').innerHTML='';
   TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
   const refreshSequence=TIN_FOIL_SEARCH_SEQUENCE;
