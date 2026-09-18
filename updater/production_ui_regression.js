@@ -86,7 +86,11 @@ const assertions=`
   const origin=ELIGIBLE.find(c=>same(c.name,'Amersham Town'));
   if(!origin)throw new Error('Production UI regression: Amersham origin missing');
 
+  tinFoilSetCurrentSearchNumber(9843);
   saveJourney(origin,'HP7 0EJ');
+  const savedIdentity=loadSavedJourney();
+  if(Number(savedIdentity.searchNumber)!==9843)throw new Error('Production UI regression: Campaign search number was not persisted');
+  if(savedIdentity.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843')throw new Error('Production UI regression: Campaign Call Sign mismatch: '+savedIdentity.callSign);
   const g=findGround(origin)||{};
   lookup=async()=>({lat:Number(g.lat),lon:Number(g.lon),postcode:'HP7 0EJ'});
   geocodeClubPostcodes=async()=>{};
@@ -99,7 +103,8 @@ const assertions=`
     'View Original Campaigns',
     '>Challenges<',
     'End My Campaign',
-    'class="round challenges-launch"'
+    'class="round challenges-launch"',
+    'Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09843'
   ]){
     if(!rendered.includes(required))throw new Error('Production UI regression: rendered Campaign toolbar missing '+required);
   }
@@ -117,14 +122,17 @@ const assertions=`
     'Pigeon Miles Flown',
     'Pigeon Miles Flown:',
     'grid-template-columns:repeat(6,minmax(0,1fr))',
-    '.g:last-child{grid-column:auto}'
+    '.g:last-child{grid-column:auto}',
+    'PIGEON CALL SIGN:',
+    'Tango Foxtrot 2 Alpha Charlie 09843'
   ]){
     if(!cert.includes(required))throw new Error('Production UI regression: Stats certificate missing '+required);
   }
   if(cert.includes('>🐦</div>'))throw new Error('Production UI regression: generic pigeon emoji remains in Stats At a Glance');
-  const pigeonLabel=(cert.match(/Pigeon<br>Miles<br>Flown/g)||[]).length;
-  if(pigeonLabel!==1)throw new Error('Production UI regression: expected one Pigeon Miles Flown At-a-Glance card, got '+pigeonLabel);
-  if(cert.includes('<div class="g-label">Pigeon<br>Miles</div>'))throw new Error('Production UI regression: old two-line Pigeon Miles At-a-Glance label remains');
+  const pigeonLabel=(cert.match(/Pigeon<br><span style="white-space:nowrap">Miles Flown<\\/span>/g)||[]).length;
+  if(pigeonLabel!==1)throw new Error('Production UI regression: expected one two-line Pigeon Miles Flown At-a-Glance card, got '+pigeonLabel);
+  if(cert.includes('<div class="g-label">Pigeon<br>Miles<br>Flown</div>'))throw new Error('Production UI regression: old three-line Pigeon Miles Flown label remains');
+  if(cert.includes('<div class="g-label">Pigeon<br>Miles</div>'))throw new Error('Production UI regression: old Pigeon Miles label remains');
 
   location.href='https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html';
   await openChallenges(origin);
@@ -133,6 +141,12 @@ const assertions=`
   if(!raw)throw new Error('Production UI regression: Challenges bridge truth was not persisted');
   const truth=JSON.parse(raw);
   if(!same(truth.currentCustodian,'Windsor & Eton'))throw new Error('Production UI regression: Challenges bridge custodian mismatch: '+truth.currentCustodian);
+  if(Number(truth.searchNumber)!==9843||truth.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843'){
+    throw new Error('Production UI regression: Challenges bridge lost Campaign identity: '+JSON.stringify({searchNumber:truth.searchNumber,callSign:truth.callSign}));
+  }
+  if(!truth.statsSnapshot||Number(truth.statsSnapshot.searchNumber)!==9843||truth.statsSnapshot.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843'){
+    throw new Error('Production UI regression: Stats snapshot lost Campaign identity');
+  }
   if(!truth.statsSnapshot||!Number.isFinite(Number(truth.statsSnapshot.pigeonMiles))||Number(truth.statsSnapshot.pigeonMiles)<=0){
     throw new Error('Production UI regression: Challenges bridge Pigeon Miles unresolved');
   }
