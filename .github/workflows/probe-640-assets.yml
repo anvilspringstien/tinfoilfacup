@@ -98,7 +98,7 @@ jobs:
 
           for p in files:
               with Image.open(p) as im:
-                  out = im.convert('RGB').resize((640, 640), Image.Resampling.LANCZOS)
+                  out = im.resize((640, 640), Image.Resampling.LANCZOS)
                   out.save(p, 'WEBP', quality=90, method=6)
 
           total = 0
