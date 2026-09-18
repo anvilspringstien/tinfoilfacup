@@ -68,6 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # Scheduled runs can wait behind the shared concurrency lock. Re-resolve the branch
+          # head when execution starts so a queued run does not build from a stale event SHA.
+          ref: ${{ github.ref_name }}
       - name: Guard universal round-state chronology
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing
