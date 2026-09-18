@@ -70,7 +70,7 @@ pigeon_calc = "    return {ground:(g&&g.ground)||'Venue TBC',postcode:(g&&g.post
 text = text.replace(venue_anchor, pigeon_calc, 1)
 
 stats_old = "• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Wins by Current Custodian: '+custodianWins+'<br>• Draws: '+draws+'<br>• Defeats by Current Custodian: '+custodianDefeats+'"
-stats_new = "• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Wins by Current Custodian: '+custodianWins+'<br>• Draws: '+draws+'<br>• Defeats by Current Custodian: '+custodianDefeats+'<br>• Pigeon Miles Travelled: '+certEsc(pigeonMilesDisplay)+'"
+stats_new = "• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Wins by Current Custodian: '+custodianWins+'<br>• Draws: '+draws+'<br>• Defeats by Current Custodian: '+custodianDefeats+'<br>• Pigeon Miles Flown: '+certEsc(pigeonMilesDisplay)+'"
 if text.count(stats_old) != 1:
     raise SystemExit(f'ABORT: expected one Stats list anchor, found {text.count(stats_old)}')
 text = text.replace(stats_old, stats_new, 1)
@@ -86,7 +86,7 @@ required = [
     'async function journeyCertificate(origin)',
     '2*hav(start,venue)',
     'savedJourneyForStats&&savedJourneyForStats.postcode',
-    'Pigeon Miles Travelled:',
+    'Pigeon Miles Flown:',
     'Awaiting venue location',
     'Pigeon Miles = twice the straight-line distance from your Campaign start postcode to each tie venue.',
 ]
