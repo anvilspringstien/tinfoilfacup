@@ -128,7 +128,7 @@ async function tinFoilHandleStatsRequest(){
   await journeyCertificate(origin,statsWindow,'challenges');
   return true;
 }
-window.addEventListener('pageshow',()=>{setTimeout(()=>{tinFoilHandleStatsRequest();},0);});
+if(typeof window.addEventListener==='function')window.addEventListener('pageshow',()=>{setTimeout(()=>{tinFoilHandleStatsRequest();},0);});
 /* TIN_FOIL_PRODUCTION_CHALLENGE_BRIDGE_END */""",
             "Stats request handler",
         )
@@ -244,7 +244,9 @@ def update_challenges(challenges: str) -> str:
   box-shadow:0 2px 0 #7c6511!important;
 }"""
         extra = """
-.hero.beta-splash .actions{gap:12px;flex-wrap:wrap}
+.hero.beta-splash .actions{gap:12px;flex-wrap:nowrap}
+.hero.beta-splash .actions #openDeck,
+.hero.beta-splash .actions #maybeLater{width:165px!important;min-width:0!important;max-width:calc((100% - 12px)/2)!important;flex:0 1 165px}
 #maybeLater.challenge-btn.beta-splash-later{
   margin-top:11px!important;
   min-width:165px!important;
