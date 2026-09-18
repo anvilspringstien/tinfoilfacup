@@ -97,6 +97,11 @@ if old_body in text:
 elif new_body not in text:
     raise SystemExit('ABORT: Stats return button boundary missing')
 
+# --- Canonical Pigeon Miles wording -------------------------------------------------
+# The pigeon does the work: user-facing distance copy is always "Flown".
+text=text.replace('Pigeon Miles Travelled:','Pigeon Miles Flown:')
+text=text.replace('Pigeon Miles Traveled:','Pigeon Miles Flown:')
+
 # --- Approved Pigeon Miles roundel + six-column desktop layout -----------------------
 old_grid='.glance{display:grid;grid-template-columns:repeat(5,1fr);'
 new_grid='.glance{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));'
@@ -150,6 +155,7 @@ required=(
     'TIN_FOIL_PRODUCTION_CHALLENGE_BRIDGE_BEGIN',
     'completedResultVenue(r)',
     'Pigeon Miles Flown',
+    'Pigeon Miles Flown:',
     'grid-template-columns:repeat(6,minmax(0,1fr))',
     '.g:last-child{grid-column:auto}',
     'certEsc(pigeonMilesDisplay)',
@@ -166,6 +172,8 @@ for forbidden in (
     'YOUR TIN FOIL FA CUP JOURNEY',
     'THE JOURNEY SO FAR',
     '>🐦</div><div class="g-num">',
+    'Pigeon Miles Travelled:',
+    'Pigeon Miles Traveled:',
 ):
     if forbidden in text:
         raise SystemExit('ABORT: retired production UI marker remains: '+forbidden)
@@ -180,5 +188,6 @@ print('CLUBFINDER PRODUCTION UI PATCH: SUCCESS')
 print('Campaign terminology: RESTORED')
 print('Challenges launcher/bridge: RESTORED')
 print('Pigeon Miles approved roundel: RESTORED')
+print('Pigeon Miles wording: FLOWN')
 print('At-a-Glance desktop columns: 6 (no wrapped sixth card)')
 print('Competition/custody/grounds/mileage formula: UNTOUCHED')
