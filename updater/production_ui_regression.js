@@ -209,9 +209,11 @@ const assertions=`
   document.getElementById('results').innerHTML='';
   TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
   const refreshSequence=TIN_FOIL_SEARCH_SEQUENCE;
+  const refreshCounterCallsBefore=getCounterIncrementCalls();
   await tinFoilRestoreSavedCampaignOnLoad();
   if(TIN_FOIL_SEARCH_SEQUENCE!==refreshSequence)throw new Error('Production UI regression: refresh redraw incremented search sequence');
-  if(tinFoilCurrentSearchNumber()!==null)throw new Error('Production UI regression: refresh redraw minted a counter number');
+  if(getCounterIncrementCalls()!==refreshCounterCallsBefore)throw new Error('Production UI regression: refresh redraw called counter service');
+  if(tinFoilCurrentSearchNumber()!==9843)throw new Error('Production UI regression: refresh redraw did not restore saved Campaign #09843');
   if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('Production UI regression: refresh redraw did not restore Campaign postcode');
 
   const rendered=String(document.getElementById('results').innerHTML||'');
