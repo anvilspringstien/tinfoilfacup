@@ -146,7 +146,7 @@ const assertions=`
 `;
 
 try{
-  vm.runInContext(scripts+'\\n'+assertions,sandbox,{filename:'beta/clubfinder-beta.html'});
+  vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'beta/clubfinder-beta.html'});
 }catch(e){
   console.error(e.stack||e);
   process.exit(1);
