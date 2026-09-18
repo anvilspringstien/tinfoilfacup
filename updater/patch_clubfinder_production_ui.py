@@ -115,13 +115,13 @@ text=text.replace('.g:last-child{grid-column:1/-1}', '.g:last-child{grid-column:
 
 generic_card=(
     "  /* TIN_FOIL_PIGEON_MILES_GLANCE */\n"
-    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br><span style="white-space:nowrap">Miles Flown</span></div>"
+    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br><span style=\"white-space:nowrap\">Miles Flown</span></div>"
     "<div class=\"icon-circle\" style=\"font-size:34px;line-height:1;display:flex;align-items:center;justify-content:center\" aria-label=\"Pigeon Miles\">🐦</div>"
     "<div class=\"g-num\">'+certEsc(pigeonMilesDisplay)+'</div></div>'+"
 )
 approved_card=(
     "  /* TIN_FOIL_PIGEON_MILES_GLANCE */\n"
-    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br><span style="white-space:nowrap">Miles Flown</span></div>"
+    "  '<div class=\"g\"><div class=\"g-label\">Pigeon<br><span style=\"white-space:nowrap\">Miles Flown</span></div>"
     "<div class=\"icon-circle\"><img src=\""+roundel+"\" alt=\"Pigeon Miles Flown\"></div>"
     "<div class=\"g-num\">'+certEsc(pigeonMilesDisplay)+'</div></div>'+"
 )
