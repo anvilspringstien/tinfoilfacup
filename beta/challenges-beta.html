@@ -1749,21 +1749,18 @@ function tinFoilConfirm(message){
 
 $("openDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(0); };
 $("maybeLater").onclick=(e)=>{
-  /* CANDIDATE 13 — same-tab return to the exact Clubfinder Campaign. */
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  history.back();
+  window.location.href='clubfinder-beta.html';
 };
 $("deckStatsBtn").onclick=()=>{ tinFoilOpenCanonicalStats(); };
 $("statsOpenDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(index); };
 $("exitBtn").onclick=(e)=>{
-  /* CANDIDATE 13 FIX — same-tab return to the exact Clubfinder Campaign via browser history.
-     No reload, no window.close(), no window.focus(), no opener lookup. */
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  history.back();
+  window.location.href='clubfinder-beta.html';
 };
 overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
 $("prev").onclick=()=>{if(index>0){index--;render()}};
