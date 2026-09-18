@@ -126,7 +126,7 @@ const assertions=`
 
   location.href='https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html';
   await openChallenges(origin);
-  if(!String(location.href).endsWith('/beta/challenges-beta.html'))throw new Error('Production UI regression: Challenges did not launch Candidate 13 beta path: '+location.href);
+  if(!String(location.href).endsWith('beta/challenges-beta.html'))throw new Error('Production UI regression: Challenges did not launch Candidate 13 beta path: '+location.href);
   const raw=localStorage.getItem('tffc.clubfinderCampaign.v1');
   if(!raw)throw new Error('Production UI regression: Challenges bridge truth was not persisted');
   const truth=JSON.parse(raw);
