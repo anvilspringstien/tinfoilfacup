@@ -135,12 +135,11 @@ const assertions=`
     'Pigeon Miles Flown',
     'Pigeon Miles Flown:',
     'grid-template-columns:repeat(6,minmax(0,1fr))',
-    '.g:last-child{grid-column:auto}',
-    'PIGEON CALL SIGN:',
-    'Tango Foxtrot 2 Alpha Charlie 09843'
+    '.g:last-child{grid-column:auto}'
   ]){
     if(!cert.includes(required))throw new Error('Production UI regression: Stats certificate missing '+required);
   }
+  if(cert.includes('PIGEON CALL SIGN:'))throw new Error('Production UI regression: retired Stats-header Pigeon Call Sign returned');
   if(cert.includes('>🐦</div>'))throw new Error('Production UI regression: generic pigeon emoji remains in Stats At a Glance');
   const pigeonLabel=(cert.match(/Pigeon<br><span style="white-space:nowrap">Miles Flown<\\/span>/g)||[]).length;
   if(pigeonLabel!==1)throw new Error('Production UI regression: expected one two-line Pigeon Miles Flown At-a-Glance card, got '+pigeonLabel);
