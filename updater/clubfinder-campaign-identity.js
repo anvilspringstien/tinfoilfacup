@@ -92,6 +92,14 @@ function tinFoilBackfillChosenCampaignIdentity(number,sequence){
   window.__tinFoilPendingCampaignIdentity=null;
   tinFoilRefreshCampaignIdentityDisplay();
 }
+function tinFoilBackfillExistingCampaignIdentity(number,sequence){
+  const n=tinFoilNormaliseSearchNumber(number);
+  if(!n||sequence!==TIN_FOIL_SEARCH_SEQUENCE)return;
+  const saved=loadSavedJourney();
+  if(!saved||saved.ended||saved.searchNumber)return;
+  updateSavedJourney({searchNumber:n,callSign:tinFoilCallSignFromSearchNumber(n)});
+  tinFoilRefreshCampaignIdentityDisplay();
+}
 function tinFoilBeginSearchIdentity(){
   const sequence=++TIN_FOIL_SEARCH_SEQUENCE;
   TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
@@ -101,6 +109,7 @@ function tinFoilBeginSearchIdentity(){
     if(sequence!==TIN_FOIL_SEARCH_SEQUENCE)return null;
     tinFoilSetCurrentSearchNumber(n);
     tinFoilBackfillChosenCampaignIdentity(n,sequence);
+    tinFoilBackfillExistingCampaignIdentity(n,sequence);
     return n;
   }).catch(()=>null);
   TIN_FOIL_SEARCH_NUMBER_PROMISE=p;

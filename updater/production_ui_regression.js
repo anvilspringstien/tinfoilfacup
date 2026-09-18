@@ -86,6 +86,19 @@ const assertions=`
   const origin=ELIGIBLE.find(c=>same(c.name,'Amersham Town'));
   if(!origin)throw new Error('Production UI regression: Amersham origin missing');
 
+  // Recover a Campaign that was chosen while the counter was unavailable.
+  localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({
+    originName:origin.name,
+    postcode:'HP7 0EJ',
+    ended:false,
+    selectedAt:'2026-09-18T12:00:00.000Z'
+  }));
+  TIN_FOIL_SEARCH_SEQUENCE=41;
+  tinFoilBackfillExistingCampaignIdentity(9843,41);
+  const repairedIdentity=loadSavedJourney();
+  if(Number(repairedIdentity.searchNumber)!==9843)throw new Error('Production UI regression: identity-less Campaign was not repaired');
+  if(repairedIdentity.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843')throw new Error('Production UI regression: repaired Campaign Call Sign mismatch: '+repairedIdentity.callSign);
+
   tinFoilSetCurrentSearchNumber(9843);
   saveJourney(origin,'HP7 0EJ');
   const savedIdentity=loadSavedJourney();

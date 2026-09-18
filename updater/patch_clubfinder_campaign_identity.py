@@ -92,7 +92,7 @@ new_header="'<section class=\"top\"><div class=\"top-left\"><div class=\"stats-t
 if old_header in text: text=text.replace(old_header,new_header,1)
 elif new_header not in text: raise SystemExit('ABORT: Stats Call Sign presentation boundary drifted')
 
-required=('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',"TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json'",'Tango Foxtrot 2 Alpha Charlie','async function go(userInitiated=false)','if(userInitiated)tinFoilBeginSearchIdentity();',"addEventListener('click',()=>go(true))",'searchNumber=identity.searchNumber','data-tin-foil-campaign-identity','PIGEON CALL SIGN:','campaignCallSign=tinFoilSavedCallSign')
+required=('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',"TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json'",'Tango Foxtrot 2 Alpha Charlie','async function go(userInitiated=false)','if(userInitiated)tinFoilBeginSearchIdentity();',"addEventListener('click',()=>go(true))",'searchNumber=identity.searchNumber','data-tin-foil-campaign-identity','tinFoilBackfillExistingCampaignIdentity(n,sequence);','PIGEON CALL SIGN:','campaignCallSign=tinFoilSavedCallSign')
 for marker in required:
     if marker not in text: raise SystemExit('ABORT: Campaign identity marker missing: '+marker)
 if text.count('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN')!=1: raise SystemExit('ABORT: Campaign identity source must appear exactly once')
@@ -103,4 +103,5 @@ print('Successful user searches: issue one sequential search number')
 print('Internal redraws: do not increment')
 print('Campaign choice: adopts search number + Pigeon Call Sign')
 print('Existing Campaign identity: preserved')
+print('Identity-less active Campaign: repaired by next successful issued number')
 print('Counter failure: non-blocking and harmless')
