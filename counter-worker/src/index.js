@@ -53,6 +53,13 @@ export class ClubfinderCounter extends DurableObject {
       )
     `);
     this.sql.exec("INSERT OR IGNORE INTO usage_counter (id, total) VALUES (1, 0)");
+
+    // One-time production seed. It only applies while the counter is still zero,
+    // so later deployments can never reset or rewind an active counter.
+    const seed = Number(env.COUNTER_SEED || 0);
+    if (Number.isSafeInteger(seed) && seed > 0) {
+      this.sql.exec(`UPDATE usage_counter SET total = ${seed} WHERE id = 1 AND total = 0`);
+    }
   }
 
   increment() {
