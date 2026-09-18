@@ -125,7 +125,7 @@ const assertions=`
 
   location.href='https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html';
   await openChallenges(origin);
-  if(!/\/beta\/challenges-beta\.html$/.test(String(location.href)))throw new Error('Production UI regression: Challenges did not launch Candidate 13 beta path: '+location.href);
+  if(!String(location.href).endsWith('/beta/challenges-beta.html'))throw new Error('Production UI regression: Challenges did not launch Candidate 13 beta path: '+location.href);
   const raw=localStorage.getItem('tffc.clubfinderCampaign.v1');
   if(!raw)throw new Error('Production UI regression: Challenges bridge truth was not persisted');
   const truth=JSON.parse(raw);
@@ -134,7 +134,7 @@ const assertions=`
     throw new Error('Production UI regression: Challenges bridge Pigeon Miles unresolved');
   }
   const petts=(truth.statsSnapshot.history||[]).find(x=>/Petts Wood/i.test(String(x.fixture||''))&&/Windsor/i.test(String(x.fixture||'')));
-  if(!petts||String(petts.postcode||'').replace(/\s+/g,'').toUpperCase()!=='BR28HQ'){
+  if(!petts||String(petts.postcode||'').replaceAll(' ','').toUpperCase()!=='BR28HQ'){
     throw new Error('Production UI regression: Challenges bridge lost canonical Petts Wood historical venue: '+JSON.stringify(petts));
   }
 
