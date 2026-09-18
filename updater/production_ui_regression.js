@@ -104,6 +104,41 @@ const assertions=`
   const savedIdentity=loadSavedJourney();
   if(Number(savedIdentity.searchNumber)!==9843)throw new Error('Production UI regression: Campaign search number was not persisted');
   if(savedIdentity.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843')throw new Error('Production UI regression: Campaign Call Sign mismatch: '+savedIdentity.callSign);
+  const identityBackup=JSON.parse(localStorage.getItem(TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY)||'null');
+  if(!identityBackup||Number(identityBackup.searchNumber)!==9843)throw new Error('Production UI regression: Campaign identity backup missing');
+
+  // Primary Campaign storage may lose optional identity fields during a migration/rebuild.
+  // Recover the original identity from the dedicated backup without issuing a new number.
+  localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({
+    originName:origin.name,
+    postcode:'HP7 0EJ',
+    ended:false,
+    selectedAt:savedIdentity.selectedAt
+  }));
+  const recoveredFromBackup=loadSavedJourney();
+  if(Number(recoveredFromBackup.searchNumber)!==9843)throw new Error('Production UI regression: Campaign identity backup recovery failed');
+  if(recoveredFromBackup.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843')throw new Error('Production UI regression: backup Call Sign recovery mismatch');
+
+  // Challenges carries a second canonical snapshot. It can also repair the same Campaign.
+  localStorage.removeItem(TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY);
+  localStorage.setItem(TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY,JSON.stringify({
+    source:'Clubfinder v7.6',
+    originName:origin.name,
+    postcode:'HP7 0EJ',
+    selectedAt:savedIdentity.selectedAt,
+    searchNumber:9843,
+    callSign:'Tango Foxtrot 2 Alpha Charlie 09843',
+    updatedAt:'2026-09-18T13:00:00.000Z'
+  }));
+  localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({
+    originName:origin.name,
+    postcode:'HP7 0EJ',
+    ended:false,
+    selectedAt:savedIdentity.selectedAt
+  }));
+  const recoveredFromBridge=loadSavedJourney();
+  if(Number(recoveredFromBridge.searchNumber)!==9843)throw new Error('Production UI regression: Challenges bridge identity recovery failed');
+  if(recoveredFromBridge.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843')throw new Error('Production UI regression: Challenges bridge Call Sign recovery mismatch');
   const g=findGround(origin)||{};
   lookup=async()=>({lat:Number(g.lat),lon:Number(g.lon),postcode:'HP7 0EJ'});
   geocodeClubPostcodes=async()=>{};
