@@ -123,9 +123,13 @@ elif new_render_journey not in text:
 
 old_go = "async function go(){\n const input=document.getElementById('postcode')"
 new_go = "async function go(){\n await tinFoilCompetitionReady;\n const input=document.getElementById('postcode')"
+identity_old_go = "async function go(userInitiated=false){\n const input=document.getElementById('postcode')"
+identity_new_go = "async function go(userInitiated=false){\n await tinFoilCompetitionReady;\n const input=document.getElementById('postcode')"
 if old_go in text:
     text = text.replace(old_go, new_go, 1)
-elif new_go not in text:
+elif identity_old_go in text:
+    text = text.replace(identity_old_go, identity_new_go, 1)
+elif new_go not in text and identity_new_go not in text:
     raise SystemExit('ABORT: Campaign go() readiness boundary not found')
 
 old_boot = '\nrefreshCompetitionData(false);\n</script>'
