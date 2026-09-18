@@ -91,7 +91,7 @@ if stats_return_css not in text:
     text=text.replace(css_anchor,css_anchor[:-2]+stats_return_css+"'+",1)
 
 old_body="'</style></head><body><main class=\"sheet\">'+"
-new_body="'</style></head><body><div class=\"stats-return\"><button type=\"button\" onclick=\"'+(returnMode===\"challenges\"?\"var c=window.open(&quot;&quot;,&quot;TFFC_CHALLENGES&quot;);if(c&amp;&amp;!c.closed){c.focus();window.close();}else{history.back();}\":\"if(window.opener&amp;&amp;!window.opener.closed){window.opener.focus();window.close();}else{history.back();}\")+'\">'+(returnMode===\"challenges\"?\"Back to Challenges\":\"Back to Clubfinder\")+'</button></div><main class=\"sheet\">'+"
+new_body="'</style></head><body><div class=\"stats-return\"><button type=\"button\" onclick=\"'+(returnMode===\"challenges\"?\"history.back();\":\"if(window.opener&amp;&amp;!window.opener.closed){window.opener.focus();window.close();}else{history.back();}\")+'\">'+(returnMode===\"challenges\"?\"Back to Challenges\":\"Back to Clubfinder\")+'</button></div><main class=\"sheet\">'+"
 if old_body in text:
     text=text.replace(old_body,new_body,1)
 elif new_body not in text:
