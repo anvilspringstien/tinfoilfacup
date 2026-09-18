@@ -1,0 +1,56 @@
+name: Probe 640 Challenge Mat encoding
+
+on:
+  push:
+    paths:
+      - '.github/workflows/probe-640-assets.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --quiet pillow
+      - name: Probe encoding
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          import hashlib, io
+
+          src = Path('beta/assets/challenge-mats/mat-00-front.webp')
+          target_hash = '59d505872555fcfde1e3122690d6278afa850469e5de6f677301cc4434fc39a7'
+          target_size = 193388
+          im = Image.open(src).convert('RGB')
+          print('SOURCE', im.size, src.stat().st_size, hashlib.sha256(src.read_bytes()).hexdigest())
+
+          filters = {
+              'LANCZOS': Image.Resampling.LANCZOS,
+              'BICUBIC': Image.Resampling.BICUBIC,
+              'BILINEAR': Image.Resampling.BILINEAR,
+              'HAMMING': Image.Resampling.HAMMING,
+              'BOX': Image.Resampling.BOX,
+          }
+          nearest = []
+          for fname, filt in filters.items():
+              resized = im.resize((640,640), filt)
+              for q in range(70, 101):
+                  for method in range(0, 7):
+                      b = io.BytesIO()
+                      resized.save(b, 'WEBP', quality=q, method=method)
+                      data = b.getvalue()
+                      h = hashlib.sha256(data).hexdigest()
+                      if h == target_hash:
+                          print('EXACT_MATCH', fname, 'quality', q, 'method', method, 'size', len(data))
+                          raise SystemExit(0)
+                      nearest.append((abs(len(data)-target_size), len(data), fname, q, method, h))
+          for row in sorted(nearest)[:25]:
+              print('NEAREST', row)
+          print('NO_EXACT_MATCH')
+          PY
