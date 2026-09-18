@@ -42,7 +42,7 @@ async function openChallenges(origin){
  let ri=0;crumbs.forEach(cr=>ri=Math.max(ri,tinFoilChallengeRoundIndex((cr.result||{}).round)));
  const texts=[journey.round,journey.nextRound,journey.fixture&&journey.fixture.round,journey.next&&journey.next.round];texts.forEach(x=>ri=Math.max(ri,tinFoilChallengeRoundIndex(x)));
  const statsSnapshot=tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,Number.isFinite(pm.miles)?pm.miles:0);
- const truth={source:'Clubfinder v7.6',originName:origin.name,currentCustodian:(journey.carrier||origin).name,postcode:saved&&saved.postcode||'',searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved),tiesPlayed:crumbs.length,awayTies:away,pigeonMiles:Number.isFinite(pm.miles)?pm.miles:0,campaignRound:ri,ended:!!(saved&&saved.ended),statsSnapshot,updatedAt:new Date().toISOString()};
+ const truth={source:'Clubfinder v7.6',originName:origin.name,currentCustodian:(journey.carrier||origin).name,postcode:saved&&saved.postcode||'',selectedAt:saved&&saved.selectedAt||null,searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved),tiesPlayed:crumbs.length,awayTies:away,pigeonMiles:Number.isFinite(pm.miles)?pm.miles:0,campaignRound:ri,ended:!!(saved&&saved.ended),statsSnapshot,updatedAt:new Date().toISOString()};
  localStorage.setItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY,JSON.stringify(truth));
  /* CANDIDATE 13 FIX — same-tab Challenges launch; Exit returns via browser history. */
  window.location.href='beta/challenges-beta.html';
