@@ -5,6 +5,12 @@ on:
   pull_request:
     paths:
       - 'counter-worker/**'
+      - 'counter-config.json'
+      - '.github/workflows/clubfinder-counter-check.yml'
+  push:
+    paths:
+      - 'counter-worker/**'
+      - 'counter-config.json'
       - '.github/workflows/clubfinder-counter-check.yml'
 
 permissions:
@@ -30,3 +36,21 @@ jobs:
 
       - name: Wrangler dry run
         run: npm run check
+
+      - name: Probe deployed Worker health
+        run: |
+          curl --fail --silent --show-error \
+            https://tffac-clubfinder-counter.anvilspringstien.workers.dev/health
+
+      - name: Probe GitHub Pages CORS permission
+        run: |
+          headers="$(mktemp)"
+          curl --fail --silent --show-error \
+            -X OPTIONS \
+            -H 'Origin: https://anvilspringstien.github.io' \
+            -H 'Access-Control-Request-Method: POST' \
+            -D "$headers" \
+            -o /dev/null \
+            https://tffac-clubfinder-counter.anvilspringstien.workers.dev/increment
+          grep -qi '^access-control-allow-origin: https://anvilspringstien.github.io' "$headers"
+          grep -qi '^access-control-allow-methods: .*POST' "$headers"
