@@ -122,8 +122,9 @@ const assertions=`
     if(!cert.includes(required))throw new Error('Production UI regression: Stats certificate missing '+required);
   }
   if(cert.includes('>🐦</div>'))throw new Error('Production UI regression: generic pigeon emoji remains in Stats At a Glance');
-  const pigeonLabel=(cert.match(/Pigeon<br>Miles/g)||[]).length;
-  if(pigeonLabel!==1)throw new Error('Production UI regression: expected one Pigeon Miles At-a-Glance card, got '+pigeonLabel);
+  const pigeonLabel=(cert.match(/Pigeon<br>Miles<br>Flown/g)||[]).length;
+  if(pigeonLabel!==1)throw new Error('Production UI regression: expected one Pigeon Miles Flown At-a-Glance card, got '+pigeonLabel);
+  if(cert.includes('<div class="g-label">Pigeon<br>Miles</div>'))throw new Error('Production UI regression: old two-line Pigeon Miles At-a-Glance label remains');
 
   location.href='https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html';
   await openChallenges(origin);
@@ -143,7 +144,7 @@ const assertions=`
   console.log('PROTECTED PRODUCTION UI REGRESSION: PASS');
   console.log('Campaign terminology: PASS');
   console.log('Yellow Challenges launcher + Candidate 13 bridge: PASS');
-  if(html.includes('Pigeon Miles Travelled:')||html.includes('Pigeon Miles Traveled:'))throw new Error('Production UI regression: retired Pigeon Miles travel wording remains');
+  if(cert.includes('Pigeon Miles Travelled:')||cert.includes('Pigeon Miles Traveled:'))throw new Error('Production UI regression: retired Pigeon Miles travel wording remains');
   console.log('Pigeon Miles wording is universally Flown: PASS');
   console.log('Pigeon Miles approved roundel + six-column no-wrap layout: PASS');
   console.log('HP7 bridge custodian: Windsor & Eton — PASS');
