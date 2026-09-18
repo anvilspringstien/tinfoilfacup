@@ -1723,8 +1723,9 @@ function close() { overlay.classList.remove("open"); }
 
 
 function tinFoilOpenCanonicalStats(){
-  /* One deterministic BETA Stats route. Never production; never depend on a
-     possibly stale Clubfinder page sitting in browser history. */
+  /* One deterministic BETA Stats route. Remember the current mat so the
+     Stats return can reopen the deck exactly where the user left it. */
+  try{sessionStorage.setItem('tffc.challengeReturnIndex',String(index));}catch(_){}
   window.location.href='clubfinder-beta.html?stats=1&return=challenges';
 }
 
@@ -1959,6 +1960,18 @@ $("cardstage").addEventListener("pointerup",e=>{
 applyClubfinderCampaignTruth();
 if (awardCampaignChallenges()) save();
 else renderStats();
+
+const tinFoilChallengeRoute=new URLSearchParams(window.location.search||'');
+if(tinFoilChallengeRoute.get('from')==='stats-return-v2'){
+  let returnIndex=0;
+  try{
+    const stored=Number(sessionStorage.getItem('tffc.challengeReturnIndex'));
+    if(Number.isFinite(stored)) returnIndex=stored;
+    sessionStorage.removeItem('tffc.challengeReturnIndex');
+  }catch(_){}
+  openAt(returnIndex);
+  try{history.replaceState(null,'',location.pathname+location.hash);}catch(_){}
+}
 </script>
 
 </body>
