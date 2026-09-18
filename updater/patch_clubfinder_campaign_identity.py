@@ -44,10 +44,22 @@ new_badge="""function updateLiveDataBadge(){
 if old_badge in text: text=text.replace(old_badge,new_badge,1)
 elif new_badge not in text: raise SystemExit('ABORT: live-data badge boundary drifted')
 
+old_load="function loadSavedJourney(){try{return JSON.parse(localStorage.getItem(JOURNEY_STORAGE_KEY)||'null')}catch(e){return null}}"
+new_load="function loadSavedJourney(){try{const saved=JSON.parse(localStorage.getItem(JOURNEY_STORAGE_KEY)||'null');return typeof tinFoilRecoverCampaignIdentity==='function'?tinFoilRecoverCampaignIdentity(saved):saved}catch(e){return null}}"
+if old_load in text: text=text.replace(old_load,new_load,1)
+elif new_load not in text: raise SystemExit('ABORT: saved Campaign recovery boundary drifted')
+
 old_save="function saveJourney(origin,postcode){const s={originName:origin.name,postcode,ended:false,selectedAt:new Date().toISOString()};localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));return s}"
-new_save="function saveJourney(origin,postcode){const existing=loadSavedJourney(),same=existing&&norm(existing.originName)===norm(origin.name),identity=tinFoilCampaignIdentityForSave(origin,existing);const s={originName:origin.name,postcode,ended:false,selectedAt:same&&existing.selectedAt?existing.selectedAt:new Date().toISOString()};if(identity.searchNumber){s.searchNumber=identity.searchNumber;s.callSign=identity.callSign}localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));tinFoilRegisterPendingCampaignIdentity(s);return s}"
+new_save="function saveJourney(origin,postcode){const existing=loadSavedJourney(),same=existing&&norm(existing.originName)===norm(origin.name),identity=tinFoilCampaignIdentityForSave(origin,existing);const s={originName:origin.name,postcode,ended:false,selectedAt:same&&existing.selectedAt?existing.selectedAt:new Date().toISOString()};if(identity.searchNumber){s.searchNumber=identity.searchNumber;s.callSign=identity.callSign}localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));tinFoilPersistCampaignIdentityBackup(s);tinFoilRegisterPendingCampaignIdentity(s);return s}"
+legacy_save="function saveJourney(origin,postcode){const existing=loadSavedJourney(),same=existing&&norm(existing.originName)===norm(origin.name),identity=tinFoilCampaignIdentityForSave(origin,existing);const s={originName:origin.name,postcode,ended:false,selectedAt:same&&existing.selectedAt?existing.selectedAt:new Date().toISOString()};if(identity.searchNumber){s.searchNumber=identity.searchNumber;s.callSign=identity.callSign}localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));tinFoilRegisterPendingCampaignIdentity(s);return s}"
 if old_save in text: text=text.replace(old_save,new_save,1)
+elif legacy_save in text: text=text.replace(legacy_save,new_save,1)
 elif new_save not in text: raise SystemExit('ABORT: saved Campaign identity boundary drifted')
+
+old_update="function updateSavedJourney(p){const s=loadSavedJourney();if(!s)return null;const n=Object.assign({},s,p);localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(n));return n}"
+new_update="function updateSavedJourney(p){const s=loadSavedJourney();if(!s)return null;const n=Object.assign({},s,p);localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(n));tinFoilPersistCampaignIdentityBackup(n);return n}"
+if old_update in text: text=text.replace(old_update,new_update,1)
+elif new_update not in text: raise SystemExit('ABORT: updated Campaign identity backup boundary drifted')
 
 if 'async function go(){' in text: text=text.replace('async function go(){','async function go(userInitiated=false){',1)
 elif 'async function go(userInitiated=false){' not in text: raise SystemExit('ABORT: Clubfinder go() signature boundary drifted')
@@ -70,10 +82,12 @@ if old_return in text: text=text.replace(old_return,new_return,1)
 elif new_return not in text: raise SystemExit('ABORT: Campaign identity display boundary drifted')
 
 hard_line=" localStorage.removeItem(JOURNEY_STORAGE_KEY);"
-hard_new=hard_line+"\n if(typeof tinFoilClearCurrentSearchIdentity==='function')tinFoilClearCurrentSearchIdentity();"
+hard_new=hard_line+"\n if(typeof tinFoilClearCampaignIdentityBackup==='function')tinFoilClearCampaignIdentityBackup();\n if(typeof tinFoilClearCurrentSearchIdentity==='function')tinFoilClearCurrentSearchIdentity();"
+legacy_hard=hard_line+"\n if(typeof tinFoilClearCurrentSearchIdentity==='function')tinFoilClearCurrentSearchIdentity();"
 if hard_new not in text:
-    if text.count(hard_line)!=1: raise SystemExit('ABORT: Hard Reset identity boundary drifted')
-    text=text.replace(hard_line,hard_new,1)
+    if legacy_hard in text: text=text.replace(legacy_hard,hard_new,1)
+    elif text.count(hard_line)!=1: raise SystemExit('ABORT: Hard Reset identity boundary drifted')
+    else: text=text.replace(hard_line,hard_new,1)
 
 stats_saved="  const savedJourneyForStats=loadSavedJourney();\n  const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);"
 stats_new="  const savedJourneyForStats=loadSavedJourney();\n  const campaignCallSign=tinFoilSavedCallSign(savedJourneyForStats);\n  const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);"
@@ -94,7 +108,7 @@ if legacy_call_sign_header in text: text=text.replace(legacy_call_sign_header,un
 elif legacy_header in text: text=text.replace(legacy_header,unified_header,1)
 elif unified_header not in text: raise SystemExit('ABORT: unified Stats header boundary drifted')
 
-required=('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',"TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json'",'Tango Foxtrot 2 Alpha Charlie','async function go(userInitiated=false)','if(userInitiated)tinFoilBeginSearchIdentity();',"addEventListener('click',()=>go(true))",'searchNumber=identity.searchNumber','data-tin-foil-campaign-identity','tinFoilBackfillExistingCampaignIdentity(n,sequence);','campaignCallSign=tinFoilSavedCallSign')
+required=('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',"TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json'",'TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY','tinFoilRecoverCampaignIdentity(saved)','tinFoilPersistCampaignIdentityBackup(n)','Tango Foxtrot 2 Alpha Charlie','async function go(userInitiated=false)','if(userInitiated)tinFoilBeginSearchIdentity();',"addEventListener('click',()=>go(true))",'searchNumber=identity.searchNumber','data-tin-foil-campaign-identity','tinFoilBackfillExistingCampaignIdentity(n,sequence);','campaignCallSign=tinFoilSavedCallSign')
 for marker in required:
     if marker not in text: raise SystemExit('ABORT: Campaign identity marker missing: '+marker)
 if text.count('TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN')!=1: raise SystemExit('ABORT: Campaign identity source must appear exactly once')
@@ -105,5 +119,6 @@ print('Successful user searches: issue one sequential search number')
 print('Internal redraws: do not increment')
 print('Campaign choice: adopts search number + Pigeon Call Sign')
 print('Existing Campaign identity: preserved')
+print('Campaign identity backup / Challenges bridge: recovery guarded')
 print('Identity-less active Campaign: repaired by next successful issued number')
 print('Counter failure: non-blocking and harmless')
