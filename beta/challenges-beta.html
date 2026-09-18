@@ -1723,16 +1723,8 @@ function close() { overlay.classList.remove("open"); }
 
 
 function tinFoilOpenCanonicalStats(){
-  /* Return to the already-loaded BETA Clubfinder and ask that exact page to
-     open its canonical Stats renderer. This avoids reloading the very large
-     Clubfinder document (and the visible/blank detour that came with it). */
-  const cameFromBetaClubfinder=/clubfinder-beta\.html(?:[?#]|$)/i.test(document.referrer||'');
-  if(cameFromBetaClubfinder){
-    try{sessionStorage.setItem('tffc.openStatsOnReturn','challenges');}catch(_){}
-    history.back();
-    return;
-  }
-  /* Direct-open fallback: still use BETA, never production. */
+  /* One deterministic BETA Stats route. Never production; never depend on a
+     possibly stale Clubfinder page sitting in browser history. */
   window.location.href='clubfinder-beta.html?stats=1&return=challenges';
 }
 
