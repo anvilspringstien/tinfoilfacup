@@ -1465,6 +1465,7 @@ async function go(userInitiated=false){
 document.getElementById('postcode').addEventListener('input',function(){this.value=this.value.toUpperCase();});document.getElementById('findBtn').addEventListener('click',()=>go(true));document.getElementById('postcode').addEventListener('keydown',e=>{if(e.key==='Enter')go(true)});
 
 const tinFoilCompetitionReady=refreshCompetitionData(false);
+Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});
 async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const q=new URLSearchParams(window.location.search||'');
   if(q.get('stats')!=='1')return;
