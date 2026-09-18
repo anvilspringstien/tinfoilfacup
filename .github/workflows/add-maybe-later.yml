@@ -1,4 +1,5 @@
 name: Add Maybe Later to Challenges splash
+# retrigger after bundled UI rollback
 
 on:
   push:
