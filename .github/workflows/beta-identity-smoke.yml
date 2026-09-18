@@ -1,0 +1,21 @@
+name: Clubfinder BETA identity smoke
+
+on:
+  push:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'updater/beta_campaign_identity_regression.js'
+      - '.github/workflows/beta-identity-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  beta-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - name: Regress BETA counter, Pigeon and refresh persistence
+        run: node updater/beta_campaign_identity_regression.js
