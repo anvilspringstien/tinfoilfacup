@@ -51,6 +51,7 @@ on:
       - "updater/amersham_stats_regression.js"
       - "updater/replay_progression_regression.js"
       - "updater/historical_journey_regression.js"
+      - "updater/historical_venue_regression.js"
       - "updater/patch_clubfinder_law2_origins.py"
       - "updater/law2-verified-location-ledger.json"
       - "updater/promote_verified_law2_locations.py"
@@ -163,6 +164,8 @@ jobs:
         run: node updater/journey_integrity_regression.js
       - name: Run historical Campaign regression
         run: node updater/historical_journey_regression.js
+      - name: Run generic historical venue regression
+        run: node updater/historical_venue_regression.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
