@@ -1276,7 +1276,23 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
 
   const savedJourneyForStats=loadSavedJourney();
   const campaignCallSign=tinFoilSavedCallSign(savedJourneyForStats);
-  const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);
+  let pigeonStats=null;
+  try{
+    const bridge=JSON.parse(localStorage.getItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY)||'null');
+    const bridgeMatches=bridge &&
+      bridge.source==='Clubfinder v7.6' &&
+      norm(bridge.originName||'')===norm(origin.name) &&
+      (!savedJourneyForStats || !savedJourneyForStats.selectedAt || !bridge.selectedAt || bridge.selectedAt===savedJourneyForStats.selectedAt);
+    const cachedMiles=bridgeMatches
+      ? Number(bridge.statsSnapshot&&bridge.statsSnapshot.pigeonMiles!=null ? bridge.statsSnapshot.pigeonMiles : bridge.pigeonMiles)
+      : NaN;
+    if(Number.isFinite(cachedMiles) && cachedMiles>=0){
+      pigeonStats={miles:cachedMiles,display:String(Math.round(cachedMiles)),unresolved:0};
+    }
+  }catch(e){}
+  if(!pigeonStats){
+    pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);
+  }
   const pigeonMilesDisplay=pigeonStats.display;
 
 
@@ -1487,8 +1503,11 @@ async function go(explicitPostcodeSearch=false){
 }
 document.getElementById('postcode').addEventListener('input',function(){this.value=this.value.toUpperCase();});document.getElementById('findBtn').addEventListener('click',()=>go(true));document.getElementById('postcode').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go(true)}});
 
+const tinFoilStatsRouteRequested=new URLSearchParams(window.location.search||'').get('stats')==='1';
 const tinFoilCompetitionReady=refreshCompetitionData(false);
-Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});
+if(!tinFoilStatsRouteRequested){
+  Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});
+}
 async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const q=new URLSearchParams(window.location.search||'');
   if(q.get('stats')!=='1')return;
@@ -1498,7 +1517,7 @@ async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const returnMode=q.get('return')==='challenges'?'challenges':'clubfinder';
   await journeyCertificate(origin,window,returnMode);
 }
-if(new URLSearchParams(window.location.search||'').get('stats')==='1'){
-  Promise.resolve(tinFoilCompetitionReady).then(tinFoilMaybeOpenCanonicalStatsRoute).catch(()=>{document.documentElement.classList.remove('tffc-stats-route');});
+if(tinFoilStatsRouteRequested){
+  Promise.resolve(tinFoilMaybeOpenCanonicalStatsRoute()).catch(()=>{document.documentElement.classList.remove('tffc-stats-route');});
 }
 </script></body></html>
