@@ -30,7 +30,7 @@ function tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,pigeonMiles){
   if(currentState&&currentState.type==='replay'&&currentState.replay){const rp=currentState.replay,rv=replayVenue(rp);nextUp={round:rp.round||'Replay',fixture:(rp.home||'')+' v '+(rp.away||''),meta:dateLabel(rp.date)+' • '+(rp.kickoff||'Kick-off TBC'),venue:(rv.ground&&rv.ground!=='Venue TBC')?rv.ground+(rv.postcode&&rv.postcode!=='Postcode TBC'?' • '+rv.postcode:''):''};}
   else if(next&&next.knownFixture){const k=next.knownFixture,v=k.venue||{};nextUp={round:next.name||k.round||'Next Round',fixture:(k.home||'')+' v '+(k.away||''),meta:dateLabel(k.date)+' • '+(k.kickoff||'Kick-off TBC'),venue:(v.ground&&v.ground!=='Venue TBC')?v.ground+(v.postcode&&v.postcode!=='Postcode TBC'?' • '+v.postcode:''):''};}
   else if(next){nextUp={round:next.name||'Next Round',fixture:'Draw / fixture TBC',meta:next.date||'Date TBC',venue:''};}
-  return {season:'2026–27',origin:origin.name,currentCustodian:carrier.name,rounds:roundNames.size,matches:crumbs.length,clubs:clubs.length,goals,grounds:venueKeys.size,pigeonMiles:Math.round(Number(pigeonMiles)||0),homeGames,awayGames,wins,draws,defeats,history,nextUp};
+  return {season:'2026–27',origin:origin.name,currentCustodian:carrier.name,searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved),rounds:roundNames.size,matches:crumbs.length,clubs:clubs.length,goals,grounds:venueKeys.size,pigeonMiles:Math.round(Number(pigeonMiles)||0),homeGames,awayGames,wins,draws,defeats,history,nextUp};
 }
 
 async function openChallenges(origin){
@@ -42,7 +42,7 @@ async function openChallenges(origin){
  let ri=0;crumbs.forEach(cr=>ri=Math.max(ri,tinFoilChallengeRoundIndex((cr.result||{}).round)));
  const texts=[journey.round,journey.nextRound,journey.fixture&&journey.fixture.round,journey.next&&journey.next.round];texts.forEach(x=>ri=Math.max(ri,tinFoilChallengeRoundIndex(x)));
  const statsSnapshot=tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,Number.isFinite(pm.miles)?pm.miles:0);
- const truth={source:'Clubfinder v7.6',originName:origin.name,currentCustodian:(journey.carrier||origin).name,postcode:saved&&saved.postcode||'',tiesPlayed:crumbs.length,awayTies:away,pigeonMiles:Number.isFinite(pm.miles)?pm.miles:0,campaignRound:ri,ended:!!(saved&&saved.ended),statsSnapshot,updatedAt:new Date().toISOString()};
+ const truth={source:'Clubfinder v7.6',originName:origin.name,currentCustodian:(journey.carrier||origin).name,postcode:saved&&saved.postcode||'',searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved),tiesPlayed:crumbs.length,awayTies:away,pigeonMiles:Number.isFinite(pm.miles)?pm.miles:0,campaignRound:ri,ended:!!(saved&&saved.ended),statsSnapshot,updatedAt:new Date().toISOString()};
  localStorage.setItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY,JSON.stringify(truth));
  /* CANDIDATE 13 FIX — same-tab Challenges launch; Exit returns via browser history. */
  window.location.href='beta/challenges-beta.html';

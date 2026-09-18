@@ -24,6 +24,9 @@ on:
       - "updater/historical_journey_regression.js"
       - "updater/historical_venue_regression.js"
       - "updater/patch_clubfinder_production_ui.py"
+      - "updater/patch_clubfinder_campaign_identity.py"
+      - "updater/clubfinder-campaign-identity.js"
+      - "counter-config.json"
       - "updater/clubfinder-production-challenge-bridge.js"
       - "updater/pigeon-miles-roundel-data-uri.txt"
       - "updater/production_ui_regression.js"
@@ -152,6 +155,9 @@ jobs:
       - name: Restore protected production Campaign UI
         run: python updater/patch_clubfinder_production_ui.py
 
+      - name: Restore Campaign search-number and Pigeon Call Sign identity
+        run: python updater/patch_clubfinder_campaign_identity.py
+
       - name: Refresh last-known-good embedded competition snapshot
         run: python updater/refresh_clubfinder_embedded_snapshot.py
 
@@ -201,6 +207,7 @@ jobs:
         run: |
           python updater/patch_clubfinder_branding.py
           python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
           node updater/production_ui_regression.js
 
       - name: Commit canonical competition state and health report

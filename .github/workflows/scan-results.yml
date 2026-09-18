@@ -54,6 +54,9 @@ on:
       - "updater/historical_journey_regression.js"
       - "updater/historical_venue_regression.js"
       - "updater/patch_clubfinder_production_ui.py"
+      - "updater/patch_clubfinder_campaign_identity.py"
+      - "updater/clubfinder-campaign-identity.js"
+      - "counter-config.json"
       - "updater/clubfinder-production-challenge-bridge.js"
       - "updater/pigeon-miles-roundel-data-uri.txt"
       - "updater/production_ui_regression.js"
@@ -141,6 +144,7 @@ jobs:
           python updater/audit_law2_location_verification.py
           python updater/patch_clubfinder_historical_venues.py
           python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
           python updater/refresh_clubfinder_embedded_snapshot.py
       - name: Re-check replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py --check
@@ -178,6 +182,7 @@ jobs:
         run: |
           python updater/patch_clubfinder_branding.py
           python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
           node updater/production_ui_regression.js
       - uses: actions/upload-artifact@v4
         if: always()

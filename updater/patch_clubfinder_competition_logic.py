@@ -161,13 +161,15 @@ elif new_layout not in text:raise SystemExit('ABORT: live-data line layout bound
 
 old_badge="e.textContent='Competition data updated: '+w;"
 new_badge="e.textContent='Clubfinder v7.6 — Competition data updated: '+w;"
+identity_badge="e.textContent='Clubfinder v7.6 — Competition data updated: '+w+suffix;"
 if old_badge in text:text=text.replace(old_badge,new_badge,1)
-elif new_badge not in text:raise SystemExit('ABORT: live-data badge text boundary not found')
+elif new_badge not in text and identity_badge not in text:raise SystemExit('ABORT: live-data badge text boundary not found')
 
 old_fallback="}else e.textContent=LIVE_DATA_STATUS.message;"
 new_fallback="}else e.textContent='Clubfinder v7.6 — '+LIVE_DATA_STATUS.message;"
+identity_fallback="}else e.textContent='Clubfinder v7.6 — '+LIVE_DATA_STATUS.message+suffix;"
 if old_fallback in text:text=text.replace(old_fallback,new_fallback,1)
-elif new_fallback not in text:raise SystemExit('ABORT: live-data fallback boundary not found')
+elif new_fallback not in text and identity_fallback not in text:raise SystemExit('ABORT: live-data fallback boundary not found')
 
 required=('function canonicalClubKey(','function canonicalResultWinner(','function sameSemanticResult(',"liveLookup('result_history',club.name)",'Object.values(allHistory)','const winner=canonicalResultWinner(r);','if(nf.venue&&nf.venue.postcode','Clubfinder v7.6 — Competition data updated: ','<div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools">')
 for marker in required:
