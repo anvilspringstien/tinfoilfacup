@@ -1119,7 +1119,9 @@ async function tinFoilRestoreSavedCampaignOnLoad(){
   const saved=loadSavedJourney();
   if(!saved||!saved.postcode)return false;
   const input=document.getElementById('postcode');
-  if(!input||String(input.value||'').trim())return false;
+  if(!input)return false;
+  // Browsers may restore the previous form value on refresh. A saved Campaign is
+  // authoritative here, so always repopulate it and redraw the Campaign.
   input.value=String(saved.postcode).toUpperCase();
   await go(false);
   return true;
