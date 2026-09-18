@@ -1,0 +1,26 @@
+name: Revert bundled Stats and Challenges consolidation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/revert-stats-challenges-bundle.yml
+
+permissions:
+  contents: write
+
+jobs:
+  revert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Revert bundled UI commit
+        run: |
+          git config user.name "Tin Foil FA Cup UI"
+          git config user.email "actions@users.noreply.github.com"
+          git revert --no-edit 5943d29474bf3184debd05cfc5fd8d7d3a6704a2
+          git push
