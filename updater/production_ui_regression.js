@@ -64,6 +64,7 @@ const sandbox={
   },
   navigator:{},location:locationStub,URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
   open:()=>popupStub(),
+  getCertificateHtml:()=>certificateHtml,
   fetch:async(url)=>{
     const s=String(url);
     if(s.includes('competition.json'))return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};
@@ -107,9 +108,9 @@ const assertions=`
   }
   if(!/This Campaign starts with:/i.test(rendered))throw new Error('Production UI regression: Campaign history origin wording missing');
 
-  certificateHtml='';
   await journeyCertificate(origin);
-  if(!certificateHtml)throw new Error('Production UI regression: Stats certificate did not render');
+  const cert=getCertificateHtml();
+  if(!cert)throw new Error('Production UI regression: Stats certificate did not render');
   for(const required of [
     'YOUR TIN FOIL FA CUP CAMPAIGN',
     'THE CAMPAIGN SO FAR',
@@ -117,10 +118,10 @@ const assertions=`
     'grid-template-columns:repeat(6,minmax(0,1fr))',
     '.g:last-child{grid-column:auto}'
   ]){
-    if(!certificateHtml.includes(required))throw new Error('Production UI regression: Stats certificate missing '+required);
+    if(!cert.includes(required))throw new Error('Production UI regression: Stats certificate missing '+required);
   }
-  if(certificateHtml.includes('>🐦</div>'))throw new Error('Production UI regression: generic pigeon emoji remains in Stats At a Glance');
-  const pigeonLabel=(certificateHtml.match(/Pigeon<br>Miles/g)||[]).length;
+  if(cert.includes('>🐦</div>'))throw new Error('Production UI regression: generic pigeon emoji remains in Stats At a Glance');
+  const pigeonLabel=(cert.match(/Pigeon<br>Miles/g)||[]).length;
   if(pigeonLabel!==1)throw new Error('Production UI regression: expected one Pigeon Miles At-a-Glance card, got '+pigeonLabel);
 
   location.href='https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html';
