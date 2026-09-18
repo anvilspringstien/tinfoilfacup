@@ -5,6 +5,25 @@ const path=require('path');
 
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'clubfinder.html'),'utf8');
+const betaHtml=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
+const betaIdentityMarkers=[
+  'TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN',
+  "TIN_FOIL_COUNTER_INCREMENT_URL='https://tffac-clubfinder-counter.anvilspringstien.workers.dev/increment'",
+  'tinFoilRecoverCampaignIdentity(saved)',
+  'if(explicitPostcodeSearch)tinFoilBeginSearchIdentity();',
+  "${mine?tinFoilCampaignIdentityHtml(saved):''}",
+  'const tinFoilCompetitionReady=refreshCompetitionData(false);',
+  'Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});',
+  "selectedAt:saved&&saved.selectedAt||null,searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved)",
+  "window.location.href='challenges-beta.html';"
+];
+for(const marker of betaIdentityMarkers){
+  if(!betaHtml.includes(marker))throw new Error('BETA Campaign identity parity regression: missing '+marker);
+}
+if((betaHtml.match(/TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN/g)||[]).length!==1)throw new Error('BETA Campaign identity parity regression: identity block count drifted');
+if(!betaHtml.includes("async function go(explicitPostcodeSearch=false){\n await tinFoilCompetitionReady;"))throw new Error('BETA Campaign identity parity regression: refresh-safe go() contract missing');
+if(!betaHtml.includes('const freshPostcodeSearch=!!(explicitPostcodeSearch&&(requestedDifferentPostcode||searchingDifferentPostcode));'))throw new Error('BETA Campaign identity parity regression: explicit postcode-search semantics lost');
+console.log('CLUBFINDER BETA CAMPAIGN IDENTITY PARITY: PASS');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
 if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
