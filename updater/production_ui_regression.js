@@ -30,6 +30,7 @@ const documentStub={
   body:nodeStub()
 };
 const localStore={};
+let counterIncrementCalls=0;
 let certificateHtml='';
 function popupStub(){
   const doc={
@@ -65,8 +66,14 @@ const sandbox={
   navigator:{},location:locationStub,URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
   open:()=>popupStub(),
   getCertificateHtml:()=>certificateHtml,
+  getCounterIncrementCalls:()=>counterIncrementCalls,
   fetch:async(url)=>{
     const s=String(url);
+    if(s.includes('counter-config.json'))return {ok:true,status:200,json:async()=>({increment_url:'https://counter.test/increment'})};
+    if(s==='https://counter.test/increment'){
+      counterIncrementCalls++;
+      return {ok:true,status:200,json:async()=>({number:9842})};
+    }
     if(s.includes('competition.json'))return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};
     if(/postcodes\//i.test(s)){
       const pc=postcodeFromUrl(s),hit=coords[pc];
@@ -85,6 +92,20 @@ const assertions=`
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):String(a||'')===String(b||'');
   const origin=ELIGIBLE.find(c=>same(c.name,'Amersham Town'));
   if(!origin)throw new Error('Production UI regression: Amersham origin missing');
+
+  // Exercise the real Find My Club browser path: a successful user-initiated
+  // search must request exactly one number and display it in the live badge.
+  const freshGround=findGround(origin)||{};
+  lookup=async()=>({lat:Number(freshGround.lat),lon:Number(freshGround.lon),postcode:'HP7 0EJ'});
+  geocodeClubPostcodes=async()=>{};
+  document.getElementById('postcode').value='HP7 0EJ';
+  await go(true);
+  if(!TIN_FOIL_SEARCH_NUMBER_PROMISE)throw new Error('Production UI regression: fresh search did not start counter request');
+  await TIN_FOIL_SEARCH_NUMBER_PROMISE;
+  if(tinFoilCurrentSearchNumber()!==9842)throw new Error('Production UI regression: fresh search did not adopt issued counter number');
+  if(getCounterIncrementCalls()!==1)throw new Error('Production UI regression: fresh search counter called '+getCounterIncrementCalls()+' times');
+  if(!String(document.getElementById('liveDataBadge').textContent||'').includes('#09842'))throw new Error('Production UI regression: issued counter number not displayed in live badge');
+  tinFoilClearCurrentSearchIdentity();
 
   // Recover a Campaign that was chosen while the counter was unavailable.
   localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({
