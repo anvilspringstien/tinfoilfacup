@@ -70,7 +70,7 @@ const sandbox={
   fetch:async(url)=>{
     const s=String(url);
     if(s.includes('counter-config.json'))return {ok:true,status:200,json:async()=>({increment_url:'https://counter.test/increment'})};
-    if(s==='https://counter.test/increment'){
+    if(s==='https://counter.test/increment'||s==='https://tffac-clubfinder-counter.anvilspringstien.workers.dev/increment'){
       counterIncrementCalls++;
       return {ok:true,status:200,json:async()=>({number:9842})};
     }
