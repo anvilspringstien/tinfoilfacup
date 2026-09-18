@@ -197,6 +197,11 @@ jobs:
         run: node updater/historical_venue_regression.js
       - name: Run protected production UI regression
         run: node updater/production_ui_regression.js
+      - name: Guard production presentation patch idempotency
+        run: |
+          python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_production_ui.py
+          node updater/production_ui_regression.js
 
       - name: Commit canonical competition state and health report
         if: ${{ github.ref_name == 'main' }}
