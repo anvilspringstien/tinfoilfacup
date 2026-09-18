@@ -107,6 +107,26 @@ const assertions=`
   if(!String(document.getElementById('liveDataBadge').textContent||'').includes('#09842'))throw new Error('Production UI regression: issued counter number not displayed in live badge');
   tinFoilClearCurrentSearchIdentity();
 
+  // Real existing-Campaign path: the Campaign already exists without an identity,
+  // then a fresh Find My Club search receives a number. That issued number must
+  // attach to the existing Campaign automatically and reveal its Pigeon Call Sign.
+  localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({
+    originName:origin.name,
+    postcode:'HP7 0EJ',
+    ended:false,
+    selectedAt:'2026-09-18T11:55:00.000Z'
+  }));
+  TIN_FOIL_COUNTER_ENDPOINT_PROMISE=Promise.resolve('https://counter.test/increment');
+  document.getElementById('postcode').value='HP7 0EJ';
+  await go(true);
+  if(!TIN_FOIL_SEARCH_NUMBER_PROMISE)throw new Error('Production UI regression: existing Campaign search did not start counter request');
+  await TIN_FOIL_SEARCH_NUMBER_PROMISE;
+  const autoBackfilled=loadSavedJourney();
+  if(Number(autoBackfilled.searchNumber)!==9842)throw new Error('Production UI regression: issued search number did not attach to existing Campaign');
+  if(autoBackfilled.callSign!=='Tango Foxtrot 2 Alpha Charlie 09842')throw new Error('Production UI regression: existing Campaign Pigeon Call Sign was not backfilled');
+  if(!String(document.getElementById('results').innerHTML||'').includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('Production UI regression: existing Campaign did not reveal backfilled Pigeon Call Sign');
+  tinFoilClearCurrentSearchIdentity();
+
   // Recover a Campaign that was chosen while the counter was unavailable.
   localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({
     originName:origin.name,
