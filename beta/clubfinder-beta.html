@@ -1507,24 +1507,11 @@ async function go(explicitPostcodeSearch=false){
 document.getElementById('postcode').addEventListener('input',function(){this.value=this.value.toUpperCase();});document.getElementById('findBtn').addEventListener('click',()=>go(true));document.getElementById('postcode').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go(true)}});
 
 const tinFoilStatsRouteRequested=new URLSearchParams(window.location.search||'').get('stats')==='1';
-const tinFoilStatsReturnRequested=tinFoilStatsReturnPending();
+try{sessionStorage.removeItem('tffc.openStatsOnReturn')}catch(e){}
 const tinFoilCompetitionReady=refreshCompetitionData(false);
-if(!tinFoilStatsRouteRequested&&!tinFoilStatsReturnRequested){
+if(!tinFoilStatsRouteRequested){
   Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});
 }
-async function tinFoilMaybeOpenStatsAfterChallengeReturn(){
-  if(!tinFoilStatsReturnPending())return false;
-  try{sessionStorage.removeItem('tffc.openStatsOnReturn')}catch(e){}
-  const saved=loadSavedJourney();
-  const origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
-  if(!origin)return false;
-  await journeyCertificate(origin,window,'challengesForward');
-  return true;
-}
-window.addEventListener('pageshow',()=>{
-  if(!tinFoilStatsReturnPending())return;
-  Promise.resolve(tinFoilMaybeOpenStatsAfterChallengeReturn()).catch(()=>{});
-});
 async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const q=new URLSearchParams(window.location.search||'');
   if(q.get('stats')!=='1')return;
