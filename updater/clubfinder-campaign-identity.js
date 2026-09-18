@@ -1,5 +1,7 @@
 /* TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN */
 const TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json';
+const TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY='tffc.clubfinderCampaignIdentity.v1';
+const TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY='tffc.clubfinderCampaign.v1';
 let TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
 let TIN_FOIL_SEARCH_NUMBER_PROMISE=null;
 let TIN_FOIL_SEARCH_SEQUENCE=0;
@@ -24,6 +26,64 @@ function tinFoilCallSignFromSearchNumber(value){
 function tinFoilSavedCallSign(saved){
   if(!saved)return '';
   return String(saved.callSign||tinFoilCallSignFromSearchNumber(saved.searchNumber)||'');
+}
+function tinFoilCampaignPostcodeKey(value){
+  return String(value||'').toUpperCase().replace(/\s+/g,'');
+}
+function tinFoilIdentityStorageSnapshot(key){
+  try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}
+}
+function tinFoilCampaignIdentityCandidateMatches(saved,candidate,source){
+  if(!saved||!candidate||norm(saved.originName)!==norm(candidate.originName))return false;
+  const a=tinFoilCampaignPostcodeKey(saved.postcode),b=tinFoilCampaignPostcodeKey(candidate.postcode);
+  if(a&&b&&a!==b)return false;
+  if(source==='backup'&&saved.selectedAt&&candidate.selectedAt&&saved.selectedAt!==candidate.selectedAt)return false;
+  if(source==='bridge'&&saved.selectedAt&&candidate.updatedAt){
+    const selected=Date.parse(saved.selectedAt),updated=Date.parse(candidate.updatedAt);
+    if(Number.isFinite(selected)&&Number.isFinite(updated)&&updated<selected)return false;
+  }
+  return true;
+}
+function tinFoilPersistCampaignIdentityBackup(saved){
+  const n=saved&&tinFoilNormaliseSearchNumber(saved.searchNumber);
+  if(!saved||!n)return;
+  try{
+    localStorage.setItem(TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY,JSON.stringify({
+      originName:saved.originName||'',
+      postcode:saved.postcode||'',
+      selectedAt:saved.selectedAt||null,
+      searchNumber:n,
+      callSign:tinFoilSavedCallSign(saved)
+    }));
+  }catch(e){}
+}
+function tinFoilRecoverCampaignIdentity(saved){
+  if(!saved)return saved;
+  const current=tinFoilNormaliseSearchNumber(saved.searchNumber);
+  if(current){
+    tinFoilPersistCampaignIdentityBackup(saved);
+    return saved;
+  }
+  const candidates=[
+    [tinFoilIdentityStorageSnapshot(TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY),'backup'],
+    [tinFoilIdentityStorageSnapshot(TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY),'bridge']
+  ];
+  for(const [candidate,source] of candidates){
+    if(source==='bridge'&&candidate&&candidate.source!=='Clubfinder v7.6')continue;
+    const n=candidate&&tinFoilNormaliseSearchNumber(candidate.searchNumber);
+    if(!n||!tinFoilCampaignIdentityCandidateMatches(saved,candidate,source))continue;
+    const repaired=Object.assign({},saved,{searchNumber:n,callSign:String(candidate.callSign||tinFoilCallSignFromSearchNumber(n))});
+    try{localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(repaired))}catch(e){}
+    tinFoilPersistCampaignIdentityBackup(repaired);
+    return repaired;
+  }
+  return saved;
+}
+function tinFoilClearCampaignIdentityBackup(){
+  try{
+    localStorage.removeItem(TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY);
+    localStorage.removeItem(TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY);
+  }catch(e){}
 }
 async function tinFoilCounterIncrementUrl(){
   if(TIN_FOIL_COUNTER_ENDPOINT_PROMISE)return TIN_FOIL_COUNTER_ENDPOINT_PROMISE;
