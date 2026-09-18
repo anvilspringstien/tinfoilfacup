@@ -132,8 +132,8 @@ elif identity_old_go in text:
 elif new_go not in text and identity_new_go not in text:
     raise SystemExit('ABORT: Campaign go() readiness boundary not found')
 
-old_boot = '\nrefreshCompetitionData(false);\n</script>'
-new_boot = '\nconst tinFoilCompetitionReady=refreshCompetitionData(false);\n</script>'
+old_boot = '\nrefreshCompetitionData(false);\n'
+new_boot = '\nconst tinFoilCompetitionReady=refreshCompetitionData(false);\n'
 if old_boot in text:
     text = text.replace(old_boot, new_boot, 1)
 elif new_boot not in text:
@@ -185,7 +185,7 @@ for required_marker in required:
 
 if "cache:force?'no-store':'default'" in text:
     raise SystemExit('ABORT: stale default-cache live competition fetch remains')
-if '\nrefreshCompetitionData(false);\n</script>' in text:
+if '\nrefreshCompetitionData(false);\n' in text:
     raise SystemExit('ABORT: untracked competition refresh bootstrap remains')
 
 P.write_text(text, encoding='utf-8')
