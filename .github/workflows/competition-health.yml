@@ -23,6 +23,10 @@ on:
       - "updater/amersham_stats_regression.js"
       - "updater/historical_journey_regression.js"
       - "updater/historical_venue_regression.js"
+      - "updater/patch_clubfinder_production_ui.py"
+      - "updater/clubfinder-production-challenge-bridge.js"
+      - "updater/pigeon-miles-roundel-data-uri.txt"
+      - "updater/production_ui_regression.js"
       - "updater/kt21_replay_regression.py"
       - "updater/kt21_venue_render_regression.js"
       - "updater/refresh_clubfinder_embedded_snapshot.py"
@@ -145,6 +149,9 @@ jobs:
       - name: Apply canonical historical venue consumption
         run: python updater/patch_clubfinder_historical_venues.py
 
+      - name: Restore protected production Campaign UI
+        run: python updater/patch_clubfinder_production_ui.py
+
       - name: Refresh last-known-good embedded competition snapshot
         run: python updater/refresh_clubfinder_embedded_snapshot.py
 
@@ -188,6 +195,8 @@ jobs:
         run: node updater/historical_journey_regression.js
       - name: Run generic historical venue regression
         run: node updater/historical_venue_regression.js
+      - name: Run protected production UI regression
+        run: node updater/production_ui_regression.js
 
       - name: Commit canonical competition state and health report
         if: ${{ github.ref_name == 'main' }}
@@ -207,6 +216,7 @@ jobs:
             node updater/amersham_stats_regression.js
             node updater/historical_journey_regression.js
             node updater/journey_integrity_regression.js
+            node updater/production_ui_regression.js
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
