@@ -15,7 +15,7 @@ text = P.read_text(encoding='utf-8')
 
 TITLE = 'Tin Foil FA Cup Clubfinder v7.6'
 URL = 'https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html'
-DESCRIPTION = 'Find your three nearest eligible clubs and follow your Tin Foil FA Cup Journey.'
+DESCRIPTION = 'Find your three nearest eligible clubs and follow your Tin Foil FA Cup Campaign.'
 
 # ---- Share / social preview metadata -------------------------------------------------
 text, n = re.subn(r'<title>.*?</title>', f'<title>{TITLE}</title>', text, count=1, flags=re.S)
@@ -107,26 +107,36 @@ if js_marker not in text:
         raise SystemExit('ABORT: saved-journey JS boundary not found')
     text = text.replace(boundary, modal_js + boundary, 1)
 
-old_choose="function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!confirm('Replace your saved Tin Foil FA Cup Journey with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
-new_choose="async function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!await tinFoilConfirm('Replace your saved Tin Foil FA Cup Journey with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
-if old_choose in text:
-    text=text.replace(old_choose,new_choose,1)
-elif new_choose not in text:
-    raise SystemExit('ABORT: chooseJourney confirmation boundary not found')
+def replace_confirmation_variant(label, legacy_sync, canonical_async, accepted_async=()):
+    global text
+    if legacy_sync in text:
+        text = text.replace(legacy_sync, canonical_async, 1)
+        return
+    if canonical_async in text:
+        return
+    for variant in accepted_async:
+        if variant in text:
+            text = text.replace(variant, canonical_async, 1)
+            return
+    raise SystemExit(f'ABORT: {label} confirmation boundary not found')
 
-old_end="function endMyJourney(){if(confirm('End your Tin Foil FA Cup Journey here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
-new_end="async function endMyJourney(){if(await tinFoilConfirm('End your Tin Foil FA Cup Journey here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
-if old_end in text:
-    text=text.replace(old_end,new_end,1)
-elif new_end not in text:
-    raise SystemExit('ABORT: endMyJourney confirmation boundary not found')
+# Accept both the original Journey wording and the protected Campaign wording.
+# Canonical output is always Campaign, making this branding patch idempotent when
+# later production-UI patches have already run on a previous publisher pass.
+choose_sync_journey="function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!confirm('Replace your saved Tin Foil FA Cup Journey with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
+choose_async_journey="async function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!await tinFoilConfirm('Replace your saved Tin Foil FA Cup Journey with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
+choose_async_campaign="async function chooseJourney(name,postcode){const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;const e=loadSavedJourney();if(e&&norm(e.originName)!==norm(o.name)&&!await tinFoilConfirm('Replace your saved Tin Foil FA Cup Campaign with '+o.name+'?'))return;saveJourney(o,postcode);window.__showOriginalTinFoilJourneys=false;go()}"
+replace_confirmation_variant('chooseJourney', choose_sync_journey, choose_async_campaign, (choose_async_journey,))
 
-old_hard="function hardResetFinder(){\n if(!confirm('Hard Reset will forget the saved Tin Foil FA Cup Journey in this browser and return the finder to a first-time-user state. Continue?'))return;"
-new_hard="async function hardResetFinder(){\n if(!await tinFoilConfirm('Hard Reset will forget the saved Tin Foil FA Cup Journey in this browser and return the finder to a first-time-user state. Continue?'))return;"
-if old_hard in text:
-    text=text.replace(old_hard,new_hard,1)
-elif new_hard not in text:
-    raise SystemExit('ABORT: hardResetFinder confirmation boundary not found')
+end_sync_journey="function endMyJourney(){if(confirm('End your Tin Foil FA Cup Journey here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
+end_async_journey="async function endMyJourney(){if(await tinFoilConfirm('End your Tin Foil FA Cup Journey here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
+end_async_campaign="async function endMyJourney(){if(await tinFoilConfirm('End your Tin Foil FA Cup Campaign here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}"
+replace_confirmation_variant('endMyJourney', end_sync_journey, end_async_campaign, (end_async_journey,))
+
+hard_sync_journey="function hardResetFinder(){\n if(!confirm('Hard Reset will forget the saved Tin Foil FA Cup Journey in this browser and return the finder to a first-time-user state. Continue?'))return;"
+hard_async_journey="async function hardResetFinder(){\n if(!await tinFoilConfirm('Hard Reset will forget the saved Tin Foil FA Cup Journey in this browser and return the finder to a first-time-user state. Continue?'))return;"
+hard_async_campaign="async function hardResetFinder(){\n if(!await tinFoilConfirm('Hard Reset will forget the saved Tin Foil FA Cup Campaign in this browser and return the finder to a first-time-user state. Continue?'))return;"
+replace_confirmation_variant('hardResetFinder', hard_sync_journey, hard_async_campaign, (hard_async_journey,))
 
 # No browser-native confirmation should remain. This prevents a future stray
 # "anvilspringstien.github.io says" prompt from reappearing unnoticed.
@@ -142,6 +152,9 @@ required = (
     'async function chooseJourney(',
     'async function endMyJourney(',
     'async function hardResetFinder(',
+    'Replace your saved Tin Foil FA Cup Campaign with ',
+    'End your Tin Foil FA Cup Campaign here?',
+    'Hard Reset will forget the saved Tin Foil FA Cup Campaign in this browser',
 )
 for marker in required:
     if marker not in text:
