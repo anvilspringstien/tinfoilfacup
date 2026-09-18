@@ -159,10 +159,18 @@ newgb="""  const g=GROUNDS.find(g=>canonicalClubKey(g.name||g.club)===target);
   const c=ELIGIBLE.find(c=>canonicalClubKey(c.name)===target);"""
 if oldgb in text:text=text.replace(oldgb,newgb,1)
 elif newgb not in text:raise SystemExit('ABORT: groundByClubName boundary changed')
-oldprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n\n  if(!crumbs.length){"""
-newprev="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n  const entryRound=journey.origin.entry_round||'';\n  if(entryRound&&entryRound!=='Extra Preliminary Round'){\n    body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '+esc(entryRound)+'.</div>';\n  }\n\n  if(!crumbs.length){"""
-if oldprev in text:text=text.replace(oldprev,newprev,1)
-elif newprev not in text:raise SystemExit('ABORT: previousRoundsHtml boundary changed')
+oldprev_journey="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n\n  if(!crumbs.length){"""
+oldprev_campaign="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">This Campaign starts with: '+esc(journey.origin.name)+'</div>';\n\n  if(!crumbs.length){"""
+with_entry_journey="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">Journey started with: '+esc(journey.origin.name)+'</div>';\n  const entryRound=journey.origin.entry_round||'';\n  if(entryRound&&entryRound!=='Extra Preliminary Round'){\n    body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '+esc(entryRound)+'.</div>';\n  }\n\n  if(!crumbs.length){"""
+with_entry_campaign="""  let body='<div class=\"history\"><div class=\"history-title\">Previous Rounds</div>'+\n    '<div class=\"history-origin\">This Campaign starts with: '+esc(journey.origin.name)+'</div>';\n  const entryRound=journey.origin.entry_round||'';\n  if(entryRound&&entryRound!=='Extra Preliminary Round'){\n    body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '+esc(entryRound)+'.</div>';\n  }\n\n  if(!crumbs.length){"""
+if oldprev_journey in text:
+ text=text.replace(oldprev_journey,with_entry_campaign,1)
+elif oldprev_campaign in text:
+ text=text.replace(oldprev_campaign,with_entry_campaign,1)
+elif with_entry_journey in text:
+ text=text.replace(with_entry_journey,with_entry_campaign,1)
+elif with_entry_campaign not in text:
+ raise SystemExit('ABORT: previousRoundsHtml boundary changed')
 if 'const top=rows.slice(0,3);' not in text:raise SystemExit('ABORT: nearest-three selector changed')
 for marker in ('const LAW2_ORIGIN_LOCATIONS=','LAW2_ORIGIN_LOCATIONS.find',"enters the competition at '+esc(entryRound)+'."):
  if marker not in text:raise SystemExit('ABORT: Law 2 marker missing: '+marker)
