@@ -142,6 +142,7 @@ const assertions=`
   const refreshedBackfilled=String(document.getElementById('results').innerHTML||'');
   if(!refreshedBackfilled.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('Production UI regression: refresh did not redraw saved Campaign Pigeon Call Sign');
   if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('Production UI regression: refresh did not restore saved Campaign postcode');
+  console.log('Existing Campaign counter -> Pigeon -> blank refresh persistence: PASS');
   tinFoilClearCurrentSearchIdentity();
 
   // Recover a Campaign that was chosen while the counter was unavailable.
