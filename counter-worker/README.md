@@ -14,7 +14,7 @@ Page loads, invalid searches, Stats visits, resets and other UI actions must not
 
 The application stores only one integer: the cumulative count. The number created by a successful search is returned to that search so Clubfinder can display it and, if a Campaign is chosen, adopt it as that Campaign's identity.
 
-Clubfinder must not send the entered postcode, club choices, Campaign data, user identity or any other payload to this service. The increment endpoint accepts no application data and returns no count.
+Clubfinder must not send the entered postcode, club choices, Campaign data, user identity or any other payload to this service. The increment endpoint accepts no application data. It returns only the sequential number issued to that successful search; the separate arbitrary total remains private behind the admin endpoint.
 
 Cloudflare will necessarily receive normal network request metadata while serving the request, but this Worker does not persist that metadata.
 
