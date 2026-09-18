@@ -1,5 +1,6 @@
 /* TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN */
 const TIN_FOIL_COUNTER_CONFIG_URL='./counter-config.json';
+const TIN_FOIL_COUNTER_INCREMENT_URL='https://tffac-clubfinder-counter.anvilspringstien.workers.dev/increment';
 const TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY='tffc.clubfinderCampaignIdentity.v1';
 const TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY='tffc.clubfinderCampaign.v1';
 let TIN_FOIL_CURRENT_SEARCH_NUMBER=null;
@@ -88,6 +89,10 @@ function tinFoilClearCampaignIdentityBackup(){
 async function tinFoilCounterIncrementUrl(){
   if(TIN_FOIL_COUNTER_ENDPOINT_PROMISE)return TIN_FOIL_COUNTER_ENDPOINT_PROMISE;
   TIN_FOIL_COUNTER_ENDPOINT_PROMISE=(async()=>{
+    // Production has one public, non-secret counter endpoint. Use it directly so
+    // search identity issuance cannot be lost to a separate config fetch.
+    const direct=String(TIN_FOIL_COUNTER_INCREMENT_URL||'').trim();
+    if(direct)return direct;
     try{
       const r=await fetch(TIN_FOIL_COUNTER_CONFIG_URL,{cache:'no-store'});
       if(!r.ok)return '';
@@ -100,22 +105,16 @@ async function tinFoilCounterIncrementUrl(){
 async function tinFoilIssueSearchNumber(){
   const endpoint=await tinFoilCounterIncrementUrl();
   if(!endpoint)return null;
-  let controller=null,timer=null;
   try{
-    if(typeof AbortController==='function'){
-      controller=new AbortController();
-      timer=setTimeout(()=>controller.abort(),2500);
-    }
-    const opts={method:'POST',mode:'cors',cache:'no-store',keepalive:true};
-    if(controller)opts.signal=controller.signal;
-    const r=await fetch(endpoint,opts);
+    // This is deliberately non-blocking from the user's point of view. Do not
+    // impose an arbitrary client timeout: a valid issued number is more useful
+    // than abandoning a slow Worker cold start.
+    const r=await fetch(endpoint,{method:'POST',mode:'cors',cache:'no-store',keepalive:true});
     if(!r.ok)return null;
     const j=await r.json();
     return tinFoilNormaliseSearchNumber(j&&j.number);
   }catch(e){
     return null;
-  }finally{
-    if(timer)clearTimeout(timer);
   }
 }
 function tinFoilRefreshCampaignIdentityDisplay(){
