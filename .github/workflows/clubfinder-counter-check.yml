@@ -42,6 +42,14 @@ jobs:
           curl --fail --silent --show-error \
             https://tffac-clubfinder-counter.anvilspringstien.workers.dev/health
 
+      - name: Probe deployed Worker contract
+        run: |
+          body="$(curl --fail --silent --show-error \
+            https://tffac-clubfinder-counter.anvilspringstien.workers.dev/contract)"
+          echo "$body"
+          echo "$body" | grep -q '"contract_version":2'
+          echo "$body" | grep -q '"increment_response":"number"'
+
       - name: Probe GitHub Pages CORS permission
         run: |
           headers="$(mktemp)"
