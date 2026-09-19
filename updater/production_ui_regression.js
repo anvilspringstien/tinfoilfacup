@@ -13,7 +13,9 @@ const betaIdentityMarkers=[
   'if(explicitPostcodeSearch)tinFoilBeginSearchIdentity();',
   "${mine?tinFoilCampaignIdentityHtml(saved):''}",
   'const tinFoilCompetitionReady=refreshCompetitionData(false);',
-  'Promise.resolve(tinFoilCompetitionReady).then(tinFoilRestoreSavedCampaignOnLoad).catch(()=>{});',
+  'const tinFoilReturnedCampaignSnapshot=!tinFoilStatsRouteRequested&&tinFoilChallengeExitReturn',
+  'Promise.resolve(tinFoilCompetitionReady).then(async()=>{',
+  'return tinFoilRestoreSavedCampaignOnLoad();',
   "selectedAt:saved&&saved.selectedAt||null,searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved)",
   "window.location.href='challenges-beta.html';"
 ];
