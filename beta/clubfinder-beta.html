@@ -1257,7 +1257,9 @@ async function openChallenges(origin){
  const statsSnapshot=tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,Number.isFinite(pm.miles)?pm.miles:0);
  const truth={source:'Clubfinder v7.6',originName:origin.name,currentCustodian:(journey.carrier||origin).name,postcode:saved&&saved.postcode||'',selectedAt:saved&&saved.selectedAt||null,searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved),tiesPlayed:crumbs.length,awayTies:away,pigeonMiles:Number.isFinite(pm.miles)?pm.miles:0,campaignRound:ri,ended:!!(saved&&saved.ended),statsSnapshot,updatedAt:new Date().toISOString()};
  localStorage.setItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY,JSON.stringify(truth));
- /* CANDIDATE 13 FIX — same-tab Challenges launch; Exit returns via browser history. */
+ /* Mark Clubfinder as the stable page beneath the BETA Challenge experience.
+    Challenges/Stats can replace one another without losing this rendered page. */
+ try{sessionStorage.setItem('tffc.challengeOrigin','clubfinder-beta');}catch(_){}
  window.location.href='challenges-beta.html';
 }
 
