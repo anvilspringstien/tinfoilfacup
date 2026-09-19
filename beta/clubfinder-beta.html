@@ -1545,7 +1545,7 @@ document.getElementById('postcode').addEventListener('input',function(){this.val
 
 const tinFoilRouteParams=new URLSearchParams(window.location.search||'');
 const tinFoilStatsRouteRequested=tinFoilRouteParams.get('stats')==='1';
-const tinFoilChallengeExitReturn=tinFoilRouteParams.get('from')==='challenges-exit-v2';
+const tinFoilChallengeExitReturn=tinFoilRouteParams.get('from')==='challenges-exit-v3';
 try{sessionStorage.removeItem('tffc.openStatsOnReturn')}catch(e){}
 
 /* On a Challenges Exit/Maybe Later return, repaint the exact Campaign view
