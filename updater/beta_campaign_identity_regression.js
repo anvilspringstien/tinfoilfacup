@@ -8,6 +8,10 @@ const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8')
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
 if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
+if(!html.includes('maxlength="20"'))throw new Error('BETA identity regression: pigeon-name 20-character cap drifted');
+if(!html.includes('.campaign-identity-band{margin:0 0 4px;padding:13px 16px 14px;border-bottom:1px solid #d40000;text-align:left;white-space:nowrap}'))throw new Error('BETA identity regression: Stats identity top-gap/nowrap contract drifted');
+if(!html.includes('.campaign-identity-label{display:inline;font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:9pt'))throw new Error('BETA identity regression: Stats identity label sizing drifted');
+if(!html.includes('.campaign-identity-value{display:inline;font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:10pt'))throw new Error('BETA identity regression: Stats identity value sizing drifted');
 
 function nodeStub(){
   return {
