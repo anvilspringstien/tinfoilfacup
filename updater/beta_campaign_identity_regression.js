@@ -123,6 +123,19 @@ const assertions=`
   await go(false);
   const rendered=String(document.getElementById('results').innerHTML||'');
   if(!rendered.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: Pigeon Call Sign did not render');
+  if(!rendered.includes('placeholder="Name your pigeon"'))throw new Error('BETA identity regression: inline pigeon-name field did not render');
+  if(/Save(?: My)? Pigeon/i.test(rendered))throw new Error('BETA identity regression: pigeon naming unexpectedly requires a Save control');
+
+  // Name the Campaign pigeon using the same autosave path as blur/Enter.
+  tinFoilSavePigeonName('  Percy   ');
+  const named=loadSavedJourney();
+  if(named.pigeonName!=='Percy')throw new Error('BETA identity regression: pigeon name did not autosave');
+  const identityBackup=JSON.parse(localStorage.getItem(TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY)||'null');
+  if(!identityBackup||identityBackup.pigeonName!=='Percy')throw new Error('BETA identity regression: pigeon name missing from Campaign identity backup');
+  await go(false);
+  const namedRendered=String(document.getElementById('results').innerHTML||'');
+  if(!namedRendered.includes('Pigeon Name:'))throw new Error('BETA identity regression: Pigeon Name label disappeared after autosave');
+  if(!namedRendered.includes('value="Percy"'))throw new Error('BETA identity regression: saved pigeon name did not redraw inline');
 
   // Simulate Safari/iPad refresh: form and results disappear, in-memory current
   // identity disappears, but localStorage persists. Restore must redraw the same
@@ -139,9 +152,13 @@ const assertions=`
   if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('BETA identity regression: refresh did not restore saved postcode');
   const refreshed=String(document.getElementById('results').innerHTML||'');
   if(!refreshed.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: refresh did not redraw Pigeon Call Sign');
+  if(!refreshed.includes('value="Percy"'))throw new Error('BETA identity regression: refresh did not preserve pigeon name');
+  if(loadSavedJourney().pigeonName!=='Percy')throw new Error('BETA identity regression: saved pigeon name changed across refresh');
   if(!refreshed.includes('Amersham Town'))throw new Error('BETA identity regression: refresh returned a blank Clubfinder');
 
-  console.log('BETA COUNTER -> PIGEON -> REFRESH PERSISTENCE: PASS');
+  if(!html.includes('pigeonName:tinFoilSavedPigeonName(saved)'))throw new Error('BETA identity regression: Challenges bridge no longer carries pigeon name');
+
+  console.log('BETA COUNTER -> PIGEON NAME -> REFRESH PERSISTENCE: PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
 `;
 
