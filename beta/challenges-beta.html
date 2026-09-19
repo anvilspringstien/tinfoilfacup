@@ -1723,10 +1723,11 @@ function close() { overlay.classList.remove("open"); }
 
 
 function tinFoilOpenCanonicalStats(){
-  /* One deterministic BETA Stats route. Remember the current mat so the
-     Stats return can reopen the deck exactly where the user left it. */
+  /* Keep Clubfinder as the one stable history entry underneath the Challenge
+     experience. Stats replaces Challenges; Back to Challenges then replaces
+     Stats. Exit can therefore return to the already-rendered Clubfinder. */
   try{sessionStorage.setItem('tffc.challengeReturnIndex',String(index));}catch(_){}
-  window.location.href='clubfinder-beta.html?stats=1&return=challenges';
+  window.location.replace('clubfinder-beta.html?stats=1&return=challenges');
 }
 
 function tinFoilConfirm(message){
@@ -1748,12 +1749,24 @@ function tinFoilConfirm(message){
   });
 }
 
+function tinFoilReturnToClubfinder(){
+  let cameFromClubfinder=false;
+  try{cameFromClubfinder=sessionStorage.getItem('tffc.challengeOrigin')==='clubfinder-beta';}catch(_){}
+  if(cameFromClubfinder && history.length>1){
+    try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
+    history.back();
+    return;
+  }
+  try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
+  window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
+}
+
 $("openDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(0); };
 $("maybeLater").onclick=(e)=>{
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  window.location.replace('clubfinder-beta.html?from=challenges-exit-v2');
+  tinFoilReturnToClubfinder();
 };
 $("deckStatsBtn").onclick=()=>{ tinFoilOpenCanonicalStats(); };
 $("statsOpenDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(index); };
@@ -1761,7 +1774,7 @@ $("exitBtn").onclick=(e)=>{
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  window.location.replace('clubfinder-beta.html?from=challenges-exit-v2');
+  tinFoilReturnToClubfinder();
 };
 overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
 $("prev").onclick=()=>{if(index>0){index--;render()}};
