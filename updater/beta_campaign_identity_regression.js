@@ -61,7 +61,7 @@ function postcodeFromUrl(url){
 }
 const locationStub={href:'https://anvilspringstien.github.io/tinfoilfacup/beta/clubfinder-beta.html'};
 const sandbox={
-  console,process,document:documentStub,MutationObserver:undefined,
+  console,process,html,document:documentStub,MutationObserver:undefined,
   localStorage:{
     getItem:k=>localStore[k]??null,
     setItem:(k,v)=>{localStore[k]=String(v)},
