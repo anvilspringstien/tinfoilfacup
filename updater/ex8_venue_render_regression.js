@@ -21,7 +21,23 @@ const assertions=`
   if(!sidmouth)throw new Error('EX8 venue regression: Sidmouth Town FC not found in ELIGIBLE');
   const journey=buildJourney(sidmouth);
   const custodian=journey.carrier||sidmouth;
-  if(!same(custodian.name,'Frome Town'))throw new Error('EX8 venue regression: expected Frome Town custodian, got '+custodian.name);
+  const crumbs=journey.breadcrumbs||[];
+  const completed=crumbs.find(x=>{const r=x.result||{};return r.round==='Second Round Qualifying'&&same(r.home,'Frome Town')&&same(r.away,'Plymouth Parkway')&&r.home_score!=null&&r.away_score!=null;});
+
+  if(completed){
+    if(typeof completedResultVenue!=='function')throw new Error('EX8 venue regression: completedResultVenue unavailable');
+    const r=completed.result||{};
+    const venue=completedResultVenue(r)||{};
+    const postcode=String(venue.postcode||'').toUpperCase().replace(/\\s+/g,' ').trim();
+    if(postcode!=='BA11 2EH')throw new Error('EX8 venue regression: completed Frome Town v Plymouth Parkway postcode expected BA11 2EH, got '+(postcode||'TBC'));
+    if(!venue.ground||/TBC/i.test(String(venue.ground)))throw new Error('EX8 venue regression: completed Frome Town v Plymouth Parkway ground is TBC');
+    console.log('EX8 VENUE RENDER REGRESSION: PASS');
+    console.log('Frome Town v Plymouth Parkway completed venue retained:',venue.ground,'•',postcode);
+    console.log('Current Sidmouth Campaign custodian:',custodian.name);
+    return;
+  }
+
+  if(!same(custodian.name,'Frome Town'))throw new Error('EX8 venue regression: pre-result custodian expected Frome Town, got '+custodian.name);
   const next=nextRoundInfo(custodian);
   if(!next||next.name!=='Second Round Qualifying')throw new Error('EX8 venue regression: expected Second Round Qualifying next round');
   if(!next.knownFixture)throw new Error('EX8 venue regression: expected published Frome Town v Plymouth Parkway fixture');
@@ -38,7 +54,7 @@ const assertions=`
   if(/Venue TBC|Postcode TBC/i.test(rendered))throw new Error('EX8 venue regression: rendered Next block still contains venue/postcode TBC');
 
   console.log('EX8 VENUE RENDER REGRESSION: PASS');
-  console.log('Sidmouth Town -> Frome Town custody: PASS');
+  console.log('Sidmouth Town -> Frome Town custody before Second Qualifying result: PASS');
   console.log('Next:',f.home,'v',f.away,'•',venue.ground,'•',postcode);
   console.log('Rendered Next block includes BA11 2EH: PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
