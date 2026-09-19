@@ -1723,9 +1723,8 @@ function close() { overlay.classList.remove("open"); }
 
 
 function tinFoilOpenCanonicalStats(){
-  /* Keep Clubfinder as the one stable history entry underneath the Challenge
-     experience. Stats replaces Challenges; Back to Challenges then replaces
-     Stats. Exit can therefore return to the already-rendered Clubfinder. */
+  /* Stats replaces Challenges and Back to Challenges replaces Stats. Exit is
+     handled separately by one explicit BETA Clubfinder return route. */
   try{sessionStorage.setItem('tffc.challengeReturnIndex',String(index));}catch(_){}
   window.location.replace('clubfinder-beta.html?stats=1&return=challenges');
 }
@@ -1750,13 +1749,8 @@ function tinFoilConfirm(message){
 }
 
 function tinFoilReturnToClubfinder(){
-  let cameFromClubfinder=false;
-  try{cameFromClubfinder=sessionStorage.getItem('tffc.challengeOrigin')==='clubfinder-beta';}catch(_){}
-  if(cameFromClubfinder && history.length>1){
-    try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
-    history.back();
-    return;
-  }
+  /* Exit and Maybe Later have one deterministic BETA destination. Do not use
+     browser history: Stats may have occupied/replaced that history entry. */
   try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
   window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
 }
