@@ -11,7 +11,7 @@ function nodeStub(){return {value:'',textContent:'',innerHTML:'',style:{},disabl
 const elements=new Proxy({}, {get:(o,k)=>o[k]||(o[k]=nodeStub())});
 const documentStub={getElementById(id){return elements[id]},querySelector(){return nodeStub()},querySelectorAll(){return []},createElement(){return nodeStub()},body:nodeStub()};
 const localStore={};
-const sandbox={console,process,document:documentStub,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request in render regression: '+s)}};
+const sandbox={console,process,document:documentStub,canonicalCompetition:competition,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request in render regression: '+s)}};
 sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
 const assertions=`
 (async()=>{
@@ -41,7 +41,7 @@ const assertions=`
   const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
   const state=competitionState(heaton);
   if(!allowActiveAdvance&&state.type!=='won')throw new Error('DL5 render regression: Heaton should be a confirmed First Qualifying winner, got '+state.type);
-  const heatonFirstQ=(competition.result_history||competition.results||[]).find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Knaresborough Town')&&Number(r.home_score)===1&&Number(r.away_score)===0&&/First Round Qualifying/i.test(r.round||''));
+  const heatonFirstQ=(canonicalCompetition.result_history||canonicalCompetition.results||[]).find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Knaresborough Town')&&Number(r.home_score)===1&&Number(r.away_score)===0&&/First Round Qualifying/i.test(r.round||''));
   if(!heatonFirstQ)throw new Error('DL5 render regression: Heaton 1-0 Knaresborough result missing from canonical chronology');
   const heatonNext=nextRoundInfo(heaton);
   const heatonSecondQ=assertSecondQFixture(heatonNext,heaton,'DL5 render regression');
