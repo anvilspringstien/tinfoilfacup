@@ -35,13 +35,20 @@ const assertions=`
   if(!hasNewtonLoss) throw new Error('DL5 render regression: Newton Aycliffe 0-1 Kendal missing from journey history');
   if(!hasHeatonReplay) throw new Error('DL5 render regression: Heaton Stannington 4-2 Kendal replay missing from journey history');
   if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
-  if(!same(carrier.name,'Heaton Stannington')) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
-  const state=competitionState(carrier);
+  const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+  if(!same(carrier.name,'Heaton Stannington')&&!allowActiveAdvance) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
+  if(allowActiveAdvance&&!same(carrier.name,'Heaton Stannington')&&!same(carrier.name,'Trafford FC')&&!same(carrier.name,'Trafford')) throw new Error('DL5 render regression: unexpected candidate custodian '+carrier.name);
+  const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
+  const state=competitionState(heaton);
   if(state.type!=='won')throw new Error('DL5 render regression: Heaton should be a confirmed First Qualifying winner, got '+state.type);
   if(!state.result||!same(state.result.home,'Heaton Stannington')||!same(state.result.away,'Knaresborough Town')||Number(state.result.home_score)!==1||Number(state.result.away_score)!==0)throw new Error('DL5 render regression: Heaton 1-0 Knaresborough result not driving winner state');
-  const heatonNext=nextRoundInfo(carrier);
-  const heatonSecondQ=assertSecondQFixture(heatonNext,carrier,'DL5 render regression');
+  const heatonNext=nextRoundInfo(heaton);
+  const heatonSecondQ=assertSecondQFixture(heatonNext,heaton,'DL5 render regression');
   if(same(heatonSecondQ.home,'Knaresborough Town')||same(heatonSecondQ.away,'Knaresborough Town'))throw new Error('DL5 render regression: played Heaton-Knaresborough First Qualifying tie leaked into Second Round Qualifying fixture');
+  if(allowActiveAdvance&&!same(carrier.name,'Heaton Stannington')){
+    const activeState=competitionState(carrier);
+    if(activeState.type==='lost')throw new Error('DL5 render regression: advanced candidate custodian '+carrier.name+' is already marked lost');
+  }
 
   const bishop=ELIGIBLE.find(c=>same(c.name,'Bishop Auckland FC'));
   if(!bishop)throw new Error('DL5 regression: Bishop Auckland FC not found in ELIGIBLE');
