@@ -17,6 +17,8 @@ on:
     paths:
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/fixture_publishability_shadow.py"
+      - "updater/fixture_publication_boundary_dry_run.py"
       - "updater/round_state_engine.py"
       - "updater/round_state_regression.py"
       - "updater/round_source_regression.py"
@@ -101,6 +103,12 @@ jobs:
         run: python updater/conditional_resolution_regression.py
       - name: Reconcile all First Qualifying replays
         run: python updater/reconcile_first_qualifying_replays.py
+      - name: Assess fixture-level publishability before candidate build
+        env:
+          INPUT_SOURCE_URL: ${{ inputs.source_url }}
+        run: |
+          SOURCE_URL="${INPUT_SOURCE_URL:-https://www.thefa.com/competitions/thefacup/results}"
+          python updater/run_source_resilient.py --label "Fixture publishability production boundary" -- python updater/fixture_publishability_shadow.py --url "$SOURCE_URL"
       - name: Scan active round and validate dispositions
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -113,6 +121,8 @@ jobs:
           else
             python updater/run_source_resilient.py --label "FA Cup active-round result scan" -- python updater/auto_round_results.py --url "$SOURCE_URL"
           fi
+      - name: Confirm fixture-local publication boundary
+        run: python updater/fixture_publication_boundary_dry_run.py
       - name: Reconcile replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py
       - name: Guard replay-participant result-history aliases
@@ -130,6 +140,8 @@ jobs:
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
       - name: Audit repaired competition chronology
+        env:
+          TFFC_FIXTURE_LOCAL_HEALTH: "1"
         run: python updater/competition_health.py
       - name: Rebuild Clubfinder competition presentation
         run: |
@@ -149,6 +161,8 @@ jobs:
       - name: Re-check replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py --check
       - name: Run competition regression guard
+        env:
+          TFFC_ALLOW_ACTIVE_RESULT_ADVANCE: "1"
         run: python updater/competition_regression_guard.py
       - name: Run rendered Clubfinder regression
         run: node updater/clubfinder_render_regression.js
