@@ -107,6 +107,18 @@ sandbox.window=sandbox;
 sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
 
+function canonicalRows(src){
+  return Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
+}
+const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+const hp7ActiveResult=canonicalRows(competition.result_history||competition.results||[]).find(r=>
+  /Second Round Qualifying/i.test(r.round||'') &&
+  String(r.home||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('eastbourneborough') &&
+  String(r.away||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('windsoreton') &&
+  Number(r.home_score)===3 && Number(r.away_score)===0
+);
+const expectedHp7Custodian=allowActiveAdvance&&hp7ActiveResult?'Eastbourne Borough':'Windsor & Eton';
+
 const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function')await refreshCompetitionData(false);
@@ -279,7 +291,8 @@ const assertions=`
   const raw=localStorage.getItem('tffc.clubfinderCampaign.v1');
   if(!raw)throw new Error('Production UI regression: Challenges bridge truth was not persisted');
   const truth=JSON.parse(raw);
-  if(!same(truth.currentCustodian,'Windsor & Eton'))throw new Error('Production UI regression: Challenges bridge custodian mismatch: '+truth.currentCustodian);
+  const expectedBridgeCustodian=${JSON.stringify(expectedHp7Custodian)};
+  if(!same(truth.currentCustodian,expectedBridgeCustodian))throw new Error('Production UI regression: Challenges bridge custodian mismatch: expected '+expectedBridgeCustodian+', got '+truth.currentCustodian);
   if(Number(truth.searchNumber)!==9843||truth.callSign!=='Tango Foxtrot 2 Alpha Charlie 09843'){
     throw new Error('Production UI regression: Challenges bridge lost Campaign identity: '+JSON.stringify({searchNumber:truth.searchNumber,callSign:truth.callSign}));
   }
@@ -300,7 +313,7 @@ const assertions=`
   if(cert.includes('Pigeon Miles Travelled:')||cert.includes('Pigeon Miles Traveled:'))throw new Error('Production UI regression: retired Pigeon Miles travel wording remains');
   console.log('Pigeon Miles wording is universally Flown: PASS');
   console.log('Pigeon Miles approved roundel + six-column no-wrap layout: PASS');
-  console.log('HP7 bridge custodian: Windsor & Eton — PASS');
+  console.log('HP7 bridge custodian:',expectedBridgeCustodian,'— PASS');
   console.log('HP7 bridge Petts Wood venue: BR2 8HQ — PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
 `;
