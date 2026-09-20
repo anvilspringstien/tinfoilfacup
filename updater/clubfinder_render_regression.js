@@ -44,7 +44,9 @@ const assertions=`
     return f;
   };
   if(!same(carrier.name,'Heaton Stannington')&&!allowActiveAdvance) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
-  if(allowActiveAdvance&&!same(carrier.name,'Heaton Stannington')&&!same(carrier.name,'Trafford FC')&&!same(carrier.name,'Trafford')) throw new Error('DL5 render regression: unexpected candidate custodian '+carrier.name);
+  const heatonActiveResult=canonicalHistory.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
+  if(allowActiveAdvance&&heatonActiveResult&&!same(carrier.name,'Trafford'))throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance custodian to Trafford; got '+carrier.name);
+  if(allowActiveAdvance&&!heatonActiveResult&&!same(carrier.name,'Heaton Stannington'))throw new Error('DL5 render regression: custodian advanced without canonical Heaton-Trafford result; got '+carrier.name);
   const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
   const state=competitionState(heaton);
   if(!allowActiveAdvance&&state.type!=='won')throw new Error('DL5 render regression: Heaton should be a confirmed First Qualifying winner, got '+state.type);
@@ -67,7 +69,11 @@ const assertions=`
   const bishopReplay=bishopHistory.find(r=>same(r.home,'Bishop Auckland')&&same(r.away,'Emley AFC')&&Number(r.home_score)===0&&Number(r.away_score)===2);
   if(!bishopDraw)throw new Error('Replay regression: Emley 1-1 Bishop Auckland First Qualifying draw missing');
   if(!bishopReplay)throw new Error('Replay regression: Bishop Auckland 0-2 Emley replay missing');
-  if(!same((bishopJourney.carrier||bishop).name,'Emley AFC'))throw new Error('Replay regression: expected Emley AFC to become custodian after Bishop replay');
+  const bishopCarrier=(bishopJourney.carrier||bishop);
+  const emleyActiveResult=canonicalHistory.find(r=>same(r.home,'Emley AFC')&&same(r.away,'Spennymoor Town')&&Number(r.home_score)===0&&Number(r.away_score)===4&&/Second Round Qualifying/i.test(r.round||''));
+  if(!allowActiveAdvance&&!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: expected Emley AFC to become custodian after Bishop replay');
+  if(allowActiveAdvance&&emleyActiveResult&&!same(bishopCarrier.name,'Spennymoor Town'))throw new Error('Replay regression: verified Emley 0-4 Spennymoor result did not advance custodian to Spennymoor Town; got '+bishopCarrier.name);
+  if(allowActiveAdvance&&!emleyActiveResult&&!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: Bishop journey advanced without canonical Emley active-round result; got '+bishopCarrier.name);
 
   const exmouth=ELIGIBLE.find(c=>same(c.name,'Exmouth Town FC'));
   if(!exmouth)throw new Error('Replay regression: Exmouth Town FC not found in ELIGIBLE');
@@ -87,10 +93,12 @@ const assertions=`
   if(frenfordReplay.kickoff!=='19:45')throw new Error('W1D regression: Frenford replay kick-off expected 19:45, got '+frenfordReplay.kickoff);
   const frenfordLoss=whistory.find(r=>same(r.home,'Frenford')&&same(r.away,'Enfield Town')&&Number(r.home_score)===0&&Number(r.away_score)===4);
   if(!frenfordLoss)throw new Error('W1D regression: Frenford 0-4 Enfield Town missing from journey history');
-  if(!same(wcarrier.name,'Enfield Town'))throw new Error('W1D regression: expected live custodian Enfield Town after Frenford loss, got '+wcarrier.name);
-  const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: Enfield should be confirmed First Qualifying winner');
+  if(!same(wcarrier.name,'Enfield Town'))throw new Error('W1D regression: expected live custodian Enfield Town after Frenford loss and active-round win, got '+wcarrier.name);
+  const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: Enfield should be a confirmed winner');
+  const enfieldActiveResult=canonicalHistory.find(r=>same(r.home,'Billericay Town')&&same(r.away,'Enfield Town')&&Number(r.home_score)===1&&Number(r.away_score)===3&&/Second Round Qualifying/i.test(r.round||''));
+  if(allowActiveAdvance&&!enfieldActiveResult)throw new Error('W1D regression: canonical Billericay 1-3 Enfield active-round result missing');
   const enfieldNext=nextRoundInfo(wcarrier);
-  const enfieldSecondQ=assertSecondQFixture(enfieldNext,wcarrier,'W1D regression');
+  const enfieldSecondQ=allowActiveAdvance?canonicalSecondQFixture(wcarrier,'W1D regression'):assertSecondQFixture(enfieldNext,wcarrier,'W1D regression');
   if(same(enfieldSecondQ.home,'Frenford')||same(enfieldSecondQ.away,'Frenford'))throw new Error('W1D regression: played Frenford-Enfield First Qualifying tie leaked into Enfield next-round fixture');
 
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
