@@ -8,6 +8,7 @@ on:
       - fixture-publishability-shadow
     paths:
       - "updater/fixture_publishability_shadow.py"
+      - "updater/fixture_publication_boundary_dry_run.py"
       - "updater/auto_round_results.py"
       - "updater/round_state_engine.py"
       - "updater/clubfinder_render_regression.js"
@@ -31,6 +32,8 @@ jobs:
         run: python updater/round_state_regression.py
       - name: Assess fixture-level publishability without mutation
         run: python updater/run_source_resilient.py --label "Fixture publishability shadow" -- python updater/fixture_publishability_shadow.py
+      - name: Prove fixture-level publication boundary in dry-run mode
+        run: python updater/fixture_publication_boundary_dry_run.py
       - name: Snapshot production files before candidate simulation
         run: cp competition.json /tmp/competition.before.json && cp clubfinder.html /tmp/clubfinder.before.html
       - name: Build candidate partial state in runner only
@@ -99,4 +102,5 @@ jobs:
           name: fixture-publishability-shadow
           path: |
             updater/fixture-publishability-shadow.json
+            updater/fixture-publication-boundary-dry-run.json
             updater/fixture-candidate-delta.txt
