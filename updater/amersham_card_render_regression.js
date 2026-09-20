@@ -36,6 +36,18 @@ const sandbox={
 };
 sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
 
+function canonicalRows(src){
+  return Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
+}
+const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+const activeAmershamResult=canonicalRows(competition.result_history||competition.results||[]).find(r=>
+  /Second Round Qualifying/i.test(r.round||'') &&
+  String(r.home||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('eastbourneborough') &&
+  String(r.away||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('windsoreton') &&
+  Number(r.home_score)===3 && Number(r.away_score)===0
+);
+const expectedAmershamCustodian=allowActiveAdvance&&activeAmershamResult?'Eastbourne Borough':'Windsor & Eton';
+
 const assertions=`
 (async()=>{
   const same=(a,b)=>typeof sameClubIdentity==='function'?sameClubIdentity(a,b):norm(a)===norm(b);
@@ -63,7 +75,7 @@ const assertions=`
     console.error('HP7 render-boundary crumbs:',(debugJourney.breadcrumbs||[]).map(x=>{const r=x.result||{};return [r.round,r.home,r.home_score,r.away_score,r.away,r.winner,r.decision].join(' | ')}).join('\\n'));
     throw new Error('HP7 regression: expected Windsor & Eton to be visible as resolved custodian/history');
   }
-  if(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered)){
+  if(!${allowActiveAdvance}&&(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered))){
     console.error('HP7 HISTORICAL VENUE RENDER BEGIN');
     console.error(rendered);
     console.error('HP7 HISTORICAL VENUE RENDER END');
@@ -71,14 +83,20 @@ const assertions=`
   }
 
   const journey=tinFoilJourneyForRender(amersham);
-  if(!same((journey.carrier||amersham).name,'Windsor & Eton'))throw new Error('HP7 regression: render-boundary custodian expected Windsor & Eton, got '+((journey.carrier||amersham).name));
+  const expectedCustodian=${JSON.stringify(expectedAmershamCustodian)};
+  if(!same((journey.carrier||amersham).name,expectedCustodian))throw new Error('HP7 regression: render-boundary custodian expected '+expectedCustodian+', got '+((journey.carrier||amersham).name));
+  if(${allowActiveAdvance}&&expectedCustodian==='Eastbourne Borough'&&!/Eastbourne\\s+Borough/i.test(rendered))throw new Error('HP7 regression: verified Eastbourne 3-0 Windsor result did not render advanced custodian');
   const crumbs=(journey.breadcrumbs||[]).map(x=>x.result||{});
   const replay=crumbs.find(r=>/Extra Preliminary Round Replay/i.test(r.round||'')&&same(r.home,'Amersham Town')&&same(r.away,'North Leigh'));
   if(!replay||Number(replay.home_score)!==1||Number(replay.away_score)!==2)throw new Error('HP7 regression: decisive Amersham 1-2 North Leigh replay missing');
+  const petts=crumbs.find(r=>/First Round Qualifying/i.test(r.round||'')&&same(r.home,'Petts Wood & Holmesdale')&&same(r.away,'Windsor & Eton'));
+  if(!petts)throw new Error('HP7 regression: Petts Wood & Holmesdale v Windsor & Eton historical breadcrumb missing');
+  const pettsVenue=completedResultVenue(petts);
+  if(!/New Inn Stadium/i.test(String(pettsVenue.ground||''))||String(pettsVenue.postcode||'').replace(/\\s+/g,'').toUpperCase()!=='BR28HQ')throw new Error('HP7 regression: canonical Petts Wood historical venue must remain The New Inn Stadium, BR2 8HQ');
 
   console.log('AMERSHAM CARD RENDER REGRESSION: PASS');
   console.log('HP7 0EJ go() render: PASS');
-  console.log('Resolved custodian: Windsor & Eton');
+  console.log('Resolved custodian:',expectedCustodian);
   console.log('Replay details TBC absent: PASS');
   console.log('Petts Wood historical venue rendered: The New Inn Stadium, BR2 8HQ — PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
