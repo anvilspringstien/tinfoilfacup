@@ -14,6 +14,7 @@ on:
       - "updater/amersham_card_render_regression.js"
       - "updater/clubfinder_stats_regression.js"
       - "updater/kt21_venue_render_regression.js"
+      - "updater/production_ui_regression.js"
       - ".github/workflows/fixture-publishability-shadow.yml"
 permissions:
   contents: read
