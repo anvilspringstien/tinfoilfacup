@@ -1,0 +1,33 @@
+name: Fixture publishability shadow
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "12 * * * *"
+  push:
+    branches:
+      - fixture-publishability-shadow
+    paths:
+      - "updater/fixture_publishability_shadow.py"
+      - "updater/auto_round_results.py"
+      - "updater/round_state_engine.py"
+      - ".github/workflows/fixture-publishability-shadow.yml"
+permissions:
+  contents: read
+concurrency:
+  group: fixture-publishability-shadow
+  cancel-in-progress: true
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Guard universal round-state chronology
+        run: python updater/round_state_regression.py
+      - name: Assess fixture-level publishability without mutation
+        run: python updater/run_source_resilient.py --label "Fixture publishability shadow" -- python updater/fixture_publishability_shadow.py
+      - name: Prove production competition data was not mutated
+        run: git diff --exit-code -- competition.json clubfinder.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fixture-publishability-shadow
+          path: updater/fixture-publishability-shadow.json
