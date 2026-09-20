@@ -57,12 +57,14 @@ jobs:
           python updater/patch_clubfinder_campaign_identity.py
           python updater/refresh_clubfinder_embedded_snapshot.py
       - name: Run candidate competition and Clubfinder guards
+        env:
+          TFFC_ALLOW_ACTIVE_RESULT_ADVANCE: "1"
         run: |
           python updater/reconcile_result_history_aliases.py --check
           python updater/competition_regression_guard.py
           python updater/extra_preliminary_replay_regression.py
           python updater/replay_completion_guard.py
-          TFFC_ALLOW_ACTIVE_RESULT_ADVANCE=1 node updater/clubfinder_render_regression.js
+          node updater/clubfinder_render_regression.js
           node updater/amersham_card_render_regression.js
           node updater/amersham_stats_regression.js
           node updater/ex8_venue_render_regression.js
