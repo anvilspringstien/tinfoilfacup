@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Synthetic source-parser regression for the round-agnostic importer."""
-from auto_round_results import dedupe_observations, parse_fwp_observations
+from auto_round_results import dedupe_observations, fwp_round_label, fwp_round_url, parse_fwp_observations
 
 
 def require(value, message):
@@ -9,6 +9,15 @@ def require(value, message):
 
 
 known = [{"round": "Second Round Qualifying", "home": "Alpha Town", "away": "Beta United", "date": "2026-09-19"}]
+
+require(
+    fwp_round_url("Second Round Qualifying").endswith("/second-qualifying-round"),
+    "active-round source must be pinned to the Second Qualifying Round archive",
+)
+require(
+    fwp_round_label("Second Round Qualifying") == "Second Qualifying Round",
+    "FA/FWP qualifying-round naming must be normalized",
+)
 
 penalty_html = """
 <h3>Tuesday 22nd September 2026</h3>
@@ -98,3 +107,4 @@ print("Unrelated rows ignored: PASS")
 print("Cross-source adjacent-date dedupe: PASS")
 print("Same-source replay chronology preserved: PASS")
 print("Different scorelines preserved: PASS")
+print("Active-round FWP archive pinning: PASS")
