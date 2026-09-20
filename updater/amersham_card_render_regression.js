@@ -75,7 +75,7 @@ const assertions=`
     console.error('HP7 render-boundary crumbs:',(debugJourney.breadcrumbs||[]).map(x=>{const r=x.result||{};return [r.round,r.home,r.home_score,r.away_score,r.away,r.winner,r.decision].join(' | ')}).join('\\n'));
     throw new Error('HP7 regression: expected Windsor & Eton to be visible as resolved custodian/history');
   }
-  if(!allowActiveAdvance&&(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered))){
+  if(!${allowActiveAdvance}&&(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered))){
     console.error('HP7 HISTORICAL VENUE RENDER BEGIN');
     console.error(rendered);
     console.error('HP7 HISTORICAL VENUE RENDER END');
