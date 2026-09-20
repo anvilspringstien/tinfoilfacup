@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json,re
+import json,re,os
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -9,7 +9,8 @@ DATA=ROOT/'competition.json'
 REPORT=ROOT/'competition-health.md'
 JSON_REPORT=ROOT/'updater/competition-health.json'
 UK=ZoneInfo('Europe/London')
-GRACE_HOURS=3\nFIXTURE_LOCAL_HEALTH = __import__('os').environ.get('TFFC_FIXTURE_LOCAL_HEALTH') == '1'
+GRACE_HOURS=3
+FIXTURE_LOCAL_HEALTH=os.environ.get('TFFC_FIXTURE_LOCAL_HEALTH')=='1'\nFIXTURE_LOCAL_HEALTH = __import__('os').environ.get('TFFC_FIXTURE_LOCAL_HEALTH') == '1'
 MIN_PRELIMINARY_TIES=130
 MIN_PRELIMINARY_RESULTS=130
 EXPECTED_ACTIVE_TIES={'First Round Qualifying':112,'Second Round Qualifying':80,'Third Round Qualifying':40,'Fourth Round Qualifying':32,'First Round Proper':40,'Second Round Proper':20,'Third Round Proper':32,'Fourth Round Proper':16,'Fifth Round Proper':8,'Quarter Final':4,'Semi Final':2,'Final':1}
