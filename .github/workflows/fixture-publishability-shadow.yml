@@ -61,7 +61,7 @@ jobs:
           python updater/competition_regression_guard.py
           python updater/extra_preliminary_replay_regression.py
           python updater/replay_completion_guard.py
-          node updater/clubfinder_render_regression.js
+          TFFC_ALLOW_ACTIVE_RESULT_ADVANCE=1 node updater/clubfinder_render_regression.js
           node updater/amersham_card_render_regression.js
           node updater/amersham_stats_regression.js
           node updater/ex8_venue_render_regression.js
