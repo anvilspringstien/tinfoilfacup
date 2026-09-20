@@ -75,7 +75,7 @@ const assertions=`
     console.error('HP7 render-boundary crumbs:',(debugJourney.breadcrumbs||[]).map(x=>{const r=x.result||{};return [r.round,r.home,r.home_score,r.away_score,r.away,r.winner,r.decision].join(' | ')}).join('\\n'));
     throw new Error('HP7 regression: expected Windsor & Eton to be visible as resolved custodian/history');
   }
-  if(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered)){
+  if(!allowActiveAdvance&&(!/The New Inn Stadium/i.test(rendered)||!/BR2\\s*8HQ/i.test(rendered))){
     console.error('HP7 HISTORICAL VENUE RENDER BEGIN');
     console.error(rendered);
     console.error('HP7 HISTORICAL VENUE RENDER END');
@@ -89,6 +89,10 @@ const assertions=`
   const crumbs=(journey.breadcrumbs||[]).map(x=>x.result||{});
   const replay=crumbs.find(r=>/Extra Preliminary Round Replay/i.test(r.round||'')&&same(r.home,'Amersham Town')&&same(r.away,'North Leigh'));
   if(!replay||Number(replay.home_score)!==1||Number(replay.away_score)!==2)throw new Error('HP7 regression: decisive Amersham 1-2 North Leigh replay missing');
+  const petts=crumbs.find(r=>/First Round Qualifying/i.test(r.round||'')&&same(r.home,'Petts Wood & Holmesdale')&&same(r.away,'Windsor & Eton'));
+  if(!petts)throw new Error('HP7 regression: Petts Wood & Holmesdale v Windsor & Eton historical breadcrumb missing');
+  const pettsVenue=completedResultVenue(petts);
+  if(!/New Inn Stadium/i.test(String(pettsVenue.ground||''))||String(pettsVenue.postcode||'').replace(/\\s+/g,'').toUpperCase()!=='BR28HQ')throw new Error('HP7 regression: canonical Petts Wood historical venue must remain The New Inn Stadium, BR2 8HQ');
 
   console.log('AMERSHAM CARD RENDER REGRESSION: PASS');
   console.log('HP7 0EJ go() render: PASS');
