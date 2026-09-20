@@ -24,6 +24,7 @@ function popupStub(){
 }
 const sandbox={console,process,document:documentStub,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,MutationObserver:undefined,open:()=>popupStub(),fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request: '+s)}};
 sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
+const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
 const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
@@ -47,9 +48,16 @@ const assertions=`
   const replay=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Kendal Town')&&Number(r.home_score)===4&&Number(r.away_score)===2);
   if(!replay||!same(tinFoilCertificateWinner(replay),'Heaton Stannington'))throw new Error('DL5 Stats regression: replay certificate winner mismatch');
 
-  if(!same(carrier.name,'Heaton Stannington'))throw new Error('DL5 Stats regression: expected current custodian Heaton Stannington, got '+carrier.name);
-  const next=nextRoundInfo(carrier);
-  if(!next||!next.knownFixture||!same(next.knownFixture.home,'Heaton Stannington')||!same(next.knownFixture.away,'Trafford'))throw new Error('DL5 Stats regression: expected Heaton Stannington v Trafford next');
+  const activeSecondQ=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
+  const expectedCustodian=${allowActiveAdvance}?'Trafford':'Heaton Stannington';
+  if(${allowActiveAdvance}&&!activeSecondQ)throw new Error('DL5 Stats regression: verified Heaton 1-2 Trafford result missing from candidate journey');
+  if(!same(carrier.name,expectedCustodian))throw new Error('DL5 Stats regression: expected current custodian '+expectedCustodian+', got '+carrier.name);
+  if(${allowActiveAdvance}){
+    if(!same(tinFoilCertificateWinner(activeSecondQ),'Trafford'))throw new Error('DL5 Stats regression: active Second Qualifying certificate winner must be Trafford');
+  }else{
+    const next=nextRoundInfo(carrier);
+    if(!next||!next.knownFixture||!same(next.knownFixture.home,'Heaton Stannington')||!same(next.knownFixture.away,'Trafford'))throw new Error('DL5 Stats regression: expected Heaton Stannington v Trafford next');
+  }
 
   if(typeof journeyCertificate!=='function')throw new Error('DL5 Stats regression: journeyCertificate renderer missing');
   certificateHtml='';
@@ -76,7 +84,7 @@ const assertions=`
   console.log('Extra Preliminary: Newton Aycliffe 0-1 Kendal Town -> Kendal Town — PASS');
   console.log('Draw remains unresolved — PASS');
   console.log('Replay -> Heaton Stannington — PASS');
-  console.log('Custody: Newton Aycliffe FC -> Kendal Town -> Heaton Stannington');
-  console.log('Next: Heaton Stannington v Trafford — PASS');
+  console.log('Custody: Newton Aycliffe FC -> Kendal Town ->',expectedCustodian);
+  console.log(${allowActiveAdvance}?'Second Qualifying: Heaton Stannington 1-2 Trafford — PASS':'Next: Heaton Stannington v Trafford — PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
