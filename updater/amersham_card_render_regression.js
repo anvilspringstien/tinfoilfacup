@@ -85,7 +85,7 @@ const assertions=`
   const journey=tinFoilJourneyForRender(amersham);
   const expectedCustodian=${JSON.stringify(expectedAmershamCustodian)};
   if(!same((journey.carrier||amersham).name,expectedCustodian))throw new Error('HP7 regression: render-boundary custodian expected '+expectedCustodian+', got '+((journey.carrier||amersham).name));
-  if(${allowActiveAdvance}&&expectedCustodian==='Eastbourne Borough'&&!/Eastbourne\s+Borough/i.test(rendered))throw new Error('HP7 regression: verified Eastbourne 3-0 Windsor result did not render advanced custodian');
+  if(${allowActiveAdvance}&&expectedCustodian==='Eastbourne Borough'&&!/Eastbourne\\s+Borough/i.test(rendered))throw new Error('HP7 regression: verified Eastbourne 3-0 Windsor result did not render advanced custodian');
   const crumbs=(journey.breadcrumbs||[]).map(x=>x.result||{});
   const replay=crumbs.find(r=>/Extra Preliminary Round Replay/i.test(r.round||'')&&same(r.home,'Amersham Town')&&same(r.away,'North Leigh'));
   if(!replay||Number(replay.home_score)!==1||Number(replay.away_score)!==2)throw new Error('HP7 regression: decisive Amersham 1-2 North Leigh replay missing');
