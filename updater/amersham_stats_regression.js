@@ -15,7 +15,8 @@ const coords={
   'HP70EJ':{latitude:51.676,longitude:-0.607},
   'OX296SL':{latitude:51.807,longitude:-1.407},
   'SL43DR':{latitude:51.482,longitude:-0.612},
-  'BR28HQ':{latitude:51.384,longitude:0.022}
+  'BR28HQ':{latitude:51.384,longitude:0.022},
+  'BN237QH':{latitude:50.796,longitude:0.323}
 };
 function postcodeFromUrl(url){
   const s=decodeURIComponent(String(url));
@@ -68,7 +69,7 @@ const assertions=`
     throw new Error('HP7 Stats regression: loaded Stats certificate is not using canonical venueForResult for Pigeon Miles');
   }
   console.log('HP7 STATS REGRESSION: PASS');
-  console.log('Campaign: Amersham Town -> North Leigh -> Windsor & Eton');
+  console.log('Campaign chronology through Windsor & Eton preserved; active-round progression permitted');
   console.log('Petts Wood historical venue: The New Inn Stadium, BR2 8HQ — PASS');
   console.log('Stats venue resolver delegates to completedResultVenue — PASS');
   console.log('Pigeon Miles resolved:',pigeon.display);
