@@ -38,6 +38,7 @@ const assertions=`
   const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
   const canonicalRecords=src=>Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
   const canonicalFixtures=canonicalRecords(canonicalCompetition.fixtures);
+  const canonicalHistory=canonicalRecords(canonicalCompetition.result_history||canonicalCompetition.results||[]);
   const canonicalSecondQFixture=(club,label)=>{
     const f=canonicalFixtures.find(x=>/Second Round Qualifying/i.test(x.round||canonicalCompetition.source_round||'')&&(same(x.home,club.name)||same(x.away,club.name)));
     if(!f)throw new Error(label+': canonical Second Round Qualifying fixture missing for '+club.name);
@@ -50,7 +51,6 @@ const assertions=`
   const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
   const state=competitionState(heaton);
   if(!allowActiveAdvance&&state.type!=='won')throw new Error('DL5 render regression: Heaton should be a confirmed First Qualifying winner, got '+state.type);
-  const canonicalHistory=canonicalRecords(canonicalCompetition.result_history||canonicalCompetition.results||[]);
   const heatonFirstQ=canonicalHistory.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Knaresborough Town')&&Number(r.home_score)===1&&Number(r.away_score)===0&&/First Round Qualifying/i.test(r.round||''));
   if(!heatonFirstQ)throw new Error('DL5 render regression: Heaton 1-0 Knaresborough result missing from canonical chronology');
   const heatonNext=nextRoundInfo(heaton);
