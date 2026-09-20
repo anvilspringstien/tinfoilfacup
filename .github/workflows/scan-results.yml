@@ -77,6 +77,8 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    env:
+      TFFC_ALLOW_ACTIVE_RESULT_ADVANCE: "1"
     steps:
       - uses: actions/checkout@v5
         with:
