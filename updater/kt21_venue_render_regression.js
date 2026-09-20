@@ -22,6 +22,21 @@ const assertions=`
     if(!origin)throw new Error('KT21 venue regression: '+originName+' not found in ELIGIBLE');
     const journey=buildJourney(origin);
     const custodian=journey.carrier||origin;
+    const crumbs=(journey.breadcrumbs||[]).map(x=>x.result||{});
+    const completed=crumbs.find(r=>r.round==='Second Round Qualifying'&&same(r.home,home)&&same(r.away,away)&&r.home_score!=null&&r.away_score!=null);
+    if(completed){
+      const hs=Number(completed.home_score),as=Number(completed.away_score);
+      const expectedCustodian=hs>as?home:as>hs?away:custodianName;
+      if(!same(custodian.name,expectedCustodian))throw new Error('KT21 venue regression: completed '+home+' v '+away+' expected custodian '+expectedCustodian+', got '+custodian.name);
+      if(typeof completedResultVenue!=='function')throw new Error('KT21 venue regression: completedResultVenue unavailable');
+      const venue=completedResultVenue(completed)||{};
+      const pc=String(venue.postcode||'').toUpperCase().replace(/\\s+/g,' ').trim();
+      if(pc!==postcode)throw new Error('KT21 venue regression: completed '+home+' v '+away+' expected '+postcode+', got '+(pc||'TBC'));
+      if(!venue.ground||/TBC/i.test(String(venue.ground)))throw new Error('KT21 venue regression: completed '+home+' v '+away+' ground is TBC');
+      console.log(originName+' -> '+expectedCustodian+': PASS');
+      console.log('Completed:',completed.home,completed.home_score,'v',completed.away_score,completed.away,'•',venue.ground,'•',pc);
+      return;
+    }
     if(!same(custodian.name,custodianName))throw new Error('KT21 venue regression: expected '+custodianName+' custodian from '+originName+', got '+custodian.name);
     const next=nextRoundInfo(custodian);
     if(!next||next.name!=='Second Round Qualifying')throw new Error('KT21 venue regression: expected Second Round Qualifying for '+custodianName);
