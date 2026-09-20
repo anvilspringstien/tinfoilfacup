@@ -31,14 +31,47 @@ from round_state_engine import (
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "competition.json"
 REPORT = ROOT / "updater" / "results-pilot-report.json"
-FWP_FIXTURES_URL = "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+FWP_FIXTURES_BASE = "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
 FWP_LIVE_URL = "https://www.footballwebpages.co.uk/fa-cup"
+FWP_ROUND_SLUGS = {
+    "Extra Preliminary Round": "extra-preliminary-round",
+    "Preliminary Round": "preliminary-round",
+    "First Round Qualifying": "first-qualifying-round",
+    "Second Round Qualifying": "second-qualifying-round",
+    "Third Round Qualifying": "third-qualifying-round",
+    "Fourth Round Qualifying": "fourth-qualifying-round",
+}
 UA = "Mozilla/5.0 TinFoilFACupRoundState/1.0"
 
 
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html,application/xhtml+xml"})
     return urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
+
+
+def fwp_round_label(round_name):
+    return re.sub(r"\s+Proper$", "", base_round(round_name), flags=re.I).strip()
+
+
+def fwp_round_url(round_name):
+    label = fwp_round_label(round_name)
+    slug = FWP_ROUND_SLUGS.get(base_round(round_name))
+    if not slug:
+        slug = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
+    if not slug:
+        raise SystemExit("Active-round scanner health failure: cannot derive Football Web Pages round URL.")
+    return FWP_FIXTURES_BASE + "/" + slug
+
+
+def validate_fwp_round_page(raw, round_name, source_url):
+    label = fwp_round_label(round_name)
+    page_text = clean(raw)
+    marker = rf"Fixtures/Results,\s*{re.escape(label)}\s*,\s*20\d{{2}}-20\d{{2}}"
+    if not re.search(marker, page_text, re.I):
+        raise SystemExit(
+            "Active-round scanner source failure: Football Web Pages round page no longer "
+            f"matches {label!r}: {source_url}"
+        )
 
 
 def clean(value):
@@ -431,13 +464,15 @@ def main():
     if not round_name or not known:
         raise SystemExit("Active-round scanner health failure: no canonical active draw available.")
 
+    fwp_round_source = fwp_round_url(round_name)
     primary_raw = fetch(args.url)
-    fixtures_raw = fetch(FWP_FIXTURES_URL)
+    fixtures_raw = fetch(fwp_round_source)
+    validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
     live_raw = fetch(FWP_LIVE_URL)
 
     by_source = {
         "primary_awards": parse_primary_awards(primary_raw, known, args.url),
-        "fwp_fixtures": parse_fwp_observations(fixtures_raw, known, FWP_FIXTURES_URL),
+        "fwp_fixtures": parse_fwp_observations(fixtures_raw, known, fwp_round_source),
         "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
     }
     observations = dedupe_observations(sum(by_source.values(), []))
@@ -468,6 +503,7 @@ def main():
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "scan_round": round_name,
         "known_ties": len(known),
+        "fwp_round_source_url": fwp_round_source,
         "source_observations": {name: len(rows) for name, rows in by_source.items()},
         "semantic_observations": len(observations),
         "classified_results": sum(1 for item in classified if item["kind"] == "result"),
@@ -482,6 +518,7 @@ def main():
     print("ROUND-AGNOSTIC RESULT SCAN")
     print("Active round:", round_name)
     print("Canonical ties:", len(known))
+    print("FWP round source:", fwp_round_source)
     print("FWP fixture observations:", len(by_source["fwp_fixtures"]))
     print("FWP live observations:", len(by_source["fwp_live"]))
     print("Explicit primary awards:", len(by_source["primary_awards"]))
