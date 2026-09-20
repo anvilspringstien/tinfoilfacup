@@ -41,6 +41,12 @@ FWP_ROUND_SLUGS = {
     "Third Round Qualifying": "third-qualifying-round",
     "Fourth Round Qualifying": "fourth-qualifying-round",
 }
+FWP_ROUND_LABELS = {
+    "First Round Qualifying": "First Qualifying Round",
+    "Second Round Qualifying": "Second Qualifying Round",
+    "Third Round Qualifying": "Third Qualifying Round",
+    "Fourth Round Qualifying": "Fourth Qualifying Round",
+}
 UA = "Mozilla/5.0 TinFoilFACupRoundState/1.0"
 
 
@@ -50,7 +56,10 @@ def fetch(url):
 
 
 def fwp_round_label(round_name):
-    return re.sub(r"\s+Proper$", "", base_round(round_name), flags=re.I).strip()
+    canonical = base_round(round_name)
+    if canonical in FWP_ROUND_LABELS:
+        return FWP_ROUND_LABELS[canonical]
+    return re.sub(r"\s+Proper$", "", canonical, flags=re.I).strip()
 
 
 def fwp_round_url(round_name):
