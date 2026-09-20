@@ -11,6 +11,9 @@ on:
       - "updater/auto_round_results.py"
       - "updater/round_state_engine.py"
       - "updater/clubfinder_render_regression.js"
+      - "updater/amersham_card_render_regression.js"
+      - "updater/clubfinder_stats_regression.js"
+      - "updater/kt21_venue_render_regression.js"
       - ".github/workflows/fixture-publishability-shadow.yml"
 permissions:
   contents: read
