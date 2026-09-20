@@ -10,6 +10,7 @@ on:
       - "updater/fixture_publishability_shadow.py"
       - "updater/auto_round_results.py"
       - "updater/round_state_engine.py"
+      - "updater/clubfinder_render_regression.js"
       - ".github/workflows/fixture-publishability-shadow.yml"
 permissions:
   contents: read
