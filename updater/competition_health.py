@@ -67,6 +67,15 @@ def unique_conditional(obj):
         key=(norm(f['home']),norm(f['away']),f.get('date',''),f.get('round',''))
         found.setdefault(key,f)
     return list(found.values())
+def malformed_conditional_flags(obj):
+    vals=obj.values() if isinstance(obj,dict) else (obj or []);found={}
+    for f in vals:
+        if not isinstance(f,dict) or not f.get('conditional'):continue
+        text=(str(f.get('home',''))+' '+str(f.get('away',''))).lower()
+        if ' or ' in text:continue
+        key=(norm(f.get('home')),norm(f.get('away')),f.get('date',''),f.get('round',''))
+        found.setdefault(key,f)
+    return list(found.values())
 
 data=json.loads(DATA.read_text(encoding='utf-8'));now=datetime.now(timezone.utc).astimezone(UK)
 fixtures=unique_fixtures(data);results=all_results(data)
@@ -90,6 +99,7 @@ firstq_ties=unique_count(firstq_source or {})
 active_round=data.get('source_round','')
 active_ties=unique_count(data.get('fixtures') or {})
 active_unresolved=unique_conditional(data.get('fixtures') or {})
+active_malformed_conditionals=malformed_conditional_flags(data.get('fixtures') or {})
 critical=[]
 if not sync:critical.append('Canonical competition chronology has not been synchronised.')
 if prelim_ties<MIN_PRELIMINARY_TIES:critical.append(f'Preliminary fixture coverage too low: {prelim_ties}.')
@@ -98,6 +108,7 @@ if firstq_ties!=112:critical.append(f'Archived First Qualifying fixture coverage
 expected=EXPECTED_ACTIVE_TIES.get(active_round)
 if expected is not None and active_ties!=expected:critical.append(f'{active_round} fixture coverage is {active_ties}; expected {expected}.')
 if data.get('source_tie_count') is not None and active_ties!=int(data.get('source_tie_count')):critical.append(f'Active fixture coverage {active_ties} does not match source_tie_count {data.get("source_tie_count")}.')
+if active_malformed_conditionals:critical.append(f'{len(active_malformed_conditionals)} active fixture(s) are marked conditional but contain no unresolved alternatives.')
 if overdue and not FIXTURE_LOCAL_HEALTH:critical.append(f'{len(overdue)} played fixtures are overdue a result.')
 payload={'checked_at':now.isoformat(),'grace_hours':GRACE_HOURS,'coverage':{'preliminary_unique_fixtures':prelim_ties,'preliminary_results_and_replays':prelim_results,'first_qualifying_unique_fixtures':firstq_ties,'active_round':active_round,'active_round_unique_fixtures':active_ties,'active_round_conditional_slots':len(active_unresolved)},'counts':{'known_fixtures':len(fixtures),'complete':len(complete),'awaiting_grace':len(recent),'overdue':len(overdue),'upcoming':len(upcoming),'critical':len(critical)},'critical':critical,'fixture_local_health':FIXTURE_LOCAL_HEALTH,'overdue':overdue,'awaiting_grace':recent,'competition_sync':sync}
 JSON_REPORT.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
