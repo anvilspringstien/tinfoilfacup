@@ -1,3 +1,4 @@
+# Final round-advance verification trigger; no production behaviour depends on this comment.
 from pathlib import Path
 import sys
 import unittest
