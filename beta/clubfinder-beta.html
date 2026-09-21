@@ -348,6 +348,24 @@ function groundByClubName(name){
 } function completedResultVenue(result){
   if(!result)return {ground:'Venue TBC',postcode:'Postcode TBC'};
   const rv=result.venue||{};
+  const homeClub=candidateClubByName(result.home);
+  const hg=groundByClubName(homeClub?homeClub.name:result.home);
+
+  // If a source venue and the verified canonical home ground have the same
+  // postcode, prefer the verified Clubfinder name. This updates stale sponsor /
+  // legacy ground names without rewriting genuine neutral or groundshare ties.
+  const rvPostcode=String(rv.postcode||'').toUpperCase().replace(/\s+/g,'');
+  const hgPostcode=String((hg&&hg.postcode)||'').toUpperCase().replace(/\s+/g,'');
+  const hgVerified=!!(hg&&String(hg.verification||'').toLowerCase()==='verified');
+  if(hgVerified&&hgPostcode&&rvPostcode&&hgPostcode===rvPostcode){
+    return {
+      ground:hg.ground||rv.ground||'Venue TBC',
+      postcode:hg.postcode||rv.postcode||'Postcode TBC',
+      lat:hg.lat??rv.lat,lon:hg.lon??rv.lon,
+      verification:'verified'
+    };
+  }
+
   if((rv.ground&&!/TBC/i.test(String(rv.ground)))||(rv.postcode&&!/TBC/i.test(String(rv.postcode)))){
     return {ground:rv.ground||'Venue TBC',postcode:rv.postcode||'Postcode TBC',lat:rv.lat,lon:rv.lon,verification:rv.verification||'verified'};
   }
@@ -359,8 +377,6 @@ function groundByClubName(name){
   if(kh)return {...kh,verification:'verified'};
   const ov=VERIFIED_MATCH_VENUE_OVERRIDES[result.home]||VERIFIED_MATCH_VENUE_OVERRIDES[(candidateClubByName(result.home)||{}).name]||null;
   if(ov)return {ground:ov.ground||'Venue TBC',postcode:ov.postcode||'Postcode TBC',lat:ov.lat,lon:ov.lon,verification:'verified'};
-  const homeClub=candidateClubByName(result.home);
-  const hg=groundByClubName(homeClub?homeClub.name:result.home);
   return {
     ground:(hg&&hg.ground)||'Venue TBC',
     postcode:(hg&&hg.postcode)||'Postcode TBC',
