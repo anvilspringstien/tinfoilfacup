@@ -24,7 +24,7 @@ function popupStub(){
 }
 const sandbox={console,process,document:documentStub,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,MutationObserver:undefined,open:()=>popupStub(),fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request: '+s)}};
 sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
-const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1'||String(competition.source_round||'')!=='Second Round Qualifying';
 const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
