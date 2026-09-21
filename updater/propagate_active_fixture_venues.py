@@ -97,9 +97,9 @@ def walk_dicts(obj, path="$", seen=None):
             yield from walk_dicts(value, f"{path}[{i}]", seen)
 
 
-def canonical_active_groups(data):
+def canonical_active_groups(data, source=None):
     groups = {}
-    for f in fixture_values(data.get("fixtures") or {}):
+    for f in fixture_values(source if source is not None else (data.get("fixtures") or {})):
         if not isinstance(f, dict) or not f.get("home") or not f.get("away"):
             continue
         if has_played_score(f) or not valid_venue(f):
@@ -163,9 +163,9 @@ def main():
     )
     anchor_counts = {}
     for home, away, postcode in anchors:
-        source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
+        source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]\n        if not source_matches:\n            source_matches = [s for s in historical_sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
         if not source_matches:
-            raise SystemExit(f"ABORT: canonical active fixture not found for {home} v {away}")
+            raise SystemExit(f"ABORT: canonical active/historical fixture not found for {home} v {away}")
         source_postcodes = {venue_postcode(s) for s in source_matches}
         if source_postcodes != {postcode}:
             raise SystemExit(
