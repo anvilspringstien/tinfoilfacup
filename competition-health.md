@@ -1,29 +1,27 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **21/09/2026, 13:33:21 BST**
+Last checked: **21/09/2026, 17:11:36 BST**
 
 ## Chronology coverage
 
 - Preliminary Round ties known: **137**
 - Preliminary Round results/replays recorded: **162**
 - First Qualifying Round ties preserved: **112 / 112**
-- Active round: **Second Round Qualifying**
-- Active-round ties: **80**
-- Active-round conditional/replay slots: **0**
+- Active round: **Third Round Qualifying**
+- Active-round ties: **40**
+- Active-round conditional/replay slots: **11**
 
 ## Fixture health
 
-- 🟢 Played fixtures with results: **214**
+- 🟢 Played fixtures with results: **137**
 - 🟡 Recently played / grace period: **0**
-- 🔴 Results requiring confirmation: **3**
-- ⚪ Upcoming / incomplete-date fixtures: **0**
+- 🔴 Results requiring confirmation: **0**
+- ⚪ Upcoming / incomplete-date fixtures: **40**
 
 ## 🟢 Competition chronology healthy
 
-Preliminary and First Qualifying chronology is preserved, the active **Second Round Qualifying** draw has canonical coverage, and no played fixture is overdue a result.
+Preliminary and First Qualifying chronology is preserved, the active **Third Round Qualifying** draw has canonical coverage, and no played fixture is overdue a result.
 
-## Results requiring confirmation
+## Conditional active-round slots
 
-- **Worcester City v Stratford Town** — Second Round Qualifying — 2026-09-19 • 15:00
-- **Yate Town v Chippenham Town** — Second Round Qualifying — 2026-09-19 • 15:00
-- **Southall v Dorking Wanderers** — Second Round Qualifying — 2026-09-19 • 15:00
+11 unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.

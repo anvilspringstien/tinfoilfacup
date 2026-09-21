@@ -1,83 +1,31 @@
 {
-  "checked_at": "2026-09-21T13:33:21.016068+01:00",
+  "checked_at": "2026-09-21T17:11:36.060294+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 162,
     "first_qualifying_unique_fixtures": 112,
-    "active_round": "Second Round Qualifying",
-    "active_round_unique_fixtures": 80,
-    "active_round_conditional_slots": 0
+    "active_round": "Third Round Qualifying",
+    "active_round_unique_fixtures": 40,
+    "active_round_conditional_slots": 11
   },
   "counts": {
-    "known_fixtures": 217,
-    "complete": 214,
+    "known_fixtures": 177,
+    "complete": 137,
     "awaiting_grace": 0,
-    "overdue": 3,
-    "upcoming": 0,
+    "overdue": 0,
+    "upcoming": 40,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": true,
-  "overdue": [
-    {
-      "round": "Second Round Qualifying",
-      "home": "Worcester City",
-      "away": "Stratford Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Sixways Stadium",
-        "postcode": "WR3 8ZE",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      },
-      "section": "fixtures",
-      "scheduled": "2026-09-19T15:00:00+01:00",
-      "deadline": "2026-09-19T18:00:00+01:00"
-    },
-    {
-      "round": "Second Round Qualifying",
-      "home": "Yate Town",
-      "away": "Chippenham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "South West Interiors Stadium",
-        "postcode": "BS37 7LE",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      },
-      "section": "fixtures",
-      "scheduled": "2026-09-19T15:00:00+01:00",
-      "deadline": "2026-09-19T18:00:00+01:00"
-    },
-    {
-      "round": "Second Round Qualifying",
-      "home": "Southall",
-      "away": "Dorking Wanderers",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Honeycroft",
-        "postcode": "UB7 8HX",
-        "source": "Current 2026/27 venue evidence: https://www.southallfc.com/contact",
-        "verification": "clubfinder-canonical"
-      },
-      "section": "fixtures",
-      "scheduled": "2026-09-19T15:00:00+01:00",
-      "deadline": "2026-09-19T18:00:00+01:00"
-    }
-  ],
+  "fixture_local_health": false,
+  "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-09-21T07:27:59.190996+00:00",
+    "synced_at": "2026-09-21T16:11:28.943521+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
@@ -94,6 +42,6 @@
     ],
     "kickoffs_enriched": 150,
     "replay_kickoffs_verified": 24,
-    "active_round_preserved": "Second Round Qualifying"
+    "active_round_preserved": "Third Round Qualifying"
   }
 }
