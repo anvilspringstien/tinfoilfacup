@@ -5,7 +5,9 @@ Once a draw slot is definite it is canonical. Live source rows are used only to
 resolve still-conditional placeholders. This prevents match-day FT rows (which
 legacy fixture parsing intentionally ignores) from shrinking the 80-tie draw.
 """
-import json\n\nimport sync_second_qualifying_resolved as legacy
+import json
+
+import sync_second_qualifying_resolved as legacy
 
 
 def reconcile_conditionals_stable(resolved, current):
