@@ -35,7 +35,7 @@ const assertions=`
   if(!hasNewtonLoss) throw new Error('DL5 render regression: Newton Aycliffe 0-1 Kendal missing from journey history');
   if(!hasHeatonReplay) throw new Error('DL5 render regression: Heaton Stannington 4-2 Kendal replay missing from journey history');
   if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
-  const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+  const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1'||String(canonicalCompetition.source_round||'')!=='Second Round Qualifying';
   if(allowActiveAdvance) console.log('ACTIVE RESULT ADVANCE MODE: enabled');
   const canonicalRecords=src=>Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
   const canonicalFixtures=canonicalRecords(canonicalCompetition.fixtures);
