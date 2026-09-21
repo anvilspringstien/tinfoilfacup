@@ -49,7 +49,51 @@ def reconcile_conditionals_stable(resolved, current):
     return fixed + promoted + retained, retained, transitions, ambiguities
 
 
+REQUIRED_CANARIES = [
+    ("Hampton & Richmond Borough", "Crowborough Athletic"),
+    ("Dulwich Hamlet", "Welling United"),
+    ("Thame United", "Exmouth Town"),
+    ("Needham Market", "Braintree Town"),
+    ("Hemel Hempstead Town", "Wingate & Finchley"),
+]
+
+
 def main():
+    data = json.loads(legacy.DATA.read_text(encoding="utf-8"))
+    active_round = str(data.get("source_round") or "")
+
+    # Once the competition advances, Second Qualifying is immutable history.
+    # Never let this historical sync overwrite the later active draw.
+    if active_round != legacy.ROUND:
+        archived = legacy.unique_fixtures(
+            (data.get("round_fixtures") or {}).get(legacy.ROUND) or {}
+        )
+        missing = [
+            f"{a} v {b}"
+            for a, b in REQUIRED_CANARIES
+            if not legacy.has_fixture(archived, a, b)
+        ]
+        if len(archived) != legacy.EXPECTED_TOTAL or missing:
+            legacy.fail(
+                "archived_round",
+                "SECOND QUALIFYING STABLE SYNC: ABORT - archived draw is incomplete after round advancement",
+                active_round=active_round,
+                archived_ties=len(archived),
+                missing=missing,
+            )
+        legacy.report(
+            "archived_round",
+            status="PASS",
+            active_round=active_round,
+            archived_ties=len(archived),
+            message="Second Qualifying archive verified; later active draw preserved.",
+        )
+        print("SECOND QUALIFYING STABLE SYNC: PASS")
+        print("Active round has advanced:", active_round or "UNKNOWN")
+        print("Archived Second Qualifying ties:", len(archived))
+        print("Later active draw: UNTOUCHED")
+        return
+
     legacy.reconcile_conditionals = reconcile_conditionals_stable
     legacy.main()
 
