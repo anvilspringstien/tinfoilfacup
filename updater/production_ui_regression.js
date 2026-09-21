@@ -110,7 +110,7 @@ vm.createContext(sandbox);
 function canonicalRows(src){
   return Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
 }
-const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1'||String(competition.source_round||'')!=='Second Round Qualifying';
 const hp7ActiveResult=canonicalRows(competition.result_history||competition.results||[]).find(r=>
   /Second Round Qualifying/i.test(r.round||'') &&
   String(r.home||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('eastbourneborough') &&
