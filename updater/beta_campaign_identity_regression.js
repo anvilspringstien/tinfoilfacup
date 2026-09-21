@@ -12,6 +12,10 @@ if(!html.includes('maxlength="20"'))throw new Error('BETA identity regression: p
 if(!html.includes('.campaign-identity-band{margin:0 0 4px;padding:13px 16px 14px;border-bottom:1px solid #d40000;text-align:left;white-space:nowrap}'))throw new Error('BETA identity regression: Stats identity top-gap/nowrap contract drifted');
 if(!html.includes('.campaign-identity-label{display:inline;font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:9pt'))throw new Error('BETA identity regression: Stats identity label sizing drifted');
 if(!html.includes('.campaign-identity-value{display:inline;font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:10pt'))throw new Error('BETA identity regression: Stats identity value sizing drifted');
+if(!html.includes("'petts wood & holmesdale|windsor & eton':{ground:'The New Inn Stadium',postcode:'BR2 8HQ'"))throw new Error('BETA parity regression: Petts Wood historical venue override missing');
+if(!html.includes('Pigeon Miles Flown:'))throw new Error('BETA parity regression: canonical Pigeon Miles Flown wording missing');
+if(html.includes('Pigeon Miles Travelled:')||html.includes('Pigeon Miles Traveled:'))throw new Error('BETA parity regression: retired Pigeon Miles travel wording returned');
+if(!html.includes('Pigeon<br><span style="white-space:nowrap">Miles Flown</span>'))throw new Error('BETA parity regression: At-a-Glance Pigeon Miles Flown label drifted');
 
 function nodeStub(){
   return {
@@ -97,6 +101,28 @@ const assertions=`
   const origin=ELIGIBLE.find(c=>same(c.name,'Amersham Town'));
   if(!origin)throw new Error('BETA identity regression: Amersham origin missing');
 
+  // BETA must consume the same canonical historical venue and mileage truth as production.
+  const parityJourney=buildJourney(origin),parityCrumbs=parityJourney.breadcrumbs||[];
+  const petts=parityCrumbs.find(x=>{const r=x.result||{};return /First Round Qualifying/i.test(r.round||'')&&same(r.home,'Petts Wood & Holmesdale')&&same(r.away,'Windsor & Eton')});
+  if(!petts)throw new Error('BETA parity regression: Petts Wood & Holmesdale v Windsor & Eton breadcrumb missing');
+  const pettsVenue=completedResultVenue(petts.result);
+  if(!/New Inn Stadium/i.test(String(pettsVenue.ground||''))||String(pettsVenue.postcode||'').replace(/\\s+/g,'').toUpperCase()!=='BR28HQ'){
+    throw new Error('BETA parity regression: canonical Petts Wood venue wrong: '+JSON.stringify(pettsVenue));
+  }
+  const pigeon=await tinFoilPigeonMilesForStats(parityCrumbs,'HP7 0EJ',completedResultVenue);
+  if(pigeon.miles===null||!Number.isFinite(Number(pigeon.miles))||Number(pigeon.miles)<=0||/Awaiting venue location/i.test(String(pigeon.display||''))){
+    throw new Error('BETA parity regression: Amersham Pigeon Miles unresolved/zero: '+JSON.stringify(pigeon));
+  }
+  const snapshotSource=String(tinFoilChallengeStatsSnapshot);
+  if(!snapshotSource.includes('const v=completedResultVenue(r);'))throw new Error('BETA parity regression: Challenge Stats venue resolver bypasses completedResultVenue');
+  const challengeSource=String(openChallenges);
+  if(!challengeSource.includes('function venueForChallenge(r){return completedResultVenue(r);}'))throw new Error('BETA parity regression: Challenges Pigeon Miles resolver bypasses completedResultVenue');
+  const certSource=String(journeyCertificate).replace(/\\s+/g,' ');
+  if(!certSource.includes('function venueForResult(r){ const v=completedResultVenue(r);'))throw new Error('BETA parity regression: Stats venue resolver bypasses completedResultVenue');
+  if(!certSource.includes('const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);'))throw new Error('BETA parity regression: Stats does not recalculate canonical Pigeon Miles');
+  if(certSource.includes('bridgeMatches')||certSource.includes('cachedMiles'))throw new Error('BETA parity regression: stale Challenges mileage cache can still override Stats');
+
+
   const g=findGround(origin)||{};
   lookup=async()=>({lat:Number(g.lat),lon:Number(g.lon),postcode:'HP7 0EJ'});
   geocodeClubPostcodes=async()=>{};
@@ -162,6 +188,9 @@ const assertions=`
 
   if(!html.includes('pigeonName:tinFoilSavedPigeonName(saved)'))throw new Error('BETA identity regression: Challenges bridge no longer carries pigeon name');
 
+  console.log('BETA HISTORICAL VENUE -> PIGEON MILES -> FLOWN PARITY: PASS');
+  console.log('BETA Petts Wood venue: The New Inn Stadium, BR2 8HQ — PASS');
+  console.log('BETA Amersham Pigeon Miles:',pigeon.display);
   console.log('BETA COUNTER -> PIGEON NAME -> REFRESH PERSISTENCE: PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
 `;
