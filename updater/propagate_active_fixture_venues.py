@@ -163,7 +163,9 @@ def main():
     )
     anchor_counts = {}
     for home, away, postcode in anchors:
-        source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]\n        if not source_matches:\n            source_matches = [s for s in historical_sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
+        source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
+        if not source_matches:
+            source_matches = [s for s in historical_sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
         if not source_matches:
             raise SystemExit(f"ABORT: canonical active/historical fixture not found for {home} v {away}")
         source_postcodes = {venue_postcode(s) for s in source_matches}
