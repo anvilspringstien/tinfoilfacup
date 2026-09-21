@@ -66,7 +66,9 @@ for home, away in replay_anchors:
     if not r.get("kickoff_source_url"):
         raise SystemExit(f"FAIL: {home} v {away} has no kick-off source URL")
 
-fixtures = fixture_values(data.get("fixtures") or {})\nif data.get("source_round") != "Second Round Qualifying":\n    fixtures += fixture_values((data.get("round_fixtures") or {}).get("Second Round Qualifying") or {})
+fixtures = fixture_values(data.get("fixtures") or {})
+if data.get("source_round") != "Second Round Qualifying":
+    fixtures += fixture_values((data.get("round_fixtures") or {}).get("Second Round Qualifying") or {})
 venue_anchors = (
     ("Hampton & Richmond Borough", "Crowborough Athletic", "TW12 2BX"),
     ("Frome Town", "Plymouth Parkway", "BA11 2EH"),
