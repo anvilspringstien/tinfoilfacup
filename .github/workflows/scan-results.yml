@@ -17,6 +17,8 @@ on:
     paths:
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/sync_active_replay_fixtures.py"
+      - "tests/test_active_replay_fixture_sync.py"
       - "updater/fixture_publishability_shadow.py"
       - "updater/fixture_publication_boundary_dry_run.py"
       - "updater/round_state_engine.py"
@@ -126,6 +128,10 @@ jobs:
           fi
       - name: Confirm fixture-local publication boundary
         run: python updater/fixture_publication_boundary_dry_run.py
+      - name: Guard active replay fixture sync
+        run: python -m unittest discover -s tests -p 'test_active_replay_fixture_sync.py'
+      - name: Synchronise active replay fixtures
+        run: python updater/run_source_resilient.py --label "Active replay fixture sync" -- python updater/sync_active_replay_fixtures.py
       - name: Reconcile replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py
       - name: Guard replay-participant result-history aliases
