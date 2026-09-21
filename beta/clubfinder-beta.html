@@ -256,6 +256,29 @@ const ROUND_META={
 };
 
 function drawAlternatives(side){return String(side||'').split(/\s+or\s+/i).map(x=>x.trim()).filter(Boolean)}
+function drawIdentityCompatible(a,b){
+  const ak=canonicalClubKey(a),bk=canonicalClubKey(b);
+  if(!ak||!bk)return false;
+  if(ak===bk||ak.startsWith(bk+' ')||bk.startsWith(ak+' '))return true;
+  const at=ak.split(' '),bt=bk.split(' ');
+  if(at[0]!==bt[0])return false;
+  const aTail=at.slice(1).join(''),bTail=bt.slice(1).join('');
+  const aInitials=at.slice(1).map(x=>x[0]).join(''),bInitials=bt.slice(1).map(x=>x[0]).join('');
+  return !!(aTail&&bTail&&(aTail===bInitials||bTail===aInitials));
+}
+function liveConditionalFixtureForClub(name){
+  if(!LIVE_COMPETITION_DATA||!LIVE_COMPETITION_DATA.fixtures)return null;
+  const seen=new Set(),matches=[];
+  for(const f of Object.values(LIVE_COMPETITION_DATA.fixtures)){
+    if(!f||typeof f!=='object')continue;
+    const sig=[f.round,f.home,f.away,f.date,f.kickoff].join('|');
+    if(seen.has(sig))continue;
+    seen.add(sig);
+    const alternatives=[...drawAlternatives(f.home),...drawAlternatives(f.away)];
+    if(alternatives.some(x=>drawIdentityCompatible(x,name)))matches.push(f);
+  }
+  return matches.length===1?matches[0]:null;
+}
 function resolveConditionalSide(side,carrier){
   const a=drawAlternatives(side);
   if(a.length<=1)return side;
@@ -269,9 +292,9 @@ function resolveConditionalSide(side,carrier){
   if(compatible.length===1)return n;
   return side;
 }
-function resolveLiveFixtureForCarrier(f,carrier){
+function resolveLiveFixtureForCarrier(f,carrier,preserveConditional){
   if(!f)return null;
-  const home=resolveConditionalSide(f.home,carrier),away=resolveConditionalSide(f.away,carrier);
+  const home=preserveConditional?f.home:resolveConditionalSide(f.home,carrier),away=preserveConditional?f.away:resolveConditionalSide(f.away,carrier);
   const unresolved=/\s+or\s+/i.test(home)||/\s+or\s+/i.test(away);
   let venue={ground:'Venue TBC',postcode:'Postcode TBC',verification:'none'};
   if(!unresolved&&home){
@@ -284,7 +307,7 @@ function resolveLiveFixtureForCarrier(f,carrier){
   }
   return {...f,home,away,conditional:unresolved,venue};
 }
-function nextRoundInfo(club){
+function nextRoundInfo(club,preserveConditional){
   const cr=resultFor(club),current=(cr&&cr.round)?cr.round:(club.entry_round||'');
   const progressionRound=String(current||'').replace(/\s+Replay$/i,'');
   let nextName='Next Round';
@@ -301,10 +324,11 @@ function nextRoundInfo(club){
   else if(progressionRound==='Fourth Round Qualifying')nextName='First Round Proper';
   const meta=ROUND_META[nextName]||{date:'TBC',drawDate:'TBC'};
   let nf=liveLookup('fixtures',club.name);
+  if(!nf)nf=liveConditionalFixtureForClub(club.name);
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }
-  const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;
+  const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club,!!preserveConditional);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;
   return {name:nextName,date:meta.date,drawDate:meta.drawDate,knownFixture,fixturesUrl:FA_FIXTURES_URL};
 }
 
@@ -580,8 +604,8 @@ function historicalResultsForClub(club){
   return {origin,carrier:resolved.carrier,breadcrumbs:resolved.breadcrumbs};
 } /* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */
 const tinFoilBaseNextRoundInfo=nextRoundInfo;
-nextRoundInfo=function(club){
-  const info=tinFoilBaseNextRoundInfo(club);
+nextRoundInfo=function(club,preserveConditional){
+  const info=tinFoilBaseNextRoundInfo(club,preserveConditional);
   if(!info||!info.knownFixture)return info;
   const fixture=info.knownFixture||{};
   const target=String(info.name||'').trim().toLowerCase();
@@ -685,7 +709,7 @@ function replayVenue(rf){
 function competitionState(club){
   const f=club.fixture||{},r=resultFor(club),upcoming=!r?nextRoundInfo(club):null,liveFixture=upcoming&&upcoming.knownFixture?upcoming.knownFixture:null,kickoff=parseKickoff(liveFixture||f),now=new Date();
   if(r){
-    if(resultNeedsReplay(r))return {type:'replay',title:'↻ Replay required',result:r,replay:replayFixtureFor(club),next:null};
+    if(resultNeedsReplay(r))return {type:'replay',title:'↻ Replay required',result:r,replay:replayFixtureFor(club),next:nextRoundInfo(club,true)};
     const won=canonicalResultWinner(r)&&sameClubIdentity(canonicalResultWinner(r),club.name);
     return {type:won?'won':'eliminated',title:won?'✅ Through to the next round':'❌ Eliminated from the FA Cup',result:r,next:nextRoundInfo(club)};
   }
@@ -738,9 +762,9 @@ function stateHtml(club){
     const rf=s.replay;
     if(rf){
       const v=replayVenue(rf);
-      return '<div class="state played"><strong>'+esc(s.title)+'</strong><br><strong>Replay: '+esc(rf.home)+' v '+esc(rf.away)+'</strong> • '+esc(rf.round||'Replay')+'<br>'+esc(formatDateGB(rf.date))+' • '+esc(rf.kickoff||'Kick-off TBC')+' • '+esc(v.ground)+' • '+esc(v.postcode)+'</div>';
+      return '<div class="state played"><strong>'+esc(s.title)+'</strong><br><strong>Replay: '+esc(rf.home)+' v '+esc(rf.away)+'</strong> • '+esc(rf.round||'Replay')+'<br>'+esc(formatDateGB(rf.date))+' • '+esc(rf.kickoff||'Kick-off TBC')+' • '+esc(v.ground)+' • '+esc(v.postcode)+nextProgressHtml(club,s.next)+'</div>';
     }
-    return '<div class="state played"><strong>'+esc(s.title)+'</strong><br>Replay details TBC</div>';
+    return '<div class="state played"><strong>'+esc(s.title)+'</strong><br>Replay details TBC'+nextProgressHtml(club,s.next)+'</div>';
   }
   if(s.type==='played')return '<div class="state played"><strong>'+esc(s.title)+'</strong><br>Result not yet embedded</div>';
   if(s.type==='won')return '<div class="state upcoming"><strong>'+esc(s.title)+'</strong>'+nextProgressHtml(club,s.next)+'</div>';
@@ -753,7 +777,7 @@ function stateActions(club){
   if(s.type==='played'||s.type==='won'||s.type==='eliminated'){
     buttons+='<a class="secondary" href="'+FA_RESULTS_URL+'" target="_blank" rel="noopener noreferrer">Verify Result</a>';
   }
-  if(s.next && (s.type==='played'||s.type==='won')){
+  if(s.next && (s.type==='played'||s.type==='won'||s.type==='replay')){
     buttons+='<a class="secondary" href="'+s.next.fixturesUrl+'" target="_blank" rel="noopener noreferrer">View Next Round</a>';
   }
   return buttons;
