@@ -36,6 +36,7 @@ const assertions=`
   if(!hasHeatonReplay) throw new Error('DL5 render regression: Heaton Stannington 4-2 Kendal replay missing from journey history');
   if(kendalHeatonDraws.length!==1) throw new Error('DL5 render regression: expected one Kendal 2-2 Heaton draw, got '+kendalHeatonDraws.length);
   const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1';
+  if(allowActiveAdvance) console.log('ACTIVE RESULT ADVANCE MODE: enabled');
   const canonicalRecords=src=>Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
   const canonicalFixtures=canonicalRecords(canonicalCompetition.fixtures);
   const canonicalHistory=canonicalRecords(canonicalCompetition.result_history||canonicalCompetition.results||[]);
@@ -72,6 +73,7 @@ const assertions=`
   const bishopCarrier=(bishopJourney.carrier||bishop);
   const emleyActiveResult=canonicalHistory.find(r=>same(r.home,'Emley AFC')&&same(r.away,'Spennymoor Town')&&Number(r.home_score)===0&&Number(r.away_score)===4&&/Second Round Qualifying/i.test(r.round||''));
   if(!allowActiveAdvance&&!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: expected Emley AFC to become custodian after Bishop replay');
+  if(allowActiveAdvance) console.log('Bishop candidate custodian:',bishopCarrier.name,'; Emley-Spennymoor result:',emleyActiveResult?'present':'absent');
   if(allowActiveAdvance&&emleyActiveResult&&!same(bishopCarrier.name,'Spennymoor Town'))throw new Error('Replay regression: verified Emley 0-4 Spennymoor result did not advance custodian to Spennymoor Town; got '+bishopCarrier.name);
   if(allowActiveAdvance&&!emleyActiveResult&&!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: Bishop journey advanced without canonical Emley active-round result; got '+bishopCarrier.name);
 
