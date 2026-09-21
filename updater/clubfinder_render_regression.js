@@ -72,6 +72,7 @@ const assertions=`
   if(!bishopReplay)throw new Error('Replay regression: Bishop Auckland 0-2 Emley replay missing');
   const bishopCarrier=(bishopJourney.carrier||bishop);
   const emleyActiveResult=canonicalHistory.find(r=>same(r.home,'Emley AFC')&&same(r.away,'Spennymoor Town')&&Number(r.home_score)===0&&Number(r.away_score)===4&&/Second Round Qualifying/i.test(r.round||''));
+  console.log('BISHOP ACTIVE-ADVANCE DIAGNOSTIC:',JSON.stringify({allowActiveAdvance,bishopCarrier:bishopCarrier.name,emleyActiveResult:!!emleyActiveResult,expectedCustodian:allowActiveAdvance&&emleyActiveResult?'Spennymoor Town':'Emley AFC'}));
   if(!allowActiveAdvance&&!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: expected Emley AFC to become custodian after Bishop replay');
   if(allowActiveAdvance) console.log('Bishop candidate custodian:',bishopCarrier.name,'; Emley-Spennymoor result:',emleyActiveResult?'present':'absent');
   if(allowActiveAdvance&&emleyActiveResult&&!same(bishopCarrier.name,'Spennymoor Town'))throw new Error('Replay regression: verified Emley 0-4 Spennymoor result did not advance custodian to Spennymoor Town; got '+bishopCarrier.name);
