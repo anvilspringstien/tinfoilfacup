@@ -49,6 +49,7 @@ on:
       - "updater/patch_clubfinder_journey_integrity.py"
       - "updater/patch_clubfinder_branding.py"
       - "updater/patch_clubfinder_historical_venues.py"
+      - "updater/patch_clubfinder_pigeon_miles_stats.py"
       - "updater/clubfinder_render_regression.js"
       - "updater/amersham_card_render_regression.js"
       - "updater/amersham_stats_regression.js"
@@ -152,6 +153,7 @@ jobs:
           python updater/patch_clubfinder_journey_integrity.py
           python updater/patch_clubfinder_result_status.py
           python updater/patch_clubfinder_stats_integrity.py
+          python updater/patch_clubfinder_pigeon_miles_stats.py
           python updater/patch_clubfinder_branding.py
           python updater/patch_clubfinder_law2_origins.py
           python updater/promote_verified_law2_locations.py
