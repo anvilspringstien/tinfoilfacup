@@ -1,0 +1,28 @@
+name: Law 2 qualifying-origin audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - law2-qualifying-origin-audit
+    paths:
+      - "clubfinder.html"
+      - "journey-club-registry.json"
+      - "updater/law2_qualifying_origin_audit.py"
+      - ".github/workflows/law2-eligibility-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Audit Law 2 qualifying origins
+        run: python updater/law2_qualifying_origin_audit.py
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: law2-qualifying-origin-audit
+          path: updater/law2-qualifying-origin-audit.json
