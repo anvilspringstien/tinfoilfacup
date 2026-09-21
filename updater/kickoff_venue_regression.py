@@ -66,7 +66,7 @@ for home, away in replay_anchors:
     if not r.get("kickoff_source_url"):
         raise SystemExit(f"FAIL: {home} v {away} has no kick-off source URL")
 
-fixtures = fixture_values(data.get("fixtures") or {})
+fixtures = fixture_values(data.get("fixtures") or {})\nif data.get("source_round") != "Second Round Qualifying":\n    fixtures += fixture_values((data.get("round_fixtures") or {}).get("Second Round Qualifying") or {})
 venue_anchors = (
     ("Hampton & Richmond Borough", "Crowborough Athletic", "TW12 2BX"),
     ("Frome Town", "Plymouth Parkway", "BA11 2EH"),
@@ -75,7 +75,7 @@ venue_anchors = (
 for home, away, postcode in venue_anchors:
     f = find_fixture(fixtures, home, away)
     if not f:
-        raise SystemExit(f"FAIL: active fixture not found: {home} v {away}")
+        raise SystemExit(f"FAIL: Second Qualifying fixture not found in active/archive state: {home} v {away}")
     venue = f.get("venue") or {}
     got = str(venue.get("postcode") or "").upper().replace("  ", " ").strip()
     if got != postcode:
