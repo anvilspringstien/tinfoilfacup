@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Final isolated Competition Health verification trigger; runtime behaviour unchanged.
 import json,re,os
 from datetime import datetime,timedelta,timezone
 from pathlib import Path

@@ -120,6 +120,16 @@ def main():
     data = json.loads(COMP.read_text(encoding="utf-8"))
     groups = canonical_active_groups(data)
     sources = [source for source, _count in groups]
+
+    # Exact regression anchors can legitimately belong to an archived round
+    # after the active draw advances. Build the same verified semantic source
+    # set from archived round fixtures without promoting them back to active.
+    historical_sources = []
+    for archived in (data.get("round_fixtures") or {}).values():
+        historical_sources.extend(
+            source for source, _count in canonical_active_groups(data, archived)
+        )
+
     all_rows = list(walk_dicts(data))
     changed = 0
     matched_copies = 0
@@ -163,7 +173,9 @@ def main():
     )
     anchor_counts = {}
     for home, away, postcode in anchors:
-        source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]\n        if not source_matches:\n            source_matches = [s for s in historical_sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
+        source_matches = [s for s in sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
+        if not source_matches:
+            source_matches = [s for s in historical_sources if norm(s.get("home")) == norm(home) and norm(s.get("away")) == norm(away)]
         if not source_matches:
             raise SystemExit(f"ABORT: canonical active/historical fixture not found for {home} v {away}")
         source_postcodes = {venue_postcode(s) for s in source_matches}

@@ -60,8 +60,12 @@ def has_result(rows, home, hs, aw, away, round_name):
     return False
 
 
-def active_fixtures(data):
-    return [f for f in fixture_values(data.get("fixtures") or {}) if isinstance(f, dict)]
+def second_qualifying_fixtures(data):
+    if str(data.get("source_round") or "") == "Second Round Qualifying":
+        src = data.get("fixtures") or {}
+    else:
+        src = (data.get("round_fixtures") or {}).get("Second Round Qualifying") or {}
+    return [f for f in fixture_values(src) if isinstance(f, dict)]
 
 
 def has_fixture(fixtures, home, away):
@@ -80,7 +84,7 @@ def conditional_count(fixtures):
 def main():
     data = json.loads(DATA.read_text(encoding="utf-8"))
     rows = all_results(data)
-    fixtures = active_fixtures(data)
+    fixtures = second_qualifying_fixtures(data)
     failures = []
 
     if not has_result(rows, "AFC Whyteleafe", 2, 3, "Crowborough Athletic", "First Round Qualifying Replay"):
