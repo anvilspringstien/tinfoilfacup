@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// Final dual-workflow verification trigger; production behaviour is unchanged.
 const fs=require('fs');
 const vm=require('vm');
 const path=require('path');
