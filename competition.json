@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-09-21T11:27:39.194598+00:00",
+  "updated_at": "2026-09-21T12:30:08.610910+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -26822,7 +26822,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Worcester City": {
+    "Stratford Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Worcester City",
       "away": "Stratford Town",
@@ -26878,7 +26878,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Stratford Town AFC": {
+    "Worcester City": {
       "round": "Second Round Qualifying",
       "home": "Worcester City",
       "away": "Stratford Town",
@@ -26892,7 +26892,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Chippenham Town FC": {
+    "Chippenham Town": {
       "round": "Second Round Qualifying",
       "home": "Yate Town",
       "away": "Chippenham Town",
@@ -26920,7 +26920,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Chippenham Town": {
+    "Yate Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Yate Town",
       "away": "Chippenham Town",
@@ -26948,6 +26948,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Chippenham Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Yate Town",
+      "away": "Chippenham Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "South West Interiors Stadium",
+        "postcode": "BS37 7LE",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Yate Town FC": {
       "round": "Second Round Qualifying",
       "home": "Yate Town",
@@ -26962,21 +26976,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Yate Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Yate Town",
-      "away": "Chippenham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "South West Interiors Stadium",
-        "postcode": "BS37 7LE",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Rushden & Diamonds FC": {
+    "AFC Rushden & Diamonds": {
       "round": "Second Round Qualifying",
       "home": "AFC Rushden & Diamonds",
       "away": "Peterborough Sports",
@@ -26991,34 +26991,6 @@
       }
     },
     "Peterborough Sports AFC": {
-      "round": "Second Round Qualifying",
-      "home": "AFC Rushden & Diamonds",
-      "away": "Peterborough Sports",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Rushden & Higham United FC",
-        "postcode": "NN10 0HX",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "AFC Rushden & Diamonds AFC": {
-      "round": "Second Round Qualifying",
-      "home": "AFC Rushden & Diamonds",
-      "away": "Peterborough Sports",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Rushden & Higham United FC",
-        "postcode": "NN10 0HX",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "AFC Rushden & Diamonds": {
       "round": "Second Round Qualifying",
       "home": "AFC Rushden & Diamonds",
       "away": "Peterborough Sports",
@@ -27060,21 +27032,35 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Worksop Town AFC": {
+    "AFC Rushden & Diamonds FC": {
       "round": "Second Round Qualifying",
-      "home": "AFC Telford United",
-      "away": "Worksop Town",
+      "home": "AFC Rushden & Diamonds",
+      "away": "Peterborough Sports",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "New Bucks Head Stadium",
-        "postcode": "TF1 2TU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "Rushden & Higham United FC",
+        "postcode": "NN10 0HX",
+        "source": "protected Clubfinder GROUNDS",
+        "verification": "clubfinder-canonical"
       }
     },
-    "Worksop Town FC": {
+    "AFC Rushden & Diamonds AFC": {
+      "round": "Second Round Qualifying",
+      "home": "AFC Rushden & Diamonds",
+      "away": "Peterborough Sports",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Rushden & Higham United FC",
+        "postcode": "NN10 0HX",
+        "source": "protected Clubfinder GROUNDS",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "AFC Telford United AFC": {
       "round": "Second Round Qualifying",
       "home": "AFC Telford United",
       "away": "Worksop Town",
@@ -27089,6 +27075,20 @@
       }
     },
     "AFC Telford United FC": {
+      "round": "Second Round Qualifying",
+      "home": "AFC Telford United",
+      "away": "Worksop Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "New Bucks Head Stadium",
+        "postcode": "TF1 2TU",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Worksop Town FC": {
       "round": "Second Round Qualifying",
       "home": "AFC Telford United",
       "away": "Worksop Town",
@@ -27130,7 +27130,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "AFC Telford United AFC": {
+    "Worksop Town AFC": {
       "round": "Second Round Qualifying",
       "home": "AFC Telford United",
       "away": "Worksop Town",
@@ -27158,7 +27158,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "AFC Totton": {
+    "Gloucester City AFC": {
       "round": "Second Round Qualifying",
       "home": "AFC Totton",
       "away": "Gloucester City",
@@ -27186,20 +27186,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Gloucester City FC": {
-      "round": "Second Round Qualifying",
-      "home": "AFC Totton",
-      "away": "Gloucester City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Snows Stadium",
-        "postcode": "SO40 2RW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Gloucester City": {
       "round": "Second Round Qualifying",
       "home": "AFC Totton",
@@ -27214,7 +27200,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Gloucester City AFC": {
+    "AFC Totton": {
       "round": "Second Round Qualifying",
       "home": "AFC Totton",
       "away": "Gloucester City",
@@ -27228,16 +27214,16 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Alvechurch FC": {
+    "Gloucester City FC": {
       "round": "Second Round Qualifying",
-      "home": "Alvechurch",
-      "away": "Racing Club Warwick",
+      "home": "AFC Totton",
+      "away": "Gloucester City",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Lye Meadow",
-        "postcode": "B48 7RS",
+        "ground": "Snows Stadium",
+        "postcode": "SO40 2RW",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -27256,7 +27242,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Racing Club Warwick FC": {
+    "Alvechurch FC": {
       "round": "Second Round Qualifying",
       "home": "Alvechurch",
       "away": "Racing Club Warwick",
@@ -27271,6 +27257,20 @@
       }
     },
     "Racing Club Warwick AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Alvechurch",
+      "away": "Racing Club Warwick",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Lye Meadow",
+        "postcode": "B48 7RS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Racing Club Warwick FC": {
       "round": "Second Round Qualifying",
       "home": "Alvechurch",
       "away": "Racing Club Warwick",
@@ -27326,7 +27326,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Newcastle Town": {
+    "Anstey Nomads FC": {
       "round": "Second Round Qualifying",
       "home": "Anstey Nomads",
       "away": "Newcastle Town",
@@ -27354,7 +27354,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Anstey Nomads FC": {
+    "Newcastle Town": {
       "round": "Second Round Qualifying",
       "home": "Anstey Nomads",
       "away": "Newcastle Town",
@@ -27396,7 +27396,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Prescot Cables FC": {
+    "Atherton Collieries FC": {
       "round": "Second Round Qualifying",
       "home": "Atherton Collieries",
       "away": "Prescot Cables",
@@ -27424,7 +27424,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Prescot Cables": {
+    "Prescot Cables FC": {
       "round": "Second Round Qualifying",
       "home": "Atherton Collieries",
       "away": "Prescot Cables",
@@ -27438,7 +27438,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Atherton Collieries": {
+    "Prescot Cables": {
       "round": "Second Round Qualifying",
       "home": "Atherton Collieries",
       "away": "Prescot Cables",
@@ -27466,7 +27466,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Atherton Collieries FC": {
+    "Atherton Collieries": {
       "round": "Second Round Qualifying",
       "home": "Atherton Collieries",
       "away": "Prescot Cables",
@@ -27480,7 +27480,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Aveley AFC": {
+    "Brentwood Town": {
       "round": "Second Round Qualifying",
       "home": "Aveley",
       "away": "Brentwood Town",
@@ -27508,35 +27508,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Brentwood Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Aveley",
-      "away": "Brentwood Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Parkside",
-        "postcode": "RM15 4PX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Brentwood Town": {
-      "round": "Second Round Qualifying",
-      "home": "Aveley",
-      "away": "Brentwood Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Parkside",
-        "postcode": "RM15 4PX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Aveley": {
+      "round": "Second Round Qualifying",
+      "home": "Aveley",
+      "away": "Brentwood Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Parkside",
+        "postcode": "RM15 4PX",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Brentwood Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Aveley",
       "away": "Brentwood Town",
@@ -27564,7 +27550,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Boldmere St Michaels AFC": {
+    "Aveley AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Aveley",
+      "away": "Brentwood Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Parkside",
+        "postcode": "RM15 4PX",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Boldmere St Michaels": {
       "round": "Second Round Qualifying",
       "home": "Barton Town",
       "away": "Boldmere St Michaels",
@@ -27606,7 +27606,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Boldmere St Michaels": {
+    "Boldmere St Michaels FC": {
+      "round": "Second Round Qualifying",
+      "home": "Barton Town",
+      "away": "Boldmere St Michaels",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Easy Buy Stadium",
+        "postcode": "DN18 5JD",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Boldmere St Michaels AFC": {
       "round": "Second Round Qualifying",
       "home": "Barton Town",
       "away": "Boldmere St Michaels",
@@ -27634,20 +27648,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Boldmere St Michaels FC": {
-      "round": "Second Round Qualifying",
-      "home": "Barton Town",
-      "away": "Boldmere St Michaels",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Easy Buy Stadium",
-        "postcode": "DN18 5JD",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Bedford Town FC": {
       "round": "Second Round Qualifying",
       "home": "Bedford Town",
@@ -27662,7 +27662,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Bedford Town": {
+    "King's Lynn Town FC": {
       "round": "Second Round Qualifying",
       "home": "Bedford Town",
       "away": "King's Lynn Town",
@@ -27718,7 +27718,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "King's Lynn Town FC": {
+    "Bedford Town": {
       "round": "Second Round Qualifying",
       "home": "Bedford Town",
       "away": "King's Lynn Town",
@@ -27728,20 +27728,6 @@
       "venue": {
         "ground": "The Eyrie",
         "postcode": "MK44 3LW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Berkhamsted": {
-      "round": "Second Round Qualifying",
-      "home": "Berkhamsted",
-      "away": "Hendon",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Glencar Community Stadium",
-        "postcode": "HP4 2AL",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -27774,7 +27760,35 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Berkhamsted AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Berkhamsted",
+      "away": "Hendon",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Glencar Community Stadium",
+        "postcode": "HP4 2AL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Berkhamsted FC": {
+      "round": "Second Round Qualifying",
+      "home": "Berkhamsted",
+      "away": "Hendon",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Glencar Community Stadium",
+        "postcode": "HP4 2AL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Berkhamsted": {
       "round": "Second Round Qualifying",
       "home": "Berkhamsted",
       "away": "Hendon",
@@ -27802,16 +27816,44 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Berkhamsted AFC": {
+    "Enfield Town FC": {
       "round": "Second Round Qualifying",
-      "home": "Berkhamsted",
-      "away": "Hendon",
+      "home": "Billericay Town",
+      "away": "Enfield Town",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Glencar Community Stadium",
-        "postcode": "HP4 2AL",
+        "ground": "New Lodge",
+        "postcode": "CM12 9SA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Enfield Town": {
+      "round": "Second Round Qualifying",
+      "home": "Billericay Town",
+      "away": "Enfield Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "New Lodge",
+        "postcode": "CM12 9SA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Enfield Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Billericay Town",
+      "away": "Enfield Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "New Lodge",
+        "postcode": "CM12 9SA",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -27844,48 +27886,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Enfield Town": {
-      "round": "Second Round Qualifying",
-      "home": "Billericay Town",
-      "away": "Enfield Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "New Lodge",
-        "postcode": "CM12 9SA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Enfield Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Billericay Town",
-      "away": "Enfield Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "New Lodge",
-        "postcode": "CM12 9SA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Enfield Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Billericay Town",
-      "away": "Enfield Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "New Lodge",
-        "postcode": "CM12 9SA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Billericay Town FC": {
       "round": "Second Round Qualifying",
       "home": "Billericay Town",
@@ -27900,21 +27900,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Bishops Cleeve": {
-      "round": "Second Round Qualifying",
-      "home": "Bishops Cleeve",
-      "away": "Tadley Calleva",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Everyone's Energy Stadium",
-        "postcode": "GL52 3PD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Tadley Calleva AFC": {
+    "Tadley Calleva": {
       "round": "Second Round Qualifying",
       "home": "Bishops Cleeve",
       "away": "Tadley Calleva",
@@ -27942,7 +27928,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Tadley Calleva": {
+    "Tadley Calleva AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Bishops Cleeve",
+      "away": "Tadley Calleva",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Everyone's Energy Stadium",
+        "postcode": "GL52 3PD",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Bishops Cleeve": {
       "round": "Second Round Qualifying",
       "home": "Bishops Cleeve",
       "away": "Tadley Calleva",
@@ -27984,6 +27984,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Brackley Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Brackley Town",
+      "away": "AFC Portchester",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "St James Park",
+        "postcode": "NN13 7EJ",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "AFC Portchester AFC": {
       "round": "Second Round Qualifying",
       "home": "Brackley Town",
@@ -28013,20 +28027,6 @@
       }
     },
     "AFC Portchester FC": {
-      "round": "Second Round Qualifying",
-      "home": "Brackley Town",
-      "away": "AFC Portchester",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "St James Park",
-        "postcode": "NN13 7EJ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Brackley Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Brackley Town",
       "away": "AFC Portchester",
@@ -28082,6 +28082,20 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Lancaster City AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Bradford (Park Avenue)",
+      "away": "Lancaster City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Horsfall Community Stadium",
+        "postcode": "BD6 2NG",
+        "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Bradford (Park Avenue)": {
       "round": "Second Round Qualifying",
       "home": "Bradford (Park Avenue)",
@@ -28097,20 +28111,6 @@
       }
     },
     "Bradford (Park Avenue) AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Bradford (Park Avenue)",
-      "away": "Lancaster City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Horsfall Community Stadium",
-        "postcode": "BD6 2NG",
-        "source": "v7.7.5 current-ground review + v7.7.6 independent coordinate validation",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Lancaster City AFC": {
       "round": "Second Round Qualifying",
       "home": "Bradford (Park Avenue)",
       "away": "Lancaster City",
@@ -28152,20 +28152,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Bromsgrove Sporting": {
-      "round": "Second Round Qualifying",
-      "home": "Bromsgrove Sporting",
-      "away": "Leek Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "UK Electrical Stadium",
-        "postcode": "B61 0DR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Leek Town FC": {
       "round": "Second Round Qualifying",
       "home": "Bromsgrove Sporting",
@@ -28180,7 +28166,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Leek Town AFC": {
+    "Bromsgrove Sporting": {
       "round": "Second Round Qualifying",
       "home": "Bromsgrove Sporting",
       "away": "Leek Town",
@@ -28194,7 +28180,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Leek Town": {
+    "Bromsgrove Sporting AFC": {
       "round": "Second Round Qualifying",
       "home": "Bromsgrove Sporting",
       "away": "Leek Town",
@@ -28222,7 +28208,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Bromsgrove Sporting AFC": {
+    "Leek Town": {
       "round": "Second Round Qualifying",
       "home": "Bromsgrove Sporting",
       "away": "Leek Town",
@@ -28232,6 +28218,48 @@
       "venue": {
         "ground": "UK Electrical Stadium",
         "postcode": "B61 0DR",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Leek Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Bromsgrove Sporting",
+      "away": "Leek Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "UK Electrical Stadium",
+        "postcode": "B61 0DR",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Workington AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Bury",
+      "away": "Workington AFC",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Gigg Lane",
+        "postcode": "BL9 9HR",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Bury FC": {
+      "round": "Second Round Qualifying",
+      "home": "Bury",
+      "away": "Workington AFC",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Gigg Lane",
+        "postcode": "BL9 9HR",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -28278,76 +28306,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Workington AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Bury",
-      "away": "Workington AFC",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Gigg Lane",
-        "postcode": "BL9 9HR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bury FC": {
-      "round": "Second Round Qualifying",
-      "home": "Bury",
-      "away": "Workington AFC",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Gigg Lane",
-        "postcode": "BL9 9HR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Buxton AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Buxton",
-      "away": "Ashton United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Silverlands",
-        "postcode": "SK17 6QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Ashton United AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Buxton",
-      "away": "Ashton United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Silverlands",
-        "postcode": "SK17 6QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Ashton United": {
-      "round": "Second Round Qualifying",
-      "home": "Buxton",
-      "away": "Ashton United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Silverlands",
-        "postcode": "SK17 6QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Ashton United FC": {
       "round": "Second Round Qualifying",
       "home": "Buxton",
@@ -28376,6 +28334,34 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Ashton United": {
+      "round": "Second Round Qualifying",
+      "home": "Buxton",
+      "away": "Ashton United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Silverlands",
+        "postcode": "SK17 6QH",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Ashton United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Buxton",
+      "away": "Ashton United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Silverlands",
+        "postcode": "SK17 6QH",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Buxton FC": {
       "round": "Second Round Qualifying",
       "home": "Buxton",
@@ -28390,35 +28376,35 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Buckhurst Hill AFC": {
+    "Buxton AFC": {
       "round": "Second Round Qualifying",
-      "home": "Cambridge City",
-      "away": "Buckhurst Hill",
+      "home": "Buxton",
+      "away": "Ashton United",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Milton Road",
-        "postcode": "CB4 1UY",
-        "source": "FCHD 2025-26 gazetteer / verified build record",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Cambridge City": {
-      "round": "Second Round Qualifying",
-      "home": "Cambridge City",
-      "away": "Buckhurst Hill",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Milton Road",
-        "postcode": "CB4 1UY",
-        "source": "FCHD 2025-26 gazetteer / verified build record",
-        "verification": "clubfinder-canonical"
+        "ground": "The Silverlands",
+        "postcode": "SK17 6QH",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
     "Buckhurst Hill": {
+      "round": "Second Round Qualifying",
+      "home": "Cambridge City",
+      "away": "Buckhurst Hill",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Milton Road",
+        "postcode": "CB4 1UY",
+        "source": "FCHD 2025-26 gazetteer / verified build record",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Buckhurst Hill AFC": {
       "round": "Second Round Qualifying",
       "home": "Cambridge City",
       "away": "Buckhurst Hill",
@@ -28446,6 +28432,20 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Cambridge City FC": {
+      "round": "Second Round Qualifying",
+      "home": "Cambridge City",
+      "away": "Buckhurst Hill",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Milton Road",
+        "postcode": "CB4 1UY",
+        "source": "FCHD 2025-26 gazetteer / verified build record",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Buckhurst Hill FC": {
       "round": "Second Round Qualifying",
       "home": "Cambridge City",
@@ -28460,7 +28460,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Cambridge City FC": {
+    "Cambridge City": {
       "round": "Second Round Qualifying",
       "home": "Cambridge City",
       "away": "Buckhurst Hill",
@@ -28471,6 +28471,34 @@
         "ground": "Milton Road",
         "postcode": "CB4 1UY",
         "source": "FCHD 2025-26 gazetteer / verified build record",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Chelmsford City": {
+      "round": "Second Round Qualifying",
+      "home": "Canvey Island",
+      "away": "Chelmsford City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Steve's Taxis Stadium",
+        "postcode": "SS8 7PX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Chelmsford City FC": {
+      "round": "Second Round Qualifying",
+      "home": "Canvey Island",
+      "away": "Chelmsford City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Steve's Taxis Stadium",
+        "postcode": "SS8 7PX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
         "verification": "clubfinder-canonical"
       }
     },
@@ -28502,48 +28530,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Canvey Island AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Canvey Island",
-      "away": "Chelmsford City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Steve's Taxis Stadium",
-        "postcode": "SS8 7PX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Chelmsford City FC": {
-      "round": "Second Round Qualifying",
-      "home": "Canvey Island",
-      "away": "Chelmsford City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Steve's Taxis Stadium",
-        "postcode": "SS8 7PX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Chelmsford City": {
-      "round": "Second Round Qualifying",
-      "home": "Canvey Island",
-      "away": "Chelmsford City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Steve's Taxis Stadium",
-        "postcode": "SS8 7PX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Canvey Island": {
       "round": "Second Round Qualifying",
       "home": "Canvey Island",
@@ -28558,35 +28544,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "AFC Greenwich Borough FC": {
+    "Canvey Island AFC": {
       "round": "Second Round Qualifying",
-      "home": "Chertsey Town",
-      "away": "AFC Greenwich Borough",
+      "home": "Canvey Island",
+      "away": "Chelmsford City",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Alwyns Lane",
-        "postcode": "KT16 9DW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "Steve's Taxis Stadium",
+        "postcode": "SS8 7PX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
-    "Chertsey Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Chertsey Town",
-      "away": "AFC Greenwich Borough",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Alwyns Lane",
-        "postcode": "KT16 9DW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Greenwich Borough": {
+    "AFC Greenwich Borough AFC": {
       "round": "Second Round Qualifying",
       "home": "Chertsey Town",
       "away": "AFC Greenwich Borough",
@@ -28614,20 +28586,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "AFC Greenwich Borough AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Chertsey Town",
-      "away": "AFC Greenwich Borough",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Alwyns Lane",
-        "postcode": "KT16 9DW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Chertsey Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Chertsey Town",
@@ -28642,21 +28600,49 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Ware FC": {
+    "AFC Greenwich Borough": {
       "round": "Second Round Qualifying",
-      "home": "Chesham United",
-      "away": "Ware",
+      "home": "Chertsey Town",
+      "away": "AFC Greenwich Borough",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "The Meadow",
-        "postcode": "HP5 1NE",
+        "ground": "Alwyns Lane",
+        "postcode": "KT16 9DW",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Chesham United AFC": {
+    "Chertsey Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Chertsey Town",
+      "away": "AFC Greenwich Borough",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Alwyns Lane",
+        "postcode": "KT16 9DW",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "AFC Greenwich Borough FC": {
+      "round": "Second Round Qualifying",
+      "home": "Chertsey Town",
+      "away": "AFC Greenwich Borough",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Alwyns Lane",
+        "postcode": "KT16 9DW",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Ware AFC": {
       "round": "Second Round Qualifying",
       "home": "Chesham United",
       "away": "Ware",
@@ -28684,21 +28670,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Ware": {
-      "round": "Second Round Qualifying",
-      "home": "Chesham United",
-      "away": "Ware",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Meadow",
-        "postcode": "HP5 1NE",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Ware AFC": {
+    "Ware FC": {
       "round": "Second Round Qualifying",
       "home": "Chesham United",
       "away": "Ware",
@@ -28722,6 +28694,90 @@
       "venue": {
         "ground": "The Meadow",
         "postcode": "HP5 1NE",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Ware": {
+      "round": "Second Round Qualifying",
+      "home": "Chesham United",
+      "away": "Ware",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Meadow",
+        "postcode": "HP5 1NE",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Chesham United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Chesham United",
+      "away": "Ware",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Meadow",
+        "postcode": "HP5 1NE",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Chichester City": {
+      "round": "Second Round Qualifying",
+      "home": "Chichester City",
+      "away": "SE Dons",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Oaklands Park",
+        "postcode": "PO19 6AR",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "SE Dons": {
+      "round": "Second Round Qualifying",
+      "home": "Chichester City",
+      "away": "SE Dons",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Oaklands Park",
+        "postcode": "PO19 6AR",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "SE Dons FC": {
+      "round": "Second Round Qualifying",
+      "home": "Chichester City",
+      "away": "SE Dons",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Oaklands Park",
+        "postcode": "PO19 6AR",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Chichester City AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Chichester City",
+      "away": "SE Dons",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Oaklands Park",
+        "postcode": "PO19 6AR",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -28754,104 +28810,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "SE Dons FC": {
-      "round": "Second Round Qualifying",
-      "home": "Chichester City",
-      "away": "SE Dons",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Oaklands Park",
-        "postcode": "PO19 6AR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "SE Dons": {
-      "round": "Second Round Qualifying",
-      "home": "Chichester City",
-      "away": "SE Dons",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Oaklands Park",
-        "postcode": "PO19 6AR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chichester City": {
-      "round": "Second Round Qualifying",
-      "home": "Chichester City",
-      "away": "SE Dons",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Oaklands Park",
-        "postcode": "PO19 6AR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chichester City AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Chichester City",
-      "away": "SE Dons",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Oaklands Park",
-        "postcode": "PO19 6AR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Cirencester Town": {
-      "round": "Second Round Qualifying",
-      "home": "Cirencester Town",
-      "away": "Farnham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Corinium Stadium",
-        "postcode": "GL7 1HS",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Cirencester Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Cirencester Town",
-      "away": "Farnham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Corinium Stadium",
-        "postcode": "GL7 1HS",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Cirencester Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Cirencester Town",
-      "away": "Farnham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Corinium Stadium",
-        "postcode": "GL7 1HS",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Farnham Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Cirencester Town",
@@ -28880,6 +28838,48 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Cirencester Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Cirencester Town",
+      "away": "Farnham Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Corinium Stadium",
+        "postcode": "GL7 1HS",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Cirencester Town": {
+      "round": "Second Round Qualifying",
+      "home": "Cirencester Town",
+      "away": "Farnham Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Corinium Stadium",
+        "postcode": "GL7 1HS",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Cirencester Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Cirencester Town",
+      "away": "Farnham Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Corinium Stadium",
+        "postcode": "GL7 1HS",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Farnham Town": {
       "round": "Second Round Qualifying",
       "home": "Cirencester Town",
@@ -28894,21 +28894,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Maidstone United FC": {
-      "round": "Second Round Qualifying",
-      "home": "Cray Wanderers",
-      "away": "Maidstone United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Flamingo Park",
-        "postcode": "BR7 6HL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Cray Wanderers AFC": {
+    "Cray Wanderers": {
       "round": "Second Round Qualifying",
       "home": "Cray Wanderers",
       "away": "Maidstone United",
@@ -28936,21 +28922,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Maidstone United": {
-      "round": "Second Round Qualifying",
-      "home": "Cray Wanderers",
-      "away": "Maidstone United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Flamingo Park",
-        "postcode": "BR7 6HL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Cray Wanderers": {
+    "Maidstone United FC": {
       "round": "Second Round Qualifying",
       "home": "Cray Wanderers",
       "away": "Maidstone United",
@@ -28978,7 +28950,35 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Dartford AFC": {
+    "Cray Wanderers AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Cray Wanderers",
+      "away": "Maidstone United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Flamingo Park",
+        "postcode": "BR7 6HL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Maidstone United": {
+      "round": "Second Round Qualifying",
+      "home": "Cray Wanderers",
+      "away": "Maidstone United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Flamingo Park",
+        "postcode": "BR7 6HL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Dartford": {
       "round": "Second Round Qualifying",
       "home": "Dartford",
       "away": "Hayes & Yeading United",
@@ -28993,20 +28993,6 @@
       }
     },
     "Dartford FC": {
-      "round": "Second Round Qualifying",
-      "home": "Dartford",
-      "away": "Hayes & Yeading United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Princes Park Stadium",
-        "postcode": "DA1 1RT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Dartford": {
       "round": "Second Round Qualifying",
       "home": "Dartford",
       "away": "Hayes & Yeading United",
@@ -29048,6 +29034,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Dartford AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Dartford",
+      "away": "Hayes & Yeading United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Princes Park Stadium",
+        "postcode": "DA1 1RT",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Hayes & Yeading United": {
       "round": "Second Round Qualifying",
       "home": "Dartford",
@@ -29062,7 +29062,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Oxford City FC": {
+    "Oxford City AFC": {
       "round": "Second Round Qualifying",
       "home": "Dorchester Town",
       "away": "Oxford City",
@@ -29076,7 +29076,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Dorchester Town AFC": {
+    "Dorchester Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Dorchester Town",
+      "away": "Oxford City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Avenue Stadium",
+        "postcode": "DT1 2RY",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Oxford City FC": {
       "round": "Second Round Qualifying",
       "home": "Dorchester Town",
       "away": "Oxford City",
@@ -29104,7 +29118,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Oxford City AFC": {
+    "Dorchester Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Dorchester Town",
       "away": "Oxford City",
@@ -29132,18 +29146,46 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Dorchester Town FC": {
+    "Folkestone Invicta FC": {
       "round": "Second Round Qualifying",
-      "home": "Dorchester Town",
-      "away": "Oxford City",
+      "home": "Dover Athletic",
+      "away": "Folkestone Invicta",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Avenue Stadium",
-        "postcode": "DT1 2RY",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
+        "ground": "Crabble Athletic Ground",
+        "postcode": "CT17 0JB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Dover Athletic AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Dover Athletic",
+      "away": "Folkestone Invicta",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Crabble Athletic Ground",
+        "postcode": "CT17 0JB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Folkestone Invicta AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Dover Athletic",
+      "away": "Folkestone Invicta",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Crabble Athletic Ground",
+        "postcode": "CT17 0JB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
     "Dover Athletic FC": {
@@ -29174,34 +29216,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Folkestone Invicta AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Dover Athletic",
-      "away": "Folkestone Invicta",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Crabble Athletic Ground",
-        "postcode": "CT17 0JB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Dover Athletic AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Dover Athletic",
-      "away": "Folkestone Invicta",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Crabble Athletic Ground",
-        "postcode": "CT17 0JB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Dover Athletic": {
       "round": "Second Round Qualifying",
       "home": "Dover Athletic",
@@ -29216,63 +29230,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Folkestone Invicta FC": {
-      "round": "Second Round Qualifying",
-      "home": "Dover Athletic",
-      "away": "Folkestone Invicta",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Crabble Athletic Ground",
-        "postcode": "CT17 0JB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Dulwich Hamlet FC": {
-      "round": "Second Round Qualifying",
-      "home": "Dulwich Hamlet",
-      "away": "Welling United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Champion Hill Stadium",
-        "postcode": "SE22 8BD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Welling United AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Dulwich Hamlet",
-      "away": "Welling United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Champion Hill Stadium",
-        "postcode": "SE22 8BD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Dulwich Hamlet AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Dulwich Hamlet",
-      "away": "Welling United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Champion Hill Stadium",
-        "postcode": "SE22 8BD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Welling United": {
+    "Dulwich Hamlet": {
       "round": "Second Round Qualifying",
       "home": "Dulwich Hamlet",
       "away": "Welling United",
@@ -29300,7 +29258,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Dulwich Hamlet": {
+    "Dulwich Hamlet FC": {
       "round": "Second Round Qualifying",
       "home": "Dulwich Hamlet",
       "away": "Welling United",
@@ -29314,63 +29272,49 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Dunston FC": {
+    "Dulwich Hamlet AFC": {
       "round": "Second Round Qualifying",
-      "home": "Dunston",
-      "away": "Scarborough Athletic",
+      "home": "Dulwich Hamlet",
+      "away": "Welling United",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "UTS Stadium",
-        "postcode": "NE11 9JL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
+        "ground": "Champion Hill Stadium",
+        "postcode": "SE22 8BD",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Welling United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Dulwich Hamlet",
+      "away": "Welling United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Champion Hill Stadium",
+        "postcode": "SE22 8BD",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Welling United": {
+      "round": "Second Round Qualifying",
+      "home": "Dulwich Hamlet",
+      "away": "Welling United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Champion Hill Stadium",
+        "postcode": "SE22 8BD",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
     "Scarborough Athletic": {
-      "round": "Second Round Qualifying",
-      "home": "Dunston",
-      "away": "Scarborough Athletic",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "UTS Stadium",
-        "postcode": "NE11 9JL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Scarborough Athletic FC": {
-      "round": "Second Round Qualifying",
-      "home": "Dunston",
-      "away": "Scarborough Athletic",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "UTS Stadium",
-        "postcode": "NE11 9JL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Dunston AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Dunston",
-      "away": "Scarborough Athletic",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "UTS Stadium",
-        "postcode": "NE11 9JL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Scarborough Athletic AFC": {
       "round": "Second Round Qualifying",
       "home": "Dunston",
       "away": "Scarborough Athletic",
@@ -29398,18 +29342,60 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Eastbourne Borough AFC": {
+    "Dunston FC": {
       "round": "Second Round Qualifying",
-      "home": "Eastbourne Borough",
-      "away": "Windsor & Eton",
+      "home": "Dunston",
+      "away": "Scarborough Athletic",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Priory Lane",
-        "postcode": "BN23 7QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "UTS Stadium",
+        "postcode": "NE11 9JL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Scarborough Athletic FC": {
+      "round": "Second Round Qualifying",
+      "home": "Dunston",
+      "away": "Scarborough Athletic",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "UTS Stadium",
+        "postcode": "NE11 9JL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Scarborough Athletic AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Dunston",
+      "away": "Scarborough Athletic",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "UTS Stadium",
+        "postcode": "NE11 9JL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Dunston AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Dunston",
+      "away": "Scarborough Athletic",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "UTS Stadium",
+        "postcode": "NE11 9JL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
     "Eastbourne Borough FC": {
@@ -29427,20 +29413,6 @@
       }
     },
     "Windsor & Eton": {
-      "round": "Second Round Qualifying",
-      "home": "Eastbourne Borough",
-      "away": "Windsor & Eton",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Priory Lane",
-        "postcode": "BN23 7QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Eastbourne Borough": {
       "round": "Second Round Qualifying",
       "home": "Eastbourne Borough",
       "away": "Windsor & Eton",
@@ -29482,35 +29454,49 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Spennymoor Town FC": {
+    "Eastbourne Borough": {
       "round": "Second Round Qualifying",
-      "home": "Emley AFC",
-      "away": "Spennymoor Town",
+      "home": "Eastbourne Borough",
+      "away": "Windsor & Eton",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Fantastic Media Welfare Ground",
-        "postcode": "HD8 9RE",
+        "ground": "Priory Lane",
+        "postcode": "BN23 7QH",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Spennymoor Town": {
+    "Eastbourne Borough AFC": {
       "round": "Second Round Qualifying",
-      "home": "Emley AFC",
-      "away": "Spennymoor Town",
+      "home": "Eastbourne Borough",
+      "away": "Windsor & Eton",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Fantastic Media Welfare Ground",
-        "postcode": "HD8 9RE",
+        "ground": "Priory Lane",
+        "postcode": "BN23 7QH",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
     "Spennymoor Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Emley AFC",
+      "away": "Spennymoor Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Fantastic Media Welfare Ground",
+        "postcode": "HD8 9RE",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Spennymoor Town FC": {
       "round": "Second Round Qualifying",
       "home": "Emley AFC",
       "away": "Spennymoor Town",
@@ -29552,7 +29538,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Ossett United FC": {
+    "Spennymoor Town": {
+      "round": "Second Round Qualifying",
+      "home": "Emley AFC",
+      "away": "Spennymoor Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Fantastic Media Welfare Ground",
+        "postcode": "HD8 9RE",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "FC United of Manchester FC": {
       "round": "Second Round Qualifying",
       "home": "FC United of Manchester",
       "away": "Ossett United",
@@ -29580,21 +29580,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Ossett United AFC": {
-      "round": "Second Round Qualifying",
-      "home": "FC United of Manchester",
-      "away": "Ossett United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Broadhurst Park",
-        "postcode": "M40 0FJ",
-        "source": "FCHD 2025-26 gazetteer / verified build record",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "FC United of Manchester FC": {
+    "Ossett United FC": {
       "round": "Second Round Qualifying",
       "home": "FC United of Manchester",
       "away": "Ossett United",
@@ -29636,6 +29622,62 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Ossett United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "FC United of Manchester",
+      "away": "Ossett United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Broadhurst Park",
+        "postcode": "M40 0FJ",
+        "source": "FCHD 2025-26 gazetteer / verified build record",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Plymouth Parkway": {
+      "round": "Second Round Qualifying",
+      "home": "Frome Town",
+      "away": "Plymouth Parkway",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Badgers Hill",
+        "postcode": "BA11 2EH",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Plymouth Parkway AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Frome Town",
+      "away": "Plymouth Parkway",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Badgers Hill",
+        "postcode": "BA11 2EH",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Frome Town": {
+      "round": "Second Round Qualifying",
+      "home": "Frome Town",
+      "away": "Plymouth Parkway",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Badgers Hill",
+        "postcode": "BA11 2EH",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Frome Town FC": {
       "round": "Second Round Qualifying",
       "home": "Frome Town",
@@ -29664,20 +29706,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Plymouth Parkway": {
-      "round": "Second Round Qualifying",
-      "home": "Frome Town",
-      "away": "Plymouth Parkway",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Badgers Hill",
-        "postcode": "BA11 2EH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Frome Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Frome Town",
@@ -29692,49 +29720,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Frome Town": {
-      "round": "Second Round Qualifying",
-      "home": "Frome Town",
-      "away": "Plymouth Parkway",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Badgers Hill",
-        "postcode": "BA11 2EH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Plymouth Parkway AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Frome Town",
-      "away": "Plymouth Parkway",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Badgers Hill",
-        "postcode": "BA11 2EH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Bury Town": {
-      "round": "Second Round Qualifying",
-      "home": "Gorleston",
-      "away": "Bury Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Wellesley Recreation Ground",
-        "postcode": "NR30 1EY",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Gorleston": {
       "round": "Second Round Qualifying",
       "home": "Gorleston",
       "away": "Bury Town",
@@ -29776,6 +29762,20 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Gorleston": {
+      "round": "Second Round Qualifying",
+      "home": "Gorleston",
+      "away": "Bury Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Wellesley Recreation Ground",
+        "postcode": "NR30 1EY",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Gorleston FC": {
       "round": "Second Round Qualifying",
       "home": "Gorleston",
@@ -29804,49 +29804,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Mickleover": {
-      "round": "Second Round Qualifying",
-      "home": "Halesowen Town",
-      "away": "Mickleover",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Grove",
-        "postcode": "B63 3TB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Mickleover FC": {
-      "round": "Second Round Qualifying",
-      "home": "Halesowen Town",
-      "away": "Mickleover",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Grove",
-        "postcode": "B63 3TB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Halesowen Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Halesowen Town",
-      "away": "Mickleover",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Grove",
-        "postcode": "B63 3TB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Halesowen Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Halesowen Town",
+      "away": "Mickleover",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Grove",
+        "postcode": "B63 3TB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Mickleover": {
       "round": "Second Round Qualifying",
       "home": "Halesowen Town",
       "away": "Mickleover",
@@ -29888,21 +29860,35 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hampton & Richmond Borough": {
+    "Halesowen Town FC": {
       "round": "Second Round Qualifying",
-      "home": "Hampton & Richmond Borough",
-      "away": "Crowborough Athletic",
+      "home": "Halesowen Town",
+      "away": "Mickleover",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Beveree Stadium",
-        "postcode": "TW12 2BX",
+        "ground": "The Grove",
+        "postcode": "B63 3TB",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Crowborough Athletic AFC": {
+    "Mickleover FC": {
+      "round": "Second Round Qualifying",
+      "home": "Halesowen Town",
+      "away": "Mickleover",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Grove",
+        "postcode": "B63 3TB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Hampton & Richmond Borough AFC": {
       "round": "Second Round Qualifying",
       "home": "Hampton & Richmond Borough",
       "away": "Crowborough Athletic",
@@ -29930,20 +29916,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Crowborough Athletic FC": {
-      "round": "Second Round Qualifying",
-      "home": "Hampton & Richmond Borough",
-      "away": "Crowborough Athletic",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Beveree Stadium",
-        "postcode": "TW12 2BX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Crowborough Athletic": {
       "round": "Second Round Qualifying",
       "home": "Hampton & Richmond Borough",
@@ -29958,7 +29930,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hampton & Richmond Borough AFC": {
+    "Crowborough Athletic AFC": {
       "round": "Second Round Qualifying",
       "home": "Hampton & Richmond Borough",
       "away": "Crowborough Athletic",
@@ -29972,49 +29944,35 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Burgess Hill Town": {
+    "Crowborough Athletic FC": {
       "round": "Second Round Qualifying",
-      "home": "Hanwell Town",
-      "away": "Burgess Hill Town",
+      "home": "Hampton & Richmond Borough",
+      "away": "Crowborough Athletic",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Powerday Stadium",
-        "postcode": "UB6 8TL",
+        "ground": "Beveree Stadium",
+        "postcode": "TW12 2BX",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Hanwell Town AFC": {
+    "Hampton & Richmond Borough": {
       "round": "Second Round Qualifying",
-      "home": "Hanwell Town",
-      "away": "Burgess Hill Town",
+      "home": "Hampton & Richmond Borough",
+      "away": "Crowborough Athletic",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Powerday Stadium",
-        "postcode": "UB6 8TL",
+        "ground": "Beveree Stadium",
+        "postcode": "TW12 2BX",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Burgess Hill Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Hanwell Town",
-      "away": "Burgess Hill Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Powerday Stadium",
-        "postcode": "UB6 8TL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Hanwell Town": {
+    "Burgess Hill Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Hanwell Town",
       "away": "Burgess Hill Town",
@@ -30042,7 +30000,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Burgess Hill Town AFC": {
+    "Hanwell Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Hanwell Town",
       "away": "Burgess Hill Town",
@@ -30056,7 +30014,63 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Harborough Town AFC": {
+    "Hanwell Town": {
+      "round": "Second Round Qualifying",
+      "home": "Hanwell Town",
+      "away": "Burgess Hill Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Powerday Stadium",
+        "postcode": "UB6 8TL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Burgess Hill Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Hanwell Town",
+      "away": "Burgess Hill Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Powerday Stadium",
+        "postcode": "UB6 8TL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Burgess Hill Town": {
+      "round": "Second Round Qualifying",
+      "home": "Hanwell Town",
+      "away": "Burgess Hill Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Powerday Stadium",
+        "postcode": "UB6 8TL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Rushall Olympic": {
+      "round": "Second Round Qualifying",
+      "home": "Harborough Town",
+      "away": "Rushall Olympic",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Bowden's Park",
+        "postcode": "LE16 9HF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Rushall Olympic FC": {
       "round": "Second Round Qualifying",
       "home": "Harborough Town",
       "away": "Rushall Olympic",
@@ -30098,6 +30112,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Harborough Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Harborough Town",
+      "away": "Rushall Olympic",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Bowden's Park",
+        "postcode": "LE16 9HF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Harborough Town FC": {
       "round": "Second Round Qualifying",
       "home": "Harborough Town",
@@ -30112,32 +30140,18 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Rushall Olympic FC": {
+    "Real Bedford": {
       "round": "Second Round Qualifying",
-      "home": "Harborough Town",
-      "away": "Rushall Olympic",
+      "home": "Harleston Town",
+      "away": "Real Bedford",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Bowden's Park",
-        "postcode": "LE16 9HF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Rushall Olympic": {
-      "round": "Second Round Qualifying",
-      "home": "Harborough Town",
-      "away": "Rushall Olympic",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Bowden's Park",
-        "postcode": "LE16 9HF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "Recreation Ground",
+        "postcode": "IP20 9DD",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
     "Harleston Town": {
@@ -30155,20 +30169,6 @@
       }
     },
     "Real Bedford FC": {
-      "round": "Second Round Qualifying",
-      "home": "Harleston Town",
-      "away": "Real Bedford",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Recreation Ground",
-        "postcode": "IP20 9DD",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Real Bedford": {
       "round": "Second Round Qualifying",
       "home": "Harleston Town",
       "away": "Real Bedford",
@@ -30224,34 +30224,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Trafford AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Heaton Stannington",
-      "away": "Trafford",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Willow Park",
-        "postcode": "NE7 7HP",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Heaton Stannington FC": {
-      "round": "Second Round Qualifying",
-      "home": "Heaton Stannington",
-      "away": "Trafford",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Willow Park",
-        "postcode": "NE7 7HP",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Trafford FC": {
       "round": "Second Round Qualifying",
       "home": "Heaton Stannington",
@@ -30280,7 +30252,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Trafford": {
+    "Heaton Stannington FC": {
       "round": "Second Round Qualifying",
       "home": "Heaton Stannington",
       "away": "Trafford",
@@ -30308,63 +30280,35 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Guiseley FC": {
+    "Trafford": {
       "round": "Second Round Qualifying",
-      "home": "Hebburn Town",
-      "away": "Guiseley",
+      "home": "Heaton Stannington",
+      "away": "Trafford",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Green Energy Sports Ground",
-        "postcode": "NE31 1UN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "The Willow Park",
+        "postcode": "NE7 7HP",
+        "source": "protected Clubfinder GROUNDS",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Trafford AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Heaton Stannington",
+      "away": "Trafford",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Willow Park",
+        "postcode": "NE7 7HP",
+        "source": "protected Clubfinder GROUNDS",
+        "verification": "clubfinder-canonical"
       }
     },
     "Hebburn Town": {
-      "round": "Second Round Qualifying",
-      "home": "Hebburn Town",
-      "away": "Guiseley",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Green Energy Sports Ground",
-        "postcode": "NE31 1UN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Hebburn Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Hebburn Town",
-      "away": "Guiseley",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Green Energy Sports Ground",
-        "postcode": "NE31 1UN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Hebburn Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Hebburn Town",
-      "away": "Guiseley",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Green Energy Sports Ground",
-        "postcode": "NE31 1UN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Guiseley": {
       "round": "Second Round Qualifying",
       "home": "Hebburn Town",
       "away": "Guiseley",
@@ -30392,21 +30336,63 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Coventry United AFC": {
+    "Guiseley": {
       "round": "Second Round Qualifying",
-      "home": "Hednesford Town",
-      "away": "Coventry United",
+      "home": "Hebburn Town",
+      "away": "Guiseley",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Keys Park",
-        "postcode": "WS12 2DZ",
+        "ground": "Green Energy Sports Ground",
+        "postcode": "NE31 1UN",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Coventry United FC": {
+    "Hebburn Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Hebburn Town",
+      "away": "Guiseley",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Green Energy Sports Ground",
+        "postcode": "NE31 1UN",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Guiseley FC": {
+      "round": "Second Round Qualifying",
+      "home": "Hebburn Town",
+      "away": "Guiseley",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Green Energy Sports Ground",
+        "postcode": "NE31 1UN",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Hebburn Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Hebburn Town",
+      "away": "Guiseley",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Green Energy Sports Ground",
+        "postcode": "NE31 1UN",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Hednesford Town FC": {
       "round": "Second Round Qualifying",
       "home": "Hednesford Town",
       "away": "Coventry United",
@@ -30448,7 +30434,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hednesford Town FC": {
+    "Coventry United AFC": {
       "round": "Second Round Qualifying",
       "home": "Hednesford Town",
       "away": "Coventry United",
@@ -30476,7 +30462,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hemel Hempstead Town FC": {
+    "Coventry United FC": {
+      "round": "Second Round Qualifying",
+      "home": "Hednesford Town",
+      "away": "Coventry United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Keys Park",
+        "postcode": "WS12 2DZ",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Wingate & Finchley AFC": {
       "round": "Second Round Qualifying",
       "home": "Hemel Hempstead Town",
       "away": "Wingate & Finchley",
@@ -30504,6 +30504,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Hemel Hempstead Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Hemel Hempstead Town",
+      "away": "Wingate & Finchley",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Vauxhall Road",
+        "postcode": "HP2 4HW",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Wingate & Finchley": {
       "round": "Second Round Qualifying",
       "home": "Hemel Hempstead Town",
@@ -30518,7 +30532,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Wingate & Finchley AFC": {
+    "Hemel Hempstead Town FC": {
       "round": "Second Round Qualifying",
       "home": "Hemel Hempstead Town",
       "away": "Wingate & Finchley",
@@ -30546,62 +30560,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hemel Hempstead Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Hemel Hempstead Town",
-      "away": "Wingate & Finchley",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Vauxhall Road",
-        "postcode": "HP2 4HW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Hitchin Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Hitchin Town",
-      "away": "Leiston",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Top Field",
-        "postcode": "SG5 1NU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Hitchin Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Hitchin Town",
-      "away": "Leiston",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Top Field",
-        "postcode": "SG5 1NU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Leiston FC": {
-      "round": "Second Round Qualifying",
-      "home": "Hitchin Town",
-      "away": "Leiston",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Top Field",
-        "postcode": "SG5 1NU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Leiston": {
       "round": "Second Round Qualifying",
       "home": "Hitchin Town",
@@ -30616,7 +30574,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hitchin Town": {
+    "Hitchin Town FC": {
       "round": "Second Round Qualifying",
       "home": "Hitchin Town",
       "away": "Leiston",
@@ -30644,7 +30602,49 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Quorn FC": {
+    "Hitchin Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Hitchin Town",
+      "away": "Leiston",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Top Field",
+        "postcode": "SG5 1NU",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Hitchin Town": {
+      "round": "Second Round Qualifying",
+      "home": "Hitchin Town",
+      "away": "Leiston",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Top Field",
+        "postcode": "SG5 1NU",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Leiston FC": {
+      "round": "Second Round Qualifying",
+      "home": "Hitchin Town",
+      "away": "Leiston",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Top Field",
+        "postcode": "SG5 1NU",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Kettering Town": {
       "round": "Second Round Qualifying",
       "home": "Kettering Town",
       "away": "Quorn",
@@ -30672,7 +30672,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Kettering Town": {
+    "Quorn": {
       "round": "Second Round Qualifying",
       "home": "Kettering Town",
       "away": "Quorn",
@@ -30686,7 +30686,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Kettering Town AFC": {
+    "Quorn FC": {
       "round": "Second Round Qualifying",
       "home": "Kettering Town",
       "away": "Quorn",
@@ -30714,7 +30714,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Quorn": {
+    "Kettering Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Kettering Town",
       "away": "Quorn",
@@ -30742,49 +30742,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Kingstonian": {
-      "round": "Second Round Qualifying",
-      "home": "Kingstonian",
-      "away": "Leatherhead",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Robert Parker Stadium",
-        "postcode": "TW19 7BH",
-        "source": "Current 2026/27 official venue evidence: https://www.kingstonianfc.com/generalinfo",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Kingstonian FC": {
-      "round": "Second Round Qualifying",
-      "home": "Kingstonian",
-      "away": "Leatherhead",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Robert Parker Stadium",
-        "postcode": "TW19 7BH",
-        "source": "Current 2026/27 official venue evidence: https://www.kingstonianfc.com/generalinfo",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Leatherhead AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Kingstonian",
-      "away": "Leatherhead",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Robert Parker Stadium",
-        "postcode": "TW19 7BH",
-        "source": "Current 2026/27 official venue evidence: https://www.kingstonianfc.com/generalinfo",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Leatherhead FC": {
       "round": "Second Round Qualifying",
       "home": "Kingstonian",
       "away": "Leatherhead",
@@ -30812,7 +30770,63 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Leamington FC": {
+    "Kingstonian FC": {
+      "round": "Second Round Qualifying",
+      "home": "Kingstonian",
+      "away": "Leatherhead",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Robert Parker Stadium",
+        "postcode": "TW19 7BH",
+        "source": "Current 2026/27 official venue evidence: https://www.kingstonianfc.com/generalinfo",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Leatherhead FC": {
+      "round": "Second Round Qualifying",
+      "home": "Kingstonian",
+      "away": "Leatherhead",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Robert Parker Stadium",
+        "postcode": "TW19 7BH",
+        "source": "Current 2026/27 official venue evidence: https://www.kingstonianfc.com/generalinfo",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Kingstonian": {
+      "round": "Second Round Qualifying",
+      "home": "Kingstonian",
+      "away": "Leatherhead",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Robert Parker Stadium",
+        "postcode": "TW19 7BH",
+        "source": "Current 2026/27 official venue evidence: https://www.kingstonianfc.com/generalinfo",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Leamington AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Leamington",
+      "away": "Gainsborough Trinity",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Your Co-Op Community Stadium",
+        "postcode": "CV33 9QB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Gainsborough Trinity FC": {
       "round": "Second Round Qualifying",
       "home": "Leamington",
       "away": "Gainsborough Trinity",
@@ -30840,21 +30854,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Leamington AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Leamington",
-      "away": "Gainsborough Trinity",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Your Co-Op Community Stadium",
-        "postcode": "CV33 9QB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Gainsborough Trinity FC": {
+    "Leamington FC": {
       "round": "Second Round Qualifying",
       "home": "Leamington",
       "away": "Gainsborough Trinity",
@@ -30896,35 +30896,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Lower Breck FC": {
-      "round": "Second Round Qualifying",
-      "home": "Lower Breck",
-      "away": "Chester",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Anfield Sports & Community Centre",
-        "postcode": "L6 0AG",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Chester": {
-      "round": "Second Round Qualifying",
-      "home": "Lower Breck",
-      "away": "Chester",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Anfield Sports & Community Centre",
-        "postcode": "L6 0AG",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Lower Breck": {
+    "Chester AFC": {
       "round": "Second Round Qualifying",
       "home": "Lower Breck",
       "away": "Chester",
@@ -30952,7 +30924,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Chester AFC": {
+    "Chester": {
+      "round": "Second Round Qualifying",
+      "home": "Lower Breck",
+      "away": "Chester",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Anfield Sports & Community Centre",
+        "postcode": "L6 0AG",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Lower Breck FC": {
       "round": "Second Round Qualifying",
       "home": "Lower Breck",
       "away": "Chester",
@@ -30980,7 +30966,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Maidenhead United AFC": {
+    "Lower Breck": {
+      "round": "Second Round Qualifying",
+      "home": "Lower Breck",
+      "away": "Chester",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Anfield Sports & Community Centre",
+        "postcode": "L6 0AG",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Maidenhead United FC": {
       "round": "Second Round Qualifying",
       "home": "Maidenhead United",
       "away": "Ebbsfleet United",
@@ -31022,21 +31022,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Ebbsfleet United": {
-      "round": "Second Round Qualifying",
-      "home": "Maidenhead United",
-      "away": "Ebbsfleet United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "York Road",
-        "postcode": "SL6 1SF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Maidenhead United FC": {
+    "Maidenhead United AFC": {
       "round": "Second Round Qualifying",
       "home": "Maidenhead United",
       "away": "Ebbsfleet United",
@@ -31064,35 +31050,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Radcliffe FC": {
+    "Ebbsfleet United": {
       "round": "Second Round Qualifying",
-      "home": "Marine",
-      "away": "Radcliffe",
+      "home": "Maidenhead United",
+      "away": "Ebbsfleet United",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Marine Travel Arena",
-        "postcode": "L23 3AS",
+        "ground": "York Road",
+        "postcode": "SL6 1SF",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
     "Radcliffe": {
-      "round": "Second Round Qualifying",
-      "home": "Marine",
-      "away": "Radcliffe",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Marine Travel Arena",
-        "postcode": "L23 3AS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Radcliffe AFC": {
       "round": "Second Round Qualifying",
       "home": "Marine",
       "away": "Radcliffe",
@@ -31120,7 +31092,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Marine FC": {
+    "Radcliffe AFC": {
       "round": "Second Round Qualifying",
       "home": "Marine",
       "away": "Radcliffe",
@@ -31148,58 +31120,30 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Truro City FC": {
+    "Radcliffe FC": {
       "round": "Second Round Qualifying",
-      "home": "Merthyr Town",
-      "away": "Truro City",
+      "home": "Marine",
+      "away": "Radcliffe",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Penydarren Park",
-        "postcode": "CF47 8RF",
+        "ground": "Marine Travel Arena",
+        "postcode": "L23 3AS",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
-    "Truro City": {
+    "Marine FC": {
       "round": "Second Round Qualifying",
-      "home": "Merthyr Town",
-      "away": "Truro City",
+      "home": "Marine",
+      "away": "Radcliffe",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Penydarren Park",
-        "postcode": "CF47 8RF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Truro City AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Merthyr Town",
-      "away": "Truro City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Penydarren Park",
-        "postcode": "CF47 8RF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Merthyr Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Merthyr Town",
-      "away": "Truro City",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Penydarren Park",
-        "postcode": "CF47 8RF",
+        "ground": "Marine Travel Arena",
+        "postcode": "L23 3AS",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -31232,7 +31176,63 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Morecambe FC": {
+    "Merthyr Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Merthyr Town",
+      "away": "Truro City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Penydarren Park",
+        "postcode": "CF47 8RF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Truro City": {
+      "round": "Second Round Qualifying",
+      "home": "Merthyr Town",
+      "away": "Truro City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Penydarren Park",
+        "postcode": "CF47 8RF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Truro City FC": {
+      "round": "Second Round Qualifying",
+      "home": "Merthyr Town",
+      "away": "Truro City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Penydarren Park",
+        "postcode": "CF47 8RF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Truro City AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Merthyr Town",
+      "away": "Truro City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Penydarren Park",
+        "postcode": "CF47 8RF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Morecambe": {
       "round": "Second Round Qualifying",
       "home": "Morecambe",
       "away": "Southport",
@@ -31288,20 +31288,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Morecambe": {
-      "round": "Second Round Qualifying",
-      "home": "Morecambe",
-      "away": "Southport",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Mazuma Mobile Stadium",
-        "postcode": "LA4 4TB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Southport FC": {
       "round": "Second Round Qualifying",
       "home": "Morecambe",
@@ -31316,7 +31302,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Needham Market": {
+    "Morecambe FC": {
+      "round": "Second Round Qualifying",
+      "home": "Morecambe",
+      "away": "Southport",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Mazuma Mobile Stadium",
+        "postcode": "LA4 4TB",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Needham Market AFC": {
       "round": "Second Round Qualifying",
       "home": "Needham Market",
       "away": "Braintree Town",
@@ -31344,7 +31344,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Needham Market AFC": {
+    "Braintree Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Needham Market",
+      "away": "Braintree Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Bloomfields",
+        "postcode": "IP6 8DA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Needham Market": {
       "round": "Second Round Qualifying",
       "home": "Needham Market",
       "away": "Braintree Town",
@@ -31372,20 +31386,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Braintree Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Needham Market",
-      "away": "Braintree Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Bloomfields",
-        "postcode": "IP6 8DA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Braintree Town FC": {
       "round": "Second Round Qualifying",
       "home": "Needham Market",
@@ -31400,7 +31400,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hanworth Villa FC": {
+    "Pagham FC": {
       "round": "Second Round Qualifying",
       "home": "Pagham",
       "away": "Hanworth Villa",
@@ -31428,35 +31428,21 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Hanworth Villa FC": {
+      "round": "Second Round Qualifying",
+      "home": "Pagham",
+      "away": "Hanworth Villa",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Nyetimber Lane",
+        "postcode": "PO21 3JY",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Hanworth Villa AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Pagham",
-      "away": "Hanworth Villa",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Nyetimber Lane",
-        "postcode": "PO21 3JY",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Pagham": {
-      "round": "Second Round Qualifying",
-      "home": "Pagham",
-      "away": "Hanworth Villa",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Nyetimber Lane",
-        "postcode": "PO21 3JY",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Pagham FC": {
       "round": "Second Round Qualifying",
       "home": "Pagham",
       "away": "Hanworth Villa",
@@ -31484,7 +31470,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Macclesfield FC": {
+    "Pagham": {
+      "round": "Second Round Qualifying",
+      "home": "Pagham",
+      "away": "Hanworth Villa",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Nyetimber Lane",
+        "postcode": "PO21 3JY",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Redcar Athletic FC": {
       "round": "Second Round Qualifying",
       "home": "Redcar Athletic",
       "away": "Macclesfield",
@@ -31512,7 +31512,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Redcar Athletic AFC": {
+    "Macclesfield FC": {
       "round": "Second Round Qualifying",
       "home": "Redcar Athletic",
       "away": "Macclesfield",
@@ -31540,7 +31540,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Redcar Athletic FC": {
+    "Redcar Athletic AFC": {
       "round": "Second Round Qualifying",
       "home": "Redcar Athletic",
       "away": "Macclesfield",
@@ -31568,7 +31568,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Redcar Town": {
+    "Darlington FC": {
       "round": "Second Round Qualifying",
       "home": "Redcar Town",
       "away": "Darlington",
@@ -31596,20 +31596,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Redcar Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Redcar Town",
-      "away": "Darlington",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Neeform Stadium",
-        "postcode": "TS10 5BW",
-        "source": "Redcar Town FC official club information",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Darlington AFC": {
       "round": "Second Round Qualifying",
       "home": "Redcar Town",
@@ -31624,7 +31610,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Darlington FC": {
+    "Redcar Town": {
       "round": "Second Round Qualifying",
       "home": "Redcar Town",
       "away": "Darlington",
@@ -31650,6 +31636,48 @@
         "postcode": "TS10 5BW",
         "source": "Redcar Town FC official club information",
         "verification": "clubfinder-canonical"
+      }
+    },
+    "Redcar Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Redcar Town",
+      "away": "Darlington",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Neeform Stadium",
+        "postcode": "TS10 5BW",
+        "source": "Redcar Town FC official club information",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Evesham United": {
+      "round": "Second Round Qualifying",
+      "home": "Redditch United",
+      "away": "Evesham United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Valley Stadium",
+        "postcode": "B97 4RN",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Evesham United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Redditch United",
+      "away": "Evesham United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The Valley Stadium",
+        "postcode": "B97 4RN",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
     "Evesham United FC": {
@@ -31680,7 +31708,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Evesham United AFC": {
+    "Redditch United": {
       "round": "Second Round Qualifying",
       "home": "Redditch United",
       "away": "Evesham United",
@@ -31708,35 +31736,21 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Redditch United": {
-      "round": "Second Round Qualifying",
-      "home": "Redditch United",
-      "away": "Evesham United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Valley Stadium",
-        "postcode": "B97 4RN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Evesham United": {
-      "round": "Second Round Qualifying",
-      "home": "Redditch United",
-      "away": "Evesham United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "The Valley Stadium",
-        "postcode": "B97 4RN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Taunton Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Salisbury",
+      "away": "Taunton Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Raymond McEnhill Stadium",
+        "postcode": "SP4 6PU",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Taunton Town": {
       "round": "Second Round Qualifying",
       "home": "Salisbury",
       "away": "Taunton Town",
@@ -31792,20 +31806,6 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Taunton Town": {
-      "round": "Second Round Qualifying",
-      "home": "Salisbury",
-      "away": "Taunton Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Raymond McEnhill Stadium",
-        "postcode": "SP4 6PU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Salisbury AFC": {
       "round": "Second Round Qualifying",
       "home": "Salisbury",
@@ -31821,48 +31821,6 @@
       }
     },
     "Hungerford Town": {
-      "round": "Second Round Qualifying",
-      "home": "Slimbridge",
-      "away": "Hungerford Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Thornhill Park",
-        "postcode": "GL2 7AF",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Hungerford Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Slimbridge",
-      "away": "Hungerford Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Thornhill Park",
-        "postcode": "GL2 7AF",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Hungerford Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Slimbridge",
-      "away": "Hungerford Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Thornhill Park",
-        "postcode": "GL2 7AF",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Slimbridge AFC": {
       "round": "Second Round Qualifying",
       "home": "Slimbridge",
       "away": "Hungerford Town",
@@ -31904,63 +31862,49 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Slough Town AFC": {
+    "Hungerford Town FC": {
       "round": "Second Round Qualifying",
-      "home": "Slough Town",
-      "away": "Chatham Town",
+      "home": "Slimbridge",
+      "away": "Hungerford Town",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Arbour Park",
-        "postcode": "SL2 5AY",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "Thornhill Park",
+        "postcode": "GL2 7AF",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Slimbridge AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Slimbridge",
+      "away": "Hungerford Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Thornhill Park",
+        "postcode": "GL2 7AF",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Hungerford Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Slimbridge",
+      "away": "Hungerford Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Thornhill Park",
+        "postcode": "GL2 7AF",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
     "Slough Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Slough Town",
-      "away": "Chatham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Arbour Park",
-        "postcode": "SL2 5AY",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Slough Town": {
-      "round": "Second Round Qualifying",
-      "home": "Slough Town",
-      "away": "Chatham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Arbour Park",
-        "postcode": "SL2 5AY",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chatham Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Slough Town",
-      "away": "Chatham Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Arbour Park",
-        "postcode": "SL2 5AY",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chatham Town": {
       "round": "Second Round Qualifying",
       "home": "Slough Town",
       "away": "Chatham Town",
@@ -31988,32 +31932,60 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Snodland Town": {
+    "Slough Town AFC": {
       "round": "Second Round Qualifying",
-      "home": "Snodland Town",
-      "away": "Sheppey United",
+      "home": "Slough Town",
+      "away": "Chatham Town",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "GI Landscapes Stadium",
-        "postcode": "ME6 5DL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
+        "ground": "Arbour Park",
+        "postcode": "SL2 5AY",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
-    "Snodland Town FC": {
+    "Chatham Town FC": {
       "round": "Second Round Qualifying",
-      "home": "Snodland Town",
-      "away": "Sheppey United",
+      "home": "Slough Town",
+      "away": "Chatham Town",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "GI Landscapes Stadium",
-        "postcode": "ME6 5DL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
+        "ground": "Arbour Park",
+        "postcode": "SL2 5AY",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Slough Town": {
+      "round": "Second Round Qualifying",
+      "home": "Slough Town",
+      "away": "Chatham Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Arbour Park",
+        "postcode": "SL2 5AY",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Chatham Town": {
+      "round": "Second Round Qualifying",
+      "home": "Slough Town",
+      "away": "Chatham Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Arbour Park",
+        "postcode": "SL2 5AY",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
     "Sheppey United FC": {
@@ -32030,21 +32002,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Sheppey United AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Snodland Town",
-      "away": "Sheppey United",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "GI Landscapes Stadium",
-        "postcode": "ME6 5DL",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Sheppey United": {
+    "Snodland Town": {
       "round": "Second Round Qualifying",
       "home": "Snodland Town",
       "away": "Sheppey United",
@@ -32072,32 +32030,46 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Witton Albion AFC": {
+    "Sheppey United": {
       "round": "Second Round Qualifying",
-      "home": "South Shields",
-      "away": "Witton Albion",
+      "home": "Snodland Town",
+      "away": "Sheppey United",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "1st Cloud Arena",
-        "postcode": "NE32 3UP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "GI Landscapes Stadium",
+        "postcode": "ME6 5DL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
-    "Witton Albion FC": {
+    "Snodland Town FC": {
       "round": "Second Round Qualifying",
-      "home": "South Shields",
-      "away": "Witton Albion",
+      "home": "Snodland Town",
+      "away": "Sheppey United",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "1st Cloud Arena",
-        "postcode": "NE32 3UP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "GI Landscapes Stadium",
+        "postcode": "ME6 5DL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Sheppey United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Snodland Town",
+      "away": "Sheppey United",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "GI Landscapes Stadium",
+        "postcode": "ME6 5DL",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
     "South Shields FC": {
@@ -32142,6 +32114,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Witton Albion FC": {
+      "round": "Second Round Qualifying",
+      "home": "South Shields",
+      "away": "Witton Albion",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "1st Cloud Arena",
+        "postcode": "NE32 3UP",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "South Shields AFC": {
       "round": "Second Round Qualifying",
       "home": "South Shields",
@@ -32156,16 +32142,16 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Hanley Town FC": {
+    "Witton Albion AFC": {
       "round": "Second Round Qualifying",
-      "home": "Spalding United",
-      "away": "Hanley Town",
+      "home": "South Shields",
+      "away": "Witton Albion",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Sir Halley Stewart Field",
-        "postcode": "PE11 1DA",
+        "ground": "1st Cloud Arena",
+        "postcode": "NE32 3UP",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -32226,6 +32212,20 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Hanley Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Spalding United",
+      "away": "Hanley Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Sir Halley Stewart Field",
+        "postcode": "PE11 1DA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Spalding United": {
       "round": "Second Round Qualifying",
       "home": "Spalding United",
@@ -32238,6 +32238,34 @@
         "postcode": "PE11 1DA",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
+      }
+    },
+    "Hereford": {
+      "round": "Second Round Qualifying",
+      "home": "Stafford Rangers",
+      "away": "Hereford",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Stan Robinson Stadium",
+        "postcode": "ST16 3BX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Stafford Rangers": {
+      "round": "Second Round Qualifying",
+      "home": "Stafford Rangers",
+      "away": "Hereford",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Stan Robinson Stadium",
+        "postcode": "ST16 3BX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
     "Stafford Rangers FC": {
@@ -32268,20 +32296,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Hereford AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Stafford Rangers",
-      "away": "Hereford",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Stafford Rangers AFC": {
       "round": "Second Round Qualifying",
       "home": "Stafford Rangers",
@@ -32296,7 +32310,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Stafford Rangers": {
+    "Hereford AFC": {
       "round": "Second Round Qualifying",
       "home": "Stafford Rangers",
       "away": "Hereford",
@@ -32306,67 +32320,11 @@
       "venue": {
         "ground": "Stan Robinson Stadium",
         "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Hereford": {
-      "round": "Second Round Qualifying",
-      "home": "Stafford Rangers",
-      "away": "Hereford",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Swindon Supermarine FC": {
-      "round": "Second Round Qualifying",
-      "home": "Swindon Supermarine",
-      "away": "Weymouth",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Imagine Cruising Stadium",
-        "postcode": "SN3 4BZ",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Swindon Supermarine": {
-      "round": "Second Round Qualifying",
-      "home": "Swindon Supermarine",
-      "away": "Weymouth",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Imagine Cruising Stadium",
-        "postcode": "SN3 4BZ",
         "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
         "verification": "clubfinder-canonical"
       }
     },
     "Swindon Supermarine AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Swindon Supermarine",
-      "away": "Weymouth",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Imagine Cruising Stadium",
-        "postcode": "SN3 4BZ",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Weymouth FC": {
       "round": "Second Round Qualifying",
       "home": "Swindon Supermarine",
       "away": "Weymouth",
@@ -32408,21 +32366,49 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Thame United FC": {
+    "Swindon Supermarine": {
       "round": "Second Round Qualifying",
-      "home": "Thame United",
-      "away": "Exmouth Town",
+      "home": "Swindon Supermarine",
+      "away": "Weymouth",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "The ASM Stadium",
-        "postcode": "OX9 3RN",
+        "ground": "Imagine Cruising Stadium",
+        "postcode": "SN3 4BZ",
         "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
         "verification": "clubfinder-canonical"
       }
     },
-    "Thame United AFC": {
+    "Weymouth FC": {
+      "round": "Second Round Qualifying",
+      "home": "Swindon Supermarine",
+      "away": "Weymouth",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Imagine Cruising Stadium",
+        "postcode": "SN3 4BZ",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Swindon Supermarine FC": {
+      "round": "Second Round Qualifying",
+      "home": "Swindon Supermarine",
+      "away": "Weymouth",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Imagine Cruising Stadium",
+        "postcode": "SN3 4BZ",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Thame United FC": {
       "round": "Second Round Qualifying",
       "home": "Thame United",
       "away": "Exmouth Town",
@@ -32450,7 +32436,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Exmouth Town": {
+    "Thame United": {
       "round": "Second Round Qualifying",
       "home": "Thame United",
       "away": "Exmouth Town",
@@ -32464,7 +32450,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Thame United": {
+    "Thame United AFC": {
       "round": "Second Round Qualifying",
       "home": "Thame United",
       "away": "Exmouth Town",
@@ -32492,63 +32478,21 @@
         "verification": "clubfinder-canonical"
       }
     },
+    "Exmouth Town": {
+      "round": "Second Round Qualifying",
+      "home": "Thame United",
+      "away": "Exmouth Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "The ASM Stadium",
+        "postcode": "OX9 3RN",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Sholing": {
-      "round": "Second Round Qualifying",
-      "home": "Tiverton Town",
-      "away": "Sholing",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Slee Blackwell Solicitors Stadium",
-        "postcode": "EX16 6SG",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Sholing AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Tiverton Town",
-      "away": "Sholing",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Slee Blackwell Solicitors Stadium",
-        "postcode": "EX16 6SG",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Tiverton Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Tiverton Town",
-      "away": "Sholing",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Slee Blackwell Solicitors Stadium",
-        "postcode": "EX16 6SG",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Sholing FC": {
-      "round": "Second Round Qualifying",
-      "home": "Tiverton Town",
-      "away": "Sholing",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Slee Blackwell Solicitors Stadium",
-        "postcode": "EX16 6SG",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Tiverton Town": {
       "round": "Second Round Qualifying",
       "home": "Tiverton Town",
       "away": "Sholing",
@@ -32576,63 +32520,63 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Ramsgate FC": {
+    "Tiverton Town FC": {
       "round": "Second Round Qualifying",
-      "home": "Tonbridge Angels",
-      "away": "Ramsgate",
+      "home": "Tiverton Town",
+      "away": "Sholing",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Longmead Stadium",
-        "postcode": "TN10 3JF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "Slee Blackwell Solicitors Stadium",
+        "postcode": "EX16 6SG",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
-    "Tonbridge Angels FC": {
+    "Sholing AFC": {
       "round": "Second Round Qualifying",
-      "home": "Tonbridge Angels",
-      "away": "Ramsgate",
+      "home": "Tiverton Town",
+      "away": "Sholing",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Longmead Stadium",
-        "postcode": "TN10 3JF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
+        "ground": "Slee Blackwell Solicitors Stadium",
+        "postcode": "EX16 6SG",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Tiverton Town": {
+      "round": "Second Round Qualifying",
+      "home": "Tiverton Town",
+      "away": "Sholing",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Slee Blackwell Solicitors Stadium",
+        "postcode": "EX16 6SG",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Sholing FC": {
+      "round": "Second Round Qualifying",
+      "home": "Tiverton Town",
+      "away": "Sholing",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Slee Blackwell Solicitors Stadium",
+        "postcode": "EX16 6SG",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
       }
     },
     "Ramsgate AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Tonbridge Angels",
-      "away": "Ramsgate",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Longmead Stadium",
-        "postcode": "TN10 3JF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Tonbridge Angels AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Tonbridge Angels",
-      "away": "Ramsgate",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Longmead Stadium",
-        "postcode": "TN10 3JF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Tonbridge Angels": {
       "round": "Second Round Qualifying",
       "home": "Tonbridge Angels",
       "away": "Ramsgate",
@@ -32660,63 +32604,63 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "Tonbridge Angels FC": {
+      "round": "Second Round Qualifying",
+      "home": "Tonbridge Angels",
+      "away": "Ramsgate",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Longmead Stadium",
+        "postcode": "TN10 3JF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Tonbridge Angels": {
+      "round": "Second Round Qualifying",
+      "home": "Tonbridge Angels",
+      "away": "Ramsgate",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Longmead Stadium",
+        "postcode": "TN10 3JF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Tonbridge Angels AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Tonbridge Angels",
+      "away": "Ramsgate",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Longmead Stadium",
+        "postcode": "TN10 3JF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Ramsgate FC": {
+      "round": "Second Round Qualifying",
+      "home": "Tonbridge Angels",
+      "away": "Ramsgate",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Longmead Stadium",
+        "postcode": "TN10 3JF",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
     "Torquay United": {
-      "round": "Second Round Qualifying",
-      "home": "Torquay United",
-      "away": "AFC Stoneham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Plainmoor",
-        "postcode": "TQ1 3PS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Torquay United AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Torquay United",
-      "away": "AFC Stoneham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Plainmoor",
-        "postcode": "TQ1 3PS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Stoneham AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Torquay United",
-      "away": "AFC Stoneham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Plainmoor",
-        "postcode": "TQ1 3PS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Stoneham": {
-      "round": "Second Round Qualifying",
-      "home": "Torquay United",
-      "away": "AFC Stoneham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Plainmoor",
-        "postcode": "TQ1 3PS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Torquay United FC": {
       "round": "Second Round Qualifying",
       "home": "Torquay United",
       "away": "AFC Stoneham",
@@ -32744,6 +32688,76 @@
         "verification": "fchd-gazetteer"
       }
     },
+    "AFC Stoneham AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Torquay United",
+      "away": "AFC Stoneham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Plainmoor",
+        "postcode": "TQ1 3PS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Torquay United AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Torquay United",
+      "away": "AFC Stoneham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Plainmoor",
+        "postcode": "TQ1 3PS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Torquay United FC": {
+      "round": "Second Round Qualifying",
+      "home": "Torquay United",
+      "away": "AFC Stoneham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Plainmoor",
+        "postcode": "TQ1 3PS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "AFC Stoneham": {
+      "round": "Second Round Qualifying",
+      "home": "Torquay United",
+      "away": "AFC Stoneham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Plainmoor",
+        "postcode": "TQ1 3PS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Uxbridge": {
+      "round": "Second Round Qualifying",
+      "home": "Uxbridge",
+      "away": "Farnborough",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Honeycroft",
+        "postcode": "UB7 8HX",
+        "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
+        "verification": "clubfinder-canonical"
+      }
+    },
     "Farnborough AFC": {
       "round": "Second Round Qualifying",
       "home": "Uxbridge",
@@ -32758,7 +32772,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Uxbridge": {
+    "Uxbridge AFC": {
       "round": "Second Round Qualifying",
       "home": "Uxbridge",
       "away": "Farnborough",
@@ -32786,20 +32800,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Uxbridge FC": {
-      "round": "Second Round Qualifying",
-      "home": "Uxbridge",
-      "away": "Farnborough",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Honeycroft",
-        "postcode": "UB7 8HX",
-        "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Farnborough": {
       "round": "Second Round Qualifying",
       "home": "Uxbridge",
@@ -32814,7 +32814,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Uxbridge AFC": {
+    "Uxbridge FC": {
       "round": "Second Round Qualifying",
       "home": "Uxbridge",
       "away": "Farnborough",
@@ -32825,6 +32825,48 @@
         "ground": "Honeycroft",
         "postcode": "UB7 8HX",
         "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Waltham Abbey FC": {
+      "round": "Second Round Qualifying",
+      "home": "Waltham Abbey",
+      "away": "Dagenham & Redbridge",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Capershotts",
+        "postcode": "EN9 1NX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Dagenham & Redbridge": {
+      "round": "Second Round Qualifying",
+      "home": "Waltham Abbey",
+      "away": "Dagenham & Redbridge",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Capershotts",
+        "postcode": "EN9 1NX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Waltham Abbey AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Waltham Abbey",
+      "away": "Dagenham & Redbridge",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Capershotts",
+        "postcode": "EN9 1NX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
         "verification": "clubfinder-canonical"
       }
     },
@@ -32856,48 +32898,6 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Waltham Abbey AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Waltham Abbey",
-      "away": "Dagenham & Redbridge",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Capershotts",
-        "postcode": "EN9 1NX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Dagenham & Redbridge": {
-      "round": "Second Round Qualifying",
-      "home": "Waltham Abbey",
-      "away": "Dagenham & Redbridge",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Capershotts",
-        "postcode": "EN9 1NX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Waltham Abbey FC": {
-      "round": "Second Round Qualifying",
-      "home": "Waltham Abbey",
-      "away": "Dagenham & Redbridge",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Capershotts",
-        "postcode": "EN9 1NX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Waltham Abbey": {
       "round": "Second Round Qualifying",
       "home": "Waltham Abbey",
@@ -32912,63 +32912,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Horsham FC": {
-      "round": "Second Round Qualifying",
-      "home": "Walton & Hersham",
-      "away": "Horsham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Elmbridge Xcel Sports Hub",
-        "postcode": "KT12 2JP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Walton & Hersham AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Walton & Hersham",
-      "away": "Horsham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Elmbridge Xcel Sports Hub",
-        "postcode": "KT12 2JP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Horsham": {
-      "round": "Second Round Qualifying",
-      "home": "Walton & Hersham",
-      "away": "Horsham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Elmbridge Xcel Sports Hub",
-        "postcode": "KT12 2JP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Walton & Hersham FC": {
-      "round": "Second Round Qualifying",
-      "home": "Walton & Hersham",
-      "away": "Horsham",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Elmbridge Xcel Sports Hub",
-        "postcode": "KT12 2JP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Horsham AFC": {
       "round": "Second Round Qualifying",
       "home": "Walton & Hersham",
       "away": "Horsham",
@@ -32996,7 +32940,63 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Chorley AFC": {
+    "Walton & Hersham AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Walton & Hersham",
+      "away": "Horsham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Elmbridge Xcel Sports Hub",
+        "postcode": "KT12 2JP",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Horsham AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Walton & Hersham",
+      "away": "Horsham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Elmbridge Xcel Sports Hub",
+        "postcode": "KT12 2JP",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Horsham": {
+      "round": "Second Round Qualifying",
+      "home": "Walton & Hersham",
+      "away": "Horsham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Elmbridge Xcel Sports Hub",
+        "postcode": "KT12 2JP",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Horsham FC": {
+      "round": "Second Round Qualifying",
+      "home": "Walton & Hersham",
+      "away": "Horsham",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Elmbridge Xcel Sports Hub",
+        "postcode": "KT12 2JP",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Chorley": {
       "round": "Second Round Qualifying",
       "home": "Warrington Rylands",
       "away": "Chorley",
@@ -33024,7 +33024,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Warrington Rylands": {
+    "Warrington Rylands FC": {
       "round": "Second Round Qualifying",
       "home": "Warrington Rylands",
       "away": "Chorley",
@@ -33052,7 +33052,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Chorley": {
+    "Chorley AFC": {
       "round": "Second Round Qualifying",
       "home": "Warrington Rylands",
       "away": "Chorley",
@@ -33066,7 +33066,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Warrington Rylands FC": {
+    "Warrington Rylands": {
       "round": "Second Round Qualifying",
       "home": "Warrington Rylands",
       "away": "Chorley",
@@ -33076,34 +33076,6 @@
       "venue": {
         "ground": "The Quickline Logistics Arena",
         "postcode": "WA3 7RZ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "South Liverpool AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Warrington Town",
-      "away": "South Liverpool",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Cal Delivery Stadium",
-        "postcode": "WA4 2RS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Warrington Town": {
-      "round": "Second Round Qualifying",
-      "home": "Warrington Town",
-      "away": "South Liverpool",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Cal Delivery Stadium",
-        "postcode": "WA4 2RS",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
@@ -33122,21 +33094,7 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "South Liverpool": {
-      "round": "Second Round Qualifying",
-      "home": "Warrington Town",
-      "away": "South Liverpool",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Cal Delivery Stadium",
-        "postcode": "WA4 2RS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "South Liverpool FC": {
+    "South Liverpool AFC": {
       "round": "Second Round Qualifying",
       "home": "Warrington Town",
       "away": "South Liverpool",
@@ -33164,63 +33122,49 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Weston-super-Mare FC": {
+    "South Liverpool": {
       "round": "Second Round Qualifying",
-      "home": "Weston-super-Mare",
-      "away": "Wimborne Town",
+      "home": "Warrington Town",
+      "away": "South Liverpool",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Woodspring Stadium",
-        "postcode": "BS24 9AA",
+        "ground": "Cal Delivery Stadium",
+        "postcode": "WA4 2RS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Warrington Town": {
+      "round": "Second Round Qualifying",
+      "home": "Warrington Town",
+      "away": "South Liverpool",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Cal Delivery Stadium",
+        "postcode": "WA4 2RS",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "South Liverpool FC": {
+      "round": "Second Round Qualifying",
+      "home": "Warrington Town",
+      "away": "South Liverpool",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Cal Delivery Stadium",
+        "postcode": "WA4 2RS",
         "source": "https://fchd.info/maps/GAZ.htm",
         "verification": "fchd-gazetteer"
       }
     },
     "Wimborne Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Weston-super-Mare",
-      "away": "Wimborne Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Woodspring Stadium",
-        "postcode": "BS24 9AA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Wimborne Town AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Weston-super-Mare",
-      "away": "Wimborne Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Woodspring Stadium",
-        "postcode": "BS24 9AA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Weston-super-Mare AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Weston-super-Mare",
-      "away": "Wimborne Town",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Woodspring Stadium",
-        "postcode": "BS24 9AA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Weston-super-Mare": {
       "round": "Second Round Qualifying",
       "home": "Weston-super-Mare",
       "away": "Wimborne Town",
@@ -33248,21 +33192,63 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Witham Town FC": {
+    "Weston-super-Mare": {
       "round": "Second Round Qualifying",
-      "home": "Witham Town",
-      "away": "St Albans City",
+      "home": "Weston-super-Mare",
+      "away": "Wimborne Town",
       "date": "2026-09-19",
       "kickoff": "15:00",
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
       "venue": {
-        "ground": "Simarco Stadium",
-        "postcode": "CM8 1UN",
-        "source": "Human-confirmed current groundshare + validated ground candidate",
-        "verification": "clubfinder-canonical"
+        "ground": "Woodspring Stadium",
+        "postcode": "BS24 9AA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       }
     },
-    "St Albans City": {
+    "Wimborne Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Weston-super-Mare",
+      "away": "Wimborne Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Woodspring Stadium",
+        "postcode": "BS24 9AA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Weston-super-Mare FC": {
+      "round": "Second Round Qualifying",
+      "home": "Weston-super-Mare",
+      "away": "Wimborne Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Woodspring Stadium",
+        "postcode": "BS24 9AA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Weston-super-Mare AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Weston-super-Mare",
+      "away": "Wimborne Town",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Woodspring Stadium",
+        "postcode": "BS24 9AA",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      }
+    },
+    "Witham Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Witham Town",
       "away": "St Albans City",
@@ -33290,7 +33276,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Witham Town AFC": {
+    "Witham Town": {
       "round": "Second Round Qualifying",
       "home": "Witham Town",
       "away": "St Albans City",
@@ -33304,7 +33290,21 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Witham Town": {
+    "St Albans City": {
+      "round": "Second Round Qualifying",
+      "home": "Witham Town",
+      "away": "St Albans City",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Simarco Stadium",
+        "postcode": "CM8 1UN",
+        "source": "Human-confirmed current groundshare + validated ground candidate",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Witham Town FC": {
       "round": "Second Round Qualifying",
       "home": "Witham Town",
       "away": "St Albans City",
@@ -33332,63 +33332,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Mulbarton Wanderers FC": {
-      "round": "Second Round Qualifying",
-      "home": "Woodford Town",
-      "away": "Mulbarton Wanderers",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Ashton's Stadium",
-        "postcode": "IG8 8AA",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
     "Mulbarton Wanderers AFC": {
-      "round": "Second Round Qualifying",
-      "home": "Woodford Town",
-      "away": "Mulbarton Wanderers",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Ashton's Stadium",
-        "postcode": "IG8 8AA",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Woodford Town FC": {
-      "round": "Second Round Qualifying",
-      "home": "Woodford Town",
-      "away": "Mulbarton Wanderers",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Ashton's Stadium",
-        "postcode": "IG8 8AA",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Mulbarton Wanderers": {
-      "round": "Second Round Qualifying",
-      "home": "Woodford Town",
-      "away": "Mulbarton Wanderers",
-      "date": "2026-09-19",
-      "kickoff": "15:00",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "venue": {
-        "ground": "Ashton's Stadium",
-        "postcode": "IG8 8AA",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Woodford Town AFC": {
       "round": "Second Round Qualifying",
       "home": "Woodford Town",
       "away": "Mulbarton Wanderers",
@@ -33416,7 +33360,63 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Dorking Wanderers FC": {
+    "Mulbarton Wanderers": {
+      "round": "Second Round Qualifying",
+      "home": "Woodford Town",
+      "away": "Mulbarton Wanderers",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Ashton's Stadium",
+        "postcode": "IG8 8AA",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Mulbarton Wanderers FC": {
+      "round": "Second Round Qualifying",
+      "home": "Woodford Town",
+      "away": "Mulbarton Wanderers",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Ashton's Stadium",
+        "postcode": "IG8 8AA",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Woodford Town FC": {
+      "round": "Second Round Qualifying",
+      "home": "Woodford Town",
+      "away": "Mulbarton Wanderers",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Ashton's Stadium",
+        "postcode": "IG8 8AA",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Woodford Town AFC": {
+      "round": "Second Round Qualifying",
+      "home": "Woodford Town",
+      "away": "Mulbarton Wanderers",
+      "date": "2026-09-19",
+      "kickoff": "15:00",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "venue": {
+        "ground": "Ashton's Stadium",
+        "postcode": "IG8 8AA",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      }
+    },
+    "Dorking Wanderers": {
       "round": "Second Round Qualifying",
       "home": "Southall",
       "away": "Dorking Wanderers",
@@ -33430,7 +33430,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Dorking Wanderers": {
+    "Southall AFC": {
       "round": "Second Round Qualifying",
       "home": "Southall",
       "away": "Dorking Wanderers",
@@ -33472,7 +33472,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Southall AFC": {
+    "Dorking Wanderers AFC": {
       "round": "Second Round Qualifying",
       "home": "Southall",
       "away": "Dorking Wanderers",
@@ -33486,7 +33486,7 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Dorking Wanderers AFC": {
+    "Dorking Wanderers FC": {
       "round": "Second Round Qualifying",
       "home": "Southall",
       "away": "Dorking Wanderers",
@@ -98744,7 +98744,7 @@
   "second_qualifying_sync": {
     "source": "Football Web Pages",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-    "synced_at": "2026-09-21T11:27:38.741268+00:00",
+    "synced_at": "2026-09-21T12:30:08.310602+00:00",
     "resolved_fixtures": 14,
     "pending_replay_slots": 0,
     "total_fixtures": 80,
