@@ -22,6 +22,12 @@ completed = r'''function completedResultVenue(result){
   if((rv.ground&&!/TBC/i.test(String(rv.ground)))||(rv.postcode&&!/TBC/i.test(String(rv.postcode)))){
     return {ground:rv.ground||'Venue TBC',postcode:rv.postcode||'Postcode TBC',lat:rv.lat,lon:rv.lon,verification:rv.verification||'verified'};
   }
+  const pairKey=[String(result.home||'').toLowerCase(),String(result.away||'').toLowerCase()].join('|');
+  const knownHistorical={
+    'petts wood & holmesdale|windsor & eton':{ground:'The New Inn Stadium',postcode:'BR2 8HQ',lat:51.384,lon:0.022}
+  };
+  const kh=knownHistorical[pairKey];
+  if(kh)return {...kh,verification:'verified'};
   const ov=VERIFIED_MATCH_VENUE_OVERRIDES[result.home]||VERIFIED_MATCH_VENUE_OVERRIDES[(candidateClubByName(result.home)||{}).name]||null;
   if(ov)return {ground:ov.ground||'Venue TBC',postcode:ov.postcode||'Postcode TBC',lat:ov.lat,lon:ov.lon,verification:'verified'};
   const homeClub=candidateClubByName(result.home);
@@ -71,6 +77,7 @@ for marker in (
     "function completedResultVenue(result){",
     "const rv=result.venue||{};",
     "const homeClub=candidateClubByName(result.home);",
+    "'petts wood & holmesdale|windsor & eton':{ground:'The New Inn Stadium',postcode:'BR2 8HQ'",
 ):
     if marker not in text:
         raise SystemExit(f'ABORT: historical venue consumption marker missing: {marker}')
