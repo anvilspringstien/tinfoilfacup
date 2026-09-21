@@ -71,6 +71,7 @@ for f in values:
     home=f.get('home') or ''
     away=f.get('away') or ''
     if not home:continue
+    if f.get('conditional') or re.search(r'\s+or\s+',home,re.I) or re.search(r'\s+or\s+',away,re.I):continue
     fixture_key=(norm(home),norm(away),f.get('date',''),f.get('round',''))
     v=f.get('venue') or {}
     if v.get('postcode') and not re.search(r'TBC',str(v.get('postcode')),re.I):

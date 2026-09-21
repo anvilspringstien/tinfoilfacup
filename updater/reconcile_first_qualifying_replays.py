@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Final combined conditional-boundary verification trigger.
 """Reconcile all completed 2026-27 FA Cup First Qualifying replays.
 
 The 31 replay results below are the verified 7-9 September replay slate from
@@ -153,8 +154,12 @@ def resolve_conditional_side(side,winners):
 
 
 def second_round_sources(data):
-    sources=[data.get("fixtures") or {}]; rf=data.get("round_fixtures") or {}
-    if "Second Round Qualifying" in rf:sources.append(rf["Second Round Qualifying"])
+    """Return only the canonical Second Qualifying draw, active or archived."""
+    sources=[]; rf=data.get("round_fixtures") or {}
+    if str(data.get("source_round") or "")=="Second Round Qualifying":
+        sources.append(data.get("fixtures") or {})
+    if "Second Round Qualifying" in rf:
+        sources.append(rf["Second Round Qualifying"])
     return sources
 
 
@@ -178,11 +183,15 @@ def main():
     if len(VERIFIED_REPLAYS)!=EXPECTED_REPLAYS or len(manifest_pairs)!=EXPECTED_REPLAYS:
         fail("manifest", "Replay reconciliation blocked: verified replay manifest is incomplete or duplicated", manifest_count=len(VERIFIED_REPLAYS), unique_pairs=len(manifest_pairs))
     data=json.loads(DATA.read_text(encoding="utf-8")); ties=archived_ties(data); rows=all_results(data); results=[result_from_manifest(x) for x in VERIFIED_REPLAYS]
+    active_round=str(data.get("source_round") or "")
+    later_draw_before=json.dumps(data.get("fixtures") or {},sort_keys=True) if active_round!="Second Round Qualifying" else None
     bad_pairs=[r for r in results if pair_key(r["home"],r["away"]) not in ties]
     if bad_pairs: fail("pair_match","Replay reconciliation blocked: replay pair absent from archived First Qualifying draw",bad_pairs=[f"{r['home']} / {r['away']}" for r in bad_pairs], archived_pairs=[f"{f.get('home')} / {f.get('away')}" for f in ties.values()])
     no_draw=[r for r in results if not first_leg_is_draw(pair_key(r["home"],r["away"]),rows)]
     if no_draw: fail("draw_prerequisite","Replay reconciliation blocked: prerequisite drawn first leg missing",no_draw=[f"{r['home']} / {r['away']}" for r in no_draw])
     changed=sum(1 for result in results if merge(data,result)); winners=[r["winner"] for r in results]; resolved=resolve_next_round(data,winners)
+    if later_draw_before is not None and json.dumps(data.get("fixtures") or {},sort_keys=True)!=later_draw_before:
+        fail("round_boundary","Replay reconciliation blocked: historical First Qualifying replay winners changed a later active draw",active_round=active_round)
     unlinked=sorted(w for w in winners if not winner_in_next_round(data,w))
     if unlinked: fail("next_round","Replay reconciliation blocked: replay winners missing from Second Qualifying draw",unlinked=unlinked)
     if changed or resolved:

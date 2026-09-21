@@ -228,6 +228,9 @@ def enrich_active_venues(data):
         if not isinstance(f, dict) or not f.get("home") or valid_venue(f.get("venue")):
             continue
         home = f.get("home")
+        away = f.get("away") or ""
+        if f.get("conditional") or re.search(r"\s+or\s+", str(home), re.I) or re.search(r"\s+or\s+", str(away), re.I):
+            continue
         g = canonical.get(norm(home))
         if g:
             f["venue"] = {"ground": g.get("ground") or "Ground TBC", "postcode": g.get("postcode"), "source": g.get("source") or "protected Clubfinder GROUNDS", "verification": "clubfinder-canonical"}
