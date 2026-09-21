@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Final combined conditional-boundary verification trigger.
 """Reconcile all completed 2026-27 FA Cup First Qualifying replays.
 
 The 31 replay results below are the verified 7-9 September replay slate from
