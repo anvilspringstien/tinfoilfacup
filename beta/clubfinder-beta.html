@@ -185,14 +185,23 @@ let LIVE_DATA_STATUS={state:'embedded',updated_at:EMBEDDED_COMPETITION_DATA.upda
 function liveLookup(section,name){
   if(!LIVE_COMPETITION_DATA||!LIVE_COMPETITION_DATA[section])return null;
   const obj=LIVE_COMPETITION_DATA[section],raw=String(name||''),short=raw.replace(/\s+(FC|AFC|CFC)$/,'');
-  return obj[raw]||obj[short]||null;
+  const direct=obj[raw]||obj[short]||null;
+  if(direct)return direct;
+
+  // Competition sources and Clubfinder do not always punctuate club names the
+  // same way (for example "Weston-super-Mare" vs "Weston Super Mare FC").
+  // Fall back to the same canonical identity comparison used by the journey
+  // engine so healthy live results cannot be hidden by punctuation alone.
+  const target=canonicalClubKey(raw);
+  if(!target)return null;
+  for(const [key,value] of Object.entries(obj)){
+    if(canonicalClubKey(key)===target)return value;
+  }
+  return null;
 }
 
 function liveResultHistory(name){
-  if(!LIVE_COMPETITION_DATA)return [];
-  const section=LIVE_COMPETITION_DATA.result_history||{};
-  const raw=String(name||''), short=raw.replace(/\s+(FC|AFC|CFC)$/,'');
-  const arr=section[raw]||section[short]||[];
+  const arr=liveLookup('result_history',name)||[];
   return Array.isArray(arr)?arr:[];
 }
 function applyLiveRoundDates(){
