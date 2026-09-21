@@ -39,9 +39,11 @@ const assertions=`
   if(allowActiveAdvance) console.log('ACTIVE RESULT ADVANCE MODE: enabled');
   const canonicalRecords=src=>Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
   const canonicalFixtures=canonicalRecords(canonicalCompetition.fixtures);
+  const archivedSecondQFixtures=canonicalRecords((canonicalCompetition.round_fixtures||{})['Second Round Qualifying']);
+  const canonicalSecondQFixtures=[...canonicalFixtures,...archivedSecondQFixtures];
   const canonicalHistory=canonicalRecords(canonicalCompetition.result_history||canonicalCompetition.results||[]);
   const canonicalSecondQFixture=(club,label)=>{
-    const f=canonicalFixtures.find(x=>/Second Round Qualifying/i.test(x.round||canonicalCompetition.source_round||'')&&(same(x.home,club.name)||same(x.away,club.name)));
+    const f=canonicalSecondQFixtures.find(x=>/Second Round Qualifying/i.test(x.round||'Second Round Qualifying')&&(same(x.home,club.name)||same(x.away,club.name)));
     if(!f)throw new Error(label+': canonical Second Round Qualifying fixture missing for '+club.name);
     return f;
   };
