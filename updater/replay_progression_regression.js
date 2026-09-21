@@ -14,7 +14,10 @@ if(!html.includes("if(progressionRound==='First Round Qualifying')nextName='Seco
 if(!html.includes('const compatible=a.filter(x=>{'))fail('Conditional draw abbreviation resolver is missing');
 
 const results=competition.results||{};
-const next=competition.fixtures||{};
+const fixtureValues=src=>Array.isArray(src)?src:Object.values(src||{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(v=>v&&typeof v==='object');
+const activeFixtures=fixtureValues(competition.fixtures);
+const archivedSecondQ=fixtureValues((competition.round_fixtures||{})['Second Round Qualifying']);
+const secondQFixtures=[...activeFixtures,...archivedSecondQ].filter(f=>f.round==='Second Round Qualifying'||(!f.round&&competition.source_round==='Second Round Qualifying'));
 const replayCases=[
   {winner:'Exmouth Town', opponent:'Banbury United', fixtureKeys:['Exmouth Town']},
   {winner:'Emley AFC', opponent:'Bishop Auckland', fixtureKeys:['Emley AFC','Emley']},
@@ -26,15 +29,15 @@ for(const c of replayCases){
   const replay=candidates.map(([,r])=>r).find(r=>/First Round Qualifying Replay$/i.test(String(r&&r.round||''))&&same(r.winner,c.winner));
   if(!replay)fail(c.winner+': decisive First Round Qualifying Replay result missing');
   if(![replay.home,replay.away].some(x=>same(x,c.opponent)))fail(c.winner+': replay opponent mismatch');
-  const fixture=c.fixtureKeys.map(k=>next[k]).find(Boolean);
-  if(!fixture)fail(c.winner+': published next fixture missing');
+  const fixture=secondQFixtures.find(f=>same(f.home,c.winner)||same(f.away,c.winner));
+  if(!fixture)fail(c.winner+': published Second Round Qualifying fixture missing');
   if(fixture.round!=='Second Round Qualifying')fail(c.winner+': next fixture is not Second Round Qualifying');
   const sides=String(fixture.home||'')+' | '+String(fixture.away||'');
   const winnerRoot=canon(c.winner).split(' ')[0];
   if(!canon(sides).includes(winnerRoot))fail(c.winner+': next fixture does not contain winner identity');
 }
 
-const frome=next['Frome Town'];
+const frome=secondQFixtures.find(f=>same(f.home,'Frome Town')||same(f.away,'Frome Town'));
 if(!frome||frome.round!=='Second Round Qualifying')fail('Non-replay control: Frome Town next fixture missing or wrong round');
 
 console.log('REPLAY PROGRESSION REGRESSION: PASS');
