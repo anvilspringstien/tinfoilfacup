@@ -120,6 +120,16 @@ def main():
     data = json.loads(COMP.read_text(encoding="utf-8"))
     groups = canonical_active_groups(data)
     sources = [source for source, _count in groups]
+
+    # Exact regression anchors can legitimately belong to an archived round
+    # after the active draw advances. Build the same verified semantic source
+    # set from archived round fixtures without promoting them back to active.
+    historical_sources = []
+    for archived in (data.get("round_fixtures") or {}).values():
+        historical_sources.extend(
+            source for source, _count in canonical_active_groups(data, archived)
+        )
+
     all_rows = list(walk_dicts(data))
     changed = 0
     matched_copies = 0
