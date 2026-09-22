@@ -257,7 +257,12 @@ const ROUND_META={
 
 function drawAlternatives(side){return String(side||'').split(/\s+or\s+/i).map(x=>x.trim()).filter(Boolean)}
 function drawIdentityCompatible(a,b){
-  const ak=canonicalClubKey(a),bk=canonicalClubKey(b);
+  // The FA's conditional draw uses these abbreviated names. Restrict the
+  // expansion to draw matching; do not weaken ordinary club identity checks.
+  const drawAlias={ 'hamp and rich':'hampton and richmond borough',
+                    'weston sm':'weston super mare' };
+  const aKey=canonicalClubKey(a),bKey=canonicalClubKey(b);
+  const ak=drawAlias[aKey]||aKey,bk=drawAlias[bKey]||bKey;
   if(!ak||!bk)return false;
   if(ak===bk||ak.startsWith(bk+' ')||bk.startsWith(ak+' '))return true;
   const at=ak.split(' '),bt=bk.split(' ');
