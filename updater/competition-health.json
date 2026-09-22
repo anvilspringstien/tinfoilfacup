@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-22T22:25:18.757257+01:00",
+  "checked_at": "2026-09-22T23:26:01.458894+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -12,15 +12,14 @@
   "counts": {
     "known_fixtures": 191,
     "complete": 137,
-    "awaiting_grace": 13,
-    "overdue": 0,
+    "awaiting_grace": 0,
+    "overdue": 13,
     "upcoming": 41,
     "critical": 0
   },
   "critical": [],
   "fixture_local_health": true,
-  "overdue": [],
-  "awaiting_grace": [
+  "overdue": [
     {
       "round": "Second Round Qualifying Replay",
       "home": "Chippenham Town",
@@ -165,6 +164,7 @@
       "deadline": "2026-09-22T22:45:00+01:00"
     }
   ],
+  "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
