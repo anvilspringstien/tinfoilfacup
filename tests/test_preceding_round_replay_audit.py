@@ -56,6 +56,19 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         self.assertFalse(report["replay_candidates"])
         self.assertEqual(len(report["blocked"]), 1)
 
+    def test_real_fwp_wimborne_penalty_score_discrepancy_quarantined(self):
+        data = fixture_data()
+        obs = {"fixture": data["round_fixtures"]["Second Round Qualifying"]["Weston-super-Mare"],
+               "observation": {"home": "Wimborne Town", "away": "Weston-super-Mare",
+                               "home_score": 3, "away_score": 2,
+                               "winner": "Wimborne Town", "decision": "penalties",
+                               "status": "FT", "date": "2026-09-22"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
+            report = audit.audit(data, "<html/>")
+        self.assertFalse(report["replay_candidates"])
+        self.assertEqual(len(report["blocked"]), 1)
+        self.assertIn("independent verification", report["blocked"][0]["reason"])
+
     def test_missing_archive_fails_closed(self):
         data = fixture_data()
         data["round_fixtures"] = {}
