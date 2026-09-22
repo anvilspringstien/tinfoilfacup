@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Read-only preceding-round replay candidate audit; never writes competition.json.
+
+Run after active draw advances, when the normal active-round scanner can no
+longer observe replays from the archived preceding round. This script reports
+source observations and classifies them against archived ties and chronology.
+It does NOT enable publication.
+"""
+import argparse
+import json
+from collections import Counter
+from pathlib import Path
+
+import auto_round_results as scan
+from round_state_engine import classify_observation, pair_key, base_round
+
+ROOT = Path(__file__).resolve().parents[1]
+ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifying",
+          "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying"]
+
+
+def audit(data, source_html, live_html="", source_url=""):
+    current = base_round(data.get("source_round"))
+    if current not in ROUNDS or ROUNDS.index(current) == 0:
+        raise ValueError("no eligible preceding qualifying round")
+    preceding = ROUNDS[ROUNDS.index(current) - 1]
+    archived = scan.fixture_values((data.get("round_fixtures") or {}).get(preceding) or {})
+    known = list({pair_key(f): dict(f, round=preceding) for f in archived}.values())
+    if not known:
+        raise ValueError("preceding-round archive missing; fail closed")
+    observations = scan.dedupe_observations(
+        scan.parse_fwp_observations(source_html, known, source_url)
+        + (scan.parse_fwp_observations(live_html, known, scan.FWP_LIVE_URL) if live_html else [])
+    )
+    history = scan.history_rows(data)
+    results, blocked, duplicates, events = [], [], [], []
+    for item in observations:
+        obs = item["observation"]
+        try:
+            outcome = classify_observation(item["fixture"], obs, history)
+        except ValueError as exc:
+            blocked.append({"home": obs["home"], "away": obs["away"],
+                            "date": obs["date"], "reason": str(exc)})
+            continue
+        kind = outcome["kind"]
+        if kind == "result":
+            row = outcome["result"]
+            if row.get("round", "").endswith(" Replay"):
+                results.append(row)
+                history.append(row)
+            else:
+                blocked.append({"home": obs["home"], "away": obs["away"],
+                                "reason": "new non-replay result in archived round"})
+        elif kind == "duplicate":
+            duplicates.append(outcome["result"])
+        else:
+            events.append(outcome["event"])
+    return {"active_round": current, "archived_round": preceding,
+            "archived_ties": len(known), "observations": len(observations),
+            "replay_candidates": results, "already_recorded": len(duplicates),
+            "blocked": blocked, "events": len(events),
+            "production_mutation": False}
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source-html", help="saved authoritative FWP round HTML for offline regression")
+    parser.add_argument("--live-html", help="optional saved live-page HTML")
+    parser.add_argument("--fetch", action="store_true", help="fetch FWP archived-round page")
+    args = parser.parse_args()
+    data = json.loads((ROOT / "competition.json").read_text(encoding="utf-8"))
+    current = base_round(data.get("source_round"))
+    if current not in ROUNDS or ROUNDS.index(current) == 0:
+        raise SystemExit("PRECEDING REPLAY AUDIT: no preceding qualifying round")
+    preceding = ROUNDS[ROUNDS.index(current) - 1]
+    url = scan.fwp_round_url(preceding)
+    if args.fetch:
+        raw = scan.fetch(url)
+        scan.validate_fwp_round_page(raw, preceding, url)
+        live = scan.fetch(scan.FWP_LIVE_URL)
+    elif args.source_html:
+        raw = Path(args.source_html).read_text(encoding="utf-8")
+        live = Path(args.live_html).read_text(encoding="utf-8") if args.live_html else ""
+    else:
+        parser.error("provide --fetch or --source-html")
+    result = audit(data, raw, live, url)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    if result["blocked"]:
+        raise SystemExit("PRECEDING REPLAY AUDIT: blocked observations; no production changes")
+
+
+if __name__ == "__main__":
+    main()
