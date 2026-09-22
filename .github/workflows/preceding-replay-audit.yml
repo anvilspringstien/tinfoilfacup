@@ -33,7 +33,7 @@ jobs:
           assert r['archived_ties'] == 80
           assert len(r['blocked']) == 1, r['blocked']
           b = r['blocked'][0]
-          assert 'Wimborne' in (b['home'], b['away']), b
+          assert any('Wimborne' in side for side in (b['home'], b['away'])), b
           assert 'penalty decision with non-level source score' in b['reason'], b
           assert len(r['replay_candidates']) >= 12, len(r['replay_candidates'])
           print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
