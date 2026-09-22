@@ -8,7 +8,6 @@ It does NOT enable publication.
 """
 import argparse
 import json
-from collections import Counter
 from pathlib import Path
 
 import auto_round_results as scan
@@ -36,6 +35,15 @@ def audit(data, source_html, live_html="", source_url=""):
     results, blocked, duplicates, events = [], [], [], []
     for item in observations:
         obs = item["observation"]
+        # FWP can encode a penalty decision with a scoreline that disagrees
+        # with the clubs' official match report (Wimborne: 3-2 vs 1-1 AET,
+        # 4-3 penalties). Never silently turn that into a 90/120-minute win.
+        if (str(obs.get("decision") or "").lower() == "penalties"
+                and obs.get("home_score") != obs.get("away_score")):
+            blocked.append({"home": obs["home"], "away": obs["away"],
+                            "date": obs.get("date", ""),
+                            "reason": "penalty decision with non-level source score: independent verification required"})
+            continue
         try:
             outcome = classify_observation(item["fixture"], obs, history)
         except ValueError as exc:
