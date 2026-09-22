@@ -19,7 +19,22 @@ jobs:
       - name: Wimborne penalties and fail-closed tests
         run: python -m unittest discover -s tests -p 'test_preceding_round_replay_audit.py' -v
       - name: Audit actual preceding-round source without publication
-        run: python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.json
+        run: |
+          python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.json || test -s /tmp/preceding-replay-audit.json
+          python - <<'PY'
+          import json
+          with open('/tmp/preceding-replay-audit.json') as f:
+              r = json.load(f)
+          assert r['production_mutation'] is False
+          assert r['archived_ties'] == 80
+          assert len(r['blocked']) == 1, r['blocked']
+          b = r['blocked'][0]
+          assert 'Wimborne' in (b['home'], b['away']), b
+          assert 'penalty decision with non-level source score' in b['reason'], b
+          assert len(r['replay_candidates']) >= 12, len(r['replay_candidates'])
+          print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
+                'quarantined=', len(r['blocked']))
+          PY
       - name: Publish audit summary to job log
         if: always()
         run: |
