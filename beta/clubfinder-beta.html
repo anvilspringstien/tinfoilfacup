@@ -260,7 +260,11 @@ function drawIdentityCompatible(a,b){
   // The FA's conditional draw uses these abbreviated names. Restrict the
   // expansion to draw matching; do not weaken ordinary club identity checks.
   const drawAlias={ 'hamp and rich':'hampton and richmond borough',
-                    'weston sm':'weston super mare' };
+                    'weston sm':'weston super mare',
+                    'cray wands':'cray wanderers',
+                    'dag and red':'dagenham and redbridge',
+                    'win finch':'wingate and finchley',
+                    'g borough t':'gainsborough trinity' };
   const aKey=canonicalClubKey(a),bKey=canonicalClubKey(b);
   const ak=drawAlias[aKey]||aKey,bk=drawAlias[bKey]||bKey;
   if(!ak||!bk)return false;
