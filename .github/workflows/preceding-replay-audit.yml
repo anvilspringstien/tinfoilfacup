@@ -4,6 +4,8 @@ on:
     paths:
       - 'updater/audit_preceding_round_replays.py'
       - 'tests/test_preceding_round_replay_audit.py'
+      - 'tests/test_beta_conditional_draw_alias.js'
+      - 'beta/clubfinder-beta.html'
       - '.github/workflows/preceding-replay-audit.yml'
   workflow_dispatch:
 jobs:
@@ -18,6 +20,8 @@ jobs:
           python-version: '3.11'
       - name: Wimborne penalties and fail-closed tests
         run: python -m unittest discover -s tests -p 'test_preceding_round_replay_audit.py' -v
+      - name: Hampton and Weston BETA conditional draw regression
+        run: node tests/test_beta_conditional_draw_alias.js
       - name: Audit actual preceding-round source without publication
         run: |
           python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.json || test -s /tmp/preceding-replay-audit.json
