@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-22T19:31:16.409053+01:00",
+  "checked_at": "2026-09-22T20:22:53.110705+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -12,20 +12,164 @@
   "counts": {
     "known_fixtures": 191,
     "complete": 137,
-    "awaiting_grace": 0,
+    "awaiting_grace": 13,
     "overdue": 0,
-    "upcoming": 54,
+    "upcoming": 41,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": true,
+  "fixture_local_health": false,
   "overdue": [],
-  "awaiting_grace": [],
+  "awaiting_grace": [
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Chippenham Town",
+      "away": "Yate Town",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Farnham Town",
+      "away": "Cirencester Town",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Maidstone United",
+      "away": "Cray Wanderers",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Crowborough Athletic",
+      "away": "Hampton & Richmond Borough",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Wingate & Finchley",
+      "away": "Hemel Hempstead Town",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Gainsborough Trinity",
+      "away": "Leamington",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Truro City",
+      "away": "Merthyr Town",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Braintree Town",
+      "away": "Needham Market",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Worksop Town",
+      "away": "AFC Telford United",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Farnborough",
+      "away": "Uxbridge",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Dagenham & Redbridge",
+      "away": "Waltham Abbey",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Wimborne Town",
+      "away": "Weston-super-Mare",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    },
+    {
+      "round": "Second Round Qualifying Replay",
+      "home": "Dorking Wanderers",
+      "away": "Southall",
+      "date": "2026-09-22",
+      "kickoff": "19:45",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+      "section": "replays",
+      "scheduled": "2026-09-22T19:45:00+01:00",
+      "deadline": "2026-09-22T22:45:00+01:00"
+    }
+  ],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-09-22T07:26:17.872645+00:00",
+    "synced_at": "2026-09-22T19:22:46.613069+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
