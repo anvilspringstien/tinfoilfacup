@@ -1,0 +1,28 @@
+name: Guarded preceding-round replay audit tests
+on:
+  pull_request:
+    paths:
+      - 'updater/audit_preceding_round_replays.py'
+      - 'tests/test_preceding_round_replay_audit.py'
+      - '.github/workflows/preceding-replay-audit.yml'
+  workflow_dispatch:
+jobs:
+  read-only-regressions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Wimborne penalties and fail-closed tests
+        run: python -m unittest discover -s tests -p 'test_preceding_round_replay_audit.py' -v
+      - name: Audit actual preceding-round source without publication
+        run: python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.json
+      - name: Publish audit summary to job log
+        if: always()
+        run: |
+          if test -f /tmp/preceding-replay-audit.json; then
+            python -m json.tool /tmp/preceding-replay-audit.json
+          fi
