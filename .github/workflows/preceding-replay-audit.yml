@@ -39,6 +39,9 @@ jobs:
           print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
                 'quarantined=', len(r['blocked']))
           PY
+      - name: Prove protected production files were not modified
+        if: always()
+        run: git diff --exit-code -- competition.json clubfinder.html
       - name: Publish audit summary to job log
         if: always()
         run: |
