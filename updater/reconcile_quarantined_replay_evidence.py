@@ -9,14 +9,15 @@ import sys
 from pathlib import Path
 
 TRUSTED = {"thefa.com": "fa", "wimbornetownfc.co.uk": "club", "wsmafc.co.uk": "club", "southwestsportsnews.com": "regional_news"}
-def reconcile(blocked, evidence):
+def reconcile(blocked, evidence, trusted_domains=None):
     if "penalty decision with non-level source score" not in blocked.get("reason", ""):
         raise ValueError("unsupported quarantine reason")
     target = {blocked.get("home", "").casefold(), blocked.get("away", "").casefold()}
+    trusted = TRUSTED if trusted_domains is None else {host: 'reviewed_source' for host in trusted_domains}
     accepted = []
     for item in evidence:
         host = item.get("domain", "").lower().removeprefix("www.")
-        if host not in TRUSTED or not any(item.get("url", "").startswith(prefix)
+        if host not in trusted or not any(item.get("url", "").startswith(prefix)
                                          for prefix in ("https://" + host + "/", "https://www." + host + "/",
                                                         "https://mail." + host + "/")):
             continue
