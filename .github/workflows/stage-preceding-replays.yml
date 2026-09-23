@@ -67,7 +67,7 @@ jobs:
           python updater/guard_archived_replay_promotion.py --audit /tmp/archived-replay-audit.json > /tmp/replay-promotion-readiness.json
           python -m json.tool /tmp/replay-promotion-readiness.json
       - name: Stage real preceding-round replay candidates in memory
-        run: python updater/stage_preceding_replay_candidates.py --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
+        run: python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
       - name: Simulate full candidate state in isolated workspace
         run: |
           set -euo pipefail
