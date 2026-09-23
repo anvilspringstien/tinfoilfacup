@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Stage archived replay candidates in memory; never publish production data."""
+import argparse
 import copy
 import json
 from pathlib import Path
@@ -67,6 +68,13 @@ def stage(data, report):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--candidate-output', type=Path, help='Write candidate ONLY to an isolated non-repository path')
+    args = parser.parse_args()
+    if args.candidate_output:
+        destination = args.candidate_output.resolve()
+        if ROOT.resolve() == destination or ROOT.resolve() in destination.parents:
+            raise SystemExit('Candidate output must be outside the repository')
     data = json.loads((ROOT / "competition.json").read_text(encoding="utf-8"))
     current = base_round(data.get("source_round"))
     if current not in audit.ROUNDS or audit.ROUNDS.index(current) == 0:
@@ -77,7 +85,9 @@ def main():
     scan.validate_fwp_round_page(raw, previous, url)
     live = scan.fetch(scan.FWP_LIVE_URL)
     report = audit.audit(data, raw, live, url)
-    summary, _ = stage(data, report)
+    summary, candidate = stage(data, report)
+    if args.candidate_output:
+        args.candidate_output.write_text(json.dumps(candidate, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print(json.dumps(summary, indent=2))
     # Deliberately no --publish mode or write to competition.json.
 
