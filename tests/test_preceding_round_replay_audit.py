@@ -69,6 +69,26 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         self.assertEqual(len(report["blocked"]), 1)
         self.assertIn("independent verification", report["blocked"][0]["reason"])
 
+    def test_already_recorded_replay_is_a_duplicate(self):
+        data = fixture_data()
+        recorded = {"round": "Second Round Qualifying Replay",
+                    "home": "Wimborne Town", "away": "Weston-super-Mare",
+                    "home_score": 1, "away_score": 1,
+                    "winner": "Wimborne Town", "decision": "penalties",
+                    "status": "FT AET", "date": "2026-09-22"}
+        data["result_history"]["Wimborne Town"] = [recorded]
+        before = copy.deepcopy(data)
+        obs = {"fixture": data["round_fixtures"]["Second Round Qualifying"]["Weston-super-Mare"],
+               "observation": dict(recorded)}
+        with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
+            report = audit.audit(data, "<html/>")
+        self.assertEqual(report["observations"], 1)
+        self.assertEqual(report["already_recorded"], 1)
+        self.assertFalse(report["replay_candidates"])
+        self.assertFalse(report["blocked"])
+        self.assertFalse(report["production_mutation"])
+        self.assertEqual(data, before)
+
     def test_missing_archive_fails_closed(self):
         data = fixture_data()
         data["round_fixtures"] = {}
