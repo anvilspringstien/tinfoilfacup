@@ -1,0 +1,57 @@
+name: Guard conditional draw and penalty display
+on:
+  pull_request:
+    paths:
+      - 'updater/patch_clubfinder_replay_progression.py'
+      - 'updater/conditional_draw_resolution_regression.js'
+      - '.github/workflows/conditional-draw-resolution.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/conditional-draw-resolution.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: competition-state-${{ github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Apply candidate UI patch in isolated checkout
+        run: python updater/patch_clubfinder_replay_progression.py
+      - name: Verify conditional draws, venues and penalties
+        run: node updater/conditional_draw_resolution_regression.js
+      - name: Existing progression and journey guards
+        run: |
+          node updater/replay_progression_regression.js
+          node updater/journey_integrity_regression.js
+          node updater/clubfinder_render_regression.js
+          node updater/production_ui_regression.js
+          python updater/competition_regression_guard.py
+      - name: Publish guarded Clubfinder UI only after all checks pass
+        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' }}
+        run: |
+          set -euo pipefail
+          git config user.name "Tin Foil FA Cup Updater"
+          git config user.email "actions@users.noreply.github.com"
+          git add clubfinder.html
+          if git diff --cached --quiet; then
+            echo "No UI change to publish"
+          else
+            git commit -m "Resolve verified third qualifying draw opponents and penalty display"
+            git pull --rebase origin main
+            node updater/conditional_draw_resolution_regression.js
+            node updater/replay_progression_regression.js
+            node updater/journey_integrity_regression.js
+            python updater/competition_regression_guard.py
+            git push origin HEAD:main
+          fi
+      - name: Verify PR does not alter protected production artifacts
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        run: git diff --name-only -- competition.json

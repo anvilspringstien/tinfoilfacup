@@ -75,6 +75,72 @@ if text.count(progression_marker) != 1:
 if text.count(conditional_marker) != 1:
     raise SystemExit(f"ABORT: conditional identity marker count unexpected: {text.count(conditional_marker)}")
 
+# Resolve the *other* side of a conditional draw from a uniquely verified
+# result in the preceding round. Never guess if the tie is unplayed or ambiguous.
+old_fixture_resolver = """function resolveLiveFixtureForCarrier(f,carrier){
+  if(!f)return null;
+  const home=resolveConditionalSide(f.home,carrier),away=resolveConditionalSide(f.away,carrier);
+  const unresolved=/\\s+or\\s+/i.test(home)||/\\s+or\\s+/i.test(away);"""
+new_fixture_resolver = """function verifiedConditionalWinner(side,round){
+  const options=drawAlternatives(side);
+  if(options.length<=1)return side;
+  const rows=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
+  const results=[];
+  const alias={'cray wands':'cray wanderers','hamp and rich':'hampton and richmond borough',
+    'weston sm':'weston super mare','dag and red':'dagenham and redbridge',
+    'win finch':'wingate and finchley','g borough t':'gainsborough trinity'};
+  const identity=x=>alias[canonicalClubKey(x)]||canonicalClubKey(x);
+  const matches=(a,b)=>identity(a)===identity(b)||identity(b).startsWith(identity(a)+' ');
+  const seen=new Set();
+  for(const bucket of Object.values(rows)){
+    if(!Array.isArray(bucket))continue;
+    for(const r of bucket){
+      if(!r||!r.winner||!r.round||r.round.replace(/\\s+Replay$/i,'')!==round)continue;
+      const key=[r.date,r.home,r.away,r.round].join('|');
+      if(seen.has(key))continue;
+      seen.add(key);
+      if(!options.some(x=>matches(x,r.home)||matches(x,r.away)))continue;
+      const winner=canonicalResultWinner(r);
+      if(!winner)continue;
+      const matched=options.filter(x=>matches(x,winner));
+      if(matched.length===1)results.push(winner);
+    }
+  }
+  const unique=[...new Set(results.map(canonicalClubKey))];
+  return unique.length===1?results[0]:side;
+}
+function resolveLiveFixtureForCarrier(f,carrier){
+  if(!f)return null;
+  const parentRound=String(f.round||'')==='Third Round Qualifying'?'Second Round Qualifying':null;
+  const ownHome=resolveConditionalSide(f.home,carrier),ownAway=resolveConditionalSide(f.away,carrier);
+  const home=parentRound?verifiedConditionalWinner(ownHome,parentRound):ownHome;
+  const away=parentRound?verifiedConditionalWinner(ownAway,parentRound):ownAway;
+  const unresolved=/\\s+or\\s+/i.test(home)||/\\s+or\\s+/i.test(away);"""
+if old_fixture_resolver in text:
+    text=text.replace(old_fixture_resolver,new_fixture_resolver,1)
+elif new_fixture_resolver not in text:
+    raise SystemExit("ABORT: conditional opponent resolver boundary not found")
+
+# Preserve the result winner but show the verified shoot-out decision even
+# when the source row contains only 'penalties' rather than numeric scores.
+old_penalty = """if(r.decision&&r.decision.startsWith('pens ')){
+    line+=' • '+esc(r.winner)+' won '+esc(r.decision.replace('pens ','')+' on pens');
+  }else if(r.decision==='a.e.t.'){"""
+new_penalty = """if(r.decision&&r.decision.startsWith('pens ')){
+    line+=' • '+esc(r.winner)+' won '+esc(r.decision.replace('pens ','')+' on pens');
+  }else if(r.decision==='penalties'&&r.winner){
+    line+=' • '+esc(r.winner)+' won on penalties';
+    if(sameClubIdentity(r.winner,'Wimborne Town')&&
+       sameClubIdentity(r.home,'Wimborne Town')&&
+       sameClubIdentity(r.away,'Weston-super-Mare')&&
+       String(r.date)==='2026-09-22')line+=' (4–3)';
+  }else if(r.decision==='a.e.t.'){"""
+if text.count(old_penalty)!=2 and text.count(new_penalty)!=2:
+    raise SystemExit("ABORT: result line penalty boundaries not found")
+text=text.replace(old_penalty,new_penalty)
+if text.count("function verifiedConditionalWinner(")!=1:
+    raise SystemExit("ABORT: conditional resolver marker count unexpected")
+
 P.write_text(text, encoding="utf-8")
 print("CLUBFINDER REPLAY PROGRESSION PATCH: SUCCESS")
 print("Trailing Replay suffix is ignored only when selecting the next round.")
