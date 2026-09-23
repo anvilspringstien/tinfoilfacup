@@ -172,6 +172,30 @@ elif new_kickoff not in text:
 if text.count("const distinct=[...new Map(")!=1:
     raise SystemExit("ABORT: unique fixture lookup marker missing")
 
+# Resolve each conditional side against independently verified current results as
+# well as chronological history; never infer an unresolved replay winner.
+old_rows = """  const rows=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
+  const results=[];"""
+new_rows = """  const rows=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
+  const verifiedCurrent=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.results)||{};
+  const results=[];"""
+if old_rows in text:
+    text=text.replace(old_rows,new_rows,1)
+elif new_rows not in text:
+    raise SystemExit("ABORT: verified result lookup boundary missing")
+old_loop = """  for(const bucket of Object.values(rows)){
+    if(!Array.isArray(bucket))continue;
+    for(const r of bucket){"""
+new_loop = """  for(const bucket of [...Object.values(rows),Object.values(verifiedCurrent)]){
+    if(!Array.isArray(bucket))continue;
+    for(const r of bucket){"""
+if old_loop in text:
+    text=text.replace(old_loop,new_loop,1)
+elif new_loop not in text:
+    raise SystemExit("ABORT: verified result loop boundary missing")
+# The same verified 22 September replay can be represented under several
+# club aliases. The existing date/participants/round deduplication remains.
+
 P.write_text(text, encoding="utf-8")
 print("CLUBFINDER REPLAY PROGRESSION PATCH: SUCCESS")
 print("Trailing Replay suffix is ignored only when selecting the next round.")
