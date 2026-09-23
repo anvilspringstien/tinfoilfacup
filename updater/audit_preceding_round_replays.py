@@ -22,7 +22,7 @@ def archived_replay_source(preceding):
 
 
 def validate_archived_replay_page(raw, preceding, url):
-    marker = rf"Fixtures/Results,\\s*{re.escape(scan.fwp_round_label(preceding))} Replay\\s*,\\s*20\\d{{2}}-20\\d{{2}}"
+    marker = rf"Fixtures/Results,\s*{re.escape(scan.fwp_round_label(preceding))} Replay\s*,\s*20\d{{2}}-20\d{{2}}"
     if not re.search(marker, scan.clean(raw), re.I):
         raise SystemExit("ARCHIVED REPLAY SOURCE FAILURE: expected dedicated replay page: " + url)
 
