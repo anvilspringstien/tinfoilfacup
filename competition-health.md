@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **23/09/2026, 22:26:47 BST**
+Last checked: **23/09/2026, 23:26:14 BST**
 
 ## Chronology coverage
 
@@ -14,8 +14,8 @@ Last checked: **23/09/2026, 22:26:47 BST**
 ## Fixture health
 
 - 🟢 Played fixtures with results: **137**
-- 🟡 Recently played / grace period: **1**
-- 🔴 Results requiring confirmation: **0**
+- 🟡 Recently played / grace period: **0**
+- 🔴 Results requiring confirmation: **1**
 - ⚪ Upcoming / incomplete-date fixtures: **40**
 
 ## 🟢 Competition chronology healthy
@@ -25,3 +25,7 @@ Preliminary and First Qualifying chronology is preserved, the active **Third Rou
 ## Conditional active-round slots
 
 11 unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.
+
+## Results requiring confirmation
+
+- **Exmouth Town v Thame United** — Second Round Qualifying Replay — 2026-09-23 • 19:45
