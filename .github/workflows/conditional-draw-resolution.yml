@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/conditional-draw-resolution.yml'
+      - 'updater/patch_clubfinder_replay_progression.py'
   workflow_dispatch:
 permissions:
   contents: write
