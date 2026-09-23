@@ -17,7 +17,7 @@ class GenericRetrievalTests(unittest.TestCase):
     def test_arbitrary_fixture_with_two_publishers(self):
         pages = {s["url"]: HTML for s in SOURCES}
         rows = retrieve([FIXTURE], {KEY: SOURCES}, lambda url: pages[url])
-        self.assertEqual(rows[0]["reconciliation"]["status"], "independently_verified")
+        self.assertEqual(rows[0]["reconciliation"]["status"], "independently_verified", rows[0])
         self.assertFalse(rows[0]["production_mutation"])
     def test_missing_second_publisher_quarantines(self):
         rows = retrieve([FIXTURE], {KEY: SOURCES[:1]}, lambda url: HTML)
@@ -40,7 +40,7 @@ class GenericRetrievalTests(unittest.TestCase):
             return HTML
         rows = retrieve([FIXTURE], {KEY: SOURCES}, fetch)
         self.assertEqual(rows[0]["reconciliation"]["status"], "quarantined")
-        self.assertEqual(len(rows[0]["failures"]), 1)
+        self.assertEqual(len(rows[0]["failures"]), 1, rows[0])
 
 if __name__ == "__main__":
     unittest.main()
