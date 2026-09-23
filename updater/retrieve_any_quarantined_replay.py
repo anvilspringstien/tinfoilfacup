@@ -90,10 +90,12 @@ def extract(fixture, source, html):
     if home_score != away_score:
         return None
     # Penalty winner must be explicit. Accept either "home win 4-3 on pens"
-    # or "home won 4-3 on penalties"; never guess from score alone.\n    # Require the named winner directly before the verb: a loose wildcard can\n    # incorrectly match the losing club in the preceding scoreline.
+    # or "home won 4-3 on penalties"; never guess from score alone.
+    # Require the named winner directly before the verb: a loose wildcard can
+    # incorrectly match the losing club in the preceding scoreline.
     pens = []
     for club, opponent, home_won in ((home, away, True), (away, home, False)):
-        pattern = re.compile(re.escape(club) + r".{0,45}?\b(?:win|wins|won)\s+(\d{1,2})\s*[-–]\s*(\d{1,2})\s+(?:on|after)\s+(?:pens|penalties)", re.I)
+        pattern = re.compile(re.escape(club) + r"\s+(?:win|wins|won)\s+(\d{1,2})\s*[-–]\s*(\d{1,2})\s+(?:on|after)\s+(?:pens|penalties)", re.I)
         for m in pattern.finditer(text):
             winner_pens, loser_pens = int(m[1]), int(m[2])
             if winner_pens <= loser_pens:
