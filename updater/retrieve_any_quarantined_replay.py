@@ -70,14 +70,14 @@ def extract(fixture, source, html):
     )
     if not any(d.casefold() in text.casefold() for d in date_forms):
         return None
-    if not re.search(r"replay|after extra time|\\bAET\\b|penalt(?:y|ies)|\\bpens\\b", text, re.I):
+    if not re.search(r"replay|after extra time|\bAET\b|penalt(?:y|ies)|\bpens\b", text, re.I):
         return None
     # Only parse a single explicitly labelled, adjacent score line for both clubs.
     escaped_home, escaped_away = re.escape(home), re.escape(away)
     score_patterns = [
-        (re.compile(escaped_home + r"\\s+(\\d{1,2})\\s*[-–:]\\s*(\\d{1,2})\\s+" + escaped_away, re.I), False),
-        (re.compile(escaped_home + r"\\s+(\\d{1,2})\\s+" + escaped_away + r"\\s+(\\d{1,2})", re.I), False),
-        (re.compile(escaped_away + r"\\s+(\\d{1,2})\\s*[-–:]\\s*(\\d{1,2})\\s+" + escaped_home, re.I), True),
+        (re.compile(escaped_home + r"\s+(\d{1,2})\s*[-–:]\s*(\d{1,2})\s+" + escaped_away, re.I), False),
+        (re.compile(escaped_home + r"\s+(\d{1,2})\s+" + escaped_away + r"\s+(\d{1,2})", re.I), False),
+        (re.compile(escaped_away + r"\s+(\d{1,2})\s*[-–:]\s*(\d{1,2})\s+" + escaped_home, re.I), True),
     ]
     scores = set()
     for pattern, reverse in score_patterns:
@@ -93,7 +93,7 @@ def extract(fixture, source, html):
     # or "home won 4-3 on penalties"; never guess from score alone.
     pens = []
     for club, opponent, home_won in ((home, away, True), (away, home, False)):
-        pattern = re.compile(re.escape(club) + r".{0,45}?\\b(?:win|wins|won)\\s+(\\d{1,2})\\s*[-–]\\s*(\\d{1,2})\\s+(?:on|after)\\s+(?:pens|penalties)", re.I)
+        pattern = re.compile(re.escape(club) + r".{0,45}?\b(?:win|wins|won)\s+(\d{1,2})\s*[-–]\s*(\d{1,2})\s+(?:on|after)\s+(?:pens|penalties)", re.I)
         for m in pattern.finditer(text):
             winner_pens, loser_pens = int(m[1]), int(m[2])
             if winner_pens <= loser_pens:
@@ -131,7 +131,7 @@ def retrieve(fixtures, source_manifest, fetch=fetch_live):
                     failures.append({"url": source["url"], "reason": "no unambiguous replay score and penalties"})
             except Exception as exc:
                 failures.append({"url": source["url"], "reason": type(exc).__name__})
-        verdict = reconcile(fixture, evidence)
+        verdict = reconcile(fixture, evidence, trusted_domains={s['domain'].lower().removeprefix('www.') for s in sources})
         output.append({"fixture": fixture, "evidence": evidence, "failures": failures,
                        "reconciliation": verdict, "production_mutation": False})
     return output
