@@ -8,7 +8,7 @@ import json
 import sys
 from pathlib import Path
 
-TRUSTED = {"thefa.com": "fa", "wimbornetownfc.co.uk": "club", "westonsmareafc.co.uk": "club"}
+TRUSTED = {"thefa.com": "fa", "wimbornetownfc.co.uk": "club", "wsmafc.co.uk": "club", "southwestsportsnews.com": "regional_news"}
 def reconcile(blocked, evidence):
     if "penalty decision with non-level source score" not in blocked.get("reason", ""):
         raise ValueError("unsupported quarantine reason")
@@ -16,7 +16,7 @@ def reconcile(blocked, evidence):
     accepted = []
     for item in evidence:
         host = item.get("domain", "").lower().removeprefix("www.")
-        if host not in TRUSTED or not item.get("url", "").startswith("https://" + host + "/"):
+        if host not in TRUSTED or not any(item.get("url", "").startswith(prefix)\n                                         for prefix in ("https://" + host + "/", "https://www." + host + "/",\n                                                        "https://mail." + host + "/")):
             continue
         if {item.get("home", "").casefold(), item.get("away", "").casefold()} != target:
             continue
