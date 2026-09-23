@@ -301,9 +301,43 @@ function resolveConditionalSide(side,carrier){
   if(compatible.length===1)return n;
   return side;
 }
+function verifiedConditionalWinner(side,round){
+  const options=drawAlternatives(side);
+  if(options.length<=1)return side;
+  const data=LIVE_COMPETITION_DATA||{};
+  const rows=data.result_history||{};
+  const results=[];
+  const alias={'cray wands':'cray wanderers','hamp and rich':'hampton and richmond borough',
+    'weston sm':'weston super mare','dag and red':'dagenham and redbridge',
+    'win finch':'wingate and finchley','g borough t':'gainsborough trinity'};
+  const identity=x=>alias[canonicalClubKey(x)]||canonicalClubKey(x);
+  const matches=(a,b)=>identity(a)===identity(b)||identity(b).startsWith(identity(a)+' ');
+  const seen=new Set();
+  const buckets=[...Object.values(rows),Object.values(data.results||{})];
+  for(const bucket of buckets){
+    if(!Array.isArray(bucket))continue;
+    for(const r of bucket){
+      if(!r||!r.winner||!r.round||r.round.replace(/\s+Replay$/i,'')!==round)continue;
+      const key=[r.date,r.home,r.away,r.round].join('|');
+      if(seen.has(key))continue;
+      seen.add(key);
+      if(!options.some(x=>matches(x,r.home)||matches(x,r.away)))continue;
+      const winner=canonicalResultWinner(r);
+      if(!winner)continue;
+      const matched=options.filter(x=>matches(x,winner));
+      if(matched.length===1)results.push(winner);
+    }
+  }
+  const unique=[...new Set(results.map(canonicalClubKey))];
+  return unique.length===1?results[0]:side;
+}
 function resolveLiveFixtureForCarrier(f,carrier,preserveConditional){
   if(!f)return null;
-  const home=preserveConditional?f.home:resolveConditionalSide(f.home,carrier),away=preserveConditional?f.away:resolveConditionalSide(f.away,carrier);
+  const parentRound=String(f.round||'')==='Third Round Qualifying'?'Second Round Qualifying':null;
+  const ownHome=preserveConditional?f.home:resolveConditionalSide(f.home,carrier);
+  const ownAway=preserveConditional?f.away:resolveConditionalSide(f.away,carrier);
+  const home=parentRound&&!preserveConditional?verifiedConditionalWinner(ownHome,parentRound):ownHome;
+  const away=parentRound&&!preserveConditional?verifiedConditionalWinner(ownAway,parentRound):ownAway;
   const unresolved=/\s+or\s+/i.test(home)||/\s+or\s+/i.test(away);
   let venue={ground:'Venue TBC',postcode:'Postcode TBC',verification:'none'};
   if(!unresolved&&home){
