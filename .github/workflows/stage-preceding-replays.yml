@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'updater/stage_preceding_replay_candidates.py'
+      - 'updater/audit_preceding_round_replays.py'
+      - 'tests/test_archived_replay_source.py'
       - 'tests/test_stage_preceding_replay_candidates.py'
       - '.github/workflows/stage-preceding-replays.yml'
       - 'updater/reconcile_quarantined_replay_evidence.py'
@@ -49,6 +51,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Guard dedicated archived replay source selection
+        run: python -m unittest discover -s tests -p 'test_archived_replay_source.py' -v
       - name: Guard staging chronology and publication boundary
         run: python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
       - name: Guard independent quarantine evidence recovery
