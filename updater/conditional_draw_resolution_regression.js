@@ -44,4 +44,22 @@ assert(context.resultLineFromResult(w).includes('won on penalties (4–3)'));
 const unresolved=resolve({home:'Unknown A or Unknown B',away:'Wimborne Town',round:'Third Round Qualifying'},'Wimborne Town');
 assert.strictEqual(unresolved.conditional,true);
 assert.strictEqual(unresolved.venue.postcode,'Postcode TBC');
-console.log('Conditional draw, venue, penalty and unresolved-fixture guards: PASS');
+
+// Saved campaigns must find the uniquely abbreviated fixture key, not lose
+// the published draw simply because the campaign has an FC suffix.
+const key='Wimborne', saved='Wimborne Town FC';
+assert(data.fixtures[key],'missing abbreviated Wimborne fixture');
+assert(!data.fixtures[saved],'regression fixture must exercise fallback');
+const target=context.canonicalClubKey(saved);
+const matches=Object.entries(data.fixtures).filter(([name,f])=>
+  f.round==='Third Round Qualifying'&&
+  (context.canonicalClubKey(name)===target||target.startsWith(context.canonicalClubKey(name)+' ')));
+const unique=[...new Map(matches.map(([,f])=>
+  [[f.home,f.away,f.round,f.date].join('|'),f])).values()];
+assert.strictEqual(unique.length,1);
+const savedFixture=resolve(unique[0],saved);
+assert.strictEqual(savedFixture.home,'Crowborough Athletic');
+assert.strictEqual(savedFixture.away,'Wimborne Town');
+assert.strictEqual(savedFixture.venue.postcode,'TN6 3BU');
+
+console.log('Conditional draw, venue, penalty and saved-campaign fixture guards: PASS');
