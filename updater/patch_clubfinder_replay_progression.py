@@ -141,6 +141,37 @@ text=text.replace(old_penalty,new_penalty)
 if text.count("function verifiedConditionalWinner(")!=1:
     raise SystemExit("ABORT: conditional resolver marker count unexpected")
 
+# Preserve saved campaign identity while matching uniquely indexed abbreviated
+# next-round fixtures (Wimborne -> Wimborne Town FC).
+old_lookup = """  let nf=liveLookup('fixtures',club.name);
+  if(!nf&&nextName==='Preliminary Round'){"""
+new_lookup = """  let nf=liveLookup('fixtures',club.name);
+  if(!nf&&LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.fixtures){
+    const target=canonicalClubKey(club.name);
+    const entries=Object.entries(LIVE_COMPETITION_DATA.fixtures);
+    const matches=entries.filter(([key,fixture])=>{
+      if(!fixture||fixture.round!==nextName)return false;
+      const k=canonicalClubKey(key);
+      return k===target||target.startsWith(k+' ');
+    });
+    const distinct=[...new Map(matches.map(([,fixture])=>
+      [[fixture.home,fixture.away,fixture.round,fixture.date].join('|'),fixture])).values()];
+    if(distinct.length===1)nf=distinct[0];
+  }
+  if(!nf&&nextName==='Preliminary Round'){"""
+if old_lookup in text:
+    text=text.replace(old_lookup,new_lookup,1)
+elif new_lookup not in text:
+    raise SystemExit("ABORT: next-round fixture lookup boundary not found")
+old_kickoff = """kickoff:r.kickoff||'15:00',venue:completedResultVenue(r),completed:true};"""
+new_kickoff = """kickoff:r.kickoff||(/Replay/i.test(r.round||'')?'Kick-off TBC':'15:00'),venue:completedResultVenue(r),completed:true};"""
+if old_kickoff in text:
+    text=text.replace(old_kickoff,new_kickoff,1)
+elif new_kickoff not in text:
+    raise SystemExit("ABORT: replay kick-off fallback boundary not found")
+if text.count("const distinct=[...new Map(")!=1:
+    raise SystemExit("ABORT: unique fixture lookup marker missing")
+
 P.write_text(text, encoding="utf-8")
 print("CLUBFINDER REPLAY PROGRESSION PATCH: SUCCESS")
 print("Trailing Replay suffix is ignored only when selecting the next round.")
