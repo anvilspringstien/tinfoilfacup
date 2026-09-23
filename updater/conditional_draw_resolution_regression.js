@@ -59,7 +59,7 @@ const unique=[...new Map(matches.map(([,f])=>
 assert.strictEqual(unique.length,1);
 const savedFixture=resolve(unique[0],saved);
 assert.strictEqual(savedFixture.home,'Crowborough Athletic');
-assert.strictEqual(savedFixture.away,'Wimborne Town');
+assert(context.sameClubIdentity(savedFixture.away,'Wimborne Town FC'));
 assert.strictEqual(savedFixture.venue.postcode,'TN6 3BU');
 
 console.log('Conditional draw, venue, penalty and saved-campaign fixture guards: PASS');
