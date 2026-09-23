@@ -80,9 +80,9 @@ def main():
     if current not in audit.ROUNDS or audit.ROUNDS.index(current) == 0:
         raise SystemExit("No eligible archived round")
     previous = audit.ROUNDS[audit.ROUNDS.index(current)-1]
-    url = scan.fwp_round_url(previous)
+    url = scan.fwp_round_url(previous + " Replay")
     raw = scan.fetch(url)
-    scan.validate_fwp_round_page(raw, previous, url)
+    scan.validate_fwp_round_page(raw, previous + " Replay", url)
     live = scan.fetch(scan.FWP_LIVE_URL)
     report = audit.audit(data, raw, live, url)
     if not report["replay_candidates"]:
