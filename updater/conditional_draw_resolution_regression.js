@@ -14,10 +14,14 @@ function extract(name){
   return html.slice(start,end);
 }
 const names=['canonicalClubKey','sameClubIdentity','canonicalResultWinner','drawAlternatives',
-  'resolveConditionalSide','verifiedConditionalWinner','resolveLiveFixtureForCarrier','resultLineFromResult'];
+  'resolveConditionalSide','verifiedConditionalWinner','resolveLiveFixtureForCarrier','resultLineFromResult','nextRoundInfo'];
 const code=names.map(extract).join('\n');
 const context={
   LIVE_COMPETITION_DATA:data,
+  ROUND_META:{'Third Round Qualifying':{date:'2026-10-03',drawDate:'2026-09-21'}},
+  FA_FIXTURES_URL:'https://www.thefa.com/competitions/thefacup/fixtures',
+  resultFor:club=>data.results[club.name]||data.results[club.name.replace(/\s+FC$/,'')]||null,
+  liveLookup:(section,name)=>data[section]?.[name]||data[section]?.[name.replace(/\\s+FC$/,'')]||null,
   VERIFIED_MATCH_VENUE_OVERRIDES:{},
   candidateClubByName:()=>null,
   groundByClubName:n=>({'crowborough athletic':{ground:'Charles Century Community Stadium',postcode:'TN6 3BU'},
@@ -38,6 +42,11 @@ assert.strictEqual(crowSaved.home,'Crowborough Athletic FC');
 assert.strictEqual(crowSaved.away,'Wimborne Town');
 assert.strictEqual(crowSaved.conditional,false);
 assert.strictEqual(crowSaved.venue.postcode,'TN6 3BU');
+const crowNext=context.nextRoundInfo({name:'Crowborough Athletic FC',entry_round:'Second Round Qualifying',fixture:{}});
+assert.strictEqual(crowNext.knownFixture.home,'Crowborough Athletic FC');
+assert.strictEqual(crowNext.knownFixture.away,'Wimborne Town');
+assert.strictEqual(crowNext.knownFixture.conditional,false);
+assert.strictEqual(crowNext.knownFixture.venue.postcode,'TN6 3BU');
 const chip=resolve(pick('Cray Wands','Chippenham'),'Chippenham Town');
 assert.strictEqual(chip.home,'Cray Wanderers');
 assert.strictEqual(chip.away,'Chippenham Town');
