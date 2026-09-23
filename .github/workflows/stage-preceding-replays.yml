@@ -9,6 +9,8 @@ on:
       - 'tests/test_quarantined_replay_evidence.py'
       - 'updater/retrieve_quarantined_replay_evidence.py'
       - 'tests/test_retrieve_quarantined_replay_evidence.py'
+      - 'updater/retrieve_any_quarantined_replay.py'
+      - 'tests/test_retrieve_any_quarantined_replay.py'
   workflow_dispatch:
 jobs:
   independent-corroboration:
@@ -20,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Test generic per-fixture source extraction and reconciliation
+        run: python -m unittest discover -s tests -p 'test_retrieve_any_quarantined_replay.py' -v
       - name: Test source extraction and fail-closed evidence gate
         run: python -m unittest discover -s tests -p 'test_retrieve_quarantined_replay_evidence.py' -v
       - name: Fetch independent live reports and reconcile quarantined replay
