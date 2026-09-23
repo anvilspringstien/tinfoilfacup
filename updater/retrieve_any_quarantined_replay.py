@@ -69,7 +69,6 @@ def extract(fixture, source, html):
         match_date.strftime("%A %B %d, %Y").replace(" 0", " "),
     )
     if not any(d.casefold() in text.casefold() for d in date_forms):
-        print("EXTRACT DIAGNOSTIC: date missing", repr(text), repr(date_forms))
         return None
     if not re.search(r"replay|after extra time|\bAET\b|penalt(?:y|ies)|\bpens\b", text, re.I):
         return None
@@ -86,13 +85,12 @@ def extract(fixture, source, html):
             pair = (int(m[1]), int(m[2]))
             scores.add(pair[::-1] if reverse else pair)
     if len(scores) != 1:
-        print("EXTRACT DIAGNOSTIC: score ambiguous", repr(text), repr(scores))
         return None
     home_score, away_score = scores.pop()
     if home_score != away_score:
         return None
     # Penalty winner must be explicit. Accept either "home win 4-3 on pens"
-    # or "home won 4-3 on penalties"; never guess from score alone.
+    # or "home won 4-3 on penalties"; never guess from score alone.\n    # Require the named winner directly before the verb: a loose wildcard can\n    # incorrectly match the losing club in the preceding scoreline.
     pens = []
     for club, opponent, home_won in ((home, away, True), (away, home, False)):
         pattern = re.compile(re.escape(club) + r".{0,45}?\b(?:win|wins|won)\s+(\d{1,2})\s*[-–]\s*(\d{1,2})\s+(?:on|after)\s+(?:pens|penalties)", re.I)
@@ -102,7 +100,6 @@ def extract(fixture, source, html):
                 continue
             pens.append((winner_pens, loser_pens, home_won))
     if len(set(pens)) != 1:
-        print("EXTRACT DIAGNOSTIC: penalties ambiguous", repr(text), repr(pens))
         return None
     winner_pens, loser_pens, home_won = pens[0]
     return {
