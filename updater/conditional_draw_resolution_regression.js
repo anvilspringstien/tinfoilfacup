@@ -14,10 +14,14 @@ function extract(name){
   return html.slice(start,end);
 }
 const names=['canonicalClubKey','sameClubIdentity','canonicalResultWinner','drawAlternatives',
-  'resolveConditionalSide','verifiedConditionalWinner','resolveLiveFixtureForCarrier','resultLineFromResult'];
+  'resolveConditionalSide','verifiedConditionalWinner','resolveLiveFixtureForCarrier','resultLineFromResult','nextRoundInfo'];
 const code=names.map(extract).join('\n');
 const context={
   LIVE_COMPETITION_DATA:data,
+  ROUND_META:{'Third Round Qualifying':{date:'2026-10-03',drawDate:'2026-09-21'}},
+  FA_FIXTURES_URL:'https://www.thefa.com/competitions/thefacup/fixtures',
+  resultFor:club=>context.LIVE_COMPETITION_DATA.results?.[club.name]||context.LIVE_COMPETITION_DATA.results?.[club.name.replace(/\s+FC$/,'')]||null,
+  liveLookup:(section,name)=>context.LIVE_COMPETITION_DATA[section]?.[name]||context.LIVE_COMPETITION_DATA[section]?.[name.replace(/\s+FC$/,'')]||null,
   VERIFIED_MATCH_VENUE_OVERRIDES:{},
   candidateClubByName:()=>null,
   groundByClubName:n=>({'crowborough athletic':{ground:'Charles Century Community Stadium',postcode:'TN6 3BU'},
@@ -46,6 +50,19 @@ assert.strictEqual(crowFromResults.home,'Crowborough Athletic FC');
 assert.strictEqual(crowFromResults.away,'Wimborne Town');
 assert.strictEqual(crowFromResults.conditional,false);
 assert.strictEqual(crowFromResults.venue.postcode,'TN6 3BU');
+const crowNext=context.nextRoundInfo({name:'Crowborough Athletic FC',entry_round:'Second Round Qualifying',fixture:{}});
+assert.strictEqual(crowNext.name,'Third Round Qualifying');
+assert.strictEqual(crowNext.knownFixture.home,'Crowborough Athletic FC');
+assert.strictEqual(crowNext.knownFixture.away,'Wimborne Town');
+assert.strictEqual(crowNext.knownFixture.conditional,false);
+assert.strictEqual(crowNext.knownFixture.venue.postcode,'TN6 3BU');
+// No chronology or verified result: retain the conditional draw and TBC ground.
+context.LIVE_COMPETITION_DATA={...data,result_history:{},results:{}};
+const crowUnknown=resolve(pick('Crowborough','Wimborne'),'Crowborough Athletic FC');
+assert.strictEqual(crowUnknown.home,'Crowborough Athletic FC');
+assert.strictEqual(crowUnknown.away,'Weston SM or Wimborne');
+assert.strictEqual(crowUnknown.conditional,true);
+assert.strictEqual(crowUnknown.venue.postcode,'Postcode TBC');
 context.LIVE_COMPETITION_DATA=data;
 const chip=resolve(pick('Cray Wands','Chippenham'),'Chippenham Town');
 assert.strictEqual(chip.home,'Cray Wanderers');
