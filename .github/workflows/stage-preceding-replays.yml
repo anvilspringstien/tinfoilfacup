@@ -23,7 +23,47 @@ jobs:
       - name: Guard independent quarantine evidence recovery
         run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
       - name: Stage real preceding-round replay candidates in memory
-        run: python updater/stage_preceding_replay_candidates.py > /tmp/staged-replays.json
+        run: python updater/stage_preceding_replay_candidates.py --candidate-output /tmp/staged-replay-candidate.json > /tmp/staged-replays.json
+      - name: Simulate full candidate state in isolated workspace
+        run: |
+          set -euo pipefail
+          test -s /tmp/staged-replay-candidate.json
+          SIM="$(mktemp -d)"
+          cp -a . "$SIM/repository"
+          cd "$SIM/repository"
+          cp /tmp/staged-replay-candidate.json competition.json
+          python updater/patch_clubfinder_competition_logic.py
+          python updater/patch_clubfinder_replay_progression.py
+          python updater/patch_clubfinder_journey_integrity.py
+          python updater/patch_clubfinder_result_status.py
+          python updater/patch_clubfinder_stats_integrity.py
+          python updater/patch_clubfinder_pigeon_miles_stats.py
+          python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_law2_origins.py
+          python updater/promote_verified_law2_locations.py
+          python updater/audit_law2_location_verification.py
+          python updater/patch_clubfinder_historical_venues.py
+          python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
+          python updater/refresh_clubfinder_embedded_snapshot.py
+          python updater/reconcile_result_history_aliases.py --check
+          python updater/extra_preliminary_replay_regression.py
+          python updater/competition_regression_guard.py
+          node updater/clubfinder_render_regression.js
+          node updater/amersham_card_render_regression.js
+          node updater/amersham_stats_regression.js
+          node updater/ex8_venue_render_regression.js
+          node updater/kt21_venue_render_regression.js
+          node updater/law2_origin_regression.js
+          node updater/replay_progression_regression.js
+          python updater/kt21_replay_regression.py
+          python updater/embedded_snapshot_regression.py
+          node updater/clubfinder_stats_regression.js
+          node updater/journey_integrity_regression.js
+          node updater/historical_journey_regression.js
+          node updater/historical_venue_regression.js
+          node updater/production_ui_regression.js
+          echo "ISOLATED CANDIDATE SIMULATION: ALL GUARDS PASSED"
       - name: Verify production remains byte-for-byte unchanged
         if: always()
         run: git diff --exit-code -- competition.json clubfinder.html
