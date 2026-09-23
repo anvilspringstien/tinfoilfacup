@@ -8,12 +8,25 @@ It does NOT enable publication.
 """
 import argparse
 import json
+import re
 from pathlib import Path
 
 import auto_round_results as scan
 from round_state_engine import classify_observation, pair_key, base_round
 
 ROOT = Path(__file__).resolve().parents[1]
+def archived_replay_source(preceding):
+    """Explicit replay endpoint; base_round() deliberately strips Replay."""
+    base_url = scan.fwp_round_url(preceding)
+    return base_url + "-replay"
+
+
+def validate_archived_replay_page(raw, preceding, url):
+    marker = rf"Fixtures/Results,\\s*{re.escape(scan.fwp_round_label(preceding))} Replay\\s*,\\s*20\\d{{2}}-20\\d{{2}}"
+    if not re.search(marker, scan.clean(raw), re.I):
+        raise SystemExit("ARCHIVED REPLAY SOURCE FAILURE: expected dedicated replay page: " + url)
+
+
 ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifying",
           "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying"]
 
@@ -81,10 +94,10 @@ def main():
     if current not in ROUNDS or ROUNDS.index(current) == 0:
         raise SystemExit("PRECEDING REPLAY AUDIT: no preceding qualifying round")
     preceding = ROUNDS[ROUNDS.index(current) - 1]
-    url = scan.fwp_round_url(preceding + " Replay")
+    url = archived_replay_source(preceding)
     if args.fetch:
         raw = scan.fetch(url)
-        scan.validate_fwp_round_page(raw, preceding + " Replay", url)
+        validate_archived_replay_page(raw, preceding, url)
         live = scan.fetch(scan.FWP_LIVE_URL)
     elif args.source_html:
         raw = Path(args.source_html).read_text(encoding="utf-8")
