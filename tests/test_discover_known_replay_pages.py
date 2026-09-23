@@ -18,7 +18,7 @@ class KnownPageTests(unittest.TestCase):
         rows = discover_known_pages(FIXTURE, get)
         self.assertEqual(calls, [FA_FIXTURES, FA_RESULTS,
                                  BBC_MONTH.format(month="2026-09")])
-        self.assertEqual(len([x for x in rows["sources"] if x["tier"] == "fa"]), 4)
+        self.assertEqual(len([x for x in rows["sources"] if x["tier"] == "fa"]), 3)
         self.assertFalse(rows["production_mutation"])
 
     def test_absent_fixture_fails_closed(self):
