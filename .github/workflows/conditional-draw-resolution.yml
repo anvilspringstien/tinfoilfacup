@@ -1,0 +1,29 @@
+name: Guard conditional draw and penalty display
+on:
+  pull_request:
+    paths:
+      - 'updater/patch_clubfinder_replay_progression.py'
+      - 'updater/conditional_draw_resolution_regression.js'
+      - '.github/workflows/conditional-draw-resolution.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Apply candidate UI patch in isolated checkout
+        run: python updater/patch_clubfinder_replay_progression.py
+      - name: Verify conditional draws, venues and penalties
+        run: node updater/conditional_draw_resolution_regression.js
+      - name: Existing progression and journey guards
+        run: |
+          node updater/replay_progression_regression.js
+          node updater/journey_integrity_regression.js
+          node updater/clubfinder_render_regression.js
+          node updater/production_ui_regression.js
+          python updater/competition_regression_guard.py
