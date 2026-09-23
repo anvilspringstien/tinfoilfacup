@@ -5,6 +5,8 @@ on:
       - 'updater/stage_preceding_replay_candidates.py'
       - 'updater/audit_preceding_round_replays.py'
       - 'tests/test_archived_replay_source.py'
+      - 'updater/guard_archived_replay_promotion.py'
+      - 'tests/test_guard_archived_replay_promotion.py'
       - 'tests/test_stage_preceding_replay_candidates.py'
       - '.github/workflows/stage-preceding-replays.yml'
       - 'updater/reconcile_quarantined_replay_evidence.py'
@@ -57,6 +59,13 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
       - name: Guard independent quarantine evidence recovery
         run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
+      - name: Guard partial promotion and independent penalty evidence
+        run: python -m unittest discover -s tests -p 'test_guard_archived_replay_promotion.py' -v
+      - name: Produce read-only source-backed promotion readiness report
+        run: |
+          python updater/audit_preceding_round_replays.py --fetch > /tmp/archived-replay-audit.json
+          python updater/guard_archived_replay_promotion.py --audit /tmp/archived-replay-audit.json > /tmp/replay-promotion-readiness.json
+          python -m json.tool /tmp/replay-promotion-readiness.json
       - name: Stage real preceding-round replay candidates in memory
         run: python updater/stage_preceding_replay_candidates.py --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
       - name: Simulate full candidate state in isolated workspace
