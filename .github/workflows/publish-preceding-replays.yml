@@ -41,7 +41,31 @@ jobs:
       - name: Produce read-only source-backed promotion readiness report
         run: |
           python updater/audit_preceding_round_replays.py --fetch > /tmp/archived-replay-audit.json
-          python updater/guard_archived_replay_promotion.py --audit /tmp/archived-replay-audit.json > /tmp/replay-promotion-readiness.json
+          python - <<'PY'
+          import json, sys
+          sys.path.insert(0, 'updater')
+          from retrieve_quarantined_replay_evidence import retrieve, fetch_live, WIMBORNE
+          from reconcile_quarantined_replay_evidence import reconcile
+          report=json.load(open('/tmp/archived-replay-audit.json'))
+          evidence, failures=retrieve(fetch_live)
+          verdict=reconcile(WIMBORNE, evidence)
+          verified=verdict['status']=='independently_verified'
+          mapping={}
+          if verified:
+              for row in report['replay_candidates']:
+                  if row.get('decision')!='penalties':
+                      continue
+                  if {row['home'].casefold(),row['away'].casefold()} != {WIMBORNE['home'].casefold(),WIMBORNE['away'].casefold()}:
+                      continue
+                  key='|'.join((row['date'],*sorted((row['home'].casefold(),row['away'].casefold()))))
+                  if row['home'].casefold()==WIMBORNE['home'].casefold():
+                      mapping[key]=evidence
+                  else:
+                      mapping[key]=[dict(e,home=e['away'],away=e['home'],home_score=e['away_score'],away_score=e['home_score'],home_pens=e['away_pens'],away_pens=e['home_pens']) for e in evidence]
+          json.dump(mapping,open('/tmp/replay-independent-evidence.json','w'))
+          print(json.dumps({'independent_evidence':verdict['status'],'source_failures':failures,'candidate_evidence_keys':list(mapping),'production_mutation':False},indent=2))
+          PY
+          python updater/guard_archived_replay_promotion.py --audit /tmp/archived-replay-audit.json --evidence /tmp/replay-independent-evidence.json > /tmp/replay-promotion-readiness.json
           python -m json.tool /tmp/replay-promotion-readiness.json
       - name: Stage real preceding-round replay candidates in memory
         run: python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
@@ -86,15 +110,21 @@ jobs:
           node updater/historical_venue_regression.js
           node updater/production_ui_regression.js
           echo "ISOLATED CANDIDATE SIMULATION: ALL GUARDS PASSED"
-      - name: Guard exactly twelve approved and Wimborne quarantined
+      - name: Guard complete accounting and conditional independent promotion
         run: |
           python - <<'PY'
           import json
           report=json.load(open('/tmp/replay-promotion-readiness.json'))
-          assert report['approved_count']==12 and report['held_count']==1, report
-          assert 'wimborne town' in report['held'][0]['fixture']
-          assert all('wimborne' not in str(r).lower() for r in report['approved'])
-          print('FIXTURE-LOCAL PUBLICATION GATE: 12 cleared, Wimborne held')
+          assert report['approved_count']+report['held_count']==13, report
+          assert report['approved_count'] in (12,13), report
+          if report['approved_count']==12:
+              assert report['held_count']==1 and 'wimborne town' in report['held'][0]['fixture'], report
+              assert all('wimborne' not in str(r).lower() for r in report['approved'])
+          else:
+              assert report['held_count']==0 and any(r.get('winner')=='Wimborne Town' for r in report['approved'])
+              evidence=json.load(open('/tmp/replay-independent-evidence.json'))
+              assert any(len(rows)>=2 for rows in evidence.values()), evidence
+          print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'cleared,',report['held_count'],'held')
           PY
       - name: Publish guarded candidate only after all isolated guards pass
         if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' }}
