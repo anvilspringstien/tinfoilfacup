@@ -1,0 +1,50 @@
+name: Guarded preceding-round replay audit tests
+on:
+  pull_request:
+    paths:
+      - 'updater/audit_preceding_round_replays.py'
+      - 'tests/test_preceding_round_replay_audit.py'
+      - 'tests/test_beta_conditional_draw_alias.js'
+      - 'beta/clubfinder-beta.html'
+      - '.github/workflows/preceding-replay-audit.yml'
+  workflow_dispatch:
+jobs:
+  read-only-regressions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Wimborne penalties and fail-closed tests
+        run: python -m unittest discover -s tests -p 'test_preceding_round_replay_audit.py' -v
+      - name: Hampton and Weston BETA conditional draw regression
+        run: node tests/test_beta_conditional_draw_alias.js
+      - name: Audit actual preceding-round source without publication
+        run: |
+          python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.json || test -s /tmp/preceding-replay-audit.json
+          python - <<'PY'
+          import json
+          with open('/tmp/preceding-replay-audit.json') as f:
+              r = json.load(f)
+          assert r['production_mutation'] is False
+          assert r['archived_ties'] == 80
+          assert len(r['blocked']) == 1, r['blocked']
+          b = r['blocked'][0]
+          assert any('Wimborne' in side for side in (b['home'], b['away'])), b
+          assert 'penalty decision with non-level source score' in b['reason'], b
+          assert len(r['replay_candidates']) >= 12, len(r['replay_candidates'])
+          print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
+                'quarantined=', len(r['blocked']))
+          PY
+      - name: Prove protected production files were not modified
+        if: always()
+        run: git diff --exit-code -- competition.json clubfinder.html
+      - name: Publish audit summary to job log
+        if: always()
+        run: |
+          if test -f /tmp/preceding-replay-audit.json; then
+            python -m json.tool /tmp/preceding-replay-audit.json
+          fi
