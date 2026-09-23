@@ -81,10 +81,10 @@ def main():
     if current not in ROUNDS or ROUNDS.index(current) == 0:
         raise SystemExit("PRECEDING REPLAY AUDIT: no preceding qualifying round")
     preceding = ROUNDS[ROUNDS.index(current) - 1]
-    url = scan.fwp_round_url(preceding)
+    url = scan.fwp_round_url(preceding + " Replay")
     if args.fetch:
         raw = scan.fetch(url)
-        scan.validate_fwp_round_page(raw, preceding, url)
+        scan.validate_fwp_round_page(raw, preceding + " Replay", url)
         live = scan.fetch(scan.FWP_LIVE_URL)
     elif args.source_html:
         raw = Path(args.source_html).read_text(encoding="utf-8")
