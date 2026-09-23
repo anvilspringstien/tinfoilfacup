@@ -1,0 +1,47 @@
+name: Diagnose preceding-round replay ingestion (read-only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Archived-round source audit
+        run: |
+          python updater/audit_preceding_round_replays.py --fetch > /tmp/replay-audit.json || test -s /tmp/replay-audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          audit = json.loads(Path('/tmp/replay-audit.json').read_text())
+          health = json.loads(Path('updater/competition-health.json').read_text())
+          overdue = [x for x in health.get('overdue', []) if x.get('round') == 'Second Round Qualifying Replay']
+          print(json.dumps({
+              'archived_round': audit['archived_round'],
+              'archived_ties': audit['archived_ties'],
+              'source_observations': audit['observations'],
+              'new_replay_candidates': len(audit['replay_candidates']),
+              'already_recorded': audit['already_recorded'],
+              'blocked': audit['blocked'],
+              'overdue_at_checkout': len(overdue),
+              'production_mutation': audit['production_mutation']
+          }, indent=2))
+          assert audit['production_mutation'] is False
+          assert audit['archived_ties'] > 0
+          # This diagnostic must not report success when overdue replays
+          # remain absent from canonical competition data.
+          if overdue:
+              print('GUARD FAIL: overdue preceding-round replays remain unresolved')
+              raise SystemExit(1)
+          if audit['blocked']:
+              print('GUARD FAIL: source observations require reconciliation')
+              raise SystemExit(1)
+          print('READ-ONLY AUDIT PASS: no overdue archived replays')
+          PY
+      - name: Verify production files unchanged
+        if: always()
+        run: git diff --exit-code -- competition.json clubfinder.html
