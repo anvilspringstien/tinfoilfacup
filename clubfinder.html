@@ -262,7 +262,8 @@ function resolveConditionalSide(side,carrier){
 function verifiedConditionalWinner(side,round){
   const options=drawAlternatives(side);
   if(options.length<=1)return side;
-  const rows=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
+  const data=LIVE_COMPETITION_DATA||{};
+  const rows=data.result_history||{};
   const results=[];
   const alias={'cray wands':'cray wanderers','hamp and rich':'hampton and richmond borough',
     'weston sm':'weston super mare','dag and red':'dagenham and redbridge',
@@ -270,7 +271,8 @@ function verifiedConditionalWinner(side,round){
   const identity=x=>alias[canonicalClubKey(x)]||canonicalClubKey(x);
   const matches=(a,b)=>identity(a)===identity(b)||identity(b).startsWith(identity(a)+' ');
   const seen=new Set();
-  for(const bucket of Object.values(rows)){
+  const buckets=[...Object.values(rows),Object.values(data.results||{})];
+  for(const bucket of buckets){
     if(!Array.isArray(bucket))continue;
     for(const r of bucket){
       if(!r||!r.winner||!r.round||r.round.replace(/\s+Replay$/i,'')!==round)continue;
