@@ -23,7 +23,7 @@ jobs:
       - name: Guard independent quarantine evidence recovery
         run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
       - name: Stage real preceding-round replay candidates in memory
-        run: python updater/stage_preceding_replay_candidates.py --candidate-output /tmp/staged-replay-candidate.json > /tmp/staged-replays.json
+        run: python updater/stage_preceding_replay_candidates.py --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
       - name: Simulate full candidate state in isolated workspace
         run: |
           set -euo pipefail
