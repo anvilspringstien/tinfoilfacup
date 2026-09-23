@@ -55,3 +55,45 @@ for (const winner of [
 assert(ctx.liveConditionalFixtureForClub('Hampton & Richmond Borough FC'),
   'Hampton must see conditional draw while replay unresolved');
 console.log('BETA conditional draw alias regression: PASS (Hampton, Weston, unrelated club)');
+
+// BETA reconciliation: ported verified-opponent resolution must not destroy
+// the existing preserveConditional path for genuinely pending replays.
+vm.runInContext(
+  between('function canonicalResultWinner(', 'function drawAlternatives(') +
+  between('function resolveConditionalSide(', 'function verifiedConditionalWinner(') +
+  between('function verifiedConditionalWinner(', 'function nextRoundInfo('), ctx);
+ctx.VERIFIED_MATCH_VENUE_OVERRIDES = {};
+ctx.candidateClubByName = () => null;
+ctx.groundByClubName = name => /crowborough/i.test(name)
+  ? {ground:'Charles Century Community Stadium',postcode:'TN6 3BU'}
+  : {};
+const replay = {round:'Second Round Qualifying Replay',
+  home:'Wimborne Town',away:'Weston-super-Mare',date:'2026-09-22',
+  home_score:1,away_score:1,winner:'Wimborne Town',
+  decision:'penalties',penalties_home:4,penalties_away:3};
+const hampton = {round:'Second Round Qualifying Replay',
+  home:'Crowborough Athletic',away:'Hampton & Richmond Borough',
+  date:'2026-09-22',home_score:3,away_score:1,winner:'Crowborough Athletic'};
+ctx.LIVE_COMPETITION_DATA = {result_history:{},results:{
+  Wimborne:replay,Crowborough:hampton}};
+const resolved = ctx.resolveLiveFixtureForCarrier(fixture,
+  {name:'Crowborough Athletic FC'},false);
+assert.equal(resolved.conditional,false);
+assert.equal(resolved.home,'Crowborough Athletic');
+assert.equal(resolved.away,'Wimborne Town');
+assert.equal(resolved.venue.postcode,'TN6 3BU');
+const pending = ctx.resolveLiveFixtureForCarrier(fixture,
+  {name:'Crowborough Athletic FC'},true);
+assert.equal(pending.conditional,true);
+assert.equal(pending.home,fixture.home);
+assert.equal(pending.away,fixture.away);
+ctx.LIVE_COMPETITION_DATA = {result_history:{},results:{}};
+const unknown = ctx.resolveLiveFixtureForCarrier(fixture,
+  {name:'Crowborough Athletic FC'},false);
+assert.equal(unknown.conditional,true);
+assert.match(unknown.away,/Weston SM or Wimborne/);
+ctx.LIVE_COMPETITION_DATA = {result_history:{replays:[replay,hampton]},results:{}};
+const fromHistory = ctx.resolveLiveFixtureForCarrier(fixture,
+  {name:'Crowborough Athletic FC'},false);
+assert.equal(fromHistory.away,'Wimborne Town');
+console.log('BETA verified replay opponent regression: PASS (results, history, pending, missing evidence)');
