@@ -85,6 +85,13 @@ def main():
     scan.validate_fwp_round_page(raw, previous, url)
     live = scan.fetch(scan.FWP_LIVE_URL)
     report = audit.audit(data, raw, live, url)
+    if not report["replay_candidates"]:
+        diagnostics = {"status": "no_replay_candidates", "archived_ties": report["archived_ties"],
+                       "observations": report["observations"], "already_recorded": report["already_recorded"],
+                       "blocked": report["blocked"], "events": report["events"],
+                       "source_url": url, "production_mutation": False}
+        print(json.dumps(diagnostics, indent=2))
+        raise SystemExit("No replay candidates in current source: inspect observation counts and archived source; publication withheld")
     summary, candidate = stage(data, report)
     if args.candidate_output:
         args.candidate_output.write_text(json.dumps(candidate, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
