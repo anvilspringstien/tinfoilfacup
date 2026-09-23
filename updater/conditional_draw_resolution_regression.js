@@ -20,8 +20,8 @@ const context={
   LIVE_COMPETITION_DATA:data,
   VERIFIED_MATCH_VENUE_OVERRIDES:{},
   candidateClubByName:()=>null,
-  groundByClubName:n=>({'Crowborough Athletic':{ground:'Charles Century Community Stadium',postcode:'TN6 3BU'},
-    'Cray Wanderers':{ground:'Flamingo Park',postcode:'BR7 6HL'}}[n]||{}),
+  groundByClubName:n=>({'crowborough athletic':{ground:'Charles Century Community Stadium',postcode:'TN6 3BU'},
+    'cray wanderers':{ground:'Flamingo Park',postcode:'BR7 6HL'}}[String(n).toLowerCase().replace(/\s+fc$/,'')]||{}),
   esc:x=>String(x),
 };
 vm.createContext(context);vm.runInContext(code,context);
@@ -33,6 +33,11 @@ assert.strictEqual(crow.home,'Crowborough Athletic');
 assert.strictEqual(crow.away,'Wimborne Town');
 assert.strictEqual(crow.venue.postcode,'TN6 3BU');
 assert.strictEqual(crow.conditional,false);
+const crowSaved=resolve(pick('Crowborough','Wimborne'),'Crowborough Athletic FC');
+assert.strictEqual(crowSaved.home,'Crowborough Athletic FC');
+assert.strictEqual(crowSaved.away,'Wimborne Town');
+assert.strictEqual(crowSaved.conditional,false);
+assert.strictEqual(crowSaved.venue.postcode,'TN6 3BU');
 const chip=resolve(pick('Cray Wands','Chippenham'),'Chippenham Town');
 assert.strictEqual(chip.home,'Cray Wanderers');
 assert.strictEqual(chip.away,'Chippenham Town');
@@ -44,4 +49,22 @@ assert(context.resultLineFromResult(w).includes('won on penalties (4–3)'));
 const unresolved=resolve({home:'Unknown A or Unknown B',away:'Wimborne Town',round:'Third Round Qualifying'},'Wimborne Town');
 assert.strictEqual(unresolved.conditional,true);
 assert.strictEqual(unresolved.venue.postcode,'Postcode TBC');
-console.log('Conditional draw, venue, penalty and unresolved-fixture guards: PASS');
+
+// Saved campaigns must find the uniquely abbreviated fixture key, not lose
+// the published draw simply because the campaign has an FC suffix.
+const key='Wimborne', saved='Wimborne Town FC';
+assert(data.fixtures[key],'missing abbreviated Wimborne fixture');
+assert(!data.fixtures[saved],'regression fixture must exercise fallback');
+const target=context.canonicalClubKey(saved);
+const matches=Object.entries(data.fixtures).filter(([name,f])=>
+  f.round==='Third Round Qualifying'&&
+  (context.canonicalClubKey(name)===target||target.startsWith(context.canonicalClubKey(name)+' ')));
+const unique=[...new Map(matches.map(([,f])=>
+  [[f.home,f.away,f.round,f.date].join('|'),f])).values()];
+assert.strictEqual(unique.length,1);
+const savedFixture=resolve(unique[0],saved);
+assert.strictEqual(savedFixture.home,'Crowborough Athletic');
+assert(context.sameClubIdentity(savedFixture.away,'Wimborne Town FC'));
+assert.strictEqual(savedFixture.venue.postcode,'TN6 3BU');
+
+console.log('Conditional draw, venue, penalty and saved-campaign fixture guards: PASS');
