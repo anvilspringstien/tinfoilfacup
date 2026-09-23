@@ -16,7 +16,7 @@ const ctx = {
   LIVE_COMPETITION_DATA: null,
   VERIFIED_MATCH_VENUE_OVERRIDES: {},
   candidateClubByName: () => null,
-  groundByClubName: () => ({ground: 'Test Ground', postcode: 'AB1 2CD', verification: 'unverified'})
+  groundByClubName: name => /crowborough/i.test(name)\n    ? {ground: 'Charles Century Community Stadium', postcode: 'TN6 3BU', verification: 'verified'}\n    : {ground: 'Test Ground', postcode: 'AB1 2CD', verification: 'unverified'}
 };
 vm.createContext(ctx);
 vm.runInContext(
@@ -75,6 +75,20 @@ check(resolve({result_history: {
   Crowborough: [crowborough], Wimborne: [wimborne]
 }, results: {}}), 'Crowborough Athletic', 'Wimborne Town', false);
 
+// Current published results must resolve the same way as archived chronology.
+const published = resolve({result_history: {}, results: {
+  crowborough, wimborne
+}});
+check(published, 'Crowborough Athletic', 'Wimborne Town', false);
+assert.equal(published.venue.postcode, 'TN6 3BU');
+
+// One independently published replay must not decide the other side.
+check(resolve({result_history: {}, results: {crowborough}}),
+  'Crowborough Athletic', fixture.away, true);
+
+// An undecided fixture has no confirmed match venue.
+assert.equal(resolve({result_history: {}, results: {}}).venue.postcode, 'Postcode TBC');
+
 // Conflicting winner records must not select either claimant.
 check(resolve({result_history: {
   A: [crowborough],
@@ -97,4 +111,4 @@ check(resolve({result_history: {
 }, results: {}}, true, 'Fourth Round Qualifying'), fixture.home, fixture.away, true);
 
 assert.match(html, /next:nextRoundInfo\(club,true\)/);
-console.log('BETA verified conditional replay regression: PASS (8 cases)');
+console.log('BETA verified conditional replay regression: PASS (10 cases plus venue checks)');
