@@ -70,6 +70,7 @@ def stage(data, report):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--candidate-output', type=Path, help='Write candidate ONLY to an isolated non-repository path')
+    parser.add_argument('--readiness', type=Path, help='Read-only per-fixture readiness report; stage approved fixtures only')
     args = parser.parse_args()
     if args.candidate_output:
         destination = args.candidate_output.resolve()
@@ -85,6 +86,19 @@ def main():
     audit.validate_archived_replay_page(raw, previous, url)
     live = scan.fetch(scan.FWP_LIVE_URL)
     report = audit.audit(data, raw, live, url)
+    held = []
+    if args.readiness:
+        readiness = json.loads(args.readiness.read_text(encoding="utf-8"))
+        if readiness.get("production_mutation") is not False:
+            raise SystemExit("Readiness report must be read-only")
+        approved = readiness.get("approved", [])
+        original = report["replay_candidates"]
+        if any(row not in original for row in approved) or len(approved) != readiness.get("approved_count"):
+            raise SystemExit("Readiness approval does not match source-backed audit")
+        held = readiness.get("held", [])
+        if len(approved) + len(held) != 13:
+            raise SystemExit("Readiness report does not account for all 13 replays")
+        report["replay_candidates"] = approved
     if not report["replay_candidates"]:
         diagnostics = {"status": "no_replay_candidates", "archived_ties": report["archived_ties"],
                        "observations": report["observations"], "already_recorded": report["already_recorded"],
@@ -93,6 +107,8 @@ def main():
         print(json.dumps(diagnostics, indent=2))
         raise SystemExit("No replay candidates in current source: inspect observation counts and archived source; publication withheld")
     summary, candidate = stage(data, report)
+    if args.readiness:
+        summary["quarantined"] = held
     if args.candidate_output:
         args.candidate_output.write_text(json.dumps(candidate, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print(json.dumps(summary, indent=2))
