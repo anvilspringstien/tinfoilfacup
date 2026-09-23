@@ -59,7 +59,7 @@ console.log('BETA conditional draw alias regression: PASS (Hampton, Weston, unre
 // BETA reconciliation: ported verified-opponent resolution must not destroy
 // the existing preserveConditional path for genuinely pending replays.
 vm.runInContext(
-  between('function canonicalResultWinner(', 'function drawAlternatives(') +
+  between('function canonicalResultWinner(', 'function sameSemanticResult(') +
   between('function resolveConditionalSide(', 'function verifiedConditionalWinner(') +
   between('function verifiedConditionalWinner(', 'function nextRoundInfo('), ctx);
 ctx.VERIFIED_MATCH_VENUE_OVERRIDES = {};
