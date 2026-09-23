@@ -1,0 +1,163 @@
+name: Guarded publication of twelve preceding-round replays
+on:
+  pull_request:
+    paths:
+      - 'updater/audit_preceding_round_replays.py'
+      - 'updater/stage_preceding_replay_candidates.py'
+      - 'updater/guard_archived_replay_promotion.py'
+      - 'updater/reconcile_quarantined_replay_evidence.py'
+      - 'tests/test_archived_replay_source.py'
+      - 'tests/test_stage_preceding_replay_candidates.py'
+      - 'tests/test_guard_archived_replay_promotion.py'
+      - '.github/workflows/publish-preceding-replays.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-preceding-replays.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: competition-state-${{ github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard dedicated archived replay source selection
+        run: python -m unittest discover -s tests -p 'test_archived_replay_source.py' -v
+      - name: Guard staging chronology and publication boundary
+        run: python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
+      - name: Guard independent quarantine evidence recovery
+        run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
+      - name: Guard partial promotion and independent penalty evidence
+        run: python -m unittest discover -s tests -p 'test_guard_archived_replay_promotion.py' -v
+      - name: Produce read-only source-backed promotion readiness report
+        run: |
+          python updater/audit_preceding_round_replays.py --fetch > /tmp/archived-replay-audit.json
+          python - <<'PY'
+          import json, sys
+          sys.path.insert(0, 'updater')
+          from retrieve_quarantined_replay_evidence import retrieve, fetch_live, WIMBORNE
+          from reconcile_quarantined_replay_evidence import reconcile
+          report=json.load(open('/tmp/archived-replay-audit.json'))
+          evidence, failures=retrieve(fetch_live)
+          verdict=reconcile(WIMBORNE, evidence)
+          verified=verdict['status']=='independently_verified'
+          mapping={}
+          if verified:
+              for row in report['replay_candidates']:
+                  if row.get('decision')!='penalties':
+                      continue
+                  if {row['home'].casefold(),row['away'].casefold()} != {WIMBORNE['home'].casefold(),WIMBORNE['away'].casefold()}:
+                      continue
+                  key='|'.join((row['date'],*sorted((row['home'].casefold(),row['away'].casefold()))))
+                  if row['home'].casefold()==WIMBORNE['home'].casefold():
+                      mapping[key]=evidence
+                  else:
+                      mapping[key]=[dict(e,home=e['away'],away=e['home'],home_score=e['away_score'],away_score=e['home_score'],home_pens=e['away_pens'],away_pens=e['home_pens']) for e in evidence]
+          json.dump(mapping,open('/tmp/replay-independent-evidence.json','w'))
+          print(json.dumps({'independent_evidence':verdict['status'],'source_failures':failures,'candidate_evidence_keys':list(mapping),'production_mutation':False},indent=2))
+          PY
+          python updater/guard_archived_replay_promotion.py --audit /tmp/archived-replay-audit.json --evidence /tmp/replay-independent-evidence.json > /tmp/replay-promotion-readiness.json
+          python -m json.tool /tmp/replay-promotion-readiness.json
+      - name: Stage real preceding-round replay candidates in memory
+        run: python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
+      - name: Simulate full candidate state in isolated workspace
+        run: |
+          set -euo pipefail
+          test -s /tmp/staged-replay-candidate.json
+          SIM="$(mktemp -d)"
+          echo "$SIM/repository" > /tmp/replay-simulation-path
+          cp -a . "$SIM/repository"
+          cd "$SIM/repository"
+          cp /tmp/staged-replay-candidate.json competition.json
+          python updater/patch_clubfinder_competition_logic.py
+          python updater/patch_clubfinder_replay_progression.py
+          python updater/patch_clubfinder_journey_integrity.py
+          python updater/patch_clubfinder_result_status.py
+          python updater/patch_clubfinder_stats_integrity.py
+          python updater/patch_clubfinder_pigeon_miles_stats.py
+          python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_law2_origins.py
+          python updater/promote_verified_law2_locations.py
+          python updater/audit_law2_location_verification.py
+          python updater/patch_clubfinder_historical_venues.py
+          python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
+          python updater/refresh_clubfinder_embedded_snapshot.py
+          python updater/reconcile_result_history_aliases.py --check
+          python updater/extra_preliminary_replay_regression.py
+          python updater/competition_regression_guard.py
+          node updater/clubfinder_render_regression.js
+          node updater/amersham_card_render_regression.js
+          node updater/amersham_stats_regression.js
+          node updater/ex8_venue_render_regression.js
+          node updater/kt21_venue_render_regression.js
+          node updater/law2_origin_regression.js
+          node updater/replay_progression_regression.js
+          python updater/kt21_replay_regression.py
+          python updater/embedded_snapshot_regression.py
+          node updater/clubfinder_stats_regression.js
+          node updater/journey_integrity_regression.js
+          node updater/historical_journey_regression.js
+          node updater/historical_venue_regression.js
+          node updater/production_ui_regression.js
+          echo "ISOLATED CANDIDATE SIMULATION: ALL GUARDS PASSED"
+      - name: Guard complete accounting and conditional independent promotion
+        run: |
+          python - <<'PY'
+          import json
+          report=json.load(open('/tmp/replay-promotion-readiness.json'))
+          assert report['approved_count']+report['held_count']==13, report
+          assert report['approved_count'] in (12,13), report
+          if report['approved_count']==12:
+              assert report['held_count']==1 and 'wimborne town' in report['held'][0]['fixture'], report
+              assert all('wimborne' not in str(r).lower() for r in report['approved'])
+          else:
+              assert report['held_count']==0 and any(r.get('winner')=='Wimborne Town' for r in report['approved'])
+              evidence=json.load(open('/tmp/replay-independent-evidence.json'))
+              assert any(len(rows)>=2 for rows in evidence.values()), evidence
+          print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'cleared,',report['held_count'],'held')
+          PY
+      - name: Publish guarded candidate only after all isolated guards pass
+        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' }}
+        run: |
+          set -euo pipefail
+          SIM="$(cat /tmp/replay-simulation-path)"
+          cp "$SIM/competition.json" competition.json
+          cp "$SIM/clubfinder.html" clubfinder.html
+          python updater/reconcile_result_history_aliases.py --check
+          python updater/competition_regression_guard.py
+          node updater/replay_progression_regression.js
+          node updater/journey_integrity_regression.js
+          node updater/production_ui_regression.js
+          git config user.name "Tin Foil FA Cup Updater"
+          git config user.email "actions@users.noreply.github.com"
+          git add competition.json clubfinder.html
+          if git diff --cached --quiet; then
+            echo "No changes to publish"
+          else
+            git commit -m "Publish twelve verified preceding-round replays; quarantine Wimborne"
+            git pull --rebase origin main
+            python updater/reconcile_result_history_aliases.py --check
+            python updater/competition_regression_guard.py
+            node updater/replay_progression_regression.js
+            node updater/journey_integrity_regression.js
+            git push origin HEAD:main
+          fi
+      - name: Verify production remains byte-for-byte unchanged
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        run: git diff --exit-code -- competition.json clubfinder.html
+      - name: Show staged replay report
+        if: always()
+        run: |
+          if test -s /tmp/staged-replays.json; then
+            python -m json.tool /tmp/staged-replays.json
+          fi
