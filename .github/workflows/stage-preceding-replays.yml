@@ -11,6 +11,8 @@ on:
       - 'tests/test_retrieve_quarantined_replay_evidence.py'
       - 'updater/retrieve_any_quarantined_replay.py'
       - 'updater/discover_quarantined_replay_urls.py'
+      - 'updater/discover_known_replay_pages.py'
+      - 'tests/test_discover_known_replay_pages.py'
       - 'updater/verify_discovered_replay.py'
       - 'tests/test_discover_quarantined_replay_urls.py'
       - 'tests/test_retrieve_any_quarantined_replay.py'
@@ -25,6 +27,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Test free direct FA/BBC discovery
+        run: python -m unittest discover -s tests -p 'test_discover_known_replay_pages.py' -v
       - name: Test automatic FA/BBC-first URL discovery
         run: python -m unittest discover -s tests -p 'test_discover_quarantined_replay_urls.py' -v
       - name: Test generic per-fixture source extraction and reconciliation
