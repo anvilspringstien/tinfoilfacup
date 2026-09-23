@@ -20,8 +20,8 @@ const context={
   LIVE_COMPETITION_DATA:data,
   VERIFIED_MATCH_VENUE_OVERRIDES:{},
   candidateClubByName:()=>null,
-  groundByClubName:n=>({'Crowborough Athletic':{ground:'Charles Century Community Stadium',postcode:'TN6 3BU'},
-    'Cray Wanderers':{ground:'Flamingo Park',postcode:'BR7 6HL'}}[n]||{}),
+  groundByClubName:n=>({'crowborough athletic':{ground:'Charles Century Community Stadium',postcode:'TN6 3BU'},
+    'cray wanderers':{ground:'Flamingo Park',postcode:'BR7 6HL'}}[String(n).toLowerCase().replace(/\\s+fc$/,'')]||{}),
   esc:x=>String(x),
 };
 vm.createContext(context);vm.runInContext(code,context);
