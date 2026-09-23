@@ -38,6 +38,15 @@ assert.strictEqual(crowSaved.home,'Crowborough Athletic FC');
 assert.strictEqual(crowSaved.away,'Wimborne Town');
 assert.strictEqual(crowSaved.conditional,false);
 assert.strictEqual(crowSaved.venue.postcode,'TN6 3BU');
+// A fresh Hampton campaign must resolve the same opponent even if the
+// separately published chronology is missing or has not yet refreshed.
+context.LIVE_COMPETITION_DATA={...data,result_history:{}};
+const crowFromResults=resolve(pick('Crowborough','Wimborne'),'Crowborough Athletic FC');
+assert.strictEqual(crowFromResults.home,'Crowborough Athletic FC');
+assert.strictEqual(crowFromResults.away,'Wimborne Town');
+assert.strictEqual(crowFromResults.conditional,false);
+assert.strictEqual(crowFromResults.venue.postcode,'TN6 3BU');
+context.LIVE_COMPETITION_DATA=data;
 const chip=resolve(pick('Cray Wands','Chippenham'),'Chippenham Town');
 assert.strictEqual(chip.home,'Cray Wanderers');
 assert.strictEqual(chip.away,'Chippenham Town');
