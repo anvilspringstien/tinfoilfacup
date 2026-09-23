@@ -172,6 +172,31 @@ elif new_kickoff not in text:
 if text.count("const distinct=[...new Map(")!=1:
     raise SystemExit("ABORT: unique fixture lookup marker missing")
 
+# A completed replay is also indexed in results. When a consumer has a
+# partial history snapshot, use those independently verified result records.
+old_history = """  const rows=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
+  const results=[];
+"""
+new_history = """  const data=LIVE_COMPETITION_DATA||{};
+  const rows=data.result_history||{};
+  const results=[];
+"""
+if old_history in text:
+    text=text.replace(old_history,new_history,1)
+elif new_history not in text:
+    raise SystemExit("ABORT: conditional history boundary not found")
+old_scan = """  for(const bucket of Object.values(rows)){
+    if(!Array.isArray(bucket))continue;
+    for(const r of bucket){"""
+new_scan = """  const buckets=[...Object.values(rows),Object.values(data.results||{})];
+  for(const bucket of buckets){
+    if(!Array.isArray(bucket))continue;
+    for(const r of bucket){"""
+if old_scan in text:
+    text=text.replace(old_scan,new_scan,1)
+elif new_scan not in text:
+    raise SystemExit("ABORT: conditional result scan boundary not found")
+
 P.write_text(text, encoding="utf-8")
 print("CLUBFINDER REPLAY PROGRESSION PATCH: SUCCESS")
 print("Trailing Replay suffix is ignored only when selecting the next round.")
