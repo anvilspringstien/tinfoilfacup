@@ -31,11 +31,16 @@ jobs:
               r = json.load(f)
           assert r['production_mutation'] is False
           assert r['archived_ties'] == 80
-          assert len(r['blocked']) == 1, r['blocked']
-          b = r['blocked'][0]
-          assert any('Wimborne' in side for side in (b['home'], b['away'])), b
-          assert 'penalty decision with non-level source score' in b['reason'], b
-          assert len(r['replay_candidates']) >= 12, len(r['replay_candidates'])
+          # FWP may correct a previously contradictory penalty score.
+          # Both states are legitimate: 12 healthy + 1 quarantined, or
+          # 13 healthy after source correction. Any other gap fails closed.
+          assert len(r['blocked']) <= 1, r['blocked']
+          if r['blocked']:
+              b = r['blocked'][0]
+              assert any('Wimborne' in side for side in (b['home'], b['away'])), b
+              assert 'penalty decision with non-level source score' in b['reason'], b
+          assert len(r['replay_candidates']) + len(r['blocked']) == 13, (
+              len(r['replay_candidates']), r['blocked'])
           print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
                 'quarantined=', len(r['blocked']))
           PY
