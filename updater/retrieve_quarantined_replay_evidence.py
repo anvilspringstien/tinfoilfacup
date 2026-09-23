@@ -47,17 +47,17 @@ class VisibleText(HTMLParser):
 def extract(domain, url, html):
     parser = VisibleText()
     parser.feed(html)
-    text = re.sub(r"\\s+", " ", " ".join(parser.parts))
+    text = re.sub(r"\s+", " ", " ".join(parser.parts))
     # Explicitly require the 22 September replay, not Saturday's 19 September draw.
     if domain == "wimbornetownfc.co.uk":
         if not re.search(r"Second Round Qualifying Replay Tue 22 September", text, re.I):
             return None
-        if not re.search(r"Wimborne Town\\s+1\\s*\\(4\\).*?Weston-super-Mare\\s+1\\s*\\(3\\).*?1-1\\s*\\(4-3 pens\\)", text, re.I):
+        if not re.search(r"Wimborne Town\s+1\s*\(4\).*?Weston-super-Mare\s+1\s*\(3\).*?1-1\s*\(4-3 pens\)", text, re.I):
             return None
     elif domain == "southwestsportsnews.com":
         if not re.search(r"TUESDAY SEPTEMBER 22, 2026", text, re.I):
             return None
-        if not re.search(r"Wimborne Town 1-1\\s+Weston-super-Mare AFC\\s+AET.*?Wimborne win 4-3 on pens", text, re.I):
+        if not re.search(r"Wimborne Town 1-1\s+Weston-super-Mare AFC\s+AET.*?Wimborne win 4-3 on pens", text, re.I):
             return None
     else:
         return None
