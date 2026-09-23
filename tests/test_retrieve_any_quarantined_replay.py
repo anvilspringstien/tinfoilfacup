@@ -19,6 +19,12 @@ class GenericRetrievalTests(unittest.TestCase):
         rows = retrieve([FIXTURE], {KEY: SOURCES}, lambda url: pages[url])
         self.assertEqual(rows[0]["reconciliation"]["status"], "independently_verified", rows[0])
         self.assertFalse(rows[0]["production_mutation"])
+    def test_opponent_in_scoreline_cannot_be_mistaken_for_penalty_winner(self):
+        evidence = extract(FIXTURE, SOURCES[0], HTML)
+        self.assertIsNotNone(evidence)
+        self.assertEqual(evidence["winner"], "Example Town")
+        self.assertEqual((evidence["home_pens"], evidence["away_pens"]), (4, 3))
+
     def test_missing_second_publisher_quarantines(self):
         rows = retrieve([FIXTURE], {KEY: SOURCES[:1]}, lambda url: HTML)
         self.assertEqual(rows[0]["reconciliation"]["status"], "quarantined")
