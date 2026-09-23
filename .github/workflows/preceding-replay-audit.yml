@@ -31,17 +31,20 @@ jobs:
               r = json.load(f)
           assert r['production_mutation'] is False
           assert r['archived_ties'] == 80
-          # FWP may correct a previously contradictory penalty score.
-          # Both states are legitimate: 12 healthy + 1 quarantined, or
-          # 13 healthy after source correction. Any other gap fails closed.
+          # A replay can be new, quarantined, or already in chronology.
+          # Require all 13 independent source observations to be accounted for;
+          # publication must not make this read-only audit turn red.
           assert len(r['blocked']) <= 1, r['blocked']
           if r['blocked']:
               b = r['blocked'][0]
               assert any('Wimborne' in side for side in (b['home'], b['away'])), b
               assert 'penalty decision with non-level source score' in b['reason'], b
-          assert len(r['replay_candidates']) + len(r['blocked']) == 13, (
-              len(r['replay_candidates']), r['blocked'])
-          print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
+          assert r['observations'] == 13, r['observations']
+          assert r['events'] == 0, r['events']
+          assert len(r['replay_candidates']) + len(r['blocked']) + r['already_recorded'] == 13, (
+              len(r['replay_candidates']), r['blocked'], r['already_recorded'])
+          print('Guarded source audit: new candidates=', len(r['replay_candidates']),
+                'already recorded=', r['already_recorded'],
                 'quarantined=', len(r['blocked']))
           PY
       - name: Prove protected production files were not modified
