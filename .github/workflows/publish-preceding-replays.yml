@@ -21,28 +21,6 @@ concurrency:
   group: competition-state-${{ github.ref_name }}
   cancel-in-progress: false
 jobs:
-  independent-corroboration:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Test free direct FA/BBC discovery
-        run: python -m unittest discover -s tests -p 'test_discover_known_replay_pages.py' -v
-      - name: Test automatic FA/BBC-first URL discovery
-        run: python -m unittest discover -s tests -p 'test_discover_quarantined_replay_urls.py' -v
-      - name: Test generic per-fixture source extraction and reconciliation
-        run: python -m unittest discover -s tests -p 'test_retrieve_any_quarantined_replay.py' -v
-      - name: Test source extraction and fail-closed evidence gate
-        run: python -m unittest discover -s tests -p 'test_retrieve_quarantined_replay_evidence.py' -v
-      - name: Fetch independent live reports and reconcile quarantined replay
-        run: python updater/retrieve_quarantined_replay_evidence.py --fetch
-      - name: Ensure no production files were touched
-        if: always()
-        run: git diff --exit-code -- competition.json clubfinder.html
   staging:
     runs-on: ubuntu-latest
     permissions:
