@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-23T08:27:19.097363+01:00",
+  "checked_at": "2026-09-23T08:29:33.591858+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -15,12 +15,10 @@
     "awaiting_grace": 0,
     "overdue": 13,
     "upcoming": 41,
-    "critical": 1
+    "critical": 0
   },
-  "critical": [
-    "13 played fixtures are overdue a result."
-  ],
-  "fixture_local_health": false,
+  "critical": [],
+  "fixture_local_health": true,
   "overdue": [
     {
       "round": "Second Round Qualifying Replay",
