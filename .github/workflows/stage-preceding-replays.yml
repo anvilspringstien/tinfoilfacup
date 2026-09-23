@@ -1,0 +1,31 @@
+name: Read-only archived replay staging
+on:
+  pull_request:
+    paths:
+      - 'updater/stage_preceding_replay_candidates.py'
+      - 'tests/test_stage_preceding_replay_candidates.py'
+      - '.github/workflows/stage-preceding-replays.yml'
+  workflow_dispatch:
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard staging chronology and publication boundary
+        run: python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
+      - name: Stage real preceding-round replay candidates in memory
+        run: python updater/stage_preceding_replay_candidates.py > /tmp/staged-replays.json
+      - name: Verify production remains byte-for-byte unchanged
+        if: always()
+        run: git diff --exit-code -- competition.json clubfinder.html
+      - name: Show staged replay report
+        if: always()
+        run: |
+          if test -s /tmp/staged-replays.json; then
+            python -m json.tool /tmp/staged-replays.json
+          fi
