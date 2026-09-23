@@ -16,7 +16,9 @@ const ctx = {
   LIVE_COMPETITION_DATA: null,
   VERIFIED_MATCH_VENUE_OVERRIDES: {},
   candidateClubByName: () => null,
-  groundByClubName: name => /crowborough/i.test(name)\n    ? {ground: 'Charles Century Community Stadium', postcode: 'TN6 3BU', verification: 'verified'}\n    : {ground: 'Test Ground', postcode: 'AB1 2CD', verification: 'unverified'}
+  groundByClubName: name => /crowborough/i.test(name)
+    ? {ground: 'Charles Century Community Stadium', postcode: 'TN6 3BU', verification: 'verified'}
+    : {ground: 'Test Ground', postcode: 'AB1 2CD', verification: 'unverified'}
 };
 vm.createContext(ctx);
 vm.runInContext(
