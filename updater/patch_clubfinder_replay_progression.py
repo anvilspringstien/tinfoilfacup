@@ -86,6 +86,11 @@ new_fixture_resolver = """function verifiedConditionalWinner(side,round){
   if(options.length<=1)return side;
   const rows=(LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.result_history)||{};
   const results=[];
+  const alias={'cray wands':'cray wanderers','hamp and rich':'hampton and richmond borough',
+    'weston sm':'weston super mare','dag and red':'dagenham and redbridge',
+    'win finch':'wingate and finchley','g borough t':'gainsborough trinity'};
+  const identity=x=>alias[canonicalClubKey(x)]||canonicalClubKey(x);
+  const matches=(a,b)=>identity(a)===identity(b)||identity(b).startsWith(identity(a)+' ');
   const seen=new Set();
   for(const bucket of Object.values(rows)){
     if(!Array.isArray(bucket))continue;
@@ -94,13 +99,10 @@ new_fixture_resolver = """function verifiedConditionalWinner(side,round){
       const key=[r.date,r.home,r.away,r.round].join('|');
       if(seen.has(key))continue;
       seen.add(key);
-      if(!options.some(x=>sameClubIdentity(x,r.home)||sameClubIdentity(x,r.away)||
-        canonicalClubKey(r.home).startsWith(canonicalClubKey(x)+' ')||
-        canonicalClubKey(r.away).startsWith(canonicalClubKey(x)+' ')))continue;
+      if(!options.some(x=>matches(x,r.home)||matches(x,r.away)))continue;
       const winner=canonicalResultWinner(r);
       if(!winner)continue;
-      const matched=options.filter(x=>sameClubIdentity(x,winner)||
-        canonicalClubKey(winner).startsWith(canonicalClubKey(x)+' '));
+      const matched=options.filter(x=>matches(x,winner));
       if(matched.length===1)results.push(winner);
     }
   }
