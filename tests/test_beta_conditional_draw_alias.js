@@ -79,7 +79,7 @@ ctx.LIVE_COMPETITION_DATA = {result_history:{},results:{
 const resolved = ctx.resolveLiveFixtureForCarrier(fixture,
   {name:'Crowborough Athletic FC'},false);
 assert.equal(resolved.conditional,false);
-assert.equal(resolved.home,'Crowborough Athletic');
+assert.equal(resolved.home,'Crowborough Athletic FC');
 assert.equal(resolved.away,'Wimborne Town');
 assert.equal(resolved.venue.postcode,'TN6 3BU');
 const pending = ctx.resolveLiveFixtureForCarrier(fixture,
