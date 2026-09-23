@@ -5,6 +5,8 @@ on:
       - 'updater/stage_preceding_replay_candidates.py'
       - 'tests/test_stage_preceding_replay_candidates.py'
       - '.github/workflows/stage-preceding-replays.yml'
+      - 'updater/reconcile_quarantined_replay_evidence.py'
+      - 'tests/test_quarantined_replay_evidence.py'
   workflow_dispatch:
 jobs:
   staging:
@@ -18,6 +20,8 @@ jobs:
           python-version: '3.11'
       - name: Guard staging chronology and publication boundary
         run: python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
+      - name: Guard independent quarantine evidence recovery
+        run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
       - name: Stage real preceding-round replay candidates in memory
         run: python updater/stage_preceding_replay_candidates.py > /tmp/staged-replays.json
       - name: Verify production remains byte-for-byte unchanged
