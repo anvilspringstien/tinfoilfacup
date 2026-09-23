@@ -16,7 +16,9 @@ def reconcile(blocked, evidence):
     accepted = []
     for item in evidence:
         host = item.get("domain", "").lower().removeprefix("www.")
-        if host not in TRUSTED or not any(item.get("url", "").startswith(prefix)\n                                         for prefix in ("https://" + host + "/", "https://www." + host + "/",\n                                                        "https://mail." + host + "/")):
+        if host not in TRUSTED or not any(item.get("url", "").startswith(prefix)
+                                         for prefix in ("https://" + host + "/", "https://www." + host + "/",
+                                                        "https://mail." + host + "/")):
             continue
         if {item.get("home", "").casefold(), item.get("away", "").casefold()} != target:
             continue
