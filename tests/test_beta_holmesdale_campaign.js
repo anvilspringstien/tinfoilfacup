@@ -53,6 +53,14 @@ async function main(){
   const direct=run("liveLookup('result_history','Holmesdale FC')");
   assert(Array.isArray(direct)&&direct.length>=4,'Original name cannot retrieve merged historical results');
   const origin=run("ELIGIBLE.find(c=>c.name==='Holmesdale FC')");
+  // Regress the visible completed fixture as well as the underlying journey.
+  // A restored Holmesdale campaign must not keep saying 'result not embedded'.
+  const displayed=run("currentDisplayFixture(__origin)",{__origin:origin});
+  assert.equal(displayed.completed,true,'The visible Holmesdale fixture is still pending');
+  assert.equal(displayed.round,'First Round Qualifying');
+  assert(/petts wood/i.test(displayed.tie)&&/windsor/i.test(displayed.tie),
+    'Displayed result does not identify the merged club and Windsor & Eton');
+  assert.equal(String(displayed.venue.postcode).toUpperCase().replace(/\s+/g,''),'BR28HQ');
   const journey=run("buildJourney(__origin)",{__origin:origin});
   const crumbs=journey.breadcrumbs||[];
   const selected=[];
