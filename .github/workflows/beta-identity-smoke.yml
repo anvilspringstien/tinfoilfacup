@@ -5,6 +5,7 @@ on:
     paths:
       - 'beta/clubfinder-beta.html'
       - 'tests/test_beta_verified_conditional_replay.js'
+      - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
       - '.github/workflows/beta-identity-smoke.yml'
@@ -13,6 +14,7 @@ on:
       - 'beta/clubfinder-beta.html'
       - 'updater/beta_campaign_identity_regression.js'
       - 'tests/test_beta_verified_conditional_replay.js'
+      - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
       - '.github/workflows/beta-identity-smoke.yml'
@@ -37,3 +39,5 @@ jobs:
         run: node tests/test_beta_verified_conditional_replay.js
       - name: Regress other FA draw abbreviations against BETA
         run: node tests/test_beta_conditional_draw_alias.js
+      - name: Regress BETA replay kick-off, shootout display and Stats accounting
+        run: node tests/test_beta_weston_replay_stats.js

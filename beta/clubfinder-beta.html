@@ -459,14 +459,39 @@ function completedResultDateLabel(result){
   return Number.isNaN(d.getTime())?result.date:
     d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
+/* TIN_FOIL_BETA_REPLAY_STATS_BEGIN */
+function tinFoilBetaVerifiedWimborneReplay(r){
+  return !!r && String(r.round||'')==='Second Round Qualifying Replay' &&
+    String(r.date||'')==='2026-09-22' &&
+    sameClubIdentity(r.home,'Wimborne Town') &&
+    sameClubIdentity(r.away,'Weston-super-Mare') &&
+    sameClubIdentity(r.winner,'Wimborne Town') &&
+    Number(r.home_score)===1 && Number(r.away_score)===1 &&
+    r.decision==='penalties';
+}
+function tinFoilBetaPenaltyResultNote(r){
+  if(!r||r.decision!=='penalties'||!r.winner)return '';
+  // Source chronology records the shootout winner but not numerical pens.
+  // This verified 4-3 score is deliberately scoped to one named 2026 tie.
+  return tinFoilBetaVerifiedWimborneReplay(r)
+    ? 'won 4–3 on penalties' : 'won on penalties';
+}
+function tinFoilBetaCompletedKickoff(r,rp){
+  // Do not let a legacy 15:00 fallback overwrite the verified replay time.
+  if(tinFoilBetaVerifiedWimborneReplay(r))return '19:45';
+  if(rp&&rp.kickoff)return rp.kickoff;
+  if(r&&r.kickoff)return r.kickoff;
+  return /Replay/i.test(String((r&&r.round)||''))?'Kick-off TBC':'15:00';
+}
+/* TIN_FOIL_BETA_REPLAY_STATS_END */
 function currentDisplayFixture(club){
   const r=resultFor(club);
   if(r){
     if(/Replay/i.test(r.round||'')){
       const rp=replayFixtureFor(club);
-      if(rp)return {tie:resultTeamLine(club),round:r.round||rp.round||'Replay',dateLabel:completedResultDateLabel({date:rp.date||r.date}),kickoff:rp.kickoff||r.kickoff||'Kick-off TBC',venue:replayVenue(rp),completed:true};
+      if(rp)return {tie:resultTeamLine(club),round:r.round||rp.round||'Replay',dateLabel:completedResultDateLabel({date:rp.date||r.date}),kickoff:tinFoilBetaCompletedKickoff(r,rp),venue:replayVenue(rp),completed:true};
     }
-    return {tie:resultTeamLine(club),round:r.round||club.entry_round||'FA Cup',dateLabel:completedResultDateLabel(r),kickoff:r.kickoff||'15:00',venue:completedResultVenue(r),completed:true};
+    return {tie:resultTeamLine(club),round:r.round||club.entry_round||'FA Cup',dateLabel:completedResultDateLabel(r),kickoff:tinFoilBetaCompletedKickoff(r,null),venue:completedResultVenue(r),completed:true};
   }
   /* C13 BETA ENTRY-ROUND FIX: prefer the canonical live fixture for a club
      whose first Campaign tie is still to be played (e.g. Chesham United
@@ -557,6 +582,8 @@ function resultTeamLine(club){
   let line=esc(r.home)+' ('+esc(r.home_score)+') v ('+esc(r.away_score)+') '+esc(r.away);
   if(r.decision&&r.decision.startsWith('pens ')){
     line+=' • '+esc(r.winner)+' won '+esc(r.decision.replace('pens ','')+' on pens');
+  }else if(r.decision==='penalties'&&r.winner){
+    line+=' • '+esc(r.winner)+' '+esc(tinFoilBetaPenaltyResultNote(r));
   }else if(r.decision==='a.e.t.'){
     line+=' • AET';
   }
@@ -571,6 +598,8 @@ function resultLineFromResult(r){
   let line=esc(r.home)+' ('+esc(r.home_score)+') v ('+esc(r.away_score)+') '+esc(r.away);
   if(r.decision&&r.decision.startsWith('pens ')){
     line+=' • '+esc(r.winner)+' won '+esc(r.decision.replace('pens ','')+' on pens');
+  }else if(r.decision==='penalties'&&r.winner){
+    line+=' • '+esc(r.winner)+' '+esc(tinFoilBetaPenaltyResultNote(r));
   }else if(r.decision==='a.e.t.'){
     line+=' • AET';
   }
@@ -928,7 +957,7 @@ function tinFoilCertificateWinner(r){
   if(r){
     const hs=Number(r.home_score),as=Number(r.away_score);
     if(Number.isFinite(hs)&&Number.isFinite(as)){
-      if(hs===as)return '';
+      if(hs===as)return r.decision==='penalties'&&r.winner?r.winner:'';
       return (hs>as?String(r.home||''):String(r.away||'')).trim();
     }
   }
@@ -1332,7 +1361,7 @@ async function hardResetFinder(){
  if(input)input.focus();
 }
 function certEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function resultLinePlain(r){if(!r)return '';if(r.decision==='walkover')return r.home+' (W/O) v '+r.away;let x=r.home+' ('+r.home_score+') v ('+r.away_score+') '+r.away;if(r.decision==='a.e.t.')x+=' • AET';return x}
+function resultLinePlain(r){if(!r)return '';if(r.decision==='walkover')return r.home+' (W/O) v '+r.away;let x=r.home+' ('+r.home_score+') v ('+r.away_score+') '+r.away;if(r.decision==='a.e.t.')x+=' • AET';if(r.decision==='penalties'&&r.winner)x+=' • '+r.winner+' '+tinFoilBetaPenaltyResultNote(r);return x}
 /* TIN_FOIL_PIGEON_MILES_STATS_BEGIN */
 const TIN_FOIL_PIGEON_COORD_CACHE=new Map();
 async function tinFoilPigeonCoords(postcode){
@@ -1451,7 +1480,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   });
   addClub(carrier.name);
 
-  let goals=0, homeGames=0, awayGames=0, custodianWins=0, draws=0, custodianDefeats=0;
+  let goals=0, homeGames=0, awayGames=0, custodianWins=0, draws=0, custodianDefeats=0, penaltyWins=0, penaltyLosses=0;
   const venueKeys=new Set();
 
   let pathCarrier=origin.name;
@@ -1474,8 +1503,16 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
     if(Number.isFinite(hs)&&Number.isFinite(as)&&hs===as)draws++;
 
     if(r.winner){
-      if(norm(r.winner)===norm(pathCarrier))custodianWins++;
-      else if(norm(r.home)===norm(pathCarrier)||norm(r.away)===norm(pathCarrier))custodianDefeats++;
+      const isDrawnShootout=r.decision==='penalties'&&
+        Number.isFinite(hs)&&Number.isFinite(as)&&hs===as;
+      if(isDrawnShootout){
+        // The match remains a draw. The shootout transfers custody separately.
+        if(norm(r.winner)===norm(pathCarrier))penaltyWins++;
+        else if(norm(r.home)===norm(pathCarrier)||norm(r.away)===norm(pathCarrier))penaltyLosses++;
+      }else{
+        if(norm(r.winner)===norm(pathCarrier))custodianWins++;
+        else if(norm(r.home)===norm(pathCarrier)||norm(r.away)===norm(pathCarrier))custodianDefeats++;
+      }
       pathCarrier=r.winner;
     }
   }
@@ -1507,7 +1544,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
       '<div class="jr-fixture">'+certEsc(resultLinePlain(r))+'</div>'+
       '<div class="jr-date">'+certEsc(dateLabel(r.date))+'</div>'+
       '<div class="jr-venue">'+certEsc(v.ground)+'<br>'+certEsc(v.postcode)+'</div>'+
-      '<div class="jr-winner">'+certEsc(tinFoilCertificateWinner(r))+'</div>'+
+      '<div class="jr-winner">'+certEsc(tinFoilCertificateWinner(r))+(r.decision==='penalties'&&r.winner?'<br>'+certEsc(tinFoilBetaPenaltyResultNote(r)):'')+'</div>'+
     '</div>';
   }).join('') :
   '<div class="journey-empty">Your first Tin Foil FA Cup tie is still ahead.</div>';
@@ -1596,7 +1633,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
 
   '<section class="section"><div class="section-title">THE CAMPAIGN SO FAR</div><div class="journey-head"><div>Round</div><div>Fixture</div><div>Date</div><div>Venue</div><div>Winner / Next Custodian</div></div>'+historyRows+'</section>'+
 
-  '<section class="bottom"><div><div class="bt">STATISTICS</div><div class="list">• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Wins by Current Custodian: '+custodianWins+'<br>• Draws: '+draws+'<br>• Defeats by Current Custodian: '+custodianDefeats+'<br>• Pigeon Miles Flown: '+certEsc(pigeonMilesDisplay)+'</div></div>'+
+  '<section class="bottom"><div><div class="bt">STATISTICS</div><div class="list">• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Custodian Match Wins: '+custodianWins+'<br>• Draws: '+draws+'<br>• Custodian Match Defeats: '+custodianDefeats+'<br>• Shootouts Won: '+penaltyWins+'<br>• Shootouts Lost: '+penaltyLosses+'<br>• Pigeon Miles Flown: '+certEsc(pigeonMilesDisplay)+'</div></div>'+
   '<div class="next"><div class="bt">NEXT UP</div><div class="next-round">'+certEsc(nextRoundLabel)+'</div><div class="next-fixture">'+certEsc(nextTitle)+'</div><div class="next-meta">'+certEsc(nextDate)+(nextVenue?'<br>'+certEsc(nextVenue):'')+'</div>'+afterReplayHtml+'</div>'+
   '<div><div class="bt">NOTES</div><div class="notes">Pigeon Miles = twice the straight-line distance from your Campaign start postcode to each tie venue.</div></div></section>'+
 
