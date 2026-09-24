@@ -128,6 +128,7 @@ async function main(){
   // stable Holmesdale lookup key. The visible identity must be current.
   run("localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({originName:'Holmesdale FC',postcode:'BR2 8HQ',ended:false,searchNumber:1088,callSign:'Tango Foxtrot 2 Alpha Charlie 01088',selectedAt:'2026-09-24T15:00:00Z'}))");
   run("lookup=async()=>({postcode:'BR2 8HQ',lat:51.37413,lon:0.03742});geocodeClubPostcodes=async()=>{};");
+  els.postcode.value='BR2 8HQ';
   await run("go(false)");
   const savedHtml=els.results.innerHTML;
   console.log('HOLMESDALE_UI_DEBUG '+JSON.stringify({status:els.status.textContent,html:savedHtml.slice(0,1800),saved:run('loadSavedJourney()')}));
