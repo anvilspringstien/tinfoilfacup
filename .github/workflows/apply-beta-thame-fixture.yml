@@ -1,0 +1,52 @@
+name: Apply and prove isolated BETA Thame fixture repair
+
+on:
+  push:
+    branches: ['beta/thame-verified-fixture-20260924']
+    paths:
+      - '.github/workflows/apply-beta-thame-fixture.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  guarded-beta-only:
+    if: github.ref == 'refs/heads/beta/thame-verified-fixture-20260924'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply source-guarded BETA-only patch
+        run: python updater/patch_beta_verified_thame_fixture.py
+      - name: Test published Thame resolver and unresolved controls
+        run: node tests/test_beta_verified_conditional_replay.js
+      - name: Test full Thame next-fixture path and Exmouth fail-closed
+        run: node tests/test_beta_thame_next_fixture.js
+      - name: Verify BETA identity and other FA draw aliases
+        run: |
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_conditional_draw_alias.js
+          node tests/test_beta_weston_replay_stats.js
+      - name: Check canonical BETA offline snapshot
+        run: python updater/refresh_beta_embedded_snapshot.py --check
+      - name: Prove source-only scope before committing
+        run: |
+          git diff --check
+          git diff --exit-code -- clubfinder.html competition.json
+          test "$(git diff --name-only)" = "beta/clubfinder-beta.html"
+      - name: Commit exactly the tested BETA HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          git commit -m "fix(beta): show verified Thame United third qualifying fixture"
+          git push origin HEAD:refs/heads/beta/thame-verified-fixture-20260924
