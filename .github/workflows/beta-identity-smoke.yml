@@ -1,10 +1,16 @@
 name: Clubfinder BETA identity smoke
 
 on:
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'tests/test_beta_verified_conditional_replay.js'
+      - '.github/workflows/beta-identity-smoke.yml'
   push:
     paths:
       - 'beta/clubfinder-beta.html'
       - 'updater/beta_campaign_identity_regression.js'
+      - 'tests/test_beta_verified_conditional_replay.js'
       - '.github/workflows/beta-identity-smoke.yml'
   workflow_dispatch:
 
@@ -19,3 +25,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Regress BETA counter, Pigeon and refresh persistence
         run: node updater/beta_campaign_identity_regression.js
+      - name: Regress BETA verified replay and conditional draw resolution
+        run: node tests/test_beta_verified_conditional_replay.js
+      - name: Regress other FA draw abbreviations against BETA
+        run: node tests/test_beta_conditional_draw_alias.js
