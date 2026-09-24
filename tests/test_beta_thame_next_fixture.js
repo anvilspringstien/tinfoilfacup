@@ -45,6 +45,11 @@ assert.equal(next.knownFixture.home,'Thame United');
 assert.equal(next.knownFixture.away,'Eastbourne Borough');
 assert.equal(next.knownFixture.date,'2026-10-03');
 assert.equal(next.knownFixture.conditional,false);
+// Regression for BOTH real direct-index routes, not just the bridge fallback.
+const indexedExmouth=Object.entries(competition.fixtures||{}).some(([key,f])=>
+  /Exmouth/i.test(key)&&f&&f.home===fixture.home&&f.away===fixture.away);
+assert(indexedExmouth,'Actual FA draw is not indexed under Exmouth in canonical data');
+ctx.liveLookup=(section,name)=>section==='fixtures'&&/Exmouth/i.test(name)?fixture:null;
 const duplicateEntries=Object.values(competition.fixtures||{}).filter(f=>f&&
   f.round===fixture.round&&f.home===fixture.home&&f.away===fixture.away);
 assert(duplicateEntries.length>=2,'Expected multiple index keys for one real FA tie');
@@ -54,6 +59,12 @@ assert.equal(ctx.tinFoilBetaVerifiedThameNextFixture(
 assert.equal(ctx.nextRoundInfo(
   {name:'Exmouth Town FC',entry_round:'Second Round Qualifying'},true
 ).knownFixture,null,'Losing Exmouth was incorrectly advanced');
+ctx.liveLookup=()=>null;
+ctx.liveConditionalFixtureForClub=name=>/Exmouth/i.test(name)?fixture:null;
+assert.equal(ctx.nextRoundInfo(
+  {name:'Exmouth Town FC',entry_round:'Second Round Qualifying'},true
+).knownFixture,null,'Losing Exmouth advanced via conditional index');
+ctx.liveConditionalFixtureForClub=()=>null;
 const finalReplay=r=>r&&r.round==='Second Round Qualifying Replay'&&
   r.home==='Exmouth Town'&&r.away==='Thame United'&&
   r.date==='2026-09-23'&&r.home_score===1&&r.away_score===3;
