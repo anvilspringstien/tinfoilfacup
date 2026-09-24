@@ -89,6 +89,36 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         self.assertFalse(report["production_mutation"])
         self.assertEqual(data, before)
 
+    def test_scheduled_replay_gap_is_not_hidden_by_source_count(self):
+        data = fixture_data()
+        data["replays"] = {"Exmouth Town": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Exmouth Town", "away": "Thame United",
+            "date": "2026-09-23"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(data, "<html/>")
+        self.assertEqual(len(report["scheduled_replay_gaps"]), 1)
+        self.assertEqual(report["scheduled_replay_gaps"][0]["home"], "Exmouth Town")
+        self.assertFalse(report["scheduled_replay_gaps"][0]["source_observed"])
+        self.assertFalse(report["production_mutation"])
+
+    def test_scheduled_replay_requires_published_not_candidate_result(self):
+        data = fixture_data()
+        data["replays"] = {"Weston": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Wimborne Town", "away": "Weston-super-Mare",
+            "date": "2026-09-22"}}
+        obs = {"fixture": data["round_fixtures"]["Second Round Qualifying"]["Weston-super-Mare"],
+               "observation": {"home": "Wimborne Town", "away": "Weston-super-Mare",
+                               "home_score": 1, "away_score": 1, "winner": "Wimborne Town",
+                               "status": "FT AET", "decision": "penalties",
+                               "date": "2026-09-22"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
+            report = audit.audit(data, "<html/>")
+        self.assertEqual(len(report["replay_candidates"]), 1)
+        self.assertEqual(len(report["scheduled_replay_gaps"]), 1)
+        self.assertTrue(report["scheduled_replay_gaps"][0]["source_observed"])
+
     def test_missing_archive_fails_closed(self):
         data = fixture_data()
         data["round_fixtures"] = {}
