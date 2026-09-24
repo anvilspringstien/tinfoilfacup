@@ -307,6 +307,26 @@ function resolveLiveFixtureForCarrier(f,carrier){
   }
   return {...f,home,away,conditional:unresolved,venue};
 }
+/* TIN_FOIL_PRODUCTION_THAME_VERIFIED_FIXTURE_BEGIN */
+function tinFoilVerifiedThameNextFixture(club,nextName){
+  // Fixture-local bridge for the FA's exact Third Qualifying draw abbreviation.
+  // No generic alias expansion, no guessed winners and no Exmouth promotion.
+  if(!club||nextName!=='Third Round Qualifying'||
+     !sameClubIdentity(club.name,'Thame United'))return null;
+  const fixtures=(LIVE_COMPETITION_DATA||{}).fixtures||{};
+  const matches=Object.values(fixtures).filter(f=>
+    f&&f.round==='Third Round Qualifying'&&f.date==='2026-10-03'&&
+    f.home==='Thame Utd or Exmouth Town'&&f.away==='Eastbourne Borough');
+  const unique=[...new Map(matches.map(f=>
+    [[f.round,f.date,f.home,f.away].join('|'),f])).values()];
+  if(unique.length!==1)return null;
+  const resolved=resolveLiveFixtureForCarrier(unique[0],club);
+  if(!resolved||resolved.conditional||
+     !sameClubIdentity(resolved.home,club.name)||
+     !sameClubIdentity(resolved.away,'Eastbourne Borough'))return null;
+  return unique[0];
+}
+/* TIN_FOIL_PRODUCTION_THAME_VERIFIED_FIXTURE_END */
 function nextRoundInfo(club){
   const cr=resultFor(club),current=(cr&&cr.round)?cr.round:(club.entry_round||'');
   const progressionRound=String(current||'').replace(/\s+Replay$/i,'');
@@ -329,8 +349,15 @@ function nextRoundInfo(club){
     });
     const distinct=[...new Map(matches.map(([,fixture])=>
       [[fixture.home,fixture.away,fixture.round,fixture.date].join('|'),fixture])).values()];
-    if(distinct.length===1)nf=distinct[0];
+    if(distinct.length===1){
+      const candidate=distinct[0];
+      const isThameConditional=nextName==='Third Round Qualifying'&&
+        candidate.date==='2026-10-03'&&candidate.home==='Thame Utd or Exmouth Town'&&
+        candidate.away==='Eastbourne Borough';
+      if(!isThameConditional)nf=candidate;
+    }
   }
+  if(!nf)nf=tinFoilVerifiedThameNextFixture(club,nextName);
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }

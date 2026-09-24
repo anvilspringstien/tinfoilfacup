@@ -168,10 +168,39 @@ if text.count("function verifiedConditionalWinner(")!=1:
     raise SystemExit("ABORT: conditional resolver marker count unexpected")
 
 # Preserve saved campaign identity while matching uniquely indexed abbreviated
-# next-round fixtures (Wimborne -> Wimborne Town FC).
+# next-round fixtures, but never let the losing Exmouth index entry promote
+# Exmouth into the verified Thame/Eastbourne tie.
+helper_marker="/* TIN_FOIL_PRODUCTION_THAME_VERIFIED_FIXTURE_BEGIN */"
+helper="""/* TIN_FOIL_PRODUCTION_THAME_VERIFIED_FIXTURE_BEGIN */
+function tinFoilVerifiedThameNextFixture(club,nextName){
+  // Fixture-local bridge for the FA's exact Third Qualifying draw abbreviation.
+  // No generic alias expansion, no guessed winners and no Exmouth promotion.
+  if(!club||nextName!=='Third Round Qualifying'||
+     !sameClubIdentity(club.name,'Thame United'))return null;
+  const fixtures=(LIVE_COMPETITION_DATA||{}).fixtures||{};
+  const matches=Object.values(fixtures).filter(f=>
+    f&&f.round==='Third Round Qualifying'&&f.date==='2026-10-03'&&
+    f.home==='Thame Utd or Exmouth Town'&&f.away==='Eastbourne Borough');
+  const unique=[...new Map(matches.map(f=>
+    [[f.round,f.date,f.home,f.away].join('|'),f])).values()];
+  if(unique.length!==1)return null;
+  const resolved=resolveLiveFixtureForCarrier(unique[0],club);
+  if(!resolved||resolved.conditional||
+     !sameClubIdentity(resolved.home,club.name)||
+     !sameClubIdentity(resolved.away,'Eastbourne Borough'))return null;
+  return unique[0];
+}
+/* TIN_FOIL_PRODUCTION_THAME_VERIFIED_FIXTURE_END */
+"""
+if helper_marker not in text:
+    next_marker="function nextRoundInfo(club){"
+    if text.count(next_marker)!=1:
+        raise SystemExit("ABORT: nextRoundInfo helper insertion boundary changed")
+    text=text.replace(next_marker,helper+next_marker,1)
+elif text.count(helper_marker)!=1 or text.count("/* TIN_FOIL_PRODUCTION_THAME_VERIFIED_FIXTURE_END */")!=1:
+    raise SystemExit("ABORT: production Thame fixture helper markers malformed")
+
 old_lookup = """  let nf=liveLookup('fixtures',club.name);
-  if(!nf&&nextName==='Preliminary Round'){"""
-new_lookup = """  let nf=liveLookup('fixtures',club.name);
   if(!nf&&LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.fixtures){
     const target=canonicalClubKey(club.name);
     const entries=Object.entries(LIVE_COMPETITION_DATA.fixtures);
@@ -185,10 +214,37 @@ new_lookup = """  let nf=liveLookup('fixtures',club.name);
     if(distinct.length===1)nf=distinct[0];
   }
   if(!nf&&nextName==='Preliminary Round'){"""
+new_lookup = """  let nf=liveLookup('fixtures',club.name);
+  if(!nf&&LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.fixtures){
+    const target=canonicalClubKey(club.name);
+    const entries=Object.entries(LIVE_COMPETITION_DATA.fixtures);
+    const matches=entries.filter(([key,fixture])=>{
+      if(!fixture||fixture.round!==nextName)return false;
+      const k=canonicalClubKey(key);
+      return k===target||target.startsWith(k+' ');
+    });
+    const distinct=[...new Map(matches.map(([,fixture])=>
+      [[fixture.home,fixture.away,fixture.round,fixture.date].join('|'),fixture])).values()];
+    if(distinct.length===1){
+      const candidate=distinct[0];
+      const isThameConditional=nextName==='Third Round Qualifying'&&
+        candidate.date==='2026-10-03'&&candidate.home==='Thame Utd or Exmouth Town'&&
+        candidate.away==='Eastbourne Borough';
+      if(!isThameConditional)nf=candidate;
+    }
+  }
+  if(!nf)nf=tinFoilVerifiedThameNextFixture(club,nextName);
+  if(!nf&&nextName==='Preliminary Round'){"""
+legacy_lookup = """  let nf=liveLookup('fixtures',club.name);
+  if(!nf&&nextName==='Preliminary Round'){"""
 if old_lookup in text:
     text=text.replace(old_lookup,new_lookup,1)
+elif legacy_lookup in text:
+    text=text.replace(legacy_lookup,new_lookup,1)
 elif new_lookup not in text:
     raise SystemExit("ABORT: next-round fixture lookup boundary not found")
+if text.count("if(!nf)nf=tinFoilVerifiedThameNextFixture(club,nextName);")!=1:
+    raise SystemExit("ABORT: Thame verified fixture bridge missing or duplicated")
 old_kickoff = """kickoff:r.kickoff||'15:00',venue:completedResultVenue(r),completed:true};"""
 new_kickoff = """kickoff:r.kickoff||(/Replay/i.test(r.round||'')?'Kick-off TBC':'15:00'),venue:completedResultVenue(r),completed:true};"""
 if old_kickoff in text:
