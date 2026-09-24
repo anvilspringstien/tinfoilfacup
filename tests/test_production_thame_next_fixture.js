@@ -18,7 +18,13 @@ const ctx={
   PRELIM_FIXTURES_BY_CLUB:{},NEXT_FIXTURE_OVERRIDES:{},
   FA_FIXTURES_URL:'https://www.thefa.com/competitions/thefacup/fixtures',
   resultFor:club=>/Thame|Exmouth/i.test(club.name)?{round:'Second Round Qualifying Replay'}:null,
-  liveLookup:()=>null
+  liveLookup:(section,name)=>{
+    // Use the same exact-name and stripped-FC lookup as real Clubfinder.
+    // The previous null stub missed the Exmouth source-index shortcut.
+    const obj=(ctx.LIVE_COMPETITION_DATA||{})[section]||{};
+    const raw=String(name||''),short=raw.replace(/\s+(FC|AFC|CFC)$/,'');
+    return obj[raw]||obj[short]||null;
+  }
 };
 vm.createContext(ctx);
 vm.runInContext(between('function drawAlternatives(','function sameSemanticResult('),ctx);
@@ -27,6 +33,15 @@ const fixture=Object.values(competition.fixtures||{}).find(f=>f&&
   f.round==='Third Round Qualifying'&&
   f.home==='Thame Utd or Exmouth Town'&&f.away==='Eastbourne Borough');
 assert(fixture,'Actual published Thame conditional draw missing');
+const exmouthIndexed=ctx.liveLookup('fixtures','Exmouth Town FC');
+assert(exmouthIndexed&&exmouthIndexed.home==='Thame Utd or Exmouth Town',
+  'Exmouth direct fixture index missing: negative test would not exercise the defect');
+const eastbourne=ctx.nextRoundInfo({name:'Eastbourne Borough FC',entry_round:'Second Round Qualifying'});
+assert(eastbourne.knownFixture,'Legitimate Eastbourne opposing fixture must survive the Exmouth guard');
+assert.equal(eastbourne.knownFixture.away,'Eastbourne Borough');
+assert.equal(eastbourne.knownFixture.home,'Thame United');
+assert.equal(eastbourne.knownFixture.conditional,false);
+
 const thame=()=>ctx.nextRoundInfo({name:'Thame United FC',entry_round:'Second Round Qualifying'});
 const next=thame();
 assert(next.knownFixture,'Production Thame has no verified next fixture');
