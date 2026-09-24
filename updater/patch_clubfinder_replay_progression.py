@@ -120,7 +120,16 @@ function resolveLiveFixtureForCarrier(f,carrier){
   const unresolved=/\\s+or\\s+/i.test(home)||/\\s+or\\s+/i.test(away);"""
 if old_fixture_resolver in text:
     text=text.replace(old_fixture_resolver,new_fixture_resolver,1)
-elif new_fixture_resolver not in text:
+elif not (
+    text.count("function verifiedConditionalWinner(side,round){")==1
+    and text.count("function resolveLiveFixtureForCarrier(f,carrier){")==1
+    and "const parentRound=String(f.round||'')==='Third Round Qualifying'?'Second Round Qualifying':null;" in text
+    and "const home=parentRound?verifiedConditionalWinner(ownHome,parentRound):ownHome;" in text
+    and "const away=parentRound?verifiedConditionalWinner(ownAway,parentRound):ownAway;" in text
+):
+    # The injected Thame alias intentionally changes new_fixture_resolver's
+    # exact text. Accept the previously patched form only with all structural
+    # markers present, so a second run is idempotent without relaxing guards.
     raise SystemExit("ABORT: conditional opponent resolver boundary not found")
 
 # Preserve the result winner but show the verified shoot-out decision even
@@ -140,6 +149,21 @@ new_penalty = """if(r.decision&&r.decision.startsWith('pens ')){
 if text.count(old_penalty)!=2 and text.count(new_penalty)!=2:
     raise SystemExit("ABORT: result line penalty boundaries not found")
 text=text.replace(old_penalty,new_penalty)
+# Keep the winner's actual club identity distinct from the FA's draw alias.
+# Older protected Clubfinder snapshots may already have the resolver installed;
+# inject only this alias into that function, never rewrite the resolver globally.
+verified_start=text.index("function verifiedConditionalWinner(")
+verified_end=text.index("function resolveLiveFixtureForCarrier(",verified_start)
+verified_block=text[verified_start:verified_end]
+if "'thame utd':'thame united'" not in verified_block:
+    target="'weston sm':'weston super mare'"
+    if verified_block.count(target)!=1:
+        raise SystemExit("ABORT: verified conditional winner alias insertion boundary changed")
+    verified_block=verified_block.replace(target,target+",'thame utd':'thame united'",1)
+    text=text[:verified_start]+verified_block+text[verified_end:]
+if text[verified_start:text.index("function resolveLiveFixtureForCarrier(",verified_start)].count("'thame utd':'thame united'")!=1:
+    raise SystemExit("ABORT: Thame draw identity alias missing or duplicated")
+
 if text.count("function verifiedConditionalWinner(")!=1:
     raise SystemExit("ABORT: conditional resolver marker count unexpected")
 
