@@ -112,5 +112,21 @@ check(resolve({result_history: {
   Crowborough: [crowborough], Wimborne: [wimborne]
 }, results: {}}, true, 'Fourth Round Qualifying'), fixture.home, fixture.away, true);
 
+// The actual Third Qualifying draw abbreviates Thame United as "Thame Utd".
+const thameFixture = {...fixture, home: 'Thame Utd or Exmouth Town', away: 'Eastbourne Borough'};
+const thameReplay = {
+  round: 'Second Round Qualifying Replay', date: '2026-09-23',
+  home: 'Exmouth Town', away: 'Thame United',
+  home_score: 1, away_score: 3, winner: 'Thame United', status: 'FT'
+};
+ctx.LIVE_COMPETITION_DATA = {result_history: {}, results: {}};
+let thameResolved = ctx.resolveLiveFixtureForCarrier(thameFixture,
+  {name: 'Exmouth Town FC'}, true);
+check(thameResolved, thameFixture.home, thameFixture.away, true);
+ctx.LIVE_COMPETITION_DATA = {result_history: {Exmouth: [thameReplay]}, results: {}};
+thameResolved = ctx.resolveLiveFixtureForCarrier(thameFixture,
+  {name: 'Exmouth Town FC'}, true);
+check(thameResolved, 'Thame United', 'Eastbourne Borough', false);
+
 assert.match(html, /next:nextRoundInfo\(club,true\)/);
 console.log('BETA verified conditional replay regression: PASS (10 cases plus venue checks)');
