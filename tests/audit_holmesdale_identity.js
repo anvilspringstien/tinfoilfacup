@@ -13,6 +13,21 @@ console.log('CANONICAL '+JSON.stringify({updated_at:competition.updated_at,
   resultKeys:results.map(([key,r])=>({key,...brief(r)})),
   historyKeys:history.map(([key,rows])=>({key,rows:(rows||[]).filter(r=>hit(r.home)||hit(r.away)).map(brief)})),
   fixtureKeys:fixtures.map(([key,r])=>({key,round:r.round,date:r.date,home:r.home,away:r.away}))}));
+
+for(const [side,path] of Object.entries(both)){
+  const html=fs.readFileSync(path,'utf8');
+  for(const n of ['canonicalClubKey','sameClubIdentity','liveLookup','resultFor','historyFor','buildJourney','currentDisplayFixture']){
+    const pattern='function '+n+'(';
+    const i=html.indexOf(pattern);
+    if(i<0){console.log('SOURCE_'+side+'_'+n+' MISSING');continue}
+    const next=html.indexOf('\nfunction ',i+pattern.length);
+    const s=html.slice(i,next>i?Math.min(next,i+2600):i+2600);
+    console.log('SOURCE_'+side+'_'+n+' '+JSON.stringify(s));
+  }
+  const occ=[...html.matchAll(/Holmesdale FC/g)];
+  console.log('ELIGIBLE_CONTEXT_'+side+' '+JSON.stringify(occ.slice(-3).map(m=>html.slice(Math.max(0,m.index-120),m.index+210))));
+}
+
 const makeNode=()=>({value:'',textContent:'',innerHTML:'',hidden:false,style:{},dataset:{},children:[],
   addEventListener(){},removeEventListener(){},focus(){},setAttribute(){},removeAttribute(){},
   appendChild(){},remove(){},insertAdjacentElement(){},querySelectorAll(){return []},
