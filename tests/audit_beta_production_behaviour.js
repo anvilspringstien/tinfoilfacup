@@ -167,6 +167,19 @@ async function main(){
     );
   }
   console.log('THAME_NEXT_FIXTURE_DIAG '+JSON.stringify(thameDiagnostic));
+  for(const [label,m] of Object.entries(models)){
+    const d=m.probe(
+      '(function(){const candidate=ELIGIBLE.find(c=>sameClubIdentity(c.name,__name));'+
+      'const custody=buildJourney(candidate).carrier||candidate;'+
+      'const drawEntries=Object.entries((LIVE_COMPETITION_DATA||{}).fixtures||{}).filter(([key,f])=>'+
+      'f&&f.round==="Third Round Qualifying" && /Thame|Exmouth|Eastbourne/i.test([key,f.home,f.away].join(" ")));'+
+      'return {nextRoundCode:String(nextRoundInfo).slice(0,5400),'+
+      'lookupCode:String(liveLookup).slice(0,2100),'+
+      'drawEntries:drawEntries.map(([key,f])=>({key,home:f.home,away:f.away,round:f.round})),custody:custody.name};})()',
+      {__name:'Thame United'}
+    );
+    console.log('THAME_INDEX_CODE '+label+' '+JSON.stringify(d));
+  }
   // Record discrepancies without failing the audit. Fail only on observed data-integrity
   // regressions; audit alone is not permission to change production or publish.
   assert.equal(canonicalFailures.length,0,'At least one version lost a canonical venue postcode');
