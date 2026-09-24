@@ -1,0 +1,13 @@
+name: Inspect BETA Petts Wood display identity
+on:
+  push:
+    branches: ['fix/beta-petts-wood-display-20260924']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only display identity inspection
+        run: python updater/inspect_beta_petts_wood_display.py
