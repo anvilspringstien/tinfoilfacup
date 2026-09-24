@@ -214,6 +214,8 @@ old_lookup = """  let nf=liveLookup('fixtures',club.name);
     if(distinct.length===1)nf=distinct[0];
   }
   if(!nf&&nextName==='Preliminary Round'){"""
+# Migrate the pre-#77 rendered lookup, then retain this guard on every rebuild.
+# In particular, the FA's Exmouth index is not verified progression evidence.
 previous_lookup = """  let nf=liveLookup('fixtures',club.name);
   if(!nf&&LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.fixtures){
     const target=canonicalClubKey(club.name);
