@@ -1,0 +1,51 @@
+name: Refresh BETA fallback from canonical competition
+
+on:
+  push:
+    branches:
+      - beta/refresh-final-replay-fallback-20260924
+    paths:
+      - '.github/workflows/refresh-beta-snapshot.yml'
+      - 'updater/refresh_beta_embedded_snapshot.py'
+      - 'tests/test_beta_embedded_snapshot_refresh.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: beta-fallback-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.ref_name == 'beta/refresh-final-replay-fallback-20260924'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Refresh only the guarded BETA fallback
+        run: |
+          set -euo pipefail
+          python updater/refresh_beta_embedded_snapshot.py
+          python updater/refresh_beta_embedded_snapshot.py --check
+          python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+          node tests/test_beta_verified_conditional_replay.js
+          test -z "$(git diff --name-only -- competition.json clubfinder.html)"
+          changed="$(git diff --name-only)"
+          test -z "$changed" || test "$changed" = 'beta/clubfinder-beta.html'
+      - name: Commit only the BETA snapshot
+        run: |
+          set -euo pipefail
+          git config user.name "Tin Foil FA Cup BETA Updater"
+          git config user.email "actions@users.noreply.github.com"
+          git add beta/clubfinder-beta.html
+          if git diff --cached --quiet; then
+            echo "Canonical BETA fallback is already current."
+          else
+            git commit -m "Refresh BETA fallback with final verified replay chronology"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
