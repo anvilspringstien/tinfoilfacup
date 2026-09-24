@@ -5,6 +5,7 @@ on:
     paths:
       - 'updater/audit_beta_production_parity.py'
       - '.github/workflows/beta-production-reconciliation.yml'
+      - 'tests/audit_beta_production_behaviour.js'
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,6 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compare committed BETA and protected production
         run: python updater/audit_beta_production_parity.py
+      - name: Execute actual production and BETA venue/fixture paths on canonical data
+        run: node tests/audit_beta_production_behaviour.js
       - name: Baseline BETA regression suite
         run: |
           python updater/refresh_beta_embedded_snapshot.py --check
