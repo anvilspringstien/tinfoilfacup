@@ -192,10 +192,11 @@ function liveLookup(section,name){
   // same way (for example "Weston-super-Mare" vs "Weston Super Mare FC").
   // Fall back to the same canonical identity comparison used by the journey
   // engine so healthy live results cannot be hidden by punctuation alone.
-  const target=canonicalClubKey(raw);
+  // Explicit 2026–27 merger identity only; never rewrite surveyed ground keys.
+  const target=tinFoilBetaCompetitionClubKey(raw);
   if(!target)return null;
   for(const [key,value] of Object.entries(obj)){
-    if(canonicalClubKey(key)===target)return value;
+    if(tinFoilBetaCompetitionClubKey(key)===target)return value;
   }
   return null;
 }
@@ -408,7 +409,26 @@ function canonicalClubKey(name){
     .replace(/[^a-z0-9]+/g,' ')
     .trim().replace(/\s+/g,' ');
 }
-function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
+/* TIN_FOIL_BETA_HOLMESDALE_2026_BEGIN */
+// Only activate the retired Holmesdale name for the actual 2026–27 merger
+// when canonical competition history proves the 8 August Petts Wood tie.
+// Do NOT change canonicalClubKey: postcode selection and ground history are
+// independent of competition identity.
+function tinFoilBetaHolmesdale2026Ready(){
+  const d=LIVE_COMPETITION_DATA||{};
+  const rows=(d.result_history||{})['Petts Wood & Holmesdale'];
+  return Array.isArray(rows)&&rows.some(r=>r&&
+    r.round==='Extra Preliminary Round'&&r.date==='2026-08-08'&&
+    canonicalClubKey(r.home)==='petts wood and holmesdale'&&
+    canonicalClubKey(r.away)==='tooting and mitcham united');
+}
+function tinFoilBetaCompetitionClubKey(name){
+  const key=canonicalClubKey(name);
+  return key==='holmesdale'&&tinFoilBetaHolmesdale2026Ready()
+    ?'petts wood and holmesdale':key;
+}
+/* TIN_FOIL_BETA_HOLMESDALE_2026_END */
+function sameClubIdentity(a,b){return tinFoilBetaCompetitionClubKey(a)===tinFoilBetaCompetitionClubKey(b);}
 function canonicalResultWinner(r){
   if(!r)return '';
   const hs=Number(r.home_score),as=Number(r.away_score);
@@ -440,6 +460,18 @@ function groundByClubName(name){
 } function completedResultVenue(result){
   if(!result)return {ground:'Venue TBC',postcode:'Postcode TBC'};
   const rv=result.venue||{};
+  // The 8 August merged-club home tie predates the explicit per-match venue
+  // now available for 5 September. Supply a postcode-only fallback using the
+  // independently surveyed former Holmesdale home location, not a guessed
+  // 2026 sponsor name. Per-match verified venue names remain authoritative.
+  if(result.date==='2026-08-08'&&
+     canonicalClubKey(result.home)==='petts wood and holmesdale'&&
+     !rv.postcode&&!rv.ground&&tinFoilBetaHolmesdale2026Ready()){
+    const home=groundByClubName('Holmesdale FC');
+    if(String(home.postcode||'').toUpperCase().replace(/\s+/g,'')==='BR28HQ')
+      return {ground:'Ground name unconfirmed',postcode:home.postcode,
+        lat:home.lat,lon:home.lon,verification:'unverified'};
+  }
   const homeClub=candidateClubByName(result.home);
   const hg=groundByClubName(homeClub?homeClub.name:result.home);
 
