@@ -1,3 +1,4 @@
+# Branch workflow trigger: guarded candidate application only
 from pathlib import Path
 
 PATH=Path("clubfinder.html")
