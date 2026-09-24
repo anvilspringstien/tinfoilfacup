@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **24/09/2026, 02:24:41 BST**
+Last checked: **24/09/2026, 08:27:16 BST**
 
 ## Chronology coverage
 
@@ -18,9 +18,9 @@ Last checked: **24/09/2026, 02:24:41 BST**
 - 🔴 Results requiring confirmation: **1**
 - ⚪ Upcoming / incomplete-date fixtures: **40**
 
-## 🟢 Competition chronology healthy
+## 🔴 Critical competition-data issues
 
-Preliminary and First Qualifying chronology is preserved, the active **Third Round Qualifying** draw has canonical coverage, and no played fixture is overdue a result.
+- 1 played fixtures are overdue a result.
 
 ## Conditional active-round slots
 
