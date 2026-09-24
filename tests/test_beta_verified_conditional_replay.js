@@ -128,5 +128,43 @@ thameResolved = ctx.resolveLiveFixtureForCarrier(thameFixture,
   {name: 'Exmouth Town FC'}, true);
 check(thameResolved, 'Thame United', 'Eastbourne Borough', false);
 
+// The post-publication production dataset must also resolve the final replay,
+// not merely a hand-written fixture and synthetic Thame observation.
+const isFinalReplay = r => r && r.round === 'Second Round Qualifying Replay' &&
+  r.home === 'Exmouth Town' && r.away === 'Thame United' &&
+  r.home_score === 1 && r.away_score === 3 &&
+  r.winner === 'Thame United' && r.date === '2026-09-23';
+assert.ok(Object.values(competition.results || {}).some(isFinalReplay),
+  'Live production data is missing the published Exmouth 1–3 Thame replay');
+assert.ok(Object.values(competition.result_history || {})
+  .some(rows => Array.isArray(rows) && rows.some(isFinalReplay)),
+  'Live published result is missing from canonical history');
+const liveThameDraw = Object.values(competition.fixtures || {}).find(f =>
+  f && f.round === 'Third Round Qualifying' &&
+  f.home === 'Thame Utd or Exmouth Town' &&
+  f.away === 'Eastbourne Borough');
+assert.ok(liveThameDraw, 'Published Third Qualifying draw is absent');
+ctx.LIVE_COMPETITION_DATA = competition;
+const actualThame = ctx.resolveLiveFixtureForCarrier(liveThameDraw,
+  {name: 'Exmouth Town FC'}, true);
+check(actualThame, 'Thame United', 'Eastbourne Borough', false);
+
+// Removing only the decisive final replay from the otherwise published data
+// must leave the home draw conditional: no guessed winner from a drawn leg.
+const withoutFinal = {
+  ...competition,
+  results: Object.fromEntries(Object.entries(competition.results || {})
+    .filter(([,r]) => !isFinalReplay(r))),
+  result_history: Object.fromEntries(
+    Object.entries(competition.result_history || {})
+      .map(([key,rows]) => [key, Array.isArray(rows)
+        ? rows.filter(r => !isFinalReplay(r)) : rows]))
+};
+ctx.LIVE_COMPETITION_DATA = withoutFinal;
+const stillPending = ctx.resolveLiveFixtureForCarrier(liveThameDraw,
+  {name: 'Exmouth Town FC'}, true);
+check(stillPending, 'Thame Utd or Exmouth Town', 'Eastbourne Borough', true);
+assert.equal(stillPending.venue.postcode, 'Postcode TBC');
+
 assert.match(html, /next:nextRoundInfo\(club,true\)/);
-console.log('BETA verified conditional replay regression: PASS (10 cases plus venue checks)');
+console.log('BETA verified conditional replay regression: PASS (published Thame and pending controls plus venue checks)');
