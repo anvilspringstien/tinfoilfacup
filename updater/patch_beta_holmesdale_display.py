@@ -50,8 +50,8 @@ def patch(s):
          "return {season:'2026–27',origin:tinFoilBetaDisplayClubName(origin.name),currentCustodian:"),
         ("'<div class=\"club\">'+certEsc(origin.name)+'</div>'",
          "'<div class=\"club\">'+certEsc(tinFoilBetaDisplayClubName(origin.name))+'</div>'"),
-        ("<h2>\${oi===0&&origin.hasCoords?'Nearest: ':''}\${esc(origin.name)}</h2>",
-         "<h2>\${oi===0&&origin.hasCoords?'Nearest: ':''}\${esc(tinFoilBetaDisplayClubName(origin.name))}</h2>"),
+        ("<h2>${oi===0&&origin.hasCoords?'Nearest: ':''}${esc(origin.name)}</h2>",
+         "<h2>${oi===0&&origin.hasCoords?'Nearest: ':''}${esc(tinFoilBetaDisplayClubName(origin.name))}</h2>"),
     ]
     for item in replacements:
         old,new,*n=item
@@ -61,7 +61,7 @@ def patch(s):
     for name in ('home','away','winner'):
         old=f'norm(r.{name})===norm(pathCarrier)'
         new=f'sameClubIdentity(r.{name},pathCarrier)'
-        count={'home':4,'away':4,'winner':2}[name]
+        count={'home':5,'away':5,'winner':3}[name]
         s=replace_exact(s,old,new,count)
     if s.count(BEGIN)!=1 or s.count(END)!=1:
         raise RuntimeError('display patch marker corruption')
