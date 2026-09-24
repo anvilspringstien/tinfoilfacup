@@ -24,6 +24,13 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_preceding_round_replay_audit.py' -v
       - name: Prove replay-orientation repairs preserve newer custodian regressions
         run: python -m unittest discover -s tests -p 'test_replay_orientation_fix_preserves_regressions.py' -v
+      - name: Dry-run routine scanner repair and rendered custody check (no publication)
+        env:
+          TFFC_ALLOW_ACTIVE_RESULT_ADVANCE: "1"
+        run: |
+          python updater/apply_replay_orientation_fix.py
+          node updater/clubfinder_render_regression.js
+          git diff --exit-code -- updater/clubfinder_render_regression.js competition.json clubfinder.html
       - name: Hampton and Weston BETA conditional draw regression
         run: node tests/test_beta_conditional_draw_alias.js
       - name: Audit actual preceding-round source without publication
