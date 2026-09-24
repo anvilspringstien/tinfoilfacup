@@ -1,0 +1,60 @@
+name: Isolated BETA Exmouth direct-index correction
+on:
+  push:
+    branches: ['fix/beta-exmouth-direct-index-20260924']
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'tests/test_beta_thame_next_fixture.js'
+      - 'tests/test_beta_exmouth_full_index.js'
+      - 'updater/patch_beta_exmouth_direct_index.py'
+      - '.github/workflows/beta-exmouth-direct-index.yml'
+permissions:
+  contents: write
+jobs:
+  beta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Apply the fixture-local guard to BETA only
+        run: |
+          set -euo pipefail
+          python updater/patch_beta_exmouth_direct_index.py
+          python updater/patch_beta_exmouth_direct_index.py
+      - name: Exercise actual Exmouth direct fixture index
+        run: |
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_thame_next_fixture.js
+      - name: Verify BETA snapshot and full guarded regressions
+        run: |
+          set -euo pipefail
+          python updater/refresh_beta_embedded_snapshot.py --check
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_conditional_draw_alias.js
+          node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_weston_replay_stats.js
+          node updater/historical_venue_regression.js
+      - name: Prove production, canonical data and update scripts unchanged
+        run: git diff --exit-code -- clubfinder.html competition.json
+      - name: Commit repaired BETA HTML only after green suite
+        if: ${{ github.event_name == 'push' && github.ref_name == 'fix/beta-exmouth-direct-index-20260924' }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- beta/clubfinder-beta.html; then
+            echo "Guarded BETA Exmouth artifact already committed"
+            exit 0
+          fi
+          git config user.name "Tin Foil FA Cup BETA Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          test "$(git diff --cached --name-only)" = "beta/clubfinder-beta.html"
+          git commit -m "Guard BETA Exmouth direct fixture index after verified Thame replay"
+          git pull --rebase origin fix/beta-exmouth-direct-index-20260924
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_thame_next_fixture.js
+          git push origin HEAD:fix/beta-exmouth-direct-index-20260924

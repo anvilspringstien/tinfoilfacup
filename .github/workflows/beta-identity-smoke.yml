@@ -6,6 +6,7 @@ on:
       - 'beta/clubfinder-beta.html'
       - 'tests/test_beta_verified_conditional_replay.js'
       - 'tests/test_beta_thame_next_fixture.js'
+      - 'tests/test_beta_holmesdale_campaign.js'
       - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
@@ -16,6 +17,7 @@ on:
       - 'updater/beta_campaign_identity_regression.js'
       - 'tests/test_beta_verified_conditional_replay.js'
       - 'tests/test_beta_thame_next_fixture.js'
+      - 'tests/test_beta_holmesdale_campaign.js'
       - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
@@ -41,6 +43,8 @@ jobs:
         run: node tests/test_beta_verified_conditional_replay.js
       - name: Regress actual Thame next fixture and Exmouth fail-closed
         run: node tests/test_beta_thame_next_fixture.js
+      - name: Regress Holmesdale merger journey, verified venues and Pigeon Miles
+        run: node tests/test_beta_holmesdale_campaign.js
       - name: Regress other FA draw abbreviations against BETA
         run: node tests/test_beta_conditional_draw_alias.js
       - name: Regress BETA replay kick-off, shootout display and Stats accounting

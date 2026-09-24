@@ -1,0 +1,58 @@
+name: Guard BETA Petts Wood public identity
+on:
+  push:
+    branches: ['fix/beta-petts-wood-display-20260924']
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'updater/patch_beta_petts_wood_display.py'
+      - 'tests/test_beta_petts_wood_display_identity.js'
+      - 'tests/test_beta_holmesdale_campaign.js'
+      - '.github/workflows/beta-petts-wood-display.yml'
+permissions:
+  contents: write
+jobs:
+  beta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Apply current merged-club identity idempotently
+        run: |
+          set -euo pipefail
+          python updater/patch_beta_petts_wood_display.py
+          python updater/patch_beta_petts_wood_display.py --check
+      - name: Guard public name, legacy saved campaign, Stats and location
+        run: node tests/test_beta_petts_wood_display_identity.js
+      - name: Re-run Holmesdale merger journey regression
+        run: node tests/test_beta_holmesdale_campaign.js
+      - name: Existing BETA identity regressions
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_thame_next_fixture.js
+          node tests/test_beta_conditional_draw_alias.js
+          node tests/test_beta_weston_replay_stats.js
+          node updater/historical_venue_regression.js
+      - name: Protect production and canonical data
+        run: git diff --exit-code -- clubfinder.html competition.json
+      - name: Commit corrected BETA artifact after green suite
+        if: ${{ github.event_name == 'push' && github.ref_name == 'fix/beta-petts-wood-display-20260924' }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- beta/clubfinder-beta.html; then
+            echo "BETA public identity artifact already committed"
+            exit 0
+          fi
+          git config user.name "Tin Foil FA Cup BETA Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          test "$(git diff --cached --name-only)" = "beta/clubfinder-beta.html"
+          git commit -m "Use Petts Wood & Holmesdale as current BETA club identity"
+          git pull --rebase origin fix/beta-petts-wood-display-20260924
+          python updater/patch_beta_petts_wood_display.py --check
+          node tests/test_beta_petts_wood_display_identity.js
+          git push origin HEAD:fix/beta-petts-wood-display-20260924
