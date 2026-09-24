@@ -100,6 +100,9 @@ def main():
         gaps = report.get("scheduled_replay_gaps")
         if not isinstance(gaps, list) or readiness.get("scheduled_replay_gaps") != gaps:
             raise SystemExit("Readiness and fresh audit disagree on scheduled replay gaps")
+        if (readiness.get("already_recorded") != report["already_recorded"]
+                or readiness.get("observations") != report["observations"]):
+            raise SystemExit("Readiness and fresh audit disagree on source accounting")
         if len(approved) + len(held) != len(gaps):
             raise SystemExit("Readiness does not account for each unpublished scheduled replay")
         report["replay_candidates"] = approved
