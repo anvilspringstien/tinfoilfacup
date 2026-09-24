@@ -130,6 +130,7 @@ async function main(){
   run("lookup=async()=>({postcode:'BR2 8HQ',lat:51.37413,lon:0.03742});geocodeClubPostcodes=async()=>{};");
   await run("go(false)");
   const savedHtml=els.results.innerHTML;
+  console.log('HOLMESDALE_UI_DEBUG '+JSON.stringify({status:els.status.textContent,html:savedHtml.slice(0,1800),saved:run('loadSavedJourney()')}));
   assert(savedHtml.includes('<h2>Petts Wood &amp; Holmesdale FC</h2>'),
     'Saved campaign heading retains Holmesdale FC');
   assert(savedHtml.includes('This Campaign starts with: Petts Wood &amp; Holmesdale FC'),
