@@ -1,4 +1,6 @@
 name: Refresh BETA fallback from canonical competition
+# Reconciliation checkpoint: refresh BETA offline data after the final replay publication.
+# This workflow may commit only BETA's embedded fallback; never production.
 
 on:
   workflow_dispatch:
