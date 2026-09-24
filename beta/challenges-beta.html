@@ -61,8 +61,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .placeholder h3{font-size:36px;margin:0;color:#7e291f} .placeholder p{font:18px Arial,sans-serif;max-width:420px}
 .cup{width:120px;max-height:190px;object-fit:contain}
 .deckfoot{position:relative;z-index:3;background:#100f0d;padding:16px 12px 12px;flex:0 0 auto}
-.controlrail{display:grid;grid-template-columns:42px 405px 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
-.controls{display:flex;justify-content:center;align-items:center;gap:7px;width:405px}
+.controlrail{display:grid;grid-template-columns:42px 310px 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
+.controls{display:flex;justify-content:center;align-items:center;gap:7px;width:310px}
 .nav{width:42px;height:38px;border-radius:50%;border:1px solid #7b6a52;background:#2a251f;color:#f3e6c7;font-size:25px;cursor:pointer;flex:0 0 auto}
 .nav.prev,.nav.next{margin:0}
 .nav[disabled]{opacity:.28;cursor:not-allowed}
@@ -107,10 +107,10 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 @media(max-width:680px){
  .app{padding:16px 10px 40px}.hero{padding:20px 8px;margin-top:4vh}.hero p{font-size:16px}.overlay{padding:4px}.deck{min-height:99vh;height:auto;border-radius:12px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
  .flipcard{width:min(96vw,610px,calc(99vh - 350px));height:auto;max-height:none;aspect-ratio:1}.face{border-radius:14px}
- .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px 258px 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px;width:258px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
+ .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px 210px 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px;width:210px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
  .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.statsaction{width:52px}.exit{width:46px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:22px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}.stats-grid{gap:6px}.statbox{padding:10px 6px}.statbox strong{font-size:19px}.statbox span{font-size:9.5px}
 }
-@media(max-width:350px){.controlrail{grid-template-columns:31px 231px 31px;column-gap:3px}.controls{gap:3px;width:231px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.statsaction{width:48px}.exit{width:42px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
+@media(max-width:350px){.controlrail{grid-template-columns:31px 190px 31px;column-gap:3px}.controls{gap:3px;width:190px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.statsaction{width:48px}.exit{width:42px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
 
 
 
@@ -1303,50 +1303,7 @@ body.tffc-stats-view .hero.beta-splash{display:none}body.tffc-stats-view #stats{
 </style>
 </head>
 <body>
-<main class="app">
- <div class="shell">
-  <section class="hero beta-splash">
-    <aside class="beta-splash-side">
-      <div class="beta-splash-side-title">Challenges · BETA</div>
-      <div class="beta-splash-side-mark">TFFAC<br>LABS</div>
-    </aside>
-    <div class="beta-splash-main">
-      <div class="beta-splash-eyebrow">Welcome to BETA.</div>
-      <h1>Oh dear. We’ve made Challenges.</h1>
-      <p>Finding your nearest club and following your Tin Foil FA Cup was apparently not enough.</p>
-      <p>We decided you needed <strong>completely unnecessary</strong> reasons to become emotionally invested in this whole <strong>mad adventure.</strong></p>
-      <p class="beta-splash-punch">So now there are Challenges.</p>
-      <p>Some are <strong>automated</strong> as your Campaign progresses. Others rely entirely on your <strong>honour</strong>, because we're not going to demand evidence that you ate a pie.</p>
-      <p>There may be dogs. There may be match-day coppers. There will definitely be <strong>pigeons</strong> — don’t ask.</p>
-      <p>Complete Challenges and fill your <strong>Trophy Cabinet</strong> with beer mats commemorating achievements that nobody outside Tin Foil FA Cup will understand or respect.</p>
-      <p class="beta-splash-punch">None of this is necessary.</p>
-      <p>Which is rather the point.</p>
-      <p>Still in <strong>BETA</strong>, we’ve left some of the machinery exposed so pull levers, press buttons — nothing important should explode.</p>
-      <p>More importantly, this BETA is now <strong>wired to Clubfinder</strong> for Campaign truth. So have fun.</p>
-      <p class="beta-splash-punch beta-splash-go-label">Let’s Go!</p>
-      <div class="actions">
-        <button id="openDeck" class="challenge-btn beta-splash-go">Challenges</button>
-        <button id="maybeLater" class="challenge-btn beta-splash-later" type="button">Maybe Later</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="stats" id="stats">
-    <div class="stats-head">
-      <div><h2>Challenges</h2><small>A compact mock-up of how Challenges could be reflected on Stats.</small></div>
-      <small>Prototype summary</small>
-    </div>
-    <div class="stats-grid">
-      <div class="statbox"><strong id="statsCompleted">0</strong><span>Completed</span></div>
-      <div class="statbox"><strong id="statsAvailable">0</strong><span>Available</span></div>
-      <div class="statbox"><strong id="statsJourney">0</strong><span>Campaign Unlocked</span></div>
-    </div>
-    <div class="stats-linkrow"><button id="statsOpenDeck" class="challenge-btn">Back to Challenges</button></div>
-    <div class="future-mileage">Campaign mileage is supplied by Clubfinder using Pigeon Miles.</div>
-  </section>
- </div>
-</main>
-
+<!-- Challenges opens directly to the Deck; Clubfinder alone owns campaign Stats. -->
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Tin Foil FA Cup Challenges">
  <section class="deck">
   <div class="deckbody">
@@ -1364,7 +1321,6 @@ body.tffc-stats-view .hero.beta-splash{display:none}body.tffc-stats-view #stats{
       <div class="controls">
         <button class="action accept" id="acceptBtn">Accept?</button>
         <button class="action complete" id="completeBtn">Completed?</button>
-        <button class="action statsaction" id="deckStatsBtn">Stats</button>
         <button class="action exit" id="exitBtn">Exit</button>
       </div>
       <button class="nav next" id="next" aria-label="Next Challenge">›</button>
@@ -1719,15 +1675,8 @@ function openAt(i=0, showBack=false) {
   index=Math.max(0,Math.min(CHALLENGES.length-1,i)); render(); overlay.classList.add("open");
   if (showBack) { flipped=true; flipcard.classList.add("flipped"); flipcard.setAttribute("aria-pressed","true"); }
 }
-function close() { overlay.classList.remove("open"); }
+function close() { tinFoilReturnToClubfinder(); }
 
-
-function tinFoilOpenCanonicalStats(){
-  /* Stats replaces Challenges and Back to Challenges replaces Stats. Exit is
-     handled separately by one explicit BETA Clubfinder return route. */
-  try{sessionStorage.setItem('tffc.challengeReturnIndex',String(index));}catch(_){}
-  window.location.replace('clubfinder-beta.html?stats=1&return=challenges');
-}
 
 function tinFoilConfirm(message){
   return new Promise(resolve=>{
@@ -1755,15 +1704,6 @@ function tinFoilReturnToClubfinder(){
   window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
 }
 
-$("openDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(0); };
-$("maybeLater").onclick=(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-  tinFoilReturnToClubfinder();
-};
-$("deckStatsBtn").onclick=()=>{ tinFoilOpenCanonicalStats(); };
-$("statsOpenDeck").onclick=()=>{ document.body.classList.remove("tffc-stats-view"); openAt(index); };
 $("exitBtn").onclick=(e)=>{
   e.preventDefault();
   e.stopPropagation();
@@ -1852,13 +1792,7 @@ $("completeBtn").onclick=()=>{
 };
 
 function renderStats() {
-  const challengeList=CHALLENGES.filter(c=>c.type!=="foundation");
-  const completed=challengeList.filter(c=>!!state.completed[c.id]);
-  const available=challengeList.filter(c=>isUnlocked(c) && !state.completed[c.id]);
-  const campaignUnlocked=challengeList.filter(c=>c.type==="campaign" && isUnlocked(c));
-  $("statsCompleted").textContent=completed.length;
-  $("statsAvailable").textContent=available.length;
-  $("statsJourney").textContent=campaignUnlocked.length;
+  // Retain simulator, mileage and Trophy Cabinet refresh; no second Stats view.
   {
     const ties=Math.min(999,Math.max(0,state.tiesPlayed)).toString().padStart(2,"0");
     $("tieCount").innerHTML=ties.split("").map(n=>`<span>${n}</span>`).join("");
@@ -1968,17 +1902,18 @@ applyClubfinderCampaignTruth();
 if (awardCampaignChallenges()) save();
 else renderStats();
 
+// Open the actual deck on arrival. Preserve legacy return links from already-open Stats tabs.
 const tinFoilChallengeRoute=new URLSearchParams(window.location.search||'');
+let launchIndex=0;
 if(tinFoilChallengeRoute.get('from')==='stats-return-v2'){
-  let returnIndex=0;
   try{
     const stored=Number(sessionStorage.getItem('tffc.challengeReturnIndex'));
-    if(Number.isFinite(stored)) returnIndex=stored;
+    if(Number.isFinite(stored)) launchIndex=stored;
     sessionStorage.removeItem('tffc.challengeReturnIndex');
   }catch(_){}
-  openAt(returnIndex);
   try{history.replaceState(null,'',location.pathname+location.hash);}catch(_){}
 }
+openAt(launchIndex);
 </script>
 
 </body>
