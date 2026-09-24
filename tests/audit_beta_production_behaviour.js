@@ -173,7 +173,7 @@ async function main(){
       'const custody=buildJourney(candidate).carrier||candidate;'+
       'const drawEntries=Object.entries((LIVE_COMPETITION_DATA||{}).fixtures||{}).filter(([key,f])=>'+
       'f&&f.round==="Third Round Qualifying" && /Thame|Exmouth|Eastbourne/i.test([key,f.home,f.away].join(" ")));'+
-      'return {nextRoundCode:String(nextRoundInfo).slice(0,5400),'+
+      'return {nextRoundCode:String(nextRoundInfo).slice(0,1300),baseNextRoundCode:String(tinFoilBaseNextRoundInfo).slice(0,11000),'+
       'lookupCode:String(liveLookup).slice(0,2100),'+
       'drawEntries:drawEntries.map(([key,f])=>({key,home:f.home,away:f.away,round:f.round})),custody:custody.name};})()',
       {__name:'Thame United'}
