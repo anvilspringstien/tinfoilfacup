@@ -1,0 +1,26 @@
+name: Guarded BETA-production reconciliation audit
+on:
+  push:
+    branches: ['audit/beta-production-reconciliation-20260924']
+    paths:
+      - 'updater/audit_beta_production_parity.py'
+      - '.github/workflows/beta-production-reconciliation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare committed BETA and protected production
+        run: python updater/audit_beta_production_parity.py
+      - name: Baseline BETA regression suite
+        run: |
+          python updater/refresh_beta_embedded_snapshot.py --check
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_weston_replay_stats.js
+          node updater/historical_venue_regression.js
+      - name: Prove no production or canonical data modifications
+        run: git diff --exit-code -- clubfinder.html competition.json
