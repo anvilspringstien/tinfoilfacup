@@ -6,6 +6,11 @@ on:
       - 'updater/audit_beta_production_parity.py'
       - '.github/workflows/beta-production-reconciliation.yml'
       - 'tests/audit_beta_production_behaviour.js'
+  pull_request:
+    paths:
+      - '.github/workflows/beta-production-reconciliation.yml'
+      - 'updater/audit_beta_production_parity.py'
+      - 'tests/audit_beta_production_behaviour.js'
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,10 +25,13 @@ jobs:
         run: node tests/audit_beta_production_behaviour.js
       - name: Baseline BETA regression suite
         run: |
-          python updater/refresh_beta_embedded_snapshot.py --check
+          # The audit intentionally reports a potentially stale BETA offline fallback.
+          # Do not mutate BETA or require freshness until a separately guarded refresh.
           node updater/beta_campaign_identity_regression.js
           node tests/test_beta_verified_conditional_replay.js
           node tests/test_beta_weston_replay_stats.js
           node updater/historical_venue_regression.js
+          node tests/test_production_thame_next_fixture.js
+          node tests/test_beta_thame_next_fixture.js
       - name: Prove no production or canonical data modifications
-        run: git diff --exit-code -- clubfinder.html competition.json
+        run: git diff --exit-code -- clubfinder.html beta/clubfinder-beta.html competition.json

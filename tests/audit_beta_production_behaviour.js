@@ -167,19 +167,54 @@ async function main(){
     );
   }
   console.log('THAME_NEXT_FIXTURE_DIAG '+JSON.stringify(thameDiagnostic));
+  // A direct Thame start must now resolve in both builds. A direct Exmouth
+  // lookup must not turn the losing side into the qualifying-round entrant.
   for(const [label,m] of Object.entries(models)){
-    const d=m.probe(
-      '(function(){const candidate=ELIGIBLE.find(c=>sameClubIdentity(c.name,__name));'+
-      'const custody=buildJourney(candidate).carrier||candidate;'+
-      'const drawEntries=Object.entries((LIVE_COMPETITION_DATA||{}).fixtures||{}).filter(([key,f])=>'+
-      'f&&f.round==="Third Round Qualifying" && /Thame|Exmouth|Eastbourne/i.test([key,f.home,f.away].join(" ")));'+
-      'return {nextRoundCode:String(nextRoundInfo).slice(0,1300),baseNextRoundCode:String(tinFoilBaseNextRoundInfo).slice(0,11000),'+
-      'lookupCode:String(liveLookup).slice(0,2100),'+
-      'drawEntries:drawEntries.map(([key,f])=>({key,home:f.home,away:f.away,round:f.round})),custody:custody.name};})()',
-      {__name:'Thame United'}
-    );
-    console.log('THAME_INDEX_CODE '+label+' '+JSON.stringify(d));
+    const t=thameDiagnostic[label];
+    assert(t.nextKnown,label+' direct Thame start has no verified Third Qualifying fixture');
+    assert.equal(norm(t.nextKnown.home),norm('Thame United'),label+' direct Thame home');
+    assert.equal(norm(t.nextKnown.away),norm('Eastbourne Borough'),label+' direct Thame away');
+    assert.equal(t.nextKnown.date,'2026-10-03',label+' direct Thame date');
+    assert.equal(t.nextKnown.conditional,false,label+' published Thame fixture still conditional');
+    const exmouth=m.probe(
+      '(function(){const o=ELIGIBLE.find(c=>sameClubIdentity(c.name,__name));'+
+      'const n=nextRoundInfo(o);return {nextName:n&&n.name,fixture:n&&n.knownFixture};})()',
+      {__name:'Exmouth Town'});
+    const f=exmouth&&exmouth.fixture;
+    assert(!(f&&f.conditional===false&&norm(f.home)===norm('Exmouth Town')&&
+      norm(f.away)===norm('Eastbourne Borough')),
+      label+' losing Exmouth incorrectly advanced into verified Third Qualifying fixture');
+    console.log('THAME_EXMOUTH_PARITY '+JSON.stringify({side:label,
+      thameNext:{home:t.nextKnown.home,away:t.nextKnown.away,date:t.nextKnown.date,
+        postcode:t.nextKnown.venue&&t.nextKnown.venue.postcode},
+      exmouthDirect:exmouth}));
   }
+
+  // Compare actual canonical shootout rows with the displayed Stats winner.
+  // A level score without a completed penalty decision must remain blank.
+  const penaltyCases=rows.filter(r=>r&&r.decision==='penalties'&&r.winner&&
+    Number(r.home_score)===Number(r.away_score));
+  assert(penaltyCases.length>0,'No canonical decided penalty shootouts in the audit dataset');
+  const sample=penaltyCases.find(r=>norm(r.home)===norm('Wimborne Town')&&
+    norm(r.away)===norm('Weston-super-Mare'))||penaltyCases[0];
+  const penaltyResult={match:[sample.home,sample.away],score:[sample.home_score,sample.away_score],
+    verifiedWinner:sample.winner,decision:sample.decision};
+  for(const [label,m] of Object.entries(models))
+    penaltyResult[label]=m.probe('tinFoilCertificateWinner(__row)',{__row:sample});
+  assert.equal(penaltyResult.production,'','Production penalty winner regression changed unexpectedly');
+  assert.equal(norm(penaltyResult.beta),norm(sample.winner),
+    'BETA Stats did not display verified penalty winner');
+  const pendingDraw=rows.find(r=>r&&r.decision==='draw-replay'&&
+    Number(r.home_score)===Number(r.away_score));
+  if(pendingDraw){
+    for(const [label,m] of Object.entries(models))
+      assert.equal(m.probe('tinFoilCertificateWinner(__row)',{__row:pendingDraw}),'',
+        label+' undecided replay incorrectly acquired a Stats winner');
+  }
+  console.log('PENALTY_STATS_AUDIT '+JSON.stringify({
+    eligibleUniqueDecidedShootouts:penaltyCases.length,example:penaltyResult,
+    undecidedReplayControl:!!pendingDraw}));
+
   // Record discrepancies without failing the audit. Fail only on observed data-integrity
   // regressions; audit alone is not permission to change production or publish.
   assert.equal(canonicalFailures.length,0,'At least one version lost a canonical venue postcode');
