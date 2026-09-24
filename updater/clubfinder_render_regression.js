@@ -88,7 +88,31 @@ const assertions=`
   const exmouthReplay=exmouthHistory.find(r=>same(r.home,'Exmouth Town')&&same(r.away,'Banbury United')&&Number(r.home_score)===2&&Number(r.away_score)===1);
   if(!exmouthDraw)throw new Error('Replay regression: Banbury United 0-0 Exmouth Town draw missing');
   if(!exmouthReplay)throw new Error('Replay regression: Exmouth Town 2-1 Banbury United replay missing');
-  if(!same((exmouthJourney.carrier||exmouth).name,'Exmouth Town'))throw new Error('Replay regression: Exmouth Town should remain custodian after winning replay');
+  // This First Qualifying victory is historical. Once the independently
+  // verified Second Qualifying replay is published, custody advances to Thame.
+  const exmouthSecondQReplay=canonicalHistory.find(r=>
+    /Second Round Qualifying Replay$/i.test(String(r.round||''))&&
+    [r.home,r.away].some(x=>same(x,'Exmouth Town'))&&
+    [r.home,r.away].some(x=>same(x,'Thame United'))&&
+    same(r.winner,'Thame United')&&Number(r.home_score)===1&&Number(r.away_score)===3);
+  const exmouthCarrier=(exmouthJourney.carrier||exmouth);
+  if(exmouthSecondQReplay){
+    if(!exmouthHistory.some(r=>/Second Round Qualifying Replay$/i.test(String(r.round||''))&&
+        same(r.winner,'Thame United')))
+      throw new Error('Replay regression: published Exmouth–Thame replay absent from journey');
+    if(!same(exmouthCarrier.name,'Thame United'))
+      throw new Error('Replay regression: Thame should become custodian after verified Exmouth 1–3 Thame replay; got '+exmouthCarrier.name);
+    const thameDraw=canonicalFixtures.find(f=>
+      String(f.round||'')==='Third Round Qualifying'&&
+      /Thame Utd or Exmouth Town/i.test(String(f.home||'')+' | '+String(f.away||''))&&
+      /Eastbourne Borough/i.test(String(f.home||'')+' | '+String(f.away||'')));
+    if(!thameDraw)throw new Error('Replay regression: conditional Thame–Eastbourne Third Qualifying draw missing');
+    const resolved=resolveLiveFixtureForCarrier(thameDraw,exmouthCarrier);
+    if(!resolved||!same(resolved.home,'Thame United')||!same(resolved.away,'Eastbourne Borough')||resolved.conditional)
+      throw new Error('Replay regression: verified Thame winner did not resolve Third Qualifying fixture');
+  }else if(!same(exmouthCarrier.name,'Exmouth Town')){
+    throw new Error('Replay regression: Exmouth should remain custodian until a published Second Qualifying result advances it');
+  }
 
   const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
@@ -114,6 +138,7 @@ const assertions=`
   console.log('Heaton replay present: PASS');
   console.log('Bishop Auckland 0-2 Emley replay: PASS');
   console.log('Exmouth Town 2-1 Banbury United replay: PASS');
+  console.log('Exmouth post-replay custodian:',exmouthCarrier.name);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
   console.log('Enfield Second Qualifying fixture:',enfieldSecondQ.home,'v',enfieldSecondQ.away);
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
