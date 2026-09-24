@@ -1,4 +1,4 @@
-name: Guarded publication of twelve preceding-round replays
+name: Guarded publication of outstanding preceding-round replays
 on:
   pull_request:
     paths:
@@ -68,8 +68,17 @@ jobs:
           python updater/guard_archived_replay_promotion.py --audit /tmp/archived-replay-audit.json --evidence /tmp/replay-independent-evidence.json > /tmp/replay-promotion-readiness.json
           python -m json.tool /tmp/replay-promotion-readiness.json
       - name: Stage real preceding-round replay candidates in memory
-        run: python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
+        id: stage
+        run: |
+          set -euo pipefail
+          python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
+          if test -s /tmp/staged-replay-candidate.json; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Simulate full candidate state in isolated workspace
+        if: ${{ steps.stage.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
           test -s /tmp/staged-replay-candidate.json
@@ -111,23 +120,25 @@ jobs:
           node updater/production_ui_regression.js
           echo "ISOLATED CANDIDATE SIMULATION: ALL GUARDS PASSED"
       - name: Guard complete accounting and conditional independent promotion
+        if: ${{ steps.stage.outputs.has_changes == 'true' }}
         run: |
           python - <<'PY'
           import json
           report=json.load(open('/tmp/replay-promotion-readiness.json'))
-          assert report['approved_count']+report['held_count']==13, report
-          assert report['approved_count'] in (12,13), report
-          if report['approved_count']==12:
-              assert report['held_count']==1 and 'wimborne town' in report['held'][0]['fixture'], report
-              assert all('wimborne' not in str(r).lower() for r in report['approved'])
-          else:
-              assert report['held_count']==0 and any(r.get('winner')=='Wimborne Town' for r in report['approved'])
+          expected=len(report['scheduled_replay_gaps'])
+          assert report['approved_count']+report['held_count']==expected, report
+          assert report['approved_count']>0, report
+          assert report['already_recorded']+report['approved_count']+report['held_count']==report['observations'], report
+          if report['held']:
+              assert all('wimborne town' in item['fixture'] for item in report['held']), report
+              assert all(r.get('winner')!='Wimborne Town' for r in report['approved']), report
+          if any(r.get('decision')=='penalties' for r in report['approved']):
               evidence=json.load(open('/tmp/replay-independent-evidence.json'))
               assert any(len(rows)>=2 for rows in evidence.values()), evidence
-          print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'cleared,',report['held_count'],'held')
+          print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'new cleared,',report['held_count'],'held,',report['already_recorded'],'previously published')
           PY
       - name: Publish guarded candidate only after all isolated guards pass
-        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' }}
+        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' && steps.stage.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
           SIM="$(cat /tmp/replay-simulation-path)"
@@ -144,7 +155,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to publish"
           else
-            git commit -m "Publish twelve verified preceding-round replays; quarantine Wimborne"
+            git commit -m "Publish newly verified preceding-round replay results"
             git pull --rebase origin main
             python updater/reconcile_result_history_aliases.py --check
             python updater/competition_regression_guard.py
