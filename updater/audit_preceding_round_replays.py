@@ -45,6 +45,7 @@ def audit(data, source_html, live_html="", source_url=""):
         + (scan.parse_fwp_observations(live_html, known, scan.FWP_LIVE_URL) if live_html else [])
     )
     history = scan.history_rows(data)
+    published_history = list(history)  # Do not mistake in-memory candidates for published results.
     results, blocked, duplicates, events = [], [], [], []
     for item in observations:
         obs = item["observation"]
@@ -79,7 +80,7 @@ def audit(data, source_html, live_html="", source_url=""):
     # Scheduled preceding-round replays are an independent completeness set.
     # A source count alone cannot prove that the source included every tie.
     observed_pairs = {pair_key(item["observation"]) for item in observations}
-    recorded_pairs = {pair_key(row) for row in history
+    recorded_pairs = {pair_key(row) for row in published_history
                       if base_round(row.get("round")) == preceding
                       and str(row.get("round") or "").endswith(" Replay")
                       and row.get("winner")}
