@@ -4,6 +4,8 @@ on:
     paths:
       - 'updater/audit_preceding_round_replays.py'
       - 'updater/stage_preceding_replay_candidates.py'
+      - 'updater/patch_clubfinder_replay_progression.py'
+      - 'updater/clubfinder_render_regression.js'
       - 'updater/guard_archived_replay_promotion.py'
       - 'updater/reconcile_quarantined_replay_evidence.py'
       - 'tests/test_archived_replay_source.py'
