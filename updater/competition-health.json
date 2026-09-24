@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-24T08:36:48.214545+01:00",
+  "checked_at": "2026-09-24T11:18:19.032808+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -10,28 +10,16 @@
     "active_round_conditional_slots": 11
   },
   "counts": {
-    "known_fixtures": 178,
+    "known_fixtures": 177,
     "complete": 137,
     "awaiting_grace": 0,
-    "overdue": 1,
+    "overdue": 0,
     "upcoming": 40,
     "critical": 0
   },
   "critical": [],
   "fixture_local_health": true,
-  "overdue": [
-    {
-      "round": "Second Round Qualifying Replay",
-      "home": "Exmouth Town",
-      "away": "Thame United",
-      "date": "2026-09-23",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-09-23T19:45:00+01:00",
-      "deadline": "2026-09-23T22:45:00+01:00"
-    }
-  ],
+  "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
