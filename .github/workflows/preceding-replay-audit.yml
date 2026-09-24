@@ -31,18 +31,43 @@ jobs:
               r = json.load(f)
           assert r['production_mutation'] is False
           assert r['archived_ties'] == 80
-          # FWP may correct a previously contradictory penalty score.
-          # Both states are legitimate: 12 healthy + 1 quarantined, or
-          # 13 healthy after source correction. Any other gap fails closed.
+          # A replay can be new, quarantined, or already in chronology.
+          # Require all 13 independent source observations to be accounted for;
+          # publication must not make this read-only audit turn red.
           assert len(r['blocked']) <= 1, r['blocked']
           if r['blocked']:
               b = r['blocked'][0]
               assert any('Wimborne' in side for side in (b['home'], b['away'])), b
               assert 'penalty decision with non-level source score' in b['reason'], b
-          assert len(r['replay_candidates']) + len(r['blocked']) == 13, (
-              len(r['replay_candidates']), r['blocked'])
-          print('Guarded source audit: verified candidates=', len(r['replay_candidates']),
-                'quarantined=', len(r['blocked']))
+          assert r['observations'] >= 13, r['observations']  # Source may gain the final replay.
+          assert not r['events'], r['events']
+          assert len(r['replay_candidates']) + len(r['blocked']) + r['already_recorded'] == r['observations'], (
+              len(r['replay_candidates']), r['blocked'], r['already_recorded'])
+          # A missing published result is expected *on a draft branch* only if
+          # the independently scheduled tie has its own observed candidate or
+          # quarantine. Source totals alone cannot prove complete coverage.
+          import sys
+          sys.path.insert(0, 'updater')
+          from round_state_engine import pair_key
+          def key(row):
+              return (row.get('date'), pair_key(row))
+          gaps = r['scheduled_replay_gaps']
+          gap_keys = [key(row) for row in gaps]
+          outstanding = r['replay_candidates'] + r['blocked']
+          outstanding_keys = [key(row) for row in outstanding]
+          assert len(set(gap_keys)) == len(gap_keys), gaps
+          assert len(set(outstanding_keys)) == len(outstanding_keys), outstanding
+          assert all(row.get('source_observed') is True for row in gaps), gaps
+          assert set(gap_keys) == set(outstanding_keys), (
+              'Unpublished scheduled replay lacks its own source-backed result or hold', gaps, outstanding)
+          print('Guarded source audit: new candidates=', len(r['replay_candidates']),
+                'already recorded=', r['already_recorded'],
+                'quarantined=', len(r['blocked']),
+                'scheduled results pending publication=', len(gaps))
+          if gaps:
+              print('AUDIT PASS WITH PENDING PUBLICATION — NOT YET COMPLETE:', gaps)
+          else:
+              print('AUDIT PASS — all scheduled replays published')
           PY
       - name: Prove protected production files were not modified
         if: always()

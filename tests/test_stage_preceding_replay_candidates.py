@@ -52,6 +52,28 @@ class StageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"no unique next-round draw"):
             stage.stage(d, report())
 
+    def test_thame_replay_maps_to_abbreviated_third_qualifying_draw(self):
+        source = data()
+        source["result_history"] = {"Thame United": [{
+            "home": "Thame United", "away": "Exmouth Town",
+            "home_score": 3, "away_score": 3, "winner": "",
+            "status": "FT", "decision": "draw-replay",
+            "round": "Second Round Qualifying", "date": "2026-09-19"}]}
+        source["fixtures"] = {"Thame": {
+            "home": "Thame Utd", "away": "Eastbourne Borough",
+            "date": "2026-10-03", "round": "Third Round Qualifying"}}
+        replay = {"home": "Exmouth Town", "away": "Thame United",
+                  "home_score": 1, "away_score": 3,
+                  "winner": "Thame United", "status": "FT",
+                  "round": "Second Round Qualifying Replay", "date": "2026-09-23"}
+        before = copy.deepcopy(source)
+        summary, candidate = stage.stage(source, {
+            "production_mutation": False, "blocked": [], "replay_candidates": [replay]})
+        self.assertEqual(source, before)
+        self.assertEqual(summary["staged_count"], 1)
+        self.assertEqual(summary["staged"][0]["next_fixture"], "Thame Utd v Eastbourne Borough")
+        self.assertEqual(candidate["results"]["Thame United"]["winner"], "Thame United")
+
 
 if __name__ == "__main__":
     unittest.main()

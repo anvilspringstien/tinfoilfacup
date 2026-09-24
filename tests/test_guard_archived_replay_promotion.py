@@ -15,7 +15,11 @@ def audit():
                  "date": "2026-09-22", "round": "Second Round Qualifying Replay",
                  "winner": "Wimborne Town", "decision": "penalties",
                  "home_score": 1, "away_score": 1})
-    return {"production_mutation": False, "replay_candidates": rows, "blocked": []}
+    return {"production_mutation": False, "replay_candidates": rows, "blocked": [],
+            "observations": 13, "already_recorded": 0, "events": [],
+            "scheduled_replay_gaps": [
+                {"home": row["home"], "away": row["away"],
+                 "date": row["date"], "source_observed": True} for row in rows]}
 
 
 def evidence():
@@ -57,8 +61,56 @@ class ReadinessTests(unittest.TestCase):
     def test_missing_fixture_fails_closed(self):
         source = audit()
         source["replay_candidates"].pop()
-        with self.assertRaisesRegex(ValueError, "all 13"):
+        with self.assertRaisesRegex(ValueError, "not fully accounted"):
             readiness(source)
+
+
+    def test_thirteen_recorded_and_one_new_thame_replay(self):
+        thame = {"home": "Exmouth Town", "away": "Thame United",
+                 "date": "2026-09-23", "round": "Second Round Qualifying Replay",
+                 "winner": "Thame United", "home_score": 1, "away_score": 3,
+                 "status": "FT", "decision": ""}
+        report = {"production_mutation": False, "replay_candidates": [thame],
+                  "blocked": [], "events": [], "observations": 14,
+                  "already_recorded": 13,
+                  "scheduled_replay_gaps": [
+                      {"home": thame["home"], "away": thame["away"],
+                       "date": thame["date"], "source_observed": True}]}
+        result = readiness(report)
+        self.assertEqual((result["approved_count"], result["held_count"]), (1, 0))
+        self.assertEqual(result["already_recorded"], 13)
+        self.assertEqual(result["approved"][0]["winner"], "Thame United")
+
+    def test_same_source_count_cannot_hide_unseen_thame(self):
+        report = audit()
+        report["scheduled_replay_gaps"].append(
+            {"home": "Exmouth Town", "away": "Thame United",
+             "date": "2026-09-23", "source_observed": False})
+        with self.assertRaisesRegex(ValueError, "absent from source"):
+            readiness(report)
+
+    def test_observed_thame_cannot_pass_before_staging(self):
+        report = audit()
+        report["scheduled_replay_gaps"].append(
+            {"home": "Exmouth Town", "away": "Thame United",
+             "date": "2026-09-23", "source_observed": True})
+        with self.assertRaisesRegex(ValueError, "no source-backed result"):
+            readiness(report)
+
+    def test_duplicate_candidate_fails_closed(self):
+        report = audit()
+        report["replay_candidates"].append(dict(report["replay_candidates"][0]))
+        report["observations"] += 1
+        with self.assertRaisesRegex(ValueError, "duplicate replay candidate"):
+            readiness(report)
+
+    def test_all_already_published_is_clean_noop(self):
+        report = {"production_mutation": False, "replay_candidates": [],
+                  "blocked": [], "events": [], "observations": 14,
+                  "already_recorded": 14, "scheduled_replay_gaps": []}
+        result = readiness(report)
+        self.assertEqual((result["approved_count"], result["held_count"]), (0, 0))
+        self.assertEqual(result["status"], "ready")
 
 
 if __name__ == "__main__":
