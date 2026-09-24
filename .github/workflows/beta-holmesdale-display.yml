@@ -1,0 +1,67 @@
+name: Isolated BETA Holmesdale display correction
+on:
+  push:
+    branches: ['fix/beta-holmesdale-display-20260924']
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'tests/test_beta_holmesdale_campaign.js'
+      - 'updater/patch_beta_holmesdale_display.py'
+      - '.github/workflows/beta-holmesdale-display.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  beta-display:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Apply only the guarded visible-name patch, prove idempotency
+        run: |
+          set -euo pipefail
+          python updater/patch_beta_holmesdale.py --check
+          python updater/patch_beta_holmesdale_display.py
+          python updater/patch_beta_holmesdale_display.py
+          python updater/patch_beta_holmesdale_display.py --check
+      - name: Verify canonical BETA snapshot and real Holmesdale display
+        run: |
+          set -euo pipefail
+          python updater/refresh_beta_embedded_snapshot.py --check
+          node tests/test_beta_holmesdale_campaign.js
+      - name: Regress existing campaigns, replay, Exmouth and historical venues
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_thame_next_fixture.js
+          node tests/test_beta_conditional_draw_alias.js
+          node tests/test_beta_weston_replay_stats.js
+          node updater/historical_venue_regression.js
+          python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+      - name: Production files must remain byte-for-byte unchanged
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- clubfinder.html competition.json
+          changed="$(git diff --name-only)"
+          test -z "$changed" || test "$changed" = 'beta/clubfinder-beta.html'
+      - name: Commit guarded corrected BETA HTML on isolated branch
+        if: ${{ github.event_name == 'push' && github.ref_name == 'fix/beta-holmesdale-display-20260924' }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- beta/clubfinder-beta.html; then
+            echo "Committed BETA artifact already up to date"
+            exit 0
+          fi
+          git config user.name "Tin Foil FA Cup BETA Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          test "$(git diff --cached --name-only)" = "beta/clubfinder-beta.html"
+          git commit -m "Display Petts Wood and Holmesdale throughout BETA campaign and Stats"
+          git pull --rebase origin fix/beta-holmesdale-display-20260924
+          python updater/patch_beta_holmesdale_display.py --check
+          python updater/refresh_beta_embedded_snapshot.py --check
+          node tests/test_beta_holmesdale_campaign.js
+          git push origin HEAD:fix/beta-holmesdale-display-20260924
