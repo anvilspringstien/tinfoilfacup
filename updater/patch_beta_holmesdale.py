@@ -49,7 +49,7 @@ NEW_VENUE="""  const rv=result.venue||{};
   if(result.date==='2026-08-08'&&
      canonicalClubKey(result.home)==='petts wood and holmesdale'&&
      !rv.postcode&&!rv.ground&&tinFoilBetaHolmesdale2026Ready()){
-    const home=groundByClubName('Holmesdale FC');
+    const home=groundByClubName('Petts Wood & Holmesdale FC');
     if(String(home.postcode||'').toUpperCase().replace(/\s+/g,'')==='BR28HQ')
       return {ground:'Ground name unconfirmed',postcode:home.postcode,
         lat:home.lat,lon:home.lon,verification:'unverified'};

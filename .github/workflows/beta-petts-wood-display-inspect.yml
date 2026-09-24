@@ -1,0 +1,18 @@
+name: Inspect BETA Petts Wood display identity
+on:
+  push:
+    branches: ['fix/beta-petts-wood-display-20260924']
+  pull_request:
+    paths:
+      - 'updater/inspect_beta_petts_wood_display.py'
+      - '.github/workflows/beta-petts-wood-display-inspect.yml'
+      - 'beta/clubfinder-beta.html'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only display identity inspection
+        run: python updater/inspect_beta_petts_wood_display.py
