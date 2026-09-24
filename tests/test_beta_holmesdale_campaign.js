@@ -49,6 +49,10 @@ async function main(){
     'Merger must not become fuzzy global name matching');
   const info=run("(function(){const o=ELIGIBLE.find(c=>c.name==='Holmesdale FC');if(!o)throw Error('Holmesdale origin absent');return {name:o.name,ground:o.ground,postcode:o.postcode,entry:o.entry_round}})()");
   assert.equal(info.name,'Holmesdale FC','Original postcode-based origin identity changed');
+  assert.equal(run("tinFoilBetaDisplayClubName('Holmesdale FC')"),'Petts Wood & Holmesdale FC',
+    'The user-visible club name must use the merged 2026 identity');
+  assert.equal(run("tinFoilBetaDisplayClubName('AFC Greenwich Borough')"),'AFC Greenwich Borough');
+  assert.equal(run("tinFoilBetaDisplayClubName('Holmesdale United')"),'Holmesdale United');
   assert.equal(info.entry,'Extra Preliminary Round');
   const direct=run("liveLookup('result_history','Holmesdale FC')");
   assert(Array.isArray(direct)&&direct.length>=4,'Original name cannot retrieve merged historical results');
@@ -111,7 +115,41 @@ async function main(){
   run("LIVE_COMPETITION_DATA=__noProof",{__noProof:noProof});
   assert.equal(run("tinFoilBetaHolmesdale2026Ready()"),false);
   assert.equal(run("sameClubIdentity('Holmesdale FC','Petts Wood & Holmesdale')"),false);
+  assert.equal(run("tinFoilBetaDisplayClubName('Holmesdale FC')"),'Holmesdale FC',
+    'Visible merger alias must fail closed if the historical evidence disappears');
   run("LIVE_COMPETITION_DATA=__canonical",{__canonical:competition});
+  const stats=run("tinFoilChallengeStatsSnapshot(__origin,__journey,__crumbs,null,0)",
+    {__origin:origin,__journey:journey,__crumbs:crumbs});
+  assert.equal(stats.origin,'Petts Wood & Holmesdale FC','Challenge Stats kept the legacy club name');
+  assert.equal(stats.clubs,5,'Stats counts the pre-merger name and merged club twice');
+  assert.equal(stats.homeGames,2,'Petts Wood home ties were lost under the legacy identity');
+  assert.equal(stats.awayGames,3,'Petts Wood and Windsor away ties should remain attributable');
+  // Model an existing browser campaign whose localStorage still uses the old,
+  // stable Holmesdale lookup key. The visible identity must be current.
+  run("localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify({originName:'Holmesdale FC',postcode:'BR2 8HQ',ended:false,searchNumber:1088,callSign:'Tango Foxtrot 2 Alpha Charlie 01088',selectedAt:'2026-09-24T15:00:00Z'}))");
+  run("lookup=async()=>({postcode:'BR2 8HQ',lat:51.37413,lon:0.03742});geocodeClubPostcodes=async()=>{};");
+  await run("go(false)");
+  const savedHtml=els.results.innerHTML;
+  assert(savedHtml.includes('<h2>Petts Wood &amp; Holmesdale FC</h2>'),
+    'Saved campaign heading retains Holmesdale FC');
+  assert(savedHtml.includes('This Campaign starts with: Petts Wood &amp; Holmesdale FC'),
+    'Saved campaign history retains Holmesdale FC');
+  assert(!savedHtml.includes('<h2>Holmesdale FC</h2>'));
+  assert.equal(JSON.parse(local.tinFoilFACupJourney_v7).originName,'Holmesdale FC',
+    'Saved legacy campaign keys must remain reopenable');
+  run("window.__showOriginalTinFoilJourneys=true");
+  await run("go(false)");
+  const resultsHtml=els.results.innerHTML;
+  assert(resultsHtml.includes('Petts Wood &amp; Holmesdale FC'),
+    'Original three-campaign nearest-club screen retains obsolete club name');
+  assert(!resultsHtml.includes('<h2>Holmesdale FC</h2>'));
+  assert(resultsHtml.includes('AFC Greenwich Borough'));
+  let certificateHtml='';
+  const outputWindow={document:{open(){},write(v){certificateHtml=v},close(){}},focus(){},print(){},close(){}};
+  await run("journeyCertificate(__origin,__outputWindow)",{__origin:origin,__outputWindow:outputWindow});
+  assert(certificateHtml.includes('STARTED WITH:</div><div class="club">Petts Wood &amp; Holmesdale FC'),
+    'The opened Stats certificate still uses Holmesdale FC');
+  console.log('HOLMESDALE_VISIBLE_IDENTITY saved campaign, original three, Stats, legacy persistence: PASS');
   console.log('HOLMESDALE_CAMPAIGN '+JSON.stringify({origin:info,firstFour:selected.map(x=>({
     date:x.result.date,home:x.result.home,away:x.result.away,winner:x.result.winner})),
     postFourCustodian:'Windsor & Eton',latestCustodian:journey.carrier.name,
