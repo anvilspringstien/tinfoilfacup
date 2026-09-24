@@ -214,7 +214,39 @@ old_lookup = """  let nf=liveLookup('fixtures',club.name);
     if(distinct.length===1)nf=distinct[0];
   }
   if(!nf&&nextName==='Preliminary Round'){"""
+# Migrate the pre-#77 rendered lookup, then retain this guard on every rebuild.
+# In particular, the FA's Exmouth index is not verified progression evidence.
+previous_lookup = """  let nf=liveLookup('fixtures',club.name);
+  if(!nf&&LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.fixtures){
+    const target=canonicalClubKey(club.name);
+    const entries=Object.entries(LIVE_COMPETITION_DATA.fixtures);
+    const matches=entries.filter(([key,fixture])=>{
+      if(!fixture||fixture.round!==nextName)return false;
+      const k=canonicalClubKey(key);
+      return k===target||target.startsWith(k+' ');
+    });
+    const distinct=[...new Map(matches.map(([,fixture])=>
+      [[fixture.home,fixture.away,fixture.round,fixture.date].join('|'),fixture])).values()];
+    if(distinct.length===1){
+      const candidate=distinct[0];
+      const isThameConditional=nextName==='Third Round Qualifying'&&
+        candidate.date==='2026-10-03'&&candidate.home==='Thame Utd or Exmouth Town'&&
+        candidate.away==='Eastbourne Borough';
+      if(!isThameConditional)nf=candidate;
+    }
+  }
+  if(!nf)nf=tinFoilVerifiedThameNextFixture(club,nextName);
+  if(!nf&&nextName==='Preliminary Round'){"""
 new_lookup = """  let nf=liveLookup('fixtures',club.name);
+  // The source indexes this conditional draw under Exmouth too. An index hit
+  // is not proof of qualification: resolve this exact tie only for verified
+  // Thame. Eastbourne is the already-named opposing club, so preserve its hit.
+  if(nf&&nextName==='Third Round Qualifying'&&
+     nf.date==='2026-10-03'&&nf.home==='Thame Utd or Exmouth Town'&&
+     nf.away==='Eastbourne Borough'&&
+     !sameClubIdentity(club.name,'Eastbourne Borough')){
+    nf=tinFoilVerifiedThameNextFixture(club,nextName);
+  }
   if(!nf&&LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.fixtures){
     const target=canonicalClubKey(club.name);
     const entries=Object.entries(LIVE_COMPETITION_DATA.fixtures);
@@ -239,6 +271,8 @@ legacy_lookup = """  let nf=liveLookup('fixtures',club.name);
   if(!nf&&nextName==='Preliminary Round'){"""
 if old_lookup in text:
     text=text.replace(old_lookup,new_lookup,1)
+elif previous_lookup in text:
+    text=text.replace(previous_lookup,new_lookup,1)
 elif legacy_lookup in text:
     text=text.replace(legacy_lookup,new_lookup,1)
 elif new_lookup not in text:
