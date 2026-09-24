@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guarded BETA-only public-identity repair for the 2026 Holmesdale merger."""
+"""Guarded BETA-only public-identity repair for the 2026 Holmesdale merger.\nThe committed BETA artifact must remain idempotent under this patcher.\n"""
 from pathlib import Path
 import argparse
 
