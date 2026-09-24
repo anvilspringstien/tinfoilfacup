@@ -393,6 +393,21 @@ function nextRoundInfo(club,preserveConditional){
   const meta=ROUND_META[nextName]||{date:'TBC',drawDate:'TBC'};
   let nf=liveLookup('fixtures',club.name);
   if(!nf)nf=liveConditionalFixtureForClub(club.name);
+  // The FA indexes this draw under the eventual loser too. Index presence
+  // does not establish progress. Preserve alternatives only before a result.
+  if(nf&&nextName==='Third Round Qualifying'&&
+     nf.date==='2026-10-03'&&nf.home==='Thame Utd or Exmouth Town'&&
+     nf.away==='Eastbourne Borough'&&
+     !sameClubIdentity(club.name,'Eastbourne Borough')){
+    const verified=verifiedConditionalWinner(nf.home,'Second Round Qualifying');
+    if(!/\s+or\s+/i.test(verified)){
+      nf=sameClubIdentity(verified,'Thame United')&&
+         sameClubIdentity(club.name,verified)
+        ?tinFoilBetaVerifiedThameNextFixture(club,nextName):null;
+    }else if(!preserveConditional){
+      nf=null;
+    }
+  }
   if(!nf)nf=tinFoilBetaVerifiedThameNextFixture(club,nextName);
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
