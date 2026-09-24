@@ -35,8 +35,9 @@ const run=(s,vars={})=>{Object.assign(ctx,vars);return vm.runInContext(s,ctx,{ti
   const current=run("ELIGIBLE.find(c=>c.name==='Petts Wood & Holmesdale FC')");
   assert(current,'Current merged club is absent from BETA eligible list');
   assert.equal(run("ELIGIBLE.some(c=>c.name==='Holmesdale FC')"),false,'Retired name still exposed as an eligible club');
-  assert.equal(current.postcode,'BR2 8HQ');
-  assert.equal(current.ground,'RTL Group Stadium');
+  const currentGround=run("groundByClubName('Petts Wood & Holmesdale FC')");
+  assert.equal(currentGround.postcode,'BR2 8HQ');
+  assert.equal(currentGround.ground,'RTL Group Stadium');
   assert.equal(run("sameClubIdentity('Holmesdale FC','Petts Wood & Holmesdale FC')"),true,'Legacy saved name must map to current club');
   const legacy={originName:'Holmesdale FC',postcode:'BR2 8HQ',ended:false,selectedAt:'2026-09-24T15:18:33Z',
     searchNumber:1088,callSign:'Tango Foxtrot 2 Alpha Charlie 01088',pigeonName:''};
@@ -61,6 +62,6 @@ const run=(s,vars={})=>{Object.assign(ctx,vars);return vm.runInContext(s,ctx,{ti
   const firstVenue=run("completedResultVenue(__r)",{__r:crumbs[0].result});
   assert.equal(firstVenue.postcode,'BR2 8HQ','Historic location changed during display rename');
   console.log('BETA PETTS WOOD PUBLIC IDENTITY: PASS');
-  console.log(JSON.stringify({display:restored.name,postcode:restored.postcode,ground:restored.ground,
+  console.log(JSON.stringify({display:restored.name,postcode:currentGround.postcode,ground:currentGround.ground,
     legacyCampaignNumber:savedAfter.searchNumber,currentCustodian:journey.carrier.name,history:crumbs.length}));
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
