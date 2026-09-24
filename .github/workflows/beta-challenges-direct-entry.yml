@@ -1,0 +1,31 @@
+name: Guard direct BETA Challenges navigation
+on:
+  push:
+    branches: ['ux/beta-direct-challenges-20260924']
+  pull_request:
+    paths:
+      - 'beta/challenges-beta.html'
+      - 'tests/test_beta_challenges_direct_entry.js'
+      - '.github/workflows/beta-challenges-direct-entry.yml'
+permissions:
+  contents: read
+jobs:
+  beta-challenges:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Test direct Deck entry, Trophy Cabinet and persistence
+        run: node tests/test_beta_challenges_direct_entry.js
+      - name: Preserve unrelated BETA and production regressions
+        run: |
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_weston_replay_stats.js
+      - name: Check protected production and competition data are unchanged by this PR
+        run: |
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- clubfinder.html beta/clubfinder-beta.html competition.json
