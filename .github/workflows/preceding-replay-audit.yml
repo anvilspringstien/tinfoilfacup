@@ -39,12 +39,12 @@ jobs:
               b = r['blocked'][0]
               assert any('Wimborne' in side for side in (b['home'], b['away'])), b
               assert 'penalty decision with non-level source score' in b['reason'], b
-          assert r['observations'] == 13, r['observations']
+          assert r['observations'] >= 13, r['observations']  # Source may gain the final replay.
           assert r['events'] == 0, r['events']
           # Fail closed if a scheduled replay is absent from published chronology.
           # This catches Exmouth–Thame even when source observations total 13.
           assert not r['scheduled_replay_gaps'], r['scheduled_replay_gaps']
-          assert len(r['replay_candidates']) + len(r['blocked']) + r['already_recorded'] == 13, (
+          assert len(r['replay_candidates']) + len(r['blocked']) + r['already_recorded'] == r['observations'], (
               len(r['replay_candidates']), r['blocked'], r['already_recorded'])
           print('Guarded source audit: new candidates=', len(r['replay_candidates']),
                 'already recorded=', r['already_recorded'],
