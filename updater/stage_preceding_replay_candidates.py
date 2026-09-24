@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DRAW_ALIASES = {
     "hamp and rich": "hampton and richmond borough",
     "weston sm": "weston super mare",
+    "thame utd": "thame united",
     "cray wands": "cray wanderers",
     "dag and red": "dagenham and redbridge",
     "win finch": "wingate and finchley",
@@ -96,9 +97,17 @@ def main():
         if any(row not in original for row in approved) or len(approved) != readiness.get("approved_count"):
             raise SystemExit("Readiness approval does not match source-backed audit")
         held = readiness.get("held", [])
-        if len(approved) + len(held) != 13:
-            raise SystemExit("Readiness report does not account for all 13 replays")
+        gaps = report.get("scheduled_replay_gaps")
+        if not isinstance(gaps, list) or readiness.get("scheduled_replay_gaps") != gaps:
+            raise SystemExit("Readiness and fresh audit disagree on scheduled replay gaps")
+        if len(approved) + len(held) != len(gaps):
+            raise SystemExit("Readiness does not account for each unpublished scheduled replay")
         report["replay_candidates"] = approved
+    if not report["replay_candidates"] and not held and not report.get("scheduled_replay_gaps"):
+        print(json.dumps({"status": "already_published",
+                          "already_recorded": report["already_recorded"],
+                          "production_mutation": False}, indent=2))
+        return
     if not report["replay_candidates"]:
         diagnostics = {"status": "no_replay_candidates", "archived_ties": report["archived_ties"],
                        "observations": report["observations"], "already_recorded": report["already_recorded"],
