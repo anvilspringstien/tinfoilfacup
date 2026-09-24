@@ -16,7 +16,7 @@ console.log('CANONICAL '+JSON.stringify({updated_at:competition.updated_at,
 
 for(const [side,path] of Object.entries(both)){
   const html=fs.readFileSync(path,'utf8');
-  for(const n of ['canonicalClubKey','sameClubIdentity','liveLookup','resultFor','historyFor','buildJourney','currentDisplayFixture']){
+  for(const n of ['canonicalClubKey','sameClubIdentity','liveLookup','resultFor','historicalResultsForClub','clubByDisplayName','resultTeamLine','historyFor','buildJourney','currentDisplayFixture']){
     const pattern='function '+n+'(';
     const i=html.indexOf(pattern);
     if(i<0){console.log('SOURCE_'+side+'_'+n+' MISSING');continue}
