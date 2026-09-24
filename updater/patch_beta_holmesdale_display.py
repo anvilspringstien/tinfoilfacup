@@ -36,8 +36,8 @@ def patch(s):
         if s.count(BEGIN)!=1 or s.count(END)!=1 or s.count(HELPER)!=1:
             raise RuntimeError('Holmesdale display helper was modified or duplicated')
     replacements=[
-        ("'This Campaign starts with: '+esc(journey.origin.name)",
-         "'This Campaign starts with: '+esc(tinFoilBetaDisplayClubName(journey.origin.name))"),
+        ("This Campaign starts with: '+esc(journey.origin.name),
+         "This Campaign starts with: '+esc(tinFoilBetaDisplayClubName(journey.origin.name))),
         ("body+='<div class=\"history-entry\">'+esc(journey.origin.name)+' enters the competition at '",
          "body+='<div class=\"history-entry\">'+esc(tinFoilBetaDisplayClubName(journey.origin.name))+' enters the competition at '"),
         ("if(!journey||!journey.carrier||norm(journey.carrier.name)===norm(journey.origin.name))return '';",
@@ -48,8 +48,8 @@ def patch(s):
          "addClub(tinFoilBetaDisplayClubName(origin.name))",2),
         ("return {season:'2026–27',origin:origin.name,currentCustodian:",
          "return {season:'2026–27',origin:tinFoilBetaDisplayClubName(origin.name),currentCustodian:"),
-        ("'<div class=\"club\">'+certEsc(origin.name)+'</div>'",
-         "'<div class=\"club\">'+certEsc(tinFoilBetaDisplayClubName(origin.name))+'</div>'"),
+        ("<div class=\"club\">'+certEsc(origin.name)",
+         "<div class=\"club\">'+certEsc(tinFoilBetaDisplayClubName(origin.name))"),
         ("<h2>${oi===0&&origin.hasCoords?'Nearest: ':''}${esc(origin.name)}</h2>",
          "<h2>${oi===0&&origin.hasCoords?'Nearest: ':''}${esc(tinFoilBetaDisplayClubName(origin.name))}</h2>"),
     ]
