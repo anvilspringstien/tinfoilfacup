@@ -4,43 +4,62 @@ on:
     branches: ['fix/beta-holmesdale-identity-20260924']
   pull_request:
     paths:
-      - 'updater/inspect_beta_holmesdale.py'
+      - 'beta/clubfinder-beta.html'
       - 'updater/patch_beta_holmesdale.py'
       - 'tests/test_beta_holmesdale_campaign.js'
       - '.github/workflows/beta-holmesdale-correction.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   beta:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect current BETA identity functions
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Inspect exact BETA source and apply patch idempotently
         run: |
-          if test -f updater/inspect_beta_holmesdale.py; then python updater/inspect_beta_holmesdale.py; fi
-      - name: Apply BETA-only correction when staged
+          set -euo pipefail
+          python updater/patch_beta_holmesdale.py
+          python updater/patch_beta_holmesdale.py
+          python updater/patch_beta_holmesdale.py --check
+      - name: Verify canonical BETA snapshot freshness
+        run: python updater/refresh_beta_embedded_snapshot.py --check
+      - name: Guard complete Holmesdale campaign including Stats and Pigeon Miles
+        run: node tests/test_beta_holmesdale_campaign.js
+      - name: All existing BETA and historic-venue regressions
         run: |
-          if test -f updater/patch_beta_holmesdale.py; then python updater/patch_beta_holmesdale.py; python updater/patch_beta_holmesdale.py; fi
-      - name: New Holmesdale campaign regression when staged
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_thame_next_fixture.js
+          node tests/test_beta_conditional_draw_alias.js
+          node tests/test_beta_weston_replay_stats.js
+          node updater/historical_venue_regression.js
+          python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+      - name: Enforce BETA-only candidate diff
         run: |
-          if test -f tests/test_beta_holmesdale_campaign.js; then node tests/test_beta_holmesdale_campaign.js; fi
-      - name: Existing BETA and venue regression suite
+          set -euo pipefail
+          git diff --exit-code -- clubfinder.html competition.json
+          changed="$(git diff --name-only)"
+          test -z "$changed" || test "$changed" = 'beta/clubfinder-beta.html'
+      - name: Commit corrected BETA artifact only after all checks pass
+        if: ${{ github.event_name == 'push' && github.ref_name == 'fix/beta-holmesdale-identity-20260924' }}
         run: |
-          if test -f updater/patch_beta_holmesdale.py; then
-            node updater/beta_campaign_identity_regression.js
-            node tests/test_beta_verified_conditional_replay.js
-            node tests/test_beta_thame_next_fixture.js
-            node tests/test_beta_conditional_draw_alias.js
-            node tests/test_beta_weston_replay_stats.js
-            node updater/historical_venue_regression.js
+          set -euo pipefail
+          if git diff --quiet -- beta/clubfinder-beta.html; then
+            echo "BETA identity artifact already committed and current"
+            exit 0
           fi
-      - name: Production and canonical data unchanged
-        run: |
-          test -z "$(git diff --name-only -- clubfinder.html competition.json)"
-          if test -f updater/patch_beta_holmesdale.py; then
-            test "$(git diff --name-only)" = "beta/clubfinder-beta.html"
-          else
-            test -z "$(git diff --name-only)"
-          fi
+          git config user.name "Tin Foil FA Cup BETA Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          test "$(git diff --cached --name-only)" = "beta/clubfinder-beta.html"
+          git commit -m "Apply guarded 2026 Holmesdale merger identity to BETA"
+          git pull --rebase origin fix/beta-holmesdale-identity-20260924
+          python updater/patch_beta_holmesdale.py --check
+          python updater/refresh_beta_embedded_snapshot.py --check
+          node tests/test_beta_holmesdale_campaign.js
+          git push origin HEAD:fix/beta-holmesdale-identity-20260924
