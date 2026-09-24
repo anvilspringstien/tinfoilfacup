@@ -40,6 +40,10 @@ def patch(src):
         "function savedOrigin(rows,s){return s?rows.find(r=>norm(r.name)===norm(s.originName))||null:null}",
         "function savedOrigin(rows,s){return s?rows.find(r=>sameClubIdentity(r.name,s.originName))||null:null}",
         "saved campaign semantic origin lookup")
+    src=one(src,
+        "  const hgVerified=!!(hg&&String(hg.verification||'').toLowerCase()==='verified');\n  if(hgVerified&&hgPostcode&&rvPostcode&&hgPostcode===rvPostcode){",
+        "  const hgVerified=!!(hg&&String(hg.verification||'').toLowerCase()==='verified');\n  // A per-match official-club venue is historical evidence; do not rename it\n  // to the ground's current sponsor/name merely because the postcode matches.\n  if(String(rv.verification||'').toLowerCase()==='official-club'&&\n     rv.ground&&rv.postcode&&!/TBC/i.test(String(rv.ground))&&!/TBC/i.test(String(rv.postcode))){\n    return {ground:rv.ground,postcode:rv.postcode,lat:rv.lat,lon:rv.lon,verification:rv.verification};\n  }\n  if(hgVerified&&hgPostcode&&rvPostcode&&hgPostcode===rvPostcode){",
+        "official historical venue precedence")
     src=replace_all_required(src,
         "norm(existing.originName)===norm(origin.name)",
         "sameClubIdentity(existing.originName,origin.name)",
