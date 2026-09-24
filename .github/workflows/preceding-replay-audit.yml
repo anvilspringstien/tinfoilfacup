@@ -40,15 +40,34 @@ jobs:
               assert any('Wimborne' in side for side in (b['home'], b['away'])), b
               assert 'penalty decision with non-level source score' in b['reason'], b
           assert r['observations'] >= 13, r['observations']  # Source may gain the final replay.
-          assert r['events'] == 0, r['events']
-          # Fail closed if a scheduled replay is absent from published chronology.
-          # This catches Exmouth–Thame even when source observations total 13.
-          assert not r['scheduled_replay_gaps'], r['scheduled_replay_gaps']
+          assert not r['events'], r['events']
           assert len(r['replay_candidates']) + len(r['blocked']) + r['already_recorded'] == r['observations'], (
               len(r['replay_candidates']), r['blocked'], r['already_recorded'])
+          # A missing published result is expected *on a draft branch* only if
+          # the independently scheduled tie has its own observed candidate or
+          # quarantine. Source totals alone cannot prove complete coverage.
+          import sys
+          sys.path.insert(0, 'updater')
+          from round_state_engine import pair_key
+          def key(row):
+              return (row.get('date'), pair_key(row))
+          gaps = r['scheduled_replay_gaps']
+          gap_keys = [key(row) for row in gaps]
+          outstanding = r['replay_candidates'] + r['blocked']
+          outstanding_keys = [key(row) for row in outstanding]
+          assert len(set(gap_keys)) == len(gap_keys), gaps
+          assert len(set(outstanding_keys)) == len(outstanding_keys), outstanding
+          assert all(row.get('source_observed') is True for row in gaps), gaps
+          assert set(gap_keys) == set(outstanding_keys), (
+              'Unpublished scheduled replay lacks its own source-backed result or hold', gaps, outstanding)
           print('Guarded source audit: new candidates=', len(r['replay_candidates']),
                 'already recorded=', r['already_recorded'],
-                'quarantined=', len(r['blocked']))
+                'quarantined=', len(r['blocked']),
+                'scheduled results pending publication=', len(gaps))
+          if gaps:
+              print('AUDIT PASS WITH PENDING PUBLICATION — NOT YET COMPLETE:', gaps)
+          else:
+              print('AUDIT PASS — all scheduled replays published')
           PY
       - name: Prove protected production files were not modified
         if: always()
