@@ -35,13 +35,29 @@ else:
         raise SystemExit("ABORT: nextRoundInfo boundary is not unique")
     text=text.replace(marker,helper+marker,1)
 
+generic_old="    if(distinct.length===1)nf=distinct[0];"
+generic_new="""    if(distinct.length===1){
+      const candidate=distinct[0];
+      const isThameConditional=nextName==='Third Round Qualifying'&&
+        candidate.date==='2026-10-03'&&candidate.home==='Thame Utd or Exmouth Town'&&
+        candidate.away==='Eastbourne Borough';
+      if(!isThameConditional)nf=candidate;
+    }"""
+if generic_old in text:
+    if text.count(generic_old)!=1:
+        raise SystemExit("ABORT: generic fixture fallback assignment is not unique")
+    text=text.replace(generic_old,generic_new,1)
+elif generic_new not in text:
+    raise SystemExit("ABORT: guarded production fixture fallback boundary missing")
+
 call="  if(!nf)nf=tinFoilVerifiedThameNextFixture(club,nextName);\n"
 if call not in text:
-    needle="    if(distinct.length===1)nf=distinct[0];\n  }\n  if(!nf&&nextName==='Preliminary Round'){"
+    needle=generic_new+"\n  }\n  if(!nf&&nextName==='Preliminary Round'){"
     if text.count(needle)!=1:
         raise SystemExit("ABORT: production fixture fallback boundary is not unique")
-    text=text.replace(needle,"    if(distinct.length===1)nf=distinct[0];\n  }\n"+call+"  if(!nf&&nextName==='Preliminary Round'){",1)
+    text=text.replace(needle,generic_new+"\n  }\n"+call+"  if(!nf&&nextName==='Preliminary Round'){",1)
 if text.count(call)!=1:
     raise SystemExit("ABORT: production Thame bridge call is not unique")
+
 PATH.write_text(text,encoding="utf-8")
 print("PRODUCTION THAME FIXTURE PATCH: SUCCESS")
