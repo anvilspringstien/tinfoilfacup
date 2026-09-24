@@ -1,0 +1,37 @@
+name: Guarded BETA-production reconciliation audit
+on:
+  push:
+    branches: ['audit/beta-production-reconciliation-20260924']
+    paths:
+      - 'updater/audit_beta_production_parity.py'
+      - '.github/workflows/beta-production-reconciliation.yml'
+      - 'tests/audit_beta_production_behaviour.js'
+  pull_request:
+    paths:
+      - '.github/workflows/beta-production-reconciliation.yml'
+      - 'updater/audit_beta_production_parity.py'
+      - 'tests/audit_beta_production_behaviour.js'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare committed BETA and protected production
+        run: python updater/audit_beta_production_parity.py
+      - name: Execute actual production and BETA venue/fixture paths on canonical data
+        run: node tests/audit_beta_production_behaviour.js
+      - name: Baseline BETA regression suite
+        run: |
+          # The audit intentionally reports a potentially stale BETA offline fallback.
+          # Do not mutate BETA or require freshness until a separately guarded refresh.
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_weston_replay_stats.js
+          node updater/historical_venue_regression.js
+          node tests/test_production_thame_next_fixture.js
+          node tests/test_beta_thame_next_fixture.js
+      - name: Prove no production or canonical data modifications
+        run: git diff --exit-code -- clubfinder.html beta/clubfinder-beta.html competition.json
