@@ -7,7 +7,7 @@ begin="/* TIN_FOIL_EMBEDDED_COMPETITION_BEGIN */"
 end="/* TIN_FOIL_EMBEDDED_COMPETITION_END */"
 if s.count(begin)!=1 or s.count(end)!=1: raise SystemExit("Bad BETA snapshot boundaries")
 sans=s.split(begin)[0]+"\n/* SNAPSHOT OMITTED */\n"+s.split(end)[1]
-names=["canonicalClubKey","sameClubIdentity","liveLookup","resultFor","buildJourney",
+names=["historicalResultsForClub","candidateClubByName","clubByDisplayName","groundByClubName","resultSortValue","resultNeedsReplay","tinFoilPigeonCoords","canonicalClubKey","sameClubIdentity","liveLookup","resultFor","buildJourney",
        "currentDisplayFixture","nextRoundInfo","resolveLiveFixtureForCarrier",
        "completedResultVenue","tinFoilPigeonMilesForStats","journeyCertificate",
        "tinFoilCertificateWinner","tinFoilStatsDisplayClubKey","tinFoilBetaVerifiedThameNextFixture"]
@@ -36,7 +36,7 @@ def extract(source,n):
  return "(unclosed)"
 for n in names:
  f=extract(sans,n)
- print("FUNCTION",n,"BYTES",len(f));print(f[:14000] if n in ("canonicalClubKey","sameClubIdentity","liveLookup","resultFor","buildJourney","currentDisplayFixture","nextRoundInfo","journeyCertificate","tinFoilPigeonMilesForStats") else f[:5000]);print("END_FUNCTION",n)
+ print("FUNCTION",n,"BYTES",len(f));print(f[:14000] if n in ("canonicalClubKey","sameClubIdentity","liveLookup","resultFor","buildJourney","currentDisplayFixture","nextRoundInfo","journeyCertificate","tinFoilPigeonMilesForStats","historicalResultsForClub","candidateClubByName","clubByDisplayName","groundByClubName") else f[:5000]);print("END_FUNCTION",n)
 for term in ["Holmesdale FC","Petts Wood","const ELIGIBLE","function resultFor","LIVE_COMPETITION_DATA.result_history","function buildJourney","groundByClubName","campaignOrigin","function journeyCertificate"]:
  matches=list(re.finditer(re.escape(term),sans,re.I))
  print("OCCURRENCES",term,len(matches))
