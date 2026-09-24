@@ -352,6 +352,28 @@ function resolveLiveFixtureForCarrier(f,carrier,preserveConditional){
   }
   return {...f,home,away,conditional:unresolved,venue};
 }
+/* TIN_FOIL_BETA_THAME_VERIFIED_FIXTURE_BEGIN */
+function tinFoilBetaVerifiedThameNextFixture(club,nextName){
+  // Fixture-local bridge for the FA's exact Third Qualifying draw abbreviation.
+  // No generic alias expansion, no guessed winners and no Exmouth promotion.
+  if(!club||nextName!=='Third Round Qualifying'||
+     !sameClubIdentity(club.name,'Thame United'))return null;
+  const fixtures=(LIVE_COMPETITION_DATA||{}).fixtures||{};
+  const matches=Object.values(fixtures).filter(f=>
+    f&&f.round==='Third Round Qualifying'&&f.date==='2026-10-03'&&
+    f.home==='Thame Utd or Exmouth Town'&&f.away==='Eastbourne Borough');
+  // Three index keys may point to the same published draw; require one
+  // unique matching fixture, not one matching index entry.
+  const unique=[...new Map(matches.map(f=>
+    [[f.round,f.date,f.home,f.away].join('|'),f])).values()];
+  if(unique.length!==1)return null;
+  const resolved=resolveLiveFixtureForCarrier(unique[0],club,true);
+  if(!resolved||resolved.conditional||
+     !sameClubIdentity(resolved.home,club.name)||
+     !sameClubIdentity(resolved.away,'Eastbourne Borough'))return null;
+  return unique[0];
+}
+/* TIN_FOIL_BETA_THAME_VERIFIED_FIXTURE_END */
 function nextRoundInfo(club,preserveConditional){
   const cr=resultFor(club),current=(cr&&cr.round)?cr.round:(club.entry_round||'');
   const progressionRound=String(current||'').replace(/\s+Replay$/i,'');
@@ -370,6 +392,7 @@ function nextRoundInfo(club,preserveConditional){
   const meta=ROUND_META[nextName]||{date:'TBC',drawDate:'TBC'};
   let nf=liveLookup('fixtures',club.name);
   if(!nf)nf=liveConditionalFixtureForClub(club.name);
+  if(!nf)nf=tinFoilBetaVerifiedThameNextFixture(club,nextName);
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }
