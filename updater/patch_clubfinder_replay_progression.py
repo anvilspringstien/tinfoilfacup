@@ -120,7 +120,16 @@ function resolveLiveFixtureForCarrier(f,carrier){
   const unresolved=/\\s+or\\s+/i.test(home)||/\\s+or\\s+/i.test(away);"""
 if old_fixture_resolver in text:
     text=text.replace(old_fixture_resolver,new_fixture_resolver,1)
-elif new_fixture_resolver not in text:
+elif not (
+    text.count("function verifiedConditionalWinner(side,round){")==1
+    and text.count("function resolveLiveFixtureForCarrier(f,carrier){")==1
+    and "const parentRound=String(f.round||'')==='Third Round Qualifying'?'Second Round Qualifying':null;" in text
+    and "const home=parentRound?verifiedConditionalWinner(ownHome,parentRound):ownHome;" in text
+    and "const away=parentRound?verifiedConditionalWinner(ownAway,parentRound):ownAway;" in text
+):
+    # The injected Thame alias intentionally changes new_fixture_resolver's
+    # exact text. Accept the previously patched form only with all structural
+    # markers present, so a second run is idempotent without relaxing guards.
     raise SystemExit("ABORT: conditional opponent resolver boundary not found")
 
 # Preserve the result winner but show the verified shoot-out decision even
