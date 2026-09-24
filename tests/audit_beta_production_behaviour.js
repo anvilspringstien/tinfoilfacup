@@ -167,8 +167,10 @@ async function main(){
     );
   }
   console.log('THAME_NEXT_FIXTURE_DIAG '+JSON.stringify(thameDiagnostic));
-  // A direct Thame start must now resolve in both builds. A direct Exmouth
-  // lookup must not turn the losing side into the qualifying-round entrant.
+  // A direct Thame start must now resolve in both builds. Report each
+  // Exmouth direct-index path independently before failing, so a production
+  // defect cannot hide the same defect (or its absence) in BETA.
+  const wrongfulExmouth=[];
   for(const [label,m] of Object.entries(models)){
     const t=thameDiagnostic[label];
     assert(t.nextKnown,label+' direct Thame start has no verified Third Qualifying fixture');
@@ -181,9 +183,9 @@ async function main(){
       'const n=nextRoundInfo(o);return {nextName:n&&n.name,fixture:n&&n.knownFixture};})()',
       {__name:'Exmouth Town'});
     const f=exmouth&&exmouth.fixture;
-    assert(!(f&&f.conditional===false&&norm(f.home)===norm('Exmouth Town')&&
-      norm(f.away)===norm('Eastbourne Borough')),
-      label+' losing Exmouth incorrectly advanced into verified Third Qualifying fixture');
+    if(f&&f.conditional===false&&norm(f.home)===norm('Exmouth Town')&&
+       norm(f.away)===norm('Eastbourne Borough'))
+      wrongfulExmouth.push({side:label,fixture:f});
     console.log('THAME_EXMOUTH_PARITY '+JSON.stringify({side:label,
       thameNext:{home:t.nextKnown.home,away:t.nextKnown.away,date:t.nextKnown.date,
         postcode:t.nextKnown.venue&&t.nextKnown.venue.postcode},
@@ -217,6 +219,9 @@ async function main(){
 
   // Record discrepancies without failing the audit. Fail only on observed data-integrity
   // regressions; audit alone is not permission to change production or publish.
+  console.log('EXMOUTH_DIRECT_INDEX_AUDIT '+JSON.stringify(wrongfulExmouth));
+  assert.equal(wrongfulExmouth.length,0,
+    'A losing Exmouth direct index still advances into the verified Thame fixture');
   assert.equal(canonicalFailures.length,0,'At least one version lost a canonical venue postcode');
   console.log('CROSS_VERSION_BEHAVIOURAL_AUDIT: PASS (read only; differences are reported)');
 }
