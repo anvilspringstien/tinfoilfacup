@@ -47,14 +47,14 @@ async function main(){
   assert.equal(run("sameClubIdentity('Holmesdale FC','Petts Wood & Holmesdale')"),true);
   assert.equal(run("sameClubIdentity('Holmesdale United','Petts Wood & Holmesdale')"),false,
     'Merger must not become fuzzy global name matching');
-  const info=run("(function(){const o=ELIGIBLE.find(c=>c.name==='Holmesdale FC');if(!o)throw Error('Holmesdale origin absent');return {name:o.name,ground:o.ground,postcode:o.postcode,entry:o.entry_round}})()");
-  assert.equal(info.name,'Holmesdale FC','Original postcode-based origin identity changed');
+  const info=run("(function(){const o=ELIGIBLE.find(c=>c.name==='Petts Wood & Holmesdale FC');if(!o)throw Error('Petts Wood & Holmesdale origin absent');return {name:o.name,ground:o.ground,postcode:o.postcode,entry:o.entry_round}})()");
+  assert.equal(info.name,'Petts Wood & Holmesdale FC','Current merged-club public identity missing');
   assert.equal(info.entry,'Extra Preliminary Round');
   const direct=run("liveLookup('result_history','Holmesdale FC')");
   assert(Array.isArray(direct)&&direct.length>=4,'Original name cannot retrieve merged historical results');
-  const origin=run("ELIGIBLE.find(c=>c.name==='Holmesdale FC')");
+  const origin=run("ELIGIBLE.find(c=>c.name==='Petts Wood & Holmesdale FC')");
   // Regress the visible completed fixture as well as the underlying journey.
-  // A restored Holmesdale campaign must not keep saying 'result not embedded'.
+  // A restored Petts Wood & Holmesdale campaign must not keep saying 'result not embedded'.
   const displayed=run("currentDisplayFixture(__origin)",{__origin:origin});
   assert.equal(displayed.completed,true,'The visible Holmesdale fixture is still pending');
   assert.equal(displayed.round,'First Round Qualifying');
@@ -116,6 +116,6 @@ async function main(){
     date:x.result.date,home:x.result.home,away:x.result.away,winner:x.result.winner})),
     postFourCustodian:'Windsor & Eton',latestCustodian:journey.carrier.name,
     historicalVenue:venues[3],roundTripMileageArithmetic:'PASS'}));
-  console.log('BETA Holmesdale season-scoped identity, history, venues, Stats and Pigeon Miles: PASS');
+  console.log('BETA Petts Wood & Holmesdale season-scoped identity, history, venues, Stats and Pigeon Miles: PASS');
 }
 main().catch(e=>{console.error('BETA HOLMESDALE CAMPAIGN REGRESSION FAILED',e.stack||e);process.exitCode=1});
