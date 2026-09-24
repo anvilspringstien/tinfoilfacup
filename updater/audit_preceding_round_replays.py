@@ -106,7 +106,8 @@ def audit(data, source_html, live_html="", source_url=""):
             "archived_ties": len(known), "observations": len(observations),
             "replay_candidates": results, "already_recorded": len(duplicates),
             "blocked": blocked, "events": len(events),
-            "scheduled_replay_gaps": scheduled_replay_gaps,\n            "production_mutation": False}
+            "scheduled_replay_gaps": scheduled_replay_gaps,
+            "production_mutation": False}
 
 
 def main():
