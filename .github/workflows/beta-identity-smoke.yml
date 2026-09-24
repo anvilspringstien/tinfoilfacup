@@ -5,12 +5,16 @@ on:
     paths:
       - 'beta/clubfinder-beta.html'
       - 'tests/test_beta_verified_conditional_replay.js'
+      - 'updater/refresh_beta_embedded_snapshot.py'
+      - 'tests/test_beta_embedded_snapshot_refresh.py'
       - '.github/workflows/beta-identity-smoke.yml'
   push:
     paths:
       - 'beta/clubfinder-beta.html'
       - 'updater/beta_campaign_identity_regression.js'
       - 'tests/test_beta_verified_conditional_replay.js'
+      - 'updater/refresh_beta_embedded_snapshot.py'
+      - 'tests/test_beta_embedded_snapshot_refresh.py'
       - '.github/workflows/beta-identity-smoke.yml'
   workflow_dispatch:
 
@@ -23,6 +27,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
+      - name: Require BETA offline fallback to match canonical live competition data
+        run: |
+          python updater/refresh_beta_embedded_snapshot.py --check
+          python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
       - name: Regress BETA counter, Pigeon and refresh persistence
         run: node updater/beta_campaign_identity_regression.js
       - name: Regress BETA verified replay and conditional draw resolution
