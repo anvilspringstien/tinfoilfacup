@@ -1,0 +1,46 @@
+name: Isolated BETA Holmesdale correction
+on:
+  push:
+    branches: ['fix/beta-holmesdale-identity-20260924']
+  pull_request:
+    paths:
+      - 'updater/inspect_beta_holmesdale.py'
+      - 'updater/patch_beta_holmesdale.py'
+      - 'tests/test_beta_holmesdale_campaign.js'
+      - '.github/workflows/beta-holmesdale-correction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  beta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect current BETA identity functions
+        run: |
+          if test -f updater/inspect_beta_holmesdale.py; then python updater/inspect_beta_holmesdale.py; fi
+      - name: Apply BETA-only correction when staged
+        run: |
+          if test -f updater/patch_beta_holmesdale.py; then python updater/patch_beta_holmesdale.py; python updater/patch_beta_holmesdale.py; fi
+      - name: New Holmesdale campaign regression when staged
+        run: |
+          if test -f tests/test_beta_holmesdale_campaign.js; then node tests/test_beta_holmesdale_campaign.js; fi
+      - name: Existing BETA and venue regression suite
+        run: |
+          if test -f updater/patch_beta_holmesdale.py; then
+            node updater/beta_campaign_identity_regression.js
+            node tests/test_beta_verified_conditional_replay.js
+            node tests/test_beta_thame_next_fixture.js
+            node tests/test_beta_conditional_draw_alias.js
+            node tests/test_beta_weston_replay_stats.js
+            node updater/historical_venue_regression.js
+          fi
+      - name: Production and canonical data unchanged
+        run: |
+          test -z "$(git diff --name-only -- clubfinder.html competition.json)"
+          if test -f updater/patch_beta_holmesdale.py; then
+            test "$(git diff --name-only)" = "beta/clubfinder-beta.html"
+          else
+            test -z "$(git diff --name-only)"
+          fi
