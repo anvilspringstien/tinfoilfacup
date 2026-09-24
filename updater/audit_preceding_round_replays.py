@@ -76,11 +76,36 @@ def audit(data, source_html, live_html="", source_url=""):
             duplicates.append(outcome["result"])
         else:
             events.append(outcome["event"])
+    # Scheduled preceding-round replays are an independent completeness set.
+    # A source count alone cannot prove that the source included every tie.
+    observed_pairs = {pair_key(item["observation"]) for item in observations}
+    recorded_pairs = {pair_key(row) for row in history
+                      if base_round(row.get("round")) == preceding
+                      and str(row.get("round") or "").endswith(" Replay")
+                      and row.get("winner")}
+    scheduled_replay_gaps = []
+    seen_scheduled = set()
+    for scheduled in (data.get("replays") or {}).values():
+        if not isinstance(scheduled, dict):
+            continue
+        if base_round(scheduled.get("round")) != preceding:
+            continue
+        pair = pair_key(scheduled)
+        if not all(pair) or pair in seen_scheduled:
+            continue
+        seen_scheduled.add(pair)
+        if pair not in recorded_pairs:
+            scheduled_replay_gaps.append({
+                "home": scheduled.get("home"), "away": scheduled.get("away"),
+                "date": scheduled.get("date"),
+                "source_observed": pair in observed_pairs,
+                "reason": "scheduled replay lacks published terminal chronology"
+            })
     return {"active_round": current, "archived_round": preceding,
             "archived_ties": len(known), "observations": len(observations),
             "replay_candidates": results, "already_recorded": len(duplicates),
             "blocked": blocked, "events": len(events),
-            "production_mutation": False}
+            "scheduled_replay_gaps": scheduled_replay_gaps,\n            "production_mutation": False}
 
 
 def main():
