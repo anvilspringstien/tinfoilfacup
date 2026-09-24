@@ -147,6 +147,26 @@ async function main(){
     sameHistories:journeyComparisons.filter(x=>x.historySame).length,
     sameNextFixtures:journeyComparisons.filter(x=>x.nextSame).length,
     comparisons:journeyComparisons,differences:fixtureDifferences.slice(0,9)}));
+  // Independently test the real published Thame draw from both custodians.
+  const thameDraw=Object.values(competition.fixtures||{}).find(f=>f&&
+    f.round==='Third Round Qualifying'&&/Thame Utd or Exmouth Town/i.test(f.home||'')&&
+    /Eastbourne Borough/i.test(f.away||''));
+  assert(thameDraw,'Published Thame Utd or Exmouth Town draw is missing');
+  const thameDiagnostic={canonicalDraw:{home:thameDraw.home,away:thameDraw.away,round:thameDraw.round,date:thameDraw.date}};
+  for(const [label,m] of Object.entries(models)){
+    thameDiagnostic[label]=m.probe(
+      '(function(){const o=ELIGIBLE.find(c=>sameClubIdentity(c.name,__name));'+
+      'const c=buildJourney(o).carrier||o;const next=nextRoundInfo(c);'+
+      'const live=liveLookup(\'fixtures\',c.name);'+
+      'const explicit=resolveLiveFixtureForCarrier(__draw,c,true);'+
+      'return {custodian:c.name,nextName:next&&next.name,nextDate:next&&next.date,'+
+      'nextKnown:next&&next.knownFixture,liveLookup:live,'+
+      'directResolved:{home:explicit&&explicit.home,away:explicit&&explicit.away,'+
+      'conditional:explicit&&explicit.conditional,venue:explicit&&explicit.venue}};})()',
+      {__name:'Thame United',__draw:thameDraw}
+    );
+  }
+  console.log('THAME_NEXT_FIXTURE_DIAG '+JSON.stringify(thameDiagnostic));
   // Record discrepancies without failing the audit. Fail only on observed data-integrity
   // regressions; audit alone is not permission to change production or publish.
   assert.equal(canonicalFailures.length,0,'At least one version lost a canonical venue postcode');
