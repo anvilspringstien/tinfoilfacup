@@ -23,7 +23,10 @@ const LONG_NAME='Pigeon McPigeonface';
 function makeNode(){
   const classes=new Set();
   const node={
-    style:{},dataset:{},children:[],textContent:'',innerHTML:'',value:'0',
+    style:{},dataset:{},children:[],textContent:'',_innerHTML:'',
+    get innerHTML(){return this._innerHTML},
+    set innerHTML(html){this._innerHTML=String(html);this.children=[]},
+    value:'0',
     options:['Extra Preliminary Round','Preliminary Round','1st Qualifying Round',
       '2nd Qualifying Round','3rd Qualifying Round','4th Qualifying Round',
       'First Round Proper','Second Round Proper','Third Round Proper',
