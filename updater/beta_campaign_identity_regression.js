@@ -85,6 +85,8 @@ const sandbox={
   open:()=>popupStub(),
   getCertificateHtml:()=>certificateHtml,
   getCounterIncrementCalls:()=>counterIncrementCalls,
+  getLocalStoreSnapshot:()=>JSON.stringify(localStore),
+  getSessionStoreSnapshot:()=>JSON.stringify(sessionStore),
   fetch:async(url)=>{
     const s=String(url);
     if(s.includes('counter-config.json'))return {ok:true,status:200,json:async()=>({increment_url:'https://counter.test/increment'})};
@@ -220,7 +222,7 @@ const assertions=`
   const builderProgress={awayTies:1,pigeonMiles:314.125,campaignRound:4};
   const builderSnapshot={pigeonMiles:314,source:'VM fixture'};
   const builderInputs=JSON.stringify([builderSaved,builderProgress,builderSnapshot]);
-  const builderLocal=JSON.stringify(localStore),builderSession=JSON.stringify(sessionStore);
+  const builderLocal=getLocalStoreSnapshot(),builderSession=getSessionStoreSnapshot();
   const builderCounter=getCounterIncrementCalls(),builderHref=window.location.href;
   const record=tinFoilBuildChallengeBridgeRecord(
     origin,{carrier:{name:'Crowborough Athletic FC'}},[{},{}],
@@ -243,8 +245,8 @@ const assertions=`
      record.updatedAt!=='2026-09-25T16:05:00.000Z')
     throw new Error('Stage C: pure builder changed the v1 bridge shape: '+JSON.stringify(record));
   if(JSON.stringify([builderSaved,builderProgress,builderSnapshot])!==builderInputs||
-     JSON.stringify(localStore)!==builderLocal||
-     JSON.stringify(sessionStore)!==builderSession||
+     getLocalStoreSnapshot()!==builderLocal||
+     getSessionStoreSnapshot()!==builderSession||
      getCounterIncrementCalls()!==builderCounter||
      window.location.href!==builderHref)
     throw new Error('Stage C: bridge record assembly mutated inputs or caused I/O');
