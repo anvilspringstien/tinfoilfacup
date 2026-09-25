@@ -1,11 +1,12 @@
 name: Guard direct BETA Challenges navigation
 on:
   push:
-    branches: ['ux/beta-direct-challenges-20260924']
+    branches: ['ux/beta-direct-challenges-20260924', 'ux/beta-trophy-viewer-20260925']
   pull_request:
     paths:
       - 'beta/challenges-beta.html'
       - 'tests/test_beta_challenges_direct_entry.js'
+      - 'tests/test_beta_trophy_viewer.js'
       - '.github/workflows/beta-challenges-direct-entry.yml'
 permissions:
   contents: read
@@ -18,7 +19,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Test direct Deck entry, Trophy Cabinet and persistence
-        run: node tests/test_beta_challenges_direct_entry.js
+        run: |
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
       - name: Preserve unrelated BETA and production regressions
         run: |
           node updater/beta_campaign_identity_regression.js
