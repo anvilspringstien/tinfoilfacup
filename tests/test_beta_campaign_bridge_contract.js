@@ -23,7 +23,10 @@ const LONG_NAME='Pigeon McPigeonface';
 function makeNode(){
   const classes=new Set();
   const node={
-    style:{},dataset:{},children:[],textContent:'',innerHTML:'',value:'0',
+    style:{},dataset:{},children:[],textContent:'',_innerHTML:'',
+    get innerHTML(){return this._innerHTML},
+    set innerHTML(html){this._innerHTML=String(html);this.children=[]},
+    value:'0',
     options:['Extra Preliminary Round','Preliminary Round','1st Qualifying Round',
       '2nd Qualifying Round','3rd Qualifying Round','4th Qualifying Round',
       'First Round Proper','Second Round Proper','Third Round Proper',
@@ -300,5 +303,112 @@ function store(deck,bridge,identity){
     'Ordinary direct entry must not consume an unrelated stale Stats token');
 }
 
-console.log('BETA SAVED CAMPAIGN / CHALLENGES BRIDGE CONTRACT: PASS');
-console.log('Verified bridge, long name, trophy persistence, legacy migration, campaign isolation, ended state and return routes: PASS');
+// Stage B display contract: the active renderer keeps three independent views
+// in sync (campaign truth, BETA simulator and the live earned Trophy Cabinet).
+// Run against the original renderer BEFORE changing its implementation.
+async function testDisplayAndReset(){
+  for(const id of ['tieCount','awayTieCount','campaignRound','truthCallSign',
+    'truthPigeonName','truthPigeonMiles','truthCampaignRound','campaignStatus',
+    'deckCabinet','cabinetCount','addTie','addAwayTie','addPigeonMiles',
+    'simulateGiantKill','reset']){
+    assert(deckHtml.includes('id="'+id+'"'),
+      'Stage B must retain existing Deck DOM control '+id);
+  }
+  const local=store(baseSave(),truth(),backup());
+  const app=boot(local);
+  const n=app.nodes;
+  assert.equal(n.tieCount.innerHTML,'<span>0</span><span>5</span>',
+    'Simulator total tie odometer drifted');
+  assert.equal(n.awayTieCount.innerHTML,'<span>0</span><span>2</span>',
+    'Simulator away tie odometer drifted');
+  assert.equal(n.campaignRound.value,'4','Simulator round selection drifted');
+  assert.equal(n.truthCallSign.textContent,CALL,'Truth Call Sign missing');
+  assert.equal(n.truthPigeonName.textContent,LONG_NAME,'Truth Pigeon Name missing');
+  assert.equal(n.truthPigeonMiles.textContent,'314','Truth Pigeon Miles missing');
+  assert.equal(n.truthCampaignRound.textContent,'3rd Qualifying Round',
+    'Truth round label drifted');
+  assert.equal(n.campaignStatus.textContent,'IN PROGRESS',
+    'Active campaign status not rendered');
+  for(const key of ['addTie','addAwayTie','addPigeonMiles','simulateGiantKill',
+    'campaignRound'])assert.equal(n[key].disabled,false,
+      'Active simulator control unexpectedly disabled: '+key);
+  assert.equal(n.cabinetCount.textContent,'2 / 27','Earned cabinet count drifted');
+  assert.equal(n.deckCabinet.children.length,27,'Trophy Cabinet row order changed');
+  const earned=n.deckCabinet.children.filter(slot=>slot.className.includes('completed'));
+  assert.equal(earned.length,2,'Existing and verified trophies not both shown');
+  assert(earned.every(slot=>typeof slot.onclick==='function'),
+    'Completed trophies must remain inspectable');
+
+  const persisted=local[DECK];
+  app.read('renderStats()');
+  assert.equal(local[DECK],persisted,'A display-only refresh wrote saved state');
+  assert.equal(n.deckCabinet.children.length,27,
+    'Display-only refresh duplicated or lost Trophy Cabinet slots');
+
+  app.read('campaignIdentity.pigeonName="Percy"; state.pigeonMiles=1234.6; state.campaignRound=5; save()');
+  assert.equal(n.truthPigeonName.textContent,'Percy','Save failed to refresh truth name');
+  assert.equal(n.truthPigeonMiles.textContent,'1,235','Miles rounding/grouping changed');
+  assert.equal(n.truthCampaignRound.textContent,'4th Qualifying Round',
+    'Save failed to refresh round label');
+  assert.equal(n.campaignRound.value,'5','Save failed to refresh simulator round');
+  assert.equal(n.cabinetCount.textContent,'2 / 27',
+    'Plain save unexpectedly awarded a new trophy');
+
+  const simulated=boot(store(baseSave(),truth(),backup()));
+  simulated.nodes.addAwayTie.onclick();
+  assert.equal(simulated.nodes.tieCount.innerHTML,'<span>0</span><span>6</span>',
+    'Away-tie simulation did not refresh total odometer');
+  assert.equal(simulated.nodes.awayTieCount.innerHTML,'<span>0</span><span>3</span>',
+    'Away-tie simulation did not refresh away odometer');
+  assert.equal(simulated.nodes.cabinetCount.textContent,'3 / 27',
+    'Qualifying away-tie simulator must award the correct third trophy');
+  const newTrophy=simulated.nodes.deckCabinet.children.filter(
+    slot=>slot.className.includes('completed'));
+  assert.equal(newTrophy.length,3,'Campaign trophy did not join existing trophies');
+  newTrophy[2].onclick();
+  assert.equal(simulated.nodes.trophyViewer.hidden,false,
+    'Newly earned trophy must still open its independent viewer');
+
+  const ended=boot(store(baseSave(),truth({
+    ended:true,giantKillAchieved:true
+  }),backup()));
+  assert.equal(ended.nodes.campaignStatus.textContent,'IT’S OVER',
+    'Ended status rendering changed');
+  for(const key of ['addTie','addAwayTie','addPigeonMiles','simulateGiantKill',
+    'campaignRound'])assert.equal(ended.nodes[key].disabled,true,
+      'Ended campaign control must remain disabled: '+key);
+  assert.equal(ended.nodes.truthPigeonName.textContent,LONG_NAME,
+    'Ended campaign lost its verified identity');
+  assert.equal(ended.nodes.cabinetCount.textContent,'3 / 27',
+    'Ended campaign must retain historical and verified Giant Kill trophies');
+
+  // Exercise the actual confirmation-dependent Hard Reset click handler.
+  // It resets only the Deck's local awards and then reapplies verified
+  // Clubfinder truth; it must not erase the bridge or backup.
+  const resetLocal=store(baseSave(),truth(),backup());
+  const reset=boot(resetLocal);
+  reset.read('tinFoilConfirm=async()=>true');
+  await reset.nodes.reset.onclick();
+  assert.equal(reset.read('Boolean(state.completed["01"])'),false,
+    'Hard Reset must clear only earlier Honour awards');
+  assert.equal(reset.read('Boolean(state.completed["02"])'),true,
+    'Hard Reset must immediately restore verified Campaign milestone');
+  assert.equal(reset.nodes.cabinetCount.textContent,'1 / 27',
+    'Hard Reset cabinet count did not reflect verified-only awards');
+  assert.equal(reset.nodes.truthPigeonName.textContent,LONG_NAME,
+    'Hard Reset lost verified Pigeon Name');
+  assert.equal(reset.nodes.truthPigeonMiles.textContent,'314',
+    'Hard Reset lost verified Pigeon Miles');
+  assert.equal(reset.nodes.tieCount.innerHTML,'<span>0</span><span>5</span>',
+    'Hard Reset failed to re-render current verified simulator counters');
+  assert.equal(JSON.parse(resetLocal[BRIDGE]).pigeonName,LONG_NAME,
+    'Hard Reset must not delete Clubfinder campaign bridge');
+  assert.equal(JSON.parse(resetLocal[IDENTITY]).pigeonName,LONG_NAME,
+    'Hard Reset must not delete Clubfinder identity backup');
+}
+
+testDisplayAndReset().then(()=>{
+  console.log('BETA SAVED CAMPAIGN / CHALLENGES BRIDGE CONTRACT: PASS');
+  console.log('Verified bridge, long name, trophy persistence, legacy migration, campaign isolation, ended state and return routes: PASS');
+  console.log('BETA RENDER STAGE B: truth frame, simulator, Trophy Cabinet, save, progress, ended state and actual Hard Reset: PASS');
+}).catch(error=>{console.error(error);process.exitCode=1;});
