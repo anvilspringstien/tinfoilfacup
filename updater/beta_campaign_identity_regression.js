@@ -11,7 +11,7 @@ const scripts=scriptBlocks.join('\n');
 const statsViewportScript=scriptBlocks.find(x=>x.includes("document.write(new URLSearchParams(location.search||'').get('stats')"));
 if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
 if(!statsViewportScript||!statsViewportScript.includes('width=980')||!statsViewportScript.includes('width=device-width,initial-scale=1'))throw new Error('BETA Stats viewport: missing conditional legacy-wide Stats / original mobile Clubfinder viewport');
-if(!html.includes("const doc='<!doctype html><html><head><meta charset=\\\"utf-8\\\"><meta name=\\\"viewport\\\" content=\\\"width=980\\\">"))throw new Error('BETA Stats viewport: generated report must preserve original pinch-to-zoom width on reload');
+if(!/const doc='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=980">/.test(html))throw new Error('BETA Stats viewport: generated report must preserve original pinch-to-zoom width on reload');
 if(!html.includes('maxlength="20"'))throw new Error('BETA identity regression: pigeon-name 20-character cap drifted');
 if(!html.includes('class="campaign-call-sign"')||!html.includes('class="campaign-pigeon-name"'))throw new Error('BETA mobile regression: identity must have separate Call Sign and Pigeon Name rows');
 if(!html.includes('.campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;'))throw new Error('BETA mobile regression: phone name row must wrap instead of clipping');
