@@ -1,0 +1,18 @@
+name: One-time read-only BETA Stats refresh inspection
+on:
+  push:
+    branches: ['investigate/beta-stats-pull-refresh-20260925']
+    paths:
+      - 'updater/inspect_beta_stats_refresh_one_time.js'
+      - '.github/workflows/one-time-beta-stats-refresh-inspection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect generated BETA Stats lifecycle and real document size
+        run: node updater/inspect_beta_stats_refresh_one_time.js
