@@ -13,7 +13,15 @@ for(const id of ['openDeck','maybeLater','deckStatsBtn','statsOpenDeck','statsCo
 assert(!/<section[^>]*class="hero beta-splash"/.test(html),'Splash remains in the page');
 assert(!/<section[^>]*class="stats"/.test(html),'Detached Challenge Stats remains');
 assert(!html.includes('beta-splash'),'Removed splash stylesheet must not return');
-assert(!/(?:\\.hero\\b|#openDeck\\b|\\.tffc-splash-name\\b)/.test(html),'Orphan original splash CSS must not return');
+const retiredSplashSelectors=/(?:\.hero\b|#openDeck\b|\.tffc-splash-name\b)/;
+for(const selector of ['.hero','#openDeck','.tffc-splash-name'])
+  assert(retiredSplashSelectors.test(selector),'Orphan-splash CSS guard must detect '+selector);
+assert(!retiredSplashSelectors.test(html),'Orphan original splash CSS must not return');
+const retiredStatsSelectors=/(?:\.stats\b|\.statbox\b|\.statsaction\b|\.future-mileage\b)/;
+for(const selector of ['.stats','.stats-grid','.statbox','.statsaction','.future-mileage'])
+  assert(retiredStatsSelectors.test(selector),'Detached-Stats CSS guard must detect '+selector);
+assert(!retiredStatsSelectors.test(html),'Detached Challenges Stats styles must not return');
+assert(html.includes('function renderStats()'),'Live Deck progress and Trophy Cabinet renderer must be retained');
 assert(/id="deckCabinet"/.test(html),'Trophy Cabinet must be retained');
 assert(/id="exitBtn"/.test(html),'Explicit Exit button must be retained');
 
