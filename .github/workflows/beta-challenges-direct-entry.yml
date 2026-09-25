@@ -7,6 +7,8 @@ on:
       - 'beta/challenges-beta.html'
       - 'tests/test_beta_challenges_direct_entry.js'
       - 'tests/test_beta_trophy_viewer.js'
+      - 'tests/test_beta_campaign_bridge_contract.js'
+      - 'updater/beta_campaign_identity_regression.js'
       - '.github/workflows/beta-challenges-direct-entry.yml'
 permissions:
   contents: read
@@ -22,6 +24,8 @@ jobs:
         run: |
           node tests/test_beta_challenges_direct_entry.js
           node tests/test_beta_trophy_viewer.js
+          node --check tests/test_beta_campaign_bridge_contract.js
+          node tests/test_beta_campaign_bridge_contract.js
       - name: Preserve unrelated BETA and production regressions
         run: |
           node updater/beta_campaign_identity_regression.js
@@ -31,4 +35,4 @@ jobs:
       - name: Check protected production and competition data are unchanged by this PR
         run: |
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- clubfinder.html beta/clubfinder-beta.html competition.json
+          git diff --exit-code origin/main...HEAD -- clubfinder.html beta/clubfinder-beta.html beta/challenges-beta.html competition.json
