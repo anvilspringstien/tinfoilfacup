@@ -21,6 +21,10 @@ const retiredStatsSelectors=/(?:\.stats\b|\.statbox\b|\.statsaction\b|\.future-m
 for(const selector of ['.stats','.stats-grid','.statbox','.statsaction','.future-mileage'])
   assert(retiredStatsSelectors.test(selector),'Detached-Stats CSS guard must detect '+selector);
 assert(!retiredStatsSelectors.test(html),'Detached Challenges Stats styles must not return');
+const retiredLaunchSelectors=/(?:#openChallenges\b|\.challenge-launch\b|\.challenges-btn\b)/;
+for(const selector of ['#openChallenges','.challenge-launch','.challenges-btn'])
+  assert(retiredLaunchSelectors.test(selector),'Retired launch guard must detect '+selector);
+assert(!retiredLaunchSelectors.test(html),'Obsolete BETA launch-only CSS must not return');
 assert(html.includes('function renderStats()'),'Live Deck progress and Trophy Cabinet renderer must be retained');
 assert(/id="deckCabinet"/.test(html),'Trophy Cabinet must be retained');
 assert(/id="exitBtn"/.test(html),'Explicit Exit button must be retained');
