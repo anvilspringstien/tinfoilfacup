@@ -1,9 +1,9 @@
 # Tin Foil FA Cup — CURRENT BETA refactor checkpoint
 
-**Last verified:** 25 September 2026 (BST), after merged dependency-map PR #95.  
+**Last verified:** 25 September 2026 (BST), after merged isolated launch-style cleanup PR #97.  
 **Source-of-truth for source code:** current `main`; **recovery source:** the pinned accepted BETA branch below.  
-**Last green BETA source change:** `bc52268d04f00e9e0bf4f4e8b56a997f0144c58d` (PR #93). **Latest completed, guarded read-only audit:** `65a4e0f4d17535b69f5d00ba638799a76708d880` (PR #95).  
-**Current BETA Challenges file blob at that merge:** `4383b17a4c38d10559016e06455b0869860eff9d`.
+**Last green BETA source change:** `88eecd8bc670a04005c107e6ed26b047721c2a3e` (PR #97). **Latest completed, guarded read-only audit:** `65a4e0f4d17535b69f5d00ba638799a76708d880` (PR #95).  
+**Current BETA Challenges file blob at that merge:** `7989e3a0d89bb7425837d3474a46eacddc53182e`.
 
 ## Restore precisely if the chat or a working branch is interrupted
 
@@ -21,8 +21,9 @@
 | [#92](https://github.com/anvilspringstien/tinfoilfacup/pull/92) | `6faf970` | Remove another 1,317 characters of unused **original** splash CSS | Same full BETA direct-entry guard passed |
 | [#93](https://github.com/anvilspringstien/tinfoilfacup/pull/93) | `bc52268` | Remove 1,274 characters of detached Challenges Stats CSS; strengthen CSS guard self-tests | Same full BETA direct-entry guard passed |
 | [#95](https://github.com/anvilspringstien/tinfoilfacup/pull/95) | `65a4e0f` | Full untruncated BETA Deck/Clubfinder dependency map and storage/compatibility inventory (no app changes) | Deck, Trophy, identity, Petts Wood, Exmouth, Weston, accepted mobile patch guard, reproducible report and protected-file gates passed |
+| [#97](https://github.com/anvilspringstien/tinfoilfacup/pull/97) | `88eecd8` | Delete 893 characters of retired launch-only CSS for `#openChallenges`, `.challenge-launch` and `.challenges-btn`; add a regression guard | Deck, Trophy, identity, Petts Wood, Exmouth, Weston and protected-file CI passed |
 
-All three functional cleanup PRs changed **only** `beta/challenges-beta.html` and `tests/test_beta_challenges_direct_entry.js`. Production Clubfinder, BETA Clubfinder, canonical competition data, updater, challenge mechanics and persisted storage schemas were **not** changed by these PRs. The original accepted source is still available at its pinned checkpoint.
+All four functional cleanup PRs changed **only** `beta/challenges-beta.html` and `tests/test_beta_challenges_direct_entry.js`. Production Clubfinder, BETA Clubfinder, canonical competition data, updater, challenge mechanics and persisted storage schemas were **not** changed by these PRs. The original accepted source is still available at its pinned checkpoint.
 
 ## Critical audited dependencies — protect during the next stage
 
@@ -40,8 +41,14 @@ The audit confirmed (a) `journeyTies` migration on load; (b) the Clubfinder brid
 
 The offline fallback in this specific audit was **STALE**: embedded `2026-09-25T07:49:01.065159+00:00`, canonical `2026-09-25T13:47:51.590346+00:00`. This is a historical observation, not necessarily the latest canonical timestamp. The live canonical fetch is authoritative; refresh offline data in a **separate guarded PR** if strict fallback parity is required.
 
+## Reviewed CSS candidate: retired launch buttons (#97)
+
+Manual source inspection proved that `#openChallenges`, `.challenge-launch` and `.challenges-btn` were used only in one historic styling block: no matching DOM elements, generated markup or JavaScript references remain in BETA Challenges. PR #97 removed **exactly 893 characters** of this CSS and introduced a regression guard. Its GitHub Actions workflow passed the direct Deck, Trophy Cabinet, campaign identity, Petts Wood, Exmouth, Weston and protected-file checks before merge. This was a BETA Challenges CSS-only change with no update to the live simulator, phone mat sizing, original checkpoint or the competition updater.
+
+**Do not assume all 47 original CSS candidates are dead:** their names come from a conservative textual scan, and the simulator's earlier overlays/skins have interdependent or dynamically generated styles. Each additional deletion needs its own targeted source and CSS-cascade review.
+
 ## Next isolated task
 
 Manually cross-check the 47 candidate classes against generated Deck markup and browser-side selectors, then choose only **proved unreachable** CSS for a small guarded PR. Add focused regression assertions for all active storage/identity/return contracts **before** renaming the progress renderer or splitting campaign-bridge code. Never delete the simulator or legacy save migration merely because their names are historical. For each new PR inspect current `main` first—normal competition ingestion may have advanced again—and append exact merged SHA and green checks here.
 
-**Manual acceptance distinction:** the user accepted the pre-refactor BETA on iPhone 14 on 25 September; PRs #91–#93 passed automated gates but have not been represented as fresh manual phone acceptance.
+**Manual acceptance distinction:** the user accepted the pre-refactor BETA on iPhone 14 on 25 September; PRs #91–#93 and #97 passed automated gates but have not been represented as fresh manual phone acceptance.
