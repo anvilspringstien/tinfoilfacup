@@ -1331,25 +1331,52 @@ function save() {
   renderStats();
 }
 
+// Keep all browser-storage I/O in one error-contained reader. A foreign or
+// malformed bridge must not replace a previously saved Challenge campaign.
+function readChallengeStorageJSON(key){
+  try{return JSON.parse(localStorage.getItem(key)||"null");}
+  catch(_){return null;}
+}
+
+// Clubfinder publishes non-negative progress; tolerate older numeric strings
+// but do not pass Infinity/NaN through to the Deck odometers or Trophy rules.
+function normalizeBridgeProgress(value){
+  const number=Number(value);
+  return Number.isFinite(number)?Math.max(0,number):0;
+}
+function normalizeBridgeIdentity(value){
+  return {
+    callSign:String(value.callSign||"").trim(),
+    pigeonName:String(value.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20)
+  };
+}
+function matchingCampaignIdentityBackup(truth,backup){
+  const sameOrigin=backup&&String(backup.originName||"")===String(truth.originName||"");
+  // Preserve legacy undated campaigns: origin still has to match.
+  const sameSelection=!truth.selectedAt||!backup||!backup.selectedAt||String(backup.selectedAt)===String(truth.selectedAt);
+  return !!(sameOrigin&&sameSelection);
+}
 function applyClubfinderCampaignTruth(){
-  let truth=null; try{truth=JSON.parse(localStorage.getItem(CLUBFINDER_BRIDGE_KEY)||"null");}catch(e){}
+  const truth=readChallengeStorageJSON(CLUBFINDER_BRIDGE_KEY);
   if(!truth||truth.source!=="Clubfinder v7.6") return false;
-  state.tiesPlayed=Math.max(0,Number(truth.tiesPlayed)||0);
-  state.awayTies=Math.max(0,Number(truth.awayTies)||0);
-  state.pigeonMiles=Math.max(0,Number(truth.pigeonMiles)||0);
-  state.campaignRound=Math.max(0,Number(truth.campaignRound)||0);
+  state.tiesPlayed=normalizeBridgeProgress(truth.tiesPlayed);
+  state.awayTies=normalizeBridgeProgress(truth.awayTies);
+  state.pigeonMiles=normalizeBridgeProgress(truth.pigeonMiles);
+  state.campaignRound=normalizeBridgeProgress(truth.campaignRound);
   state.giantKillAchieved=truth.giantKillAchieved===true;
-  campaignIdentity.callSign=String(truth.callSign||"").trim();
-  campaignIdentity.pigeonName=String(truth.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
-  if(!campaignIdentity.pigeonName){
-    let backup=null; try{backup=JSON.parse(localStorage.getItem("tffc.clubfinderCampaignIdentity.v1")||"null");}catch(e){}
-    const sameOrigin=backup&&String(backup.originName||"")===String(truth.originName||"");
-    const sameSelection=!truth.selectedAt||!backup||!backup.selectedAt||String(backup.selectedAt)===String(truth.selectedAt);
-    if(sameOrigin&&sameSelection){
-      if(!campaignIdentity.callSign) campaignIdentity.callSign=String(backup.callSign||"").trim();
-      campaignIdentity.pigeonName=String(backup.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
+
+  const identity=normalizeBridgeIdentity(truth);
+  // Only consult the backup when the current bridge lacks a usable name.
+  if(!identity.pigeonName){
+    const backup=readChallengeStorageJSON("tffc.clubfinderCampaignIdentity.v1");
+    if(matchingCampaignIdentityBackup(truth,backup)){
+      const restored=normalizeBridgeIdentity(backup);
+      if(!identity.callSign) identity.callSign=restored.callSign;
+      identity.pigeonName=restored.pigeonName;
     }
   }
+  campaignIdentity.callSign=identity.callSign;
+  campaignIdentity.pigeonName=identity.pigeonName;
   if(truth.ended===true) state.campaignStatus="ENDED";
   return true;
 }
