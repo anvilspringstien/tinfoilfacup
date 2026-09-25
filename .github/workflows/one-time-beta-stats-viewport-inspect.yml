@@ -1,0 +1,16 @@
+name: One-time read-only BETA Stats viewport investigation
+on:
+  push:
+    branches: ['fix/beta-stats-restore-original-viewport-20260925']
+    paths:
+      - 'updater/inspect_beta_stats_viewport_one_time.js'
+      - '.github/workflows/one-time-beta-stats-viewport-inspect.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node updater/inspect_beta_stats_viewport_one_time.js
