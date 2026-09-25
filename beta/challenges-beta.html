@@ -38,6 +38,21 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .deckcabwrap{width:100%;max-width:330px;margin:8px auto 0}.deckcabhead{display:flex;align-items:center;justify-content:space-between;padding:0 3px 6px;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#bcae95}
 .deckcabinet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding:2px 4px 8px 2px;touch-action:pan-y}
 .trophy-slot{position:relative;min-width:0;width:100%;aspect-ratio:1 / 1;border:1px solid #554b3d;background:#1b1814;border-radius:9px;padding:4px;overflow:hidden;cursor:default}
+
+/* BETA Trophy inspection: independent of the live Challenge Deck. */
+.trophy-viewer[hidden]{display:none!important}
+.trophy-viewer{position:fixed;inset:0;z-index:90;background:rgba(6,7,7,.89);display:flex;align-items:center;justify-content:center;overflow:auto;overscroll-behavior:contain;touch-action:none;padding:16px}
+.trophy-viewer-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%;animation:trophy-view-in .2s ease-out both}
+.trophy-viewer-mat{width:min(640px,90vw,calc(100dvh - 110px));aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
+.trophy-viewer-mat:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px;border-radius:15px}
+.trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1)}
+.trophy-viewer-card.flipped{transform:rotateX(180deg)}
+.trophy-viewer-face{position:absolute;inset:0;overflow:hidden;border:2px solid #3b2c1d;border-radius:18px;background:#d7c49d;backface-visibility:hidden;box-shadow:0 18px 45px rgba(0,0,0,.38)}
+.trophy-viewer-face.back{transform:rotateX(180deg)}
+.trophy-viewer-face img{width:100%;height:100%;object-fit:cover;display:block}
+.trophy-viewer-hint{font:12px/1.3 Arial,sans-serif;letter-spacing:.04em;color:#d5c8b3;text-align:center;pointer-events:none}
+@keyframes trophy-view-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.trophy-viewer-inner{animation:none}.trophy-viewer-card{transition:none}}
 .trophy-slot img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block}.trophy-slot.available img{filter:grayscale(1);opacity:.16}.trophy-slot.locked img{filter:grayscale(1);opacity:.09}.trophy-slot.completed{cursor:pointer;border-color:#9e845d;box-shadow:0 3px 10px rgba(0,0,0,.25)}
 .slotmark{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:6px;font:800 11px/1.1 Arial,sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#b8aa91}.completed .slotmark{display:none}.locked .slotmark{font-size:18px;color:#887c6b}.available .slotmark{color:#988b77}
 .hidden-control{display:none!important;pointer-events:none!important}
@@ -1405,6 +1420,19 @@ body.tffc-stats-view .hero.beta-splash{display:none}body.tffc-stats-view #stats{
  </section>
 </div>
 
+<!-- Achieved trophies have their own inspection surface; never flip or scroll the live deck. -->
+<div id="trophyViewer" class="trophy-viewer" role="dialog" aria-modal="true" aria-label="Inspect achieved trophy" hidden>
+  <div class="trophy-viewer-inner">
+    <div id="trophyViewerMat" class="trophy-viewer-mat" role="button" tabindex="0" aria-label="Tap to flip trophy">
+      <div id="trophyViewerCard" class="trophy-viewer-card">
+        <div class="trophy-viewer-face front"><img id="trophyViewerFront" alt="" draggable="false" decoding="async"></div>
+        <div class="trophy-viewer-face back"><img id="trophyViewerBack" alt="" draggable="false" decoding="async"></div>
+      </div>
+    </div>
+    <div id="trophyViewerHint" class="trophy-viewer-hint" aria-live="polite">Tap to flip</div>
+  </div>
+</div>
+
 <script>
 const CHALLENGES = [{"id":"00","title":"The Four Laws","subtitle":"It’s The Law!","type":"foundation","motto":"FOUR LAWS. ONE GLORIOUS CAMPAIGN.","behaviour":"reference"},{"id":"01","title":"The First Law","subtitle":"Get Your Blue Peter Badge","type":"honour","motto":"THE FIRST LAW. ALWAYS AND FOREVER.","behaviour":"prerequisite"},{"id":"02","title":"The Second Law","subtitle":"Get to your first Qualifying Tie","type":"campaign","motto":"GET TO YOUR FIRST QUALIFYING TIE.","behaviour":"first_qualifying_tie"},{"id":"03","title":"The Fourth Law","subtitle":"First Tie. First Pie.","type":"honour","motto":"FIRST TIE. FIRST PIE.","behaviour":"simple"},{"id":"04","title":"The Dogs Bollocks","subtitle":"Tin Foil FA Cup. Dog. Camera.","type":"honour","motto":"EVERY GROUND NEEDS A GOOD DOG.","behaviour":"simple"},{"id":"05","title":"The Graduate","subtitle":"Complete the Qualifying School","type":"campaign","motto":"1ST. 2ND. 3RD. GRADUATE.","behaviour":"three_qualifying"},{"id":"06","title":"The Pie’d Piper","subtitle":"4 ties, 4 pies","type":"honour","motto":"4 TIES. 4 PIES.","behaviour":"four_ties_honour"},{"id":"07","title":"Rockerfeller","subtitle":"Donate £5 to Site Upkeep","type":"honour","motto":"EVERY LITTLE HELPS.","behaviour":"simple"},{"id":"08","title":"Ding Ding Ding","subtitle":"The First Round — And a Right Proper One at that!","type":"campaign","motto":"THE FIRST ROUND PROPER.","behaviour":"first_round_proper"},{"id":"09","title":"Cop That!","subtitle":"Snap a pic with a match-day Copper","type":"honour","motto":"HELLO, HELLO, HELLO!","behaviour":"simple"},{"id":"10","title":"Ad Astra","subtitle":"Do Something Special on Your Campaign","type":"honour","motto":"TO THE STARS!","behaviour":"simple"},{"id":"11","title":"Away Days","subtitle":"Get to Three Away Ties","type":"campaign","motto":"RETURN TICKET TO GLORY.","behaviour":"three_away_ties"},{"id":"12","title":"Graffiti Artista","subtitle":"Purchase TFFC Stickers and be just like Banksy, but without the spray can!","type":"comingsoon","motto":"WE’RE STILL MAKING THE BLOODY STICKERS.","behaviour":"coming_soon"},{"id":"13","title":"The Difficult Second Round","subtitle":"All Downhill From Here!","type":"campaign","motto":"ALL DOWNHILL FROM HERE!","behaviour":"second_round_proper"},{"id":"14","title":"The Third Law","subtitle":"No Tickets? You’re OUT!","type":"honour","motto":"NO TICKETS? YOU’RE OUT!","behaviour":"end_campaign"},{"id":"15","title":"Fashionista","subtitle":"Wear TFFAC Merch at a Tie!","type":"comingsoon","motto":"TIN FOIL. HIGH FASHION.","behaviour":"coming_soon"},{"id":"16","title":"Doing A Richard","subtitle":"Get to the 3rd Round","type":"campaign","motto":"YOU’VE DONE A RICHARD!","behaviour":"third_round_proper"},{"id":"17","title":"A Proclaimer","subtitle":"Travel 500 Pigeon Miles","type":"campaign","motto":"TRAVEL 500 PIGEON MILES.","behaviour":"pigeon_500"},{"id":"18","title":"Giant Killer","subtitle":"Beat a club at least two levels above","type":"campaign","motto":"SMALL CLUBS. BIG STORIES.","behaviour":"giant_killer"},{"id":"19","title":"Seeing Double","subtitle":"Travel 1000 Pigeon Miles","type":"campaign","motto":"TRAVEL 1000 PIGEON MILES.","behaviour":"pigeon_1000"},{"id":"20","title":"The Fourth Be With You","subtitle":"Get to the Fourth Round","type":"campaign","motto":"THE FOURTH BE WITH YOU.","behaviour":"fourth_round_proper"},{"id":"21","title":"Boot Room Boy","subtitle":"Start a New Chat in The Boot Room","type":"comingsoon","motto":"PUT THE KETTLE ON.","behaviour":"coming_soon"},{"id":"22","title":"A Beethoven","subtitle":"Get to the Fifth Round","type":"campaign","motto":"DA DA DA DAAAAA!","behaviour":"fifth_round_proper"},{"id":"23","title":"Scorcese","subtitle":"Upload a video to your socials!","type":"honour","motto":"THAT’S A WRAP!","behaviour":"simple"},{"id":"24","title":"Been There, Done That!","subtitle":"Tin Foil FA Cup Tee Shirt Purchase","type":"comingsoon","motto":"BEEN THERE. DONE THAT. GOT THE TEE SHIRT.","behaviour":"coming_soon"},{"id":"25","title":"Quartermeister!","subtitle":"Get to The Quarter Finals!","type":"campaign","motto":"REPORT TO THE QUARTERMEISTER!","behaviour":"quarter_finals"},{"id":"26","title":"Get A Semi On!","subtitle":"Get to The Semi Finals!","type":"campaign","motto":"GET TO THE SEMI FINALS!","behaviour":"semi_finals"},{"id":"27","title":"Wembley Wizard","subtitle":"The Final!","type":"campaign","motto":"FROM THE FIRST TIE TO THE FINAL.","behaviour":"the_final"}];
 const ART = {"00":{"front":"assets/challenge-mats/mat-00-front.webp","back":"assets/challenge-mats/mat-00-back.webp"},"01":{"front":"assets/challenge-mats/mat-01-front.webp","back":"assets/challenge-mats/mat-01-back.webp"},"02":{"front":"assets/challenge-mats/mat-02-front.webp","back":"assets/challenge-mats/mat-02-back.webp"},"03":{"front":"assets/challenge-mats/mat-03-front.webp","back":"assets/challenge-mats/mat-03-back.webp"},"04":{"front":"assets/challenge-mats/mat-04-front.webp","back":"assets/challenge-mats/mat-04-back.webp"},"05":{"front":"assets/challenge-mats/mat-05-front.webp","back":"assets/challenge-mats/mat-05-back.webp"},"06":{"front":"assets/challenge-mats/mat-06-front.webp","back":"assets/challenge-mats/mat-06-back.webp"},"07":{"front":"assets/challenge-mats/mat-07-front.webp","back":"assets/challenge-mats/mat-07-back.webp"},"08":{"front":"assets/challenge-mats/mat-08-front.webp","back":"assets/challenge-mats/mat-08-back.webp"},"09":{"front":"assets/challenge-mats/mat-09-front.webp","back":"assets/challenge-mats/mat-09-back.webp"},"10":{"front":"assets/challenge-mats/mat-10-front.webp","back":"assets/challenge-mats/mat-10-back.webp"},"11":{"front":"assets/challenge-mats/mat-11-front.webp","back":"assets/challenge-mats/mat-11-back.webp"},"12":{"front":"assets/challenge-mats/mat-12-front.webp","back":"assets/challenge-mats/mat-12-back.webp"},"13":{"front":"assets/challenge-mats/mat-13-front.webp","back":"assets/challenge-mats/mat-13-back.webp"},"14":{"front":"assets/challenge-mats/mat-14-front.webp","back":"assets/challenge-mats/mat-14-back.webp"},"15":{"front":"assets/challenge-mats/mat-15-front.webp","back":"assets/challenge-mats/mat-15-back.webp"},"16":{"front":"assets/challenge-mats/mat-16-front.webp","back":"assets/challenge-mats/mat-16-back.webp"},"17":{"front":"assets/challenge-mats/mat-17-front.webp","back":"assets/challenge-mats/mat-17-back.webp"},"18":{"front":"assets/challenge-mats/mat-18-front.webp","back":"assets/challenge-mats/mat-18-back.webp"},"19":{"front":"assets/challenge-mats/mat-19-front.webp","back":"assets/challenge-mats/mat-19-back.webp"},"20":{"front":"assets/challenge-mats/mat-20-front.webp","back":"assets/challenge-mats/mat-20-back.webp"},"21":{"front":"assets/challenge-mats/mat-21-front.webp","back":"assets/challenge-mats/mat-21-back.webp"},"22":{"front":"assets/challenge-mats/mat-22-front.webp","back":"assets/challenge-mats/mat-22-back.webp"},"23":{"front":"assets/challenge-mats/mat-23-front.webp","back":"assets/challenge-mats/mat-23-back.webp"},"24":{"front":"assets/challenge-mats/mat-24-front.webp","back":"assets/challenge-mats/mat-24-back.webp"},"25":{"front":"assets/challenge-mats/mat-25-front.webp","back":"assets/challenge-mats/mat-25-back.webp"},"26":{"front":"assets/challenge-mats/mat-26-front.webp","back":"assets/challenge-mats/mat-26-back.webp"},"27":{"front":"assets/challenge-mats/mat-27-front.webp","back":"assets/challenge-mats/mat-27-back.webp"}};
@@ -1671,6 +1699,52 @@ function render() {
     $("feedback").textContent=lockedMessage(c);
   }
 }
+
+/* Trophy inspection is a separate, transient UI state: no deck index, flips or storage writes. */
+const trophyViewer=$("trophyViewer"), trophyViewerMat=$("trophyViewerMat");
+const trophyViewerCard=$("trophyViewerCard"), trophyViewerHint=$("trophyViewerHint");
+let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null;
+function openTrophy(c,origin){
+  if(!state.completed[c.id]) return;
+  trophyOrigin=origin;
+  trophyViewerFlipped=false;
+  $("trophyViewerFront").src=ART[c.id]?.front || CANONICAL_CUP || "";
+  $("trophyViewerBack").src=ART[c.id]?.back || CANONICAL_CUP || "";
+  trophyViewer.setAttribute("aria-label",c.title+" — achieved trophy");
+  trophyViewerCard.classList.remove("flipped");
+  trophyViewerHint.textContent="Tap to flip";
+  trophyViewerMat.setAttribute("aria-label",c.title+" — tap to flip");
+  trophyViewerOpen=true;
+  trophyViewer.hidden=false;
+  trophyViewer.classList.add("open");
+  trophyViewerMat.focus({preventScroll:true});
+}
+function closeTrophy(){
+  if(!trophyViewerOpen)return;
+  trophyViewerOpen=false;
+  trophyViewer.classList.remove("open");
+  trophyViewer.hidden=true;
+  trophyViewerCard.classList.remove("flipped");
+  const origin=trophyOrigin;
+  trophyOrigin=null;
+  if(origin && origin.isConnected!==false && typeof origin.focus==="function"){
+    try{origin.focus({preventScroll:true});}catch(_){origin.focus();}
+  }
+}
+function advanceTrophy(){
+  if(!trophyViewerOpen)return;
+  if(trophyViewerFlipped){closeTrophy();return;}
+  trophyViewerFlipped=true;
+  trophyViewerCard.classList.add("flipped");
+  trophyViewerHint.textContent="Tap to return";
+  trophyViewerMat.setAttribute("aria-label","Tap to return to Trophy Cabinet");
+}
+trophyViewerMat.onclick=advanceTrophy;
+trophyViewerMat.addEventListener("keydown",e=>{
+  if(e.key==="Enter" || e.key===" "){e.preventDefault();e.stopPropagation();advanceTrophy();}
+});
+trophyViewer.onclick=e=>{if(e.target===trophyViewer)closeTrophy();};
+
 function openAt(i=0, showBack=false) {
   index=Math.max(0,Math.min(CHALLENGES.length-1,i)); render(); overlay.classList.add("open");
   if (showBack) { flipped=true; flipcard.classList.add("flipped"); flipcard.setAttribute("aria-pressed","true"); }
@@ -1823,11 +1897,11 @@ function renderStats() {
     const unlocked=isUnlocked(c);
     const slot=document.createElement(done?"button":"div");
     slot.className=`trophy-slot ${done?"completed":unlocked?"available":"locked"}`;
-    slot.setAttribute("aria-label", done?`${c.title} completed`:unlocked?`${c.title} available`:`${c.title} locked`);
+    slot.setAttribute("aria-label", done?`Inspect ${c.title} achieved trophy`:unlocked?`${c.title} available`:`${c.title} locked`);
     const img=document.createElement("img"); img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front || CANONICAL_CUP; img.alt="";
     const mark=document.createElement("span"); mark.className="slotmark"; mark.textContent=done?"":unlocked?"Available":"🔒";
     slot.append(img,mark);
-    if(done) slot.onclick=()=>openAt(i,true);
+    if(done) slot.onclick=()=>openTrophy(c,slot);
     cabinet.appendChild(slot);
   }
 }
@@ -1882,6 +1956,12 @@ $("reset").onclick=async ()=>{
   }
 };
 document.addEventListener("keydown",e=>{
+  if(trophyViewerOpen){
+    if(e.key==="Escape"){e.preventDefault();closeTrophy();}
+    else if(e.key==="Tab"){e.preventDefault();trophyViewerMat.focus({preventScroll:true});}
+    else if(["ArrowRight","ArrowLeft","Enter"," "].includes(e.key))e.preventDefault();
+    return;
+  }
   if(!overlay.classList.contains("open")) return;
   if(e.key==="Escape") close();
   if(e.key==="ArrowRight" && index<CHALLENGES.length-1){index++;render()}
