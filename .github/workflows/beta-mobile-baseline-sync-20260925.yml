@@ -1,0 +1,39 @@
+name: Temporary guarded BETA mobile baseline sync
+on:
+  push:
+    branches: ['ux/beta-mobile-pigeon-name-20260925']
+    paths: ['.github/workflows/beta-mobile-baseline-sync-20260925.yml']
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - name: Integrate refreshed main into isolated mobile fix
+        run: |
+          set -euo pipefail
+          git config user.name 'Tin Foil FA Cup BETA Guard'
+          git config user.email 'actions@users.noreply.github.com'
+          git fetch origin main
+          git merge --no-edit origin/main
+          python updater/refresh_beta_embedded_snapshot.py --check
+      - name: Verify all BETA identity and replay regressions
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_weston_replay_stats.js
+          node tests/test_beta_challenges_direct_entry.js
+          git diff --exit-code origin/main -- clubfinder.html competition.json
+      - name: Push baseline-integrated mobile branch
+        run: |
+          set -euo pipefail
+          git push origin HEAD:ux/beta-mobile-pigeon-name-20260925
