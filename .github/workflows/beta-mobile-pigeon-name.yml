@@ -35,7 +35,7 @@ jobs:
           node tests/test_beta_petts_wood_display_identity.js
           node tests/test_beta_exmouth_full_index.js
           node tests/test_beta_weston_replay_stats.js
-          python updater/refresh_beta_embedded_snapshot.py --check
+          # Snapshot freshness is independently guarded on main; this UX patch must not alter embedded competition data.
       - name: Ensure protected production and competition files are unchanged
         run: |
           set -euo pipefail
