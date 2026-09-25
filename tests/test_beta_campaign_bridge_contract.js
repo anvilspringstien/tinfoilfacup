@@ -169,6 +169,58 @@ function store(deck,bridge,identity){
     'Fresh bridge identity must take precedence over stale backup');
 }
 
+// Stage A guard: reject non-finite/negative progress while accepting historical
+// numeric-string bridges; recover identity without copying an unrelated backup.
+{
+  const app=boot(store(baseSave(),truth({
+    tiesPlayed:'Infinity',awayTies:'-3',pigeonMiles:'1e999',
+    campaignRound:'not-a-round',giantKillAchieved:'true',
+    callSign:'  Tango Foxtrot 2 Alpha Charlie 01123  ',
+    pigeonName:'  Pigeon   McPigeonface  '
+  }),backup()));
+  for(const key of ['tiesPlayed','awayTies','pigeonMiles','campaignRound'])
+    assert.equal(app.read('state.'+key),0,
+      'Invalid or negative bridge progress must be normalized: '+key);
+  assert.equal(app.read('state.giantKillAchieved'),false,
+    'String true must not be trusted as a verified Giant Kill');
+  assert.equal(app.nodes.truthCallSign.textContent,CALL,'Call Sign whitespace changed');
+  assert.equal(app.nodes.truthPigeonName.textContent,LONG_NAME,
+    'Name whitespace collapsed incorrectly or 20-character cap changed');
+  assert.equal(app.nodes.truthCampaignRound.textContent,'Extra Preliminary Round',
+    'Non-numeric campaign round must render the default');
+
+  const numeric=boot(store(baseSave(),truth({
+    tiesPlayed:'5',awayTies:'2',pigeonMiles:'314.4',campaignRound:'4'
+  }),backup()));
+  assert.equal(numeric.read('state.tiesPlayed'),5,'Numeric-string tie count not accepted');
+  assert.equal(numeric.read('state.awayTies'),2,'Numeric-string away count not accepted');
+  assert.equal(numeric.read('state.pigeonMiles'),314.4,
+    'Finite decimal mileage must retain original verified precision');
+  assert.equal(numeric.read('state.campaignRound'),4,
+    'Numeric-string campaign round not accepted');
+
+  const noBackup=boot(store(baseSave(),truth({pigeonName:'',callSign:''})));
+  assert.equal(noBackup.nodes.truthPigeonName.textContent,'—',
+    'Absent identity backup should not invent a Pigeon Name');
+  assert.equal(noBackup.nodes.truthCallSign.textContent,'—',
+    'Absent identity backup should not invent a Call Sign');
+  const malformedBackup=store(baseSave(),truth({pigeonName:'',callSign:''}));
+  malformedBackup[IDENTITY]='{malformed json';
+  const bad=boot(malformedBackup);
+  assert.equal(bad.nodes.truthPigeonName.textContent,'—',
+    'Malformed identity backup should not crash or leak another Pigeon Name');
+
+  const oldUndated=boot(store(baseSave(),
+    truth({pigeonName:'',selectedAt:undefined}),backup()));
+  assert.equal(oldUndated.nodes.truthPigeonName.textContent,LONG_NAME,
+    'Previously supported undated matching-origin backup was rejected');
+  const undatedMismatch=boot(store(baseSave(),
+    truth({pigeonName:'',selectedAt:undefined}),
+    backup({originName:'Wimborne Town FC',pigeonName:'Other Pigeon'})));
+  assert.equal(undatedMismatch.nodes.truthPigeonName.textContent,'—',
+    'Missing date must not allow a different-origin identity to leak');
+}
+
 // A legacy prototype save is MIGRATED in memory, not treated as an empty
 // cabinet; new saves must use the current v1 tiesPlayed field.
 {
