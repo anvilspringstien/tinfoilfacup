@@ -12,6 +12,7 @@ for(const id of ['openDeck','maybeLater','deckStatsBtn','statsOpenDeck','statsCo
 }
 assert(!/<section[^>]*class="hero beta-splash"/.test(html),'Splash remains in the page');
 assert(!/<section[^>]*class="stats"/.test(html),'Detached Challenge Stats remains');
+assert(!html.includes('beta-splash'),'Removed splash stylesheet must not return');
 assert(/id="deckCabinet"/.test(html),'Trophy Cabinet must be retained');
 assert(/id="exitBtn"/.test(html),'Explicit Exit button must be retained');
 
