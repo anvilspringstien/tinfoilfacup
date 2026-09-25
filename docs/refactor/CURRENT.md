@@ -1,8 +1,8 @@
 # Tin Foil FA Cup — CURRENT BETA refactor checkpoint
 
-**Last verified:** 25 September 2026 (BST), after merged guarded campaign/bridge regression PR #99.  
+**Last verified:** 25 September 2026 (BST), after test-only PR #99 and green Deck-workflow correction PR #101; [guarded structural plan](./2026-09-25-bridge-render-structural-plan.md) now prepared.  
 **Source-of-truth for source code:** current `main`; **recovery source:** the pinned accepted BETA branch below.  
-**Last green BETA source change:** `88eecd8bc670a04005c107e6ed26b047721c2a3e` (PR #97). **Latest green test-only change:** `c02c5aea26963b006150d995413b3c0563c8f184` (PR #99). **Read-only dependency audit:** `65a4e0f4d17535b69f5d00ba638799a76708d880` (PR #95).  
+**Last green BETA source change:** `88eecd8bc670a04005c107e6ed26b047721c2a3e` (PR #97). **Latest green test-only change:** `c02c5aea26963b006150d995413b3c0563c8f184` (PR #99). **Latest green CI preparation:** `9d7e449b6a69e41d7233e38ff6027071aa528bed` (PR #101). **Read-only dependency audit:** `65a4e0f4d17535b69f5d00ba638799a76708d880` (PR #95).  
 **Current BETA Challenges file blob at that merge:** `7989e3a0d89bb7425837d3474a46eacddc53182e`.
 
 ## Restore precisely if the chat or a working branch is interrupted
@@ -23,6 +23,8 @@
 | [#95](https://github.com/anvilspringstien/tinfoilfacup/pull/95) | `65a4e0f` | Full untruncated BETA Deck/Clubfinder dependency map and storage/compatibility inventory (no app changes) | Deck, Trophy, identity, Petts Wood, Exmouth, Weston, accepted mobile patch guard, reproducible report and protected-file gates passed |
 | [#97](https://github.com/anvilspringstien/tinfoilfacup/pull/97) | `88eecd8` | Delete 893 characters of retired launch-only CSS for `#openChallenges`, `.challenge-launch` and `.challenges-btn`; add a regression guard | Deck, Trophy, identity, Petts Wood, Exmouth, Weston and protected-file CI passed |
 | [#99](https://github.com/anvilspringstien/tinfoilfacup/pull/99) | `c02c5ae` | BETA tests for existing saved Challenges, legacy migration, protected Pigeon identity and actual Clubfinder → Deck → Clubfinder handover; expand CI trigger and protected-file guard | Challenges/Deck/Trophy/identity/Petts Wood/Exmouth/Weston and mobile Pigeon Name workflows passed; no app/data files changed |
+| [#101](https://github.com/anvilspringstien/tinfoilfacup/pull/101) | `9d7e449` | Permit intentional tested BETA Deck refactor PRs in the full bridge/Trophy CI, while preserving guards on production, canonical data and independent BETA Clubfinder | Full BETA direct-entry and historic regressions passed; workflow-only change |
+
 
 All four functional cleanup PRs changed **only** `beta/challenges-beta.html` and `tests/test_beta_challenges_direct_entry.js`. Production Clubfinder, BETA Clubfinder, canonical competition data, updater, challenge mechanics and persisted storage schemas were **not** changed by these PRs. The original accepted source is still available at its pinned checkpoint.
 
@@ -56,8 +58,12 @@ The [expanded Clubfinder identity regression](../../updater/beta_campaign_identi
 
 PR #99's Challenges workflow and independent mobile Pigeon Name workflow were both **green** before squash merge at `c02c5ae`. This was **tests and CI only**: no new app UI acceptance is implied, and the manually approved BETA recovery branch remains pinned at `89f0338`.
 
+## Structural refactor prepared (plan only)
+
+The [guarded bridge/render refactoring plan](./2026-09-25-bridge-render-structural-plan.md) defines four independent stages: (A) Deck-only pure bridge/identity helpers behind the existing `applyClubfinderCampaignTruth()` interface; (B) decompose the **active** `renderStats()` display into truth-frame, simulator and Trophy Cabinet helpers while retaining its wrapper; (C) separately investigate the huge BETA Clubfinder producer and use a dedicated safe workflow **before editing it**; (D) consider an external shared script only if it has a measured benefit and no Wix/GitHub Pages loading regression. Every stage preserves the v1 storage, identity/date matching, historical trophy migration, venue-derived Pigeon Miles and old Stats-tab navigation. This is a plan, not authorisation to change production.
+
 ## Next isolated task
 
-Manually cross-check the remaining CSS candidates against dynamic Deck markup and selectors; pursue only **proved unreachable** styles in a small guarded PR. With the new #99 campaign/identity/return regression safety net in place, draft a separate structural plan for consolidating the Clubfinder bridge and Deck progress renderer before modifying them. Never delete the simulator or legacy save migration merely because their names are historical. For each new PR inspect current `main` first—normal competition ingestion may have advanced again—and append exact merged SHA and green checks here.
+Take stage **A**, Deck-only bridge normalization, in an isolated BETA-only PR, adding targeted invalid-data/identity tests to the new #99 contract suite before editing source; then run the full #101 regression workflow. In parallel, manually cross-check any remaining CSS deletion candidate with dynamic markup; do not bundle CSS removals with bridge changes. Do not remove the simulator, old `journeyTies` migration or the live `renderStats` wrapper. Refresh offline competition fallback only in a separate guarded data PR. Check current `main` before every branch, and append exact merged SHA and completed green checks here.
 
 **Manual acceptance distinction:** the user accepted the pre-refactor BETA on iPhone 14 on 25 September; PRs #91–#93 and #97 passed automated gates but have not been represented as fresh manual phone acceptance.
