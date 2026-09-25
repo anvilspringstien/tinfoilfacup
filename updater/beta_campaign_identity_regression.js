@@ -6,8 +6,12 @@ const path=require('path');
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
-const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
+const scriptBlocks=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
+const scripts=scriptBlocks.join('\n');
+const statsViewportScript=scriptBlocks.find(x=>x.includes("document.write(new URLSearchParams(location.search||'').get('stats')"));
 if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
+if(!statsViewportScript||!statsViewportScript.includes('width=980')||!statsViewportScript.includes('width=device-width,initial-scale=1'))throw new Error('BETA Stats viewport: missing conditional legacy-wide Stats / original mobile Clubfinder viewport');
+if(!html.includes("const doc='<!doctype html><html><head><meta charset=\\\"utf-8\\\"><meta name=\\\"viewport\\\" content=\\\"width=980\\\">"))throw new Error('BETA Stats viewport: generated report must preserve original pinch-to-zoom width on reload');
 if(!html.includes('maxlength="20"'))throw new Error('BETA identity regression: pigeon-name 20-character cap drifted');
 if(!html.includes('class="campaign-call-sign"')||!html.includes('class="campaign-pigeon-name"'))throw new Error('BETA mobile regression: identity must have separate Call Sign and Pigeon Name rows');
 if(!html.includes('.campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;'))throw new Error('BETA mobile regression: phone name row must wrap instead of clipping');
@@ -43,11 +47,16 @@ const documentStub={
   removeEventListener(){},
   body:nodeStub(),
   open(){certificateHtml='';},
-  write(chunk){certificateHtml+=String(chunk)},
+  write(chunk){
+    const part=String(chunk);
+    if(part.startsWith('<meta name="viewport"')){lastViewportMetaWritten=part;return;}
+    certificateHtml+=part;
+  },
   close(){}
 };
 const localStore={};
 const sessionStore={};
+let lastViewportMetaWritten='';
 let counterIncrementCalls=0;
 let certificateHtml='';
 const popupRoutes=[];
@@ -91,6 +100,8 @@ const sandbox={
   navigator:{},location:locationStub,URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
   open:url=>{popupRoutes.push(String(url??''));return popupStub()},
   getCertificateHtml:()=>certificateHtml,
+  getViewportMetaWritten:()=>lastViewportMetaWritten,
+  statsViewportScript,
   getPopupRoutes:()=>JSON.stringify(popupRoutes),
   getCounterIncrementCalls:()=>counterIncrementCalls,
   getLocalStoreSnapshot:()=>JSON.stringify(localStore),
@@ -232,9 +243,18 @@ const assertions=`
   if(getCertificateHtml())throw new Error('BETA Stats refresh: popup is still filled with an ephemeral document');
   if(window.location.href!==originalPageHref)throw new Error('BETA Stats refresh: opening Stats navigated away from the original Clubfinder');
   const originalSearch=window.location.search;
+  if(!getViewportMetaWritten().includes('width=device-width,initial-scale=1'))
+    throw new Error('BETA Stats viewport: ordinary Clubfinder no longer starts with phone-appropriate viewport');
   window.location.search='?stats=1';
+  eval(statsViewportScript);
+  if(getViewportMetaWritten()!=='<meta name="viewport" content="width=980">')
+    throw new Error('BETA Stats viewport: canonical route no longer has original wide, pinchable report viewport');
   await tinFoilMaybeOpenCanonicalStatsRoute();
   const statsPage=getCertificateHtml();
+  if(!statsPage.includes('<meta name="viewport" content="width=980">')||
+     !statsPage.includes('.sheet{width:min(790px,100%)')||
+     !statsPage.includes('@media(max-width:650px)'))
+    throw new Error('BETA Stats viewport: certificate itself does not preserve the original wide report and desktop grid');
   if(statsPage.length<10000||!statsPage.includes('Pigeon McPigeonface')||
      !statsPage.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
      !statsPage.includes('Thame United'))
@@ -252,7 +272,7 @@ const assertions=`
   if(getCounterIncrementCalls()!==statsCounterBefore||
      JSON.stringify(loadSavedJourney())!==statsSavedBefore)
     throw new Error('BETA Stats refresh: regeneration changed the Campaign or allocated a call-sign number');
-  console.log('BETA IPHONE STATS PULL-TO-REFRESH: canonical route, full identity, restored report, no extra counter — PASS');
+  console.log('BETA IPHONE STATS PULL-TO-REFRESH: canonical route, original wide pinchable report, full identity, restored content, no extra counter — PASS');
 
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity
