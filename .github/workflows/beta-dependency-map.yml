@@ -1,0 +1,65 @@
+name: Read-only BETA dependency map
+
+on:
+  push:
+    branches: ['refactor/beta-dependency-map-20260925']
+    paths:
+      - 'updater/map_beta_dependencies.py'
+      - '.github/workflows/beta-dependency-map.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout isolated audit branch
+        uses: actions/checkout@v4
+        with:
+          ref: refactor/beta-dependency-map-20260925
+          fetch-depth: 0
+      - name: Regress direct Deck, Trophy, bridge and historical campaigns
+        run: |
+          set -euo pipefail
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_weston_replay_stats.js
+          python updater/patch_beta_mobile_pigeon_name.py --check
+      - name: Generate report from full untruncated BETA source and reproduce it
+        run: |
+          set -euo pipefail
+          python updater/map_beta_dependencies.py
+          python updater/map_beta_dependencies.py --check
+      - name: Ensure protected files are unchanged
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- \
+            clubfinder.html beta/clubfinder-beta.html \
+            beta/challenges-beta.html competition.json
+          changed="$(git status --porcelain | awk '{print $2}' | grep -v '^docs/refactor/2026-09-25-dependency-map.md$' || true)"
+          if [ -n "$changed" ]; then
+            echo "Unexpected working-tree changes: $changed"
+            exit 1
+          fi
+      - name: Commit generated report only on the isolated branch
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          git config user.name "Tin Foil FA Cup Refactor Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- docs/refactor/2026-09-25-dependency-map.md
+          if git diff --cached --quiet; then
+            echo "Dependency map already current"
+          else
+            git commit -m "docs(refactor): save full-source BETA dependency map"
+            git push origin HEAD:refactor/beta-dependency-map-20260925
+          fi
