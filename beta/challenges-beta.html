@@ -1916,7 +1916,7 @@ function renderStats() {
   $("truthCallSign").textContent=campaignIdentity.callSign||"—";
   $("truthPigeonName").textContent=campaignIdentity.pigeonName||"—";
   $("truthPigeonMiles").textContent=Math.max(0,Math.round(state.pigeonMiles)).toLocaleString("en-GB");
-  $("truthCampaignRound").textContent=$("campaignRound").options[$("campaignRound").selectedIndex].textContent;
+  $("truthCampaignRound").textContent=$("campaignRound").options[state.campaignRound]?.textContent || "Extra Preliminary Round";
   $("campaignStatus").textContent=state.campaignStatus==="ENDED"?"IT’S OVER":"IN PROGRESS";
   const ended=state.campaignStatus==="ENDED";
   $("addTie").disabled=ended;
