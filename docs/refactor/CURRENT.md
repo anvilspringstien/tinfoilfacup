@@ -1,8 +1,8 @@
 # Tin Foil FA Cup — CURRENT BETA refactor checkpoint
 
-**Last verified:** 25 September 2026 (BST), after merged PR #93.  
+**Last verified:** 25 September 2026 (BST), after merged dependency-map PR #95.  
 **Source-of-truth for source code:** current `main`; **recovery source:** the pinned accepted BETA branch below.  
-**Last green BETA CSS-cleanup merge:** `bc52268d04f00e9e0bf4f4e8b56a997f0144c58d` (PR #93).  
+**Last green BETA source change:** `bc52268d04f00e9e0bf4f4e8b56a997f0144c58d` (PR #93). **Latest completed, guarded read-only audit:** `65a4e0f4d17535b69f5d00ba638799a76708d880` (PR #95).  
 **Current BETA Challenges file blob at that merge:** `4383b17a4c38d10559016e06455b0869860eff9d`.
 
 ## Restore precisely if the chat or a working branch is interrupted
@@ -20,6 +20,7 @@
 | [#91](https://github.com/anvilspringstien/tinfoilfacup/pull/91) | `a621897` | Remove the orphaned 4,109-character newer splash CSS block from BETA Challenges | Deck, Trophy, identity, Petts Wood, Exmouth, Weston and protected-file gate passed |
 | [#92](https://github.com/anvilspringstien/tinfoilfacup/pull/92) | `6faf970` | Remove another 1,317 characters of unused **original** splash CSS | Same full BETA direct-entry guard passed |
 | [#93](https://github.com/anvilspringstien/tinfoilfacup/pull/93) | `bc52268` | Remove 1,274 characters of detached Challenges Stats CSS; strengthen CSS guard self-tests | Same full BETA direct-entry guard passed |
+| [#95](https://github.com/anvilspringstien/tinfoilfacup/pull/95) | `65a4e0f` | Full untruncated BETA Deck/Clubfinder dependency map and storage/compatibility inventory (no app changes) | Deck, Trophy, identity, Petts Wood, Exmouth, Weston, accepted mobile patch guard, reproducible report and protected-file gates passed |
 
 All three functional cleanup PRs changed **only** `beta/challenges-beta.html` and `tests/test_beta_challenges_direct_entry.js`. Production Clubfinder, BETA Clubfinder, canonical competition data, updater, challenge mechanics and persisted storage schemas were **not** changed by these PRs. The original accepted source is still available at its pinned checkpoint.
 
@@ -31,8 +32,16 @@ All three functional cleanup PRs changed **only** `beta/challenges-beta.html` an
 - BETA Clubfinder is a ~4.6 MB source file; use **in-repository full-file tooling**, not a potentially truncated connector result, for any substantive code audit or patch.
 - The initial inventory found the BETA embedded offline competition snapshot **stale** against a later canonical main update. Live `../competition.json` remains authoritative. Run `updater/refresh_beta_embedded_snapshot.py` in its **own** guarded data-fallback PR whenever a strict current-canonical smoke check requires freshness; normal competition ingestion can advance in the meantime.
 
+## Latest read-only dependency audit (#95)
+
+The [full-source dependency report](./2026-09-25-dependency-map.md) is a **historical, commit-scoped** artifact, generated on the repository runner from the complete files. It records **30** Deck and **150** Clubfinder named functions and maps seven key persistent/session browser-storage contracts. The scanner found **47 CSS class candidates** with no exact static markup/JS references, but dynamic markup produces false positives: no CSS is approved for removal without manual checks.
+
+The audit confirmed (a) `journeyTies` migration on load; (b) the Clubfinder bridge's counters, mileage, round, Call Sign and Pigeon Name; (c) origin-and-selection-date identity-backup matching; (d) old Stats-tab return-index compatibility; and (e) explicit Challenges-to-Clubfinder return. **Preserve all five.** `renderStats()` remains active. Production and both BETA HTML files were unchanged by #95.
+
+The offline fallback in this specific audit was **STALE**: embedded `2026-09-25T07:49:01.065159+00:00`, canonical `2026-09-25T13:47:51.590346+00:00`. This is a historical observation, not necessarily the latest canonical timestamp. The live canonical fetch is authoritative; refresh offline data in a **separate guarded PR** if strict fallback parity is required.
+
 ## Next isolated task
 
-Perform a **read-only dependency map** of the remaining Challenge Deck script/CSS and the BETA Clubfinder campaign bridge, identifying genuinely unused styles/functions, explicit dynamic references and active storage contracts. Only then choose the next tiny functional change. Use a fresh branch from then-current `main`, run the established guards, and add its exact green merge SHA to this document.
+Manually cross-check the 47 candidate classes against generated Deck markup and browser-side selectors, then choose only **proved unreachable** CSS for a small guarded PR. Add focused regression assertions for all active storage/identity/return contracts **before** renaming the progress renderer or splitting campaign-bridge code. Never delete the simulator or legacy save migration merely because their names are historical. For each new PR inspect current `main` first—normal competition ingestion may have advanced again—and append exact merged SHA and green checks here.
 
 **Manual acceptance distinction:** the user accepted the pre-refactor BETA on iPhone 14 on 25 September; PRs #91–#93 passed automated gates but have not been represented as fresh manual phone acceptance.
