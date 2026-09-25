@@ -225,6 +225,42 @@ const assertions=`
   if(!Number.isFinite(bridged.pigeonMiles)||bridged.pigeonMiles<=0)throw new Error('BETA bridge contract: verified mileage missing');
   if(bridged.tiesPlayed!==(buildJourney(origin).breadcrumbs||[]).length)throw new Error('BETA bridge contract: verified ties count mismatch');
   if(!bridged.statsSnapshot||bridged.statsSnapshot.pigeonMiles!==Math.round(bridged.pigeonMiles))throw new Error('BETA bridge contract: cached stats differ from verified miles');
+
+  // Stage C baseline: lock the ACTUAL producer's v1 payload before extracting
+  // its record assembly. This is intentionally validated against the original
+  // source first; venue selection, replay progression and counters remain live.
+  const bridgeFields=[
+    'source','originName','currentCustodian','postcode','selectedAt',
+    'searchNumber','callSign','pigeonName','tiesPlayed','awayTies',
+    'pigeonMiles','campaignRound','ended','statsSnapshot','updatedAt'
+  ];
+  const actualFields=Object.keys(bridged).sort().join('|');
+  if(actualFields!==bridgeFields.sort().join('|')){
+    throw new Error('Stage C: v1 bridge schema unexpectedly changed: '+actualFields);
+  }
+  if(bridged.currentCustodian!==(buildJourney(origin).carrier||origin).name)
+    throw new Error('Stage C: current custodian missing from producer');
+  if(bridged.postcode!=='HP7 0EJ'||bridged.searchNumber!==9842)
+    throw new Error('Stage C: origin postcode or stable call-sign number changed');
+  if(bridged.ended!==false)
+    throw new Error('Stage C: active Campaign incorrectly exported as ended');
+  if(!Number.isInteger(bridged.awayTies)||bridged.awayTies<0||
+     bridged.awayTies>bridged.tiesPlayed)
+    throw new Error('Stage C: away-tie progression left legal range');
+  if(!Number.isInteger(bridged.campaignRound)||bridged.campaignRound<0||
+     bridged.campaignRound>13)
+    throw new Error('Stage C: qualifying round index changed');
+  if(Math.abs(bridged.pigeonMiles-pigeon.miles)>1e-8)
+    throw new Error('Stage C: bridge mileage differs from resolved ground-by-ground mileage');
+  if(bridged.statsSnapshot.origin!==origin.name||
+     bridged.statsSnapshot.currentCustodian!==bridged.currentCustodian||
+     bridged.statsSnapshot.searchNumber!==bridged.searchNumber||
+     bridged.statsSnapshot.callSign!==bridged.callSign)
+    throw new Error('Stage C: derived Stats snapshot no longer belongs to the campaign');
+  if(!Number.isFinite(Date.parse(bridged.updatedAt))||
+     new Date(bridged.updatedAt).toISOString()!==bridged.updatedAt)
+    throw new Error('Stage C: bridge update timestamp is not ISO');
+
   if(sessionStorage.getItem('tffc.challengeOrigin')!=='clubfinder-beta')throw new Error('BETA bridge contract: origin marker was not saved');
   if(window.location.href!=='challenges-beta.html')throw new Error('BETA bridge contract: direct Deck route missing');
   const returnRecord=JSON.parse(sessionStorage.getItem(TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY)||'null');
