@@ -1,7 +1,9 @@
 # Tin Foil FA Cup — BETA refactor recovery checkpoint and initial inventory
 
-Status: **Stage 1 / read-only inventory. No functional refactor authorised or applied.**  
+Status: **Historical Stage 1 baseline; see [CURRENT.md](./CURRENT.md) for live refactor progress and restore instructions.**  
 Date: **25 September 2026 (BST)**
+
+**Latest verified cleanups:** PRs #91–#93 have since merged, without touching production or the accepted recovery branch. The original inventory below records its historical audit commit, not the latest BETA file hashes.
 
 ## Immutable recovery anchors
 
