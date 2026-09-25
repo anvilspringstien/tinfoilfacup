@@ -1,0 +1,86 @@
+name: Guard BETA Clubfinder producer (Stage C)
+
+on:
+  push:
+    branches: ['refactor/beta-clubfinder-stage-c-audit-20260925']
+    paths:
+      - 'updater/audit_beta_clubfinder_stage_c.py'
+      - '.github/workflows/beta-clubfinder-stage-c.yml'
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'updater/audit_beta_clubfinder_stage_c.py'
+      - 'docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md'
+      - 'updater/beta_campaign_identity_regression.js'
+      - 'tests/test_beta_campaign_bridge_contract.js'
+      - '.github/workflows/beta-clubfinder-stage-c.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  full-file-audit-and-clubfinder-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout actual PR or isolated Stage C audit branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Audit complete BETA Clubfinder and reproduce report
+        run: |
+          set -euo pipefail
+          python3 updater/audit_beta_clubfinder_stage_c.py
+          python3 updater/audit_beta_clubfinder_stage_c.py --check
+          python3 updater/patch_beta_mobile_pigeon_name.py --check
+      - name: Actual Clubfinder producer, identity, phone and return tests
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_campaign_bridge_contract.js
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
+      - name: Guard venue and completed campaign histories
+        run: |
+          set -euo pipefail
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_weston_replay_stats.js
+          node tests/test_beta_thame_next_fixture.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_conditional_draw_alias.js
+      - name: Protect live production, canonical data and separately accepted Deck
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- \
+            clubfinder.html competition.json beta/challenges-beta.html
+          # The audit branch itself MUST also leave BETA Clubfinder unchanged.
+          if [ "$GITHUB_REF_NAME" = "refactor/beta-clubfinder-stage-c-audit-20260925" ] || \
+             [ "$GITHUB_HEAD_REF" = "refactor/beta-clubfinder-stage-c-audit-20260925" ]; then
+            git diff --exit-code origin/main...HEAD -- beta/clubfinder-beta.html
+          fi
+          # Only the generated report is permitted as a working-tree addition.
+          unexpected="$(git status --porcelain | awk '{print $2}' | \
+            grep -v '^docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "ABORT: audit modified unexpected files: $unexpected"
+            exit 1
+          fi
+      - name: Commit generated audit only on isolated push branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/refactor/beta-clubfinder-stage-c-audit-20260925'
+        run: |
+          set -euo pipefail
+          git config user.name "Tin Foil FA Cup Refactor Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md
+          if git diff --cached --quiet; then
+            echo "Full-file Stage C source report already current"
+          else
+            git commit -m "docs(refactor): save reproducible Stage C Clubfinder producer map"
+            git push origin HEAD:refactor/beta-clubfinder-stage-c-audit-20260925
+          fi
