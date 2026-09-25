@@ -1,14 +1,11 @@
-#!/usr/bin/env python3
 from pathlib import Path
 s=Path("beta/clubfinder-beta.html").read_text(encoding="utf-8")
-start=s.find("async function journeyCertificate(")
-end=s.find("</script>",start) if start>=0 else -1
-print("CERTIFICATE_BEGIN",start,"CERTIFICATE_END",end)
-if start>=0: print("CERTIFICATE SOURCE START",repr(s[start:start+5600]))
-for needle in ["campaign-identity-band","campaign-identity-label","campaign-identity-value","<meta name=\\\"viewport","<meta name=\\\"viewport\\\"","text-size-adjust","Pigeon Name"]:
- print("\n=== NEEDLE",repr(needle),"COUNT",s.count(needle))
+start=s.index("async function journeyCertificate(")
+segment=s[start:start+26000]
+for needle in ["<head","<meta","viewport","<style","const html","const css","width:","@media","w.document.write","document.write"]:
+ print("\nTOKEN",repr(needle),"COUNT",segment.count(needle))
  off=0
- for i in range(min(4,s.count(needle))):
-  p=s.find(needle,off)
-  print("OFFSET",p,"SNIPPET",repr(s[max(start,p-250):p+490]))
+ for i in range(min(5,segment.count(needle))):
+  p=segment.find(needle,off)
+  print("OFFSET",start+p,"SNIP",repr(segment[max(0,p-220):p+600]))
   off=p+len(needle)
