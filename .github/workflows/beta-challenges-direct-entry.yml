@@ -1,7 +1,7 @@
 name: Guard direct BETA Challenges navigation
 on:
   push:
-    branches: ['ux/beta-direct-challenges-20260924', 'ux/beta-trophy-viewer-20260925']
+    branches: ['ux/beta-direct-challenges-20260924', 'ux/beta-trophy-viewer-20260925', 'ux/beta-campaign-truth-frame-20260925']
   pull_request:
     paths:
       - 'beta/challenges-beta.html'
