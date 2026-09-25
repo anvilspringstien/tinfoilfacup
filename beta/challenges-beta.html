@@ -913,10 +913,29 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 }
 
 
-/* v0.10.33 — persistent truth strip: current Campaign standing */
-.campaign-truth{margin-bottom:22px;display:flex;align-items:center;justify-content:center;gap:22px;margin:8px auto 0;max-width:500px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#c9c4b8;white-space:nowrap}
-.campaign-truth strong{color:#f3efe4;font-size:11px;letter-spacing:.03em}
-@media(max-width:520px){.campaign-truth{gap:12px;font-size:8.5px;letter-spacing:.035em}.campaign-truth strong{font-size:9.5px}}
+/* v0.10.37 — compact Campaign identity frame, sized to the BETA panel language */
+.campaign-truth{
+  width:min(500px, calc(100% - 28px));
+  box-sizing:border-box;
+  margin:8px auto 22px;
+  padding:11px 14px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:10px;
+  background:rgba(255,255,255,.045);
+  color:#c9c4b8;
+  font:10px/1.45 Arial,sans-serif;
+  letter-spacing:.045em;
+}
+.campaign-truth-line{display:block;min-width:0;overflow-wrap:anywhere}
+.campaign-truth-line.two{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.campaign-truth-item{min-width:0}
+.campaign-truth .label{text-transform:uppercase}
+.campaign-truth strong{color:#f3efe4;font-size:11px;letter-spacing:.02em;text-transform:none}
+@media(max-width:560px){
+  .campaign-truth{width:calc(100% - 20px);padding:10px 11px;font-size:9px;letter-spacing:.025em}
+  .campaign-truth strong{font-size:10px}
+  .campaign-truth-line.two{gap:6px 14px}
+}
 </style>
 <!-- v0.10.23 — corrected reverse/back artwork mapping for Mats 16, 18, 20–23; no Challenge logic changed -->
 <!-- TFFAC Challenge Deck v0.10.30 | Audit artwork locked | Feedback field between mat and console -->
@@ -1342,7 +1361,11 @@ body.tffc-stats-view .hero.beta-splash{display:none}body.tffc-stats-view #stats{
     </div>
     <div class="verifyrow"><button class="verifybadge" id="verifyBadge" type="button" aria-describedby="verifyHelp" aria-expanded="false">Our Foundational Laws</button></div>
     <div class="verifyhelp" id="verifyHelp"></div>
-    <div class="campaign-truth" aria-label="Current Campaign standing"><span>Pigeon Miles Travelled: <strong id="truthPigeonMiles">0</strong></span><span>Current Campaign Round: <strong id="truthCampaignRound">Extra Preliminary Round</strong></span></div>
+    <div class="campaign-truth" aria-label="Current Campaign standing">
+      <span class="campaign-truth-line"><span class="label">Call Sign:</span> <strong id="truthCallSign">—</strong></span>
+      <span class="campaign-truth-line two"><span class="campaign-truth-item"><span class="label">Pigeon Name:</span> <strong id="truthPigeonName">—</strong></span><span class="campaign-truth-item"><span class="label">Miles Flown:</span> <strong id="truthPigeonMiles">0</strong></span></span>
+      <span class="campaign-truth-line"><span class="label">Current Campaign Round:</span> <strong id="truthCampaignRound">Extra Preliminary Round</strong></span>
+    </div>
     
     
 
@@ -1506,6 +1529,7 @@ function loadState() {
 let state = loadState();
 let index = 0;
 let flipped = false;
+let campaignIdentity={callSign:"",pigeonName:""};
 
 const $ = id => document.getElementById(id);
 const overlay=$("overlay"), flipcard=$("flipcard"), front=$("frontFace"), back=$("backFace");
@@ -1523,6 +1547,17 @@ function applyClubfinderCampaignTruth(){
   state.pigeonMiles=Math.max(0,Number(truth.pigeonMiles)||0);
   state.campaignRound=Math.max(0,Number(truth.campaignRound)||0);
   state.giantKillAchieved=truth.giantKillAchieved===true;
+  campaignIdentity.callSign=String(truth.callSign||"").trim();
+  campaignIdentity.pigeonName=String(truth.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
+  if(!campaignIdentity.pigeonName){
+    let backup=null; try{backup=JSON.parse(localStorage.getItem("tffc.clubfinderCampaignIdentity.v1")||"null");}catch(e){}
+    const sameOrigin=backup&&String(backup.originName||"")===String(truth.originName||"");
+    const sameSelection=!truth.selectedAt||!backup||!backup.selectedAt||String(backup.selectedAt)===String(truth.selectedAt);
+    if(sameOrigin&&sameSelection){
+      if(!campaignIdentity.callSign) campaignIdentity.callSign=String(backup.callSign||"").trim();
+      campaignIdentity.pigeonName=String(backup.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
+    }
+  }
   if(truth.ended===true) state.campaignStatus="ENDED";
   return true;
 }
@@ -1878,6 +1913,8 @@ function renderStats() {
     $("awayTieCount").setAttribute("aria-label",`${state.awayTies} away ${state.awayTies===1?"tie":"ties"}`);
   }
   $("campaignRound").value=String(state.campaignRound);
+  $("truthCallSign").textContent=campaignIdentity.callSign||"—";
+  $("truthPigeonName").textContent=campaignIdentity.pigeonName||"—";
   $("truthPigeonMiles").textContent=Math.max(0,Math.round(state.pigeonMiles)).toLocaleString("en-GB");
   $("truthCampaignRound").textContent=$("campaignRound").options[$("campaignRound").selectedIndex].textContent;
   $("campaignStatus").textContent=state.campaignStatus==="ENDED"?"IT’S OVER":"IN PROGRESS";
