@@ -22,7 +22,7 @@ new vm.Script(scripts,{filename:'beta/challenges-beta.html'});
 function stub(){
   const flags=new Set(),node={
     style:{},dataset:{},children:[],textContent:'',innerHTML:'',value:'0',selectedIndex:0,disabled:false,
-    options:Array.from({length:14},(_,i)=>({textContent:i?'Round '+i:'Extra Preliminary Round',text:i?'Round '+i:'Extra Preliminary Round'})),
+    options:['Extra Preliminary Round','Preliminary Round','1st Qualifying Round','2nd Qualifying Round','3rd Qualifying Round','4th Qualifying Round','First Round Proper','Second Round Proper','Third Round Proper','Fourth Round Proper','Fifth Round Proper','Quarter Finals','Semi Finals','Final'].map(text=>({textContent:text,text})),
     classList:{add(k){flags.add(k)},remove(k){flags.delete(k)},contains(k){return flags.has(k)},toggle(k,on){if(on===undefined)on=!flags.has(k);if(on)flags.add(k);else flags.delete(k);return on}},
     setAttribute(){},removeAttribute(){},remove(){},focus(){},addEventListener(){},
     querySelector(){return null},querySelectorAll(){return []},appendChild(child){this.children.push(child);return child},
