@@ -41,12 +41,16 @@ const documentStub={
   createElement(){return nodeStub()},
   addEventListener(){},
   removeEventListener(){},
-  body:nodeStub()
+  body:nodeStub(),
+  open(){certificateHtml='';},
+  write(chunk){certificateHtml+=String(chunk)},
+  close(){}
 };
 const localStore={};
 const sessionStore={};
 let counterIncrementCalls=0;
 let certificateHtml='';
+const popupRoutes=[];
 function popupStub(){
   const doc={
     open(){certificateHtml='';},
@@ -85,8 +89,9 @@ const sandbox={
   },
   requestAnimationFrame:fn=>fn(),scrollY:128,scrollTo(){},
   navigator:{},location:locationStub,URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
-  open:()=>popupStub(),
+  open:url=>{popupRoutes.push(String(url??''));return popupStub()},
   getCertificateHtml:()=>certificateHtml,
+  getPopupRoutes:()=>JSON.stringify(popupRoutes),
   getCounterIncrementCalls:()=>counterIncrementCalls,
   getLocalStoreSnapshot:()=>JSON.stringify(localStore),
   getSessionStoreSnapshot:()=>JSON.stringify(sessionStore),
@@ -214,6 +219,40 @@ const assertions=`
   if(!refreshed.includes('Amersham Town'))throw new Error('BETA identity regression: refresh returned a blank Clubfinder');
 
   if(!html.includes('pigeonName:tinFoilSavedPigeonName(saved)'))throw new Error('BETA identity regression: Challenges bridge no longer carries pigeon name');
+
+  // iPhone pull-to-refresh regression: the Stats button must open a real
+  // reloadable URL, never a document written into a blank about:blank tab.
+  const statsSavedBefore=JSON.stringify(loadSavedJourney());
+  const statsCounterBefore=getCounterIncrementCalls();
+  const originalPageHref=window.location.href;
+  await journeyCertificate(origin);
+  const openedUrls=JSON.parse(getPopupRoutes());
+  if(openedUrls.length!==1||openedUrls[0]!=='clubfinder-beta.html?stats=1')
+    throw new Error('BETA Stats refresh: button did not open its canonical reloadable route: '+JSON.stringify(openedUrls));
+  if(getCertificateHtml())throw new Error('BETA Stats refresh: popup is still filled with an ephemeral document');
+  if(window.location.href!==originalPageHref)throw new Error('BETA Stats refresh: opening Stats navigated away from the original Clubfinder');
+  const originalSearch=window.location.search;
+  window.location.search='?stats=1';
+  await tinFoilMaybeOpenCanonicalStatsRoute();
+  const statsPage=getCertificateHtml();
+  if(statsPage.length<10000||!statsPage.includes('Pigeon McPigeonface')||
+     !statsPage.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
+     !statsPage.includes('Thame United'))
+    throw new Error('BETA Stats refresh: first load did not rebuild full canonical Stats document');
+  // Pull-to-refresh re-runs BETA at the SAME permanent URL. A second
+  // entry must regenerate the report without losing the saved campaign.
+  document.open();
+  await tinFoilMaybeOpenCanonicalStatsRoute();
+  const refreshedStats=getCertificateHtml();
+  if(refreshedStats.length<10000||!refreshedStats.includes('Pigeon McPigeonface')||
+     !refreshedStats.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
+     !refreshedStats.includes('Thame United'))
+    throw new Error('BETA Stats refresh: refresh returned a blank or stale-identity report');
+  window.location.search=originalSearch;
+  if(getCounterIncrementCalls()!==statsCounterBefore||
+     JSON.stringify(loadSavedJourney())!==statsSavedBefore)
+    throw new Error('BETA Stats refresh: regeneration changed the Campaign or allocated a call-sign number');
+  console.log('BETA IPHONE STATS PULL-TO-REFRESH: canonical route, full identity, restored report, no extra counter — PASS');
 
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity

@@ -1560,6 +1560,11 @@ async function openChallenges(origin){
 }
 
 async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder"){
+  // Open the existing reloadable Stats route while still in the user click.
+  if(!suppliedWindow){
+    window.open("clubfinder-beta.html?stats=1","_blank");
+    return;
+  }
   const w=suppliedWindow || window.open("","_blank");
   const journey=buildJourney(origin);
   const carrier=journey.carrier||origin;
@@ -1824,6 +1829,7 @@ if(!tinFoilStatsRouteRequested){
 async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const q=new URLSearchParams(window.location.search||'');
   if(q.get('stats')!=='1')return;
+  await tinFoilCompetitionReady;
   const saved=loadSavedJourney();
   const origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
   if(!origin){document.documentElement.classList.remove('tffc-stats-route');return;}
