@@ -186,6 +186,8 @@ def make_report():
         "",
         "| Source line | Operation | Source expression | Resolved literal if simple alias |",
         "|---|---|---|---|",
+        # Inspect the newline-preserving HTML mask, not concatenated <script> bodies,
+        # so storage operations cite the original full-file HTML source lines.
         *(storage_inventory(source) or ["| — | No direct relevant operations found; investigate helpers | — | — |"]),
         "",
         "## Critical producer evidence",
