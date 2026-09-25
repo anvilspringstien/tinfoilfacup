@@ -1,0 +1,57 @@
+name: Read-only BETA refactor inventory
+
+on:
+  push:
+    branches: ['refactor/beta-inventory-20260925']
+    paths:
+      - 'updater/inventory_beta_refactor.py'
+      - '.github/workflows/beta-refactor-inventory.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/beta-inventory-20260925
+          fetch-depth: 0
+      - name: Run existing BETA Deck, Trophy and accepted mobile checks
+        run: |
+          set -euo pipefail
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
+          python updater/patch_beta_mobile_pigeon_name.py --check
+      - name: Generate and verify full-source inventory on repository runner
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python updater/inventory_beta_refactor.py
+          python updater/inventory_beta_refactor.py --check
+      - name: Guard all functional source and canonical data
+        run: |
+          set -euo pipefail
+          git diff --exit-code 1ab8276ba18d43513ef50c922fbbbe737ff23e72 -- clubfinder.html beta/clubfinder-beta.html beta/challenges-beta.html competition.json
+          changed="$(git status --porcelain | awk '{print $2}' | grep -v '^docs/refactor/2026-09-25-generated-source-map.md$' || true)"
+          if [ -n "$changed" ]; then
+            echo "Unexpected working-tree changes: $changed"
+            exit 1
+          fi
+      - name: Commit generated report on refactor branch only
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          git config user.name "Tin Foil FA Cup Refactor Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- docs/refactor/2026-09-25-generated-source-map.md
+          if git diff --cached --quiet; then
+            echo "Generated report already current"
+          else
+            git commit -m "docs(refactor): record full-source BETA inventory"
+            git push origin HEAD:refactor/beta-inventory-20260925
+          fi
