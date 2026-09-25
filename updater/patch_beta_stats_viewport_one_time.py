@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 P=Path(__file__).resolve().parents[1]/"beta"/"clubfinder-beta.html"
 OLD_HEAD='<meta name="viewport" content="width=device-width,initial-scale=1">'
-NEW_HEAD="""<script>document.write(new URLSearchParams(location.search||'').get('stats')==='1'?'<meta name="viewport" content="width=980">':'<meta name="viewport" content="width=device-width,initial-scale=1">');</script>"""
+NEW_HEAD="""<script>if(typeof document.write===\'function\')document.write(new URLSearchParams(location.search||'').get('stats')==='1'?'<meta name="viewport" content="width=980">':'<meta name="viewport" content="width=device-width,initial-scale=1">');</script>"""
 OLD_DOC="""const doc='<!doctype html><html><head><meta charset="utf-8"><title"""
 NEW_DOC="""const doc='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=980"><title"""
 def revise(s):
