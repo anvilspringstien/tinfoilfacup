@@ -379,8 +379,8 @@ async function testDisplayAndReset(){
       'Ended campaign control must remain disabled: '+key);
   assert.equal(ended.nodes.truthPigeonName.textContent,LONG_NAME,
     'Ended campaign lost its verified identity');
-  assert.equal(ended.nodes.cabinetCount.textContent,'2 / 27',
-    'Ended campaign lost historical earned trophies');
+  assert.equal(ended.nodes.cabinetCount.textContent,'3 / 27',
+    'Ended campaign must retain historical and verified Giant Kill trophies');
 
   // Exercise the actual confirmation-dependent Hard Reset click handler.
   // It resets only the Deck's local awards and then reapplies verified
