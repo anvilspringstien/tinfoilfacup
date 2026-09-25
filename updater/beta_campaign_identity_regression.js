@@ -12,6 +12,12 @@ if(!html.includes('maxlength="20"'))throw new Error('BETA identity regression: p
 if(!html.includes('class="campaign-call-sign"')||!html.includes('class="campaign-pigeon-name"'))throw new Error('BETA mobile regression: identity must have separate Call Sign and Pigeon Name rows');
 if(!html.includes('.campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;'))throw new Error('BETA mobile regression: phone name row must wrap instead of clipping');
 if(!html.includes('.campaign-pigeon-name .pigeon-name-input{display:block;flex:1 1 205px;'))throw new Error('BETA mobile regression: phone name input must use available width');
+// Stats shares Clubfinder's URL but NOT its narrow phone viewport: the original
+// zoomable 790px certificate must keep Safari's wide layout on reload.
+if(!html.includes(`document.querySelector('meta[name="viewport"]').setAttribute('content','width=980')`))
+  throw new Error('BETA Stats viewport: refresh route must switch to the original wide report layout');
+if(!html.includes('const doc=\'<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=980">'))
+  throw new Error('BETA Stats viewport: regenerated certificate must own a wide viewport');
 if(!html.includes('.campaign-identity-band{margin:0 0 4px;padding:13px 16px 14px;border-bottom:1px solid #d40000;text-align:left;white-space:normal;overflow-wrap:anywhere;-webkit-text-size-adjust:100%;text-size-adjust:100%}'))throw new Error('BETA identity regression: Stats identity top-gap/nowrap contract drifted');
 if(!html.includes('@media screen and (max-width:650px),screen and (max-device-width:650px){.campaign-identity-band{padding:11px 10px;white-space:normal;overflow-wrap:anywhere}.campaign-identity-label{font-size:8pt}.campaign-identity-value{font-size:9pt;letter-spacing:0;overflow-wrap:anywhere}.campaign-identity-name-row{display:flex;align-items:baseline;flex-wrap:nowrap;gap:0 5px;margin-top:4px;min-width:0}.campaign-identity-name-row .campaign-identity-separator{display:none}.campaign-identity-name-row .campaign-identity-label{flex:0 0 auto;white-space:nowrap}.campaign-identity-name-row .campaign-identity-value{flex:1 1 auto;min-width:0;white-space:normal;overflow-wrap:anywhere}}'))throw new Error('BETA iPhone Stats: narrowly scoped phone identity wrapping rule missing');
 if(!html.includes('class="campaign-identity-name-row"')||!html.includes('class="campaign-identity-separator" aria-hidden="true"'))throw new Error('BETA iPhone Stats: Pigeon Name label/value must be grouped for a two-line identity');
@@ -235,6 +241,9 @@ const assertions=`
   window.location.search='?stats=1';
   await tinFoilMaybeOpenCanonicalStatsRoute();
   const statsPage=getCertificateHtml();
+  if(!statsPage.includes('<meta name="viewport" content="width=980">')||
+     !statsPage.includes('grid-template-columns:repeat(6,minmax(0,1fr))'))
+    throw new Error('BETA iPhone Stats: regenerated certificate lost the original six-column, pinch-to-zoom report');
   if(statsPage.length<10000||!statsPage.includes('Pigeon McPigeonface')||
      !statsPage.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
      !statsPage.includes('Thame United'))
@@ -244,6 +253,8 @@ const assertions=`
   document.open();
   await tinFoilMaybeOpenCanonicalStatsRoute();
   const refreshedStats=getCertificateHtml();
+  if(!refreshedStats.includes('<meta name="viewport" content="width=980">'))
+    throw new Error('BETA iPhone Stats: pull-to-refresh lost the original report viewport');
   if(refreshedStats.length<10000||!refreshedStats.includes('Pigeon McPigeonface')||
      !refreshedStats.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
      !refreshedStats.includes('Thame United'))
