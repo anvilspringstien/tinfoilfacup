@@ -32,7 +32,11 @@ jobs:
           node tests/test_beta_petts_wood_display_identity.js
           node tests/test_beta_exmouth_full_index.js
           node tests/test_beta_weston_replay_stats.js
-      - name: Check protected production and competition data are unchanged by this PR
+      - name: Protect production, competition and independent BETA Clubfinder
         run: |
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- clubfinder.html beta/clubfinder-beta.html beta/challenges-beta.html competition.json
+          # This workflow also validates intentional BETA Deck source PRs with all
+          # Deck, Trophy, bridge, identity and historical regression tests above.
+          # A test-only PR still cannot change either app unless its diff shows it.
+          # Clubfinder BETA requires its own separate guarded promotion route.
+          git diff --exit-code origin/main...HEAD -- clubfinder.html beta/clubfinder-beta.html competition.json
