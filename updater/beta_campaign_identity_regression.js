@@ -41,6 +41,7 @@ const documentStub={
   body:nodeStub()
 };
 const localStore={};
+const sessionStore={};
 let counterIncrementCalls=0;
 let certificateHtml='';
 function popupStub(){
@@ -74,6 +75,12 @@ const sandbox={
     setItem:(k,v)=>{localStore[k]=String(v)},
     removeItem:k=>delete localStore[k]
   },
+  sessionStorage:{
+    getItem:k=>sessionStore[k]??null,
+    setItem:(k,v)=>{sessionStore[k]=String(v)},
+    removeItem:k=>delete sessionStore[k]
+  },
+  requestAnimationFrame:fn=>fn(),scrollY:128,scrollTo(){},
   navigator:{},location:locationStub,URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
   open:()=>popupStub(),
   getCertificateHtml:()=>certificateHtml,
@@ -202,6 +209,39 @@ const assertions=`
   if(!refreshed.includes('Amersham Town'))throw new Error('BETA identity regression: refresh returned a blank Clubfinder');
 
   if(!html.includes('pigeonName:tinFoilSavedPigeonName(saved)'))throw new Error('BETA identity regression: Challenges bridge no longer carries pigeon name');
+
+  // Execute the real Clubfinder -> Challenges producer path, not merely a
+  // static source check. It must export canonical miles and the full identity
+  // while retaining the exact rendered Campaign for Exit/Back navigation.
+  const priorCounterCalls=getCounterIncrementCalls();
+  const priorSavedCampaign=JSON.stringify(loadSavedJourney());
+  await openChallenges(origin);
+  const bridged=JSON.parse(localStorage.getItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY)||'null');
+  if(!bridged||bridged.source!=='Clubfinder v7.6')throw new Error('BETA bridge contract: actual openChallenges did not create a Clubfinder bridge');
+  if(bridged.originName!==origin.name)throw new Error('BETA bridge contract: campaign origin changed');
+  if(bridged.selectedAt!==loadSavedJourney().selectedAt)throw new Error('BETA bridge contract: selectedAt changed');
+  if(bridged.callSign!=='Tango Foxtrot 2 Alpha Charlie 09842')throw new Error('BETA bridge contract: Call Sign missing from bridge');
+  if(bridged.pigeonName!=='Pigeon McPigeonface')throw new Error('BETA bridge contract: full Pigeon Name missing');
+  if(!Number.isFinite(bridged.pigeonMiles)||bridged.pigeonMiles<=0)throw new Error('BETA bridge contract: verified mileage missing');
+  if(bridged.tiesPlayed!==(buildJourney(origin).breadcrumbs||[]).length)throw new Error('BETA bridge contract: verified ties count mismatch');
+  if(!bridged.statsSnapshot||bridged.statsSnapshot.pigeonMiles!==Math.round(bridged.pigeonMiles))throw new Error('BETA bridge contract: cached stats differ from verified miles');
+  if(sessionStorage.getItem('tffc.challengeOrigin')!=='clubfinder-beta')throw new Error('BETA bridge contract: origin marker was not saved');
+  if(window.location.href!=='challenges-beta.html')throw new Error('BETA bridge contract: direct Deck route missing');
+  const returnRecord=JSON.parse(sessionStorage.getItem(TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY)||'null');
+  if(!returnRecord||returnRecord.postcode!=='HP7 0EJ'||!returnRecord.resultsHtml.includes('Pigeon McPigeonface'))throw new Error('BETA bridge contract: full Campaign return snapshot missing');
+  if(getCounterIncrementCalls()!==priorCounterCalls)throw new Error('BETA bridge contract: opening Challenges issued a counter number');
+  if(JSON.stringify(loadSavedJourney())!==priorSavedCampaign)throw new Error('BETA bridge contract: leaving Clubfinder rewrote the saved Campaign');
+
+  // Simulate navigation back to Clubfinder after the Deck has opened.
+  document.getElementById('results').innerHTML='';
+  document.getElementById('postcode').value='';
+  if(!tinFoilRestoreClubfinderReturnSnapshot())throw new Error('BETA return contract: Campaign snapshot was not restored');
+  if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('BETA return contract: campaign postcode lost');
+  if(!document.getElementById('results').innerHTML.includes('Pigeon McPigeonface'))throw new Error('BETA return contract: pigeon identity lost');
+  if(getCounterIncrementCalls()!==priorCounterCalls)throw new Error('BETA return contract: snapshot restoration issued a counter number');
+  if(JSON.stringify(loadSavedJourney())!==priorSavedCampaign)throw new Error('BETA return contract: snapshot restoration rewrote saved Campaign');
+  console.log('BETA CLUBFINDER -> CHALLENGES -> CLUBFINDER SNAPSHOT: PASS');
+
 
   console.log('BETA HISTORICAL VENUE -> PIGEON MILES -> FLOWN PARITY: PASS');
   console.log('BETA Petts Wood venue: The New Inn Stadium, BR2 8HQ — PASS');
