@@ -5,6 +5,7 @@ on:
     branches: ['refactor/beta-clubfinder-pure-bridge-builder-20260925']
     paths:
       - 'updater/patch_beta_clubfinder_bridge_builder.py'
+      - 'updater/beta_campaign_identity_regression.js'
       - '.github/workflows/beta-clubfinder-bridge-builder-patch.yml'
   workflow_dispatch:
 
