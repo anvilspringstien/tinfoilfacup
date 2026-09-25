@@ -28,7 +28,7 @@ if(regression.split(marker).length!==2)throw new Error('Regression splice anchor
 const injected=`  await journeyCertificate(origin);
   console.log('STATS_RENDER_PROBE',JSON.stringify({
     characters:getCertificateHtml().length,
-    bytes:Buffer.byteLength(getCertificateHtml(),'utf8'),
+    bytes:new TextEncoder().encode(getCertificateHtml()).length,
     base64Tags:(getCertificateHtml().match(/src="data:image[^"]*/g)||[]).map(x=>x.length),
     url:window.location.href,
     start:getCertificateHtml().slice(0,160),
