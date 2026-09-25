@@ -22,7 +22,7 @@ new vm.Script(scripts,{filename:'beta/challenges-beta.html'});
 function stub(){
   const flags=new Set(),node={
     style:{},dataset:{},children:[],textContent:'',innerHTML:'',value:'0',selectedIndex:0,disabled:false,
-    options:Array.from({length:14},(_,i)=>({textContent:i?'Round '+i:'Extra Preliminary Round',text:i?'Round '+i:'Extra Preliminary Round'})),
+    options:['Extra Preliminary Round','Preliminary Round','1st Qualifying Round','2nd Qualifying Round','3rd Qualifying Round','4th Qualifying Round','First Round Proper','Second Round Proper','Third Round Proper','Fourth Round Proper','Fifth Round Proper','Quarter Finals','Semi Finals','Final'].map(text=>({textContent:text,text})),
     classList:{add(k){flags.add(k)},remove(k){flags.delete(k)},contains(k){return flags.has(k)},toggle(k,on){if(on===undefined)on=!flags.has(k);if(on)flags.add(k);else flags.delete(k);return on}},
     setAttribute(){},removeAttribute(){},remove(){},focus(){},addEventListener(){},
     querySelector(){return null},querySelectorAll(){return []},appendChild(child){this.children.push(child);return child},
@@ -60,6 +60,14 @@ const local={
     version:1,accepted:{'01':true},completed:{'01':true},records:{},
     tiesPlayed:2,awayTies:1,pigeonMiles:40,campaignRound:0,
     giantKillAchieved:false,campaignStatus:'ACTIVE'
+  }),
+  'tffc.clubfinderCampaign.v1':JSON.stringify({
+    source:'Clubfinder v7.6',originName:'Amersham Town FC',selectedAt:'2026-09-25T09:00:00.000Z',
+    callSign:'Tango Foxtrot 2 Alpha Charlie 01123',tiesPlayed:5,awayTies:2,pigeonMiles:314,campaignRound:4
+  }),
+  'tffc.clubfinderCampaignIdentity.v1':JSON.stringify({
+    originName:'Amersham Town FC',selectedAt:'2026-09-25T09:00:00.000Z',
+    searchNumber:1123,callSign:'Tango Foxtrot 2 Alpha Charlie 01123',pigeonName:'Esmeralda'
   })
 };
 const first=boot('',local,{});
@@ -67,7 +75,14 @@ assert(first.nodes.overlay.classList.contains('open'),'Deck must open immediatel
 assert.equal(vm.runInContext('index',first.ctx),0,'Direct launch must show first mat');
 assert.equal(vm.runInContext('state.completed["01"]',first.ctx),true,'Previously completed trophy lost');
 assert.equal(first.nodes.deckCabinet.children.length,27,'Trophy Cabinet cards lost during navigation change');
-assert.equal(first.nodes.cabinetCount.textContent,'1 / 27','Completed trophy count changed');
+assert.equal(first.nodes.cabinetCount.textContent,'2 / 27','Verified Third Qualifying progress should award the campaign milestone trophy');
+assert.equal(first.nodes.truthCallSign.textContent,'Tango Foxtrot 2 Alpha Charlie 01123','Challenge Deck Call Sign did not follow Clubfinder identity');
+assert.equal(first.nodes.truthPigeonName.textContent,'Esmeralda','Challenge Deck Pigeon Name did not follow Clubfinder identity');
+assert.equal(first.nodes.truthPigeonMiles.textContent,'314','Pigeon Miles Flown did not follow Clubfinder truth');
+assert.equal(first.nodes.truthCampaignRound.textContent,'3rd Qualifying Round','Current Campaign Round did not follow Clubfinder truth');
+assert(!html.includes('Pigeon Miles Travelled'),'Legacy Pigeon Miles Travelled wording remains');
+assert(html.includes('Miles Flown:'),'Challenge Deck must use Miles Flown wording');
+assert(/class="campaign-truth-line"/.test(html),'Campaign identity must use stacked truth-frame lines');
 first.nodes.exitBtn.onclick({preventDefault(){},stopPropagation(){},stopImmediatePropagation(){}});
 assert.equal(first.location.href,'clubfinder-beta.html?from=challenges-exit-v3','Exit must return to BETA Clubfinder');
 assert(local['tffc.challengeDeck.v1'],'Exiting must not erase saved Challenge data');
