@@ -186,7 +186,7 @@ def make_report():
         "",
         "| Source line | Operation | Source expression | Resolved literal if simple alias |",
         "|---|---|---|---|",
-        *(storage_inventory(scripts) or ["| — | No direct relevant operations found; investigate helpers | — | — |"]),
+        *(storage_inventory(source) or ["| — | No direct relevant operations found; investigate helpers | — | — |"]),
         "",
         "## Critical producer evidence",
         "",
