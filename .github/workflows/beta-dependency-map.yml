@@ -6,6 +6,10 @@ on:
     paths:
       - 'updater/map_beta_dependencies.py'
       - '.github/workflows/beta-dependency-map.yml'
+  pull_request:
+    paths:
+      - 'updater/map_beta_dependencies.py'
+      - '.github/workflows/beta-dependency-map.yml'
   workflow_dispatch:
 
 permissions:
