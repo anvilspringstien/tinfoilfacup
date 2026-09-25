@@ -15,6 +15,10 @@ assert(!/<section[^>]*class="stats"/.test(html),'Detached Challenge Stats remain
 assert(/id="deckCabinet"/.test(html),'Trophy Cabinet must be retained');
 assert(/id="exitBtn"/.test(html),'Explicit Exit button must be retained');
 
+assert(/@media\(max-width:680px\)\s*\{\s*\.deckbody\{height:auto;min-height:0;padding:4px 4px 8px;overflow:visible\}\s*\.cardstage\{height:auto;min-height:0\}/.test(html),
+  'Phone Deck must follow the actual mat height instead of leaving a fixed viewport gap before feedback');
+
+
 const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
 assert(scripts.length>20000,'Standalone Challenge Deck script missing');
 new vm.Script(scripts,{filename:'beta/challenges-beta.html'});
