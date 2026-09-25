@@ -14,18 +14,25 @@ for(const token of ['const w=suppliedWindow || window.open','const doc=', 'w.doc
   startAt=p+token.length;
  }
 }
+for(const token of ['journeyCertificate(', 'tinFoilMaybeOpenCanonicalStatsRoute(', 'stats=1', 'window.open(', 'window.location.href=']){
+ let at=source.indexOf('async function journeyCertificate('),num=0;
+ while(num++<10){let p=source.indexOf(token,at);if(p<0)break;
+ console.log('STATS_CALLSITE',JSON.stringify({token,offset:p,excerpt:source.slice(Math.max(0,p-240),Math.min(source.length,p+580))}));
+ at=p+token.length;
+ }
+}
 const regressionFile=path.join(__dirname,'beta_campaign_identity_regression.js');
 const regression=fs.readFileSync(regressionFile,'utf8');
 const marker='  // Execute the real Clubfinder -> Challenges producer path';
 if(regression.split(marker).length!==2)throw new Error('Regression splice anchor drift');
 const injected=`  await journeyCertificate(origin);
   console.log('STATS_RENDER_PROBE',JSON.stringify({
-    characters:certificateHtml.length,
-    bytes:Buffer.byteLength(certificateHtml,'utf8'),
-    base64Tags:(certificateHtml.match(/src="data:image[^"]*/g)||[]).map(x=>x.length),
+    characters:getCertificateHtml().length,
+    bytes:Buffer.byteLength(getCertificateHtml(),'utf8'),
+    base64Tags:(getCertificateHtml().match(/src="data:image[^"]*/g)||[]).map(x=>x.length),
     url:window.location.href,
-    start:certificateHtml.slice(0,160),
-    end:certificateHtml.slice(-600)
+    start:getCertificateHtml().slice(0,160),
+    end:getCertificateHtml().slice(-600)
   }));
 `;
 const patched=regression.replace(marker,injected+marker);
