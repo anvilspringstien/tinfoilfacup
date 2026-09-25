@@ -1,0 +1,35 @@
+name: Temporary BETA Stats viewport large-file patch
+
+on:
+  push:
+    branches:
+      - fix/beta-stats-original-viewport-20260925
+    paths:
+      - .github/workflows/temp-beta-stats-viewport-patch.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-isolated-stats-viewport-patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply two exact-match BETA-only viewport changes
+        run: node updater/temp_beta_stats_viewport_patch.js
+      - name: Run Stats refresh and full campaign identity regression
+        run: node updater/beta_campaign_identity_regression.js
+      - name: Commit only the large BETA HTML on the isolated branch
+        run: |
+          set -euo pipefail
+          git config user.name "Tin Foil FA Cup BETA QA"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          git diff --cached --check
+          git diff --cached --quiet && { echo "No patch to apply"; exit 1; }
+          git commit -m "BETA Stats: restore original pinch-to-zoom layout with refreshable URL"
+          git push origin HEAD:fix/beta-stats-original-viewport-20260925
