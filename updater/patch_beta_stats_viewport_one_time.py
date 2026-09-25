@@ -8,7 +8,7 @@ NEW_HEAD="""<script>document.write(new URLSearchParams(location.search||'').get(
 OLD_DOC="""const doc='<!doctype html><html><head><meta charset="utf-8"><title"""
 NEW_DOC="""const doc='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=980"><title"""
 def revise(s):
-    if all(s.count(after)==1 and s.count(before)==0 for before,after in [(OLD_HEAD,NEW_HEAD),(OLD_DOC,NEW_DOC)]):
+    if s.count(NEW_HEAD)==1 and s.count(NEW_DOC)==1 and s.count(OLD_DOC)==0:
         return s,False
     for label,a,b in [("document head",OLD_HEAD,NEW_HEAD),("generated certificate head",OLD_DOC,NEW_DOC)]:
         if s.count(a)!=1 or s.count(b)!=0:
