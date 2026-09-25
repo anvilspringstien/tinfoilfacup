@@ -16,10 +16,6 @@ body{background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 1
 button{font:inherit}
 .app{min-height:100vh;padding:32px 18px 60px}
 .shell{max-width:980px;margin:auto}
-.hero{max-width:690px;margin:8vh auto 0;background:transparent;color:#f3e6c7;border-radius:0;padding:20px 10px;box-shadow:none;text-align:center}
-.hero h1{display:none}
-.hero p{margin:0 auto 18px;opacity:1;max-width:650px;font:18px/1.55 Arial,sans-serif;color:#f3e6c7}
-.hero p:first-of-type{font-weight:700}
 .actions{display:flex;justify-content:center;margin-top:26px}
 .challenge-btn{border:3px solid #1c1606;background:var(--yellow);color:#221a05;border-radius:999px;padding:13px 22px;
 font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px 0 #1c1606;cursor:pointer}
@@ -120,7 +116,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
  .flipcard{width:clamp(420px,calc(100dvh - 180px),560px);max-width:min(78vw,560px);height:auto;aspect-ratio:1}
 }
 @media(max-width:680px){
- .app{padding:16px 10px 40px}.hero{padding:20px 8px;margin-top:4vh}.hero p{font-size:16px}.overlay{padding:4px}.deck{min-height:99vh;height:auto;border-radius:12px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
+ .app{padding:16px 10px 40px}.overlay{padding:4px}.deck{min-height:99vh;height:auto;border-radius:12px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
  .flipcard{width:min(96vw,610px,calc(99vh - 350px));height:auto;max-height:none;aspect-ratio:1}.face{border-radius:14px}
  .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px 210px 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px;width:210px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
  .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.statsaction{width:52px}.exit{width:46px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:22px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}.stats-grid{gap:6px}.statbox{padding:10px 6px}.statbox strong{font-size:19px}.statbox span{font-size:9.5px}
@@ -233,36 +229,6 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   border-radius:999px!important;
   transition:filter .12s ease,color .12s ease,border-color .12s ease,box-shadow .12s ease,transform .12s ease;
 }
-
-
-/* v0.9.11b — actual splash Challenges button */
-#openDeck.challenge-btn{
-  height:27px!important;
-  min-width:96px!important;
-  padding:0 12px!important;
-  border-radius:999px!important;
-  background:#2f7d4a!important;
-  color:#f7fff9!important;
-  border:1px solid #58a873!important;
-  font:700 11px/1 Arial,sans-serif!important;
-  transition:filter .12s ease,color .12s ease,border-color .12s ease,box-shadow .12s ease,transform .12s ease;
-}
-#openDeck.challenge-btn:hover,
-#openDeck.challenge-btn:focus-visible{
-  filter:brightness(1.22);
-  color:#fff!important;
-  border-color:#8bd2a1!important;
-  box-shadow:0 4px 12px rgba(0,0,0,.34)!important;
-  transform:translateY(-1px);
-}
-
-
-/* v0.9.11 — splash title line break */
-.tffc-splash-name{display:block;margin:3px 0}
-/* v0.9.11 — centred tester splash */
-.hero{text-align:center}
-.hero>p{text-align:center}
-.hero .campaign-line{display:block;text-align:center;font-weight:700;margin-top:-2px}
 
 
 /* v0.10.5 — clearer, more inviting diagnostic Test Console */
