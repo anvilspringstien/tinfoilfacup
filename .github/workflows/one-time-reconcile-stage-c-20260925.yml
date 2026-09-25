@@ -32,6 +32,8 @@ jobs:
       - name: Merge accepted baseline and reconcile only BETA snapshot conflict
         run: |
           set -euo pipefail
+          git config user.name 'Tin Foil FA Cup Stage C Reconcile'
+          git config user.email 'actions@users.noreply.github.com'
           if git merge --no-ff --no-commit origin/main; then
             echo "Merge completed without conflicts"
           else
