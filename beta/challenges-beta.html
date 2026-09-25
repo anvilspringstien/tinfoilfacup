@@ -1719,47 +1719,59 @@ $("completeBtn").onclick=()=>{
   requestAnimationFrame(()=>renderStats());
 };
 
+// Stage B: presentation-only helpers preserve the original update order.
+// The legacy wrapper is still called by save(), simulator actions and startup.
+function renderSimulatorCounters() {
+  const ties=Math.min(999,Math.max(0,state.tiesPlayed)).toString().padStart(2,"0");
+  $("tieCount").innerHTML=ties.split("").map(n=>`<span>${n}</span>`).join("");
+  $("tieCount").setAttribute("aria-label",`${state.tiesPlayed} ${state.tiesPlayed===1?"tie":"ties"} played`);
+  const away=Math.min(999,Math.max(0,state.awayTies)).toString().padStart(2,"0");
+  $("awayTieCount").innerHTML=away.split("").map(n=>`<span>${n}</span>`).join("");
+  $("awayTieCount").setAttribute("aria-label",`${state.awayTies} away ${state.awayTies===1?"tie":"ties"}`);
+
+}
+function renderCampaignTruthFrame() {
+$("campaignRound").value=String(state.campaignRound);
+$("truthCallSign").textContent=campaignIdentity.callSign||"—";
+$("truthPigeonName").textContent=campaignIdentity.pigeonName||"—";
+$("truthPigeonMiles").textContent=Math.max(0,Math.round(state.pigeonMiles)).toLocaleString("en-GB");
+$("truthCampaignRound").textContent=$("campaignRound").options[state.campaignRound]?.textContent || "Extra Preliminary Round";
+}
+function renderSimulatorControls() {
+$("campaignStatus").textContent=state.campaignStatus==="ENDED"?"IT’S OVER":"IN PROGRESS";
+const ended=state.campaignStatus==="ENDED";
+$("addTie").disabled=ended;
+$("addAwayTie").disabled=ended;
+$("addPigeonMiles").disabled=ended;
+$("simulateGiantKill").disabled=ended || state.giantKillAchieved;
+$("campaignRound").disabled=ended;
+}
+function renderTrophyCabinet(challengeList,completed) {
+const trophyChallenges=challengeList;
+$("cabinetCount").textContent=`${completed.length} / ${trophyChallenges.length}`;
+
+const cabinet=$("deckCabinet"); cabinet.innerHTML="";
+for(const c of challengeList) {
+  const i=CHALLENGES.indexOf(c);
+  const done=!!state.completed[c.id];
+  const unlocked=isUnlocked(c);
+  const slot=document.createElement(done?"button":"div");
+  slot.className=`trophy-slot ${done?"completed":unlocked?"available":"locked"}`;
+  slot.setAttribute("aria-label", done?`Inspect ${c.title} achieved trophy`:unlocked?`${c.title} available`:`${c.title} locked`);
+  const img=document.createElement("img"); img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front || CANONICAL_CUP; img.alt="";
+  const mark=document.createElement("span"); mark.className="slotmark"; mark.textContent=done?"":unlocked?"Available":"🔒";
+  slot.append(img,mark);
+  if(done) slot.onclick=()=>openTrophy(c,slot);
+  cabinet.appendChild(slot);
+}
+}
 function renderStats() {
   const challengeList=CHALLENGES.filter(c=>c.type!=="foundation");
   const completed=challengeList.filter(c=>!!state.completed[c.id]);
-  // Retain simulator, mileage and Trophy Cabinet refresh; no second Stats view.
-  {
-    const ties=Math.min(999,Math.max(0,state.tiesPlayed)).toString().padStart(2,"0");
-    $("tieCount").innerHTML=ties.split("").map(n=>`<span>${n}</span>`).join("");
-    $("tieCount").setAttribute("aria-label",`${state.tiesPlayed} ${state.tiesPlayed===1?"tie":"ties"} played`);
-    const away=Math.min(999,Math.max(0,state.awayTies)).toString().padStart(2,"0");
-    $("awayTieCount").innerHTML=away.split("").map(n=>`<span>${n}</span>`).join("");
-    $("awayTieCount").setAttribute("aria-label",`${state.awayTies} away ${state.awayTies===1?"tie":"ties"}`);
-  }
-  $("campaignRound").value=String(state.campaignRound);
-  $("truthCallSign").textContent=campaignIdentity.callSign||"—";
-  $("truthPigeonName").textContent=campaignIdentity.pigeonName||"—";
-  $("truthPigeonMiles").textContent=Math.max(0,Math.round(state.pigeonMiles)).toLocaleString("en-GB");
-  $("truthCampaignRound").textContent=$("campaignRound").options[state.campaignRound]?.textContent || "Extra Preliminary Round";
-  $("campaignStatus").textContent=state.campaignStatus==="ENDED"?"IT’S OVER":"IN PROGRESS";
-  const ended=state.campaignStatus==="ENDED";
-  $("addTie").disabled=ended;
-  $("addAwayTie").disabled=ended;
-  $("addPigeonMiles").disabled=ended;
-  $("simulateGiantKill").disabled=ended || state.giantKillAchieved;
-  $("campaignRound").disabled=ended;
-  const trophyChallenges=challengeList;
-  $("cabinetCount").textContent=`${completed.length} / ${trophyChallenges.length}`;
-
-  const cabinet=$("deckCabinet"); cabinet.innerHTML="";
-  for(const c of challengeList) {
-    const i=CHALLENGES.indexOf(c);
-    const done=!!state.completed[c.id];
-    const unlocked=isUnlocked(c);
-    const slot=document.createElement(done?"button":"div");
-    slot.className=`trophy-slot ${done?"completed":unlocked?"available":"locked"}`;
-    slot.setAttribute("aria-label", done?`Inspect ${c.title} achieved trophy`:unlocked?`${c.title} available`:`${c.title} locked`);
-    const img=document.createElement("img"); img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front || CANONICAL_CUP; img.alt="";
-    const mark=document.createElement("span"); mark.className="slotmark"; mark.textContent=done?"":unlocked?"Available":"🔒";
-    slot.append(img,mark);
-    if(done) slot.onclick=()=>openTrophy(c,slot);
-    cabinet.appendChild(slot);
-  }
+  renderSimulatorCounters();
+  renderCampaignTruthFrame();
+  renderSimulatorControls();
+  renderTrophyCabinet(challengeList,completed);
 }
 function applySimulationChange(message) {
   if (state.campaignStatus==="ENDED") {
