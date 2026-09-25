@@ -213,6 +213,57 @@ const assertions=`
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity
   // while retaining the exact rendered Campaign for Exit/Back navigation.
+  // Exercise the new, page-local Stage C bridge builder directly with a fixed
+  // timestamp and a synthetic custodian. It must only assemble the v1 record:
+  // NO storage writes, counter allocation, mutation or navigation.
+  const builderSaved=loadSavedJourney();
+  const builderProgress={awayTies:1,pigeonMiles:314.125,campaignRound:4};
+  const builderSnapshot={pigeonMiles:314,source:'VM fixture'};
+  const builderInputs=JSON.stringify([builderSaved,builderProgress,builderSnapshot]);
+  const builderLocal=JSON.stringify(localStore),builderSession=JSON.stringify(sessionStore);
+  const builderCounter=getCounterIncrementCalls(),builderHref=window.location.href;
+  const record=tinFoilBuildChallengeBridgeRecord(
+    origin,{carrier:{name:'Crowborough Athletic FC'}},[{},{}],
+    builderSaved,builderProgress,builderSnapshot,'2026-09-25T16:05:00.000Z'
+  );
+  if(record.source!=='Clubfinder v7.6'||
+     record.originName!==origin.name||
+     record.currentCustodian!=='Crowborough Athletic FC'||
+     record.postcode!=='HP7 0EJ'||
+     record.selectedAt!==builderSaved.selectedAt||
+     record.searchNumber!==9842||
+     record.callSign!=='Tango Foxtrot 2 Alpha Charlie 09842'||
+     record.pigeonName!=='Pigeon McPigeonface'||
+     record.tiesPlayed!==2||
+     record.awayTies!==1||
+     record.pigeonMiles!==314.125||
+     record.campaignRound!==4||
+     record.ended!==false||
+     record.statsSnapshot!==builderSnapshot||
+     record.updatedAt!=='2026-09-25T16:05:00.000Z')
+    throw new Error('Stage C: pure builder changed the v1 bridge shape: '+JSON.stringify(record));
+  if(JSON.stringify([builderSaved,builderProgress,builderSnapshot])!==builderInputs||
+     JSON.stringify(localStore)!==builderLocal||
+     JSON.stringify(sessionStore)!==builderSession||
+     getCounterIncrementCalls()!==builderCounter||
+     window.location.href!==builderHref)
+    throw new Error('Stage C: bridge record assembly mutated inputs or caused I/O');
+  const noCampaign=tinFoilBuildChallengeBridgeRecord(
+    origin,{carrier:null},[],null,
+    {awayTies:0,pigeonMiles:0,campaignRound:0},{pigeonMiles:0},
+    '2026-09-25T16:06:00.000Z'
+  );
+  if(noCampaign.originName!==origin.name||
+     noCampaign.currentCustodian!==origin.name||
+     noCampaign.postcode!==''||
+     noCampaign.selectedAt!==null||
+     noCampaign.searchNumber!==null||
+     noCampaign.callSign!==''||
+     noCampaign.pigeonName!==''||
+     noCampaign.tiesPlayed!==0||
+     noCampaign.ended!==false)
+    throw new Error('Stage C: absent optional saved data did not preserve defaults');
+
   const priorCounterCalls=getCounterIncrementCalls();
   const priorSavedCampaign=JSON.stringify(loadSavedJourney());
   await openChallenges(origin);
