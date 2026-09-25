@@ -1,0 +1,51 @@
+name: Guarded BETA canonical fallback catch-up
+on:
+  push:
+    branches: ['beta/refresh-canonical-fallback-20260925']
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Refresh BETA snapshot, idempotently
+        run: |
+          set -euo pipefail
+          python updater/refresh_beta_embedded_snapshot.py
+          python updater/refresh_beta_embedded_snapshot.py --check
+          python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+      - name: Regress existing BETA campaigns and conditional draws
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_weston_replay_stats.js
+      - name: Enforce snapshot-only changes
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- clubfinder.html competition.json
+          changed="$(git diff --name-only)"
+          test -z "$changed" || test "$changed" = beta/clubfinder-beta.html
+      - name: Commit canonical fallback only after all tests pass
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- beta/clubfinder-beta.html; then
+            echo 'BETA snapshot already current'
+            exit 0
+          fi
+          git config user.name 'Tin Foil FA Cup BETA Guard'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -- beta/clubfinder-beta.html
+          test "$(git diff --cached --name-only)" = beta/clubfinder-beta.html
+          git commit -m 'Refresh BETA offline fallback from canonical competition'
+          git pull --rebase origin beta/refresh-canonical-fallback-20260925
+          python updater/refresh_beta_embedded_snapshot.py --check
+          node updater/beta_campaign_identity_regression.js
+          git push origin HEAD:beta/refresh-canonical-fallback-20260925
