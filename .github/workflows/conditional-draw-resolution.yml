@@ -30,6 +30,9 @@ jobs:
           python updater/patch_clubfinder_replay_progression.py
       - name: Verify conditional draws, venues and penalties
         run: node updater/conditional_draw_resolution_regression.js
+      - name: Diagnose published campaign pair without modifying production
+        if: ${{ github.event_name == 'pull_request' }}
+        run: node updater/live_pair_public_diagnostic.js
       - name: Existing progression and journey guards
         run: |
           node updater/replay_progression_regression.js

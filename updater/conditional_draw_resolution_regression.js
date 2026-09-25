@@ -93,4 +93,31 @@ assert.strictEqual(savedFixture.home,'Crowborough Athletic');
 assert(context.sameClubIdentity(savedFixture.away,'Wimborne Town FC'));
 assert.strictEqual(savedFixture.venue.postcode,'TN6 3BU');
 
+// Diagnose the two fresh live campaigns, including their real result/history shapes.
+const liveShape = {
+  results: Object.entries(data.results||{}).filter(([k])=>/crowborough|wimborne|hampton|weston/i.test(k)).slice(0,12).map(([k,v])=>({
+    club:k, isArray:Array.isArray(v), count:Array.isArray(v)?v.length:1,
+    value:Array.isArray(v)?v[v.length-1]:v
+  })),
+  history: Object.entries(data.result_history||{}).filter(([k])=>/crowborough|wimborne|hampton|weston/i.test(k)).slice(0,8).map(([k,v])=>({
+    club:k, count:v.length, latest:v[v.length-1]
+  }))
+};
+console.log('CAMPAIGN PAIR DATA SHAPES:', JSON.stringify(liveShape));
+for (const [name, entryRound] of [['Crowborough Athletic FC','Second Round Qualifying'],['Wimborne Town FC','First Round Qualifying']]) {
+  const next=context.nextRoundInfo({name,entry_round:entryRound,fixture:{}});
+  console.log('CAMPAIGN PAIR NEXT:',name,JSON.stringify(next));
+  assert(next.knownFixture,'missing next fixture for '+name);
+  assert.strictEqual(next.knownFixture.conditional,false,'unresolved opponent for '+name);
+  assert(context.sameClubIdentity(next.knownFixture.home,'Crowborough Athletic FC'));
+  assert(context.sameClubIdentity(next.knownFixture.away,'Wimborne Town FC'));
+  assert.strictEqual(next.knownFixture.venue.postcode,'TN6 3BU');
+}
+for (const needle of ['resolveLiveFixtureForCarrier(','nextRoundInfo(']) {
+  const positions=[];
+  let at=0;
+  while((at=html.indexOf(needle,at))>=0){positions.push(at);at+=needle.length;}
+  console.log('CAMPAIGN PAIR CALLS:',needle,'count',positions.length,JSON.stringify(positions.slice(0,15).map(pos=>html.slice(Math.max(0,pos-160),pos+190).replace(/\s+/g,' '))));
+}
+
 console.log('Conditional draw, venue, penalty and saved-campaign fixture guards: PASS');
