@@ -1,0 +1,61 @@
+name: Guard BETA mobile pigeon-name layout
+
+on:
+  push:
+    branches: ['ux/beta-mobile-pigeon-name-20260925']
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'updater/patch_beta_mobile_pigeon_name.py'
+      - 'updater/beta_campaign_identity_regression.js'
+      - '.github/workflows/beta-mobile-pigeon-name.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  mobile-pigeon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+      - name: Patch BETA only and prove the patch is idempotent
+        run: |
+          set -euo pipefail
+          python updater/patch_beta_mobile_pigeon_name.py
+          python updater/patch_beta_mobile_pigeon_name.py
+          python updater/patch_beta_mobile_pigeon_name.py --check
+      - name: Regress identity, saved names, historical venues and Campaigns
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_weston_replay_stats.js
+          python updater/refresh_beta_embedded_snapshot.py --check
+      - name: Ensure protected production and competition files are unchanged
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- clubfinder.html competition.json
+          changed="$(git diff --name-only)"
+          test -z "$changed" || test "$changed" = 'beta/clubfinder-beta.html'
+      - name: Commit guarded BETA HTML only after checks pass
+        if: ${{ github.event_name == 'push' && github.ref_name == 'ux/beta-mobile-pigeon-name-20260925' }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- beta/clubfinder-beta.html; then
+            echo "BETA mobile pigeon-name fix is already committed"
+            exit 0
+          fi
+          git config user.name "Tin Foil FA Cup BETA Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          test "$(git diff --cached --name-only)" = 'beta/clubfinder-beta.html'
+          git commit -m "Apply mobile-safe pigeon-name layout to BETA Clubfinder"
+          git pull --rebase origin ux/beta-mobile-pigeon-name-20260925
+          python updater/patch_beta_mobile_pigeon_name.py --check
+          node updater/beta_campaign_identity_regression.js
+          git push origin HEAD:ux/beta-mobile-pigeon-name-20260925
