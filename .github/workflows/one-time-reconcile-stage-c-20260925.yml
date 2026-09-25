@@ -1,0 +1,99 @@
+name: One-time guarded Stage C snapshot reconciliation
+
+on:
+  push:
+    branches: ['refactor/reconcile-stage-c-snapshot-20260925']
+    paths:
+      - '.github/workflows/one-time-reconcile-stage-c-20260925.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile-test-and-publish-isolated-branch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require exact tested Stage C source and accepted main
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = '27d25c6650d3d1f5a9df48a681a07eb3c3a7e025'
+          test "$(git rev-parse HEAD:beta/clubfinder-beta.html)" = 'de8dc832fbdc0a2522f96a354f5bc2eac16eef69'
+          test "$(git rev-parse origin/main:beta/clubfinder-beta.html)" = '9bd639cdbc5721fdb500a899ac36f976e95ace2f'
+          git merge-base --is-ancestor 4f7b5f3cff5d0bc7125a7bce0158782482799f39 HEAD
+          git diff --exit-code -- clubfinder.html competition.json beta/challenges-beta.html
+      - name: Merge accepted baseline and reconcile only BETA snapshot conflict
+        run: |
+          set -euo pipefail
+          if git merge --no-ff --no-commit origin/main; then
+            echo "Merge completed without conflicts"
+          else
+            unmerged="$(git diff --name-only --diff-filter=U)"
+            if [ "$unmerged" != "beta/clubfinder-beta.html" ]; then
+              echo "ABORT: unexpected merge conflicts: $unmerged"
+              exit 1
+            fi
+            # Keep the already-tested Stage C producer; refresh just its offline
+            # JSON block from canonical main. Do not choose ours for other files.
+            git show HEAD:beta/clubfinder-beta.html > beta/clubfinder-beta.html
+            git add -- beta/clubfinder-beta.html
+          fi
+          python3 updater/refresh_beta_embedded_snapshot.py
+          python3 updater/refresh_beta_embedded_snapshot.py --check
+          python3 -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+          test "$(grep -c 'function tinFoilBuildChallengeBridgeRecord(' beta/clubfinder-beta.html)" = '1'
+          git add -- beta/clubfinder-beta.html
+          git diff --check
+          git diff --cached --check
+      - name: Full Stage C producer, Deck, mobile, Trophy, venue and replay tests
+        run: |
+          set -euo pipefail
+          python3 updater/audit_beta_clubfinder_stage_c.py
+          python3 updater/audit_beta_clubfinder_stage_c.py --check
+          python3 updater/patch_beta_mobile_pigeon_name.py --check
+          node --check updater/beta_campaign_identity_regression.js
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_campaign_bridge_contract.js
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_weston_replay_stats.js
+          node tests/test_beta_thame_next_fixture.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_conditional_draw_alias.js
+          python3 updater/refresh_beta_embedded_snapshot.py --check
+      - name: Guard final source and retire one-time workflow
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = '27d25c6650d3d1f5a9df48a681a07eb3c3a7e025'
+          git diff --exit-code -- clubfinder.html competition.json beta/challenges-beta.html
+          git diff --cached --exit-code -- clubfinder.html competition.json beta/challenges-beta.html
+          if [ -n "$(git diff --name-only --diff-filter=U)" ]; then
+            echo "ABORT: unresolved merge conflicts"
+            exit 1
+          fi
+          git config user.name "Tin Foil FA Cup Stage C Reconcile"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html
+          git commit -m "merge(beta): reconcile tested Stage C producer with canonical offline fallback"
+          git rm -- .github/workflows/one-time-reconcile-stage-c-20260925.yml
+          git commit -m "chore(beta): retire one-time Stage C reconciliation workflow"
+          changed="$(git diff --name-only origin/main...HEAD)"
+          expected="$(printf 'beta/clubfinder-beta.html\nupdater/beta_campaign_identity_regression.js')"
+          if [ "$changed" != "$expected" ]; then
+            echo "ABORT: final PR changed files differ; got $changed"
+            exit 1
+          fi
+          python3 updater/refresh_beta_embedded_snapshot.py --check
+          node updater/beta_campaign_identity_regression.js
+          git push origin HEAD:refactor/reconcile-stage-c-snapshot-20260925
