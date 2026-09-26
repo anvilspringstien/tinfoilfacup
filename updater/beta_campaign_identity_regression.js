@@ -6,6 +6,16 @@ const path=require('path');
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
+const liteRoute=fs.readFileSync(path.join(ROOT,'beta','stats-beta.html'),'utf8');
+const liteScriptMatch=liteRoute.match(/<script>([\s\S]*?)<\/script>/i);
+if(!liteScriptMatch)throw new Error('BETA fast Stats: tiny route script missing');
+if(!liteRoute.includes('content="width=980"')||
+   !liteRoute.includes('source.tinFoilRenderStatsFromOpener(window)')||
+   !liteRoute.includes('source.location.origin===window.location.origin')||
+   !liteRoute.includes('sessionStorage.removeItem(marker)')||
+   !liteRoute.includes('window.location.replace(canonical)'))
+  throw new Error('BETA fast Stats: opener, wide page, refresh or fallback guard missing');
+
 const scripts=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]).join('\n');
 if(!scripts.trim())throw new Error('No inline Clubfinder JavaScript found');
 if(!html.includes('maxlength="20"'))throw new Error('BETA identity regression: pigeon-name 20-character cap drifted');
@@ -236,59 +246,53 @@ const assertions=`
 
   if(!html.includes('pigeonName:tinFoilSavedPigeonName(saved)'))throw new Error('BETA identity regression: Challenges bridge no longer carries pigeon name');
 
-  // First opening must immediately reuse the already loaded Clubfinder, not
-  // refetch competition.json. The popup's rendered document receives a proper
-  // URL via same-origin history replacement, so refresh still regenerates it.
+  // First opening loads only a tiny local page, not another 4.6 MB Clubfinder.
+  // That page asks the existing opener to render into the new tab.
   const statsSavedBefore=JSON.stringify(loadSavedJourney());
   const statsCounterBefore=getCounterIncrementCalls();
   const competitionBeforeStats=getCompetitionFetchCalls();
   const originalPageHref=window.location.href;
   await journeyCertificate(origin);
   const openedUrls=JSON.parse(getPopupRoutes());
-  if(openedUrls.length!==1||openedUrls[0]!=='')
-    throw new Error('BETA Stats fast-open: popup was not created synchronously as a blank same-origin document');
-  const historyUrls=JSON.parse(getPopupHistory());
-  if(historyUrls.length!==1||
-     historyUrls[0]!==new URL('clubfinder-beta.html?stats=1',originalPageHref).href||
-     JSON.parse(getPopupFallbacks()).length!==0)
-    throw new Error('BETA Stats fast-open: rendered popup did not acquire its reloadable URL: '+JSON.stringify(historyUrls));
+  if(openedUrls.length!==1||openedUrls[0]!=='stats-beta.html')
+    throw new Error('BETA Stats fast-open: did not open the tiny same-origin route: '+JSON.stringify(openedUrls));
+  if(getCertificateHtml())throw new Error('BETA Stats fast-open: opener unexpectedly rendered into itself');
+  if(!await tinFoilRenderStatsFromOpener(window.open('')))
+    throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
   if(instantPage.length<10000||!instantPage.includes('Pigeon McPigeonface')||
      !instantPage.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
      !instantPage.includes('Thame United')||
      !instantPage.includes('<meta name="viewport" content="width=980">'))
-    throw new Error('BETA Stats fast-open: accepted pinch-to-zoom report or campaign identity missing');
+    throw new Error('BETA Stats fast-open: original report, identity or wide viewport lost');
   if(getCompetitionFetchCalls()!==competitionBeforeStats)
-    throw new Error('BETA Stats fast-open: redundant competition-data fetch on opening Stats');
+    throw new Error('BETA Stats fast-open: opening triggered a redundant competition fetch');
   if(window.location.href!==originalPageHref)
-    throw new Error('BETA Stats fast-open: opening Stats navigated away from Clubfinder');
+    throw new Error('BETA Stats fast-open: opening navigated away from Clubfinder');
+  // Genuine refresh retains the existing canonical route and fetches fresh data.
   const originalSearch=window.location.search;
   window.location.search='?stats=1';
   await tinFoilMaybeOpenCanonicalStatsRoute();
   const statsPage=getCertificateHtml();
   if(!statsPage.includes('<meta name="viewport" content="width=980">')||
-     !statsPage.includes('grid-template-columns:repeat(6,minmax(0,1fr))'))
-    throw new Error('BETA iPhone Stats: regenerated certificate lost the original six-column, pinch-to-zoom report');
-  if(statsPage.length<10000||!statsPage.includes('Pigeon McPigeonface')||
+     !statsPage.includes('grid-template-columns:repeat(6,minmax(0,1fr))')||
+     !statsPage.includes('Pigeon McPigeonface')||
      !statsPage.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
      !statsPage.includes('Thame United'))
-    throw new Error('BETA Stats refresh: first load did not rebuild full canonical Stats document');
-  // Pull-to-refresh re-runs BETA at the SAME permanent URL. A second
-  // entry must regenerate the report without losing the saved campaign.
+    throw new Error('BETA Stats refresh: original zoomable report or campaign missing');
   document.open();
   await tinFoilMaybeOpenCanonicalStatsRoute();
   const refreshedStats=getCertificateHtml();
-  if(!refreshedStats.includes('<meta name="viewport" content="width=980">'))
-    throw new Error('BETA iPhone Stats: pull-to-refresh lost the original report viewport');
-  if(refreshedStats.length<10000||!refreshedStats.includes('Pigeon McPigeonface')||
+  if(!refreshedStats.includes('<meta name="viewport" content="width=980">')||
+     !refreshedStats.includes('Pigeon McPigeonface')||
      !refreshedStats.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
      !refreshedStats.includes('Thame United'))
-    throw new Error('BETA Stats refresh: refresh returned a blank or stale-identity report');
+    throw new Error('BETA Stats refresh: blank page or stale campaign');
   window.location.search=originalSearch;
   if(getCounterIncrementCalls()!==statsCounterBefore||
      JSON.stringify(loadSavedJourney())!==statsSavedBefore)
-    throw new Error('BETA Stats refresh: regeneration changed the Campaign or allocated a call-sign number');
-  console.log('BETA IPHONE STATS FAST OPEN + PULL-TO-REFRESH: reused competition, canonical URL, wide report, restored identity, no extra counter — PASS');
+    throw new Error('BETA Stats: navigation altered campaign or allocated a call sign');
+  console.log('BETA STATS LIGHT FIRST OPEN + CANONICAL REFRESH: PASS');
 
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity
@@ -423,3 +427,35 @@ try{
   console.error(e.stack||e);
   process.exit(1);
 }
+
+(async()=>{
+  const script=liteScriptMatch[1], storage={}, redirects=[];
+  let renders=0;
+  const origin='https://anvilspringstien.github.io';
+  const source={
+    closed:false,location:{origin},
+    async tinFoilRenderStatsFromOpener(){renders++;return true}
+  };
+  const page={
+    opener:source,
+    location:{origin,replace:url=>redirects.push(String(url))}
+  };
+  const session={
+    getItem:k=>storage[k]??null,
+    setItem:(k,v)=>{storage[k]=String(v)},
+    removeItem:k=>{delete storage[k]}
+  };
+  const ctx={window:page,sessionStorage:session,console};
+  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  if(renders!==1||redirects.length||storage['tffc.stats-fast-open.v1']!=='1')
+    throw new Error('BETA lite Stats: first load failed to use available opener');
+  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  if(renders!==1||redirects.length!==1||redirects[0]!=='clubfinder-beta.html?stats=1')
+    throw new Error('BETA lite Stats: browser refresh did not fetch canonical fresh route');
+  page.opener=null;
+  redirects.length=0;
+  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  if(redirects.length!==1||redirects[0]!=='clubfinder-beta.html?stats=1')
+    throw new Error('BETA lite Stats: missing opener failed to use canonical fallback');
+  console.log('BETA STATS LIGHT ROUTE: first open, real refresh, missing opener — PASS');
+})().catch(e=>{console.error(e.stack||e);process.exitCode=1});
