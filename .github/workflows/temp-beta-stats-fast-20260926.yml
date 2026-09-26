@@ -46,17 +46,16 @@ jobs:
           git config user.name "Tin Foil FA Cup BETA Test"
           git config user.email "actions@users.noreply.github.com"
           git add -- beta/clubfinder-beta.html beta/stats-beta.html updater/beta_campaign_identity_regression.js updater/temp_patch_beta_stats_fast_20260926.py .github/workflows/temp-beta-stats-fast-20260926.yml
-          unexpected="$(git ls-files --others --exclude-standard | grep -v '^docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md
+          unexpected="$(git ls-files --others --exclude-standard | grep -v '^docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md$' || true)"
           if [ -n "$unexpected" ]; then
-            echo "ABORT: unexpected changes after patch: $unexpected"
+            echo "ABORT: unexpected untracked files: $unexpected"
             exit 1
           fi
-          git diff --cached --check
-          git commit -m "BETA: fast first-open Stats with lightweight reload-safe route"
-          git push origin HEAD:fix/beta-stats-light-route-20260926
- || true)"
-          if [ -n "$unexpected" ]; then
-            echo "ABORT: unexpected changes after patch: $unexpected"
+          changed="$(git diff --cached --name-only | sort)"
+          expected="$(printf '%s\n' .github/workflows/temp-beta-stats-fast-20260926.yml beta/clubfinder-beta.html beta/stats-beta.html updater/beta_campaign_identity_regression.js updater/temp_patch_beta_stats_fast_20260926.py | sort)"
+          if [ "$changed" != "$expected" ]; then
+            echo "ABORT: unexpected staged diff"
+            printf 'Actual:\n%s\nExpected:\n%s\n' "$changed" "$expected"
             exit 1
           fi
           git diff --cached --check
