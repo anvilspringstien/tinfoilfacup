@@ -83,7 +83,7 @@ new_test='''  // First opening loads only a tiny local page, not another 4.6 MB 
   if(openedUrls.length!==1||openedUrls[0]!=='stats-beta.html')
     throw new Error('BETA Stats fast-open: did not open the tiny same-origin route: '+JSON.stringify(openedUrls));
   if(getCertificateHtml())throw new Error('BETA Stats fast-open: opener unexpectedly rendered into itself');
-  if(!await tinFoilRenderStatsFromOpener(popupStub()))
+  if(!await tinFoilRenderStatsFromOpener(window.open('')))
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
   if(instantPage.length<10000||!instantPage.includes('Pigeon McPigeonface')||
