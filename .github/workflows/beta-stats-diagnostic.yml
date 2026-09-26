@@ -1,0 +1,15 @@
+name: BETA Stats diagnostic (temporary)
+on:
+  pull_request:
+    paths:
+      - .github/workflows/beta-stats-diagnostic.yml
+      - updater/beta_stats_diagnostic.py
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print bounded Stats code and timings of test harness
+        run: python updater/beta_stats_diagnostic.py
