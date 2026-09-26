@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=980">
+<title>Tin Foil FA Cup Stats</title>
+<style>body{margin:0;padding:28px;background:#ededed;font:600 14px Arial,sans-serif;color:#084c61}</style>
+<script>
+// First visit reuses the Clubfinder tab that already holds the verified data.
+// On a real refresh, use the canonical route so new competition data is fetched.
+// If the opener is gone or inaccessible, the canonical route remains the fallback.
+(async function(){
+  const canonical="clubfinder-beta.html?stats=1";
+  const marker="tffc.stats-fast-open.v1";
+  try{
+    if(sessionStorage.getItem(marker)==="1"){
+      sessionStorage.removeItem(marker);
+      window.location.replace(canonical);
+      return;
+    }
+    sessionStorage.setItem(marker,"1");
+    const source=window.opener;
+    if(source && !source.closed &&
+       source.location.origin===window.location.origin &&
+       typeof source.tinFoilRenderStatsFromOpener==="function" &&
+       await source.tinFoilRenderStatsFromOpener(window))return;
+  }catch(_){}
+  window.location.replace(canonical);
+})();
+</script>
+</head>
+<body>Loading your Tin Foil FA Cup Stats…</body>
+</html>
