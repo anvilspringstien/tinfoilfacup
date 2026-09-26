@@ -1,0 +1,32 @@
+name: Apply isolated BETA Stats asset split
+on:
+  push:
+    branches: [perf/beta-stats-assets-20260926]
+    paths: [.github/workflows/apply-beta-stats-assets.yml]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
+      - name: Extract only the seven rendered images and regenerate Stage C inventory
+        run: |
+          set -euo pipefail
+          python3 updater/apply_beta_stats_asset_split_TEMP.py
+          python3 updater/audit_beta_clubfinder_stage_c.py
+          python3 updater/audit_beta_clubfinder_stage_c.py --check
+          python3 updater/patch_beta_mobile_pigeon_name.py --check
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_campaign_bridge_contract.js
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
+          git diff --check
+          git rm updater/apply_beta_stats_asset_split_TEMP.py .github/workflows/apply-beta-stats-assets.yml
+          git add beta/clubfinder-beta.html beta/assets/stats-report updater/beta_campaign_identity_regression.js docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "BETA: defer Stats report artwork from Clubfinder download"
+          git push
