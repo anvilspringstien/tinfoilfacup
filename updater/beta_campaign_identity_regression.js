@@ -57,6 +57,9 @@ const sessionStore={};
 let counterIncrementCalls=0;
 let certificateHtml='';
 const popupRoutes=[];
+const popupHistory=[];
+const popupFallbacks=[];
+let competitionFetchCalls=0;
 function popupStub(){
   const doc={
     open(){certificateHtml='';},
@@ -66,7 +69,11 @@ function popupStub(){
     body:{innerHTML:''},
     documentElement:{innerHTML:''}
   };
-  return {document:doc,closed:false,focus(){},print(){},close(){this.closed=true}};
+  return {
+    document:doc,closed:false,focus(){},print(){},close(){this.closed=true},
+    history:{replaceState(_state,_title,url){popupHistory.push(String(url))}},
+    location:{replace(url){popupFallbacks.push(String(url))}}
+  };
 }
 const coords={
   'HP70EJ':{latitude:51.676,longitude:-0.607},
@@ -98,6 +105,9 @@ const sandbox={
   open:url=>{popupRoutes.push(String(url??''));return popupStub()},
   getCertificateHtml:()=>certificateHtml,
   getPopupRoutes:()=>JSON.stringify(popupRoutes),
+  getPopupHistory:()=>JSON.stringify(popupHistory),
+  getPopupFallbacks:()=>JSON.stringify(popupFallbacks),
+  getCompetitionFetchCalls:()=>competitionFetchCalls,
   getCounterIncrementCalls:()=>counterIncrementCalls,
   getLocalStoreSnapshot:()=>JSON.stringify(localStore),
   getSessionStoreSnapshot:()=>JSON.stringify(sessionStore),
@@ -108,7 +118,7 @@ const sandbox={
       counterIncrementCalls++;
       return {ok:true,status:200,json:async()=>({number:9842})};
     }
-    if(s.includes('competition.json'))return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};
+    if(s.includes('competition.json')){competitionFetchCalls++;return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};}
     if(/postcodes\//i.test(s)){
       const pc=postcodeFromUrl(s),hit=coords[pc];
       return hit?{ok:true,status:200,json:async()=>({status:200,result:hit})}:{ok:false,status:404,json:async()=>({status:404,result:null})};
@@ -226,17 +236,32 @@ const assertions=`
 
   if(!html.includes('pigeonName:tinFoilSavedPigeonName(saved)'))throw new Error('BETA identity regression: Challenges bridge no longer carries pigeon name');
 
-  // iPhone pull-to-refresh regression: the Stats button must open a real
-  // reloadable URL, never a document written into a blank about:blank tab.
+  // First opening must immediately reuse the already loaded Clubfinder, not
+  // refetch competition.json. The popup's rendered document receives a proper
+  // URL via same-origin history replacement, so refresh still regenerates it.
   const statsSavedBefore=JSON.stringify(loadSavedJourney());
   const statsCounterBefore=getCounterIncrementCalls();
+  const competitionBeforeStats=getCompetitionFetchCalls();
   const originalPageHref=window.location.href;
   await journeyCertificate(origin);
   const openedUrls=JSON.parse(getPopupRoutes());
-  if(openedUrls.length!==1||openedUrls[0]!=='clubfinder-beta.html?stats=1')
-    throw new Error('BETA Stats refresh: button did not open its canonical reloadable route: '+JSON.stringify(openedUrls));
-  if(getCertificateHtml())throw new Error('BETA Stats refresh: popup is still filled with an ephemeral document');
-  if(window.location.href!==originalPageHref)throw new Error('BETA Stats refresh: opening Stats navigated away from the original Clubfinder');
+  if(openedUrls.length!==1||openedUrls[0]!=='')
+    throw new Error('BETA Stats fast-open: popup was not created synchronously as a blank same-origin document');
+  const historyUrls=JSON.parse(getPopupHistory());
+  if(historyUrls.length!==1||
+     historyUrls[0]!==new URL('clubfinder-beta.html?stats=1',originalPageHref).href||
+     JSON.parse(getPopupFallbacks()).length!==0)
+    throw new Error('BETA Stats fast-open: rendered popup did not acquire its reloadable URL: '+JSON.stringify(historyUrls));
+  const instantPage=getCertificateHtml();
+  if(instantPage.length<10000||!instantPage.includes('Pigeon McPigeonface')||
+     !instantPage.includes('Tango Foxtrot 2 Alpha Charlie 09842')||
+     !instantPage.includes('Thame United')||
+     !instantPage.includes('<meta name="viewport" content="width=980">'))
+    throw new Error('BETA Stats fast-open: accepted pinch-to-zoom report or campaign identity missing');
+  if(getCompetitionFetchCalls()!==competitionBeforeStats)
+    throw new Error('BETA Stats fast-open: redundant competition-data fetch on opening Stats');
+  if(window.location.href!==originalPageHref)
+    throw new Error('BETA Stats fast-open: opening Stats navigated away from Clubfinder');
   const originalSearch=window.location.search;
   window.location.search='?stats=1';
   await tinFoilMaybeOpenCanonicalStatsRoute();
@@ -263,7 +288,7 @@ const assertions=`
   if(getCounterIncrementCalls()!==statsCounterBefore||
      JSON.stringify(loadSavedJourney())!==statsSavedBefore)
     throw new Error('BETA Stats refresh: regeneration changed the Campaign or allocated a call-sign number');
-  console.log('BETA IPHONE STATS PULL-TO-REFRESH: canonical route, full identity, restored report, no extra counter — PASS');
+  console.log('BETA IPHONE STATS FAST OPEN + PULL-TO-REFRESH: reused competition, canonical URL, wide report, restored identity, no extra counter — PASS');
 
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity
