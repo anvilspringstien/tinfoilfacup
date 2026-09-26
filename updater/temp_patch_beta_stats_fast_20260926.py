@@ -159,3 +159,5 @@ test+='''
 '''
 test_file.write_text(test)
 print("Patched BETA Clubfinder and Stats regression; production and canonical data untouched")
+
+# Rerun isolated workflow after draft PR opened.
