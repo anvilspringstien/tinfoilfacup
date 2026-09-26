@@ -1,0 +1,34 @@
+name: Apply isolated BETA chooser copy
+on:
+  push:
+    branches: [fix/beta-choose-campaign-20260926]
+    paths: [.github/workflows/apply-beta-chooser-copy.yml]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Restore agreed chooser labels and remove helper
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('beta/clubfinder-beta.html')
+          b=p.read_bytes()
+          old=b'<span class="default-label">Tin Foil FA Cup Campaign ${jn}</span>'
+          new=b'<span class="default-label">Choose Tin Foil FA Cup Campaign ${jn}</span>'
+          assert b.count(old)==1, 'Unexpected BETA chooser content'
+          assert Path('clubfinder.html').read_bytes().count(new)==1, 'Production reference changed'
+          p.write_bytes(b.replace(old,new))
+          assert p.read_bytes().count(new)==1
+          PY
+          git rm .github/workflows/apply-beta-chooser-copy.yml
+          git diff --check
+          git add beta/clubfinder-beta.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "BETA: restore explicit Choose campaign labels"
+          git push
