@@ -1,0 +1,51 @@
+name: One-time BETA Stats lightweight route patch
+on:
+  push:
+    branches: ['fix/beta-stats-light-route-20260926']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch-test-and-clean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply SHA-pinned patch inside the full checkout
+        run: |
+          set -euo pipefail
+          python3 updater/temp_patch_beta_stats_fast_20260926.py
+          git diff --check
+      - name: Actual Clubfinder and Stats regression
+        run: |
+          set -euo pipefail
+          node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_campaign_bridge_contract.js
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_trophy_viewer.js
+          node tests/test_beta_petts_wood_display_identity.js
+          node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_exmouth_full_index.js
+          node tests/test_beta_weston_replay_stats.js
+          node tests/test_beta_thame_next_fixture.js
+          node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_conditional_draw_alias.js
+      - name: Guard protected files and remove temporary tools
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- clubfinder.html competition.json beta/challenges-beta.html
+          rm -f updater/temp_patch_beta_stats_fast_20260926.py .github/workflows/temp-beta-stats-fast-20260926.yml
+          git config user.name "Tin Foil FA Cup BETA Test"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- beta/clubfinder-beta.html beta/stats-beta.html updater/beta_campaign_identity_regression.js updater/temp_patch_beta_stats_fast_20260926.py .github/workflows/temp-beta-stats-fast-20260926.yml
+          unexpected="$(git status --porcelain | awk '{print $2}' | grep -v '^docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "ABORT: unexpected changes after patch: $unexpected"
+            exit 1
+          fi
+          git diff --cached --check
+          git commit -m "BETA: fast first-open Stats with lightweight reload-safe route"
+          git push origin HEAD:fix/beta-stats-light-route-20260926
