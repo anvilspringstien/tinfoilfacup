@@ -1,7 +1,11 @@
 name: One-time BETA Stats lightweight route patch
 on:
-  push:
-    branches: ['fix/beta-stats-light-route-20260926']
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: ['main']
+    paths:
+      - 'updater/temp_patch_beta_stats_fast_20260926.py'
+      - '.github/workflows/temp-beta-stats-fast-20260926.yml'
   workflow_dispatch:
 permissions:
   contents: write
