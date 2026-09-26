@@ -457,5 +457,21 @@ try{
   await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
   if(redirects.length!==1||redirects[0]!=='clubfinder-beta.html?stats=1')
     throw new Error('BETA lite Stats: missing opener failed to use canonical fallback');
-  console.log('BETA STATS LIGHT ROUTE: first open, real refresh, missing opener — PASS');
+  // Safari privacy controls can suppress opener access; a foreign-origin tab
+  // must not be allowed to render our campaign. Both cases fall back safely.
+  delete storage['tffc.stats-fast-open.v1'];
+  page.opener={closed:false,location:{origin:'https://other.example'},
+    async tinFoilRenderStatsFromOpener(){renders++;return true}};
+  redirects.length=0;
+  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  if(renders!==1||redirects.length!==1||redirects[0]!=='clubfinder-beta.html?stats=1')
+    throw new Error('BETA lite Stats: cross-origin opener did not fall back without rendering');
+  delete storage['tffc.stats-fast-open.v1'];
+  page.opener={closed:false,location:{origin},
+    async tinFoilRenderStatsFromOpener(){throw new Error('simulated opener failure')}};
+  redirects.length=0;
+  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  if(renders!==1||redirects.length!==1||redirects[0]!=='clubfinder-beta.html?stats=1')
+    throw new Error('BETA lite Stats: broken opener failed to recover via canonical route');
+  console.log('BETA STATS LIGHT ROUTE: first open, refresh, missing/cross-origin/broken opener — PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
