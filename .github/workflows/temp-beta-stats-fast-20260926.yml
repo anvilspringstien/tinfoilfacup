@@ -52,7 +52,7 @@ jobs:
             exit 1
           fi
           changed="$(git diff --cached --name-only | sort)"
-          expected="$(printf '%s\n' .github/workflows/temp-beta-stats-fast-20260926.yml beta/clubfinder-beta.html beta/stats-beta.html updater/beta_campaign_identity_regression.js updater/temp_patch_beta_stats_fast_20260926.py | sort)"
+          expected="$(printf '%s\n' .github/workflows/temp-beta-stats-fast-20260926.yml beta/clubfinder-beta.html updater/beta_campaign_identity_regression.js updater/temp_patch_beta_stats_fast_20260926.py | sort)"
           if [ "$changed" != "$expected" ]; then
             echo "ABORT: unexpected staged diff"
             printf 'Actual:\n%s\nExpected:\n%s\n' "$changed" "$expected"
