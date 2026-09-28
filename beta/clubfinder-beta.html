@@ -1775,7 +1775,8 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
 
 async function tinFoilRenderStatsFromOpener(target){
   if(!target || target.closed)return false;
-  await tinFoilEnsureCompetitionReady();
+  // Fast-open Stats reuses the already-rendered Clubfinder state. A real
+  // Stats refresh still uses ?stats=1 below and refreshes canonical data.
   const saved=loadSavedJourney();
   const origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
   if(!origin)return false;
