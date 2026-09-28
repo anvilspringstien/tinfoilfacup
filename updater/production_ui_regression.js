@@ -12,18 +12,22 @@ const betaIdentityMarkers=[
   'tinFoilRecoverCampaignIdentity(saved)',
   'if(explicitPostcodeSearch)tinFoilBeginSearchIdentity();',
   "${mine?tinFoilCampaignIdentityHtml(saved):''}",
-  'const tinFoilCompetitionReady=refreshCompetitionData(false);',
+  'let tinFoilCompetitionReady=null;',
+  'function tinFoilEnsureCompetitionReady(){',
   'const tinFoilReturnedCampaignSnapshot=!tinFoilStatsRouteRequested&&tinFoilChallengeExitReturn',
-  'Promise.resolve(tinFoilCompetitionReady).then(async()=>{',
-  'return tinFoilRestoreSavedCampaignOnLoad();',
-  "selectedAt:saved&&saved.selectedAt||null,searchNumber:saved&&saved.searchNumber||null,callSign:tinFoilSavedCallSign(saved)",
+  'const tinFoilSavedCampaignAtStartup=!tinFoilStatsRouteRequested?loadSavedJourney():null;',
+  'if(tinFoilNeedsCompetitionAtStartup)tinFoilEnsureCompetitionReady();',
+  'Promise.resolve(tinFoilEnsureCompetitionReady()).then(()=>tinFoilRestoreSavedCampaignOnLoad()).catch(()=>{});',
+  'searchNumber:n,',
+  'callSign:tinFoilSavedCallSign(saved),',
+  'pigeonName:tinFoilSavedPigeonName(saved)',
   "window.location.href='challenges-beta.html';"
 ];
 for(const marker of betaIdentityMarkers){
   if(!betaHtml.includes(marker))throw new Error('BETA Campaign identity parity regression: missing '+marker);
 }
 if((betaHtml.match(/TIN_FOIL_CAMPAIGN_IDENTITY_BEGIN/g)||[]).length!==1)throw new Error('BETA Campaign identity parity regression: identity block count drifted');
-if(!betaHtml.includes("async function go(explicitPostcodeSearch=false){\n await tinFoilCompetitionReady;"))throw new Error('BETA Campaign identity parity regression: refresh-safe go() contract missing');
+if(!betaHtml.includes("async function go(explicitPostcodeSearch=false){\n await tinFoilEnsureCompetitionReady();"))throw new Error('BETA Campaign identity parity regression: lazy competition-loader go() contract missing');
 if(!betaHtml.includes('const freshPostcodeSearch=!!(explicitPostcodeSearch&&(requestedDifferentPostcode||searchingDifferentPostcode));'))throw new Error('BETA Campaign identity parity regression: explicit postcode-search semantics lost');
 console.log('CLUBFINDER BETA CAMPAIGN IDENTITY PARITY: PASS');
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
