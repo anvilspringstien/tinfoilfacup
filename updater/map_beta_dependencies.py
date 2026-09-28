@@ -133,6 +133,12 @@ def storage_table(deck, cf):
 def snapshot_status(cf):
     html = cf["html"]
     canonical = json.loads((ROOT / "competition.json").read_text(encoding="utf-8"))
+    if "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';" in html:
+        embedded = json.loads((ROOT / "beta/competition-fallback.json").read_text(encoding="utf-8"))
+        return (("MATCH" if embedded == canonical else "STALE") + "; fallback " +
+                str(embedded.get("updated_at")) + "; canonical " +
+                str(canonical.get("updated_at")) +
+                ". Live ../competition.json remains authoritative.")
     payload = html.split(BEGIN, 1)[1].split(END, 1)[0]
     m = re.search(r"const EMBEDDED_COMPETITION_DATA=(.*?);\s*$",
                   payload.strip(), re.S)

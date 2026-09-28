@@ -56,6 +56,10 @@ def line_no(text,index):
     return text.count("\n",0,index)+1
 
 def mask_payload(text):
+    if text.count(START)==0 and text.count(STOP)==0:
+        if "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';" not in text:
+            raise ValueError("BETA external competition fallback missing")
+        return text
     if text.count(START)!=1 or text.count(STOP)!=1:
         raise ValueError("BETA embedded competition markers missing or duplicated")
     a=text.index(START);b=text.index(STOP,a)+len(STOP)

@@ -8,6 +8,7 @@ on:
     paths:
       - '.github/workflows/refresh-beta-snapshot.yml'
       - 'updater/refresh_beta_embedded_snapshot.py'
+      - 'beta/competition-fallback.json'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
 
 permissions:
@@ -37,13 +38,13 @@ jobs:
           node tests/test_beta_verified_conditional_replay.js
           test -z "$(git diff --name-only -- competition.json clubfinder.html)"
           changed="$(git diff --name-only)"
-          test -z "$changed" || test "$changed" = 'beta/clubfinder-beta.html'
+          test -z "$changed" || test "$changed" = 'beta/competition-fallback.json'
       - name: Commit only the BETA snapshot
         run: |
           set -euo pipefail
           git config user.name "Tin Foil FA Cup BETA Updater"
           git config user.email "actions@users.noreply.github.com"
-          git add beta/clubfinder-beta.html
+          git add beta/competition-fallback.json
           if git diff --cached --quiet; then
             echo "Canonical BETA fallback is already current."
           else

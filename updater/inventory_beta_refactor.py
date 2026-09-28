@@ -67,6 +67,12 @@ def scan_html(path, raw):
 
 
 def embedded_snapshot(html, canonical):
+    if "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';" in html:
+        embedded = json.loads((ROOT / "beta/competition-fallback.json").read_text(encoding="utf-8"))
+        return {"status": "MATCH" if embedded == canonical else "STALE",
+                "embedded_updated_at": embedded.get("updated_at"),
+                "canonical_updated_at": canonical.get("updated_at"),
+                "canonical_schema_version": canonical.get("schema_version")}
     if html.count(BEGIN) != 1 or html.count(END) != 1:
         return {"status": "MARKER_ERROR"}
     payload = html.split(BEGIN, 1)[1].split(END, 1)[0]
