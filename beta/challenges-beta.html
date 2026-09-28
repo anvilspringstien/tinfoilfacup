@@ -841,28 +841,47 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 }
 
 
-/* v0.10.37 — compact Campaign identity frame, sized to the BETA panel language */
+/* Campaign standing: give live Campaign truth the same visual weight as the BETA controls. */
 .campaign-truth{
   width:min(500px, calc(100% - 28px));
   box-sizing:border-box;
   margin:8px auto 22px;
-  padding:11px 14px;
+  padding:12px 14px;
   border:1px solid rgba(255,255,255,.22);
   border-radius:10px;
   background:rgba(255,255,255,.045);
-  color:#c9c4b8;
-  font:10px/1.45 Arial,sans-serif;
-  letter-spacing:.045em;
+  font-family:Arial,sans-serif;
 }
-.campaign-truth-line{display:block;min-width:0;overflow-wrap:anywhere}
-.campaign-truth-line.two{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
-.campaign-truth-item{min-width:0}
-.campaign-truth .label{text-transform:uppercase}
-.campaign-truth strong{color:#f3efe4;font-size:11px;letter-spacing:.02em;text-transform:none}
+.campaign-truth-line{display:grid;grid-template-columns:132px minmax(0,1fr);gap:9px;align-items:stretch;margin-top:8px;min-width:0}
+.campaign-truth-line:first-child{margin-top:0}
+.campaign-truth-line.two{grid-template-columns:minmax(0,1fr) 180px;gap:10px}
+.campaign-truth-item{display:grid;grid-template-columns:108px minmax(0,1fr);gap:8px;min-width:0}
+.campaign-truth .label{
+  display:flex;align-items:center;justify-content:center;min-height:36px;padding:6px 8px;
+  box-sizing:border-box;border:1px solid rgba(255,255,255,.16);border-radius:8px;
+  background:#302a23;color:#fff;box-shadow:0 2px 0 #2f3235,inset 0 1px rgba(255,255,255,.22);
+  font:700 10px/1.15 Arial,sans-serif;text-align:center;text-transform:uppercase;letter-spacing:.025em
+}
+.campaign-truth strong{
+  display:flex;align-items:center;min-width:0;min-height:36px;padding:6px 9px;box-sizing:border-box;
+  border:1px solid #d7d2c8;border-radius:6px;background:#fafafa;color:#17130f;
+  font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;overflow-wrap:anywhere
+}
+.campaign-truth .miles-field{display:block;padding:3px;background:#080705;border-color:rgba(255,255,255,.12)}
+.truth-mile-value{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+.truth-odo{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;height:30px}
+.truth-odo span{
+  display:flex;align-items:center;justify-content:center;min-width:0;color:#111;
+  background:linear-gradient(180deg,#d7d7d3 0%,#f5f4ef 18%,#f8f7f2 76%,#cfcfca 100%);
+  border-radius:2px;font:900 16px/1 "Courier New",monospace;box-shadow:inset 0 0 2px rgba(0,0,0,.35)
+}
 @media(max-width:560px){
-  .campaign-truth{width:calc(100% - 20px);padding:10px 11px;font-size:9px;letter-spacing:.025em}
-  .campaign-truth strong{font-size:10px}
-  .campaign-truth-line.two{gap:6px 14px}
+  .campaign-truth{width:calc(100% - 20px);padding:10px}
+  .campaign-truth-line{grid-template-columns:104px minmax(0,1fr);gap:6px}
+  .campaign-truth-line.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+  .campaign-truth-item{grid-template-columns:1fr;gap:4px}
+  .campaign-truth .label{min-height:32px;padding:5px 5px;font-size:8.5px}
+  .campaign-truth strong{min-height:32px;padding:5px 7px;font-size:10px}
 }
 </style>
 <!-- v0.10.23 — corrected reverse/back artwork mapping for Mats 16, 18, 20–23; no Challenge logic changed -->
@@ -1155,7 +1174,10 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
     <div class="verifyhelp" id="verifyHelp"></div>
     <div class="campaign-truth" aria-label="Current Campaign standing">
       <span class="campaign-truth-line"><span class="label">Call Sign:</span> <strong id="truthCallSign">—</strong></span>
-      <span class="campaign-truth-line two"><span class="campaign-truth-item"><span class="label">Pigeon Name:</span> <strong id="truthPigeonName">—</strong></span><span class="campaign-truth-item"><span class="label">Miles Flown:</span> <strong id="truthPigeonMiles">0</strong></span></span>
+      <span class="campaign-truth-line two">
+        <span class="campaign-truth-item"><span class="label">Pigeon Name:</span> <strong id="truthPigeonName">—</strong></span>
+        <span class="campaign-truth-item"><span class="label">Pigeon Miles Flown:</span> <strong class="miles-field"><span id="truthPigeonMiles" class="truth-mile-value">0</span><span class="truth-odo" id="truthPigeonMilesOdometer" aria-hidden="true"><span>0</span><span>0</span><span>0</span><span>0</span></span></strong></span>
+      </span>
       <span class="campaign-truth-line"><span class="label">Current Campaign Round:</span> <strong id="truthCampaignRound">Extra Preliminary Round</strong></span>
     </div>
     
@@ -1734,7 +1756,9 @@ function renderCampaignTruthFrame() {
 $("campaignRound").value=String(state.campaignRound);
 $("truthCallSign").textContent=campaignIdentity.callSign||"—";
 $("truthPigeonName").textContent=campaignIdentity.pigeonName||"—";
-$("truthPigeonMiles").textContent=Math.max(0,Math.round(state.pigeonMiles)).toLocaleString("en-GB");
+const truthMiles=Math.max(0,Math.round(state.pigeonMiles));
+$("truthPigeonMiles").textContent=truthMiles.toLocaleString("en-GB");
+$("truthPigeonMilesOdometer").innerHTML=String(Math.min(9999,truthMiles)).padStart(4,"0").split("").map(n=>`<span>${n}</span>`).join("");
 $("truthCampaignRound").textContent=$("campaignRound").options[state.campaignRound]?.textContent || "Extra Preliminary Round";
 }
 function renderSimulatorControls() {
