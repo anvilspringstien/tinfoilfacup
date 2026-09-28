@@ -3,13 +3,26 @@ name: Refresh BETA fallback from canonical competition
 on:
   workflow_dispatch:
   push:
-    branches:
-      - beta/refresh-final-replay-fallback-20260924
+    branches: [main]
     paths:
+      - 'competition.json'
       - '.github/workflows/refresh-beta-snapshot.yml'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'beta/competition-fallback.json'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
+  workflow_run:
+    workflows:
+      - 'Scan FA Cup results (v7.6 guarded)'
+      - 'Scan FA Cup draw (guarded)'
+      - 'Competition health monitor (v7.10.2)'
+      - 'Guard conditional draw and penalty display'
+      - 'Guarded publication of outstanding preceding-round replays'
+      - 'Record FA Cup result'
+      - 'Record result (v7.6 assisted)'
+      - 'Refresh FA Cup competition data'
+    types: [completed]
+  schedule:
+    - cron: '47 * * * *'
 
 permissions:
   contents: write
@@ -20,12 +33,13 @@ concurrency:
 
 jobs:
   refresh:
-    if: github.ref_name == 'main' || github.ref_name == 'beta/refresh-final-replay-fallback-20260924'
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -49,9 +63,34 @@ jobs:
             echo "Canonical BETA fallback is already current."
           else
             git commit -m "Refresh BETA fallback with current verified replay chronology"
-            if test "$GITHUB_REF_NAME" = main; then
-              git pull --rebase origin main
+            # A concurrent canonical update may have landed since checkout.
+            # Rebase, then regenerate from the new main before publishing.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort
+                git reset --hard origin/main
+              fi
+              python updater/refresh_beta_embedded_snapshot.py
               python updater/refresh_beta_embedded_snapshot.py --check
-            fi
-            git push origin "HEAD:$GITHUB_REF_NAME"
+              git add -- beta/competition-fallback.json
+              if git diff --cached --quiet; then
+                if test "$(git diff-tree --no-commit-id --name-only -r HEAD)" != 'beta/competition-fallback.json'; then
+                  echo 'Canonical fallback is already current.'
+                  exit 0
+                fi
+              elif test "$(git log -1 --format=%s)" = 'Refresh BETA fallback with current verified replay chronology'; then
+                git commit --amend --no-edit
+              else
+                git commit -m 'Refresh BETA fallback with current verified replay chronology'
+              fi
+              test -z "$(git diff --name-only -- competition.json clubfinder.html)"
+              test -z "$(git diff --name-only)"
+              test "$(git diff-tree --no-commit-id --name-only -r HEAD)" = 'beta/competition-fallback.json'
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+            done
+            echo 'Main advanced during refresh; retry on the next reconciliation run.' >&2
+            exit 1
           fi
