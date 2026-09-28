@@ -1775,7 +1775,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
 
 async function tinFoilRenderStatsFromOpener(target){
   if(!target || target.closed)return false;
-  await tinFoilCompetitionReady;
+  await tinFoilEnsureCompetitionReady();
   const saved=loadSavedJourney();
   const origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
   if(!origin)return false;
@@ -1784,7 +1784,7 @@ async function tinFoilRenderStatsFromOpener(target){
 }
 
 async function go(explicitPostcodeSearch=false){
- await tinFoilCompetitionReady;
+ await tinFoilEnsureCompetitionReady();
  const input=document.getElementById('postcode'),btn=document.getElementById('findBtn'),status=document.getElementById('status'),results=document.getElementById('results');
  if(!LIVE_COMPETITION_DATA){status.textContent=LIVE_DATA_STATUS.message;return}
  let pc=input.value.trim(),saved=loadSavedJourney();if(!pc){status.textContent='Please enter a postcode.';return}
@@ -1835,22 +1835,27 @@ if(tinFoilChallengeExitReturn){
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}
 }
 
-const tinFoilCompetitionReady=refreshCompetitionData(false);
+let tinFoilCompetitionReady=null;
+function tinFoilEnsureCompetitionReady(){
+  if(!tinFoilCompetitionReady)tinFoilCompetitionReady=refreshCompetitionData(false);
+  return tinFoilCompetitionReady;
+}
+const tinFoilSavedCampaignAtStartup=!tinFoilStatsRouteRequested?loadSavedJourney():null;
+const tinFoilNeedsCompetitionAtStartup=!!(tinFoilStatsRouteRequested||(tinFoilSavedCampaignAtStartup&&tinFoilSavedCampaignAtStartup.postcode));
+if(tinFoilNeedsCompetitionAtStartup)tinFoilEnsureCompetitionReady();
 if(!tinFoilStatsRouteRequested){
-  Promise.resolve(tinFoilCompetitionReady).then(async()=>{
-    if(tinFoilReturnedCampaignSnapshot){
-      const saved=loadSavedJourney(),savedNumber=tinFoilNormaliseSearchNumber(saved&&saved.searchNumber);
-      if(savedNumber)tinFoilSetCurrentSearchNumber(savedNumber);
-      updateLiveDataBadge();
-      return true;
-    }
-    return tinFoilRestoreSavedCampaignOnLoad();
-  }).catch(()=>{});
+  if(tinFoilReturnedCampaignSnapshot){
+    const saved=loadSavedJourney(),savedNumber=tinFoilNormaliseSearchNumber(saved&&saved.searchNumber);
+    if(savedNumber)tinFoilSetCurrentSearchNumber(savedNumber);
+    updateLiveDataBadge();
+  }else if(tinFoilSavedCampaignAtStartup&&tinFoilSavedCampaignAtStartup.postcode){
+    Promise.resolve(tinFoilEnsureCompetitionReady()).then(()=>tinFoilRestoreSavedCampaignOnLoad()).catch(()=>{});
+  }
 }
 async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const q=new URLSearchParams(window.location.search||'');
   if(q.get('stats')!=='1')return;
-  await tinFoilCompetitionReady;
+  await tinFoilEnsureCompetitionReady();
   const saved=loadSavedJourney();
   const origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
   if(!origin){document.documentElement.classList.remove('tffc-stats-route');return;}
