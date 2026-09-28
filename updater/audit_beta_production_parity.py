@@ -14,7 +14,7 @@ def embedded(s):
  m=re.search(r'const EMBEDDED_COMPETITION_DATA\s*=\s*(\{.*\});?\s*$',block,re.S)
  try:return json.loads(m.group(1)) if m else None
  except Exception:return None
-pe,be=embedded(p),embedded(b)
+pe,be=embedded(p),json.loads((R/'beta/competition-fallback.json').read_text())
 out("BASELINE",{"production_bytes":len(p),"beta_bytes":len(b),"competition_updated":data.get("updated_at"),
 "prod_fallback_exact":pe==data,"beta_fallback_exact":be==data,
 "prod_fallback_updated":pe.get("updated_at") if pe else None,"beta_fallback_updated":be.get("updated_at") if be else None})

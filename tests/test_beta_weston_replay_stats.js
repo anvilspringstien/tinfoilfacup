@@ -85,6 +85,6 @@ assert.equal(JSON.stringify(stats),JSON.stringify({
 assert.match(html,/• Shootouts Won: '\+penaltyWins/);
 assert.match(html,/• Shootouts Lost: '\+penaltyLosses/);
 assert.match(html,/jr-winner[^;]*tinFoilBetaPenaltyResultNote\(r\)/s);
-assert.match(html,/const EMBEDDED_COMPETITION_DATA=/);
+assert.match(html,/const FALLBACK_COMPETITION_DATA_URL='\.\/competition-fallback\.json'/);
 console.log('BETA WESTON REPLAY/STATS REGRESSION: PASS');
 console.log('19:45 replay / shootout display / canonical custody / 2 draws and separate shootout loss: PASS');

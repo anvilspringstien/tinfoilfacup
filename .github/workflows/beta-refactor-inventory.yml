@@ -1,6 +1,10 @@
 name: Read-only BETA refactor inventory
 
 on:
+  pull_request:
+    paths:
+      - 'updater/inventory_beta_refactor.py'
+      - '.github/workflows/beta-refactor-inventory.yml'
   push:
     branches: ['refactor/beta-inventory-20260925']
     paths:
@@ -18,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: refactor/beta-inventory-20260925
+          ref: ${{ github.event_name == 'pull_request' && github.sha || 'refactor/beta-inventory-20260925' }}
           fetch-depth: 0
       - name: Run existing BETA Deck, Trophy and accepted mobile checks
         run: |
@@ -36,7 +40,12 @@ jobs:
       - name: Guard all functional source and canonical data
         run: |
           set -euo pipefail
-          git diff --exit-code 1ab8276ba18d43513ef50c922fbbbe737ff23e72 -- clubfinder.html beta/clubfinder-beta.html beta/challenges-beta.html competition.json
+          if [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+            git fetch origin main
+            git diff --exit-code origin/main...HEAD -- clubfinder.html beta/challenges-beta.html competition.json
+          else
+            git diff --exit-code 1ab8276ba18d43513ef50c922fbbbe737ff23e72 -- clubfinder.html beta/clubfinder-beta.html beta/challenges-beta.html competition.json
+          fi
           changed="$(git status --porcelain | awk '{print $2}' | grep -v '^docs/refactor/2026-09-25-generated-source-map.md$' || true)"
           if [ -n "$changed" ]; then
             echo "Unexpected working-tree changes: $changed"

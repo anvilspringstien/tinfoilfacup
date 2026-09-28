@@ -31,6 +31,10 @@ def fingerprint(raw):
 
 
 def mask_embedded(html):
+    if "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';" in html:
+        if BEGIN in html or END in html:
+            raise ValueError("External BETA fallback still contains embedded payload markers")
+        return html
     if html.count(BEGIN) != 1 or html.count(END) != 1:
         raise ValueError("Missing or duplicated BETA competition payload markers")
     start = html.index(BEGIN)
@@ -133,6 +137,12 @@ def storage_table(deck, cf):
 def snapshot_status(cf):
     html = cf["html"]
     canonical = json.loads((ROOT / "competition.json").read_text(encoding="utf-8"))
+    if "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';" in html:
+        embedded = json.loads((ROOT / "beta/competition-fallback.json").read_text(encoding="utf-8"))
+        return (("MATCH" if embedded == canonical else "STALE") + "; fallback " +
+                str(embedded.get("updated_at")) + "; canonical " +
+                str(canonical.get("updated_at")) +
+                ". Live ../competition.json remains authoritative.")
     payload = html.split(BEGIN, 1)[1].split(END, 1)[0]
     m = re.search(r"const EMBEDDED_COMPETITION_DATA=(.*?);\s*$",
                   payload.strip(), re.S)
@@ -188,8 +198,7 @@ def make_report(deck, cf):
         "| " + k + " | " + ("Present" if v else "**NOT DETECTED — manual review**") + " |"
         for k, v in contract.items()
     ]
-    # Source positions use the newline-preserving mask for Clubfinder;
-    # the 3 MB offline data is not printed or reparsed into this source map.
+    # Source positions are preserved when scanning a legacy embedded payload.
     bridge_names = [
         "openChallenges", "tinFoilChallengeStatsSnapshot",
         "tinFoilCampaignIdentityForSave", "tinFoilPersistCampaignIdentityBackup",
@@ -286,8 +295,8 @@ def make_report(deck, cf):
         "4. Review any zero-textual-reference CSS candidate manually against "
         "generated markup, selectors and browser behaviours before selecting "
         "a small reversible cleanup.",
-        "5. Refresh the embedded offline snapshot in a separate guarded PR "
-        "if a strict current-canonical fallback check is required. "
+        "5. Keep the external BETA fallback synchronized with canonical "
+        "competition.json using the guarded refresh workflow. "
         "Never bundle large competition-data churn with a structural refactor.",
         "",
     ]
