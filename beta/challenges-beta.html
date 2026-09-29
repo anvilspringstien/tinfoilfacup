@@ -1384,7 +1384,8 @@ function challengeCampaignKey(truth){
   const origin=String((truth&&truth.originName)||"").trim();
   const selected=String((truth&&truth.selectedAt)||"").trim();
   const callSign=String((truth&&truth.callSign)||"").trim();
-  return [origin,selected,callSign].join("|");
+  if(!origin)return "";
+  return selected ? [origin,selected].join("|") : [origin,callSign].join("|");
 }
 function ensureChallengeStateMatchesCampaign(truth){
   const nextKey=challengeCampaignKey(truth);
@@ -1890,8 +1891,9 @@ $("cardstage").addEventListener("pointerup",e=>{
   if(dx>0 && index>0){index--;render()}
 });
 
-applyClubfinderCampaignTruth();
-if (awardCampaignChallenges()) save();
+const challengeTruthApplied=applyClubfinderCampaignTruth();
+const challengeAwardsChanged=awardCampaignChallenges();
+if (challengeTruthApplied || challengeAwardsChanged) save();
 else renderStats();
 
 // Open the actual deck on arrival. Preserve legacy return links from already-open Stats tabs.
