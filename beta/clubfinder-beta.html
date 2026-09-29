@@ -42,7 +42,13 @@
 .tin-foil-confirm-actions{display:flex;justify-content:flex-end;gap:8px}
 .tin-foil-confirm-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 #tinFoilConfirmCancel{background:#fff;color:#084C61}
-#tinFoilConfirmOk{background:#084C61;color:#FAFAFA}.tin-foil-result-health{margin:10px 0 14px;padding:11px 13px;border-radius:8px;font:300 13px/1.5 Poppins,Arial,sans-serif}
+#tinFoilConfirmOk{background:#084C61;color:#FAFAFA}
+.tffc-beta-help{margin:14px 0 0;text-align:center;font:600 10px/1.4 Poppins,Arial,sans-serif;color:#777}
+.tffc-beta-help a,.tffc-beta-help button{border:0;background:transparent;padding:0;color:#666;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.tffc-beta-help a:hover,.tffc-beta-help button:hover{color:#084C61}
+.tffc-beta-help-sep{margin:0 6px;color:#aaa}
+.tin-foil-privacy-actions{display:flex;justify-content:flex-end}
+.tin-foil-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}.tin-foil-result-health{margin:10px 0 14px;padding:11px 13px;border-radius:8px;font:300 13px/1.5 Poppins,Arial,sans-serif}
 .tin-foil-result-health[hidden]{display:none}
 .tin-foil-result-health-item+ .tin-foil-result-health-item{margin-top:9px;padding-top:9px;border-top:1px solid rgba(0,0,0,.12)}
 .tin-foil-result-health-title{font-weight:600;margin-bottom:2px}
@@ -952,6 +958,32 @@ function stateActions(club){
   return buttons;
 }
 
+function tinFoilPrivacyNotice(){
+  let overlay=document.getElementById('tinFoilPrivacyOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='tinFoilPrivacyOverlay';
+    overlay.className='tin-foil-confirm-overlay';
+    overlay.hidden=true;
+    overlay.innerHTML='<div class="tin-foil-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tinFoilPrivacyTitle" aria-describedby="tinFoilPrivacyMessage"><div id="tinFoilPrivacyTitle" class="tin-foil-confirm-title">Privacy</div><div id="tinFoilPrivacyMessage" class="tin-foil-confirm-message">Clubfinder uses your postcode to find nearby clubs. Your Campaign and Challenge progress is stored on your device. See our full Privacy Policy or contact us for details.</div><div class="tin-foil-privacy-actions"><button id="tinFoilPrivacyClose" type="button">Close</button></div></div>';
+    document.body.appendChild(overlay);
+  }
+  const close=document.getElementById('tinFoilPrivacyClose');
+  const previous=document.activeElement;
+  overlay.hidden=false;
+  function finish(){
+    document.removeEventListener('keydown',onKey);
+    overlay.hidden=true;
+    close.onclick=null;overlay.onclick=null;
+    if(previous&&typeof previous.focus==='function')previous.focus();
+  }
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
+  close.onclick=finish;
+  overlay.onclick=e=>{if(e.target===overlay)finish()};
+  document.addEventListener('keydown',onKey);
+  close.focus();
+}
+
 function tinFoilConfirm(message){
   return new Promise(resolve=>{
     let overlay=document.getElementById('tinFoilConfirmOverlay');
@@ -1825,7 +1857,7 @@ async function go(explicitPostcodeSearch=false){
    if(selected&&!showOriginal)tools='<div class="my-journey-bar"><span class="round">My Tin Foil FA Cup Campaign</span><button class="round" type="button" onclick="viewOriginalJourneys()">View Original Campaigns</button><button class="round stats-action" type="button" onclick=\'journeyCertificate(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>'+(saved&&saved.ended?'Stats':'Stats')+'</button><button class="round challenges-launch" type="button" onclick=\'openChallenges(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>Challenges</button>'+(saved&&saved.ended?'<button class="round" type="button" onclick="resumeMyJourney()">Resume My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>':'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>')+'</div>';
    else if(selected&&showOriginal)tools='<div class="my-journey-bar"><button class="round" type="button" onclick="returnToMyJourney()">Return to My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button></div>';
    const ended=mine&&saved&&saved.ended?'<div class="journey-ended"><strong>Campaign completed here.</strong><br>You can still view your certificate or resume this Tin Foil FA Cup Campaign.</div>':'';
-   return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}<h2>${oi===0&&origin.hasCoords?'Nearest: ':''}${esc(origin.name)}</h2><div class="meta">${ground}</div><div class="meta" style="color:${lc};font-weight:600">${loc}</div>${carrierHtml(j)}<div class="fixture">${tieLine}<div>${esc(df.dateLabel)} • ${esc(df.kickoff)} • ${esc(df.venue.ground||'Venue TBC')} • ${esc(df.venue.postcode||'Postcode TBC')}</div></div>${stateHtml(c)}${previousRoundsHtml(j)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div></div>`;
+   return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}<h2>${oi===0&&origin.hasCoords?'Nearest: ':''}${esc(origin.name)}</h2><div class="meta">${ground}</div><div class="meta" style="color:${lc};font-weight:600">${loc}</div>${carrierHtml(j)}<div class="fixture">${tieLine}<div>${esc(df.dateLabel)} • ${esc(df.kickoff)} • ${esc(df.venue.ground||'Venue TBC')} • ${esc(df.venue.postcode||'Postcode TBC')}</div></div>${stateHtml(c)}${previousRoundsHtml(j)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div>${mine&&selected&&!showOriginal?'<div class="tffc-beta-help" aria-label="BETA support links"><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><button type="button" onclick="tinFoilPrivacyNotice()">Privacy</button></div>':''}</div>`;
   }).join('');
   results.style.display='block';const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';status.textContent=selected&&!showOriginal?'Your Tin Foil FA Cup Campaign. Dates & times may change. Always check before travelling':top.length+' Tin Foil FA Cup Campaigns found for '+u.postcode+'. Dates & times may change. Always check before travelling';
  }catch(e){status.textContent=e.message||'Unable to complete the search.'}finally{btn.disabled=false}
