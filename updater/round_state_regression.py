@@ -65,6 +65,15 @@ except ValueError:
 proper_pen = classify_observation(proper, obs("2026-11-07", hs=1, ass=1, winner="Beta United", decision="penalties"), [])["result"]
 require(proper_pen["round"] == "First Round Proper", "proper-round penalty result must not become a replay")
 
+# A terminal score explicitly voided by the FA with a full replay order is the
+# one guarded exception: the later completed match is replay ancestry, not a
+# contradictory second original result.
+voided = dict(r["result"])
+voided.update({"status": "VOID", "winner": "", "decision": "voided-replay-ordered"})
+fa_replay = classify_observation(fixture(), obs("2026-09-29", home="Beta United", away="Alpha Town", hs=2, ass=0), [voided])["result"]
+require(fa_replay["round"] == "Second Round Qualifying Replay", "explicit FA void/replay order must create replay ancestry")
+require(fa_replay["winner"] == "Beta United", "FA-ordered replay score must determine the new terminal winner")
+
 # Once a tie has a terminal result, a later different result is contradictory.
 terminal = r["result"]
 try:
@@ -80,4 +89,5 @@ print("Abandoned/postponed -> rearranged original: PASS")
 print("Walkover/award without invented score: PASS")
 print("Qualifying replay penalties: PASS")
 print("Competition Proper no-replay rule: PASS")
+print("FA-ordered replay after void result: PASS")
 print("Terminal chronology conflict fails closed: PASS")
