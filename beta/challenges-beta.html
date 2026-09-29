@@ -1165,6 +1165,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .tffc-confirm-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 #tffcConfirmCancel{background:#fff;color:#084C61}
 #tffcConfirmOk{background:#084C61;color:#FAFAFA}
+.tffc-privacy-actions{display:flex;justify-content:flex-end}
+.tffc-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1255,6 +1257,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
       <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a>
       <span class="beta-help-sep" aria-hidden="true">·</span>
       <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
+      <span class="beta-help-sep" aria-hidden="true">·</span>
+      <button class="beta-help-link" type="button" id="challengePrivacyLink">Privacy</button>
     </div>
   </div>
 
@@ -1667,6 +1671,23 @@ function openAt(i=0, showBack=false) {
 function close() { tinFoilReturnToClubfinder(); }
 
 
+function tinFoilPrivacyNotice(){
+  let privacyOverlay=document.getElementById('tffcPrivacyOverlay');
+  if(!privacyOverlay){
+    privacyOverlay=document.createElement('div');
+    privacyOverlay.id='tffcPrivacyOverlay';
+    privacyOverlay.className='tffc-confirm-overlay';
+    privacyOverlay.hidden=true;
+    privacyOverlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcPrivacyTitle" aria-describedby="tffcPrivacyMessage"><div id="tffcPrivacyTitle" class="tffc-confirm-title">Privacy</div><div id="tffcPrivacyMessage" class="tffc-confirm-message">Clubfinder uses your postcode to find nearby clubs. Your Campaign and Challenge progress is stored on your device. See our full Privacy Policy or contact us for details.</div><div class="tffc-privacy-actions"><button id="tffcPrivacyClose" type="button">Close</button></div></div>';
+    document.body.appendChild(privacyOverlay);
+  }
+  const closeButton=document.getElementById('tffcPrivacyClose'),previous=document.activeElement;
+  privacyOverlay.hidden=false;
+  function finish(){document.removeEventListener('keydown',onKey);privacyOverlay.hidden=true;closeButton.onclick=null;privacyOverlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus()}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
+  closeButton.onclick=finish;privacyOverlay.onclick=e=>{if(e.target===privacyOverlay)finish()};document.addEventListener('keydown',onKey);closeButton.focus();
+}
+
 function tinFoilConfirm(message){
   return new Promise(resolve=>{
     let overlay=document.getElementById('tffcConfirmOverlay');
@@ -1692,6 +1713,9 @@ function tinFoilReturnToClubfinder(){
   try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
   window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
 }
+
+const challengePrivacyLink=$("challengePrivacyLink");
+if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
 
 $("exitBtn").onclick=(e)=>{
   e.preventDefault();
