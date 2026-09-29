@@ -67,7 +67,19 @@ def current_location(rows):
 
 text=replace_array(text,"ELIGIBLE",eligible)
 text=replace_array(text,"GROUNDS",current_location)
-text=replace_array(text,"LAW2_ORIGIN_LOCATIONS",current_location)
+
+# LAW2_ORIGIN_LOCATIONS is supplemental: Gloucester may legitimately be absent
+# because it already has a canonical GROUNDS record. Update it only if exactly
+# one Gloucester row exists; never require or invent a duplicate.
+s,e=locate(text,"LAW2_ORIGIN_LOCATIONS")
+law2=json.loads(text[s:e])
+law2_matches=[r for r in law2 if norm(r.get("name") or r.get("club"))=="gloucester city"]
+if len(law2_matches)>1:
+    raise SystemExit(f"ABORT: ambiguous Gloucester City supplemental locations: {len(law2_matches)}")
+if len(law2_matches)==1:
+    current_location(law2)
+    text=text[:s]+json.dumps(law2,ensure_ascii=False,separators=(",",":")).replace("</","<\\/")+text[e:]
+
 P.write_text(text,encoding="utf-8")
 print("GLOUCESTER CURRENT IDENTITY: Gloucester City AFC")
 print("GLOUCESTER CURRENT GROUND: The KMM Energy Stadium • GL2 5HD")
