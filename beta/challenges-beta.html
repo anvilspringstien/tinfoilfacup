@@ -866,6 +866,15 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#17130f;
   font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;overflow-wrap:anywhere
 }
+.campaign-truth .name-pigeon-action{
+  width:100%;min-width:0;min-height:36px;padding:6px 9px;box-sizing:border-box;
+  border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#084c61;
+  font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;text-align:left;cursor:pointer;
+  text-decoration:underline;text-underline-offset:2px
+}
+.campaign-truth .name-pigeon-action:hover,.campaign-truth .name-pigeon-action:focus-visible{
+  background:#fffaf0;outline:2px solid rgba(8,76,97,.28);outline-offset:1px
+}
 .campaign-truth .miles-field{display:block;padding:3px;background:#080705;border-color:rgba(255,255,255,.12)}
 .truth-mile-value{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
 .truth-odo{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;height:30px}
@@ -1774,7 +1783,14 @@ function renderSimulatorCounters() {
 function renderCampaignTruthFrame() {
 $("campaignRound").value=String(state.campaignRound);
 $("truthCallSign").textContent=campaignIdentity.callSign||"—";
-$("truthPigeonName").textContent=campaignIdentity.pigeonName||"—";
+const pigeonNameField=$("truthPigeonName");
+if(campaignIdentity.pigeonName){
+  pigeonNameField.textContent=campaignIdentity.pigeonName;
+}else{
+  pigeonNameField.innerHTML='<button type="button" class="name-pigeon-action" id="namePigeonInClubfinder">Name Your Pigeon in Clubfinder</button>';
+  const nameButton=$("namePigeonInClubfinder");
+  if(nameButton)nameButton.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilReturnToClubfinder();};
+}
 const truthMiles=Math.max(0,Math.round(state.pigeonMiles));
 $("truthPigeonMiles").textContent=truthMiles.toLocaleString("en-GB");
 $("truthPigeonMilesOdometer").innerHTML=String(Math.min(9999,truthMiles)).padStart(4,"0").split("").map(n=>`<span>${n}</span>`).join("");
