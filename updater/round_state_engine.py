@@ -191,12 +191,22 @@ def classify_observation(fixture, observation, history=None):
         and is_draw(row)
         and _earlier(row, obs)
     ]
+    # Rare FA-directed full replays can follow a match that originally had a
+    # decisive score but was subsequently voided.  Treat an explicit,
+    # persisted replay-order disposition as replay ancestry; never infer this
+    # state from a later contradictory score alone.
+    earlier_voided_replay_orders = [
+        row for row in relevant
+        if str(row.get("status") or "").upper() in {"VOID", "VOIDED"}
+        and str(row.get("decision") or "").lower() == "voided-replay-ordered"
+        and _earlier(row, obs)
+    ]
     earlier_terminal = [row for row in relevant if is_terminal(row) and _earlier(row, obs)]
 
     if earlier_terminal:
         raise ValueError("later result observed after tie already had a terminal outcome")
 
-    is_replay = bool(earlier_draws)
+    is_replay = bool(earlier_draws or earlier_voided_replay_orders)
     out_round = round_name + " Replay" if is_replay else round_name
 
     if status in AWARD_STATUSES:
