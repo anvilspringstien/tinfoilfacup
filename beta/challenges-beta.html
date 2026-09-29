@@ -1844,7 +1844,7 @@ $("campaignRound").onchange=()=>{
   applySimulationChange(`Campaign Round set to ${label}.`);
 };
 $("reset").onclick=async ()=>{
-  if(await tinFoilConfirm("Hard Reset will clear your Challenge Deck progress and BETA simulator data from this browser. Your saved Clubfinder Campaign will stay safe. Continue?")) {
+  if(await tinFoilConfirm("Hard Reset will clear Simulated Progress Only. Your Clubfinder Campaign will stay safe. Continue?")) {
     localStorage.removeItem(STORE_KEY); state=blankState(); applyClubfinderCampaignTruth(); awardCampaignChallenges(); save(); renderStats(); render();
   }
 };
