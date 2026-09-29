@@ -31,7 +31,19 @@ new="""function canonicalResultWinner(r){\n  if(!r)return '';\n  const hs=Number
 if old in text:
     text=text.replace(old,new,1)
 elif new not in text:
-    raise SystemExit('ABORT: canonicalResultWinner boundary not found')
+    # Newer guarded form may additionally suppress an explicitly voided result.
+    # Preserve that stronger state as long as decisive scores still precede the
+    # ordinary draw-replay fallback.
+    fn_start=text.find("function canonicalResultWinner(r){")
+    fn_end=text.find("function sameSemanticResult",fn_start)
+    fn=text[fn_start:fn_end] if fn_start>=0 and fn_end>fn_start else ""
+    if not (
+        "voided-replay-ordered" in fn
+        and "status==='VOID'" in fn
+        and "Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as" in fn
+        and "if(r.decision==='draw-replay')return '';" in fn
+    ):
+        raise SystemExit('ABORT: canonicalResultWinner boundary not found')
 PATCH.write_text(text,encoding='utf-8')
 
 # 3) This repair script must never revert newer regression assertions.
