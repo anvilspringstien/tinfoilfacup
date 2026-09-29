@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json,re
+import json,re,math
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -34,12 +34,36 @@ def require(ok,msg):
 text=HTML.read_text(encoding="utf-8")
 eligible=locate(text,"ELIGIBLE")
 grounds=locate(text,"GROUNDS")
+supplemental=locate(text,"LAW2_ORIGIN_LOCATIONS")
 gclubs=[x for x in eligible if norm(x.get("name"))=="gloucester city"]
 require(len(gclubs)==1 and gclubs[0]["name"]=="Gloucester City AFC","current display identity is not Gloucester City AFC")
 gg=[x for x in grounds if norm(x.get("name") or x.get("club"))=="gloucester city"]
 require(len(gg)==1,"Gloucester current ground is missing/ambiguous")
 require(gg[0].get("ground")=="The KMM Energy Stadium" and gg[0].get("postcode")=="GL2 5HD","Gloucester current ground/postcode drifted")
 require(gg[0].get("verification")=="verified","Gloucester current ground is not verified")
+
+# Reproduce the user's GL1 1AJ canary from its published postcode centroid.
+# Gloucester City need not be the nearest club, but it must appear in the
+# nearest three under its current AFC identity and current KMM ground record.
+def hav_miles(a,b):
+    r=3958.7613
+    p1,p2=math.radians(a[0]),math.radians(b[0])
+    dp=math.radians(b[0]-a[0]); dl=math.radians(b[1]-a[1])
+    h=math.sin(dp/2)**2+math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+    return 2*r*math.atan2(math.sqrt(h),math.sqrt(1-h))
+locations={norm(x.get("name") or x.get("club")):x for x in supplemental}
+locations.update({norm(x.get("name") or x.get("club")):x for x in grounds})
+origin=(51.861614,-2.221328)
+ranked=[]
+for club in eligible:
+    g=locations.get(norm(club.get("name")))
+    if not g: continue
+    try: point=(float(g.get("lat")),float(g.get("lon")))
+    except (TypeError,ValueError): continue
+    ranked.append((hav_miles(origin,point),club.get("name"),g))
+ranked.sort(key=lambda x:x[0])
+top3=ranked[:3]
+require(any(name=="Gloucester City AFC" and g.get("postcode")=="GL2 5HD" for _,name,g in top3),"GL1 1AJ nearest-three canary does not return Gloucester City AFC at GL2 5HD")
 
 m=re.search(r"const EMBEDDED_COMPETITION_DATA=(\{.*?\});\s*/\* TIN_FOIL_EMBEDDED_COMPETITION_END \*/",text,re.S)
 require(bool(m),"embedded competition snapshot missing")
@@ -68,3 +92,4 @@ print("19 September result: VOIDED / replay ordered")
 print("29 September replay: Mulbarton Wanderers 2-0 Woodford Town")
 print("3 October: Mulbarton Wanderers v Gloucester City AFC")
 print("Gloucester current ground: The KMM Energy Stadium • GL2 5HD")
+print("GL1 1AJ nearest three:", " | ".join(name for _,name,_ in top3))
