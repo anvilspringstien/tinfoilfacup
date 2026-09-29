@@ -892,6 +892,15 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   .campaign-truth .label{min-height:32px;padding:5px 5px;font-size:8px;white-space:nowrap}
   .campaign-truth strong{min-height:32px;padding:5px 7px;font-size:10px}
 }
+@media (max-height:500px) and (orientation:landscape){
+  .campaign-truth{width:min(620px,calc(100% - 20px));padding:10px}
+  .campaign-truth-line{grid-template-columns:150px minmax(0,1fr);gap:6px;min-height:34px}
+  .campaign-truth-line.two{grid-template-columns:150px minmax(0,3fr) minmax(0,2fr);gap:6px}
+  .campaign-truth .label,.campaign-truth strong,.campaign-truth .name-pigeon-action{min-height:34px;padding:5px 7px}
+  .campaign-truth .label{font-size:8px;white-space:nowrap}
+  .campaign-truth strong{font-size:10px}
+  #truthCallSign{white-space:nowrap}
+}
 </style>
 <!-- v0.10.23 — corrected reverse/back artwork mapping for Mats 16, 18, 20–23; no Challenge logic changed -->
 <!-- TFFAC Challenge Deck v0.10.30 | Audit artwork locked | Feedback field between mat and console -->
