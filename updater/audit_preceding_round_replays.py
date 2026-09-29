@@ -66,8 +66,10 @@ def audit(data, source_html, live_html="", source_url=""):
     )
     history = scan.history_rows(data)
     published_history = list(history)  # Do not mistake in-memory candidates for published results.
+    known_pairs={pair_key(f) for f in known}
     exceptions=[x for x in exceptional_dispositions()
-                if x.get("original",{}).get("round")==preceding]
+                if x.get("original",{}).get("round")==preceding
+                and pair_key(x.get("original") or {}) in known_pairs]
     # Read-only overlay: the canonical file may still contain the original FT
     # result while a reviewed FA disposition awaits publication.  Reclassify
     # only the exact ledger-matched row in memory so the audit can test the
