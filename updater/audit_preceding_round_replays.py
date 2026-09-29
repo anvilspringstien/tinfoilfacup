@@ -15,6 +15,26 @@ import auto_round_results as scan
 from round_state_engine import classify_observation, pair_key, base_round
 
 ROOT = Path(__file__).resolve().parents[1]
+EXCEPTION_LEDGER = ROOT / "updater" / "exceptional-replay-dispositions.json"
+
+def exceptional_dispositions():
+    if not EXCEPTION_LEDGER.exists():
+        return []
+    payload=json.loads(EXCEPTION_LEDGER.read_text(encoding="utf-8"))
+    return [x for x in (payload.get("dispositions") or [])
+            if x.get("verification_state")=="human-reviewed-exception"
+            and x.get("disposition")=="voided-replay-ordered"
+            and x.get("disposition_source_url")]
+
+def same_original(row, expected):
+    return (
+        base_round(row.get("round"))==expected.get("round")
+        and str(row.get("date") or "")==str(expected.get("date") or "")
+        and pair_key(row)==pair_key(expected)
+        and row.get("home_score")==expected.get("home_score")
+        and row.get("away_score")==expected.get("away_score")
+    )
+
 def archived_replay_source(preceding):
     """Explicit replay endpoint; base_round() deliberately strips Replay."""
     base_url = scan.fwp_round_url(preceding)
@@ -46,6 +66,25 @@ def audit(data, source_html, live_html="", source_url=""):
     )
     history = scan.history_rows(data)
     published_history = list(history)  # Do not mistake in-memory candidates for published results.
+    exceptions=[x for x in exceptional_dispositions()
+                if x.get("original",{}).get("round")==preceding]
+    # Read-only overlay: the canonical file may still contain the original FT
+    # result while a reviewed FA disposition awaits publication.  Reclassify
+    # only the exact ledger-matched row in memory so the audit can test the
+    # ordered replay without rewriting history or competition.json.
+    if exceptions:
+        overlaid=[]
+        for row in history:
+            replacement=dict(row)
+            for item in exceptions:
+                if same_original(row,item["original"]):
+                    replacement["status"]="VOID"
+                    replacement["decision"]="voided-replay-ordered"
+                    replacement["winner"]=""
+                    replacement["disposition_source_url"]=item["disposition_source_url"]
+                    break
+            overlaid.append(replacement)
+        history=overlaid
     results, blocked, duplicates, events = [], [], [], []
     for item in observations:
         obs = item["observation"]
@@ -102,6 +141,22 @@ def audit(data, source_html, live_html="", source_url=""):
                 "source_observed": pair in observed_pairs,
                 "reason": "scheduled replay lacks published terminal chronology"
             })
+    # Exceptional full replays are not ordinary draw replays and therefore
+    # may not exist in data["replays"] yet. Include their reviewed ledger rows
+    # in the same independent completeness set.
+    for item in exceptions:
+        replay=item.get("replay_result") or {}
+        pair=pair_key(replay)
+        if not all(pair) or pair in seen_scheduled or pair in recorded_pairs:
+            continue
+        seen_scheduled.add(pair)
+        scheduled_replay_gaps.append({
+            "home": replay.get("home"), "away": replay.get("away"),
+            "date": replay.get("date"),
+            "source_observed": pair in observed_pairs,
+            "reason": "reviewed exceptional replay lacks published terminal chronology"
+        })
+
     return {"active_round": current, "archived_round": preceding,
             "archived_ties": len(known), "observations": len(observations),
             "replay_candidates": results, "already_recorded": len(duplicates),
