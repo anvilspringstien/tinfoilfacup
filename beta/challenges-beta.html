@@ -1323,13 +1323,14 @@ const CLUBFINDER_BRIDGE_KEY = "tffc.clubfinderCampaign.v1";
 const STORE_VERSION = 1;
 
 function blankState() {
-  return {version:STORE_VERSION, accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
+  return {version:STORE_VERSION, campaignKey:"", accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
 }
 function loadState() {
   try {
     const x = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
     if (!x || x.version !== STORE_VERSION || typeof x.accepted !== "object" || typeof x.completed !== "object") return blankState();
     x.records ||= {};
+    x.campaignKey = typeof x.campaignKey==="string" ? x.campaignKey : "";
     // Backwards-compatible migration from the prototype's old journeyTies counter.
     x.tiesPlayed = Number.isFinite(x.tiesPlayed) ? x.tiesPlayed : (Number.isFinite(x.journeyTies) ? x.journeyTies : 0);
     delete x.journeyTies;
@@ -1379,9 +1380,25 @@ function matchingCampaignIdentityBackup(truth,backup){
   const sameSelection=!truth.selectedAt||!backup||!backup.selectedAt||String(backup.selectedAt)===String(truth.selectedAt);
   return !!(sameOrigin&&sameSelection);
 }
+function challengeCampaignKey(truth){
+  const origin=String((truth&&truth.originName)||"").trim();
+  const selected=String((truth&&truth.selectedAt)||"").trim();
+  const callSign=String((truth&&truth.callSign)||"").trim();
+  return [origin,selected,callSign].join("|");
+}
+function ensureChallengeStateMatchesCampaign(truth){
+  const nextKey=challengeCampaignKey(truth);
+  if(!nextKey)return false;
+  if(state.campaignKey && state.campaignKey!==nextKey){
+    state=blankState();
+  }
+  state.campaignKey=nextKey;
+  return true;
+}
 function applyClubfinderCampaignTruth(){
   const truth=readChallengeStorageJSON(CLUBFINDER_BRIDGE_KEY);
   if(!truth||truth.source!=="Clubfinder v7.6") return false;
+  ensureChallengeStateMatchesCampaign(truth);
   state.tiesPlayed=normalizeBridgeProgress(truth.tiesPlayed);
   state.awayTies=normalizeBridgeProgress(truth.awayTies);
   state.pigeonMiles=normalizeBridgeProgress(truth.pigeonMiles);
