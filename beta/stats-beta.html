@@ -109,5 +109,16 @@ body{
       <span>3</span><span>7</span><span>1</span>
     </div>
   </main>
+  <script>
+  (()=> {
+    const rollers=[...document.querySelectorAll('.prep-rollers span')];
+    if(!rollers.length || (window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+    let tick=0;
+    window.setInterval(()=>{
+      tick=(tick+1)%10;
+      rollers.forEach((roller,index)=>{roller.textContent=String((tick+(index*3))%10);});
+    },180);
+  })();
+  </script>
 </body>
 </html>
