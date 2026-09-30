@@ -13,6 +13,7 @@ on:
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
       - 'tests/test_beta_competition_loader.js'
+      - 'tests/test_beta_first_keystroke_prefetch.js'
       - '.github/workflows/beta-identity-smoke.yml'
   push:
     paths:
@@ -25,6 +26,7 @@ on:
       - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
+      - 'tests/test_beta_first_keystroke_prefetch.js'
       - 'tests/test_beta_competition_loader.js'
       - '.github/workflows/beta-identity-smoke.yml'
   workflow_dispatch:
@@ -46,6 +48,8 @@ jobs:
         run: node updater/beta_campaign_identity_regression.js
       - name: Regress live competition, fallback and unavailable loading
         run: node tests/test_beta_competition_loader.js
+      - name: Regress first-keystroke competition prefetch
+        run: node tests/test_beta_first_keystroke_prefetch.js
       - name: Regress BETA verified replay and conditional draw resolution
         run: node tests/test_beta_verified_conditional_replay.js
       - name: Regress actual Thame next fixture and Exmouth fail-closed
