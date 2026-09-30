@@ -8,6 +8,7 @@ on:
       - 'tests/test_beta_verified_conditional_replay.js'
       - 'tests/test_beta_thame_next_fixture.js'
       - 'tests/test_beta_holmesdale_campaign.js'
+      - 'tests/test_beta_gloucester_current_identity.js'
       - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
@@ -51,6 +52,8 @@ jobs:
         run: node tests/test_beta_thame_next_fixture.js
       - name: Regress Holmesdale merger journey, verified venues and Pigeon Miles
         run: node tests/test_beta_holmesdale_campaign.js
+      - name: Regress Gloucester current identity, verified ground and GL1 canary
+        run: node tests/test_beta_gloucester_current_identity.js
       - name: Regress other FA draw abbreviations against BETA
         run: node tests/test_beta_conditional_draw_alias.js
       - name: Regress BETA replay kick-off, shootout display and Stats accounting
