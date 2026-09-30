@@ -37,6 +37,15 @@ for(const token of [
   "window.addEventListener('pageshow',tinFoilRemoveChallengesPrep)"
 ]) assert(helper.includes(token),'Challenges preparation contract missing: '+token);
 
+
+const navBlock=html.slice(openStart,nav+80);
+assert(navBlock.includes("tinFoilRemoveChallengesPrep();"),
+  'Challenges loader must be removed before navigating away');
+assert(navBlock.indexOf("tinFoilRemoveChallengesPrep();")<navBlock.indexOf("window.location.href='challenges-beta.html';"),
+  'Challenges loader cleanup must happen before navigation');
+assert(navBlock.includes("raf(resolve);"),
+  'Challenges must yield a paint frame after loader cleanup so browser history snapshots the Campaign view');
+
 assert(html.includes("window.location.href='challenges-beta.html';"),
   'Challenges must still use the existing same-tab route');
 assert(html.includes("sessionStorage.setItem('tffc.challengeOrigin','clubfinder-beta')"),
