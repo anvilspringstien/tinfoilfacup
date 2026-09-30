@@ -1598,6 +1598,10 @@ function tinFoilBuildChallengeBridgeRecord(origin,journey,crumbs,saved,progress,
  };
 }
 
+function tinFoilRemoveChallengesPrep(){
+ const old=document.getElementById('tffc-challenges-prep');
+ if(old)old.remove();
+}
 function tinFoilShowChallengesPrep(){
  const old=document.getElementById('tffc-challenges-prep');
  if(old)return old;
@@ -1606,15 +1610,9 @@ function tinFoilShowChallengesPrep(){
  wrap.setAttribute('role','status');
  wrap.setAttribute('aria-live','polite');
  wrap.setAttribute('aria-busy','true');
- wrap.innerHTML='<style>#tffc-challenges-prep{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:24px;background:#ededed;color:#084c61;font-family:Arial,sans-serif}#tffc-challenges-prep *{box-sizing:border-box}#tffc-challenges-prep .prep-card{width:min(420px,calc(100vw - 40px));padding:28px 24px 26px;border:1px solid #d7d2c8;border-radius:10px;background:#fafafa;box-shadow:0 12px 28px rgba(0,0,0,.12);text-align:center}#tffc-challenges-prep .prep-kicker{margin:0 0 12px;font:800 11px/1 Arial,sans-serif;letter-spacing:.14em;color:#6b6257}#tffc-challenges-prep .prep-title{margin:0;font:800 19px/1.15 Arial,sans-serif;letter-spacing:.02em;color:#084c61}#tffc-challenges-prep .prep-copy{margin:12px auto 18px;max-width:300px;font:600 13px/1.4 Arial,sans-serif;color:#4a4742}#tffc-challenges-prep .prep-rollers{display:flex;justify-content:center;gap:6px}#tffc-challenges-prep .prep-rollers span{width:34px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:#111;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),#f4efe3;box-shadow:inset 0 0 6px rgba(71,52,25,.22);font:900 24px/1 Georgia,"Times New Roman",serif}</style><main class="prep-card"><div class="prep-kicker">TIN FOIL FA CUP</div><h1 class="prep-title">Preparing Your Challenges…</h1><p class="prep-copy">Checking your Campaign and loading the Challenge Deck</p><div class="prep-rollers" aria-hidden="true"><span>3</span><span>7</span><span>1</span></div></main>';
+ const digits='<span class="prep-track">'+Array.from({length:20},(_,i)=>'<b>'+String(i%10)+'</b>').join('')+'</span>';
+ wrap.innerHTML='<style>#tffc-challenges-prep{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:24px;background:#ededed;color:#084c61;font-family:Arial,sans-serif}#tffc-challenges-prep *{box-sizing:border-box}#tffc-challenges-prep .prep-card{width:min(420px,calc(100vw - 40px));padding:28px 24px 26px;border:1px solid #d7d2c8;border-radius:10px;background:#fafafa;box-shadow:0 12px 28px rgba(0,0,0,.12);text-align:center}#tffc-challenges-prep .prep-kicker{margin:0 0 12px;font:800 11px/1 Arial,sans-serif;letter-spacing:.14em;color:#6b6257}#tffc-challenges-prep .prep-title{margin:0;font:800 19px/1.15 Arial,sans-serif;letter-spacing:.02em;color:#084c61}#tffc-challenges-prep .prep-copy{margin:12px auto 18px;max-width:300px;font:600 13px/1.4 Arial,sans-serif;color:#4a4742}#tffc-challenges-prep .prep-rollers{display:flex;justify-content:center;gap:6px}#tffc-challenges-prep .prep-roller{width:34px;height:42px;overflow:hidden;border-radius:4px;color:#111;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),#f4efe3;box-shadow:inset 0 0 6px rgba(71,52,25,.22)}#tffc-challenges-prep .prep-track{display:block;will-change:transform;animation:tffcChallengeRoll 1.8s linear infinite}#tffc-challenges-prep .prep-roller:nth-child(2) .prep-track{animation-duration:1.55s;animation-delay:-.4s}#tffc-challenges-prep .prep-roller:nth-child(3) .prep-track{animation-duration:1.95s;animation-delay:-.8s}#tffc-challenges-prep .prep-track b{height:42px;display:flex;align-items:center;justify-content:center;font:900 24px/42px Georgia,"Times New Roman",serif}@keyframes tffcChallengeRoll{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-420px,0)}}@media (prefers-reduced-motion:reduce){#tffc-challenges-prep .prep-track{animation:none;transform:translateY(-126px)}}</style><main class="prep-card"><div class="prep-kicker">TIN FOIL FA CUP</div><h1 class="prep-title">Preparing Your Challenges…</h1><p class="prep-copy">Checking your Campaign and loading the Challenge Deck</p><div class="prep-rollers" aria-hidden="true"><span class="prep-roller">'+digits+'</span><span class="prep-roller">'+digits+'</span><span class="prep-roller">'+digits+'</span></div></main>';
  document.body.appendChild(wrap);
- const rollers=[...wrap.querySelectorAll('.prep-rollers span')];
- const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- if(rollers.length&&!reduced){
-   let t=0;
-   const timer=setInterval(()=>{t=(t+1)%10;rollers.forEach((x,i)=>x.textContent=String((t+i*3)%10))},180);
-   wrap.dataset.timer=String(timer);
- }
  return wrap;
 }
 async function tinFoilPaintChallengesPrep(){
@@ -1624,6 +1622,8 @@ async function tinFoilPaintChallengesPrep(){
    raf(()=>raf(resolve));
  });
 }
+window.addEventListener('pagehide',tinFoilRemoveChallengesPrep);
+window.addEventListener('pageshow',tinFoilRemoveChallengesPrep);
 
 async function openChallenges(origin){
  await tinFoilPaintChallengesPrep();
