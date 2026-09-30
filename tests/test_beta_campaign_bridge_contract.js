@@ -270,7 +270,9 @@ function store(deck,bridge,identity){
     assert.equal(app.read('state.pigeonMiles'),75,'Invalid bridge overwrote saved mileage');
     assert.equal(app.read('Boolean(state.completed["01"])'),true,
       'Invalid bridge erased earned trophy');
-    assert.equal(app.nodes.truthPigeonName.textContent,'—',
+    assert.match(app.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+      'Invalid bridge should fall back to safe Clubfinder naming');
+    assert.doesNotMatch(app.nodes.truthPigeonName.innerHTML,/Wrong Origin|Old Campaign|Other Pigeon/,
       'Invalid bridge invented a campaign identity');
   }
 }
