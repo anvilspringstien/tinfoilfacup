@@ -158,13 +158,17 @@ function store(deck,bridge,identity){
     'Matching backup did not restore the full Pigeon Name');
   const wrongOrigin=boot(store(baseSave(),truth({pigeonName:''}),
     backup({originName:'Wimborne Town FC',pigeonName:'Wrong Origin'})));
-  assert.equal(wrongOrigin.nodes.truthPigeonName.textContent,'—',
+  assert.match(wrongOrigin.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+    'Missing name did not offer the safe Clubfinder naming action');
+  assert.doesNotMatch(wrongOrigin.nodes.truthPigeonName.innerHTML,/Wrong Origin/,
     'Different origin pigeon identity leaked into current campaign');
   assert.equal(wrongOrigin.nodes.truthCallSign.textContent,CALL,
     'Different-origin backup replaced current verified Call Sign');
   const wrongSelection=boot(store(baseSave(),truth({pigeonName:''}),
     backup({selectedAt:'2026-09-20T08:00:00.000Z',pigeonName:'Old Campaign'})));
-  assert.equal(wrongSelection.nodes.truthPigeonName.textContent,'—',
+  assert.match(wrongSelection.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+    'Missing name did not offer the safe Clubfinder naming action');
+  assert.doesNotMatch(wrongSelection.nodes.truthPigeonName.innerHTML,/Old Campaign/,
     'Old selection pigeon identity leaked into new campaign');
   const bridgeWins=boot(store(baseSave(),truth(),
     backup({originName:'Wimborne Town FC',pigeonName:'Wrong Origin'})));
