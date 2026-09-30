@@ -1622,8 +1622,10 @@ async function tinFoilPaintChallengesPrep(){
    raf(()=>raf(resolve));
  });
 }
-window.addEventListener('pagehide',tinFoilRemoveChallengesPrep);
-window.addEventListener('pageshow',tinFoilRemoveChallengesPrep);
+if(window&&typeof window.addEventListener==='function'){
+ window.addEventListener('pagehide',tinFoilRemoveChallengesPrep);
+ window.addEventListener('pageshow',tinFoilRemoveChallengesPrep);
+}
 
 async function openChallenges(origin){
  await tinFoilPaintChallengesPrep();
