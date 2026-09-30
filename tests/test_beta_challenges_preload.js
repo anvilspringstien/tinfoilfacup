@@ -28,7 +28,11 @@ for(const token of [
   "class=\"prep-rollers\"",
   "aria-live','polite'",
   "prefers-reduced-motion",
-  "requestAnimationFrame"
+  "requestAnimationFrame",
+  "@keyframes tffcChallengeRoll",
+  "translate3d",
+  "window.addEventListener('pagehide',tinFoilRemoveChallengesPrep)",
+  "window.addEventListener('pageshow',tinFoilRemoveChallengesPrep)"
 ]) assert(helper.includes(token),'Challenges preparation contract missing: '+token);
 
 assert(html.includes("window.location.href='challenges-beta.html';"),
@@ -39,4 +43,8 @@ assert(html.includes('tinFoilSaveClubfinderReturnSnapshot();'),
   'Clubfinder return snapshot changed');
 
 console.log('BETA CHALLENGES PRELOAD CARD: PASS');
-console.log('immediate prep paint | existing bridge work | same route/return semantics');
+assert(!helper.includes('setInterval('),'Challenges rollers must not depend on the busy JS main thread');
+assert(helper.includes("function tinFoilRemoveChallengesPrep(){"),'History cleanup helper missing');
+
+console.log('BETA CHALLENGES PRELOAD CARD: PASS');
+console.log('immediate prep paint | compositor rollers | bfcache cleanup | same route/return semantics');
