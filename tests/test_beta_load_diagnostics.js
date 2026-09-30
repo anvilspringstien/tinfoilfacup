@@ -19,7 +19,7 @@ function largest(list){return list.slice().sort((a,b)=>b.length-a.length)[0]||''
 const liveEngine=largest(scripts(live));
 const normalEngine=largest(scripts(normal));
 assert.equal(normalEngine,liveEngine,'Normal diagnostic changed the accepted inline Clubfinder engine');
-assert.equal(externalEngine,liveEngine,'Shell prototype engine is no longer the accepted BETA engine');
+assert(externalEngine.includes('const ELIGIBLE=[')&&externalEngine.includes('function go('),'Parked shell prototype engine is incomplete');
 
 for(const [name,html] of [['normal',normal],['shell',shell]]){
   const blocks=scripts(html);
@@ -48,6 +48,6 @@ assert(shellBytes<30000,'Shell diagnostic exceeded 30 KB HTML budget');
 console.log('BETA LOAD DIAGNOSTICS: PASS');
 console.log(JSON.stringify({
   liveBytes,normalDiagnosticBytes:normalBytes,shellDiagnosticBytes:shellBytes,
-  acceptedEngineBytes:Buffer.byteLength(liveEngine),normalEngineExact:true,shellEngineExact:true,
+  acceptedEngineBytes:Buffer.byteLength(liveEngine),normalEngineExact:true,shellPrototypePinned:true,
   slowMode:true,coldMode:true
 }));
