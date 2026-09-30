@@ -86,5 +86,16 @@ assert.match(html,/• Shootouts Won: '\+penaltyWins/);
 assert.match(html,/• Shootouts Lost: '\+penaltyLosses/);
 assert.match(html,/jr-winner[^;]*tinFoilBetaPenaltyResultNote\(r\)/s);
 assert.match(html,/const FALLBACK_COMPETITION_DATA_URL='\.\/competition-fallback\.json'/);
+
+function requireVoidReplayPresentation(){
+  const html=fs.readFileSync(BETA,'utf8');
+  must(html.includes("function tinFoilBetaResultVoided(r){"),'void-result helper missing');
+  must(html.includes("function tinFoilBetaVerifiedMulbartonReplay(r){"),'Mulbarton replay identity guard missing');
+  must(html.includes("tinFoilBetaVerifiedWimborneReplay(r)||tinFoilBetaVerifiedMulbartonReplay(r)"),'verified 19:45 replay override missing');
+  must(html.includes("if(tinFoilBetaResultVoided(r))return '';"),'Stats winner must fail closed for voided result');
+  must(html.includes("if(tinFoilBetaResultVoided(r))x+=' • Result voided; replay ordered'"),'Stats fixture must label voided result');
+}
+requireVoidReplayPresentation();
+console.log('BETA VOIDED REPLAY/STATS PRESENTATION: PASS');
 console.log('BETA WESTON REPLAY/STATS REGRESSION: PASS');
 console.log('19:45 replay / shootout display / canonical custody / 2 draws and separate shootout loss: PASS');
