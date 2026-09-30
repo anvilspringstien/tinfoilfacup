@@ -7,6 +7,7 @@ const vm=require('node:vm');
 
 const html=fs.readFileSync('beta/clubfinder-beta.html','utf8');
 
+(async()=>{
 const readyStart=html.indexOf('let tinFoilCompetitionReady=null;');
 const readyEnd=html.indexOf('const tinFoilSavedCampaignAtStartup=',readyStart);
 assert(readyStart>=0&&readyEnd>readyStart,'Competition readiness promise boundary missing');
@@ -59,3 +60,4 @@ await findPromise;
 
 console.log('BETA FIRST-KEYSTROKE COMPETITION PREFETCH: PASS');
 console.log('fresh load: deferred | first input: starts once | further input/Find: reuses promise');
+})().catch(e=>{console.error(e.stack||e);process.exitCode=1});
