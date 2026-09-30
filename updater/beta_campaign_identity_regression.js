@@ -266,10 +266,10 @@ const assertions=`
   if(openedUrls.length!==1||openedUrls[0]!==''||
      openedHistory.length!==1||openedHistory[0]!=='stats-beta.html')
     throw new Error('BETA Stats fast-open: did not open and label the tiny same-origin route: '+JSON.stringify({openedUrls,openedHistory}));
-  const preparationPage=getCertificateHtml();
-  if(!preparationPage.includes('Preparing Your Stats…')||
-     preparationPage.includes('YOUR TIN FOIL FA CUP CAMPAIGN'))
-    throw new Error('BETA Stats fast-open: preparation page missing or final certificate rendered too early');
+  const firstOpenPage=getCertificateHtml();
+  if(!firstOpenPage.includes('YOUR TIN FOIL FA CUP CAMPAIGN')||
+     firstOpenPage.includes('Preparing Your Stats…'))
+    throw new Error('BETA Stats fast-open: prepared tab did not finish with the campaign certificate');
   if(!await tinFoilRenderStatsFromOpener(window.open('')))
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
