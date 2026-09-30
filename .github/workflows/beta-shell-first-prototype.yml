@@ -1,0 +1,31 @@
+name: Guard BETA shell-first prototype
+
+on:
+  pull_request:
+    paths:
+      - 'beta/clubfinder-shell-prototype.html'
+      - 'beta/clubfinder-shell-prototype-engine.js'
+      - 'tests/test_beta_shell_first_prototype.js'
+      - '.github/workflows/beta-shell-first-prototype.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-first:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Prove prototype extraction and shell budget
+        run: node tests/test_beta_shell_first_prototype.js
+      - name: Prove live BETA, production and competition data are untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- \
+            beta/clubfinder-beta.html clubfinder.html competition.json \
+            beta/competition.json beta/competition-fallback.json beta/challenges-beta.html
