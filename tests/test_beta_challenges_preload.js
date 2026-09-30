@@ -6,10 +6,12 @@ const fs=require('node:fs');
 
 const html=fs.readFileSync('beta/clubfinder-beta.html','utf8');
 
+const cleanupStart=html.indexOf('function tinFoilRemoveChallengesPrep(){');
 const helperStart=html.indexOf('function tinFoilShowChallengesPrep(){');
 const openStart=html.indexOf('async function openChallenges(origin){');
 const nav=html.indexOf("window.location.href='challenges-beta.html';",openStart);
 
+assert(cleanupStart>=0&&cleanupStart<helperStart,'Challenges history cleanup helper must exist before preparation helper');
 assert(helperStart>=0&&helperStart<openStart,'Challenges preparation helper must exist before openChallenges');
 assert(openStart>=0,'openChallenges missing');
 assert(nav>openStart,'Challenges navigation changed or disappeared');
@@ -20,7 +22,7 @@ assert(openHead.includes('await tinFoilPaintChallengesPrep();'),
 assert(openHead.indexOf('await tinFoilPaintChallengesPrep();')<openHead.indexOf('const journey=buildJourney(origin)'),
   'Challenges preparation card must paint before journey construction');
 
-const helper=html.slice(helperStart,openStart);
+const helper=html.slice(cleanupStart,openStart);
 for(const token of [
   "id='tffc-challenges-prep'",
   'Preparing Your Challenges…',
@@ -28,7 +30,11 @@ for(const token of [
   "class=\"prep-rollers\"",
   "aria-live','polite'",
   "prefers-reduced-motion",
-  "requestAnimationFrame"
+  "requestAnimationFrame",
+  "@keyframes tffcChallengeRoll",
+  "translate3d",
+  "window.addEventListener('pagehide',tinFoilRemoveChallengesPrep)",
+  "window.addEventListener('pageshow',tinFoilRemoveChallengesPrep)"
 ]) assert(helper.includes(token),'Challenges preparation contract missing: '+token);
 
 assert(html.includes("window.location.href='challenges-beta.html';"),
@@ -38,5 +44,8 @@ assert(html.includes("sessionStorage.setItem('tffc.challengeOrigin','clubfinder-
 assert(html.includes('tinFoilSaveClubfinderReturnSnapshot();'),
   'Clubfinder return snapshot changed');
 
+assert(!helper.includes('setInterval('),'Challenges rollers must not depend on the busy JS main thread');
+assert(helper.includes("function tinFoilRemoveChallengesPrep(){"),'History cleanup helper missing');
+
 console.log('BETA CHALLENGES PRELOAD CARD: PASS');
-console.log('immediate prep paint | existing bridge work | same route/return semantics');
+console.log('immediate prep paint | compositor rollers | bfcache cleanup | same route/return semantics');
