@@ -25,3 +25,5 @@ Preliminary and First Qualifying chronology is preserved, the active **Third Rou
 ## Conditional active-round slots
 
 11 unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.
+
+<!-- BETA diagnostic hold: production publication intentionally blocked pending browser acceptance. -->
