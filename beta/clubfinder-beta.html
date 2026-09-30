@@ -571,6 +571,18 @@ function tinFoilBetaVerifiedWimborneReplay(r){
     Number(r.home_score)===1 && Number(r.away_score)===1 &&
     r.decision==='penalties';
 }
+function tinFoilBetaResultVoided(r){
+  const status=String((r&&r.status)||'').toUpperCase();
+  return !!r&&(status==='VOID'||status==='VOIDED'||String(r.decision||'').toLowerCase()==='voided-replay-ordered');
+}
+function tinFoilBetaVerifiedMulbartonReplay(r){
+  return !!r && String(r.round||'')==='Second Round Qualifying Replay' &&
+    String(r.date||'')==='2026-09-29' &&
+    sameClubIdentity(r.home,'Mulbarton Wanderers') &&
+    sameClubIdentity(r.away,'Woodford Town') &&
+    sameClubIdentity(r.winner,'Mulbarton Wanderers') &&
+    Number(r.home_score)===2 && Number(r.away_score)===0;
+}
 function tinFoilBetaPenaltyResultNote(r){
   if(!r||r.decision!=='penalties'||!r.winner)return '';
   // Source chronology records the shootout winner but not numerical pens.
@@ -580,7 +592,7 @@ function tinFoilBetaPenaltyResultNote(r){
 }
 function tinFoilBetaCompletedKickoff(r,rp){
   // Do not let a legacy 15:00 fallback overwrite the verified replay time.
-  if(tinFoilBetaVerifiedWimborneReplay(r))return '19:45';
+  if(tinFoilBetaVerifiedWimborneReplay(r)||tinFoilBetaVerifiedMulbartonReplay(r))return '19:45';
   if(rp&&rp.kickoff)return rp.kickoff;
   if(r&&r.kickoff)return r.kickoff;
   return /Replay/i.test(String((r&&r.round)||''))?'Kick-off TBC':'15:00';
@@ -1086,6 +1098,7 @@ function tinFoilStatsWinnerFromFixture(text){
   return p.homeScore>p.awayScore?p.home:p.away;
 }
 function tinFoilCertificateWinner(r){
+  if(tinFoilBetaResultVoided(r))return '';
   if(r){
     const hs=Number(r.home_score),as=Number(r.away_score);
     if(Number.isFinite(hs)&&Number.isFinite(as)){
@@ -1493,7 +1506,7 @@ async function hardResetFinder(){
  if(input)input.focus();
 }
 function certEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function resultLinePlain(r){if(!r)return '';if(r.decision==='walkover')return r.home+' (W/O) v '+r.away;let x=r.home+' ('+r.home_score+') v ('+r.away_score+') '+r.away;if(r.decision==='a.e.t.')x+=' • AET';if(r.decision==='penalties'&&r.winner)x+=' • '+r.winner+' '+tinFoilBetaPenaltyResultNote(r);return x}
+function resultLinePlain(r){if(!r)return '';if(r.decision==='walkover')return r.home+' (W/O) v '+r.away;let x=r.home+' ('+r.home_score+') v ('+r.away_score+') '+r.away;if(tinFoilBetaResultVoided(r))x+=' • Result voided; replay ordered';else if(r.decision==='a.e.t.')x+=' • AET';if(r.decision==='penalties'&&r.winner)x+=' • '+r.winner+' '+tinFoilBetaPenaltyResultNote(r);return x}
 /* TIN_FOIL_PIGEON_MILES_STATS_BEGIN */
 const TIN_FOIL_PIGEON_COORD_CACHE=new Map();
 async function tinFoilPigeonCoords(postcode){
