@@ -43,8 +43,8 @@ assert(navBlock.includes("tinFoilRemoveChallengesPrep();"),
   'Challenges loader must be removed before navigating away');
 assert(navBlock.indexOf("tinFoilRemoveChallengesPrep();")<navBlock.indexOf("window.location.href='challenges-beta.html';"),
   'Challenges loader cleanup must happen before navigation');
-assert(navBlock.includes("raf(resolve);"),
-  'Challenges must yield a paint frame after loader cleanup so browser history snapshots the Campaign view');
+assert(!navBlock.includes("raf(resolve);"),
+  'Challenges navigation must not expose an extra painted Clubfinder frame after loader cleanup');
 
 assert(html.includes("window.location.href='challenges-beta.html';"),
   'Challenges must still use the existing same-tab route');
