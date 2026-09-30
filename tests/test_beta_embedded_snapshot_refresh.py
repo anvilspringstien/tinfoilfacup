@@ -25,7 +25,7 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
 
     def test_changed_loader_boundary_fails_closed(self):
         for old, new in (
-            ("../competition.json", "./competition.json"),
+            ("./competition.json", "../competition.json"),
             ("./competition-fallback.json", "../competition.json"),
             ("fetch(FALLBACK_COMPETITION_DATA_URL", "fetch('missing.json'"),
         ):
