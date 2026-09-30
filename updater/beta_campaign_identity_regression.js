@@ -14,8 +14,9 @@ for(const url of reportImages){
 }
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const liteRoute=fs.readFileSync(path.join(ROOT,'beta','stats-beta.html'),'utf8');
-const liteScriptMatch=liteRoute.match(/<script>([\s\S]*?)<\/script>/i);
-if(!liteScriptMatch)throw new Error('BETA fast Stats: tiny route script missing');
+const liteScripts=[...liteRoute.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
+const liteScript=liteScripts.find(script=>script.includes('tffc.stats-fast-open.v1'));
+if(!liteScript)throw new Error('BETA fast Stats: tiny route script missing');
 if(!liteRoute.includes('content="width=980"')||
    !liteRoute.includes('source.tinFoilRenderStatsFromOpener(window)')||
    !liteRoute.includes('source.location.origin===window.location.origin')||
@@ -261,9 +262,14 @@ const assertions=`
   const originalPageHref=window.location.href;
   await journeyCertificate(origin);
   const openedUrls=JSON.parse(getPopupRoutes());
-  if(openedUrls.length!==1||openedUrls[0]!=='stats-beta.html')
-    throw new Error('BETA Stats fast-open: did not open the tiny same-origin route: '+JSON.stringify(openedUrls));
-  if(getCertificateHtml())throw new Error('BETA Stats fast-open: opener unexpectedly rendered into itself');
+  const openedHistory=JSON.parse(getPopupHistory());
+  if(openedUrls.length!==1||openedUrls[0]!==''||
+     openedHistory.length!==1||openedHistory[0]!=='stats-beta.html')
+    throw new Error('BETA Stats fast-open: did not open and label the tiny same-origin route: '+JSON.stringify({openedUrls,openedHistory}));
+  const firstOpenPage=getCertificateHtml();
+  if(!firstOpenPage.includes('YOUR TIN FOIL FA CUP CAMPAIGN')||
+     firstOpenPage.includes('Preparing Your Stats…'))
+    throw new Error('BETA Stats fast-open: prepared tab did not finish with the campaign certificate');
   if(!await tinFoilRenderStatsFromOpener(window.open('')))
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
@@ -445,7 +451,7 @@ try{
 }
 
 (async()=>{
-  const script=liteScriptMatch[1], storage={}, redirects=[];
+  const script=liteScript, storage={}, redirects=[];
   let renders=0;
   const origin='https://anvilspringstien.github.io';
   const source={
@@ -461,7 +467,7 @@ try{
     setItem:(k,v)=>{storage[k]=String(v)},
     removeItem:k=>{delete storage[k]}
   };
-  const ctx={window:page,sessionStorage:session,console};
+  const ctx={window:page,sessionStorage:session,console,requestAnimationFrame:fn=>fn()};
   await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
   if(renders!==1||redirects.length||storage['tffc.stats-fast-open.v1']!=='1')
     throw new Error('BETA lite Stats: first load failed to use available opener');

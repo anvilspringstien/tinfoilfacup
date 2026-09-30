@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const html=fs.readFileSync('beta/clubfinder-beta.html','utf8');
-const live=JSON.parse(fs.readFileSync('competition.json','utf8'));
+const live=JSON.parse(fs.readFileSync('beta/competition.json','utf8'));
 const fallback=JSON.parse(fs.readFileSync('beta/competition-fallback.json','utf8'));
 const source=html.slice(html.indexOf("const LIVE_COMPETITION_DATA_URL="),html.indexOf('function liveLookup('))+
   html.slice(html.indexOf('function applyLiveRoundDates(){'),html.indexOf('\nconst ROUND_META={'));
@@ -16,7 +16,7 @@ async function scenario(liveOK,fallbackOK){
     ROUND_META:{'Third Round Qualifying':{date:'old'}},
     fetch:async(url,options)=>{
       calls.push({url:String(url),options});
-      if(String(url).startsWith('../competition.json')){
+      if(String(url).startsWith('./competition.json')){
         if(!liveOK)throw Error('live unavailable');
         return {ok:true,json:async()=>live};
       }
@@ -33,7 +33,7 @@ async function scenario(liveOK,fallbackOK){
 (async()=>{
   const success=await scenario(true,true);
   assert.equal(success.result,true);assert.equal(success.state,'live');
-  assert.equal(success.calls.length,1);assert.match(success.calls[0].url,/^\.\.\/competition\.json\?t=\d+$/);
+  assert.equal(success.calls.length,1);assert.match(success.calls[0].url,/^\.\/competition\.json\?t=\d+$/);
   assert.equal(success.calls[0].options.cache,'no-store');assert.equal(success.data.updated_at,live.updated_at);
   const offline=await scenario(false,true);
   assert.equal(offline.result,false);assert.equal(offline.state,'fallback');

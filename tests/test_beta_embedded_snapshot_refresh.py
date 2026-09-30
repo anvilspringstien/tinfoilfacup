@@ -1,4 +1,4 @@
-"""BETA's separate fallback remains an exact copy of canonical competition data."""
+"""BETA's separate fallback remains an exact copy of its local live competition data."""
 import json
 import sys
 import unittest
@@ -11,7 +11,7 @@ from refresh_beta_embedded_snapshot import refresh, BETA, DATA, FALLBACK
 
 class BetaFallbackSnapshotTests(unittest.TestCase):
     def setUp(self):
-        self.canonical = {
+        self.live = {
             'schema_version': 1, 'updated_at': '2026-09-24T10:00:00Z',
             'result_history': {'Thame United': [{'winner': 'Thame United'}]},
             'fixtures': {'Thame Utd': {'home': 'Thame Utd or Exmouth Town'}},
@@ -19,22 +19,23 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
         self.html = BETA.read_text(encoding='utf-8')
 
     def test_refresh_is_idempotent_and_does_not_edit_html(self):
-        expected = json.dumps(self.canonical, ensure_ascii=False, separators=(',', ':')) + '\n'
-        self.assertEqual(refresh(self.html, self.canonical), expected)
-        self.assertEqual(refresh(self.html, self.canonical), expected)
+        expected = json.dumps(self.live, ensure_ascii=False, separators=(',', ':')) + '\n'
+        self.assertEqual(refresh(self.html, self.live), expected)
+        self.assertEqual(refresh(self.html, self.live), expected)
 
     def test_changed_loader_boundary_fails_closed(self):
         for old, new in (
-            ("../competition.json", "./competition.json"),
+            ("./competition.json", "../competition.json"),
             ("./competition-fallback.json", "../competition.json"),
             ("fetch(FALLBACK_COMPETITION_DATA_URL", "fetch('missing.json'"),
         ):
             with self.subTest(old=old):
                 with self.assertRaises(ValueError):
-                    refresh(self.html.replace(old, new), self.canonical)
+                    refresh(self.html.replace(old, new), self.live)
 
-    def test_committed_fallback_matches_canonical(self):
+    def test_committed_fallback_matches_local_live_data(self):
         live = json.loads(DATA.read_text(encoding='utf-8'))
+        self.assertIn("const LIVE_COMPETITION_DATA_URL='./competition.json';", self.html)
         fallback = json.loads(FALLBACK.read_text(encoding='utf-8'))
         self.assertEqual(FALLBACK.read_text(encoding='utf-8'), refresh(self.html, live))
         self.assertEqual(fallback, live)
