@@ -14,8 +14,9 @@ for(const url of reportImages){
 }
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const liteRoute=fs.readFileSync(path.join(ROOT,'beta','stats-beta.html'),'utf8');
-const liteScriptMatch=liteRoute.match(/<script>([\s\S]*?)<\/script>/i);
-if(!liteScriptMatch)throw new Error('BETA fast Stats: tiny route script missing');
+const liteScripts=[...liteRoute.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
+const liteScript=liteScripts.find(script=>script.includes('tffc.stats-fast-open.v1'));
+if(!liteScript)throw new Error('BETA fast Stats: tiny route script missing');
 if(!liteRoute.includes('content="width=980"')||
    !liteRoute.includes('source.tinFoilRenderStatsFromOpener(window)')||
    !liteRoute.includes('source.location.origin===window.location.origin')||
@@ -445,7 +446,7 @@ try{
 }
 
 (async()=>{
-  const script=liteScriptMatch[1], storage={}, redirects=[];
+  const script=liteScript, storage={}, redirects=[];
   let renders=0;
   const origin='https://anvilspringstien.github.io';
   const source={
