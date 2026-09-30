@@ -262,8 +262,10 @@ const assertions=`
   const originalPageHref=window.location.href;
   await journeyCertificate(origin);
   const openedUrls=JSON.parse(getPopupRoutes());
-  if(openedUrls.length!==1||openedUrls[0]!=='stats-beta.html')
-    throw new Error('BETA Stats fast-open: did not open the tiny same-origin route: '+JSON.stringify(openedUrls));
+  const openedHistory=JSON.parse(getPopupHistory());
+  if(openedUrls.length!==1||openedUrls[0]!==''||
+     openedHistory.length!==1||openedHistory[0]!=='stats-beta.html')
+    throw new Error('BETA Stats fast-open: did not open and label the tiny same-origin route: '+JSON.stringify({openedUrls,openedHistory}));
   if(getCertificateHtml())throw new Error('BETA Stats fast-open: opener unexpectedly rendered into itself');
   if(!await tinFoilRenderStatsFromOpener(window.open('')))
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
@@ -462,7 +464,7 @@ try{
     setItem:(k,v)=>{storage[k]=String(v)},
     removeItem:k=>{delete storage[k]}
   };
-  const ctx={window:page,sessionStorage:session,console};
+  const ctx={window:page,sessionStorage:session,console,requestAnimationFrame:fn=>fn()};
   await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
   if(renders!==1||redirects.length||storage['tffc.stats-fast-open.v1']!=='1')
     throw new Error('BETA lite Stats: first load failed to use available opener');
