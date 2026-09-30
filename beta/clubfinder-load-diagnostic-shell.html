@@ -1,0 +1,328 @@
+<!doctype html><html lang="en-GB"><head><script>
+(()=>{
+  const MODE="shell";
+  const q=new URLSearchParams(location.search||'');
+  const slowMs=Math.min(10000,Math.max(0,Number(q.get('slow'))||0));
+  const marks=Object.create(null),resources=Object.create(null);
+  let renderTimer=null,competitionWatch=null;
+  const round=n=>Number.isFinite(Number(n))?Math.round(Number(n)*10)/10:null;
+  function mark(name,value=performance.now()){
+    if(marks[name]==null){marks[name]=round(value);scheduleRender();}
+    return marks[name];
+  }
+  window.__tffcDiagMark=mark;
+  window.__tffcDiagMode=MODE;
+  window.__tffcDiagSlowMs=slowMs;
+  mark('diagnosticStart');
+
+  const nativeFetch=window.fetch.bind(window);
+  window.fetch=async function(input,init){
+    const url=String((input&&input.url)||input||'');
+    const isCompetition=/competition(?:-fallback)?\.json(?:[?#]|$)/.test(url);
+    if(isCompetition)mark('competitionRequestStart');
+    try{
+      const response=await nativeFetch(input,init);
+      if(isCompetition){
+        mark('competitionResponseHeaders');
+        if(!competitionWatch){
+          competitionWatch=setInterval(()=>{
+            try{
+              if(typeof LIVE_DATA_STATUS!=='undefined'&&LIVE_DATA_STATUS&&LIVE_DATA_STATUS.state!=='loading'){
+                mark('competitionReady');
+                clearInterval(competitionWatch);competitionWatch=null;
+              }
+            }catch(e){}
+          },20);
+        }
+      }
+      return response;
+    }catch(err){
+      if(isCompetition)mark('competitionFetchError');
+      throw err;
+    }
+  };
+
+  try{
+    const po=new PerformanceObserver(list=>{
+      for(const e of list.getEntries()){
+        if(e.entryType==='paint'){
+          if(e.name==='first-paint')mark('firstPaint',e.startTime);
+          if(e.name==='first-contentful-paint')mark('firstContentfulPaint',e.startTime);
+        }else if(e.entryType==='resource'){
+          const name=String(e.name||'');
+          if(/clubfinder-shell-prototype-engine\.js/.test(name)){
+            resources.engine={start:round(e.startTime),responseEnd:round(e.responseEnd),duration:round(e.duration),
+              transferSize:e.transferSize||0,encodedBodySize:e.encodedBodySize||0,decodedBodySize:e.decodedBodySize||0};
+            mark('engineResourceStart',e.startTime);mark('engineResourceEnd',e.responseEnd);
+          }
+          if(/competition(?:-fallback)?\.json/.test(name)){
+            resources.competition={name:name.split('/').pop().split('?')[0],start:round(e.startTime),
+              responseEnd:round(e.responseEnd),duration:round(e.duration),transferSize:e.transferSize||0,
+              encodedBodySize:e.encodedBodySize||0,decodedBodySize:e.decodedBodySize||0};
+          }
+          scheduleRender();
+        }
+      }
+    });
+    po.observe({type:'paint',buffered:true});
+    po.observe({type:'resource',buffered:true});
+  }catch(e){}
+
+  function attachUserJourney(){
+    const input=document.getElementById('postcode'),button=document.getElementById('findBtn');
+    const results=document.getElementById('results');
+    if(input){
+      input.addEventListener('input',()=>mark('firstKeystroke'),{capture:true,once:true});
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')mark('findClick')},{capture:true});
+    }
+    if(button)button.addEventListener('click',()=>mark('findClick'),{capture:true});
+    if(results&&typeof MutationObserver==='function'){
+      const inspect=()=>{
+        const txt=String(results.textContent||'');
+        if(results.style.display!=='none'&&(/Tin Foil FA Cup Campaign/i.test(txt)||results.querySelector('.result')))mark('campaignsRendered');
+      };
+      new MutationObserver(inspect).observe(results,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['style','class']});
+      inspect();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    mark('domContentLoaded');
+    if(document.getElementById('postcode')&&document.getElementById('findBtn'))mark('shellDOMReady');
+    attachUserJourney();
+    requestAnimationFrame(()=>mark('firstRAF'));
+  },{once:true});
+  window.addEventListener('load',()=>mark('windowLoad'),{once:true});
+
+  function navData(){
+    const n=performance.getEntriesByType('navigation')[0];
+    if(!n)return {};
+    return {
+      domainLookupStart:round(n.domainLookupStart),domainLookupEnd:round(n.domainLookupEnd),
+      connectStart:round(n.connectStart),secureConnectionStart:round(n.secureConnectionStart),
+      connectEnd:round(n.connectEnd),requestStart:round(n.requestStart),
+      responseStart:round(n.responseStart),responseEnd:round(n.responseEnd),
+      domInteractive:round(n.domInteractive),domContentLoaded:round(n.domContentLoadedEventEnd),
+      loadEventEnd:round(n.loadEventEnd),transferSize:n.transferSize||0,
+      encodedBodySize:n.encodedBodySize||0,decodedBodySize:n.decodedBodySize||0
+    };
+  }
+  function delta(a,b){return marks[a]!=null&&marks[b]!=null?round(marks[b]-marks[a]):null;}
+  function snapshot(){
+    return {
+      mode:MODE,slowEngineMs:slowMs,url:location.href,navigation:navData(),
+      marks:{...marks},resources:{...resources},
+      intervals:{
+        firstKeystrokeToFind:delta('firstKeystroke','findClick'),
+        findToCampaigns:delta('findClick','campaignsRendered'),
+        engineResource:delta('engineResourceStart','engineResourceEnd'),
+        competitionRequestToReady:delta('competitionRequestStart','competitionReady')
+      },
+      userAgent:navigator.userAgent
+    };
+  }
+  function humanReport(){
+    const s=snapshot(),n=s.navigation,m=s.marks,r=s.resources;
+    const row=(label,v)=>label.padEnd(29)+' '+(v==null?'—':v+' ms');
+    const lines=[
+      'TFFC LOAD DIAGNOSTICS — '+MODE.toUpperCase(),
+      'slow engine delay: '+slowMs+' ms','',
+      row('Navigation response start',n.responseStart),
+      row('Navigation response end',n.responseEnd),
+      row('Shell DOM ready',m.shellDOMReady),
+      row('First paint',m.firstPaint),
+      row('First contentful paint',m.firstContentfulPaint),
+      row('Engine ready',m.engineReady),
+      row('Competition request start',m.competitionRequestStart),
+      row('Competition ready',m.competitionReady),
+      row('First keystroke',m.firstKeystroke),
+      row('Find clicked',m.findClick),
+      row('Campaigns rendered',m.campaignsRendered),'',
+      'Navigation transfer: '+(n.transferSize||0)+' bytes',
+      'Navigation encoded body: '+(n.encodedBodySize||0)+' bytes',
+      'Navigation decoded body: '+(n.decodedBodySize||0)+' bytes'
+    ];
+    if(r.engine)lines.push('Engine resource: '+JSON.stringify(r.engine));
+    if(r.competition)lines.push('Competition resource: '+JSON.stringify(r.competition));
+    lines.push('','COPY JSON:',JSON.stringify(s,null,2));
+    return lines.join('\n');
+  }
+  function ensurePanel(){
+    if(!document.body)return null;
+    let box=document.getElementById('tffcLoadDiagnostics');
+    if(box)return box;
+    box=document.createElement('section');
+    box.id='tffcLoadDiagnostics';
+    box.style.cssText='width:100%;max-width:600px;margin:18px 0 24px;padding:12px;border:2px dashed #084c61;border-radius:5px;background:#fafafa;color:#111;font:12px/1.4 monospace;white-space:normal';
+    box.innerHTML='<div style="font:600 14px Poppins,Arial,sans-serif;color:#084c61;margin-bottom:8px">Performance Diagnostics — '+MODE+'</div>'+
+      '<button id="tffcDiagCopy" type="button" style="padding:6px 10px;margin-bottom:8px">Copy results</button>'+
+      '<pre id="tffcDiagOutput" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere"></pre>';
+    document.body.appendChild(box);
+    box.querySelector('#tffcDiagCopy').addEventListener('click',async()=>{
+      const t=humanReport();
+      try{await navigator.clipboard.writeText(t);box.querySelector('#tffcDiagCopy').textContent='Copied';}
+      catch(e){box.querySelector('#tffcDiagOutput').textContent=t;}
+    });
+    return box;
+  }
+  function render(){renderTimer=null;const box=ensurePanel();if(box)box.querySelector('#tffcDiagOutput').textContent=humanReport();}
+  function scheduleRender(){if(renderTimer==null)renderTimer=setTimeout(render,60);}
+  document.addEventListener('DOMContentLoaded',scheduleRender,{once:true});
+  window.addEventListener('load',scheduleRender,{once:true});
+  setInterval(scheduleRender,750);
+})();
+</script><script>if(new URLSearchParams(location.search||'').get('stats')==='1')document.documentElement.classList.add('tffc-stats-route');</script><style>html.tffc-stats-route{background:#ededed}html.tffc-stats-route body{background:#ededed}html.tffc-stats-route #searchPanel,html.tffc-stats-route #liveDataTools,html.tffc-stats-route #status,html.tffc-stats-route #results{display:none!important}html.tffc-stats-route body:before{content:"Loading your Tin Foil FA Cup Stats…";display:block;margin:28px;font:600 14px Arial,sans-serif;color:#084c61}</style><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>if(new URLSearchParams(location.search||'').get('stats')==='1')document.querySelector('meta[name="viewport"]').setAttribute('content','width=980');</script><title>Tin Foil FA Cup Clubfinder v7.6 BETA</title><meta property="og:title" content="Tin Foil FA Cup Clubfinder v7.6 BETA"><meta property="og:site_name" content="Tin Foil FA Cup"><meta property="og:type" content="website"><meta property="og:url" content="https://anvilspringstien.github.io/tinfoilfacup/beta/clubfinder-beta.html"><meta property="og:description" content="Find your nearest eligible clubs, follow your Campaign and try our new Challenges."><meta property="og:image" content="https://anvilspringstien.github.io/tinfoilfacup/beta/tin-foil-fa-cup-four-laws-beta.png"><meta property="og:image:alt" content="Tin Foil FA Cup — The Four Laws"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Tin Foil FA Cup Clubfinder v7.6 BETA"><meta name="twitter:description" content="Find your nearest eligible clubs, follow your Campaign and try our new Challenges."><meta name="twitter:image" content="https://anvilspringstien.github.io/tinfoilfacup/beta/tin-foil-fa-cup-four-laws-beta.png"><meta name="description" content="Find your nearest eligible clubs, follow your Campaign and try our new Challenges."><link rel="canonical" href="https://anvilspringstien.github.io/tinfoilfacup/beta/clubfinder-beta.html"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Poppins,Arial,sans-serif;background:transparent;color:#111}body{min-height:100vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:20px 10px}#searchPanel{height:80px;width:100%;max-width:360px;background:rgba(8,76,97,.90);border-radius:5px;padding:20px;display:flex;align-items:center;gap:10px}#postcode{height:40px;flex:1;min-width:0;border:2px solid #FAFAFA;border-radius:10px;background:#FAFAFA;color:#111;padding:0 13px;font:400 13px Poppins,Arial,sans-serif;text-transform:uppercase;outline:none}#findBtn{height:40px;padding:0 18px;border:2px solid #FAFAFA;border-radius:10px;background:#084C61;color:#FAFAFA;font:200 13px/36px Poppins,Arial,sans-serif;cursor:pointer;box-shadow:3px 3px 4px rgba(0,0,0,.60);white-space:nowrap}#findBtn:disabled{opacity:.65;cursor:wait}#status{font:300 13px Poppins,Arial,sans-serif;margin:10px 2px;color:#555;min-height:18px;max-width:600px;width:100%}#results{display:none;width:100%;max-width:600px;margin-top:10px}.result{border:1px solid #ddd;border-radius:5px;padding:16px;background:#fff;margin-bottom:8px}.result h2{font-size:22px;font-weight:600;margin:0 0 3px}.meta{font-size:13px;color:#555;margin-bottom:10px}.round{display:inline-block;padding:3px 8px;border-radius:20px;background:#084c61;color:#FAFAFA;font-size:11px;font-weight:400;margin-bottom:8px}.fixture{font-size:14px;margin:7px 0 12px;line-height:1.5margin-bottom:10px}.actions a{height:38px;display:inline-flex;align-items:center;padding:0 13px;border:2px solid #084c61;border-radius:10px;text-decoration:none;color:#084c61;font:300 13px Poppins,Arial,sans-serif}.actions a.primary{background:#084c61;color:#FAFAFA}@media(max-width:480px){#searchPanel{padding:20px 8px;gap:6px}#findBtn{padding:0 9px;font-size:13px}#postcode{font-size:13px;padding:0 8px}}#postcode::placeholder{font-size:13px;color:#666;opacity:1;text-transform:none}
+.state{margin:0 0 10px;padding:8px 10px;border-radius:5px;background:#f5f5f5;font-size:12px;line-height:1.45}
+.state.upcoming{border-left:4px solid #084c61;background:#eeeeee}
+.state.played{border-left:4px solid #555}
+.state.pending{border-left:4px solid #8a5a00}
+.state.eliminated{border-left:4px solid #a32626}
+.actions a.secondary{margin-left:6px;background:#fff;color:#084c61}
+@media(max-width:430px){.actions a.secondary{margin-left:0;margin-top:6px}}
+
+.history{margin:0 0 10px;padding:8px 10px;border-radius:5px;background:#eeeeee;font-size:12px;line-height:1.45;border-left:4px solid #084c61}
+.history-title{font-weight:700;margin-bottom:4px}
+.history-origin{font-weight:600;margin-bottom:6px}
+.history-item{padding:5px 0;border-top:1px solid #ddd}
+.history-item:first-of-type{border-top:0}
+.carrier{margin-top:8px;font-size:12px;font-weight:600;color:#084C61}
+.custodian-name{font-size:20px;font-weight:400;line-height:1.2;margin-top:3px;color:inherit}
+
+.journey-choice{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.journey-choice .round{margin:0}.journey-select,.journey-tool{appearance:none;border:1px solid #084c61;background:#fff;color:#084c61;border-radius:5px;padding:5px 8px;font:inherit;font-size:11px;font-weight:600;cursor:pointer;text-decoration:none}
+.journey-select:hover,.journey-tool:hover{background:#084c61;color:#fff}.my-journey-bar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.journey-ended{margin:0 0 10px;padding:8px 10px;border-radius:5px;background:#eeeeee;border-left:4px solid #084c61;font-size:12px;line-height:1.45}
+
+.journey-choice{justify-content:flex-start}
+.journey-lozenge{display:inline-block;border:0;background:transparent;padding:0;margin:0;cursor:pointer;font:inherit}
+.journey-lozenge .round{display:inline-block}.journey-lozenge .hover-label{display:none}
+@media (hover:hover) and (pointer:fine){.journey-lozenge:hover .default-label{display:none}.journey-lozenge:hover .hover-label{display:inline}}
+.my-journey-bar{align-items:center}.my-journey-bar .round{margin:0;cursor:default}.my-journey-bar button.round{border:0;cursor:pointer;font-family:inherit}.my-journey-bar button.round:hover{filter:brightness(.92)}
+#liveDataTools{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font:11px Arial,sans-serif;color:#555}.map-pending{display:inline-block;padding:8px 10px;border:1px solid #bbb;border-radius:10px;color:#666;font-size:12px}
+.my-journey-bar button.stats-action{
+  background:#c90000 !important;
+  color:#fff !important;
+  border-color:#c90000 !important;
+}
+.my-journey-bar button.stats-action:hover{
+  filter:brightness(.92);
+}
+.tin-foil-confirm-overlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.48)}
+.tin-foil-confirm-overlay[hidden]{display:none}
+.tin-foil-confirm-box{width:min(420px,100%);background:#fff;border:1px solid #d7d7d7;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.28);padding:18px;font:300 13px/1.5 Poppins,Arial,sans-serif;color:#111}
+.tin-foil-confirm-title{font-size:16px;font-weight:600;color:#084C61;margin:0 0 10px}
+.tin-foil-confirm-message{white-space:pre-wrap;margin:0 0 16px}
+.tin-foil-confirm-actions{display:flex;justify-content:flex-end;gap:8px}
+.tin-foil-confirm-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
+#tinFoilConfirmCancel{background:#fff;color:#084C61}
+#tinFoilConfirmOk{background:#084C61;color:#FAFAFA}
+.tffc-beta-help{margin:14px 0 0;text-align:center;font:600 10px/1.4 Poppins,Arial,sans-serif;color:#777}
+.tffc-beta-help a,.tffc-beta-help button{border:0;background:transparent;padding:0;color:#666;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.tffc-beta-help a:hover,.tffc-beta-help button:hover{color:#084C61}
+.tffc-beta-help-sep{margin:0 6px;color:#aaa}
+.tin-foil-privacy-actions{display:flex;justify-content:flex-end}
+.tin-foil-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}.tin-foil-result-health{margin:10px 0 14px;padding:11px 13px;border-radius:8px;font:300 13px/1.5 Poppins,Arial,sans-serif}
+.tin-foil-result-health[hidden]{display:none}
+.tin-foil-result-health-item+ .tin-foil-result-health-item{margin-top:9px;padding-top:9px;border-top:1px solid rgba(0,0,0,.12)}
+.tin-foil-result-health-title{font-weight:600;margin-bottom:2px}
+.tin-foil-result-health--grace{background:#fff7d6;border:1px solid #d5b84b;color:#3d3300}
+.tin-foil-result-health--overdue{background:#fff0d8;border:1px solid #cf8128;color:#4d2a00}.challenges-launch{background:#e4bb26!important;color:#111!important}.challenges-launch:hover{filter:brightness(.92)}.campaign-identity{margin:0 0 10px;padding:7px 10px;border-radius:5px;background:#eeeeee;border-left:4px solid #084c61;color:#084c61;font-size:12px;font-weight:600}.pigeon-name-input{display:inline-block;width:200px;max-width:40vw;border:0;border-radius:0;background:transparent;color:inherit;padding:0 2px;margin:0;font:inherit;font-weight:inherit;line-height:inherit;vertical-align:baseline;outline:none}.pigeon-name-input::placeholder{color:inherit;opacity:.68}.pigeon-name-input:focus{border:0}.campaign-identity[hidden]{display:none}
+/* BETA mobile: put the Call Sign and the full Pigeon Name on separate lines. */
+@media(max-width:680px){
+ .campaign-identity{white-space:normal}
+ .campaign-call-sign{display:block;overflow-wrap:anywhere}
+ .campaign-identity-separator{display:none}
+ .campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;min-width:0;margin-top:4px}
+ .campaign-pigeon-label{flex:0 0 auto;white-space:nowrap}
+ .campaign-pigeon-name .pigeon-name-input{display:block;flex:1 1 205px;min-width:0;width:auto;max-width:none;padding:0 2px 1px;line-height:1.4}
+}
+</style></head><!-- C13 UX POSTCODE SEARCH v2: explicit Find My Club fresh-search semantics -->
+<body><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div><script>
+/* TFFC SHELL-FIRST PROTOTYPE BOOTLOADER — isolated performance experiment */
+(()=>{
+  const __diagParams=new URLSearchParams(location.search||'');
+  const __diagCold=__diagParams.get('cold')==='1';
+  const __diagSlow=Math.min(10000,Math.max(0,Number(__diagParams.get('slow'))||0));
+  const ENGINE_URL='./clubfinder-shell-prototype-engine.js'+(__diagCold?'?diagcold='+Date.now():'');
+  const input=document.getElementById('postcode');
+  const button=document.getElementById('findBtn');
+  const status=document.getElementById('status');
+  let started=false;
+  let resolveReady,rejectReady;
+  let pendingFind=false;
+  let warmCompetition=false;
+  window.__tffcPrototypeEngineReady=new Promise((resolve,reject)=>{resolveReady=resolve;rejectReady=reject});
+
+  function warmCompetitionWhenReady(){
+    warmCompetition=true;
+    if(typeof window.tinFoilEnsureCompetitionReady==='function'){
+      Promise.resolve(window.tinFoilEnsureCompetitionReady()).catch(()=>{});
+    }
+  }
+
+  function loadEngine(){
+    if(started)return window.__tffcPrototypeEngineReady;
+    started=true;
+    const script=document.createElement('script');
+    script.src=ENGINE_URL;
+    script.async=true;
+    script.onload=()=>{
+      window.__tffcDiagMark&&window.__tffcDiagMark('engineReady');
+      resolveReady(true);
+      if(warmCompetition)warmCompetitionWhenReady();
+      if(pendingFind&&typeof window.go==='function'){
+        pendingFind=false;
+        window.go(true);
+      }
+    };
+    script.onerror=()=>{
+      if(status)status.textContent='Unable to load Clubfinder. Please refresh and try again.';
+      rejectReady(new Error('Clubfinder prototype engine failed to load'));
+    };
+    const __attach=()=>{window.__tffcDiagMark&&window.__tffcDiagMark('engineRequestStart');document.head.appendChild(script);};
+    window.__tffcDiagMark&&window.__tffcDiagMark('engineLoadRequested');
+    if(__diagSlow>0){window.__tffcDiagMark&&window.__tffcDiagMark('engineDelayStart');setTimeout(__attach,__diagSlow);}else __attach();
+    return window.__tffcPrototypeEngineReady;
+  }
+
+  if(input){
+    input.addEventListener('input',()=>{
+      input.value=input.value.toUpperCase();
+      warmCompetitionWhenReady();
+      loadEngine();
+    });
+    input.addEventListener('keydown',event=>{
+      if(event.key==='Enter'&&typeof window.go!=='function'){
+        event.preventDefault();
+        pendingFind=true;
+        if(status)status.textContent='Preparing Clubfinder…';
+        warmCompetitionWhenReady();
+        loadEngine();
+      }
+    });
+  }
+  if(button){
+    button.addEventListener('pointerdown',loadEngine);
+    button.addEventListener('click',event=>{
+      if(typeof window.go!=='function'){
+        event.preventDefault();
+        pendingFind=true;
+        if(status)status.textContent='Preparing Clubfinder…';
+        warmCompetitionWhenReady();
+        loadEngine();
+      }
+    });
+  }
+
+  const urgent=new URLSearchParams(location.search||'').get('stats')==='1' ||
+    new URLSearchParams(location.search||'').get('from')==='challenges-exit-v3';
+  if(urgent){
+    loadEngine();
+  }else{
+    const afterPaint=()=>requestAnimationFrame(()=>requestAnimationFrame(loadEngine));
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',afterPaint,{once:true});
+    else afterPaint();
+  }
+  window.__tffcPrototypeLoadEngine=loadEngine;
+})();
+</script></body></html>

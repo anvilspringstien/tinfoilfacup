@@ -1,0 +1,33 @@
+name: Guard BETA load diagnostics
+
+on:
+  pull_request:
+    paths:
+      - 'beta/clubfinder-load-diagnostic-normal.html'
+      - 'beta/clubfinder-load-diagnostic-shell.html'
+      - 'tests/test_beta_load_diagnostics.js'
+      - '.github/workflows/beta-load-diagnostics.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Validate diagnostic pages and accepted engine identity
+        run: node tests/test_beta_load_diagnostics.js
+      - name: Prove real BETA, production, data and ingestion are untouched
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- \
+            beta/clubfinder-beta.html clubfinder.html competition.json \
+            beta/competition.json beta/competition-fallback.json \
+            beta/challenges-beta.html updater .github/workflows/scan-results.yml \
+            .github/workflows/competition-health.yml
