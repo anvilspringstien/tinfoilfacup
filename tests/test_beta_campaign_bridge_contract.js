@@ -67,8 +67,8 @@ function boot(local,session={},query=''){
     replace(url){this.href=url}
   };
   const ctx={
-    console,document,location,history:{replaceState(_s,_t,path){location.search='';
-      location.href=path}},
+    console,document,location,history:{backCalls:0,replaceState(_s,_t,path){location.search='';
+      location.href=path},back(){this.backCalls++;location.href='__HISTORY_BACK__'}},
     localStorage:storage(local),sessionStorage:storage(session),
     navigator:{},URL,URLSearchParams,
     requestAnimationFrame:fn=>fn(),setTimeout:()=>0,clearTimeout(){},
@@ -130,8 +130,10 @@ function store(deck,bridge,identity){
   assert(savedAfterLaunch.completed['02'],'Verified milestone not persisted');
 
   first.nodes.exitBtn.onclick({preventDefault(){},stopPropagation(){},stopImmediatePropagation(){}});
-  assert.equal(first.location.href,'clubfinder-beta.html?from=challenges-exit-v3',
-    'Exit must return to the originating BETA Clubfinder route');
+  assert.equal(first.location.href,'__HISTORY_BACK__',
+    'Normal Clubfinder-origin Exit must return through existing browser history');
+  assert.equal(first.ctx.history.backCalls,1,
+    'Normal Clubfinder-origin Exit must use one history.back call');
   assert.equal(session['tffc.challengeOrigin'],undefined,
     'Exit must consume only the Challenges origin marker');
   assert.equal(session.otherSession,'preserve me','Exit cleared unrelated session data');
@@ -148,6 +150,18 @@ function store(deck,bridge,identity){
     'Campaign milestone lost across exit and Deck refresh');
   assert.equal(refreshed.read('state.records["04"].note'),
     'retain existing trophy records','Existing records lost on refresh');
+}
+
+// Direct entry has no guaranteed Clubfinder entry behind it, so Exit keeps the
+// deterministic replacement fallback instead of navigating arbitrary history.
+{
+  const local=store(baseSave(),truth(),backup());
+  const direct=boot(local,{});
+  direct.nodes.exitBtn.onclick({preventDefault(){},stopPropagation(){},stopImmediatePropagation(){}});
+  assert.equal(direct.ctx.history.backCalls,0,
+    'Direct Challenges entry must not use browser Back');
+  assert.equal(direct.location.href,'clubfinder-beta.html?from=challenges-exit-v3',
+    'Direct Challenges entry must retain deterministic Clubfinder fallback');
 }
 
 // A missing Pigeon Name may use the backup only for the SAME origin and
@@ -304,6 +318,8 @@ function store(deck,bridge,identity){
   const escape=app.listeners.keydown.find(fn=>fn.toString().includes('Escape'));
   assert(escape,'Escape navigation handler missing');
   escape({key:'Escape',preventDefault(){}});
+  assert.equal(app.ctx.history.backCalls,0,
+    'Legacy Stats-return must not use browser Back');
   assert.equal(app.location.href,'clubfinder-beta.html?from=challenges-exit-v3',
     'Legacy Stats-return Escape must return to BETA Clubfinder');
   const outOfRange=boot(store(baseSave()),{'tffc.challengeReturnIndex':'999'},
