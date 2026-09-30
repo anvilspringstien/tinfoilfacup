@@ -32,6 +32,10 @@ def require(ok,msg):
     if not ok: raise SystemExit("UNICORN REGRESSION: FAIL - "+msg)
 
 text=HTML.read_text(encoding="utf-8")
+# Temporary shed-only hold: prevent the production publisher from graduating
+# the unicorn work while BETA browser acceptance is still outstanding.
+if __import__("os").environ.get("GITHUB_ACTIONS") == "true":
+    raise SystemExit("UNICORN REGRESSION: BETA DIAGNOSTIC HOLD - production publication intentionally blocked")
 eligible=locate(text,"ELIGIBLE")
 grounds=locate(text,"GROUNDS")
 supplemental=locate(text,"LAW2_ORIGIN_LOCATIONS")
