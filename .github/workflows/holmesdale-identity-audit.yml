@@ -1,0 +1,23 @@
+name: Holmesdale merged-club identity audit
+on:
+  push:
+    branches: ['audit/holmesdale-identity-20260924']
+  pull_request:
+    paths:
+      - 'tests/audit_holmesdale_identity.js'
+      - '.github/workflows/holmesdale-identity-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect canonical names and execute actual production and BETA campaigns
+        run: node tests/audit_holmesdale_identity.js
+      - name: Guard production, BETA, and canonical files
+        run: git diff --exit-code -- clubfinder.html beta/clubfinder-beta.html competition.json
