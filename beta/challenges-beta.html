@@ -1708,9 +1708,16 @@ function tinFoilConfirm(message){
 }
 
 function tinFoilReturnToClubfinder(){
-  /* Exit and Maybe Later have one deterministic BETA destination. Do not use
-     browser history: Stats may have occupied/replaced that history entry. */
+  let origin='';
+  try{origin=sessionStorage.getItem('tffc.challengeOrigin')||'';}catch(_){}
+  const fromStatsReturn=new URLSearchParams(location.search||'').get('from')==='stats-return-v2';
   try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
+  if(origin==='clubfinder-beta'&&!fromStatsReturn&&history&&typeof history.back==='function'){
+    history.back();
+    return;
+  }
+  /* Direct/legacy entry, or a Stats-return path, has no guaranteed Clubfinder
+     history entry immediately behind it. Keep the deterministic fallback. */
   window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
 }
 
