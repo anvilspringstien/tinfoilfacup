@@ -2053,7 +2053,7 @@ async function go(explicitPostcodeSearch=false){
   results.style.display='block';const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';status.textContent=selected&&!showOriginal?'Your Tin Foil FA Cup Campaign. Dates & times may change. Always check before travelling':top.length+' Tin Foil FA Cup Campaigns found for '+u.postcode+'. Dates & times may change. Always check before travelling';
  }catch(e){status.textContent=e.message||'Unable to complete the search.'}finally{btn.disabled=false}
 }
-document.getElementById('postcode').addEventListener('input',function(){this.value=this.value.toUpperCase();});document.getElementById('findBtn').addEventListener('click',()=>go(true));document.getElementById('postcode').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go(true)}});
+document.getElementById('postcode').addEventListener('input',function(){this.value=this.value.toUpperCase();if(this.value.trim())tinFoilEnsureCompetitionReady().catch(()=>{});});document.getElementById('findBtn').addEventListener('click',()=>go(true));document.getElementById('postcode').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go(true)}});
 
 const tinFoilRouteParams=new URLSearchParams(window.location.search||'');
 const tinFoilStatsRouteRequested=tinFoilRouteParams.get('stats')==='1';
