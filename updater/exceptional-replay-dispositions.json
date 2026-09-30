@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "dispositions": [
+    {
+      "id": "2026-09-19-woodford-town-mulbarton-wanderers-fa-ordered-full-replay",
+      "round": "Second Round Qualifying",
+      "original": {
+        "date": "2026-09-19",
+        "home": "Woodford Town",
+        "away": "Mulbarton Wanderers",
+        "home_score": 1,
+        "away_score": 2,
+        "round": "Second Round Qualifying"
+      },
+      "disposition": "voided-replay-ordered",
+      "disposition_source_url": "https://www.woodfordtownfc.com/news/club-statement--fa-cup-second-qualifying-round-tie-to-be-replayed-2999559.html",
+      "disposition_note": "FA ruled the original fixture was not completed in accordance with the 2026/27 FA Cup Rules and ordered the match replayed in full.",
+      "replay_result": {
+        "date": "2026-09-29",
+        "home": "Mulbarton Wanderers",
+        "away": "Woodford Town",
+        "home_score": 2,
+        "away_score": 0,
+        "winner": "Mulbarton Wanderers",
+        "status": "FT",
+        "decision": "",
+        "round": "Second Round Qualifying Replay",
+        "source_url": "https://uk.sports.yahoo.com/news/mulbarton-just-rewards-controversial-fa-205200927.html",
+        "venue": {
+          "ground": "The Abode Arena at Mulberry Park",
+          "postcode": "NR14 8AE",
+          "source": "https://www.mulbartonfc.co.uk/calendar",
+          "verification": "official-club"
+        }
+      },
+      "downstream": {
+        "date": "2026-10-03",
+        "round": "Third Round Qualifying",
+        "home": "Mulbarton Wanderers",
+        "away": "Gloucester City",
+        "kickoff": "15:00"
+      },
+      "downstream_source_url": "https://www.mulbartonfc.co.uk/calendar",
+      "verification_state": "human-reviewed-exception"
+    }
+  ]
+}

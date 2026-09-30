@@ -10,6 +10,31 @@ import auto_round_results as scan
 from round_state_engine import norm, compatible, base_round, pair_key
 
 ROOT = Path(__file__).resolve().parents[1]
+EXCEPTION_LEDGER = ROOT / "updater" / "exceptional-replay-dispositions.json"
+
+def exceptional_original_matches(row, replay):
+    if not EXCEPTION_LEDGER.exists():
+        return False
+    payload=json.loads(EXCEPTION_LEDGER.read_text(encoding="utf-8"))
+    for item in payload.get("dispositions") or []:
+        original=item.get("original") or {}
+        expected=item.get("replay_result") or {}
+        if not (item.get("verification_state")=="human-reviewed-exception"
+                and item.get("disposition")=="voided-replay-ordered"
+                and item.get("disposition_source_url")):
+            continue
+        if not (pair_key(expected)==pair_key(replay)
+                and expected.get("date")==replay.get("date")
+                and expected.get("winner")==replay.get("winner")):
+            continue
+        if (pair_key(original)==pair_key(row)
+                and original.get("round")==base_round(row.get("round"))
+                and original.get("date")==row.get("date")
+                and original.get("home_score")==row.get("home_score")
+                and original.get("away_score")==row.get("away_score")):
+            return True
+    return False
+
 DRAW_ALIASES = {
     "hamp and rich": "hampton and richmond borough",
     "weston sm": "weston super mare",
@@ -50,7 +75,8 @@ def stage(data, report):
                      if pair_key(r) == pair_key(result)
                      and base_round(r.get("round")) == base_round(result.get("round"))
                      and not r.get("round", "").endswith(" Replay")
-                     and r.get("decision") == "draw-replay"
+                     and (r.get("decision") == "draw-replay"
+                          or exceptional_original_matches(r, result))
                      and r.get("date", "") < result.get("date", "")]
         if len(originals) != 1:
             raise ValueError("replay original not uniquely verified")

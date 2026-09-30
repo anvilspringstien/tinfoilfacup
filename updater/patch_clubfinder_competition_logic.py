@@ -31,6 +31,8 @@ identity_block=r'''function canonicalClubKey(name){
 function sameClubIdentity(a,b){return canonicalClubKey(a)===canonicalClubKey(b);}
 function canonicalResultWinner(r){
   if(!r)return '';
+  const status=String(r.status||'').toUpperCase();
+  if(status==='VOID'||status==='VOIDED'||String(r.decision||'').toLowerCase()==='voided-replay-ordered')return '';
   const hs=Number(r.home_score),as=Number(r.away_score);
   if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
   if(r.decision==='draw-replay')return '';
@@ -64,6 +66,8 @@ history_fn=r'''function historicalResultsForClub(club){
   const out=[];
   function add(r,round){
     if(!r||typeof r!=='object')return;
+    const status=String(r.status||'').toUpperCase();
+    if(status==='VOID'||status==='VOIDED'||String(r.decision||'').toLowerCase()==='voided-replay-ordered')return;
     if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
     if(!out.some(x=>sameSemanticResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
   }

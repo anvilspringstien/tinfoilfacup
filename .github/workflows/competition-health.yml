@@ -15,6 +15,10 @@ on:
       - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
       - "updater/sync_second_qualifying_stable.py"
+      - "updater/exceptional-replay-dispositions.json"
+      - "updater/apply_exceptional_replay_dispositions.py"
+      - "updater/unicorn_replay_regression.py"
+      - "updater/patch_gloucester_current_identity.py"
       - "updater/reconcile_first_qualifying_replays.py"
       - "updater/replay_completion_guard.py"
       - "updater/reconcile_result_history_aliases.py"
@@ -90,6 +94,9 @@ jobs:
       - name: Reconcile all First Qualifying replays
         run: python updater/reconcile_first_qualifying_replays.py
 
+      - name: Apply reviewed exceptional replay dispositions
+        run: python updater/apply_exceptional_replay_dispositions.py
+
       - name: Reconcile replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py
 
@@ -146,6 +153,9 @@ jobs:
       - name: Promote independently verified Law 2 locations
         run: python updater/promote_verified_law2_locations.py
 
+      - name: Apply Gloucester City AFC current identity and ground
+        run: python updater/patch_gloucester_current_identity.py
+
       - name: Audit Law 2 location verification queue
         run: python updater/audit_law2_location_verification.py
 
@@ -190,6 +200,9 @@ jobs:
 
       - name: Guard embedded fallback freshness
         run: python updater/embedded_snapshot_regression.py
+
+      - name: Guard exceptional replay and Gloucester identity
+        run: python updater/unicorn_replay_regression.py
 
       - name: Run canonical DL5 4RQ Stats regression
         run: node updater/clubfinder_stats_regression.js

@@ -74,6 +74,45 @@ class StageTests(unittest.TestCase):
         self.assertEqual(summary["staged"][0]["next_fixture"], "Thame Utd v Eastbourne Borough")
         self.assertEqual(candidate["results"]["Thame United"]["winner"], "Thame United")
 
+    def test_reviewed_voided_result_can_stage_ordered_full_replay(self):
+        source = data()
+        source["result_history"] = {"Woodford Town": [{
+            "home": "Woodford Town", "away": "Mulbarton Wanderers",
+            "home_score": 1, "away_score": 2, "winner": "Mulbarton Wanderers",
+            "status": "FT", "decision": "",
+            "round": "Second Round Qualifying", "date": "2026-09-19"}]}
+        source["fixtures"] = {"Mulbarton": {
+            "home": "Mulbarton Wanderers", "away": "Gloucester City",
+            "date": "2026-10-03", "round": "Third Round Qualifying"}}
+        replay = {"home": "Mulbarton Wanderers", "away": "Woodford Town",
+                  "home_score": 2, "away_score": 0,
+                  "winner": "Mulbarton Wanderers", "status": "FT", "decision": "",
+                  "round": "Second Round Qualifying Replay", "date": "2026-09-29"}
+        before = copy.deepcopy(source)
+        summary, candidate = stage.stage(source, {
+            "production_mutation": False, "blocked": [], "replay_candidates": [replay]})
+        self.assertEqual(source, before)
+        self.assertEqual(summary["staged_count"], 1)
+        self.assertEqual(summary["staged"][0]["next_fixture"], "Mulbarton Wanderers v Gloucester City")
+        self.assertEqual(candidate["results"]["Mulbarton Wanderers"]["winner"], "Mulbarton Wanderers")
+
+    def test_unlisted_decided_result_cannot_be_treated_as_replay_original(self):
+        source = data()
+        source["result_history"] = {"Other": [{
+            "home": "Other", "away": "Opponent",
+            "home_score": 1, "away_score": 0, "winner": "Other",
+            "status": "FT", "decision": "",
+            "round": "Second Round Qualifying", "date": "2026-09-19"}]}
+        source["fixtures"] = {"Other": {
+            "home": "Other", "away": "Next Club",
+            "date": "2026-10-03", "round": "Third Round Qualifying"}}
+        replay = {"home": "Opponent", "away": "Other",
+                  "home_score": 0, "away_score": 2, "winner": "Other",
+                  "status": "FT", "decision": "",
+                  "round": "Second Round Qualifying Replay", "date": "2026-09-29"}
+        with self.assertRaisesRegex(ValueError, "replay original not uniquely verified"):
+            stage.stage(source, {"production_mutation": False, "blocked": [], "replay_candidates": [replay]})
+
 
 if __name__ == "__main__":
     unittest.main()
