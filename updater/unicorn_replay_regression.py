@@ -38,9 +38,11 @@ supplemental=locate(text,"LAW2_ORIGIN_LOCATIONS")
 gclubs=[x for x in eligible if norm(x.get("name"))=="gloucester city"]
 require(len(gclubs)==1 and gclubs[0]["name"]=="Gloucester City AFC","current display identity is not Gloucester City AFC")
 gg=[x for x in grounds if norm(x.get("name") or x.get("club"))=="gloucester city"]
-require(len(gg)==1,"Gloucester current ground is missing/ambiguous")
-require(gg[0].get("ground")=="The KMM Energy Stadium" and gg[0].get("postcode")=="GL2 5HD","Gloucester current ground/postcode drifted")
-require(gg[0].get("verification")=="verified","Gloucester current ground is not verified")
+sg=[x for x in supplemental if norm(x.get("name") or x.get("club"))=="gloucester city"]
+current_gloucester=gg+sg
+require(len(current_gloucester)==1,"Gloucester current ground is missing/ambiguous across GROUNDS/Law2")
+require(current_gloucester[0].get("ground")=="The KMM Energy Stadium" and current_gloucester[0].get("postcode")=="GL2 5HD","Gloucester current ground/postcode drifted")
+require(current_gloucester[0].get("verification")=="verified","Gloucester current ground is not verified")
 
 # Reproduce the user's GL1 1AJ canary from its published postcode centroid.
 # Gloucester City need not be the nearest club, but it must appear in the
