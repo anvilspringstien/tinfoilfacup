@@ -13,6 +13,7 @@ on:
       - 'docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md'
       - 'updater/beta_campaign_identity_regression.js'
       - 'tests/test_beta_campaign_bridge_contract.js'
+      - 'tests/test_beta_gloucester_current_identity.js'
       - '.github/workflows/beta-clubfinder-stage-c.yml'
   workflow_dispatch:
 
@@ -48,6 +49,7 @@ jobs:
           set -euo pipefail
           node tests/test_beta_petts_wood_display_identity.js
           node tests/test_beta_holmesdale_campaign.js
+          node tests/test_beta_gloucester_current_identity.js
           node tests/test_beta_exmouth_full_index.js
           node tests/test_beta_weston_replay_stats.js
           node tests/test_beta_thame_next_fixture.js
