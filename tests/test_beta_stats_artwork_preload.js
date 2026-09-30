@@ -13,13 +13,17 @@ const assets=[
 ];
 const prepStart=html.indexOf("Preparing Your Stats");
 assert(prepStart>=0,'Stats prep page missing');
-const prepWindow=html.slice(Math.max(0,prepStart-7000),prepStart+2500);
-for(const asset of assets){
-  assert(prepWindow.includes('rel="preload" as="image" href="'+asset),
-    'Stats prep page must preload '+asset);
-}
-assert(prepWindow.includes('header-logo-f533fc07b55f.png" fetchpriority="high"'),
+const prepWindow=html.slice(Math.max(0,prepStart-7000),prepStart+4500);
+assert(prepWindow.includes("journeyCertificate.toString()"),
+  'Stats prep must derive preload assets from the existing renderer');
+assert(prepWindow.includes("link.rel='preload';link.as='image';link.href=asset"),
+  'Stats prep must create image preload links');
+assert(prepWindow.includes("if(asset.includes('header-logo-'))link.fetchPriority='high'"),
   'Stats header logo preload must have high fetch priority');
+
+const reportImages=[...html.matchAll(/assets\/stats-report\/[^"'\\]+\.png/g)].map(m=>m[0]);
+assert(reportImages.length===7&&new Set(reportImages).size===7,
+  'Stats renderer must retain exactly seven literal artwork references');
 
 const statsDoc=html.indexOf('</style></head><body><main class="sheet"><div class="stats-return">');
 assert(statsDoc>=0,'Stats return control must be inside the Stats sheet');
