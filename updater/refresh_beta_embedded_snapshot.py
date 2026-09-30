@@ -12,9 +12,9 @@ FALLBACK = ROOT / 'beta/competition-fallback.json'
 
 def refresh(html, data):
     if data.get('schema_version') != 1 or not data.get('updated_at'):
-        raise ValueError('canonical competition schema/timestamp missing')
+        raise ValueError('BETA live competition schema/timestamp missing')
     if not data.get('result_history') or not data.get('fixtures'):
-        raise ValueError('canonical result history/fixtures missing')
+        raise ValueError('BETA live result history/fixtures missing')
     required = (
         "const LIVE_COMPETITION_DATA_URL='./competition.json';",
         "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';",
