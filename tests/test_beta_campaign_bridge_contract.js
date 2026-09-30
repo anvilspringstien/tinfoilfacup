@@ -207,14 +207,18 @@ function store(deck,bridge,identity){
     'Numeric-string campaign round not accepted');
 
   const noBackup=boot(store(baseSave(),truth({pigeonName:'',callSign:''})));
-  assert.equal(noBackup.nodes.truthPigeonName.textContent,'—',
+  assert.match(noBackup.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+    'Absent identity backup should offer safe Clubfinder naming');
+  assert.doesNotMatch(noBackup.nodes.truthPigeonName.innerHTML,/Pigeon McPigeonface/,
     'Absent identity backup should not invent a Pigeon Name');
   assert.equal(noBackup.nodes.truthCallSign.textContent,'—',
     'Absent identity backup should not invent a Call Sign');
   const malformedBackup=store(baseSave(),truth({pigeonName:'',callSign:''}));
   malformedBackup[IDENTITY]='{malformed json';
   const bad=boot(malformedBackup);
-  assert.equal(bad.nodes.truthPigeonName.textContent,'—',
+  assert.match(bad.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+    'Malformed identity backup should fall back to safe Clubfinder naming');
+  assert.doesNotMatch(bad.nodes.truthPigeonName.innerHTML,/Pigeon McPigeonface/,
     'Malformed identity backup should not crash or leak another Pigeon Name');
 
   const oldUndated=boot(store(baseSave(),
@@ -224,7 +228,9 @@ function store(deck,bridge,identity){
   const undatedMismatch=boot(store(baseSave(),
     truth({pigeonName:'',selectedAt:undefined}),
     backup({originName:'Wimborne Town FC',pigeonName:'Other Pigeon'})));
-  assert.equal(undatedMismatch.nodes.truthPigeonName.textContent,'—',
+  assert.match(undatedMismatch.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+    'Undated wrong-origin backup should offer safe Clubfinder naming');
+  assert.doesNotMatch(undatedMismatch.nodes.truthPigeonName.innerHTML,/Other Pigeon/,
     'Missing date must not allow a different-origin identity to leak');
 }
 
