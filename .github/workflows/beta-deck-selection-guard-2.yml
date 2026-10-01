@@ -1,0 +1,25 @@
+name: BETA Deck-wide selection guard
+
+on:
+  push:
+    branches:
+      - beta/deck-text-selection-guard-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Focused regressions
+        run: |
+          node tests/test_beta_deck_text_selection_guard.js
+          node tests/test_beta_deck_image_hit_guard.js
+          node tests/test_beta_demand_loaded_reverses.js
+          node tests/test_beta_controlled_deck_warmer.js
+          node tests/test_beta_challenges_startup_load.js
+          node tests/test_beta_cabinet_thumbnails.js
+          node tests/test_beta_trophy_viewer.js
+          node tests/test_beta_challenges_direct_entry.js
