@@ -1335,14 +1335,17 @@ function preloadArt(src, priority="low"){
   ART_PRELOAD_CACHE.set(src,entry);
   return entry.promise;
 }
-function preloadMatAt(i, priority="low"){
+function preloadFaceAt(i, side, priority="low"){
   const c=CHALLENGES[i];
   if(!c) return Promise.resolve(false);
   const art=ART[c.id];
-  if(!art) return Promise.resolve(false);
+  const src=art&&art[side];
+  return src?preloadArt(src,priority):Promise.resolve(false);
+}
+function preloadMatAt(i, priority="low"){
   return Promise.all([
-    preloadArt(art.front,priority),
-    preloadArt(art.back,priority)
+    preloadFaceAt(i,"front",priority),
+    preloadFaceAt(i,"back",priority)
   ]);
 }
 function matPreloadStarted(i){
@@ -1357,7 +1360,7 @@ function warmChallengeArt(){
   preloadMatAt(0,"high");
 }
 let INITIAL_FRONT_READY=false;
-let DECK_WARM_INDEX=3;
+let DECK_WARM_INDEX=2;
 let DECK_WARM_RUNNING=false;
 let DECK_WARM_TIMER=0;
 function scheduleDeckWarm(delay=180){
@@ -1381,11 +1384,14 @@ async function warmNextDeckMat(){
   }
 }
 function warmOpeningNeighbours(){
+  // Fronts are what rapid next-card browsing needs first. Pull several fronts
+  // forward without simultaneously spending bandwidth on every reverse.
   Promise.all([
-    preloadMatAt(0,"high"),
     preloadMatAt(1,"high"),
-    preloadMatAt(2,"low")
-  ]).finally(()=>scheduleDeckWarm(250));
+    preloadFaceAt(2,"front","high"),
+    preloadFaceAt(3,"front","high"),
+    preloadFaceAt(4,"front","low")
+  ]).finally(()=>scheduleDeckWarm(180));
 }
 if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:900});
 else setTimeout(warmChallengeArt,120);
