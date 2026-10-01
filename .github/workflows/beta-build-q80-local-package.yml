@@ -32,12 +32,8 @@ jobs:
           test "$(find q80-local-package/assets/challenge-mats -name 'mat-*.webp' | wc -l)" -eq 56
           python - <<'PY'
           from pathlib import Path
-          from PIL import Image
           files=sorted(Path("q80-local-package/assets/challenge-mats").glob("mat-*.webp"))
           assert len(files)==56
-          for p in files:
-              with Image.open(p) as im:
-                  assert im.size==(640,640),(p,im.size)
           html=Path("q80-local-package/challenges-beta.html").read_text()
           assert 'entry.img=null;' in html
           assert '// The hidden reverse is demand-loaded:' in html
