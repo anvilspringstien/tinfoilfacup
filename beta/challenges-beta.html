@@ -1887,6 +1887,11 @@ function flipMat() {
   });
 }
 
+flipcard.addEventListener("mousedown",e=>{
+  // Rapid mouse clicks can otherwise start native text selection outside the
+  // non-selectable artwork layer and highlight adjacent Deck copy.
+  if(e.button===0)e.preventDefault();
+});
 flipcard.onclick=()=>{ if(suppressFlip){suppressFlip=false;return;} flipMat(); };
 flipcard.addEventListener("keydown",e=>{
   if(e.key==="Enter" || e.key===" ") { e.preventDefault(); flipMat(); }
