@@ -1316,6 +1316,12 @@ function __tffcChallengeShowLoadReport(){
   const lm=__tffcChallengeLocalMarks;
   const abs=(relative)=>performance.timeOrigin+(Number(relative)||0);
   const dest={
+    fetchStart:nav?{t:abs(nav.fetchStart)}:null,
+    domainStart:nav?{t:abs(nav.domainLookupStart)}:null,
+    domainEnd:nav?{t:abs(nav.domainLookupEnd)}:null,
+    connectStart:nav?{t:abs(nav.connectStart)}:null,
+    connectEnd:nav?{t:abs(nav.connectEnd)}:null,
+    requestStart:nav?{t:abs(nav.requestStart)}:null,
     responseStart:nav?{t:abs(nav.responseStart)}:null,
     responseEnd:nav?{t:abs(nav.responseEnd)}:null,
     domContentLoaded:nav?{t:abs(nav.domContentLoadedEventEnd)}:null,
@@ -1336,18 +1342,22 @@ function __tffcChallengeShowLoadReport(){
     'Postcodes.io resources      '+postcode.length+' requests; summed duration '+postcodeDur.toFixed(1)+' ms',
     '',
     'Challenges navigation / paint',
-    'Navigation → response start '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,dest.responseStart)),
-    'Response start → end        '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(dest.responseStart,dest.responseEnd)),
+    'Navigation → fetch start    '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,dest.fetchStart)),
+    'Fetch → request start        '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(dest.fetchStart,dest.requestStart)),
+    'Request → response start     '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(dest.requestStart,dest.responseStart)),
+    'Response start → end         '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(dest.responseStart,dest.responseEnd)),
     'Navigation → DOM ready      '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,dest.domContentLoaded)),
     'Navigation → FCP            '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,dest.fcp)),
-    'Navigation → first mat      '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,lm.firstMatReady)),
+    'Navigation → front mat      '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,lm.frontMatReady)),
+    'Navigation → back mat       '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,lm.backMatReady)),
     'Navigation → deck open      '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.navigationStart,lm.deckOpen)),
-    'Click → first mat           '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.click,lm.firstMatReady)),
+    'Click → front mat           '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.click,lm.frontMatReady)),
     'Click → deck open           '+__tffcChallengeDiagFmt(__tffcChallengeDiagMs(m.click,lm.deckOpen)),
     '',
     'Current Challenges resources',
     'Mat resources requested     '+mats.length,
     'Mat bytes transferred       '+__tffcChallengeDiagBytes(matBytes),
+    ...mats.map((r,i)=>'Mat '+(i+1)+' '+r.duration.toFixed(1)+' ms @ '+r.startTime.toFixed(1)+' ms  '+r.name.split('/').pop()),
     'Challenges HTML transfer    '+__tffcChallengeDiagBytes(nav&&nav.transferSize),
     'Challenges HTML decoded     '+__tffcChallengeDiagBytes(nav&&nav.decodedBodySize),
     '',
@@ -1636,7 +1646,8 @@ function buildFace(el, c, side) {
     const reveal=()=>{
       if(el.dataset.faceLoad===serial){
         img.style.visibility="visible";
-        __tffcChallengeLocalMark('firstMatReady',{challenge:c.id,side});
+        if(side==='front')__tffcChallengeLocalMark('frontMatReady',{challenge:c.id});
+        if(side==='back')__tffcChallengeLocalMark('backMatReady',{challenge:c.id});
       }
     };
     if(typeof img.decode==="function") img.decode().catch(()=>{}).finally(reveal);
