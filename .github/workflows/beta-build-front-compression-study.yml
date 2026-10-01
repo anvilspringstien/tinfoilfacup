@@ -71,7 +71,7 @@ function tffcCompressionDiagReport(){{
   const entries=performance.getEntriesByType("resource").filter(e=>/challenge-fronts-q{q}\\/mat-00-front\\.webp/.test(e.name));
   if(!entries.length)return;
   const e=entries[entries.length-1];
-  TFFC_COMP_DIAG.textContent=`q{q} 640px fronts • mat 00: start ${{e.startTime.toFixed(0)}} ms • end ${{e.responseEnd.toFixed(0)}} ms • duration ${{e.duration.toFixed(0)}} ms`;
+  TFFC_COMP_DIAG.textContent="q{q} 640px fronts • mat 00: start "+e.startTime.toFixed(0)+" ms • end "+e.responseEnd.toFixed(0)+" ms • duration "+e.duration.toFixed(0)+" ms";
 }}
 setInterval(tffcCompressionDiagReport,250);
 '''
