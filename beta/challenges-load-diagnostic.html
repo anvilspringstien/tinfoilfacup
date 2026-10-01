@@ -1933,11 +1933,14 @@ $("addPigeonMiles").disabled=ended;
 $("simulateGiantKill").disabled=ended || state.giantKillAchieved;
 $("campaignRound").disabled=ended;
 }
+let CABINET_IMAGE_OBSERVER=null;
 function renderTrophyCabinet(challengeList,completed) {
 const trophyChallenges=challengeList;
 $("cabinetCount").textContent=`${completed.length} / ${trophyChallenges.length}`;
 
 const cabinet=$("deckCabinet"); cabinet.innerHTML="";
+if(CABINET_IMAGE_OBSERVER){CABINET_IMAGE_OBSERVER.disconnect();CABINET_IMAGE_OBSERVER=null;}
+const pending=[];
 for(const c of challengeList) {
   const i=CHALLENGES.indexOf(c);
   const done=!!state.completed[c.id];
@@ -1945,11 +1948,26 @@ for(const c of challengeList) {
   const slot=document.createElement(done?"button":"div");
   slot.className=`trophy-slot ${done?"completed":unlocked?"available":"locked"}`;
   slot.setAttribute("aria-label", done?`Inspect ${c.title} achieved trophy`:unlocked?`${c.title} available`:`${c.title} locked`);
-  const img=document.createElement("img"); img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front || CANONICAL_CUP; img.alt="";
+  const img=document.createElement("img"); img.decoding="async"; img.dataset.src=ART[c.id]?.front || CANONICAL_CUP || ""; img.alt="";
   const mark=document.createElement("span"); mark.className="slotmark"; mark.textContent=done?"":unlocked?"Available":"🔒";
   slot.append(img,mark);
+  pending.push(img);
   if(done) slot.onclick=()=>openTrophy(c,slot);
   cabinet.appendChild(slot);
+}
+if("IntersectionObserver" in window){
+  CABINET_IMAGE_OBSERVER=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      if(!entry.isIntersecting)continue;
+      const img=entry.target,src=img.dataset.src;
+      if(src&&!img.src)img.src=src;
+      CABINET_IMAGE_OBSERVER.unobserve(img);
+    }
+  },{root:overlay,rootMargin:"80px 0px",threshold:0.01});
+  pending.forEach(img=>CABINET_IMAGE_OBSERVER.observe(img));
+}else{
+  const load=()=>pending.forEach(img=>{if(img.dataset.src&&!img.src)img.src=img.dataset.src});
+  if("requestIdleCallback" in window)requestIdleCallback(load,{timeout:1500});else setTimeout(load,1000);
 }
 }
 function renderStats() {
