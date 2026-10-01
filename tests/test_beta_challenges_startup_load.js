@@ -12,14 +12,16 @@ assert(html.includes('function warmOpeningNeighbours(){'),
   'Challenges must retain neighbour strengthening after mat 00 paints');
 assert(html.includes('preloadFaceAt(0,"back","high");\n  preloadFaceAt(1,"front","high");\n  preloadFaceAt(2,"front","high");\n  preloadFaceAt(3,"front","low");'),
   'Opening browse path must strengthen nearby fronts without bursting unseen reverses');
-assert(html.includes('if(side==="front" && c.id==="00" && !INITIAL_FRONT_READY)'),
+assert(html.includes('if(c.id==="00" && !INITIAL_FRONT_READY)'),
   'Opening neighbour warmup must wait for the visible mat 00 front');
 assert(html.includes('requestAnimationFrame(()=>warmOpeningNeighbours());'),
   'Opening neighbour warmup must be deferred until after mat 00 front reveal');
 assert(html.includes('preloadFaceAt(index,"front","high");'),
   'Current visible front must remain high priority');
-assert(html.includes('preloadFaceAt(index,"back",(index===0 && !INITIAL_FRONT_READY)?"low":"high");'),
-  'Initial hidden mat 00 reverse must not compete equally with the visible front');
+assert(!html.includes('preloadFaceAt(index,"back",(index===0 && !INITIAL_FRONT_READY)?"low":"high");'),
+  'Navigation must not eagerly preload the current hidden reverse');
+assert(html.includes('scheduleCurrentBackWarm(index,c.id);'),
+  'Current reverse must only warm after the visible front has settled');
 assert(html.includes('preloadFaceAt(index+1,"front","high");'),
   'Foreground neighbour warmup must favour next-card fronts');
 
