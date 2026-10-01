@@ -41,57 +41,72 @@ const art=Object.fromEntries(challenges.map(c=>[c.id,{
 vm.runInContext('const CHALLENGES='+JSON.stringify(challenges)+'; const ART='+JSON.stringify(art)+';',ctx);
 vm.runInContext(code,ctx,{filename:'deck-warmer-subsystem.js'});
 
-assert.equal(typeof idleCallback,'function','Opening mat warmup must remain idle-scheduled');
-idleCallback();
-assert.equal(images.length,2,'Opening warmup must request only mat 00 front/back');
-assert(images.every(img=>img.fetchPriority==='high'),'Opening mat must be high priority');
-
-function fireFor(prefix){
-  for(const img of images.filter(x=>x.src.startsWith(prefix)&&x.onload)) img.onload();
+function bySrc(src){return images.filter(x=>x.src===src);}
+function fire(src){
+  for(const img of bySrc(src)) if(img.onload) img.onload();
 }
 async function flush(){
   for(let i=0;i<8;i++) await Promise.resolve();
 }
 
 (async()=>{
-  // Opening-neighbour stage must not start the background march until 00-02 settle.
-  vm.runInContext('warmOpeningNeighbours()',ctx);
-  assert.equal(images.length,6,'Opening neighbourhood must total mats 00-02 only');
-  assert.equal(images.filter(x=>x.src.startsWith('mat-01')).length,2,'Mat 01 missing');
-  assert.equal(images.filter(x=>x.src.startsWith('mat-02')).length,2,'Mat 02 missing');
-  assert.equal(images.find(x=>x.src==='mat-01-front.webp').fetchPriority,'high','Mat 01 must be high priority');
-  assert.equal(images.find(x=>x.src==='mat-02-front.webp').fetchPriority,'low','Mat 02 must stay low priority');
+  assert.equal(typeof idleCallback,'function','Opening front warmup must remain idle-scheduled');
 
-  fireFor('mat-00');
-  fireFor('mat-01');
-  fireFor('mat-02');
-  await flush();
+  // Cold start: only the visible mat 00 front gets an immediate request.
+  idleCallback();
+  assert.equal(images.length,1,'Cold warmup must request only the visible mat 00 front immediately');
+  assert.equal(images[0].src,'mat-00-front.webp','Wrong opening asset');
+  assert.equal(images[0].fetchPriority,'high','Visible mat 00 front must be high priority');
+  assert.equal(timers.length,1,'Future-front sweep must be scheduled separately');
+  assert.equal(timers[0].delay,100,'Future-front sweep should begin gently after mat 00 starts');
 
-  assert.equal(timers.length,1,'Exactly one background timer should be queued after 00-02 settle');
-  assert.equal(timers[0].delay,250,'First background march should pause after opening neighbourhood');
-  assert.equal(images.filter(x=>x.src.startsWith('mat-03')).length,0,'Mat 03 must not start before scheduled background turn');
-
-  // One cold mat at a time.
+  // One quiet future front at a time.
   timers.shift().fn();
-  assert.equal(images.filter(x=>x.src.startsWith('mat-03')).length,2,'First background turn must fetch mat 03 only');
-  assert.equal(images.filter(x=>x.src.startsWith('mat-04')).length,0,'Mat 04 must wait until mat 03 settles');
-  const mat3=images.filter(x=>x.src.startsWith('mat-03'));
-  assert(mat3.every(x=>x.fetchPriority==='low'),'Background mat must start low priority');
+  assert.equal(bySrc('mat-01-front.webp').length,1,'First background asset must be mat 01 front');
+  assert.equal(bySrc('mat-01-back.webp').length,0,'Future reverse must not compete with browse fronts');
+  const front1=bySrc('mat-01-front.webp')[0];
+  assert.equal(front1.fetchPriority,'low','Background future front must start low priority');
+  assert.equal(bySrc('mat-02-front.webp').length,0,'Only one cold future front may be in flight');
 
-  // Foreground navigation reuses and promotes the in-flight requests.
-  vm.runInContext('preloadMatAt(3,"high")',ctx);
-  assert.equal(images.filter(x=>x.src.startsWith('mat-03')).length,2,'Foreground promotion must not duplicate mat 03 requests');
-  assert(mat3.every(x=>x.fetchPriority==='high'),'Foreground navigation must promote in-flight mat 03 requests');
+  // Foreground navigation promotes the same request instead of duplicating it.
+  vm.runInContext('preloadFaceAt(1,"front","high")',ctx);
+  assert.equal(bySrc('mat-01-front.webp').length,1,'Foreground promotion must not duplicate mat 01 front');
+  assert.equal(front1.fetchPriority,'high','Foreground navigation must promote an in-flight future front');
 
-  fireFor('mat-03');
+  fire('mat-01-front.webp');
   await flush();
-  assert.equal(timers.length,1,'Next background turn should be queued only after mat 03 settles');
-  assert.equal(images.filter(x=>x.src.startsWith('mat-04')).length,0,'Mat 04 must still be untouched before the timer fires');
+  assert.equal(timers.length,1,'Next future front should schedule only after mat 01 settles');
+  assert.equal(timers[0].delay,120,'Steady-state front sweep cadence changed unexpectedly');
+  assert.equal(bySrc('mat-02-front.webp').length,0,'Mat 02 front must wait for the next sweep turn');
 
   timers.shift().fn();
-  assert.equal(images.filter(x=>x.src.startsWith('mat-04')).length,2,'Second background turn must move to mat 04');
-  assert.equal(images.filter(x=>x.src.startsWith('mat-05')).length,0,'Only one background mat may be in flight');
+  assert.equal(bySrc('mat-02-front.webp').length,1,'Second sweep turn must fetch mat 02 front');
+  assert.equal(bySrc('mat-02-back.webp').length,0,'Back sweep must not start while fronts remain');
+
+  // Finish the front sweep.
+  for(let i=2;i<=5;i++){
+    const src=`mat-${String(i).padStart(2,'0')}-front.webp`;
+    if(bySrc(src).length===0){
+      assert.equal(timers.length,1,'Expected one timer before '+src);
+      timers.shift().fn();
+      assert.equal(bySrc(src).length,1,'Missing '+src);
+    }
+    fire(src);
+    await flush();
+  }
+
+  // One transition turn changes phase; only then may reverse artwork begin.
+  assert.equal(timers.length,1,'Front sweep completion must schedule a phase transition');
+  timers.shift().fn();
+  assert.equal(bySrc('mat-00-back.webp').length,0,'Phase transition must not burst a reverse immediately');
+  assert.equal(timers.length,1,'Back sweep must be separately scheduled');
+  assert.equal(timers[0].delay,180,'Back sweep should start with a larger pause');
+
+  timers.shift().fn();
+  assert.equal(bySrc('mat-00-back.webp').length,1,'Back sweep must begin at mat 00 only after all fronts');
+  assert.equal(bySrc('mat-01-back.webp').length,0,'Only one cold reverse may be in flight');
+  assert.equal(bySrc('mat-00-back.webp')[0].fetchPriority,'low','Background reverse must stay low priority');
 
   console.log('BETA CONTROLLED DECK WARMER: PASS');
-  console.log('00-02 first | one cold mat at a time | foreground promotion | no duplicate requests');
+  console.log('visible front first | sequential future fronts | foreground promotion | backs only after fronts');
 })().catch(err=>{console.error(err);process.exit(1);});
