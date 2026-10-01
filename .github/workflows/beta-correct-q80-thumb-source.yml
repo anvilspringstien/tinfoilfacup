@@ -1,0 +1,58 @@
+name: BETA correct q80 Cabinet thumb source
+
+on:
+  push:
+    branches:
+      - beta/q80-artwork-compression-20261001
+
+permissions:
+  contents: write
+
+jobs:
+  correct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Rebuild thumbs from original accepted masters
+        run: |
+          mkdir -p /tmp/tffc-original-fronts
+          for i in $(seq -w 1 27); do
+            git show 7b25e4d45e144abae1ffc51e64086abf3e0758ce:beta/assets/challenge-mats/mat-$i-front.webp > /tmp/tffc-original-fronts/mat-$i-front.webp
+          done
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          srcdir=Path("/tmp/tffc-original-fronts")
+          thumbs=Path("beta/assets/challenge-thumbs")
+          for i in range(1,28):
+              cid=f"{i:02d}"
+              src=srcdir/f"mat-{cid}-front.webp"
+              dest=thumbs/f"mat-{cid}-front.webp"
+              with Image.open(src) as im:
+                  thumb=im.convert("RGB").resize((200,200),Image.Resampling.LANCZOS)
+              thumb.save(dest,"WEBP",quality=80,method=6)
+          files=sorted(thumbs.glob("mat-*-front.webp"))
+          assert len(files)==27
+          total=sum(p.stat().st_size for p in files)
+          assert total==444292,total
+          print("THUMBS_TOTAL",total)
+          PY
+          node tests/test_beta_cabinet_thumbnails.js
+
+      - name: Remove correction workflow and commit
+        run: |
+          rm -f .github/workflows/beta-correct-q80-thumb-source.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/assets/challenge-thumbs .github/workflows/beta-correct-q80-thumb-source.yml
+          git commit -m "BETA: rebuild q80 Cabinet thumbs from original masters"
+          git push origin HEAD:beta/q80-artwork-compression-20261001
