@@ -1307,9 +1307,19 @@ const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;
 const ART_PRELOAD_CACHE=new Map();
 function preloadArt(src, priority="low"){
   if(!src) return Promise.resolve(false);
-  if(ART_PRELOAD_CACHE.has(src)) return ART_PRELOAD_CACHE.get(src);
-  const p=new Promise(resolve=>{
-    const img=new Image();
+  const cached=ART_PRELOAD_CACHE.get(src);
+  if(cached){
+    // Foreground Deck navigation wins: promote an in-flight background request
+    // rather than starting a duplicate transfer for the same artwork.
+    if(priority==="high" && cached.priority!=="high"){
+      cached.priority="high";
+      try{ cached.img.fetchPriority="high"; }catch(_){}
+    }
+    return cached.promise;
+  }
+  const entry={promise:null,img:null,priority};
+  entry.promise=new Promise(resolve=>{
+    const img=entry.img=new Image();
     try{ img.fetchPriority=priority; }catch(_){}
     img.decoding="async";
     img.onload=()=>{
@@ -1322,26 +1332,60 @@ function preloadArt(src, priority="low"){
     img.onerror=()=>resolve(false);
     img.src=src;
   });
-  ART_PRELOAD_CACHE.set(src,p);
-  return p;
+  ART_PRELOAD_CACHE.set(src,entry);
+  return entry.promise;
 }
 function preloadMatAt(i, priority="low"){
   const c=CHALLENGES[i];
-  if(!c) return;
+  if(!c) return Promise.resolve(false);
   const art=ART[c.id];
-  if(!art) return;
-  preloadArt(art.front,priority);
-  preloadArt(art.back,priority);
+  if(!art) return Promise.resolve(false);
+  return Promise.all([
+    preloadArt(art.front,priority),
+    preloadArt(art.back,priority)
+  ]);
 }
-// Warm only the opening neighbourhood. Warming all 56 WebPs together caused
-// avoidable decode/GPU pressure during rapid multi-pass browsing.
+function matPreloadStarted(i){
+  const c=CHALLENGES[i],art=c&&ART[c.id];
+  return !!(art&&ART_PRELOAD_CACHE.has(art.front)&&ART_PRELOAD_CACHE.has(art.back));
+}
+
+// Keep the fast opening path: mat 00 first, then 01/02 only after the visible
+// front has painted. Once that opening neighbourhood is secure, quietly march
+// through 03-27 one mat at a time.
 function warmChallengeArt(){
   preloadMatAt(0,"high");
 }
 let INITIAL_FRONT_READY=false;
+let DECK_WARM_INDEX=3;
+let DECK_WARM_RUNNING=false;
+let DECK_WARM_TIMER=0;
+function scheduleDeckWarm(delay=180){
+  if(DECK_WARM_RUNNING||DECK_WARM_TIMER||DECK_WARM_INDEX>=CHALLENGES.length)return;
+  DECK_WARM_TIMER=setTimeout(()=>{
+    DECK_WARM_TIMER=0;
+    warmNextDeckMat();
+  },delay);
+}
+async function warmNextDeckMat(){
+  if(DECK_WARM_RUNNING)return;
+  while(DECK_WARM_INDEX<CHALLENGES.length && matPreloadStarted(DECK_WARM_INDEX))DECK_WARM_INDEX++;
+  if(DECK_WARM_INDEX>=CHALLENGES.length)return;
+  const target=DECK_WARM_INDEX++;
+  DECK_WARM_RUNNING=true;
+  try{
+    await preloadMatAt(target,"low");
+  }finally{
+    DECK_WARM_RUNNING=false;
+    scheduleDeckWarm();
+  }
+}
 function warmOpeningNeighbours(){
-  preloadMatAt(1,"high");
-  preloadMatAt(2,"low");
+  Promise.all([
+    preloadMatAt(0,"high"),
+    preloadMatAt(1,"high"),
+    preloadMatAt(2,"low")
+  ]).finally(()=>scheduleDeckWarm(250));
 }
 if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:900});
 else setTimeout(warmChallengeArt,120);
