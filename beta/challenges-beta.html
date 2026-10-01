@@ -1348,53 +1348,62 @@ function preloadMatAt(i, priority="low"){
     preloadFaceAt(i,"back",priority)
   ]);
 }
-function matPreloadStarted(i){
-  const c=CHALLENGES[i],art=c&&ART[c.id];
-  return !!(art&&ART_PRELOAD_CACHE.has(art.front)&&ART_PRELOAD_CACHE.has(art.back));
+function facePreloadStarted(i, side){
+  const c=CHALLENGES[i],art=c&&ART[c.id],src=art&&art[side];
+  return !!(src&&ART_PRELOAD_CACHE.has(src));
 }
 
-// Keep the fast opening path: mat 00 first, then 01/02 only after the visible
-// front has painted. Once that opening neighbourhood is secure, quietly march
-// through 03-27 one mat at a time.
-function warmChallengeArt(){
-  preloadMatAt(0,"high");
-}
+// Fronts-first cold-cache warmer.
+// The visible mat 00 front gets first claim on the connection. Then one quiet
+// future front at a time marches through the Deck. Only after every front has
+// been requested do unseen reverses warm in the background.
 let INITIAL_FRONT_READY=false;
-let DECK_WARM_INDEX=2;
+let DECK_WARM_SIDE="front";
+let DECK_WARM_INDEX=1;
 let DECK_WARM_RUNNING=false;
 let DECK_WARM_TIMER=0;
-function scheduleDeckWarm(delay=180){
-  if(DECK_WARM_RUNNING||DECK_WARM_TIMER||DECK_WARM_INDEX>=CHALLENGES.length)return;
+function scheduleDeckWarm(delay=120){
+  if(DECK_WARM_RUNNING||DECK_WARM_TIMER)return;
   DECK_WARM_TIMER=setTimeout(()=>{
     DECK_WARM_TIMER=0;
-    warmNextDeckMat();
+    warmNextDeckAsset();
   },delay);
 }
-async function warmNextDeckMat(){
+async function warmNextDeckAsset(){
   if(DECK_WARM_RUNNING)return;
-  while(DECK_WARM_INDEX<CHALLENGES.length && matPreloadStarted(DECK_WARM_INDEX))DECK_WARM_INDEX++;
-  if(DECK_WARM_INDEX>=CHALLENGES.length)return;
+  while(DECK_WARM_INDEX<CHALLENGES.length && facePreloadStarted(DECK_WARM_INDEX,DECK_WARM_SIDE))DECK_WARM_INDEX++;
+  if(DECK_WARM_INDEX>=CHALLENGES.length){
+    if(DECK_WARM_SIDE==="front"){
+      DECK_WARM_SIDE="back";
+      DECK_WARM_INDEX=0;
+      scheduleDeckWarm(180);
+    }
+    return;
+  }
   const target=DECK_WARM_INDEX++;
+  const side=DECK_WARM_SIDE;
   DECK_WARM_RUNNING=true;
   try{
-    await preloadMatAt(target,"low");
+    await preloadFaceAt(target,side,"low");
   }finally{
     DECK_WARM_RUNNING=false;
     scheduleDeckWarm();
   }
 }
-function warmOpeningNeighbours(){
-  // Fronts are what rapid next-card browsing needs first. Pull several fronts
-  // forward without simultaneously spending bandwidth on every reverse.
-  Promise.all([
-    preloadMatAt(1,"high"),
-    preloadFaceAt(2,"front","high"),
-    preloadFaceAt(3,"front","high"),
-    preloadFaceAt(4,"front","low")
-  ]).finally(()=>scheduleDeckWarm(180));
+function warmChallengeArt(){
+  preloadFaceAt(0,"front","high");
+  scheduleDeckWarm(100);
 }
-if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:900});
-else setTimeout(warmChallengeArt,120);
+function warmOpeningNeighbours(){
+  // The first visible front has painted: strengthen the immediate browse path,
+  // but continue to avoid a burst of unseen reverse downloads.
+  preloadFaceAt(0,"back","high");
+  preloadFaceAt(1,"front","high");
+  preloadFaceAt(2,"front","high");
+  preloadFaceAt(3,"front","low");
+}
+if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:400});
+else setTimeout(warmChallengeArt,40);
 
 window.name='TFFC_CHALLENGES';
 const STORE_KEY = "tffc.challengeDeck.v1";
@@ -1605,7 +1614,7 @@ function buildFace(el, c, side) {
 
   // Do not display a partially decoded frame while a rapid swipe is changing mats.
   img.style.visibility="hidden";
-  preloadArt(src,"high").then(ok=>{
+  preloadArt(src,(side==="back" && c.id==="00" && !INITIAL_FRONT_READY)?"low":"high").then(ok=>{
     if(el.dataset.faceLoad!==serial) return;
     if(!ok){
       img.removeAttribute("src");
@@ -1643,11 +1652,12 @@ function render() {
 
   buildFace(front,c,"front"); buildFace(back,c,"back");
   flipcard.classList.toggle("coming-soon-mat",c.type==="comingsoon");
-  preloadMatAt(index,"high");
+  preloadFaceAt(index,"front","high");
+  preloadFaceAt(index,"back",(index===0 && !INITIAL_FRONT_READY)?"low":"high");
   if(index!==0 || INITIAL_FRONT_READY){
-    preloadMatAt(index+1,"high");
-    preloadMatAt(index+2,"low");
-    preloadMatAt(index-1,"low");
+    preloadFaceAt(index+1,"front","high");
+    preloadFaceAt(index+2,"front","low");
+    preloadFaceAt(index-1,"front","low");
   }
   requestAnimationFrame(()=>flipcard.classList.remove("instant-reset"));
   $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
