@@ -1,0 +1,96 @@
+name: BETA build q80 back study
+
+on:
+  push:
+    branches:
+      - beta/full-mat-q80-study-20261001
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: beta/full-mat-q80-study-20261001
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Build q80 backs and full-q80 diagnostic page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import re
+
+          src_dir=Path("beta/assets/challenge-mats")
+          out_dir=Path("beta/assets/challenge-backs-q80")
+          out_dir.mkdir(parents=True,exist_ok=True)
+
+          original_back_total=0
+          q80_back_total=0
+          for i in range(28):
+              cid=f"{i:02d}"
+              src=src_dir/f"mat-{cid}-back.webp"
+              dest=out_dir/f"mat-{cid}-back.webp"
+              original_back_total+=src.stat().st_size
+              with Image.open(src) as im:
+                  assert im.size==(640,640),(src,im.size)
+                  im.convert("RGB").save(dest,"WEBP",quality=80,method=6)
+              with Image.open(dest) as check:
+                  assert check.size==(640,640),(dest,check.size)
+              q80_back_total+=dest.stat().st_size
+
+          html=Path("beta/challenges-q80-diagnostic.html").read_text()
+          html=re.sub(
+              r'assets/challenge-mats/(mat-\d\d-back\.webp)',
+              r'assets/challenge-backs-q80/\1',
+              html
+          )
+          html=html.replace("q80 640px fronts","q80 640px full mats")
+          Path("beta/challenges-q80-full-diagnostic.html").write_text(html)
+
+          front_total=sum(p.stat().st_size for p in Path("beta/assets/challenge-fronts-q80").glob("mat-*-front.webp"))
+          original_front_total=sum((src_dir/f"mat-{i:02d}-front.webp").stat().st_size for i in range(28))
+          original_total=original_front_total+original_back_total
+          q80_total=front_total+q80_back_total
+
+          print(f"Original backs: {original_back_total}")
+          print(f"q80 backs: {q80_back_total}")
+          print(f"Back saving: {(1-q80_back_total/original_back_total)*100:.2f}%")
+          print(f"Original full deck: {original_total}")
+          print(f"q80 full deck: {q80_total}")
+          print(f"Full-deck saving: {(1-q80_total/original_total)*100:.2f}%")
+          PY
+
+      - name: Verify
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          files=sorted(Path("beta/assets/challenge-backs-q80").glob("mat-*-back.webp"))
+          assert len(files)==28,len(files)
+          for file in files:
+              with Image.open(file) as im:
+                  assert im.size==(640,640),(file,im.size)
+          html=Path("beta/challenges-q80-full-diagnostic.html").read_text()
+          assert html.count("assets/challenge-fronts-q80/")==28
+          assert html.count("assets/challenge-backs-q80/")==28
+          print("q80 full mat study: PASS")
+          PY
+
+      - name: Remove builder and commit
+        run: |
+          rm -f .github/workflows/beta-build-q80-back-study.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/assets/challenge-backs-q80 beta/challenges-q80-full-diagnostic.html .github/workflows/beta-build-q80-back-study.yml
+          git commit -m "BETA: add q80 full-mat browser study"
+          git push origin HEAD:beta/full-mat-q80-study-20261001
