@@ -1417,6 +1417,9 @@ function preloadMatAt(i, priority="low"){
 // avoidable decode/GPU pressure during rapid multi-pass browsing.
 function warmChallengeArt(){
   preloadMatAt(0,"high");
+}
+let INITIAL_FRONT_READY=false;
+function warmOpeningNeighbours(){
   preloadMatAt(1,"high");
   preloadMatAt(2,"low");
 }
@@ -1646,7 +1649,13 @@ function buildFace(el, c, side) {
     const reveal=()=>{
       if(el.dataset.faceLoad===serial){
         img.style.visibility="visible";
-        if(side==='front')__tffcChallengeLocalMark('frontMatReady',{challenge:c.id});
+        if(side==='front'){
+          __tffcChallengeLocalMark('frontMatReady',{challenge:c.id});
+          if(c.id==='00'&&!INITIAL_FRONT_READY){
+            INITIAL_FRONT_READY=true;
+            requestAnimationFrame(()=>warmOpeningNeighbours());
+          }
+        }
         if(side==='back')__tffcChallengeLocalMark('backMatReady',{challenge:c.id});
       }
     };
@@ -1669,9 +1678,11 @@ function render() {
   buildFace(front,c,"front"); buildFace(back,c,"back");
   flipcard.classList.toggle("coming-soon-mat",c.type==="comingsoon");
   preloadMatAt(index,"high");
-  preloadMatAt(index+1,"high");
-  preloadMatAt(index+2,"low");
-  preloadMatAt(index-1,"low");
+  if(index!==0||INITIAL_FRONT_READY){
+    preloadMatAt(index+1,"high");
+    preloadMatAt(index+2,"low");
+    preloadMatAt(index-1,"low");
+  }
   requestAnimationFrame(()=>flipcard.classList.remove("instant-reset"));
   $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
   $("verifyBadge").textContent=verificationLabel(c);
