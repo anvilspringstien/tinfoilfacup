@@ -8,8 +8,12 @@ const html=fs.readFileSync('beta/challenges-beta.html','utf8');
 
 assert(html.includes('function warmChallengeArt(){\n  preloadMatAt(0,"high");\n}'),
   'Challenges startup must warm only the opening mat before it is visible');
-assert(html.includes('function warmOpeningNeighbours(){\n  preloadMatAt(1,"high");\n  preloadMatAt(2,"low");\n}'),
+assert(html.includes('function warmOpeningNeighbours(){\n  Promise.all(['),
   'Challenges must retain neighbour warmup after the opening mat');
+assert(html.includes('preloadMatAt(0,"high"),\n    preloadMatAt(1,"high"),\n    preloadMatAt(2,"low")'),
+  'Opening neighbourhood 00-02 must be secure before background warming starts');
+assert(html.includes(']).finally(()=>scheduleDeckWarm(250));'),
+  'Background Deck warmer must wait for the opening neighbourhood to settle');
 assert(html.includes('if(side==="front" && c.id==="00" && !INITIAL_FRONT_READY)'),
   'Opening neighbour warmup must wait for the visible mat 00 front');
 assert(html.includes('requestAnimationFrame(()=>warmOpeningNeighbours());'),
