@@ -1,0 +1,92 @@
+name: BETA build q80 artwork compression
+
+on:
+  push:
+    branches:
+      - beta/q80-artwork-compression-20261001
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Recompress Deck and Cabinet artwork at q80
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          mats=Path("beta/assets/challenge-mats")
+          thumbs=Path("beta/assets/challenge-thumbs")
+
+          before_mats=sum(p.stat().st_size for p in mats.glob("mat-*.webp"))
+          before_thumbs=sum(p.stat().st_size for p in thumbs.glob("mat-*-front.webp"))
+
+          # Recompress the 56 existing 640x640 Deck mats in place.
+          for p in sorted(mats.glob("mat-*.webp")):
+              with Image.open(p) as im:
+                  assert im.size==(640,640),(p,im.size)
+                  rgb=im.convert("RGB")
+              rgb.save(p,"WEBP",quality=80,method=6)
+              with Image.open(p) as check:
+                  assert check.size==(640,640),(p,check.size)
+
+          # Rebuild the 27 dedicated Cabinet thumbs directly from q80 Deck fronts.
+          for i in range(1,28):
+              cid=f"{i:02d}"
+              src=mats/f"mat-{cid}-front.webp"
+              dest=thumbs/f"mat-{cid}-front.webp"
+              with Image.open(src) as im:
+                  thumb=im.convert("RGB").resize((200,200),Image.Resampling.LANCZOS)
+              thumb.save(dest,"WEBP",quality=80,method=6)
+              with Image.open(dest) as check:
+                  assert check.size==(200,200),(dest,check.size)
+
+          mat_files=sorted(mats.glob("mat-*.webp"))
+          thumb_files=sorted(thumbs.glob("mat-*-front.webp"))
+          assert len(mat_files)==56,len(mat_files)
+          assert len(thumb_files)==27,len(thumb_files)
+
+          after_mats=sum(p.stat().st_size for p in mat_files)
+          after_thumbs=sum(p.stat().st_size for p in thumb_files)
+          before=before_mats+before_thumbs
+          after=after_mats+after_thumbs
+
+          print("DECK_BEFORE",before_mats)
+          print("DECK_AFTER",after_mats)
+          print("DECK_SAVED",before_mats-after_mats)
+          print("DECK_PCT",round((1-after_mats/before_mats)*100,2))
+          print("THUMBS_BEFORE",before_thumbs)
+          print("THUMBS_AFTER",after_thumbs)
+          print("THUMBS_SAVED",before_thumbs-after_thumbs)
+          print("THUMBS_PCT",round((1-after_thumbs/before_thumbs)*100,2))
+          print("COMBINED_BEFORE",before)
+          print("COMBINED_AFTER",after)
+          print("COMBINED_SAVED",before-after)
+          print("COMBINED_PCT",round((1-after/before)*100,2))
+          PY
+
+      - name: Run artwork regressions
+        run: |
+          node tests/test_beta_cabinet_thumbnails.js
+          node tests/test_beta_trophy_viewer.js
+          node tests/test_beta_challenges_preload.js
+
+      - name: Remove builder and commit asset-only change
+        run: |
+          rm -f .github/workflows/beta-build-q80-artwork-compression.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/assets/challenge-mats beta/assets/challenge-thumbs .github/workflows/beta-build-q80-artwork-compression.yml
+          git commit -m "BETA: recompress Challenge artwork at q80"
+          git push origin HEAD:beta/q80-artwork-compression-20261001
