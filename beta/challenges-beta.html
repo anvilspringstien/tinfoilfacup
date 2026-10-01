@@ -1584,14 +1584,30 @@ function lockedMessage(c) {
   return "";
 }
 let FACE_LOAD_SERIAL=0;
-function buildFace(el, c, side) {
+let CURRENT_BACK_WARM_TIMER=0;
+let FLIP_PENDING=false;
+function cancelCurrentBackWarm(){
+  if(CURRENT_BACK_WARM_TIMER){
+    clearTimeout(CURRENT_BACK_WARM_TIMER);
+    CURRENT_BACK_WARM_TIMER=0;
+  }
+}
+function scheduleCurrentBackWarm(i,id){
+  cancelCurrentBackWarm();
+  CURRENT_BACK_WARM_TIMER=setTimeout(()=>{
+    CURRENT_BACK_WARM_TIMER=0;
+    if(index!==i || flipped || CHALLENGES[index]?.id!==id)return;
+    preloadFaceAt(i,"back","low");
+  },2500);
+}
+function buildFace(el, c, side, priority="high") {
   const src = ART[c.id]?.[side==="front"?"front":"back"];
   const serial=String(++FACE_LOAD_SERIAL);
   el.dataset.faceLoad=serial;
 
   if (!src) {
     el.innerHTML=`<div class="placeholder">${CANONICAL_CUP?`<img class="cup" src="${CANONICAL_CUP}" alt="">`:""}<div><h3>${c.title}</h3><p>${c.subtitle}</p></div></div>`;
-    return;
+    return Promise.resolve(false);
   }
 
   let img=el.querySelector("img.mat-art");
@@ -1601,45 +1617,55 @@ function buildFace(el, c, side) {
     img.className="mat-art";
     img.decoding="async";
     img.draggable=false;
-    try{ img.fetchPriority="high"; }catch(_){}
     el.appendChild(img);
   }
+  try{ img.fetchPriority=priority; }catch(_){}
 
   const alt=`${c.title} ${side} artwork`;
   if(img.dataset.src===src && img.complete && img.naturalWidth){
     img.alt=alt;
     img.style.visibility="visible";
-    return;
+    if(side==="front" && CHALLENGES[index]?.id===c.id) scheduleCurrentBackWarm(index,c.id);
+    return Promise.resolve(true);
   }
 
   // Do not display a partially decoded frame while a rapid swipe is changing mats.
   img.style.visibility="hidden";
-  preloadArt(src,(side==="back" && c.id==="00" && !INITIAL_FRONT_READY)?"low":"high").then(ok=>{
-    if(el.dataset.faceLoad!==serial) return;
+  return preloadArt(src,priority).then(ok=>{
+    if(el.dataset.faceLoad!==serial) return false;
     if(!ok){
       img.removeAttribute("src");
       img.removeAttribute("data-src");
       img.alt="";
-      return;
+      return false;
     }
     img.dataset.src=src;
     img.alt=alt;
     img.src=src;
-    const reveal=()=>{
-      if(el.dataset.faceLoad===serial){
-        img.style.visibility="visible";
-        if(side==="front" && c.id==="00" && !INITIAL_FRONT_READY){
-          INITIAL_FRONT_READY=true;
-          requestAnimationFrame(()=>warmOpeningNeighbours());
+    return new Promise(resolve=>{
+      const reveal=()=>{
+        if(el.dataset.faceLoad===serial){
+          img.style.visibility="visible";
+          if(side==="front"){
+            if(c.id==="00" && !INITIAL_FRONT_READY){
+              INITIAL_FRONT_READY=true;
+              requestAnimationFrame(()=>warmOpeningNeighbours());
+            }
+            if(CHALLENGES[index]?.id===c.id) scheduleCurrentBackWarm(index,c.id);
+          }
         }
-      }
-    };
-    if(typeof img.decode==="function") img.decode().catch(()=>{}).finally(reveal);
-    else reveal();
+        resolve(true);
+      };
+      if(typeof img.decode==="function") img.decode().catch(()=>{}).finally(reveal);
+      else reveal();
+    });
   });
 }
+
 function render() {
   const c=CHALLENGES[index];
+  cancelCurrentBackWarm();
+  FLIP_PENDING=false;
 
   // If the user navigates while a flip animation is still running, reset the old
   // card instantly before swapping in the next artwork. This prevents transient
@@ -1650,10 +1676,19 @@ function render() {
   flipcard.setAttribute("aria-pressed","false");
   void flipcard.offsetWidth;
 
-  buildFace(front,c,"front"); buildFace(back,c,"back");
+  buildFace(front,c,"front","high");
+  // The hidden reverse is demand-loaded: racing through fronts no longer
+  // downloads and decodes an unseen 640px image for every navigation step.
+  back.dataset.faceLoad=String(++FACE_LOAD_SERIAL);
+  const oldBack=back.querySelector("img.mat-art");
+  if(oldBack){
+    oldBack.style.visibility="hidden";
+    oldBack.removeAttribute("src");
+    oldBack.removeAttribute("data-src");
+    oldBack.alt="";
+  }
   flipcard.classList.toggle("coming-soon-mat",c.type==="comingsoon");
   preloadFaceAt(index,"front","high");
-  preloadFaceAt(index,"back",(index===0 && !INITIAL_FRONT_READY)?"low":"high");
   if(index!==0 || INITIAL_FRONT_READY){
     preloadFaceAt(index+1,"front","high");
     preloadFaceAt(index+2,"front","low");
@@ -1819,6 +1854,11 @@ verifyBadge.addEventListener("click",e=>{
 document.addEventListener("pointerdown",e=>{
   if(!verifyBadge.contains(e.target) && !$("verifyHelp").contains(e.target)) hideVerificationHelp();
 });
+function setDeckFlip(next){
+  flipped=next;
+  flipcard.classList.toggle("flipped",flipped);
+  flipcard.setAttribute("aria-pressed",String(flipped));
+}
 function flipMat() {
   const c=CHALLENGES[index];
   // Achievement reverses are earned reveals: keep them hidden until Clubfinder verifies the milestone.
@@ -1831,10 +1871,22 @@ function flipMat() {
     $("feedback").textContent=msg;
     return;
   }
-  flipped=!flipped;
-  flipcard.classList.toggle("flipped",flipped);
-  flipcard.setAttribute("aria-pressed",String(flipped));
+  if(flipped){
+    setDeckFlip(false);
+    return;
+  }
+  if(FLIP_PENDING)return;
+  FLIP_PENDING=true;
+  cancelCurrentBackWarm();
+  const expectedIndex=index;
+  const expectedId=c.id;
+  buildFace(back,c,"back","high").then(ok=>{
+    FLIP_PENDING=false;
+    if(!ok || index!==expectedIndex || CHALLENGES[index]?.id!==expectedId)return;
+    setDeckFlip(true);
+  });
 }
+
 flipcard.onclick=()=>{ if(suppressFlip){suppressFlip=false;return;} flipMat(); };
 flipcard.addEventListener("keydown",e=>{
   if(e.key==="Enter" || e.key===" ") { e.preventDefault(); flipMat(); }
