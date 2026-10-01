@@ -1,0 +1,63 @@
+name: BETA build q80 Cabinet thumbnails
+
+on:
+  push:
+    branches:
+      - beta/q80-cabinet-thumbs-20261001
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Rebuild Cabinet thumbnails at q80
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          fronts=Path("beta/assets/challenge-mats")
+          thumbs=Path("beta/assets/challenge-thumbs")
+          before=sum(p.stat().st_size for p in thumbs.glob("mat-*-front.webp"))
+
+          for i in range(1,28):
+              cid=f"{i:02d}"
+              src=fronts/f"mat-{cid}-front.webp"
+              dest=thumbs/f"mat-{cid}-front.webp"
+              with Image.open(src) as im:
+                  resized=im.convert("RGB").resize((200,200),Image.Resampling.LANCZOS)
+                  resized.save(dest,"WEBP",quality=80,method=6)
+              with Image.open(dest) as check:
+                  assert check.size==(200,200),(dest,check.size)
+
+          files=sorted(thumbs.glob("mat-*-front.webp"))
+          assert len(files)==27,len(files)
+          after=sum(p.stat().st_size for p in files)
+          assert after < before
+          print("Before",before)
+          print("After",after)
+          print("Saved",before-after)
+          print("Pct",round((1-after/before)*100,2))
+          PY
+
+      - name: Verify thumbnail regression
+        run: node tests/test_beta_cabinet_thumbnails.js
+
+      - name: Remove builder and commit
+        run: |
+          rm -f .github/workflows/beta-build-q80-cabinet-thumbs.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/assets/challenge-thumbs .github/workflows/beta-build-q80-cabinet-thumbs.yml
+          git commit -m "BETA: recompress Trophy Cabinet thumbnails at q80"
+          git push origin HEAD:beta/q80-cabinet-thumbs-20261001
