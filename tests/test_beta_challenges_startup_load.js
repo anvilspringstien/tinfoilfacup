@@ -19,8 +19,14 @@ assert(html.includes('if(index!==0 || INITIAL_FRONT_READY)'),
 
 assert(html.includes('let CABINET_IMAGE_OBSERVER=null;'),
   'Trophy Cabinet must use explicit image deferral');
-assert(html.includes('img.dataset.src=ART[c.id]?.front || CANONICAL_CUP || "";'),
-  'Trophy Cabinet artwork must remain in data-src until near the viewport');
+assert(html.includes('const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;'),
+  'Trophy Cabinet must have a dedicated thumbnail asset route');
+assert(html.includes('img.dataset.src=CABINET_THUMB(c.id);'),
+  'Trophy Cabinet thumbnails must remain in data-src until near the viewport');
+assert(html.includes('img.dataset.fallback=ART[c.id]?.front || CANONICAL_CUP || "";'),
+  'Trophy Cabinet thumbnail failure must retain the full front artwork fallback');
+assert(html.includes('function loadCabinetImage(img){'),
+  'Trophy Cabinet deferred loader helper is missing');
 assert(html.includes('new IntersectionObserver(entries=>'),
   'Trophy Cabinet artwork must load through IntersectionObserver when supported');
 assert(!html.includes('img.loading="lazy"; img.decoding="async"; img.src=ART[c.id]?.front'),
