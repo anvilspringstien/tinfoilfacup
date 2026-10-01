@@ -1,11 +1,9 @@
-name: BETA build 640px front compression browser study
+name: BETA front compression study assets
 
 on:
   push:
     branches:
       - beta/mat-compression-browser-study-20261001
-    paths:
-      - .github/workflows/beta-build-front-compression-study.yml
 
 permissions:
   contents: write
@@ -25,91 +23,47 @@ jobs:
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check pillow
 
-      - name: Build q85 and q80 front sets and diagnostic pages
+      - name: Build q85 and q80 640px fronts
         run: |
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
-          import re
 
-          src_dir=Path("beta/assets/challenge-mats")
-          html_path=Path("beta/challenges-beta.html")
-          original=html_path.read_text()
+          src_dir = Path("beta/assets/challenge-mats")
+          original_total = 0
+          totals = {85: 0, 80: 0}
 
-          totals={}
-          for q in (85,80):
-              out_dir=Path(f"beta/assets/challenge-fronts-q{q}")
-              out_dir.mkdir(parents=True,exist_ok=True)
-              total=0
-              for i in range(28):
-                  cid=f"{i:02d}"
-                  src=src_dir/f"mat-{cid}-front.webp"
-                  dest=out_dir/f"mat-{cid}-front.webp"
-                  with Image.open(src) as im:
-                      assert im.size==(640,640),(src,im.size)
-                      im.convert("RGB").save(dest,"WEBP",quality=q,method=6)
-                  with Image.open(dest) as check:
-                      assert check.size==(640,640),(dest,check.size)
-                  total+=dest.stat().st_size
-              totals[q]=total
+          for i in range(28):
+              cid = f"{i:02d}"
+              src = src_dir / f"mat-{cid}-front.webp"
+              original_total += src.stat().st_size
+              with Image.open(src) as im:
+                  assert im.size == (640, 640)
+                  rgb = im.convert("RGB")
+                  for q in (85, 80):
+                      out_dir = Path(f"beta/assets/challenge-fronts-q{q}")
+                      out_dir.mkdir(parents=True, exist_ok=True)
+                      dest = out_dir / f"mat-{cid}-front.webp"
+                      rgb.save(dest, "WEBP", quality=q, method=6)
+                      with Image.open(dest) as check:
+                          assert check.size == (640, 640)
+                      totals[q] += dest.stat().st_size
 
-              html=original
-              html=re.sub(
-                  r'assets/challenge-mats/(mat-\d\d-front\.webp)',
-                  f'assets/challenge-fronts-q{q}/\\1',
-                  html
-              )
-
-              css='''\n#tffcCompressionDiag{position:fixed;z-index:100000;left:8px;bottom:8px;max-width:min(92vw,470px);padding:7px 9px;border-radius:5px;background:rgba(0,0,0,.78);color:#fff;font:12px/1.35 monospace;pointer-events:none}\n'''
-              html=html.replace('</style>',css+'</style>',1)
-              html=html.replace('<body>','<body>\n<div id="tffcCompressionDiag">q%d 640px fronts • waiting for mat 00…</div>'%q,1)
-
-              marker="window.name='TFFC_CHALLENGES';"
-              diag=f'''const TFFC_COMP_Q={q};
-const TFFC_COMP_DIAG=document.getElementById("tffcCompressionDiag");
-function tffcCompressionDiagReport(){{
-  const entries=performance.getEntriesByType("resource").filter(e=>/challenge-fronts-q{q}\\/mat-00-front\\.webp/.test(e.name));
-  if(!entries.length)return;
-  const e=entries[entries.length-1];
-  TFFC_COMP_DIAG.textContent="q{q} 640px fronts • mat 00: start "+e.startTime.toFixed(0)+" ms • end "+e.responseEnd.toFixed(0)+" ms • duration "+e.duration.toFixed(0)+" ms";
-}}
-setInterval(tffcCompressionDiagReport,250);
-'''
-              assert marker in html
-              html=html.replace(marker,diag+'\n'+marker,1)
-              Path(f"beta/challenges-q{q}-diagnostic.html").write_text(html)
-
-          original_total=sum((src_dir/f"mat-{i:02d}-front.webp").stat().st_size for i in range(28))
-          print(f"Original 28 fronts: {original_total}")
-          for q,total in totals.items():
-              print(f"q{q} 28 fronts: {total} ({(1-total/original_total)*100:.2f}% saving)")
+          print("Original:", original_total)
+          for q in (85, 80):
+              print(f"q{q}:", totals[q], f"saving={(1-totals[q]/original_total)*100:.2f}%")
           PY
 
-      - name: Verify study pages and dimensions
+      - name: Verify sets
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          from PIL import Image
-          for q in (85,80):
-              files=sorted(Path(f"beta/assets/challenge-fronts-q{q}").glob("mat-*-front.webp"))
-              assert len(files)==28,len(files)
-              for file in files:
-                  with Image.open(file) as im:
-                      assert im.size==(640,640),(file,im.size)
-              html=Path(f"beta/challenges-q{q}-diagnostic.html").read_text()
-              assert html.count(f"assets/challenge-fronts-q{q}/")==28
-              assert 'assets/challenge-mats/mat-00-back.webp' in html
-              assert f'q{q} 640px fronts' in html
-          print("640px front compression browser study: PASS")
-          PY
+          test "$(find beta/assets/challenge-fronts-q85 -name 'mat-*-front.webp' | wc -l)" -eq 28
+          test "$(find beta/assets/challenge-fronts-q80 -name 'mat-*-front.webp' | wc -l)" -eq 28
 
-      - name: Remove temporary builder
-        run: rm -f .github/workflows/beta-build-front-compression-study.yml
-
-      - name: Commit browser study
+      - name: Remove builder and commit
         run: |
+          rm -f .github/workflows/beta-build-front-compression-study.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add beta/assets/challenge-fronts-q85 beta/assets/challenge-fronts-q80 beta/challenges-q85-diagnostic.html beta/challenges-q80-diagnostic.html .github/workflows/beta-build-front-compression-study.yml
-          git commit -m "BETA: add 640px front compression browser study"
+          git add beta/assets/challenge-fronts-q85 beta/assets/challenge-fronts-q80 .github/workflows/beta-build-front-compression-study.yml
+          git commit -m "BETA: add q85 and q80 640px front study assets"
           git push origin HEAD:beta/mat-compression-browser-study-20261001
