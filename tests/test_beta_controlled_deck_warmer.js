@@ -75,6 +75,8 @@ async function flush(){
 
   fire('mat-01-front.webp');
   await flush();
+  assert.equal(vm.runInContext('ART_PRELOAD_CACHE.get("mat-01-front.webp").img',ctx),null,
+    'Settled preloader Image must be released so hidden decoded mats cannot accumulate');
   assert.equal(timers.length,1,'Next future front should schedule only after mat 01 settles');
   assert.equal(timers[0].delay,120,'Steady-state front sweep cadence changed unexpectedly');
   assert.equal(bySrc('mat-02-front.webp').length,0,'Mat 02 front must wait for the next sweep turn');
