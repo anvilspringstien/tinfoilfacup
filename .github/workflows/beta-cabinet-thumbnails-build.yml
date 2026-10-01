@@ -1,0 +1,190 @@
+name: BETA build Cabinet thumbnails
+
+on:
+  push:
+    branches:
+      - beta/cabinet-thumbnails-20261001
+    paths:
+      - .github/workflows/beta-cabinet-thumbnails-build.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: beta/cabinet-thumbnails-20261001
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Generate 200px q85 Cabinet thumbnails
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src_dir = Path("beta/assets/challenge-mats")
+          out_dir = Path("beta/assets/challenge-thumbs")
+          out_dir.mkdir(parents=True, exist_ok=True)
+
+          # Mat 00 is the foundation card and is not rendered in the Trophy Cabinet.
+          ids = [f"{i:02d}" for i in range(1, 28)]
+          original_total = 0
+          thumb_total = 0
+
+          for cid in ids:
+              src = src_dir / f"mat-{cid}-front.webp"
+              dest = out_dir / f"mat-{cid}-front.webp"
+              original_total += src.stat().st_size
+              with Image.open(src) as im:
+                  assert im.size == (640, 640), (src, im.size)
+                  thumb = im.convert("RGB").resize((200, 200), Image.Resampling.LANCZOS)
+                  thumb.save(dest, "WEBP", quality=85, method=6)
+              with Image.open(dest) as check:
+                  assert check.size == (200, 200), (dest, check.size)
+                  assert check.format == "WEBP", (dest, check.format)
+              thumb_total += dest.stat().st_size
+
+          assert len(list(out_dir.glob("mat-*-front.webp"))) == 27
+          print(f"Cabinet full-front bytes: {original_total}")
+          print(f"Cabinet thumbnail bytes: {thumb_total}")
+          print(f"Reduction: {(1 - thumb_total/original_total)*100:.2f}%")
+          PY
+
+      - name: Wire only the Cabinet to thumbnails
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("beta/challenges-beta.html")
+          s = path.read_text()
+
+          marker = "// Stage 1 external-art warmup."
+          insert = 'const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;\n\n'
+          assert marker in s
+          assert "const CABINET_THUMB=" not in s
+          s = s.replace(marker, insert + marker, 1)
+
+          old = 'const img=document.createElement("img"); img.decoding="async"; img.dataset.src=ART[c.id]?.front || CANONICAL_CUP || ""; img.alt="";'
+          new = 'const img=document.createElement("img"); img.decoding="async"; img.dataset.src=CABINET_THUMB(c.id); img.dataset.fallback=ART[c.id]?.front || CANONICAL_CUP || ""; img.alt="";'
+          assert old in s
+          s = s.replace(old, new, 1)
+
+          cabinet_marker = "function renderTrophyCabinet(challengeList,completed) {"
+          helper = '''function loadCabinetImage(img){
+            const src=img.dataset.src;
+            if(!src||img.src)return;
+            img.onerror=()=>{
+              const fallback=img.dataset.fallback;
+              img.onerror=null;
+              if(fallback)img.src=fallback;
+            };
+            img.src=src;
+          }
+          '''
+          assert cabinet_marker in s
+          assert "function loadCabinetImage(img)" not in s
+          s = s.replace(cabinet_marker, helper + cabinet_marker, 1)
+
+          old_observer = '''      const img=entry.target,src=img.dataset.src;
+                if(src&&!img.src)img.src=src;'''
+          new_observer = '''      const img=entry.target;
+                loadCabinetImage(img);'''
+          assert old_observer in s
+          s = s.replace(old_observer, new_observer, 1)
+
+          old_fallback = 'const load=()=>pending.forEach(img=>{if(img.dataset.src&&!img.src)img.src=img.dataset.src});'
+          new_fallback = 'const load=()=>pending.forEach(loadCabinetImage);'
+          assert old_fallback in s
+          s = s.replace(old_fallback, new_fallback, 1)
+
+          path.write_text(s)
+          PY
+
+      - name: Update startup regression and add thumbnail asset guard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("tests/test_beta_challenges_startup_load.js")
+          s = path.read_text()
+          old = '''assert(html.includes('img.dataset.src=ART[c.id]?.front || CANONICAL_CUP || "";'),
+            'Trophy Cabinet artwork must remain in data-src until near the viewport');'''
+          new = '''assert(html.includes('const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;'),
+            'Trophy Cabinet must have a dedicated thumbnail asset route');
+          assert(html.includes('img.dataset.src=CABINET_THUMB(c.id);'),
+            'Trophy Cabinet thumbnails must remain in data-src until near the viewport');
+          assert(html.includes('img.dataset.fallback=ART[c.id]?.front || CANONICAL_CUP || "";'),
+            'Trophy Cabinet thumbnail failure must retain the full front artwork fallback');
+          assert(html.includes('function loadCabinetImage(img){'),
+            'Trophy Cabinet deferred loader helper is missing');'''
+          assert old in s
+          s = s.replace(old, new, 1)
+          path.write_text(s)
+
+          guard = r'''#!/usr/bin/env node
+          'use strict';
+
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const path=require('node:path');
+
+          const dir='beta/assets/challenge-thumbs';
+          const expected=Array.from({length:27},(_,i)=>`mat-${String(i+1).padStart(2,'0')}-front.webp`);
+          const actual=fs.readdirSync(dir).filter(name=>name.endsWith('.webp')).sort();
+          assert.deepEqual(actual,expected,'Cabinet thumbnail set must be exactly mats 01-27');
+
+          let total=0;
+          for(const name of actual){
+            const file=path.join(dir,name);
+            const b=fs.readFileSync(file);
+            total+=b.length;
+            assert.equal(b.subarray(0,4).toString(),'RIFF',name+' is not RIFF');
+            assert.equal(b.subarray(8,12).toString(),'WEBP',name+' is not WebP');
+            assert.equal(b.subarray(12,16).toString(),'VP8 ',name+' must remain lossy VP8 WebP');
+            assert.equal(b[23],0x9d,name+' VP8 start code mismatch');
+            assert.equal(b[24],0x01,name+' VP8 start code mismatch');
+            assert.equal(b[25],0x2a,name+' VP8 start code mismatch');
+            const width=b.readUInt16LE(26)&0x3fff;
+            const height=b.readUInt16LE(28)&0x3fff;
+            assert.equal(width,200,name+' width');
+            assert.equal(height,200,name+' height');
+            assert(b.length<50000,name+' unexpectedly large: '+b.length);
+          }
+          assert(total<750000,'Cabinet thumbnail set unexpectedly heavy: '+total);
+          console.log('BETA CABINET THUMBNAILS: PASS');
+          console.log(`27 x 200px lossy WebPs | ${total} bytes total`);
+          '''
+          Path("tests/test_beta_cabinet_thumbnails.js").write_text(guard)
+          PY
+
+      - name: Run focused BETA regressions
+        run: |
+          node tests/test_beta_cabinet_thumbnails.js
+          node tests/test_beta_challenges_startup_load.js
+          node tests/test_beta_trophy_viewer.js
+          node tests/test_beta_challenges_direct_entry.js
+          node tests/test_beta_campaign_bridge_contract.js
+          node tests/test_beta_challenges_preload.js
+
+      - name: Remove temporary generator workflows
+        run: |
+          rm -f .github/workflows/beta-cabinet-thumb-study.yml
+          rm -f .github/workflows/beta-cabinet-thumbnails-build.yml
+
+      - name: Commit isolated BETA result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/challenges-beta.html beta/assets/challenge-thumbs tests/test_beta_challenges_startup_load.js tests/test_beta_cabinet_thumbnails.js .github/workflows/beta-cabinet-thumb-study.yml .github/workflows/beta-cabinet-thumbnails-build.yml
+          git status --short
+          git commit -m "BETA: add dedicated Trophy Cabinet thumbnails"
+          git push origin HEAD:beta/cabinet-thumbnails-20261001
