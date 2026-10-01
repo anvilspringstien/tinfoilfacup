@@ -1,0 +1,2145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tin Foil FA Cup — Challenges</title>
+<style>
+:root {
+  --ink:#17130f; --cream:#ead9ad; --paper:#f3e6c7; --red:#8e2d1f;
+  --yellow:#f3c340; --deep:#084c61; --white:#fafafa;
+  --shadow:0 16px 45px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#141210;color:#f3e6c7;font-family:Georgia,"Times New Roman",serif}
+body{background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed}
+button{font:inherit}
+.app{min-height:100vh;padding:32px 18px 60px}
+.shell{max-width:980px;margin:auto}
+.actions{display:flex;justify-content:center;margin-top:26px}
+.challenge-btn{border:3px solid #1c1606;background:var(--yellow);color:#221a05;border-radius:999px;padding:13px 22px;
+font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px 0 #1c1606;cursor:pointer}
+.challenge-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #1c1606}
+.secondary{background:white;border:1px solid #ddd;border-radius:10px;padding:10px 15px;cursor:pointer}
+.statusline{margin:14px 3px 0;font:13px/1.4 Arial,sans-serif;opacity:.75}
+.deckcabwrap{width:100%;max-width:330px;margin:8px auto 0}.deckcabhead{display:flex;align-items:center;justify-content:space-between;padding:0 3px 6px;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#bcae95}
+.deckcabinet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding:2px 4px 8px 2px;touch-action:pan-y}
+.trophy-slot{position:relative;min-width:0;width:100%;aspect-ratio:1 / 1;border:1px solid #554b3d;background:#1b1814;border-radius:9px;padding:4px;overflow:hidden;cursor:default}
+
+/* BETA Trophy inspection: independent of the live Challenge Deck. */
+.trophy-viewer[hidden]{display:none!important}
+.trophy-viewer{position:fixed;inset:0;z-index:90;background:rgba(6,7,7,.89);display:flex;align-items:center;justify-content:center;overflow:auto;overscroll-behavior:contain;touch-action:none;padding:16px}
+.trophy-viewer-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%;animation:trophy-view-in .2s ease-out both}
+.trophy-viewer-mat{width:min(640px,90vw,calc(100dvh - 110px));aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
+.trophy-viewer-mat:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px;border-radius:15px}
+.trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1)}
+.trophy-viewer-card.flipped{transform:rotateX(180deg)}
+.trophy-viewer-face{position:absolute;inset:0;overflow:hidden;border:2px solid #3b2c1d;border-radius:18px;background:#d7c49d;backface-visibility:hidden;box-shadow:0 18px 45px rgba(0,0,0,.38)}
+.trophy-viewer-face.back{transform:rotateX(180deg)}
+.trophy-viewer-face img{width:100%;height:100%;object-fit:cover;display:block}
+.trophy-viewer-hint{font:12px/1.3 Arial,sans-serif;letter-spacing:.04em;color:#d5c8b3;text-align:center;pointer-events:none}
+@keyframes trophy-view-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.trophy-viewer-inner{animation:none}.trophy-viewer-card{transition:none}}
+.trophy-slot img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block}.trophy-slot.available img{filter:grayscale(1);opacity:.16}.trophy-slot.locked img{filter:grayscale(1);opacity:.09}.trophy-slot.completed{cursor:pointer;border-color:#9e845d;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.slotmark{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:6px;font:800 11px/1.1 Arial,sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#b8aa91}.completed .slotmark{display:none}.locked .slotmark{font-size:18px;color:#887c6b}.available .slotmark{color:#988b77}
+.hidden-control{display:none!important;pointer-events:none!important}
+
+.overlay{position:fixed;inset:0;background:rgba(8,9,9,.94);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.overlay::-webkit-scrollbar{display:none;width:0;height:0}
+.overlay.open{display:flex}
+.deck{width:min(1020px,100%);min-height:min(880px,94vh);height:auto;margin:auto;background:#100f0d;border:1px solid #332d26;border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.72);display:block;overflow:visible}
+.deckbody{height:min(660px,calc(94vh - 220px));min-height:300px;display:flex;align-items:center;justify-content:center;padding:10px 14px 18px;overflow:hidden;background:#100f0d}
+.nav{width:52px;height:52px;border-radius:50%;border:2px solid #241e17;background:#f1dfb2;font-size:28px;cursor:pointer;justify-self:center;flex:0 0 auto}
+.nav[disabled]{opacity:.35;cursor:not-allowed}
+.cardstage{height:100%;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;perspective:1500px;touch-action:pan-y}
+.flipcard{width:min(650px,92vw,calc(94vh - 330px));height:auto;aspect-ratio:1;position:relative;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1);cursor:pointer;outline:none}
+.flipcard.instant-reset{transition:none!important}
+.flipcard:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px}
+.flipcard.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;background:#d7c49d;box-shadow:0 18px 45px rgba(0,0,0,.38);border:2px solid #3b2c1d}
+.face.back{transform:rotateY(180deg)}
+.face img{width:100%;height:100%;object-fit:cover;display:block}
+.placeholder{height:100%;display:grid;place-items:center;text-align:center;padding:30px;background:radial-gradient(circle,#f0dfb9,#cfb583)}
+.placeholder h3{font-size:36px;margin:0;color:#7e291f} .placeholder p{font:18px Arial,sans-serif;max-width:420px}
+.cup{width:120px;max-height:190px;object-fit:contain}
+.deckfoot{position:relative;z-index:3;background:#100f0d;padding:16px 12px 12px;flex:0 0 auto}
+.controlrail{display:grid;grid-template-columns:42px 310px 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
+.controls{display:flex;justify-content:center;align-items:center;gap:7px;width:310px}
+.nav{width:42px;height:38px;border-radius:50%;border:1px solid #7b6a52;background:#2a251f;color:#f3e6c7;font-size:25px;cursor:pointer;flex:0 0 auto}
+.nav.prev,.nav.next{margin:0}
+.nav[disabled]{opacity:.28;cursor:not-allowed}
+.action{border:1px solid rgba(255,255,255,.16);border-radius:999px;height:27px;padding:0 12px;font:700 11px/1 Arial,sans-serif;cursor:pointer;width:96px;min-width:96px;box-shadow:0 3px 9px rgba(0,0,0,.22);display:inline-flex;align-items:center;justify-content:center}
+.accept{background:#d59b28;color:#1b1508}.complete{background:#2d6a4f;color:white}.exit{background:#302a23;color:#fff}
+.action[disabled]{background:#3a3732!important;color:#817a70!important;border-color:#504a43!important;box-shadow:none!important;opacity:1;cursor:not-allowed}
+.complete.done-state[disabled]{background:#2d6a4f!important;color:#fff!important;border-color:#3f8a69!important;box-shadow:0 3px 9px rgba(0,0,0,.22)!important;cursor:default}
+.accept.accepted-state[disabled]{background:#8b6927!important;color:#fff8e8!important;border-color:#aa8641!important;opacity:1!important;cursor:default}
+.verifyrow{display:flex;justify-content:center;min-height:28px;margin-top:8px}
+.verifybadge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border:1px solid #756753;border-radius:999px;background:#2c271f;color:#ead9ad;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em;cursor:help}
+.verifybadge:focus-visible{outline:2px solid #ead9ad;outline-offset:3px}
+.verifyhelp{min-height:18px;text-align:center;margin-top:5px;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#cdbfa8;opacity:0;transition:opacity .16s}
+.verifyhelp.show{opacity:1}
+.feedback{min-height:18px;text-align:center;margin:0;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#dbc89d}
+.deck-feedback{
+  width:min(610px,94vw);
+  min-height:24px;
+  margin:2px auto 5px;
+  padding:3px 10px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#dbc89d;
+  font:700 12px/1.35 Arial,sans-serif;
+  text-align:center;
+}
+.tester-tools{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:9px auto;max-width:560px;font-family:Arial,sans-serif;color:#a99d89;font-size:10px;line-height:1.2}
+.tie-field{display:inline;color:#b9ad99;font:700 10px/1.2 Arial,sans-serif;white-space:nowrap}
+.test-sep{color:#756b5d;user-select:none}
+.test-btn{padding:0;border:0;background:transparent;color:#a99d89;font:10px/1.2 Arial,sans-serif;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.test-btn:hover{color:#d9c9ae}
+.test-btn:active{opacity:.7}
+
+@media(min-width:681px){
+ .deckbody{height:auto;min-height:0;padding:18px 14px 20px;overflow:visible}
+ .cardstage{height:auto;min-height:0}
+ /* Laptop-friendly Goldilocks sizing: keep the mat dominant, but reserve
+    enough first-viewport height for the console to be visibly present. */
+ .flipcard{width:clamp(420px,calc(100dvh - 180px),560px);max-width:min(78vw,560px);height:auto;aspect-ratio:1}
+}
+@media(max-width:680px){
+ .app{padding:16px 10px 40px}.overlay{padding:4px}.deck{min-height:99vh;height:auto;border-radius:12px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
+ .flipcard{width:min(96vw,610px,calc(99vh - 350px));height:auto;max-height:none;aspect-ratio:1}.face{border-radius:14px}
+ .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px 210px 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px;width:210px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
+ .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.exit{width:46px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:22px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}
+}
+/* BETA mobile: the mat determines the Deck height rather than reserving an empty viewport gap. */
+@media(max-width:680px){
+ .deckbody{height:auto;min-height:0;padding:4px 4px 8px;overflow:visible}
+ .cardstage{height:auto;min-height:0}
+}
+@media(max-width:350px){.controlrail{grid-template-columns:31px 190px 31px;column-gap:3px}.controls{gap:3px;width:190px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.exit{width:42px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
+
+
+
+/* v0.9.11 — live controls should feel live */
+.action{transition:filter .12s ease,color .12s ease,border-color .12s ease,box-shadow .12s ease,transform .12s ease}
+.action:not([disabled]):hover,.action:not([disabled]):focus-visible{
+ filter:brightness(1.32);color:#fff!important;border-color:rgba(255,255,255,.68)!important;
+ box-shadow:0 4px 12px rgba(0,0,0,.34)!important;transform:translateY(-1px)
+}
+
+/* v0.9.11 — Honour actions share one energetic green language */
+.accept,
+.complete{
+  background:#2f7d4a!important;
+  color:#f7fff9!important;
+  border-color:#58a873!important;
+}
+.accept:not([disabled]):hover,
+.complete:not([disabled]):hover,
+.accept:not([disabled]):focus-visible,
+.complete:not([disabled]):focus-visible{
+  filter:brightness(1.22);
+  color:#fff!important;
+  border-color:#8bd2a1!important;
+}
+.accept.accepted-state[disabled],
+.complete.done-state[disabled]{
+  background:#2f7d4a!important;
+  color:#f7fff9!important;
+  border-color:#58a873!important;
+  opacity:1!important;
+}
+
+/* v0.10.5 — The Third Law final state carries proper gravity */
+.accept.done-state[disabled]{
+  background:#c90000!important;
+  color:#fff!important;
+  border-color:#c90000!important;
+  box-shadow:0 3px 9px rgba(0,0,0,.22)!important;
+  opacity:1!important;
+  cursor:default;
+}
+
+
+/* v0.9.11 — status labels keep the standard console-button footprint */
+.action{white-space:nowrap}
+
+/* v0.9.11 — prototype controls are visually separated from gameplay */
+.beta-panel{
+  margin:10px auto 0;
+  width:min(560px,92vw);
+  padding:8px 10px 9px;
+  border:1px dashed rgba(255,255,255,.28);
+  border-radius:8px;
+  background:#000;
+  box-sizing:border-box;
+}
+.beta-panel-label{
+  display:block;
+  margin:0 0 6px;
+  text-align:center;
+  font:800 10px/1 Arial,sans-serif;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+}
+.beta-panel .tester-tools{margin-top:0}
+.beta-panel .feedback{margin-top:6px}
+
+
+/* v0.10.5 — clearer, more inviting diagnostic Test Console */
+.beta-panel{
+  margin:12px auto 0;
+  width:min(610px,94vw);
+  padding:11px 12px 10px;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:7px;
+  background:rgba(255,255,255,.055);
+}
+.beta-console-head{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:12px;
+  align-items:center;
+}
+.beta-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:54px;
+  height:30px;
+  padding:0 9px;
+  box-sizing:border-box;
+  background:#fff;
+  color:#fff;
+  border:1px solid #fff;
+  border-radius:2px;
+  font:900 12px/1 Arial,sans-serif;
+  letter-spacing:.12em;
+}
+.beta-panel .tester-tools{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:9px;
+  flex-wrap:wrap;
+  margin:0;
+  max-width:none;
+}
+.beta-panel .test-btn{
+  min-height:32px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.58);
+  border-radius:3px;
+  background:rgba(0,0,0,.28);
+  color:#eee5d6;
+  font:700 11px/1 Arial,sans-serif;
+  text-decoration:none;
+  letter-spacing:.02em;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.28);
+  transition:background .12s ease,border-color .12s ease,color .12s ease,transform .12s ease;
+}
+.beta-panel .test-btn:hover,
+.beta-panel .test-btn:focus-visible{
+  background:rgba(255,255,255,.12);
+  border-color:#fff;
+  color:#fff;
+  transform:translateY(-1px);
+}
+.beta-panel .test-btn:active{transform:translateY(0)}
+.beta-panel .tie-field{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:32px;
+  padding:0 10px;
+  border:1px solid rgba(201,0,0,.65);
+  border-radius:3px;
+  background:rgba(0,0,0,.22);
+  color:#ff5a5a;
+  font:900 13px/1 Arial,sans-serif;
+  white-space:nowrap;
+  letter-spacing:.02em;
+}
+.beta-panel .feedback{
+  margin-top:8px;
+  min-height:20px;
+  font-size:12px;
+  line-height:1.35;
+}
+@media(max-width:680px){
+  .beta-console-head{grid-template-columns:1fr}
+  .beta-badge{justify-self:start}
+  .beta-panel .tester-tools{justify-content:center}
+}
+
+
+/* v0.10.5 — balanced BETA / TEST diagnostic panel and more breathing room */
+.beta-panel{
+  margin-top:12px;
+  margin-bottom:24px;
+}
+.beta-console-head{
+  grid-template-columns:64px minmax(0,1fr) 64px;
+  gap:10px;
+}
+.beta-console-head .beta-badge:first-child{justify-self:start}
+.beta-console-head .test-badge{justify-self:end}
+.beta-panel .tester-tools{justify-content:center}
+.deckcabwrap{margin-top:0}
+@media(max-width:680px){
+  .beta-console-head{
+    grid-template-columns:54px minmax(0,1fr) 54px;
+    gap:6px;
+  }
+  .beta-badge{min-width:50px;padding:0 6px}
+}
+
+
+/* v0.10.5 — every Challenge Mat flips bottom-to-top like a pub beer mat */
+.flipcard.flipped{transform:rotateX(180deg)}
+.face.back{transform:rotateX(180deg)}
+
+.flipcard.coming-soon-mat .face img{filter:grayscale(1);opacity:.58}
+.flipcard.coming-soon-mat .face{background:#777}
+
+/* BETA TEST LAB Mk II */
+.tester-tools-mk2{gap:12px;flex-wrap:wrap;justify-content:center}.sim-block{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}.round-block{border-left:1px solid rgba(255,255,255,.35);padding-left:12px}.round-block label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.test-select{min-height:36px;border:2px solid #fff;border-radius:4px;background:#f7f2e8;color:#111;font:700 12px Poppins,Arial,sans-serif;padding:5px 8px}.tie-field{white-space:nowrap}.campaign-status{font-weight:900;letter-spacing:.05em}@media(max-width:700px){.round-block{border-left:0;padding-left:0;width:100%}.test-select{max-width:240px}}
+
+/* v0.10.5 — BETA TEST LAB: unnecessarily handsome back-of-the-boiler edition */
+.beta-panel{
+  position:relative;
+  width:min(650px,95vw);
+  padding:14px 14px 12px;
+  border:3px double #b98a45;
+  border-radius:10px;
+  background:
+    radial-gradient(circle at 12px 12px,#d2a45e 0 2px,#5a3a1e 3px 5px,transparent 6px),
+    radial-gradient(circle at calc(100% - 12px) 12px,#d2a45e 0 2px,#5a3a1e 3px 5px,transparent 6px),
+    radial-gradient(circle at 12px calc(100% - 12px),#d2a45e 0 2px,#5a3a1e 3px 5px,transparent 6px),
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),#d2a45e 0 2px,#5a3a1e 3px 5px,transparent 6px),
+    linear-gradient(180deg,#30271f,#181512);
+  box-shadow:inset 0 0 0 2px #0d0b09,inset 0 0 22px rgba(0,0,0,.8),0 5px 14px rgba(0,0,0,.38);
+}
+.beta-console-head{grid-template-columns:auto auto 1fr;gap:9px}
+.beta-badge{
+  background:linear-gradient(#d7b06c,#9a6a31);
+  color:#21170e;border:1px solid #efd091;
+  box-shadow:inset 0 0 0 1px #70451f,0 2px 3px #000;
+  text-shadow:0 1px rgba(255,255,255,.25);
+}
+.lab-title{
+  white-space:nowrap;color:#e8c681;
+  font:900 11px/1 Arial,sans-serif;letter-spacing:.13em;
+  text-shadow:0 1px 2px #000;
+}
+.beta-panel .tester-tools{justify-content:center}
+.beta-panel .test-btn{
+  border:1px solid #c69a58;
+  background:linear-gradient(#4b3b2c,#241c16);
+  color:#f4dfb0;
+  box-shadow:inset 0 0 0 1px #17110d,0 2px 4px rgba(0,0,0,.55);
+}
+.beta-panel .test-btn:hover,.beta-panel .test-btn:focus-visible{
+  background:linear-gradient(#67503a,#32261c);
+  border-color:#efc97e;color:#fff3cf;
+}
+.beta-panel .test-btn-reset{
+  background:linear-gradient(#6b241e,#38130f);
+  border-color:#b65d4c;color:#ffe5d7;
+}
+.beta-panel .tie-field{
+  border:1px inset #a17a43;border-radius:3px;
+  background:#11100d;color:#e7c87e;
+  padding:7px 9px;font-family:"Courier New",monospace;font-weight:700;
+  box-shadow:inset 0 0 7px #000;
+}
+.beta-panel .campaign-status{color:#9ed58f}
+.beta-panel .round-block{
+  border-left:1px solid #8f6a38;padding-left:10px;color:#e7c87e
+}
+.beta-panel .test-select{
+  border:1px solid #b98a45;background:#17130f;color:#f1d79d;
+  box-shadow:inset 0 0 5px #000
+}
+.beta-panel .feedback{color:#e7c87e}
+@media(max-width:700px){
+  .beta-console-head{grid-template-columns:auto 1fr}
+  .lab-title{text-align:left}
+  .beta-panel .tester-tools{grid-column:1/-1}
+}
+
+
+/* v0.10.13 — Mat 18 Giant Killer artwork restored and web-optimised; no existing Challenge logic changed */
+/* v0.10.10 — Simulator signaller + permanent Pigeon Miles mechanical indicator */
+.simulator-sign{
+  grid-column:1/-1;
+  justify-self:center;
+  margin:2px auto 8px;
+  padding:5px 12px 4px;
+  border:1px solid #d0a45e;
+  border-radius:3px;
+  background:linear-gradient(#b98643,#725026);
+  color:#18110b;
+  font:900 10px/1.1 Arial,sans-serif;
+  letter-spacing:.16em;
+  text-align:center;
+  box-shadow:inset 0 0 0 1px #e0bf82,0 2px 4px rgba(0,0,0,.55);
+  text-shadow:0 1px rgba(255,255,255,.25);
+}
+.pigeon-gauge-wrap{
+  display:flex;
+  justify-content:center;
+  margin:7px auto 9px;
+}
+.pigeon-gauge{
+  min-width:235px;
+  padding:7px 11px 8px;
+  border:2px solid #9b7137;
+  border-radius:7px;
+  background:linear-gradient(180deg,#35291e,#17130f);
+  box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 15px rgba(0,0,0,.85),0 3px 7px rgba(0,0,0,.38);
+  text-align:center;
+  position:relative;
+}
+.pigeon-gauge:before,.pigeon-gauge:after{
+  content:"";
+  position:absolute;
+  top:8px;
+  width:6px;height:6px;border-radius:50%;
+  background:#b58a4d;
+  box-shadow:inset 0 0 0 1px #5b3d1d,0 1px 2px #000;
+}
+.pigeon-gauge:before{left:8px}.pigeon-gauge:after{right:8px}
+.pigeon-gauge-label{
+  color:#e7c37e;
+  font:900 9px/1 Arial,sans-serif;
+  letter-spacing:.14em;
+  margin-bottom:5px;
+}
+.pigeon-odometer{
+  display:inline-block;
+  min-width:150px;
+  padding:3px 7px 2px;
+  border:2px inset #80613b;
+  border-radius:3px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.08),transparent 30%),
+    repeating-linear-gradient(90deg,#0b0b09 0 23px,#2b241b 23px 24px);
+  color:#efe2bd;
+  font:900 26px/1.05 "Courier New",monospace;
+  letter-spacing:5px;
+  text-indent:5px;
+  text-shadow:0 0 2px #000,0 1px #000;
+  box-shadow:inset 0 0 9px #000;
+}
+.pigeon-gauge-sub{
+  margin-top:4px;
+  color:#9f8a67;
+  font:700 7.5px/1 Arial,sans-serif;
+  letter-spacing:.12em;
+}
+@media(max-width:700px){
+  .pigeon-gauge{min-width:205px}
+  .pigeon-odometer{font-size:22px;min-width:136px}
+}
+
+
+/* v0.10.10 — Permanent Pigeon Miles instrument: blue pigeon skin; mat-subordinate width */
+.pigeon-gauge-wrap{display:none!important}
+.pigeon-machine-wrap{
+  width:min(540px,92vw);
+  margin:7px auto 10px;
+  text-align:center;
+}
+.pigeon-machine{
+  position:relative;
+  width:100%;
+  aspect-ratio:1600/480;
+  background-image:var(--pigeon-machine-art);
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  border-radius:8px;
+  overflow:hidden;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.38));
+}
+.pigeon-machine-rollers{
+  position:absolute;
+  left:24.15%;
+  top:39.9%;
+  width:55.45%;
+  height:40.3%;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:.55%;
+  align-items:stretch;
+  padding:0;
+  background:#070707;
+  border-radius:2.5%;
+  overflow:hidden;
+  box-shadow:inset 0 0 7px #000;
+}
+.pigeon-machine-rollers span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  overflow:hidden;
+  color:#111;
+  background:linear-gradient(180deg,#d8d0bf 0%,#f4eedf 16%,#f5efe0 78%,#d2c8b5 100%);
+  border-left:1px solid #514b43;
+  border-right:1px solid #25221f;
+  border-radius:5%/10%;
+  font:900 clamp(20px,3.6vw,43px)/1 Georgia,"Times New Roman",serif;
+  text-shadow:0 1px rgba(255,255,255,.45);
+  box-shadow:inset 0 0 6px rgba(0,0,0,.22);
+}
+.pigeon-rule{
+  margin:5px auto 0;
+  color:#9f8a67;
+  font:700 8px/1.2 Arial,sans-serif;
+  letter-spacing:.06em;
+}
+@media(max-width:700px){
+  .pigeon-machine-wrap{width:min(92vw,540px)}
+  .pigeon-machine-rollers span{font-size:clamp(17px,6vw,34px)}
+}
+
+/* v0.10.5 — the approved BETA artwork IS the hardware; only controls/displays are wired live */
+.beta-hardware{
+  width:min(760px,97vw)!important;
+  padding:0!important;
+  border:0!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+.beta-face{
+  position:relative;
+  width:100%;
+  aspect-ratio:1536/1024;
+  background-image:var(--beta-face);
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  border-radius:9px;
+  overflow:hidden;
+  box-shadow:0 6px 16px rgba(0,0,0,.45);
+}
+.hw-hotspot{
+  position:absolute;
+  border:0;
+  border-radius:50%;
+  background:transparent!important;
+  padding:0;
+  margin:0;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  outline:none;
+}
+.hw-hotspot:hover:not(:disabled),
+.hw-hotspot:focus-visible:not(:disabled){
+  box-shadow:0 0 0 4px rgba(255,255,255,.18),0 0 18px rgba(255,225,150,.58);
+}
+.hw-hotspot:active:not(:disabled){transform:scale(.97)}
+.hw-hotspot:disabled{cursor:default;opacity:.55}
+.hw-home{left:9.65%;top:20.2%;width:10.2%;aspect-ratio:1/1;height:auto;appearance:none;-webkit-appearance:none}
+.hw-away{left:33.75%;top:20.2%;width:10.2%;aspect-ratio:1/1;height:auto;appearance:none;-webkit-appearance:none}
+.hw-pigeon{left:12.0%;top:64.0%;width:10.2%;aspect-ratio:1/1;height:auto;appearance:none;-webkit-appearance:none}
+
+.hw-odo{
+  position:absolute;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:2%;
+  padding:.55%;
+  box-sizing:border-box;
+  background:#080705;
+  border-radius:3px;
+}
+.hw-odo span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#111;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),
+    #f4efe3;
+  border-radius:8%/12%;
+  font:900 clamp(18px,4.8vw,49px)/1 Georgia,"Times New Roman",serif;
+  box-shadow:inset 0 0 6px rgba(71,52,25,.22);
+}
+.hw-ties{left:55.4%;top:19.8%;width:13.2%;height:12.8%}
+.hw-away-count{left:79.4%;top:19.8%;width:13.2%;height:12.8%}
+
+.hw-state{
+  position:absolute;
+  left:27.1%;
+  top:43.6%;
+  width:46.8%;
+  height:10.0%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  color:#111;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.07),transparent 20%,transparent 80%,rgba(0,0,0,.10)),
+    #f4efe3;
+  border:2px solid #6e4a22;
+  border-radius:4px;
+  font:900 clamp(12px,2.4vw,23px)/1 Georgia,"Times New Roman",serif;
+  letter-spacing:.10em;
+  white-space:nowrap;
+  overflow:hidden;
+  box-shadow:inset 0 0 7px rgba(71,52,25,.22);
+}
+.hw-round{
+  position:absolute;
+  left:50.9%;
+  top:64.8%;
+  width:40.2%;
+  height:9.0%;
+  box-sizing:border-box;
+  padding:0 6.5%;
+  border:0;
+  border-radius:3px;
+  appearance:none;
+  -webkit-appearance:none;
+  background:linear-gradient(#f7f0df,#fffaf0 50%,#efe4d0);
+  color:#17110b;
+  font:700 clamp(10px,1.8vw,17px) Georgia,"Times New Roman",serif;
+  text-align:center;
+  cursor:pointer;
+}
+.hw-round:focus-visible{outline:3px solid rgba(255,255,255,.5)}
+.hw-reset{display:block;margin:10px auto 0!important}
+.hw-feedback{min-height:1.2em;text-align:center;margin-top:6px}
+.giant-kill-sim{
+  display:block;
+  margin:8px auto 2px;
+  padding:2px 4px;
+  border:0;
+  background:transparent;
+  color:#b9a88a;
+  font:700 10px/1.2 Arial,sans-serif;
+  letter-spacing:.08em;
+  text-decoration:underline;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.giant-kill-sim:hover:not(:disabled),.giant-kill-sim:focus-visible:not(:disabled){color:#f1dfbb}
+.giant-kill-sim:disabled{opacity:.42;cursor:default}
+@media(max-width:700px){
+  .hw-state{letter-spacing:.07em}
+}
+
+
+/* v0.10.10 — faun/vintage Pigeon Miles skin; deliberately ~half beer-mat width */
+.pigeon-machine-wrap{
+  width:min(350px,88vw)!important;
+  margin:7px auto 10px!important;
+}
+.pigeon-machine{
+  aspect-ratio:1568/433!important;
+  border-radius:5px!important;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.32))!important;
+}
+.pigeon-machine-rollers{
+  left:23.72%!important;
+  top:36.26%!important;
+  width:53.38%!important;
+  height:43.19%!important;
+  grid-template-columns:repeat(6,1fr)!important;
+  gap:.45%!important;
+}
+.pigeon-machine-rollers span{
+  font-size:clamp(11px,2.0vw,22px)!important;
+}
+.pigeon-rule{
+  max-width:350px!important;
+  font-size:7px!important;
+  line-height:1.25!important;
+}
+@media(max-width:700px){
+  .pigeon-machine-wrap{width:min(280px,78vw)!important}
+  .pigeon-machine-rollers span{font-size:clamp(10px,5vw,19px)!important}
+}
+
+
+/* v0.10.10 — odometer roller-field finesse only */
+.pigeon-machine-rollers{
+  left:24.15%!important;
+  top:37.0%!important;
+  width:52.45%!important;
+  height:41.8%!important;
+}
+
+
+/* v0.10.10 — vintage faun BETA Test Lab skin. The artwork IS the hardware. */
+.beta-hardware{
+  width:min(560px,92vw)!important;
+  margin:12px auto 24px!important;
+  padding:0!important;
+  border:0!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+.beta-face{
+  position:relative!important;
+  width:100%!important;
+  aspect-ratio:1501/813!important;
+  background-image:var(--beta-face)!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  border-radius:7px!important;
+  overflow:hidden!important;
+  box-shadow:0 5px 12px rgba(0,0,0,.36)!important;
+}
+
+/* All three live push-buttons use the printed switches as their faces. */
+.hw-hotspot{
+  position:absolute!important;
+  display:block!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  border-radius:6px!important;
+  cursor:pointer!important;
+  outline:none!important;
+}
+.hw-hotspot:hover:not(:disabled),
+.hw-hotspot:focus-visible:not(:disabled){
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.24),0 0 12px rgba(255,224,154,.5)!important;
+}
+.hw-hotspot:active:not(:disabled){transform:scale(.985)!important}
+.hw-hotspot:disabled{cursor:default!important;opacity:.48!important}
+
+.hw-home{
+  left:16.15%!important; top:35.65%!important;
+  width:16.1%!important; height:16.5%!important;
+  aspect-ratio:auto!important;
+}
+.hw-away{
+  left:34.25%!important; top:35.65%!important;
+  width:16.45%!important; height:16.5%!important;
+  aspect-ratio:auto!important;
+}
+.hw-pigeon{
+  left:6.35%!important; top:71.8%!important;
+  width:26.6%!important; height:13.8%!important;
+  aspect-ratio:auto!important;
+}
+.hw-reset{
+  left:35.05%!important; top:71.8%!important;
+  width:24.25%!important; height:13.8%!important;
+}
+
+/* Three-roller odometers fitted into the printed black windows. */
+.hw-odo{
+  position:absolute!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:1.5%!important;
+  padding:.55%!important;
+  box-sizing:border-box!important;
+  background:#090806!important;
+  border-radius:3px!important;
+  overflow:hidden!important;
+  box-shadow:inset 0 0 5px #000!important;
+}
+.hw-odo span{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:0!important;
+  color:#111!important;
+  background:linear-gradient(180deg,#d6cebd 0%,#f4eee0 18%,#f6efe1 78%,#cec3ae 100%)!important;
+  border-radius:7%/10%!important;
+  font:900 clamp(10px,2.65vw,25px)/1 Georgia,"Times New Roman",serif!important;
+  box-shadow:inset 0 0 4px rgba(0,0,0,.22)!important;
+}
+.hw-ties{
+  left:52.35%!important; top:39.1%!important;
+  width:14.45%!important; height:13.2%!important;
+}
+.hw-away-count{
+  left:68.45%!important; top:39.1%!important;
+  width:14.45%!important; height:13.2%!important;
+}
+
+/* Campaign State deliberately uses only the central portion of the long printed aperture. */
+.hw-state{
+  position:absolute!important;
+  left:25%!important;
+  top:60.6%!important;
+  width:50%!important;
+  height:7.25%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  padding:0 2%!important;
+  color:#f2e7cf!important;
+  background:rgba(13,12,10,.88)!important;
+  border:1px solid rgba(190,153,91,.55)!important;
+  border-radius:3px!important;
+  font:700 clamp(8px,1.8vw,15px)/1.05 "Courier New",monospace!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-shadow:0 1px #000!important;
+  box-shadow:inset 0 0 7px #000!important;
+}
+
+/* The real round selector sits over the printed dropdown. */
+.hw-round{
+  position:absolute!important;
+  left:61.4%!important;
+  top:76.6%!important;
+  width:33.0%!important;
+  height:8.25%!important;
+  box-sizing:border-box!important;
+  padding:0 4.2% 0 1.3%!important;
+  border:0!important;
+  border-radius:3px!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  background:linear-gradient(#f4ead4,#fff8e9 52%,#e7d8bc)!important;
+  color:#17110b!important;
+  font:700 clamp(7px,1.55vw,12px)/1 Georgia,"Times New Roman",serif!important;
+  text-align:center!important;
+  cursor:pointer!important;
+}
+
+/* The normal live info line survives as a small matching manufacturer's plate beneath the skin. */
+.hw-feedback{
+  width:min(540px,90vw)!important;
+  min-height:18px!important;
+  box-sizing:border-box!important;
+  margin:5px auto 0!important;
+  padding:4px 8px!important;
+  text-align:center!important;
+  color:#2a2015!important;
+  background:#d8b47a!important;
+  border:1px solid #5c3d20!important;
+  border-radius:4px!important;
+  font:700 8px/1.25 Georgia,"Times New Roman",serif!important;
+  box-shadow:inset 0 0 5px rgba(84,55,25,.18),0 2px 4px rgba(0,0,0,.18)!important;
+}
+
+@media(max-width:700px){
+  .beta-hardware{width:min(560px,94vw)!important}
+  .hw-state{font-size:clamp(7px,2.1vw,12px)!important}
+  .hw-round{font-size:clamp(6px,1.9vw,10px)!important}
+  .hw-feedback{font-size:7px!important}
+}
+
+
+/* Campaign standing: give live Campaign truth the same visual weight as the BETA controls. */
+.campaign-truth{
+  width:min(500px, calc(100% - 28px));
+  box-sizing:border-box;
+  margin:8px auto 22px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:10px;
+  background:rgba(255,255,255,.045);
+  font-family:Arial,sans-serif;
+}
+.campaign-truth-line{display:grid;grid-template-columns:176px minmax(0,1fr);gap:9px;align-items:stretch;margin-top:8px;min-width:0}
+.campaign-truth-line:first-child{margin-top:0}
+.campaign-truth-line.two{grid-template-columns:176px minmax(0,3fr) minmax(0,2fr);gap:9px}
+.campaign-truth .label{
+  display:flex;align-items:center;justify-content:center;min-height:36px;padding:6px 8px;
+  box-sizing:border-box;border:1px solid rgba(255,255,255,.16);border-radius:8px;
+  background:#302a23;color:#fff;box-shadow:0 2px 0 #2f3235,inset 0 1px rgba(255,255,255,.22);
+  font:700 10px/1.15 Arial,sans-serif;text-align:center;text-transform:uppercase;letter-spacing:.025em
+}
+.campaign-truth strong{
+  display:flex;align-items:center;min-width:0;min-height:36px;padding:6px 9px;box-sizing:border-box;
+  border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#17130f;
+  font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;overflow-wrap:anywhere
+}
+.campaign-truth .name-pigeon-action{
+  width:100%;min-width:0;min-height:36px;padding:6px 9px;box-sizing:border-box;
+  border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#084c61;
+  font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;text-align:left;cursor:pointer;
+  text-decoration:underline;text-underline-offset:2px
+}
+.campaign-truth .name-pigeon-action:hover,.campaign-truth .name-pigeon-action:focus-visible{
+  background:#fffaf0;outline:2px solid rgba(8,76,97,.28);outline-offset:1px
+}
+.campaign-truth .miles-field{display:block;padding:3px;background:#080705;border-color:rgba(255,255,255,.12)}
+.truth-mile-value{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+.truth-odo{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;height:30px}
+.truth-odo span{
+  display:flex;align-items:center;justify-content:center;min-width:0;color:#111;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),
+    #f4efe3;
+  border-radius:4px;font:900 16px/1 Georgia,"Times New Roman",serif;box-shadow:inset 0 0 6px rgba(71,52,25,.22)
+}
+@media(max-width:560px){
+  .campaign-truth{width:min(500px,calc(100% - 28px));padding:10px}
+  .campaign-truth-line{grid-template-columns:142px minmax(0,1fr);gap:6px}
+  .campaign-truth-line.two{grid-template-columns:142px minmax(0,3fr) minmax(0,2fr);gap:6px}
+  .campaign-truth .label{min-height:32px;padding:5px 5px;font-size:8px;white-space:nowrap}
+  .campaign-truth strong{min-height:32px;padding:5px 7px;font-size:10px}
+  .truth-odo{height:24px}
+}
+@media (max-height:500px) and (orientation:landscape){
+  .campaign-truth{width:min(500px,calc(100% - 28px));padding:10px}
+  .campaign-truth-line{grid-template-columns:150px minmax(0,1fr);gap:6px;min-height:34px}
+  .campaign-truth-line.two{grid-template-columns:150px minmax(0,3fr) minmax(0,2fr);gap:6px}
+  .campaign-truth .label,.campaign-truth strong,.campaign-truth .name-pigeon-action{min-height:34px;padding:5px 7px}
+  .campaign-truth .label{font-size:8px;white-space:nowrap}
+  .campaign-truth strong{font-size:10px}
+  .truth-odo{height:26px}
+  #truthCallSign{white-space:nowrap}
+}
+</style>
+<!-- v0.10.23 — corrected reverse/back artwork mapping for Mats 16, 18, 20–23; no Challenge logic changed -->
+<!-- TFFAC Challenge Deck v0.10.30 | Audit artwork locked | Feedback field between mat and console -->
+
+<style>
+/* v0.10.36 — compact functional BETA simulator */
+.campaign-truth{
+  margin-bottom:42px !important; /* clear visual separation from the simulator */
+}
+
+.beta-sim-panel{
+  width:min(500px, calc(100% - 28px));
+  margin:0 auto 42px;
+  padding:14px 14px 28px;
+  box-sizing:border-box;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:10px;
+  background:rgba(255,255,255,.045);
+}
+
+.beta-title{
+  margin:0 0 13px;
+  text-align:center;
+  color:#d8d1c2;
+  font:700 12px/1.2 Arial,sans-serif;
+  letter-spacing:.035em;
+}
+
+.beta-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:10px;
+  margin-top:11px;
+}
+
+.beta-row-ties{margin-top:0}
+
+.beta-button{
+  width:96px;
+  height:39px;
+  flex:0 0 96px;
+  padding:6px 7px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:8px;
+  background:#302a23;
+  color:#fff;
+  box-shadow:0 2px 0 #2f3235, inset 0 1px rgba(255,255,255,.22);
+  font:700 11px/1.14 Arial,sans-serif;
+  text-align:center;
+  cursor:pointer;
+}
+
+.beta-button:hover{filter:brightness(1.08)}
+.beta-button:active{transform:translateY(1px);box-shadow:0 1px 0 #6f4e16}
+.beta-button:disabled{opacity:.45;cursor:default;filter:none}
+
+.beta-reset{
+  border-color:#f2b4a5;
+  background:#a84f3e;
+  color:#fff5ed;
+  box-shadow:0 2px 0 #51281f, inset 0 1px rgba(255,255,255,.18);
+}
+.beta-reset span{
+  display:block;
+  margin-top:2px;
+  font-size:8px;
+  line-height:1.05;
+  font-weight:600;
+}
+
+.beta-odometer-block{
+  width:82px;
+  flex:0 0 82px;
+  text-align:center;
+}
+
+.beta-odo-label{
+  margin-bottom:5px;
+  color:#cfc7b8;
+  font:700 12px/1 Arial,sans-serif;
+}
+
+.beta-odo{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:3px;
+  height:42px;
+  padding:3px;
+  box-sizing:border-box;
+  background:#080705;
+  border-radius:4px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+.beta-odo span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#111;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),
+    #f4efe3;
+  border-radius:4px;
+  font:900 24px/1 Georgia,"Times New Roman",serif;
+  box-shadow:inset 0 0 6px rgba(71,52,25,.22);
+}
+
+.beta-row-round{
+  align-items:center;
+  margin-top:14px;
+}
+
+.beta-round-label{
+  color:#cfc7b8;
+  font:700 12px/1 Arial,sans-serif;
+}
+
+.beta-round-select{
+  width:250px;
+  max-width:68%;
+  height:34px;
+  padding:0 30px 0 10px;
+  border:1px solid #7d6a4c;
+  border-radius:6px;
+  background:#f4efe3;
+  color:#17110b;
+  font:700 11px/1 Arial,sans-serif;
+}
+
+.beta-row-actions{
+  align-items:center;
+  margin-top:13px;
+}
+
+.beta-action{
+  width:126px;
+  height:40px;
+  flex:1 1 0;
+  max-width:132px;
+}
+
+@media(max-width:560px){
+  .campaign-truth{margin-bottom:34px !important}
+  .beta-sim-panel{width:calc(100% - 20px);padding:12px 10px 20px;margin-bottom:34px}
+  .beta-row{gap:7px}
+  .beta-button{width:78px;flex-basis:78px;height:56px;font-size:10px}
+  .beta-odometer-block{width:67px;flex-basis:67px}
+  .beta-odo{height:40px}
+  .beta-odo span{font-size:22px}
+  .beta-round-select{width:220px;max-width:66%}
+  .beta-action{width:auto;max-width:none;flex:1 1 0}
+}
+</style>
+
+
+<style>
+/* v0.10.41 — extend the existing BETA panel with tester contact links; add physical Deck tease */
+.beta-help{
+  margin:17px 0 0;
+  padding-top:13px;
+  border-top:1px solid rgba(255,255,255,.12);
+  text-align:center;
+  font-family:Arial,sans-serif;
+}
+.beta-help-title{
+  display:block;
+  margin-bottom:6px;
+  color:#d8d1c2;
+  font-size:10px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.beta-help-links{
+  color:#cfc7b8;
+  font-size:11px;
+  line-height:1.2;
+}
+.beta-help-link{
+  appearance:none;
+  display:inline;
+  border:0;
+  padding:0;
+  background:transparent;
+  color:#f0c64f;
+  font:700 11px/1.2 Arial,sans-serif;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  cursor:pointer;
+}
+.beta-help-link:hover,
+.beta-help-link:focus-visible{
+  color:#fff0a8;
+}
+.beta-help-sep{
+  margin:0 7px;
+  color:#7f7769;
+}
+
+.deck-sales-tease{
+  width:100%;
+  max-width:330px;
+  margin:18px auto 0;
+  padding:13px 12px 14px;
+  box-sizing:border-box;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;
+  background:rgba(255,255,255,.035);
+  text-align:center;
+  font-family:Arial,sans-serif;
+}
+.deck-sales-kicker{
+  margin:0 0 5px;
+  color:#d8d1c2;
+  font-size:11px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.deck-sales-copy{
+  margin:0 0 10px;
+  color:#cfc7b8;
+  font-size:11px;
+  line-height:1.25;
+}
+.deck-sales-coming{
+  height:28px;
+  padding:0 14px;
+  border:1px solid #d5ad26;
+  border-radius:999px;
+  background:#f0c64f;
+  color:#17110b;
+  font:800 10px/1 Arial,sans-serif;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  cursor:default;
+  opacity:.88;
+}
+
+@media(max-width:560px){
+  .beta-help{margin-top:15px;padding-top:12px}
+  .deck-sales-tease{max-width:310px;margin-top:16px}
+}
+</style>
+
+
+
+
+
+<style id="tffcBrandedConfirmStyles">
+.tffc-confirm-overlay{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.48)}
+.tffc-confirm-overlay[hidden]{display:none}
+.tffc-confirm-box{width:min(420px,100%);background:#fff;border:1px solid #d7d7d7;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.28);padding:18px;font:300 13px/1.5 Poppins,Arial,sans-serif;color:#111}
+.tffc-confirm-title{font-size:16px;font-weight:600;color:#084C61;margin:0 0 10px}
+.tffc-confirm-message{white-space:pre-wrap;margin:0 0 16px}
+.tffc-confirm-actions{display:flex;justify-content:flex-end;gap:8px}
+.tffc-confirm-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
+#tffcConfirmCancel{background:#fff;color:#084C61}
+#tffcConfirmOk{background:#084C61;color:#FAFAFA}
+.tffc-privacy-actions{display:flex;justify-content:flex-end}
+.tffc-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
+</style>
+</head>
+<body>
+<!-- Challenges opens directly to the Deck; Clubfinder alone owns campaign Stats. -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Tin Foil FA Cup Challenges">
+ <section class="deck">
+  <div class="deckbody">
+    <div class="cardstage" id="cardstage">
+      <div class="flipcard" id="flipcard" role="button" tabindex="0" aria-label="Flip challenge mat" aria-pressed="false">
+        <article class="face front" id="frontFace"></article>
+        <article class="face back" id="backFace"></article>
+      </div>
+    </div>
+  </div>
+  <div class="feedback deck-feedback" id="feedback" role="status" aria-live="polite"></div>
+  <footer class="deckfoot">
+    <div class="controlrail">
+      <button class="nav prev" id="prev" aria-label="Previous Challenge">‹</button>
+      <div class="controls">
+        <button class="action accept" id="acceptBtn">Accept?</button>
+        <button class="action complete" id="completeBtn">Completed?</button>
+        <button class="action exit" id="exitBtn">Exit</button>
+      </div>
+      <button class="nav next" id="next" aria-label="Next Challenge">›</button>
+    </div>
+    <div class="verifyrow"><button class="verifybadge" id="verifyBadge" type="button" aria-describedby="verifyHelp" aria-expanded="false">Our Foundational Laws</button></div>
+    <div class="verifyhelp" id="verifyHelp"></div>
+    <div class="campaign-truth" aria-label="Current Campaign standing">
+      <span class="campaign-truth-line"><span class="label">Call Sign:</span> <strong id="truthCallSign">—</strong></span>
+      <span class="campaign-truth-line two">
+        <span class="label">Pigeon Name & Miles Flown:</span>
+        <strong id="truthPigeonName">—</strong>
+        <strong class="miles-field"><span id="truthPigeonMiles" class="truth-mile-value">0</span><span class="truth-odo" id="truthPigeonMilesOdometer" aria-hidden="true"><span>0</span><span>0</span><span>0</span><span>0</span></span></strong>
+      </span>
+      <span class="campaign-truth-line"><span class="label">Current Campaign Round:</span> <strong id="truthCampaignRound">Extra Preliminary Round</strong></span>
+    </div>
+    
+    
+
+
+<div class="beta-panel beta-sim-panel" aria-label="BETA Campaign Progress Simulator">
+  <div class="beta-title">BETA – Campaign Progress Simulator</div>
+
+  <div class="beta-row beta-row-ties">
+    <button class="beta-button" id="addTie" type="button">Play a<br>Home Tie</button>
+    <button class="beta-button" id="addAwayTie" type="button">Play an<br>Away Tie</button>
+
+    <div class="beta-odometer-block">
+      <div class="beta-odo-label">Ties Played</div>
+      <div class="beta-odo" id="tieCount" aria-label="0 ties played"><span>0</span><span>0</span></div>
+    </div>
+
+    <div class="beta-odometer-block">
+      <div class="beta-odo-label">Away Ties</div>
+      <div class="beta-odo" id="awayTieCount" aria-label="0 away ties"><span>0</span><span>0</span></div>
+    </div>
+  </div>
+
+  <div class="beta-row beta-row-round">
+    <label class="beta-round-label" for="campaignRound">Campaign Round:</label>
+    <select id="campaignRound" class="beta-round-select" aria-label="Campaign Round">
+      <option value="0">Extra Preliminary Round</option>
+      <option value="1">Preliminary Round</option>
+      <option value="2">1st Qualifying Round</option>
+      <option value="3">2nd Qualifying Round</option>
+      <option value="4">3rd Qualifying Round</option>
+      <option value="5">4th Qualifying Round</option>
+      <option value="6">First Round Proper</option>
+      <option value="7">Second Round Proper</option>
+      <option value="8">Third Round Proper</option>
+      <option value="9">Fourth Round Proper</option>
+      <option value="10">Fifth Round Proper</option>
+      <option value="11">Quarter Finals</option>
+      <option value="12">Semi Finals</option>
+      <option value="13">The Final</option>
+    </select>
+  </div>
+
+  <div class="beta-row beta-row-actions">
+    <button class="beta-button beta-action" id="addPigeonMiles" type="button">Fly +100<br>Pigeon Miles</button>
+    <button class="beta-button beta-action" id="simulateGiantKill" type="button">Bag a<br>Giant Kill</button>
+    <button class="beta-button beta-action beta-reset" id="reset" type="button">Hard Reset<br><span>Reset All Challenge Data</span></button>
+  </div>
+
+  <div class="beta-help" aria-label="BETA tester feedback">
+    <span class="beta-help-title">Help Us Break It</span>
+    <div class="beta-help-links">
+      <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a>
+      <span class="beta-help-sep" aria-hidden="true">·</span>
+      <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
+      <span class="beta-help-sep" aria-hidden="true">·</span>
+      <button class="beta-help-link" type="button" id="challengePrivacyLink">Privacy</button>
+    </div>
+  </div>
+
+  <!-- Kept only because the established render loop uses campaignStatus internally.
+       It is intentionally not shown in the simplified BETA UI. -->
+  <div id="campaignStatus" aria-live="polite" hidden>IN PROGRESS</div>
+</div>
+
+
+<div class="deckcabwrap">
+      <div class="deckcabhead"><span>Trophy Cabinet</span><span id="cabinetCount">0 / 18</span></div>
+      <div class="deckcabinet" id="deckCabinet" aria-label="Challenge Trophy Cabinet, three mats per row; scroll down for more"></div>
+    </div>
+
+    <div class="deck-sales-tease" aria-label="Tin Foil FA Cup Challenge Deck coming soon">
+      <div class="deck-sales-kicker">Like the Beer Mats?</div>
+      <p class="deck-sales-copy">Get Your Hands on The Real Thing!</p>
+      <button class="deck-sales-coming" type="button" disabled>Coming Soon!</button>
+    </div>
+  </footer>
+ </section>
+</div>
+
+<!-- Achieved trophies have their own inspection surface; never flip or scroll the live deck. -->
+<div id="trophyViewer" class="trophy-viewer" role="dialog" aria-modal="true" aria-label="Inspect achieved trophy" hidden>
+  <div class="trophy-viewer-inner">
+    <div id="trophyViewerMat" class="trophy-viewer-mat" role="button" tabindex="0" aria-label="Tap to flip trophy">
+      <div id="trophyViewerCard" class="trophy-viewer-card">
+        <div class="trophy-viewer-face front"><img id="trophyViewerFront" alt="" draggable="false" decoding="async"></div>
+        <div class="trophy-viewer-face back"><img id="trophyViewerBack" alt="" draggable="false" decoding="async"></div>
+      </div>
+    </div>
+    <div id="trophyViewerHint" class="trophy-viewer-hint" aria-live="polite">Tap to flip</div>
+  </div>
+</div>
+
+<script>
+const CHALLENGES = [{"id":"00","title":"The Four Laws","subtitle":"It’s The Law!","type":"foundation","motto":"FOUR LAWS. ONE GLORIOUS CAMPAIGN.","behaviour":"reference"},{"id":"01","title":"The First Law","subtitle":"Get Your Blue Peter Badge","type":"honour","motto":"THE FIRST LAW. ALWAYS AND FOREVER.","behaviour":"prerequisite"},{"id":"02","title":"The Second Law","subtitle":"Get to your first Qualifying Tie","type":"campaign","motto":"GET TO YOUR FIRST QUALIFYING TIE.","behaviour":"first_qualifying_tie"},{"id":"03","title":"The Fourth Law","subtitle":"First Tie. First Pie.","type":"honour","motto":"FIRST TIE. FIRST PIE.","behaviour":"simple"},{"id":"04","title":"The Dogs Bollocks","subtitle":"Tin Foil FA Cup. Dog. Camera.","type":"honour","motto":"EVERY GROUND NEEDS A GOOD DOG.","behaviour":"simple"},{"id":"05","title":"The Graduate","subtitle":"Complete the Qualifying School","type":"campaign","motto":"1ST. 2ND. 3RD. GRADUATE.","behaviour":"three_qualifying"},{"id":"06","title":"The Pie’d Piper","subtitle":"4 ties, 4 pies","type":"honour","motto":"4 TIES. 4 PIES.","behaviour":"four_ties_honour"},{"id":"07","title":"Rockerfeller","subtitle":"Donate £5 to Site Upkeep","type":"honour","motto":"EVERY LITTLE HELPS.","behaviour":"simple"},{"id":"08","title":"Ding Ding Ding","subtitle":"The First Round — And a Right Proper One at that!","type":"campaign","motto":"THE FIRST ROUND PROPER.","behaviour":"first_round_proper"},{"id":"09","title":"Cop That!","subtitle":"Snap a pic with a match-day Copper","type":"honour","motto":"HELLO, HELLO, HELLO!","behaviour":"simple"},{"id":"10","title":"Ad Astra","subtitle":"Do Something Special on Your Campaign","type":"honour","motto":"TO THE STARS!","behaviour":"simple"},{"id":"11","title":"Away Days","subtitle":"Get to Three Away Ties","type":"campaign","motto":"RETURN TICKET TO GLORY.","behaviour":"three_away_ties"},{"id":"12","title":"Graffiti Artista","subtitle":"Purchase TFFC Stickers and be just like Banksy, but without the spray can!","type":"comingsoon","motto":"WE’RE STILL MAKING THE BLOODY STICKERS.","behaviour":"coming_soon"},{"id":"13","title":"The Difficult Second Round","subtitle":"All Downhill From Here!","type":"campaign","motto":"ALL DOWNHILL FROM HERE!","behaviour":"second_round_proper"},{"id":"14","title":"The Third Law","subtitle":"No Tickets? You’re OUT!","type":"honour","motto":"NO TICKETS? YOU’RE OUT!","behaviour":"end_campaign"},{"id":"15","title":"Fashionista","subtitle":"Wear TFFAC Merch at a Tie!","type":"comingsoon","motto":"TIN FOIL. HIGH FASHION.","behaviour":"coming_soon"},{"id":"16","title":"Doing A Richard","subtitle":"Get to the 3rd Round","type":"campaign","motto":"YOU’VE DONE A RICHARD!","behaviour":"third_round_proper"},{"id":"17","title":"A Proclaimer","subtitle":"Travel 500 Pigeon Miles","type":"campaign","motto":"TRAVEL 500 PIGEON MILES.","behaviour":"pigeon_500"},{"id":"18","title":"Giant Killer","subtitle":"Beat a club at least two levels above","type":"campaign","motto":"SMALL CLUBS. BIG STORIES.","behaviour":"giant_killer"},{"id":"19","title":"Seeing Double","subtitle":"Travel 1000 Pigeon Miles","type":"campaign","motto":"TRAVEL 1000 PIGEON MILES.","behaviour":"pigeon_1000"},{"id":"20","title":"The Fourth Be With You","subtitle":"Get to the Fourth Round","type":"campaign","motto":"THE FOURTH BE WITH YOU.","behaviour":"fourth_round_proper"},{"id":"21","title":"Boot Room Boy","subtitle":"Start a New Chat in The Boot Room","type":"comingsoon","motto":"PUT THE KETTLE ON.","behaviour":"coming_soon"},{"id":"22","title":"A Beethoven","subtitle":"Get to the Fifth Round","type":"campaign","motto":"DA DA DA DAAAAA!","behaviour":"fifth_round_proper"},{"id":"23","title":"Scorcese","subtitle":"Upload a video to your socials!","type":"honour","motto":"THAT’S A WRAP!","behaviour":"simple"},{"id":"24","title":"Been There, Done That!","subtitle":"Tin Foil FA Cup Tee Shirt Purchase","type":"comingsoon","motto":"BEEN THERE. DONE THAT. GOT THE TEE SHIRT.","behaviour":"coming_soon"},{"id":"25","title":"Quartermeister!","subtitle":"Get to The Quarter Finals!","type":"campaign","motto":"REPORT TO THE QUARTERMEISTER!","behaviour":"quarter_finals"},{"id":"26","title":"Get A Semi On!","subtitle":"Get to The Semi Finals!","type":"campaign","motto":"GET TO THE SEMI FINALS!","behaviour":"semi_finals"},{"id":"27","title":"Wembley Wizard","subtitle":"The Final!","type":"campaign","motto":"FROM THE FIRST TIE TO THE FINAL.","behaviour":"the_final"}];
+const ART = {"00":{"front":"assets/challenge-mats/mat-00-front.webp","back":"assets/challenge-mats/mat-00-back.webp"},"01":{"front":"assets/challenge-mats/mat-01-front.webp","back":"assets/challenge-mats/mat-01-back.webp"},"02":{"front":"assets/challenge-mats/mat-02-front.webp","back":"assets/challenge-mats/mat-02-back.webp"},"03":{"front":"assets/challenge-mats/mat-03-front.webp","back":"assets/challenge-mats/mat-03-back.webp"},"04":{"front":"assets/challenge-mats/mat-04-front.webp","back":"assets/challenge-mats/mat-04-back.webp"},"05":{"front":"assets/challenge-mats/mat-05-front.webp","back":"assets/challenge-mats/mat-05-back.webp"},"06":{"front":"assets/challenge-mats/mat-06-front.webp","back":"assets/challenge-mats/mat-06-back.webp"},"07":{"front":"assets/challenge-mats/mat-07-front.webp","back":"assets/challenge-mats/mat-07-back.webp"},"08":{"front":"assets/challenge-mats/mat-08-front.webp","back":"assets/challenge-mats/mat-08-back.webp"},"09":{"front":"assets/challenge-mats/mat-09-front.webp","back":"assets/challenge-mats/mat-09-back.webp"},"10":{"front":"assets/challenge-mats/mat-10-front.webp","back":"assets/challenge-mats/mat-10-back.webp"},"11":{"front":"assets/challenge-mats/mat-11-front.webp","back":"assets/challenge-mats/mat-11-back.webp"},"12":{"front":"assets/challenge-mats/mat-12-front.webp","back":"assets/challenge-mats/mat-12-back.webp"},"13":{"front":"assets/challenge-mats/mat-13-front.webp","back":"assets/challenge-mats/mat-13-back.webp"},"14":{"front":"assets/challenge-mats/mat-14-front.webp","back":"assets/challenge-mats/mat-14-back.webp"},"15":{"front":"assets/challenge-mats/mat-15-front.webp","back":"assets/challenge-mats/mat-15-back.webp"},"16":{"front":"assets/challenge-mats/mat-16-front.webp","back":"assets/challenge-mats/mat-16-back.webp"},"17":{"front":"assets/challenge-mats/mat-17-front.webp","back":"assets/challenge-mats/mat-17-back.webp"},"18":{"front":"assets/challenge-mats/mat-18-front.webp","back":"assets/challenge-mats/mat-18-back.webp"},"19":{"front":"assets/challenge-mats/mat-19-front.webp","back":"assets/challenge-mats/mat-19-back.webp"},"20":{"front":"assets/challenge-mats/mat-20-front.webp","back":"assets/challenge-mats/mat-20-back.webp"},"21":{"front":"assets/challenge-mats/mat-21-front.webp","back":"assets/challenge-mats/mat-21-back.webp"},"22":{"front":"assets/challenge-mats/mat-22-front.webp","back":"assets/challenge-mats/mat-22-back.webp"},"23":{"front":"assets/challenge-mats/mat-23-front.webp","back":"assets/challenge-mats/mat-23-back.webp"},"24":{"front":"assets/challenge-mats/mat-24-front.webp","back":"assets/challenge-mats/mat-24-back.webp"},"25":{"front":"assets/challenge-mats/mat-25-front.webp","back":"assets/challenge-mats/mat-25-back.webp"},"26":{"front":"assets/challenge-mats/mat-26-front.webp","back":"assets/challenge-mats/mat-26-back.webp"},"27":{"front":"assets/challenge-mats/mat-27-front.webp","back":"assets/challenge-mats/mat-27-back.webp"}};
+
+const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;
+
+// Stage 1 external-art warmup.
+// Keep the slim HTML, but begin fetching the mat artwork once the page is interactive
+// so rapid flick/flip browsing does not outrun the network.
+const ART_PRELOAD_CACHE=new Map();
+function preloadArt(src, priority="low"){
+  if(!src) return Promise.resolve(false);
+  const cached=ART_PRELOAD_CACHE.get(src);
+  if(cached){
+    // Foreground Deck navigation wins: promote an in-flight background request
+    // rather than starting a duplicate transfer for the same artwork.
+    if(priority==="high" && cached.priority!=="high"){
+      cached.priority="high";
+      try{ if(cached.img)cached.img.fetchPriority="high"; }catch(_){}
+    }
+    return cached.promise;
+  }
+  const entry={promise:null,img:null,priority};
+  entry.promise=new Promise(resolve=>{
+    const img=entry.img=new Image();
+    try{ img.fetchPriority=priority; }catch(_){}
+    img.decoding="async";
+    const finish=ok=>{
+      // The preloader exists only to warm the browser cache. Do not retain a
+      // decoded hidden Image for every mat: the visible Deck image owns decode.
+      entry.img=null;
+      resolve(ok);
+    };
+    img.onload=()=>finish(true);
+    img.onerror=()=>finish(false);
+    img.src=src;
+  });
+  ART_PRELOAD_CACHE.set(src,entry);
+  return entry.promise;
+}
+function preloadFaceAt(i, side, priority="low"){
+  const c=CHALLENGES[i];
+  if(!c) return Promise.resolve(false);
+  const art=ART[c.id];
+  const src=art&&art[side];
+  return src?preloadArt(src,priority):Promise.resolve(false);
+}
+function preloadMatAt(i, priority="low"){
+  return Promise.all([
+    preloadFaceAt(i,"front",priority),
+    preloadFaceAt(i,"back",priority)
+  ]);
+}
+function facePreloadStarted(i, side){
+  const c=CHALLENGES[i],art=c&&ART[c.id],src=art&&art[side];
+  return !!(src&&ART_PRELOAD_CACHE.has(src));
+}
+
+// Fronts-first cold-cache warmer.
+// The visible mat 00 front gets first claim on the connection. Then one quiet
+// future front at a time marches through the Deck. Only after every front has
+// been requested do unseen reverses warm in the background.
+let INITIAL_FRONT_READY=false;
+let DECK_WARM_SIDE="front";
+let DECK_WARM_INDEX=1;
+let DECK_WARM_RUNNING=false;
+let DECK_WARM_TIMER=0;
+function scheduleDeckWarm(delay=120){
+  if(DECK_WARM_RUNNING||DECK_WARM_TIMER)return;
+  DECK_WARM_TIMER=setTimeout(()=>{
+    DECK_WARM_TIMER=0;
+    warmNextDeckAsset();
+  },delay);
+}
+async function warmNextDeckAsset(){
+  if(DECK_WARM_RUNNING)return;
+  while(DECK_WARM_INDEX<CHALLENGES.length && facePreloadStarted(DECK_WARM_INDEX,DECK_WARM_SIDE))DECK_WARM_INDEX++;
+  if(DECK_WARM_INDEX>=CHALLENGES.length){
+    if(DECK_WARM_SIDE==="front"){
+      DECK_WARM_SIDE="back";
+      DECK_WARM_INDEX=0;
+      scheduleDeckWarm(180);
+    }
+    return;
+  }
+  const target=DECK_WARM_INDEX++;
+  const side=DECK_WARM_SIDE;
+  DECK_WARM_RUNNING=true;
+  try{
+    await preloadFaceAt(target,side,"low");
+  }finally{
+    DECK_WARM_RUNNING=false;
+    scheduleDeckWarm();
+  }
+}
+function warmChallengeArt(){
+  preloadFaceAt(0,"front","high");
+  scheduleDeckWarm(100);
+}
+function warmOpeningNeighbours(){
+  // The first visible front has painted: strengthen the immediate browse path,
+  // but continue to avoid a burst of unseen reverse downloads.
+  preloadFaceAt(0,"back","high");
+  preloadFaceAt(1,"front","high");
+  preloadFaceAt(2,"front","high");
+  preloadFaceAt(3,"front","low");
+}
+if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:400});
+else setTimeout(warmChallengeArt,40);
+
+window.name='TFFC_CHALLENGES';
+const STORE_KEY = "tffc.challengeDeck.v1";
+const CLUBFINDER_BRIDGE_KEY = "tffc.clubfinderCampaign.v1";
+const STORE_VERSION = 1;
+
+function blankState() {
+  return {version:STORE_VERSION, campaignKey:"", accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
+}
+function loadState() {
+  try {
+    const x = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if (!x || x.version !== STORE_VERSION || typeof x.accepted !== "object" || typeof x.completed !== "object") return blankState();
+    x.records ||= {};
+    x.campaignKey = typeof x.campaignKey==="string" ? x.campaignKey : "";
+    // Backwards-compatible migration from the prototype's old journeyTies counter.
+    x.tiesPlayed = Number.isFinite(x.tiesPlayed) ? x.tiesPlayed : (Number.isFinite(x.journeyTies) ? x.journeyTies : 0);
+    delete x.journeyTies;
+    x.awayTies = Number.isFinite(x.awayTies) ? x.awayTies : 0;
+    x.pigeonMiles = Number.isFinite(x.pigeonMiles) ? x.pigeonMiles : 0;
+    x.campaignRound = Number.isFinite(x.campaignRound) ? x.campaignRound : 0;
+    x.giantKillAchieved = x.giantKillAchieved === true;
+    x.campaignStatus = x.campaignStatus==="ENDED" ? "ENDED" : "ACTIVE";
+    return x;
+  } catch { return blankState(); }
+}
+let state = loadState();
+let index = 0;
+let flipped = false;
+let campaignIdentity={callSign:"",pigeonName:""};
+
+const $ = id => document.getElementById(id);
+const overlay=$("overlay"), flipcard=$("flipcard"), front=$("frontFace"), back=$("backFace");
+
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  renderStats();
+}
+
+// Keep all browser-storage I/O in one error-contained reader. A foreign or
+// malformed bridge must not replace a previously saved Challenge campaign.
+function readChallengeStorageJSON(key){
+  try{return JSON.parse(localStorage.getItem(key)||"null");}
+  catch(_){return null;}
+}
+
+// Clubfinder publishes non-negative progress; tolerate older numeric strings
+// but do not pass Infinity/NaN through to the Deck odometers or Trophy rules.
+function normalizeBridgeProgress(value){
+  const number=Number(value);
+  return Number.isFinite(number)?Math.max(0,number):0;
+}
+function normalizeBridgeIdentity(value){
+  return {
+    callSign:String(value.callSign||"").trim(),
+    pigeonName:String(value.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20)
+  };
+}
+function matchingCampaignIdentityBackup(truth,backup){
+  const sameOrigin=backup&&String(backup.originName||"")===String(truth.originName||"");
+  // Preserve legacy undated campaigns: origin still has to match.
+  const sameSelection=!truth.selectedAt||!backup||!backup.selectedAt||String(backup.selectedAt)===String(truth.selectedAt);
+  return !!(sameOrigin&&sameSelection);
+}
+function challengeCampaignKey(truth){
+  const origin=String((truth&&truth.originName)||"").trim();
+  const selected=String((truth&&truth.selectedAt)||"").trim();
+  const callSign=String((truth&&truth.callSign)||"").trim();
+  if(!origin)return "";
+  return selected ? [origin,selected].join("|") : [origin,callSign].join("|");
+}
+function ensureChallengeStateMatchesCampaign(truth){
+  const nextKey=challengeCampaignKey(truth);
+  if(!nextKey)return false;
+  if(state.campaignKey && state.campaignKey!==nextKey){
+    state=blankState();
+  }
+  state.campaignKey=nextKey;
+  return true;
+}
+function applyClubfinderCampaignTruth(){
+  const truth=readChallengeStorageJSON(CLUBFINDER_BRIDGE_KEY);
+  if(!truth||truth.source!=="Clubfinder v7.6") return false;
+  ensureChallengeStateMatchesCampaign(truth);
+  state.tiesPlayed=normalizeBridgeProgress(truth.tiesPlayed);
+  state.awayTies=normalizeBridgeProgress(truth.awayTies);
+  state.pigeonMiles=normalizeBridgeProgress(truth.pigeonMiles);
+  state.campaignRound=normalizeBridgeProgress(truth.campaignRound);
+  state.giantKillAchieved=truth.giantKillAchieved===true;
+
+  const identity=normalizeBridgeIdentity(truth);
+  // Only consult the backup when the current bridge lacks a usable name.
+  if(!identity.pigeonName){
+    const backup=readChallengeStorageJSON("tffc.clubfinderCampaignIdentity.v1");
+    if(matchingCampaignIdentityBackup(truth,backup)){
+      const restored=normalizeBridgeIdentity(backup);
+      if(!identity.callSign) identity.callSign=restored.callSign;
+      identity.pigeonName=restored.pigeonName;
+    }
+  }
+  campaignIdentity.callSign=identity.callSign;
+  campaignIdentity.pigeonName=identity.pigeonName;
+  if(truth.ended===true) state.campaignStatus="ENDED";
+  return true;
+}
+
+function bluePeterDone() { return !!state.completed["01"]; }
+function campaignConditionMet(c) {
+  if (c.id==="02") return state.campaignRound >= 2; // The Second Law is satisfied when a qualifying Campaign exists; no extra simulated tie is required.
+  if (c.id==="05") return state.campaignRound >= 5;
+  if (c.id==="08") return state.campaignRound >= 6;
+  if (c.id==="11") return state.awayTies >= 3;
+  if (c.id==="13") return state.campaignRound >= 7;
+  if (c.id==="16") return state.campaignRound >= 8;
+  if (c.id==="17") return state.pigeonMiles >= 500;
+  if (c.id==="18") return state.giantKillAchieved === true;
+  if (c.id==="19") return state.pigeonMiles >= 1000;
+  if (c.id==="20") return state.campaignRound >= 9;
+  if (c.id==="22") return state.campaignRound >= 10;
+  if (c.id==="25") return state.campaignRound >= 11;
+  if (c.id==="26") return state.campaignRound >= 12;
+  if (c.id==="27") return state.campaignRound >= 13;
+  return false;
+}
+function awardCampaignChallenges() {
+  let changed=false;
+  for (const c of CHALLENGES) {
+    if (c.type!=="campaign" || state.completed[c.id] || !campaignConditionMet(c)) continue;
+    state.completed[c.id]={at:new Date().toISOString(), automatic:true};
+    delete state.accepted[c.id];
+    changed=true;
+  }
+  return changed;
+}
+function isUnlocked(c) {
+  if (c.type==="foundation") return true;
+  if (c.type==="comingsoon") return false;
+  if (c.id==="01") return true;
+  if (c.id==="03") return !!state.completed["02"]; // First Tie. First Pie. follows completion of the user’s first qualifying tie.
+  if (c.id==="04") return true;
+  if (c.id==="06") return state.tiesPlayed >= 4; // Honour Challenge; Campaign only verifies the four-tie prerequisite.
+  if (c.type==="campaign") return campaignConditionMet(c);
+  return true;
+}
+function verificationLabel(c) {
+  if (c.type==="foundation") return "Our Foundational Laws";
+  if (c.type==="campaign") return "A Campaign Challenge";
+  if (c.type==="comingsoon") return "Coming Soon!";
+  if (c.type==="external") return "External";
+  return "An Honour Challenge";
+}
+function verificationHelp(c) {
+  if (c.type==="foundation") return "Move along now, this isn't a Challenge. it's The Law!";
+  if (c.type==="campaign") return "Earned by progress through your Tin Foil FA Cup Campaign";
+  if (c.type==="comingsoon") return "How many times do we have to say Coming Soon?";
+  if (c.type==="external") return "This Challenge takes you beyond Clubfinder.";
+  return "We believe every word you say. Honest!";
+}
+function hideVerificationHelp() {
+  $("verifyHelp").classList.remove("show");
+  $("verifyBadge").setAttribute("aria-expanded","false");
+}
+function showVerificationHelp() {
+  $("verifyHelp").classList.add("show");
+  $("verifyBadge").setAttribute("aria-expanded","true");
+}
+function lockedMessage(c) {
+  if (c.type==="foundation") return "Foundation mat — no action required.";
+  if (c.type==="comingsoon") {
+    if (c.id==="15") return "Coming Soon! — We haven’t made the bloody clothes yet.";
+    if (c.id==="21") return "Coming Soon! — The Boot Room isn’t open yet. Put the kettle on.";
+    if (c.id==="24") return "Coming Soon! — Tin Foil FA Cup tee shirts aren’t on sale yet.";
+    return "Coming Soon! — We’re still making the bloody stickers.";
+  }
+  if (c.id==="03" && !state.completed["02"]) return "Locked — your Campaign must record its first qualifying tie before First Tie. First Pie. becomes available.";
+  if (c.id==="06" && state.tiesPlayed < 4) return `Locked — four verified Campaign ties are required before the Pie’d Piper can be accepted. ${state.tiesPlayed}/4 recorded.`;
+  if (c.type==="campaign" && !campaignConditionMet(c)) return "Campaign Challenge – Awaiting Verified Campaign Progress";
+  return "";
+}
+let FACE_LOAD_SERIAL=0;
+let CURRENT_BACK_WARM_TIMER=0;
+let FLIP_PENDING=false;
+let FLIP_ANIMATING=false;
+let FLIP_ANIMATION_TIMER=0;
+function cancelCurrentBackWarm(){
+  if(CURRENT_BACK_WARM_TIMER){
+    clearTimeout(CURRENT_BACK_WARM_TIMER);
+    CURRENT_BACK_WARM_TIMER=0;
+  }
+}
+function scheduleCurrentBackWarm(i,id){
+  cancelCurrentBackWarm();
+  CURRENT_BACK_WARM_TIMER=setTimeout(()=>{
+    CURRENT_BACK_WARM_TIMER=0;
+    if(index!==i || flipped || CHALLENGES[index]?.id!==id)return;
+    preloadFaceAt(i,"back","low");
+  },2500);
+}
+function buildFace(el, c, side, priority="high") {
+  const src = ART[c.id]?.[side==="front"?"front":"back"];
+  const serial=String(++FACE_LOAD_SERIAL);
+  el.dataset.faceLoad=serial;
+
+  if (!src) {
+    el.innerHTML=`<div class="placeholder">${CANONICAL_CUP?`<img class="cup" src="${CANONICAL_CUP}" alt="">`:""}<div><h3>${c.title}</h3><p>${c.subtitle}</p></div></div>`;
+    return Promise.resolve(false);
+  }
+
+  let img=el.querySelector("img.mat-art");
+  if(!img){
+    el.innerHTML="";
+    img=document.createElement("img");
+    img.className="mat-art";
+    img.decoding="async";
+    img.draggable=false;
+    el.appendChild(img);
+  }
+  try{ img.fetchPriority=priority; }catch(_){}
+
+  const alt=`${c.title} ${side} artwork`;
+  if(img.dataset.src===src && img.complete && img.naturalWidth){
+    img.alt=alt;
+    img.style.visibility="visible";
+    if(side==="front" && CHALLENGES[index]?.id===c.id) scheduleCurrentBackWarm(index,c.id);
+    return Promise.resolve(true);
+  }
+
+  // Do not display a partially decoded frame while a rapid swipe is changing mats.
+  img.style.visibility="hidden";
+  return preloadArt(src,priority).then(ok=>{
+    if(el.dataset.faceLoad!==serial) return false;
+    if(!ok){
+      img.removeAttribute("src");
+      img.removeAttribute("data-src");
+      img.alt="";
+      return false;
+    }
+    img.dataset.src=src;
+    img.alt=alt;
+    img.src=src;
+    return new Promise(resolve=>{
+      const reveal=()=>{
+        if(el.dataset.faceLoad===serial){
+          img.style.visibility="visible";
+          if(side==="front"){
+            if(c.id==="00" && !INITIAL_FRONT_READY){
+              INITIAL_FRONT_READY=true;
+              requestAnimationFrame(()=>warmOpeningNeighbours());
+            }
+            if(CHALLENGES[index]?.id===c.id) scheduleCurrentBackWarm(index,c.id);
+          }
+        }
+        resolve(true);
+      };
+      if(typeof img.decode==="function") img.decode().catch(()=>{}).finally(reveal);
+      else reveal();
+    });
+  });
+}
+
+function render() {
+  const c=CHALLENGES[index];
+  cancelCurrentBackWarm();
+  FLIP_PENDING=false;
+  finishDeckFlipAnimation();
+
+  // If the user navigates while a flip animation is still running, reset the old
+  // card instantly before swapping in the next artwork. This prevents transient
+  // face compositing/blank frames during rapid browsing.
+  flipcard.classList.add("instant-reset");
+  flipped=false;
+  flipcard.classList.remove("flipped");
+  flipcard.setAttribute("aria-pressed","false");
+  void flipcard.offsetWidth;
+
+  buildFace(front,c,"front","high");
+  // The hidden reverse is demand-loaded: racing through fronts no longer
+  // downloads and decodes an unseen 640px image for every navigation step.
+  back.dataset.faceLoad=String(++FACE_LOAD_SERIAL);
+  const oldBack=back.querySelector("img.mat-art");
+  if(oldBack){
+    oldBack.style.visibility="hidden";
+    oldBack.removeAttribute("src");
+    oldBack.removeAttribute("data-src");
+    oldBack.alt="";
+  }
+  flipcard.classList.toggle("coming-soon-mat",c.type==="comingsoon");
+  preloadFaceAt(index,"front","high");
+  if(index!==0 || INITIAL_FRONT_READY){
+    preloadFaceAt(index+1,"front","high");
+    preloadFaceAt(index+2,"front","low");
+    preloadFaceAt(index-1,"front","low");
+  }
+  requestAnimationFrame(()=>flipcard.classList.remove("instant-reset"));
+  $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
+  $("verifyBadge").textContent=verificationLabel(c);
+  $("verifyHelp").textContent=verificationHelp(c);
+  hideVerificationHelp();
+  $("feedback").textContent="";
+
+  const unlocked=isUnlocked(c);
+  const accepted=!!state.accepted[c.id], done=!!state.completed[c.id];
+  const automatic=c.type==="campaign";
+  const endCampaign=c.behaviour==="end_campaign";
+  const noManualActions=c.type==="foundation" || automatic || c.type==="comingsoon";
+  const showCampaignAchievement=automatic && done;
+  $("acceptBtn").classList.toggle("hidden-control",noManualActions);
+  $("completeBtn").classList.toggle("hidden-control",endCampaign || (noManualActions && !showCampaignAchievement));
+  $("acceptBtn").disabled=noManualActions || !unlocked || accepted || done || (endCampaign && state.campaignStatus==="ENDED");
+  $("completeBtn").disabled=noManualActions || endCampaign || !unlocked || !accepted || done;
+  $("acceptBtn").textContent=endCampaign ? (done?"It’s Over!":"End it all?") : ((accepted||done)?"Accepted!":"Accept?");
+  $("acceptBtn").classList.toggle("accepted-state",!endCampaign && (accepted||done));
+  $("acceptBtn").classList.toggle("done-state",endCampaign && done);
+  $("completeBtn").textContent=done?(automatic?"Achieved!":"Completed!"):"Completed?";
+  $("completeBtn").classList.toggle("done-state",done);
+  if (endCampaign) {
+    $("feedback").textContent=done ? "The Third Law — Campaign Ended. Your Stats and Trophy Cabinet are preserved." : "The Third Law is your decision. End the Campaign only when you decide your adventure stops here.";
+  } else if (done && c.type!=="foundation" && c.type!=="comingsoon") {
+    $("feedback").textContent="Challenge Completed – This Beer Mat added to Your Trophy Cabinet";
+  } else if (automatic) {
+    $("feedback").textContent=lockedMessage(c);
+  } else if (!unlocked && c.type!=="foundation") {
+    $("feedback").textContent=lockedMessage(c);
+  }
+}
+
+/* Trophy inspection is a separate, transient UI state: no deck index, flips or storage writes. */
+const trophyViewer=$("trophyViewer"), trophyViewerMat=$("trophyViewerMat");
+const trophyViewerCard=$("trophyViewerCard"), trophyViewerHint=$("trophyViewerHint");
+let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null;
+function openTrophy(c,origin){
+  if(!state.completed[c.id]) return;
+  trophyOrigin=origin;
+  trophyViewerFlipped=false;
+  $("trophyViewerFront").src=ART[c.id]?.front || CANONICAL_CUP || "";
+  $("trophyViewerBack").src=ART[c.id]?.back || CANONICAL_CUP || "";
+  trophyViewer.setAttribute("aria-label",c.title+" — achieved trophy");
+  trophyViewerCard.classList.remove("flipped");
+  trophyViewerHint.textContent="Tap to flip";
+  trophyViewerMat.setAttribute("aria-label",c.title+" — tap to flip");
+  trophyViewerOpen=true;
+  trophyViewer.hidden=false;
+  trophyViewer.classList.add("open");
+  trophyViewerMat.focus({preventScroll:true});
+}
+function closeTrophy(){
+  if(!trophyViewerOpen)return;
+  trophyViewerOpen=false;
+  trophyViewer.classList.remove("open");
+  trophyViewer.hidden=true;
+  trophyViewerCard.classList.remove("flipped");
+  const origin=trophyOrigin;
+  trophyOrigin=null;
+  if(origin && origin.isConnected!==false && typeof origin.focus==="function"){
+    try{origin.focus({preventScroll:true});}catch(_){origin.focus();}
+  }
+}
+function advanceTrophy(){
+  if(!trophyViewerOpen)return;
+  if(trophyViewerFlipped){closeTrophy();return;}
+  trophyViewerFlipped=true;
+  trophyViewerCard.classList.add("flipped");
+  trophyViewerHint.textContent="Tap to return";
+  trophyViewerMat.setAttribute("aria-label","Tap to return to Trophy Cabinet");
+}
+trophyViewerMat.onclick=advanceTrophy;
+trophyViewerMat.addEventListener("keydown",e=>{
+  if(e.key==="Enter" || e.key===" "){e.preventDefault();e.stopPropagation();advanceTrophy();}
+});
+trophyViewer.onclick=e=>{if(e.target===trophyViewer)closeTrophy();};
+
+function openAt(i=0, showBack=false) {
+  index=Math.max(0,Math.min(CHALLENGES.length-1,i)); render(); overlay.classList.add("open");
+  if (showBack) { flipped=true; flipcard.classList.add("flipped"); flipcard.setAttribute("aria-pressed","true"); }
+}
+function close() { tinFoilReturnToClubfinder(); }
+
+
+function tinFoilPrivacyNotice(){
+  let privacyOverlay=document.getElementById('tffcPrivacyOverlay');
+  if(!privacyOverlay){
+    privacyOverlay=document.createElement('div');
+    privacyOverlay.id='tffcPrivacyOverlay';
+    privacyOverlay.className='tffc-confirm-overlay';
+    privacyOverlay.hidden=true;
+    privacyOverlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcPrivacyTitle" aria-describedby="tffcPrivacyMessage"><div id="tffcPrivacyTitle" class="tffc-confirm-title">Privacy</div><div id="tffcPrivacyMessage" class="tffc-confirm-message">Clubfinder uses your postcode to find nearby clubs. Your Campaign and Challenge progress is stored on your device. See our full Privacy Policy or contact us for details.</div><div class="tffc-privacy-actions"><button id="tffcPrivacyClose" type="button">Close</button></div></div>';
+    document.body.appendChild(privacyOverlay);
+  }
+  const closeButton=document.getElementById('tffcPrivacyClose'),previous=document.activeElement;
+  privacyOverlay.hidden=false;
+  function finish(){document.removeEventListener('keydown',onKey);privacyOverlay.hidden=true;closeButton.onclick=null;privacyOverlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus()}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
+  closeButton.onclick=finish;privacyOverlay.onclick=e=>{if(e.target===privacyOverlay)finish()};document.addEventListener('keydown',onKey);closeButton.focus();
+}
+
+function tinFoilConfirm(message){
+  return new Promise(resolve=>{
+    let overlay=document.getElementById('tffcConfirmOverlay');
+    if(!overlay){
+      overlay=document.createElement('div');
+      overlay.id='tffcConfirmOverlay';
+      overlay.className='tffc-confirm-overlay';
+      overlay.hidden=true;
+      overlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcConfirmTitle" aria-describedby="tffcConfirmMessage"><div id="tffcConfirmTitle" class="tffc-confirm-title">Tin Foil FA Cup says</div><div id="tffcConfirmMessage" class="tffc-confirm-message"></div><div class="tffc-confirm-actions"><button id="tffcConfirmCancel" type="button">Cancel</button><button id="tffcConfirmOk" type="button">OK</button></div></div>';
+      document.body.appendChild(overlay);
+    }
+    const messageEl=document.getElementById('tffcConfirmMessage'),ok=document.getElementById('tffcConfirmOk'),cancel=document.getElementById('tffcConfirmCancel'),previous=document.activeElement;
+    messageEl.textContent=String(message||'');overlay.hidden=false;
+    function finish(value){document.removeEventListener('keydown',onKey);overlay.hidden=true;ok.onclick=null;cancel.onclick=null;overlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus();resolve(value)}
+    function onKey(e){if(e.key==='Escape'){e.preventDefault();finish(false)}}
+    ok.onclick=()=>finish(true);cancel.onclick=()=>finish(false);overlay.onclick=e=>{if(e.target===overlay)finish(false)};document.addEventListener('keydown',onKey);ok.focus();
+  });
+}
+
+function tinFoilReturnToClubfinder(){
+  let origin='';
+  try{origin=sessionStorage.getItem('tffc.challengeOrigin')||'';}catch(_){}
+  const fromStatsReturn=new URLSearchParams(location.search||'').get('from')==='stats-return-v2';
+  try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
+  if(origin==='clubfinder-beta'&&!fromStatsReturn&&history&&typeof history.back==='function'){
+    history.back();
+    return;
+  }
+  /* Direct/legacy entry, or a Stats-return path, has no guaranteed Clubfinder
+     history entry immediately behind it. Keep the deterministic fallback. */
+  window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
+}
+
+const challengePrivacyLink=$("challengePrivacyLink");
+if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
+
+$("exitBtn").onclick=(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  tinFoilReturnToClubfinder();
+};
+overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
+$("prev").onclick=()=>{if(index>0){index--;render()}};
+$("next").onclick=()=>{if(index<CHALLENGES.length-1){index++;render()}};
+const verifyBadge=$("verifyBadge");
+verifyBadge.addEventListener("mouseenter",showVerificationHelp);
+verifyBadge.addEventListener("mouseleave",()=>{ if(document.activeElement!==verifyBadge) hideVerificationHelp(); });
+verifyBadge.addEventListener("focus",showVerificationHelp);
+verifyBadge.addEventListener("blur",hideVerificationHelp);
+verifyBadge.addEventListener("click",e=>{
+  e.stopPropagation();
+  const showing=$("verifyHelp").classList.contains("show");
+  showing ? hideVerificationHelp() : showVerificationHelp();
+});
+document.addEventListener("pointerdown",e=>{
+  if(!verifyBadge.contains(e.target) && !$("verifyHelp").contains(e.target)) hideVerificationHelp();
+});
+function finishDeckFlipAnimation(){
+  FLIP_ANIMATING=false;
+  if(FLIP_ANIMATION_TIMER){
+    clearTimeout(FLIP_ANIMATION_TIMER);
+    FLIP_ANIMATION_TIMER=0;
+  }
+}
+function setDeckFlip(next){
+  if(FLIP_ANIMATING)return false;
+  flipped=next;
+  FLIP_ANIMATING=true;
+  flipcard.classList.toggle("flipped",flipped);
+  flipcard.setAttribute("aria-pressed",String(flipped));
+  // transitionend is authoritative; timeout is a safety net for interrupted
+  // or compositor-dropped transition events.
+  FLIP_ANIMATION_TIMER=setTimeout(finishDeckFlipAnimation,650);
+  return true;
+}
+flipcard.addEventListener("transitionend",e=>{
+  if(e.target===flipcard && e.propertyName==="transform") finishDeckFlipAnimation();
+});
+function flipMat() {
+  if(FLIP_ANIMATING)return;
+  const c=CHALLENGES[index];
+  // Achievement reverses are earned reveals: keep them hidden until Clubfinder verifies the milestone.
+  if (!flipped && ["17","19","27"].includes(c.id) && !campaignConditionMet(c)) {
+    const msg = c.id==="17"
+      ? "Keep flapping. 500 Pigeon Miles required for flipping. 🐦"
+      : c.id==="19"
+        ? "Keep flapping. 1,000 Pigeon Miles required for flipping. 🐦"
+        : "Keep dreaming. The Final is required for flipping. 🏆";
+    $("feedback").textContent=msg;
+    return;
+  }
+  if(flipped){
+    setDeckFlip(false);
+    return;
+  }
+  if(FLIP_PENDING)return;
+  FLIP_PENDING=true;
+  cancelCurrentBackWarm();
+  const expectedIndex=index;
+  const expectedId=c.id;
+  buildFace(back,c,"back","high").then(ok=>{
+    FLIP_PENDING=false;
+    if(!ok || index!==expectedIndex || CHALLENGES[index]?.id!==expectedId)return;
+    setDeckFlip(true);
+  });
+}
+
+flipcard.onclick=()=>{ if(suppressFlip){suppressFlip=false;return;} flipMat(); };
+flipcard.addEventListener("keydown",e=>{
+  if(e.key==="Enter" || e.key===" ") { e.preventDefault(); flipMat(); }
+});
+$("acceptBtn").onclick=async ()=>{
+  const c=CHALLENGES[index];
+  if (c.behaviour==="end_campaign") {
+    if (state.completed[c.id] || state.campaignStatus==="ENDED") return;
+    const ok=await tinFoilConfirm("End this Campaign?\n\nThe Third Law means your current Tin Foil FA Cup Campaign finishes here. Your Stats and Trophy Cabinet will be preserved.\n\nYou can save or print them before starting another Campaign.");
+    if (!ok) { $("feedback").textContent="Not yet. The Campaign continues."; return; }
+    state.campaignStatus="ENDED";
+    state.completed[c.id]={at:new Date().toISOString(), honour:true, campaignEnded:true};
+    delete state.accepted[c.id];
+    save();
+    render();
+    $("feedback").textContent="The Third Law — Achieved! Campaign Ended. Trophy added to Your Trophy Cabinet.";
+    return;
+  }
+  if (c.type==="foundation" || c.type==="campaign") { $("feedback").textContent=c.type==="campaign" ? "Campaign Challenges complete automatically when their Campaign milestone is reached." : lockedMessage(c); return; }
+  if (!isUnlocked(c)) { $("feedback").textContent=lockedMessage(c); return; }
+  if (state.completed[c.id] || state.accepted[c.id]) return;
+  state.accepted[c.id]={at:new Date().toISOString()};
+  $("acceptBtn").textContent="Accepted!";
+  $("acceptBtn").classList.add("accepted-state");
+  $("acceptBtn").disabled=true;
+  $("completeBtn").textContent="Completed?";
+  $("completeBtn").disabled=false;
+  $("feedback").textContent="Challenge Accepted.";
+  save();
+  requestAnimationFrame(()=>renderStats());
+};
+$("completeBtn").onclick=()=>{
+  const c=CHALLENGES[index];
+  if (c.type==="foundation" || c.type==="campaign") { $("feedback").textContent=c.type==="campaign" ? "Campaign Challenges complete automatically when their Campaign milestone is reached." : lockedMessage(c); return; }
+  if (!isUnlocked(c)) { $("feedback").textContent=lockedMessage(c); return; }
+  if (!state.accepted[c.id]) { $("feedback").textContent="Accept the Challenge first."; return; }
+  if (state.completed[c.id]) return;
+  state.completed[c.id]={at:new Date().toISOString()};
+  $("acceptBtn").textContent="Accepted!";
+  $("acceptBtn").classList.add("accepted-state");
+  $("acceptBtn").disabled=true;
+  $("completeBtn").textContent="Completed!";
+  $("completeBtn").classList.add("done-state");
+  $("completeBtn").disabled=true;
+  $("feedback").textContent="Challenge Completed – This Beer Mat added to Your Trophy Cabinet";
+  save();
+  requestAnimationFrame(()=>renderStats());
+};
+
+// Stage B: presentation-only helpers preserve the original update order.
+// The legacy wrapper is still called by save(), simulator actions and startup.
+function renderSimulatorCounters() {
+  const ties=Math.min(999,Math.max(0,state.tiesPlayed)).toString().padStart(2,"0");
+  $("tieCount").innerHTML=ties.split("").map(n=>`<span>${n}</span>`).join("");
+  $("tieCount").setAttribute("aria-label",`${state.tiesPlayed} ${state.tiesPlayed===1?"tie":"ties"} played`);
+  const away=Math.min(999,Math.max(0,state.awayTies)).toString().padStart(2,"0");
+  $("awayTieCount").innerHTML=away.split("").map(n=>`<span>${n}</span>`).join("");
+  $("awayTieCount").setAttribute("aria-label",`${state.awayTies} away ${state.awayTies===1?"tie":"ties"}`);
+
+}
+function renderCampaignTruthFrame() {
+$("campaignRound").value=String(state.campaignRound);
+$("truthCallSign").textContent=campaignIdentity.callSign||"—";
+const pigeonNameField=$("truthPigeonName");
+if(campaignIdentity.pigeonName){
+  pigeonNameField.textContent=campaignIdentity.pigeonName;
+}else{
+  pigeonNameField.innerHTML='<button type="button" class="name-pigeon-action" id="namePigeonInClubfinder">Name Your Pigeon in Clubfinder</button>';
+  const nameButton=$("namePigeonInClubfinder");
+  if(nameButton)nameButton.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilReturnToClubfinder();};
+}
+const truthMiles=Math.max(0,Math.round(state.pigeonMiles));
+$("truthPigeonMiles").textContent=truthMiles.toLocaleString("en-GB");
+$("truthPigeonMilesOdometer").innerHTML=String(Math.min(9999,truthMiles)).padStart(4,"0").split("").map(n=>`<span>${n}</span>`).join("");
+$("truthCampaignRound").textContent=$("campaignRound").options[state.campaignRound]?.textContent || "Extra Preliminary Round";
+}
+function renderSimulatorControls() {
+$("campaignStatus").textContent=state.campaignStatus==="ENDED"?"IT’S OVER":"IN PROGRESS";
+const ended=state.campaignStatus==="ENDED";
+$("addTie").disabled=ended;
+$("addAwayTie").disabled=ended;
+$("addPigeonMiles").disabled=ended;
+$("simulateGiantKill").disabled=ended || state.giantKillAchieved;
+$("campaignRound").disabled=ended;
+}
+let CABINET_IMAGE_OBSERVER=null;
+function loadCabinetImage(img){
+  const src=img.dataset.src;
+  if(!src||img.src)return;
+  img.onerror=()=>{
+    const fallback=img.dataset.fallback;
+    img.onerror=null;
+    if(fallback)img.src=fallback;
+  };
+  img.src=src;
+}
+function renderTrophyCabinet(challengeList,completed) {
+const trophyChallenges=challengeList;
+$("cabinetCount").textContent=`${completed.length} / ${trophyChallenges.length}`;
+
+const cabinet=$("deckCabinet"); cabinet.innerHTML="";
+if(CABINET_IMAGE_OBSERVER){CABINET_IMAGE_OBSERVER.disconnect();CABINET_IMAGE_OBSERVER=null;}
+const pending=[];
+for(const c of challengeList) {
+  const i=CHALLENGES.indexOf(c);
+  const done=!!state.completed[c.id];
+  const unlocked=isUnlocked(c);
+  const slot=document.createElement(done?"button":"div");
+  slot.className=`trophy-slot ${done?"completed":unlocked?"available":"locked"}`;
+  slot.setAttribute("aria-label", done?`Inspect ${c.title} achieved trophy`:unlocked?`${c.title} available`:`${c.title} locked`);
+  const img=document.createElement("img"); img.decoding="async"; img.dataset.src=CABINET_THUMB(c.id); img.dataset.fallback=ART[c.id]?.front || CANONICAL_CUP || ""; img.alt="";
+  const mark=document.createElement("span"); mark.className="slotmark"; mark.textContent=done?"":unlocked?"Available":"🔒";
+  slot.append(img,mark);
+  pending.push(img);
+  if(done) slot.onclick=()=>openTrophy(c,slot);
+  cabinet.appendChild(slot);
+}
+if("IntersectionObserver" in window){
+  CABINET_IMAGE_OBSERVER=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      if(!entry.isIntersecting)continue;
+      const img=entry.target;
+      loadCabinetImage(img);
+      CABINET_IMAGE_OBSERVER.unobserve(img);
+    }
+  },{root:overlay,rootMargin:"80px 0px",threshold:0.01});
+  pending.forEach(img=>CABINET_IMAGE_OBSERVER.observe(img));
+}else{
+  const load=()=>pending.forEach(loadCabinetImage);
+  if("requestIdleCallback" in window)requestIdleCallback(load,{timeout:1500});else setTimeout(load,1000);
+}
+}
+function renderStats() {
+  const challengeList=CHALLENGES.filter(c=>c.type!=="foundation");
+  const completed=challengeList.filter(c=>!!state.completed[c.id]);
+  renderSimulatorCounters();
+  renderCampaignTruthFrame();
+  renderSimulatorControls();
+  renderTrophyCabinet(challengeList,completed);
+}
+function applySimulationChange(message) {
+  if (state.campaignStatus==="ENDED") {
+    if (overlay.classList.contains("open")) $("feedback").textContent="Campaign Ended — no further Campaign progression will occur.";
+    renderStats();
+    return;
+  }
+  const newlyCompleted=[];
+  for (const c of CHALLENGES) if (c.type==="campaign" && !state.completed[c.id] && campaignConditionMet(c)) newlyCompleted.push(c.title);
+  awardCampaignChallenges();
+  save();
+  if (overlay.classList.contains("open")) {
+    const current=CHALLENGES[index];
+    render();
+    if (current.type==="campaign" && state.completed[current.id]) $("feedback").textContent="Challenge Completed – This Beer Mat added to Your Trophy Cabinet";
+    else if (newlyCompleted.length) $("feedback").textContent="Challenge Completed – This Beer Mat added to Your Trophy Cabinet";
+    else $("feedback").textContent=message;
+  }
+}
+$("addTie").onclick=()=>{
+  if (state.campaignStatus==="ENDED") { applySimulationChange(""); return; }
+  state.tiesPlayed += 1;
+  applySimulationChange(`Home tie played. ${state.tiesPlayed} total ${state.tiesPlayed===1?"tie":"ties"}.`);
+};
+$("addAwayTie").onclick=()=>{
+  if (state.campaignStatus==="ENDED") { applySimulationChange(""); return; }
+  state.tiesPlayed += 1;
+  state.awayTies += 1;
+  applySimulationChange(`Away tie played. ${state.awayTies} away ${state.awayTies===1?"tie":"ties"}; ${state.tiesPlayed} total.`);
+};
+$("addPigeonMiles").onclick=()=>{
+  if (state.campaignStatus==="ENDED") { applySimulationChange(""); return; }
+  state.pigeonMiles += 100;
+  applySimulationChange(`Pigeon Miles simulator added 100 miles. ${Math.round(state.pigeonMiles)} Pigeon Miles flown.`);
+};
+$("simulateGiantKill").onclick=()=>{
+  if (state.campaignStatus==="ENDED") { applySimulationChange(""); return; }
+  state.giantKillAchieved = true;
+  applySimulationChange("Giant Kill simulated — your custodian beat a club at least two pyramid levels above.");
+};
+$("campaignRound").onchange=()=>{
+  if (state.campaignStatus==="ENDED") { renderStats(); applySimulationChange(""); return; }
+  state.campaignRound=Number($("campaignRound").value);
+  const label=$("campaignRound").options[$("campaignRound").selectedIndex].text;
+  applySimulationChange(`Campaign Round set to ${label}.`);
+};
+$("reset").onclick=async ()=>{
+  if(await tinFoilConfirm("Hard Reset will clear Simulated Progress Only. Your Clubfinder Campaign will stay safe. Continue?")) {
+    localStorage.removeItem(STORE_KEY); state=blankState(); applyClubfinderCampaignTruth(); awardCampaignChallenges(); save(); renderStats(); render();
+  }
+};
+document.addEventListener("keydown",e=>{
+  if(trophyViewerOpen){
+    if(e.key==="Escape"){e.preventDefault();closeTrophy();}
+    else if(e.key==="Tab"){e.preventDefault();trophyViewerMat.focus({preventScroll:true});}
+    else if(["ArrowRight","ArrowLeft","Enter"," "].includes(e.key))e.preventDefault();
+    return;
+  }
+  if(!overlay.classList.contains("open")) return;
+  if(e.key==="Escape") close();
+  if(e.key==="ArrowRight" && index<CHALLENGES.length-1){index++;render()}
+  if(e.key==="ArrowLeft" && index>0){index--;render()}
+  if(e.key===" " || e.key==="Enter"){ if(document.activeElement===document.body) flipMat(); }
+});
+
+// Swipe navigation.
+let sx=null, suppressFlip=false;
+$("cardstage").addEventListener("pointerdown",e=>{sx=e.clientX;suppressFlip=false});
+$("cardstage").addEventListener("pointerup",e=>{
+  if(sx===null)return; const dx=e.clientX-sx; sx=null;
+  if(Math.abs(dx)<55)return;
+  suppressFlip=true;
+  if(dx<0 && index<CHALLENGES.length-1){index++;render()}
+  if(dx>0 && index>0){index--;render()}
+});
+
+const challengeTruthApplied=applyClubfinderCampaignTruth();
+const challengeAwardsChanged=awardCampaignChallenges();
+if (challengeTruthApplied || challengeAwardsChanged) save();
+else renderStats();
+
+// Open the actual deck on arrival. Preserve legacy return links from already-open Stats tabs.
+const tinFoilChallengeRoute=new URLSearchParams(window.location.search||'');
+let launchIndex=0;
+if(tinFoilChallengeRoute.get('from')==='stats-return-v2'){
+  try{
+    const stored=Number(sessionStorage.getItem('tffc.challengeReturnIndex'));
+    if(Number.isFinite(stored)) launchIndex=stored;
+    sessionStorage.removeItem('tffc.challengeReturnIndex');
+  }catch(_){}
+  try{history.replaceState(null,'',location.pathname+location.hash);}catch(_){}
+}
+openAt(launchIndex);
+</script>
+
+</body>
+</html>
