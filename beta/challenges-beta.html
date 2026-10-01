@@ -1313,7 +1313,7 @@ function preloadArt(src, priority="low"){
     // rather than starting a duplicate transfer for the same artwork.
     if(priority==="high" && cached.priority!=="high"){
       cached.priority="high";
-      try{ cached.img.fetchPriority="high"; }catch(_){}
+      try{ if(cached.img)cached.img.fetchPriority="high"; }catch(_){}
     }
     return cached.promise;
   }
@@ -1322,14 +1322,14 @@ function preloadArt(src, priority="low"){
     const img=entry.img=new Image();
     try{ img.fetchPriority=priority; }catch(_){}
     img.decoding="async";
-    img.onload=()=>{
-      if(typeof img.decode==="function"){
-        img.decode().catch(()=>{}).finally(()=>resolve(true));
-      }else{
-        resolve(true);
-      }
+    const finish=ok=>{
+      // The preloader exists only to warm the browser cache. Do not retain a
+      // decoded hidden Image for every mat: the visible Deck image owns decode.
+      entry.img=null;
+      resolve(ok);
     };
-    img.onerror=()=>resolve(false);
+    img.onload=()=>finish(true);
+    img.onerror=()=>finish(false);
     img.src=src;
   });
   ART_PRELOAD_CACHE.set(src,entry);
