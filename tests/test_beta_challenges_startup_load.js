@@ -6,16 +6,24 @@ const fs=require('node:fs');
 
 const html=fs.readFileSync('beta/challenges-beta.html','utf8');
 
-assert(html.includes('function warmChallengeArt(){\n  preloadMatAt(0,"high");\n}'),
-  'Challenges startup must warm only the opening mat before it is visible');
-assert(html.includes('function warmOpeningNeighbours(){\n  preloadMatAt(1,"high");\n  preloadMatAt(2,"low");\n}'),
-  'Challenges must retain neighbour warmup after the opening mat');
-assert(html.includes('if(side==="front" && c.id==="00" && !INITIAL_FRONT_READY)'),
+assert(html.includes('function warmChallengeArt(){\n  preloadFaceAt(0,"front","high");\n  scheduleDeckWarm(100);\n}'),
+  'Challenges startup must give the visible mat 00 front first claim, then start a gentle future-front sweep');
+assert(html.includes('function warmOpeningNeighbours(){'),
+  'Challenges must retain neighbour strengthening after mat 00 paints');
+assert(html.includes('preloadFaceAt(0,"back","high");\n  preloadFaceAt(1,"front","high");\n  preloadFaceAt(2,"front","high");\n  preloadFaceAt(3,"front","low");'),
+  'Opening browse path must strengthen nearby fronts without bursting unseen reverses');
+assert(html.includes('if(c.id==="00" && !INITIAL_FRONT_READY)'),
   'Opening neighbour warmup must wait for the visible mat 00 front');
 assert(html.includes('requestAnimationFrame(()=>warmOpeningNeighbours());'),
   'Opening neighbour warmup must be deferred until after mat 00 front reveal');
-assert(html.includes('if(index!==0 || INITIAL_FRONT_READY)'),
-  'Initial render must not preload neighbours before mat 00 is visible');
+assert(html.includes('preloadFaceAt(index,"front","high");'),
+  'Current visible front must remain high priority');
+assert(!html.includes('preloadFaceAt(index,"back",(index===0 && !INITIAL_FRONT_READY)?"low":"high");'),
+  'Navigation must not eagerly preload the current hidden reverse');
+assert(html.includes('scheduleCurrentBackWarm(index,c.id);'),
+  'Current reverse must only warm after the visible front has settled');
+assert(html.includes('preloadFaceAt(index+1,"front","high");'),
+  'Foreground neighbour warmup must favour next-card fronts');
 
 assert(html.includes('let CABINET_IMAGE_OBSERVER=null;'),
   'Trophy Cabinet must use explicit image deferral');

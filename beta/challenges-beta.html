@@ -58,7 +58,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .flipcard.flipped{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;background:#d7c49d;box-shadow:0 18px 45px rgba(0,0,0,.38);border:2px solid #3b2c1d}
 .face.back{transform:rotateY(180deg)}
-.face img{width:100%;height:100%;object-fit:cover;display:block}
+.face img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}\n.flipcard,.face{-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 .placeholder{height:100%;display:grid;place-items:center;text-align:center;padding:30px;background:radial-gradient(circle,#f0dfb9,#cfb583)}
 .placeholder h3{font-size:36px;margin:0;color:#7e291f} .placeholder p{font:18px Arial,sans-serif;max-width:420px}
 .cup{width:120px;max-height:190px;object-fit:contain}
@@ -1307,44 +1307,103 @@ const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;
 const ART_PRELOAD_CACHE=new Map();
 function preloadArt(src, priority="low"){
   if(!src) return Promise.resolve(false);
-  if(ART_PRELOAD_CACHE.has(src)) return ART_PRELOAD_CACHE.get(src);
-  const p=new Promise(resolve=>{
-    const img=new Image();
+  const cached=ART_PRELOAD_CACHE.get(src);
+  if(cached){
+    // Foreground Deck navigation wins: promote an in-flight background request
+    // rather than starting a duplicate transfer for the same artwork.
+    if(priority==="high" && cached.priority!=="high"){
+      cached.priority="high";
+      try{ if(cached.img)cached.img.fetchPriority="high"; }catch(_){}
+    }
+    return cached.promise;
+  }
+  const entry={promise:null,img:null,priority};
+  entry.promise=new Promise(resolve=>{
+    const img=entry.img=new Image();
     try{ img.fetchPriority=priority; }catch(_){}
     img.decoding="async";
-    img.onload=()=>{
-      if(typeof img.decode==="function"){
-        img.decode().catch(()=>{}).finally(()=>resolve(true));
-      }else{
-        resolve(true);
-      }
+    const finish=ok=>{
+      // The preloader exists only to warm the browser cache. Do not retain a
+      // decoded hidden Image for every mat: the visible Deck image owns decode.
+      entry.img=null;
+      resolve(ok);
     };
-    img.onerror=()=>resolve(false);
+    img.onload=()=>finish(true);
+    img.onerror=()=>finish(false);
     img.src=src;
   });
-  ART_PRELOAD_CACHE.set(src,p);
-  return p;
+  ART_PRELOAD_CACHE.set(src,entry);
+  return entry.promise;
+}
+function preloadFaceAt(i, side, priority="low"){
+  const c=CHALLENGES[i];
+  if(!c) return Promise.resolve(false);
+  const art=ART[c.id];
+  const src=art&&art[side];
+  return src?preloadArt(src,priority):Promise.resolve(false);
 }
 function preloadMatAt(i, priority="low"){
-  const c=CHALLENGES[i];
-  if(!c) return;
-  const art=ART[c.id];
-  if(!art) return;
-  preloadArt(art.front,priority);
-  preloadArt(art.back,priority);
+  return Promise.all([
+    preloadFaceAt(i,"front",priority),
+    preloadFaceAt(i,"back",priority)
+  ]);
 }
-// Warm only the opening neighbourhood. Warming all 56 WebPs together caused
-// avoidable decode/GPU pressure during rapid multi-pass browsing.
-function warmChallengeArt(){
-  preloadMatAt(0,"high");
+function facePreloadStarted(i, side){
+  const c=CHALLENGES[i],art=c&&ART[c.id],src=art&&art[side];
+  return !!(src&&ART_PRELOAD_CACHE.has(src));
 }
+
+// Fronts-first cold-cache warmer.
+// The visible mat 00 front gets first claim on the connection. Then one quiet
+// future front at a time marches through the Deck. Only after every front has
+// been requested do unseen reverses warm in the background.
 let INITIAL_FRONT_READY=false;
-function warmOpeningNeighbours(){
-  preloadMatAt(1,"high");
-  preloadMatAt(2,"low");
+let DECK_WARM_SIDE="front";
+let DECK_WARM_INDEX=1;
+let DECK_WARM_RUNNING=false;
+let DECK_WARM_TIMER=0;
+function scheduleDeckWarm(delay=120){
+  if(DECK_WARM_RUNNING||DECK_WARM_TIMER)return;
+  DECK_WARM_TIMER=setTimeout(()=>{
+    DECK_WARM_TIMER=0;
+    warmNextDeckAsset();
+  },delay);
 }
-if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:900});
-else setTimeout(warmChallengeArt,120);
+async function warmNextDeckAsset(){
+  if(DECK_WARM_RUNNING)return;
+  while(DECK_WARM_INDEX<CHALLENGES.length && facePreloadStarted(DECK_WARM_INDEX,DECK_WARM_SIDE))DECK_WARM_INDEX++;
+  if(DECK_WARM_INDEX>=CHALLENGES.length){
+    if(DECK_WARM_SIDE==="front"){
+      DECK_WARM_SIDE="back";
+      DECK_WARM_INDEX=0;
+      scheduleDeckWarm(180);
+    }
+    return;
+  }
+  const target=DECK_WARM_INDEX++;
+  const side=DECK_WARM_SIDE;
+  DECK_WARM_RUNNING=true;
+  try{
+    await preloadFaceAt(target,side,"low");
+  }finally{
+    DECK_WARM_RUNNING=false;
+    scheduleDeckWarm();
+  }
+}
+function warmChallengeArt(){
+  preloadFaceAt(0,"front","high");
+  scheduleDeckWarm(100);
+}
+function warmOpeningNeighbours(){
+  // The first visible front has painted: strengthen the immediate browse path,
+  // but continue to avoid a burst of unseen reverse downloads.
+  preloadFaceAt(0,"back","high");
+  preloadFaceAt(1,"front","high");
+  preloadFaceAt(2,"front","high");
+  preloadFaceAt(3,"front","low");
+}
+if("requestIdleCallback" in window) requestIdleCallback(warmChallengeArt,{timeout:400});
+else setTimeout(warmChallengeArt,40);
 
 window.name='TFFC_CHALLENGES';
 const STORE_KEY = "tffc.challengeDeck.v1";
@@ -1525,14 +1584,30 @@ function lockedMessage(c) {
   return "";
 }
 let FACE_LOAD_SERIAL=0;
-function buildFace(el, c, side) {
+let CURRENT_BACK_WARM_TIMER=0;
+let FLIP_PENDING=false;
+function cancelCurrentBackWarm(){
+  if(CURRENT_BACK_WARM_TIMER){
+    clearTimeout(CURRENT_BACK_WARM_TIMER);
+    CURRENT_BACK_WARM_TIMER=0;
+  }
+}
+function scheduleCurrentBackWarm(i,id){
+  cancelCurrentBackWarm();
+  CURRENT_BACK_WARM_TIMER=setTimeout(()=>{
+    CURRENT_BACK_WARM_TIMER=0;
+    if(index!==i || flipped || CHALLENGES[index]?.id!==id)return;
+    preloadFaceAt(i,"back","low");
+  },2500);
+}
+function buildFace(el, c, side, priority="high") {
   const src = ART[c.id]?.[side==="front"?"front":"back"];
   const serial=String(++FACE_LOAD_SERIAL);
   el.dataset.faceLoad=serial;
 
   if (!src) {
     el.innerHTML=`<div class="placeholder">${CANONICAL_CUP?`<img class="cup" src="${CANONICAL_CUP}" alt="">`:""}<div><h3>${c.title}</h3><p>${c.subtitle}</p></div></div>`;
-    return;
+    return Promise.resolve(false);
   }
 
   let img=el.querySelector("img.mat-art");
@@ -1542,45 +1617,55 @@ function buildFace(el, c, side) {
     img.className="mat-art";
     img.decoding="async";
     img.draggable=false;
-    try{ img.fetchPriority="high"; }catch(_){}
     el.appendChild(img);
   }
+  try{ img.fetchPriority=priority; }catch(_){}
 
   const alt=`${c.title} ${side} artwork`;
   if(img.dataset.src===src && img.complete && img.naturalWidth){
     img.alt=alt;
     img.style.visibility="visible";
-    return;
+    if(side==="front" && CHALLENGES[index]?.id===c.id) scheduleCurrentBackWarm(index,c.id);
+    return Promise.resolve(true);
   }
 
   // Do not display a partially decoded frame while a rapid swipe is changing mats.
   img.style.visibility="hidden";
-  preloadArt(src,"high").then(ok=>{
-    if(el.dataset.faceLoad!==serial) return;
+  return preloadArt(src,priority).then(ok=>{
+    if(el.dataset.faceLoad!==serial) return false;
     if(!ok){
       img.removeAttribute("src");
       img.removeAttribute("data-src");
       img.alt="";
-      return;
+      return false;
     }
     img.dataset.src=src;
     img.alt=alt;
     img.src=src;
-    const reveal=()=>{
-      if(el.dataset.faceLoad===serial){
-        img.style.visibility="visible";
-        if(side==="front" && c.id==="00" && !INITIAL_FRONT_READY){
-          INITIAL_FRONT_READY=true;
-          requestAnimationFrame(()=>warmOpeningNeighbours());
+    return new Promise(resolve=>{
+      const reveal=()=>{
+        if(el.dataset.faceLoad===serial){
+          img.style.visibility="visible";
+          if(side==="front"){
+            if(c.id==="00" && !INITIAL_FRONT_READY){
+              INITIAL_FRONT_READY=true;
+              requestAnimationFrame(()=>warmOpeningNeighbours());
+            }
+            if(CHALLENGES[index]?.id===c.id) scheduleCurrentBackWarm(index,c.id);
+          }
         }
-      }
-    };
-    if(typeof img.decode==="function") img.decode().catch(()=>{}).finally(reveal);
-    else reveal();
+        resolve(true);
+      };
+      if(typeof img.decode==="function") img.decode().catch(()=>{}).finally(reveal);
+      else reveal();
+    });
   });
 }
+
 function render() {
   const c=CHALLENGES[index];
+  cancelCurrentBackWarm();
+  FLIP_PENDING=false;
 
   // If the user navigates while a flip animation is still running, reset the old
   // card instantly before swapping in the next artwork. This prevents transient
@@ -1591,13 +1676,23 @@ function render() {
   flipcard.setAttribute("aria-pressed","false");
   void flipcard.offsetWidth;
 
-  buildFace(front,c,"front"); buildFace(back,c,"back");
+  buildFace(front,c,"front","high");
+  // The hidden reverse is demand-loaded: racing through fronts no longer
+  // downloads and decodes an unseen 640px image for every navigation step.
+  back.dataset.faceLoad=String(++FACE_LOAD_SERIAL);
+  const oldBack=back.querySelector("img.mat-art");
+  if(oldBack){
+    oldBack.style.visibility="hidden";
+    oldBack.removeAttribute("src");
+    oldBack.removeAttribute("data-src");
+    oldBack.alt="";
+  }
   flipcard.classList.toggle("coming-soon-mat",c.type==="comingsoon");
-  preloadMatAt(index,"high");
+  preloadFaceAt(index,"front","high");
   if(index!==0 || INITIAL_FRONT_READY){
-    preloadMatAt(index+1,"high");
-    preloadMatAt(index+2,"low");
-    preloadMatAt(index-1,"low");
+    preloadFaceAt(index+1,"front","high");
+    preloadFaceAt(index+2,"front","low");
+    preloadFaceAt(index-1,"front","low");
   }
   requestAnimationFrame(()=>flipcard.classList.remove("instant-reset"));
   $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
@@ -1759,6 +1854,11 @@ verifyBadge.addEventListener("click",e=>{
 document.addEventListener("pointerdown",e=>{
   if(!verifyBadge.contains(e.target) && !$("verifyHelp").contains(e.target)) hideVerificationHelp();
 });
+function setDeckFlip(next){
+  flipped=next;
+  flipcard.classList.toggle("flipped",flipped);
+  flipcard.setAttribute("aria-pressed",String(flipped));
+}
 function flipMat() {
   const c=CHALLENGES[index];
   // Achievement reverses are earned reveals: keep them hidden until Clubfinder verifies the milestone.
@@ -1771,10 +1871,22 @@ function flipMat() {
     $("feedback").textContent=msg;
     return;
   }
-  flipped=!flipped;
-  flipcard.classList.toggle("flipped",flipped);
-  flipcard.setAttribute("aria-pressed",String(flipped));
+  if(flipped){
+    setDeckFlip(false);
+    return;
+  }
+  if(FLIP_PENDING)return;
+  FLIP_PENDING=true;
+  cancelCurrentBackWarm();
+  const expectedIndex=index;
+  const expectedId=c.id;
+  buildFace(back,c,"back","high").then(ok=>{
+    FLIP_PENDING=false;
+    if(!ok || index!==expectedIndex || CHALLENGES[index]?.id!==expectedId)return;
+    setDeckFlip(true);
+  });
 }
+
 flipcard.onclick=()=>{ if(suppressFlip){suppressFlip=false;return;} flipMat(); };
 flipcard.addEventListener("keydown",e=>{
   if(e.key==="Enter" || e.key===" ") { e.preventDefault(); flipMat(); }
