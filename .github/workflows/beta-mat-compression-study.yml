@@ -1,0 +1,106 @@
+name: BETA 640px mat compression study
+
+on:
+  push:
+    branches:
+      - beta/mat-compression-study-20261001
+    paths:
+      - .github/workflows/beta-mat-compression-study.yml
+
+permissions:
+  contents: read
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: beta/mat-compression-study-20261001
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Build representative 640px candidates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw, ImageChops, ImageStat
+          import hashlib, json, math
+
+          root=Path("beta/assets/challenge-mats")
+          out=Path("mat-compression-study")
+          out.mkdir(exist_ok=True)
+
+          samples=[
+              ("opening", root/"mat-00-front.webp"),
+              ("heavy", root/"mat-06-front.webp"),
+              ("median", root/"mat-14-front.webp"),
+              ("light", root/"mat-20-front.webp"),
+          ]
+          qualities=[90,85,80,75]
+          report=[]
+
+          def psnr(a,b):
+              diff=ImageChops.difference(a,b)
+              stat=ImageStat.Stat(diff)
+              mse=sum(v*v for v in stat.rms)/len(stat.rms)
+              return 99.0 if mse==0 else 20*math.log10(255/math.sqrt(mse))
+
+          for label,src in samples:
+              with Image.open(src) as im:
+                  assert im.size==(640,640),(src,im.size)
+                  original=im.convert("RGB")
+                  original.save(out/f"{label}-current.png",optimize=True)
+                  for q in qualities:
+                      dest=out/f"{label}-q{q}.webp"
+                      original.save(dest,"WEBP",quality=q,method=6)
+                      with Image.open(dest) as check:
+                          check=check.convert("RGB")
+                          assert check.size==(640,640)
+                          metric=psnr(original,check)
+                      report.append({
+                          "sample":label,
+                          "source":src.name,
+                          "source_bytes":src.stat().st_size,
+                          "quality":q,
+                          "candidate_bytes":dest.stat().st_size,
+                          "saving_pct":round((1-dest.stat().st_size/src.stat().st_size)*100,2),
+                          "psnr_db":round(metric,2),
+                          "sha256":hashlib.sha256(dest.read_bytes()).hexdigest(),
+                      })
+
+          # Full-size comparison sheets, one row per sample.
+          cols=["Current decoded","q90","q85","q80","q75"]
+          cell=640
+          label_h=34
+          sheet=Image.new("RGB",(cell*len(cols),(cell+label_h)*len(samples)),"white")
+          draw=ImageDraw.Draw(sheet)
+          for row,(label,_src) in enumerate(samples):
+              y=row*(cell+label_h)
+              paths=[
+                  out/f"{label}-current.png",
+                  out/f"{label}-q90.webp",
+                  out/f"{label}-q85.webp",
+                  out/f"{label}-q80.webp",
+                  out/f"{label}-q75.webp",
+              ]
+              for col,(title,path) in enumerate(zip(cols,paths)):
+                  with Image.open(path) as im:
+                      sheet.paste(im.convert("RGB"),(col*cell,y))
+                  draw.text((col*cell+8,y+cell+9),f"{label}: {title}",fill="black")
+          sheet.save(out/"comparison-full.png",optimize=True)
+
+          (out/"report.json").write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mat-compression-study
+          path: mat-compression-study/
+          if-no-files-found: error
