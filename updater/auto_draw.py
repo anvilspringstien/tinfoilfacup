@@ -414,6 +414,26 @@ def main():
     # producer instead of relying on Clubfinder to infer the winner forever.
     current_official = unique_ties([r for r in all_rows if r["round"] == current])
     saved_current = fixture_values(data.get("fixtures") or {})
+    expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
+    active_source_complete = len(current_official) == expected_active_ties
+    if not active_source_complete:
+        print(
+            "ACTIVE ROUND SOURCE INCOMPLETE:",
+            f"official={len(current_official)} expected={expected_active_ties}",
+        )
+        if args.publish:
+            write_report(
+                status="blocked",
+                current_round=current,
+                target_round=target,
+                pages_checked=pages_checked,
+                pagination_stop=fetch_stop,
+                active_round_official_ties=len(current_official),
+                active_round_expected_ties=expected_active_ties,
+                active_round_source_complete=False,
+            )
+            raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
+
     refreshed_current, active_transitions, active_ambiguities = reconcile_active_conditionals(
         saved_current, current_official
     )
