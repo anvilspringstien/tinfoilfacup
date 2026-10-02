@@ -162,6 +162,23 @@ def reconcile_active_conditionals(current_fixtures, official_fixtures):
     return final, transitions, ambiguities
 
 
+def diagnose_unresolved_conditionals(current_fixtures, official_fixtures):
+    diagnostics = []
+    for saved in current_fixtures:
+        if not is_conditional_fixture(saved):
+            continue
+        if any(fixture_matches_slot(f, saved) for f in official_fixtures):
+            continue
+        home_hits = [f for f in official_fixtures if side_matches(f.get("home", ""), saved.get("home", ""))]
+        away_hits = [f for f in official_fixtures if side_matches(f.get("away", ""), saved.get("away", ""))]
+        diagnostics.append({
+            "slot": f'{saved.get("home")} v {saved.get("away")}',
+            "home_side_official_candidates": [f'{f.get("home")} v {f.get("away")}' for f in home_hits],
+            "away_side_official_candidates": [f'{f.get("home")} v {f.get("away")}' for f in away_hits],
+        })
+    return diagnostics
+
+
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=35) as r:
@@ -327,6 +344,7 @@ def main():
     refreshed_current, active_transitions, active_ambiguities = reconcile_active_conditionals(
         saved_current, current_official
     )
+    active_unresolved = diagnose_unresolved_conditionals(saved_current, current_official)
     if active_ambiguities:
         write_report(
             status="blocked",
@@ -336,6 +354,7 @@ def main():
             pagination_stop=fetch_stop,
             active_round_official_ties=len(current_official),
             active_round_ambiguities=active_ambiguities,
+            active_round_unresolved_diagnostics=active_unresolved,
         )
         raise SystemExit("Publication blocked: active-round conditional slots resolved ambiguously.")
 
@@ -365,6 +384,7 @@ def main():
         published=active_published,
         active_round_official_ties=len(current_official),
         active_round_conditional_resolutions=active_transitions,
+        active_round_unresolved_diagnostics=active_unresolved,
     )
 
     if not target_ties:
