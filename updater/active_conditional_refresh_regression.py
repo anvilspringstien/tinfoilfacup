@@ -74,6 +74,9 @@ real_abbreviations=[
 for short,full in real_abbreviations:
     require(compatible(short,full),f"FA abbreviation not recognized: {short} -> {full}")
 require(not compatible("Town United","Town Wanderers"),"unrelated club words must not match")
+require(not compatible("T","Trinity"),"single-letter token must not match independently")
+require(not compatible("G'borough X","Gainsborough Trinity"),"wrong contextual initial must not match")
+require(not compatible("A T","Another Trinity"),"initial-only club name must not match without substantive evidence")
 
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
