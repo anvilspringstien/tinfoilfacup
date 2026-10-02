@@ -445,6 +445,16 @@ def main():
 
         pages_checked += 1
         rows = parse_page(page_html)
+        for row in rows:
+            if "brentwood" in fixture_key_text(row.get("home", "")) or "dagenham" in fixture_key_text(row.get("away", "")):
+                print("FA PAGE PROVENANCE:", {
+                    "page": page,
+                    "round": row.get("round"),
+                    "date": row.get("date"),
+                    "home": row.get("home"),
+                    "away": row.get("away"),
+                    "kickoff": row.get("kickoff"),
+                })
         all_rows.extend(rows)
         if not rows and page > 5:
             fetch_stop = "empty-page"
