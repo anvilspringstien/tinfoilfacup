@@ -79,6 +79,8 @@ require(not compatible("G'borough X","Gainsborough Trinity"),"wrong contextual i
 require(not compatible("A T","Another Trinity"),"initial-only club name must not match without substantive evidence")
 require(compatible("Win Finch","Wingate & Finchley"),"connective omission must preserve valid abbreviation match")
 require(not compatible("Win Town","Wingate & Finchley"),"ignoring connective must not hide a mismatched substantive token")
+require(compatible("Cray Wands","Cray Wanderers"),"guarded stem contraction must match")
+require(not compatible("Cray Wands","Cray Waltham"),"shared short opening must not match unrelated token")
 
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
