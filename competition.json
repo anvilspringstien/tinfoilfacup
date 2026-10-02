@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-09-30T06:43:24.725753+00:00",
+  "updated_at": "2026-10-02T09:56:42.276504+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -26493,29 +26493,19 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Leamington": {
+    "Gainsborough Trinity": {
       "round": "Third Round Qualifying",
-      "home": "Leamington or G'borough T",
+      "home": "Gainsborough Trinity",
       "away": "Anstey Nomads",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "G'borough T": {
-      "round": "Third Round Qualifying",
-      "home": "Leamington or G'borough T",
-      "away": "Anstey Nomads",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Anstey Nomads": {
       "round": "Third Round Qualifying",
-      "home": "Leamington or G'borough T",
+      "home": "Gainsborough Trinity",
       "away": "Anstey Nomads",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Morecambe": {
       "round": "Third Round Qualifying",
@@ -26621,29 +26611,19 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "AFC Telford": {
+    "Worksop Town": {
       "round": "Third Round Qualifying",
-      "home": "AFC Telford or Worksop",
+      "home": "Worksop Town",
       "away": "FC United of Manchester",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Worksop": {
-      "round": "Third Round Qualifying",
-      "home": "AFC Telford or Worksop",
-      "away": "FC United of Manchester",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "FC United of Manchester": {
       "round": "Third Round Qualifying",
-      "home": "AFC Telford or Worksop",
+      "home": "Worksop Town",
       "away": "FC United of Manchester",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Stafford Rangers": {
       "round": "Third Round Qualifying",
@@ -26778,26 +26758,16 @@
     "Bedford Town": {
       "round": "Third Round Qualifying",
       "home": "Bedford Town",
-      "away": "Hemel H or Win Finch",
+      "away": "Wingate & Finchley",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Hemel H": {
+    "Wingate & Finchley": {
       "round": "Third Round Qualifying",
       "home": "Bedford Town",
-      "away": "Hemel H or Win Finch",
+      "away": "Wingate & Finchley",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Win Finch": {
-      "round": "Third Round Qualifying",
-      "home": "Bedford Town",
-      "away": "Hemel H or Win Finch",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Kettering Town": {
       "round": "Third Round Qualifying",
@@ -26932,26 +26902,16 @@
     "Brentwood Town": {
       "round": "Third Round Qualifying",
       "home": "Brentwood Town",
-      "away": "Waltham A or Dag & Red",
+      "away": "Dagenham & Redbridge",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Waltham A": {
+    "Dagenham & Redbridge": {
       "round": "Third Round Qualifying",
       "home": "Brentwood Town",
-      "away": "Waltham A or Dag & Red",
+      "away": "Dagenham & Redbridge",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Dag & Red": {
-      "round": "Third Round Qualifying",
-      "home": "Brentwood Town",
-      "away": "Waltham A or Dag & Red",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Leiston": {
       "round": "Third Round Qualifying",
@@ -27008,82 +26968,44 @@
     "AFC Rushden & Diamonds": {
       "round": "Third Round Qualifying",
       "home": "AFC Rushden & Diamonds",
-      "away": "Needham M or Braintree",
+      "away": "Braintree Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Needham M": {
+    "Braintree Town": {
       "round": "Third Round Qualifying",
       "home": "AFC Rushden & Diamonds",
-      "away": "Needham M or Braintree",
+      "away": "Braintree Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Braintree": {
-      "round": "Third Round Qualifying",
-      "home": "AFC Rushden & Diamonds",
-      "away": "Needham M or Braintree",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Southall": {
-      "round": "Third Round Qualifying",
-      "home": "Southall or Dorking Wanderers",
-      "away": "Chatham Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Dorking Wanderers": {
       "round": "Third Round Qualifying",
-      "home": "Southall or Dorking Wanderers",
+      "home": "Dorking Wanderers",
       "away": "Chatham Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Chatham Town": {
       "round": "Third Round Qualifying",
-      "home": "Southall or Dorking Wanderers",
+      "home": "Dorking Wanderers",
       "away": "Chatham Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Merthyr": {
-      "round": "Third Round Qualifying",
-      "home": "Merthyr or Truro City",
-      "away": "Cirencester or Farnham",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Truro City": {
       "round": "Third Round Qualifying",
-      "home": "Merthyr or Truro City",
-      "away": "Cirencester or Farnham",
+      "home": "Truro City",
+      "away": "Cirencester Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Cirencester": {
+    "Cirencester Town": {
       "round": "Third Round Qualifying",
-      "home": "Merthyr or Truro City",
-      "away": "Cirencester or Farnham",
+      "home": "Truro City",
+      "away": "Cirencester Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Farnham": {
-      "round": "Third Round Qualifying",
-      "home": "Merthyr or Truro City",
-      "away": "Cirencester or Farnham",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Tonbridge Angels": {
       "round": "Third Round Qualifying",
@@ -27163,69 +27085,33 @@
         "verification": "clubfinder-canonical"
       }
     },
-    "Cray Wands": {
+    "Cray Wanderers": {
       "round": "Third Round Qualifying",
-      "home": "Cray Wands or Maidstone",
-      "away": "Yate Town or Chippenham",
+      "home": "Cray Wanderers",
+      "away": "Chippenham Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Maidstone": {
+    "Chippenham Town": {
       "round": "Third Round Qualifying",
-      "home": "Cray Wands or Maidstone",
-      "away": "Yate Town or Chippenham",
+      "home": "Cray Wanderers",
+      "away": "Chippenham Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Yate Town": {
+    "Crowborough Athletic": {
       "round": "Third Round Qualifying",
-      "home": "Cray Wands or Maidstone",
-      "away": "Yate Town or Chippenham",
+      "home": "Crowborough Athletic",
+      "away": "Wimborne Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Chippenham": {
+    "Wimborne Town": {
       "round": "Third Round Qualifying",
-      "home": "Cray Wands or Maidstone",
-      "away": "Yate Town or Chippenham",
+      "home": "Crowborough Athletic",
+      "away": "Wimborne Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Hamp & Rich": {
-      "round": "Third Round Qualifying",
-      "home": "Hamp & Rich or Crowborough",
-      "away": "Weston SM or Wimborne",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Crowborough": {
-      "round": "Third Round Qualifying",
-      "home": "Hamp & Rich or Crowborough",
-      "away": "Weston SM or Wimborne",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Weston SM": {
-      "round": "Third Round Qualifying",
-      "home": "Hamp & Rich or Crowborough",
-      "away": "Weston SM or Wimborne",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Wimborne": {
-      "round": "Third Round Qualifying",
-      "home": "Hamp & Rich or Crowborough",
-      "away": "Weston SM or Wimborne",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Plymouth Parkway": {
       "round": "Third Round Qualifying",
@@ -27255,27 +27141,17 @@
     },
     "Uxbridge": {
       "round": "Third Round Qualifying",
-      "home": "Uxbridge or Farnborough",
+      "home": "Uxbridge",
       "away": "Hungerford Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Farnborough": {
-      "round": "Third Round Qualifying",
-      "home": "Uxbridge or Farnborough",
-      "away": "Hungerford Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Hungerford Town": {
       "round": "Third Round Qualifying",
-      "home": "Uxbridge or Farnborough",
+      "home": "Uxbridge",
       "away": "Hungerford Town",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Ebbsfleet United": {
       "round": "Third Round Qualifying",
@@ -27329,29 +27205,19 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Thame Utd": {
+    "Thame United": {
       "round": "Third Round Qualifying",
-      "home": "Thame Utd or Exmouth Town",
+      "home": "Thame United",
       "away": "Eastbourne Borough",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Exmouth Town": {
-      "round": "Third Round Qualifying",
-      "home": "Thame Utd or Exmouth Town",
-      "away": "Eastbourne Borough",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Eastbourne Borough": {
       "round": "Third Round Qualifying",
-      "home": "Thame Utd or Exmouth Town",
+      "home": "Thame United",
       "away": "Eastbourne Borough",
       "date": "2026-10-03",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Hanwell Town": {
       "round": "Third Round Qualifying",
