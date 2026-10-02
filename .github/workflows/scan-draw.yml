@@ -13,6 +13,7 @@ on:
   push:
     paths:
       - "updater/auto_draw.py"
+      - "updater/active_conditional_refresh_regression.py"
       - ".github/workflows/scan-draw.yml"
 
 permissions:
@@ -29,7 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Detect and validate next official FA draw
+      - name: Guard active-round conditional resolution
+        run: python updater/active_conditional_refresh_regression.py
+
+      - name: Detect and validate official FA draw state
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_PUBLISH: ${{ inputs.publish }}
