@@ -12,6 +12,8 @@ import argparse
 import html as H
 import json
 import re
+import unicodedata
+import time
 import urllib.error
 import urllib.request
 from collections import Counter
@@ -96,10 +98,192 @@ def alternatives(s):
     return [p.strip() for p in re.split(r"\s+or\s+", s or "", flags=re.I) if p.strip()]
 
 
+def abbreviation_tokens(value):
+    tokens = [token for token in norm(value).split() if token != "and"]
+    # Connective "and" (including normalized &) is non-semantic only for\n    # abbreviation comparison; the general club-name normalizer is unchanged.\n    # Apostrophe contractions such as G'borough normalize to ["g","borough"].
+    # Rejoin an initial with its retained suffix so it can be compared
+    # structurally with the full word without naming a specific club.
+    out = []
+    i = 0
+    while i < len(tokens):
+        if len(tokens[i]) == 1 and i + 1 < len(tokens) and len(tokens[i + 1]) >= 3:
+            out.append(tokens[i] + tokens[i + 1])
+            i += 2
+        else:
+            out.append(tokens[i])
+            i += 1
+    return out
+
+
+def token_compatible(short_token, full_token):
+    if short_token == full_token:
+        return True
+    conventional = {("utd", "united"), ("united", "utd")}
+    if (short_token, full_token) in conventional:
+        return True
+    if len(short_token) < 2:
+        return False
+    if (len(short_token) >= 3 and full_token.startswith(short_token)) or (len(full_token) >= 3 and short_token.startswith(full_token)):
+        return True
+    shorter, longer = sorted((short_token, full_token), key=len)
+    if len(shorter) >= 4 and shorter[0] == longer[0] and longer.endswith(shorter[1:]):
+        return True
+    common = 0
+    for left, right in zip(shorter, longer):
+        if left != right:
+            break
+        common += 1
+    return common >= 4 and len(shorter) >= 5 and len(longer) >= 6
+
+def abbreviation_compatible(a, b):
+    aa, bb = abbreviation_tokens(a), abbreviation_tokens(b)
+    if not aa or not bb or len(aa) != len(bb):
+        return False
+
+    substantive = False
+    for x, y in zip(aa, bb):
+        if len(x) == 1 or len(y) == 1:
+            # A single-letter token is allowed only as one component of a
+            # multi-token club name, and only by matching the corresponding
+            # full token's initial. Another token must carry substantive proof.
+            if len(aa) < 2 or x[0] != y[0]:
+                return False
+            continue
+        if not token_compatible(x, y):
+            return False
+        if x != y or len(x) >= 3:
+            substantive = True
+    return substantive
+
+
+def compatible(a, b):
+    a, b = norm(a), norm(b)
+    if not a or not b:
+        return False
+    if a == b or a.startswith(b + " ") or b.startswith(a + " "):
+        return True
+    return abbreviation_compatible(a, b)
+
+
+def active_source_complete(official_ties, expected_ties):
+    return len(official_ties) == int(expected_ties)
+
+
+def is_conditional_fixture(fixture):
+    return len(alternatives(fixture.get("home", ""))) > 1 or len(alternatives(fixture.get("away", ""))) > 1
+
+
+def side_matches(value, side):
+    return any(compatible(value, option) for option in alternatives(side))
+
+
+def fixture_matches_slot(fixture, slot):
+    return (
+        not is_conditional_fixture(fixture)
+        and side_matches(fixture.get("home", ""), slot.get("home", ""))
+        and side_matches(fixture.get("away", ""), slot.get("away", ""))
+    )
+
+
+def reconcile_active_conditionals(current_fixtures, official_fixtures):
+    """Collapse saved conditional slots only when the official current-round
+    fixture catalogue supplies exactly one compatible definite fixture.
+
+    Non-conditional saved fixtures are retained byte-for-byte in meaning. A
+    missing source match leaves the placeholder untouched; multiple matches fail
+    closed upstream. This makes same-round replay resolution a producer concern
+    rather than a Clubfinder-only inference.
+    """
+    final = []
+    transitions = []
+    metadata_updates = []
+    ambiguities = []
+    for saved in current_fixtures:
+        if not is_conditional_fixture(saved):
+            matches = [f for f in official_fixtures if fixture_matches_slot(f, saved)]
+            if len(matches) == 1:
+                source = matches[0]
+                refreshed = dict(saved)
+                changes = []
+                for field in ("date", "kickoff"):
+                    value = source.get(field)
+                    if value and value != saved.get(field):
+                        changes.append({"field": field, "from": saved.get(field, ""), "to": value})
+                        refreshed[field] = value
+                if changes:
+                    metadata_updates.append({
+                        "fixture": f'{saved.get("home")} v {saved.get("away")}',
+                        "changes": changes,
+                    })
+                final.append(refreshed)
+            else:
+                if len(matches) > 1:
+                    ambiguities.append({
+                        "slot": f'{saved.get("home")} v {saved.get("away")}',
+                        "matches": [f'{f.get("home")} v {f.get("away")}' for f in matches],
+                    })
+                final.append(dict(saved))
+            continue
+        matches = [f for f in official_fixtures if fixture_matches_slot(f, saved)]
+        if len(matches) > 1:
+            ambiguities.append({
+                "slot": f'{saved.get("home")} v {saved.get("away")}',
+                "matches": [f'{f.get("home")} v {f.get("away")}' for f in matches],
+            })
+            final.append(dict(saved))
+            continue
+        if not matches:
+            final.append(dict(saved))
+            continue
+        source = matches[0]
+        resolved = dict(saved)
+        resolved.update({
+            "round": saved.get("round") or source.get("round"),
+            "home": source["home"],
+            "away": source["away"],
+            "date": source.get("date") or saved.get("date", ""),
+            "kickoff": source.get("kickoff") or saved.get("kickoff", "15:00"),
+        })
+        resolved.pop("conditional", None)
+        transitions.append({
+            "from": f'{saved.get("home")} v {saved.get("away")}',
+            "to": f'{resolved.get("home")} v {resolved.get("away")}',
+        })
+        final.append(resolved)
+    return final, transitions, metadata_updates, ambiguities
+
+
+def diagnose_unresolved_conditionals(current_fixtures, official_fixtures):
+    diagnostics = []
+    for saved in current_fixtures:
+        if not is_conditional_fixture(saved):
+            continue
+        if any(fixture_matches_slot(f, saved) for f in official_fixtures):
+            continue
+        home_hits = [f for f in official_fixtures if side_matches(f.get("home", ""), saved.get("home", ""))]
+        away_hits = [f for f in official_fixtures if side_matches(f.get("away", ""), saved.get("away", ""))]
+        diagnostics.append({
+            "slot": f'{saved.get("home")} v {saved.get("away")}',
+            "home_side_official_candidates": [f'{f.get("home")} v {f.get("away")}' for f in home_hits],
+            "away_side_official_candidates": [f'{f.get("home")} v {f.get("away")}' for f in away_hits],
+        })
+    return diagnostics
+
+
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=35) as r:
-        return r.read().decode("utf-8", "replace")
+    waits = (2, 5)
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=35) as r:
+                return r.read().decode("utf-8", "replace")
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            transient = not isinstance(e, urllib.error.HTTPError) or e.code in {429, 500, 502, 503, 504}
+            if not transient or attempt == 2:
+                raise
+            wait = waits[attempt]
+            print(f"FA SOURCE RETRY: attempt {attempt + 1} failed ({e}); waiting {wait}s.")
+            time.sleep(wait)
 
 
 def round_from_context(context):
@@ -139,17 +323,31 @@ def parse_page(page_html):
         date = date_from_context(context)
         home = canonical_conditional(cells[vi - 1])
         away = canonical_conditional(cells[vi + 1])
-        kickoff = next((c for c in cells[:vi] if re.fullmatch(r"\d{1,2}:\d{2}", c)), "15:00")
+        kickoff = ""
+        for cell in cells[:vi]:
+            match = re.search(r"(?<!\d)([01]?\d|2[0-3]):[0-5]\d(?!\d)", cell)
+            if match:
+                kickoff = match.group(0)
+                break
         if rnd and home and away:
             rows.append({"round": rnd, "home": home, "away": away, "date": date, "kickoff": kickoff})
     return rows
 
 
+def fixture_key_text(value):
+    value = unicodedata.normalize("NFKC", value or "")
+    value = value.replace("\u00a0", " ").replace("\u200b", "").replace("\ufeff", "")
+    return norm(value)
+
+
 def unique_ties(rows):
     out = {}
     for r in rows:
-        k = (r["round"], norm(r["home"]), norm(r["away"]), r.get("date", ""))
-        out[k] = r
+        k = (fixture_key_text(r["round"]), fixture_key_text(r["home"]), fixture_key_text(r["away"]), r.get("date", ""))
+        existing = out.get(k)
+        replace = existing is None or (not existing.get("kickoff") and r.get("kickoff"))
+        if replace:
+            out[k] = r
     return list(out.values())
 
 
@@ -252,18 +450,95 @@ def main():
             fetch_stop = "empty-page"
             break
 
+    # Before looking for the next draw, allow the official fixture catalogue to
+    # collapse conditional slots in the *current* active round. This is the
+    # normal replay-resolution path: the machine updates its canonical fixture
+    # producer instead of relying on Clubfinder to infer the winner forever.
+    current_official = unique_ties([r for r in all_rows if r["round"] == current])
+
+    saved_current = fixture_values(data.get("fixtures") or {})
+    expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
+    source_complete = active_source_complete(current_official, expected_active_ties)
+    if not source_complete:
+        print(
+            "ACTIVE ROUND SOURCE INCOMPLETE:",
+            f"official={len(current_official)} expected={expected_active_ties}",
+        )
+        if args.publish:
+            write_report(
+                status="blocked",
+                current_round=current,
+                target_round=target,
+                pages_checked=pages_checked,
+                pagination_stop=fetch_stop,
+                active_round_official_ties=len(current_official),
+                active_round_expected_ties=expected_active_ties,
+                active_round_source_complete=False,
+            )
+            raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
+
+    refreshed_current, active_transitions, active_metadata_updates, active_ambiguities = reconcile_active_conditionals(
+        saved_current, current_official
+    )
+    active_unresolved = diagnose_unresolved_conditionals(saved_current, current_official)
+    if active_unresolved:
+        print(f"ACTIVE ROUND CONDITIONALS UNRESOLVED: {len(active_unresolved)}")
+        for diagnostic in active_unresolved:
+            print("UNRESOLVED:", diagnostic["slot"])
+            print("  HOME CANDIDATES:", diagnostic["home_side_official_candidates"] or ["none"])
+            print("  AWAY CANDIDATES:", diagnostic["away_side_official_candidates"] or ["none"])
+    if active_ambiguities:
+        write_report(
+            status="blocked",
+            current_round=current,
+            target_round=target,
+            pages_checked=pages_checked,
+            pagination_stop=fetch_stop,
+            active_round_official_ties=len(current_official),
+            active_round_ambiguities=active_ambiguities,
+            active_round_unresolved_diagnostics=active_unresolved,
+        )
+        raise SystemExit("Publication blocked: active-round conditional slots resolved ambiguously.")
+
+    active_published = False
+    if active_transitions:
+        print(f"ACTIVE ROUND CONDITIONALS RESOLVED: {len(active_transitions)}")
+        for transition in active_transitions:
+            print("RESOLVED:", transition["from"], "->", transition["to"])
+    if active_metadata_updates:
+        print(f"ACTIVE ROUND METADATA UPDATES: {len(active_metadata_updates)}")
+        for update in active_metadata_updates:
+            for change in update["changes"]:
+                print("METADATA:", update["fixture"], change["field"], change["from"], "->", change["to"])
+    if active_transitions or active_metadata_updates:
+        if args.publish:
+            data["fixtures"] = fixture_map(refreshed_current)
+            data["source_tie_count"] = len(refreshed_current)
+            data["source_url"] = OFFICIAL_SOURCE
+            data["updated_at"] = datetime.now(timezone.utc).isoformat()
+            DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+            active_published = True
+        else:
+            print("DRY RUN: active-round changes not written.")
+
     target_ties = unique_ties([r for r in all_rows if r["round"] == target])
     report = write_report(
-        status="detected" if target_ties else "no-new-draw",
+        status="detected" if target_ties else ("active-round-refreshed" if active_published else "no-new-draw"),
         current_round=current,
         target_round=target,
         target_ties_detected=len(target_ties),
         pages_checked=pages_checked,
         pagination_stop=fetch_stop,
-        published=False,
+        published=active_published,
+        active_round_official_ties=len(current_official),
+        active_round_conditional_resolutions=active_transitions,
+        active_round_metadata_updates=active_metadata_updates,
+        active_round_unresolved_diagnostics=active_unresolved,
     )
 
     if not target_ties:
+        if active_published:
+            print(f"ACTIVE ROUND REFRESH PUBLISHED: {len(active_transitions)} conditional slots collapsed; {len(active_metadata_updates)} metadata updates.")
         print(f"NO NEW DRAW: official Emirates FA Cup fixture pages do not yet expose {target}.")
         return
 

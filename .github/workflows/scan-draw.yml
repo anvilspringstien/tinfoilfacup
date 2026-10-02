@@ -13,6 +13,7 @@ on:
   push:
     paths:
       - "updater/auto_draw.py"
+      - "updater/active_conditional_refresh_regression.py"
       - ".github/workflows/scan-draw.yml"
 
 permissions:
@@ -29,7 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Detect and validate next official FA draw
+      - name: Guard active-round conditional resolution
+        run: python updater/active_conditional_refresh_regression.py
+
+      - name: Detect and validate official FA draw state
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_PUBLISH: ${{ inputs.publish }}
@@ -70,8 +74,9 @@ jobs:
               git reset
             else
               git commit -m "Auto-import validated FA Cup draw"
-              git pull --rebase origin main
-              git push
+              TARGET_BRANCH="$GITHUB_REF_NAME"
+              git pull --rebase origin "$TARGET_BRANCH"
+              git push origin "HEAD:$TARGET_BRANCH"
               echo "published=true" >> "$GITHUB_OUTPUT"
             fi
           fi
@@ -81,7 +86,7 @@ jobs:
       # promoted draw always gets the same chronology, Clubfinder and regression
       # checks as a human-authored competition.json change.
       - name: Dispatch Competition Health after promotion
-        if: ${{ steps.commit_draw.outputs.published == 'true' }}
+        if: ${{ steps.commit_draw.outputs.published == 'true' && github.ref_name == 'main' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run competition-health.yml --ref main

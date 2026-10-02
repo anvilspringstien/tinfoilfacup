@@ -1,14 +1,21 @@
 {
-  "checked_at": "2026-09-21T12:49:18.464800+00:00",
+  "checked_at": "2026-10-02T10:48:31.250408+00:00",
   "official_source": "https://www.thefa.com/competitions/thefacup/fixtures",
   "competition_id": 1,
-  "status": "published",
-  "current_round": "Second Round Qualifying",
-  "target_round": "Third Round Qualifying",
-  "target_ties_detected": 40,
+  "status": "active-round-refreshed",
+  "current_round": "Third Round Qualifying",
+  "target_round": "Fourth Round Qualifying",
+  "target_ties_detected": 0,
   "pages_checked": 6,
   "pagination_stop": "empty-page",
   "published": true,
-  "archived_outgoing_round": "Second Round Qualifying",
-  "archived_outgoing_ties": 80
+  "active_round_official_ties": 40,
+  "active_round_conditional_resolutions": [
+    {
+      "from": "Brentwood Town v Dagenham & Redbridge",
+      "to": "Brentwood Town v Dagenham & Redbridge",
+      "metadata_only": true
+    }
+  ],
+  "active_round_unresolved_diagnostics": []
 }
