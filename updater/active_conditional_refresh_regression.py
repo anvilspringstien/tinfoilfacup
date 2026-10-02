@@ -77,6 +77,8 @@ require(not compatible("Town United","Town Wanderers"),"unrelated club words mus
 require(not compatible("T","Trinity"),"single-letter token must not match independently")
 require(not compatible("G'borough X","Gainsborough Trinity"),"wrong contextual initial must not match")
 require(not compatible("A T","Another Trinity"),"initial-only club name must not match without substantive evidence")
+require(compatible("Win Finch","Wingate & Finchley"),"connective omission must preserve valid abbreviation match")
+require(not compatible("Win Town","Wingate & Finchley"),"ignoring connective must not hide a mismatched substantive token")
 
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
