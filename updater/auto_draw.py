@@ -114,8 +114,41 @@ def token_compatible(short_token, full_token):
     )
 
 
+def abbreviation_tokens(value):
+    tokens = norm(value).split()
+    # Apostrophe contractions such as G'borough normalize to ["g","borough"].
+    # Rejoin an initial with its retained suffix so it can be compared
+    # structurally with the full word without naming a specific club.
+    out = []
+    i = 0
+    while i < len(tokens):
+        if len(tokens[i]) == 1 and i + 1 < len(tokens) and len(tokens[i + 1]) >= 3:
+            out.append(tokens[i] + tokens[i + 1])
+            i += 2
+        else:
+            out.append(tokens[i])
+            i += 1
+    return out
+
+
+def token_compatible(short_token, full_token):
+    if short_token == full_token:
+        return True
+    if len(short_token) < 2:
+        return False
+    if (
+        len(short_token) >= 3 and full_token.startswith(short_token)
+    ) or (
+        len(full_token) >= 3 and short_token.startswith(full_token)
+    ):
+        return True
+    # Initial-plus-suffix contractions: gborough -> gainsborough.
+    shorter, longer = sorted((short_token, full_token), key=len)
+    return len(shorter) >= 4 and shorter[0] == longer[0] and longer.endswith(shorter[1:])
+
+
 def abbreviation_compatible(a, b):
-    aa, bb = norm(a).split(), norm(b).split()
+    aa, bb = abbreviation_tokens(a), abbreviation_tokens(b)
     if not aa or not bb or len(aa) != len(bb):
         return False
     return all(token_compatible(x, y) for x, y in zip(aa, bb))
