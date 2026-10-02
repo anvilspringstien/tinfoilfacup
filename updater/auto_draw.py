@@ -196,6 +196,7 @@ def reconcile_active_conditionals(current_fixtures, official_fixtures):
     """
     final = []
     transitions = []
+    metadata_updates = []
     ambiguities = []
     for saved in current_fixtures:
         if not is_conditional_fixture(saved):
@@ -203,17 +204,16 @@ def reconcile_active_conditionals(current_fixtures, official_fixtures):
             if len(matches) == 1:
                 source = matches[0]
                 refreshed = dict(saved)
-                changed = False
+                changes = []
                 for field in ("date", "kickoff"):
                     value = source.get(field)
                     if value and value != saved.get(field):
+                        changes.append({"field": field, "from": saved.get(field, ""), "to": value})
                         refreshed[field] = value
-                        changed = True
-                if changed:
-                    transitions.append({
-                        "from": f'{saved.get("home")} v {saved.get("away")}',
-                        "to": f'{refreshed.get("home")} v {refreshed.get("away")}',
-                        "metadata_only": True,
+                if changes:
+                    metadata_updates.append({
+                        "fixture": f'{saved.get("home")} v {saved.get("away")}',
+                        "changes": changes,
                     })
                 final.append(refreshed)
             else:
@@ -250,7 +250,7 @@ def reconcile_active_conditionals(current_fixtures, official_fixtures):
             "to": f'{resolved.get("home")} v {resolved.get("away")}',
         })
         final.append(resolved)
-    return final, transitions, ambiguities
+    return final, transitions, metadata_updates, ambiguities
 
 
 def diagnose_unresolved_conditionals(current_fixtures, official_fixtures):
@@ -477,7 +477,7 @@ def main():
             )
             raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
 
-    refreshed_current, active_transitions, active_ambiguities = reconcile_active_conditionals(
+    refreshed_current, active_transitions, active_metadata_updates, active_ambiguities = reconcile_active_conditionals(
         saved_current, current_official
     )
     active_unresolved = diagnose_unresolved_conditionals(saved_current, current_official)
@@ -505,6 +505,12 @@ def main():
         print(f"ACTIVE ROUND CONDITIONALS RESOLVED: {len(active_transitions)}")
         for transition in active_transitions:
             print("RESOLVED:", transition["from"], "->", transition["to"])
+    if active_metadata_updates:
+        print(f"ACTIVE ROUND METADATA UPDATES: {len(active_metadata_updates)}")
+        for update in active_metadata_updates:
+            for change in update["changes"]:
+                print("METADATA:", update["fixture"], change["field"], change["from"], "->", change["to"])
+    if active_transitions or active_metadata_updates:
         if args.publish:
             data["fixtures"] = fixture_map(refreshed_current)
             data["source_tie_count"] = len(refreshed_current)
@@ -513,7 +519,7 @@ def main():
             DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
             active_published = True
         else:
-            print("DRY RUN: active-round resolutions not written.")
+            print("DRY RUN: active-round changes not written.")
 
     target_ties = unique_ties([r for r in all_rows if r["round"] == target])
     report = write_report(
@@ -526,12 +532,13 @@ def main():
         published=active_published,
         active_round_official_ties=len(current_official),
         active_round_conditional_resolutions=active_transitions,
+        active_round_metadata_updates=active_metadata_updates,
         active_round_unresolved_diagnostics=active_unresolved,
     )
 
     if not target_ties:
         if active_published:
-            print(f"ACTIVE ROUND REFRESH PUBLISHED: {len(active_transitions)} conditional slots collapsed.")
+            print(f"ACTIVE ROUND REFRESH PUBLISHED: {len(active_transitions)} conditional slots collapsed; {len(active_metadata_updates)} metadata updates.")
         print(f"NO NEW DRAW: official Emirates FA Cup fixture pages do not yet expose {target}.")
         return
 
