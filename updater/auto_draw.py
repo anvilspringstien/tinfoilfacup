@@ -134,7 +134,21 @@ def abbreviation_compatible(a, b):
     aa, bb = abbreviation_tokens(a), abbreviation_tokens(b)
     if not aa or not bb or len(aa) != len(bb):
         return False
-    return all(token_compatible(x, y) for x, y in zip(aa, bb))
+
+    substantive = False
+    for x, y in zip(aa, bb):
+        if len(x) == 1 or len(y) == 1:
+            # A single-letter token is allowed only as one component of a
+            # multi-token club name, and only by matching the corresponding
+            # full token's initial. Another token must carry substantive proof.
+            if len(aa) < 2 or x[0] != y[0]:
+                return False
+            continue
+        if not token_compatible(x, y):
+            return False
+        if x != y or len(x) >= 3:
+            substantive = True
+    return substantive
 
 
 def compatible(a, b):
