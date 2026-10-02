@@ -81,6 +81,8 @@ require(compatible("Win Finch","Wingate & Finchley"),"connective omission must p
 require(not compatible("Win Town","Wingate & Finchley"),"ignoring connective must not hide a mismatched substantive token")
 require(compatible("Cray Wands","Cray Wanderers"),"guarded stem contraction must match")
 require(not compatible("Cray Wands","Cray Waltham"),"shared short opening must not match unrelated token")
+require(compatible("Thame Utd","Thame United"),"conventional Utd abbreviation must match")
+require(not compatible("Thame Utd","Thame University"),"Utd must not become generic Ut-prefix matching")
 
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
