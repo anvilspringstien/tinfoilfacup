@@ -74,8 +74,9 @@ jobs:
               git reset
             else
               git commit -m "Auto-import validated FA Cup draw"
-              git pull --rebase origin main
-              git push
+              TARGET_BRANCH="$GITHUB_REF_NAME"
+              git pull --rebase origin "$TARGET_BRANCH"
+              git push origin "HEAD:$TARGET_BRANCH"
               echo "published=true" >> "$GITHUB_OUTPUT"
             fi
           fi
@@ -85,7 +86,7 @@ jobs:
       # promoted draw always gets the same chronology, Clubfinder and regression
       # checks as a human-authored competition.json change.
       - name: Dispatch Competition Health after promotion
-        if: ${{ steps.commit_draw.outputs.published == 'true' }}
+        if: ${{ steps.commit_draw.outputs.published == 'true' && github.ref_name == 'main' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run competition-health.yml --ref main
