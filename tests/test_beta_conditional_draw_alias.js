@@ -52,6 +52,6 @@ for (const winner of [
   assert(ctx.liveConditionalFixtureForClub(winner),
     'No unique Third Qualifying draw for ' + winner);
 }
-assert(ctx.liveConditionalFixtureForClub('Hampton & Richmond Borough FC'),
-  'Hampton must see conditional draw while replay unresolved');
+assert.equal(ctx.liveConditionalFixtureForClub('Hampton & Richmond Borough FC'), null,
+  'Eliminated Hampton must not retain a resolved Third Qualifying draw');
 console.log('BETA conditional draw alias regression: PASS (Hampton, Weston, unrelated club)');
