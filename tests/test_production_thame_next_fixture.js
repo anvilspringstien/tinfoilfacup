@@ -31,11 +31,11 @@ vm.runInContext(between('function drawAlternatives(','function sameSemanticResul
 assert.equal(typeof ctx.tinFoilVerifiedThameNextFixture,'function');
 const fixture=Object.values(competition.fixtures||{}).find(f=>f&&
   f.round==='Third Round Qualifying'&&
-  f.home==='Thame Utd or Exmouth Town'&&f.away==='Eastbourne Borough');
-assert(fixture,'Actual published Thame conditional draw missing');
-const exmouthIndexed=ctx.liveLookup('fixtures','Exmouth Town FC');
-assert(exmouthIndexed&&exmouthIndexed.home==='Thame Utd or Exmouth Town',
-  'Exmouth direct fixture index missing: negative test would not exercise the defect');
+  f.home==='Thame United'&&f.away==='Eastbourne Borough');
+assert(fixture,'Actual published resolved Thame–Eastbourne draw missing');
+assert(!fixture.conditional,'Published Thame–Eastbourne fixture must not remain conditional');
+assert.equal(ctx.liveLookup('fixtures','Exmouth Town FC'),null,
+  'Losing Exmouth must not retain a direct Third Qualifying fixture index');
 const eastbourne=ctx.nextRoundInfo({name:'Eastbourne Borough FC',entry_round:'Second Round Qualifying'});
 assert(eastbourne.knownFixture,'Legitimate Eastbourne opposing fixture must survive the Exmouth guard');
 assert.equal(eastbourne.knownFixture.away,'Eastbourne Borough');
