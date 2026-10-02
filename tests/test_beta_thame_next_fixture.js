@@ -64,7 +64,8 @@ const duplicateEntries=Object.values(competition.fixtures||{}).filter(f=>f&&
 assert(duplicateEntries.length>=2,'Expected home/away index keys for one real FA tie');
 const bridged=ctx.tinFoilBetaVerifiedThameNextFixture(
   {name:'Thame United FC'},'Third Round Qualifying');
-assert(bridged&&bridged.home===fixture.home,'Verified Thame bridge lost the resolved fixture');
+assert.equal(bridged,null,
+  'Conditional-only Thame bridge must stand down once canonical draw is definite');
 // The losing club must not inherit the fixture through this bridge.
 assert.equal(ctx.nextRoundInfo(
   {name:'Exmouth Town FC',entry_round:'Second Round Qualifying'},true
