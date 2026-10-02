@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Regression for generic active-round conditional fixture collapse."""
+import urllib.error
+from unittest.mock import patch
+import auto_draw
 from auto_draw import reconcile_active_conditionals
 
 def require(ok,msg):
@@ -34,6 +37,32 @@ amb_source=[
 final,transitions,ambiguities=reconcile_active_conditionals(unresolved,amb_source)
 require(len(ambiguities)==1 and not transitions,"multiple compatible official fixtures must fail closed")
 
+calls=[0]
+class Response:
+    def __enter__(self): return self
+    def __exit__(self,*args): return False
+    def read(self): return b"ok"
+def flaky(*args,**kwargs):
+    calls[0]+=1
+    if calls[0] < 3:
+        raise urllib.error.HTTPError("https://example.invalid",504,"Gateway Time-out",None,None)
+    return Response()
+with patch.object(auto_draw.urllib.request,"urlopen",side_effect=flaky), patch.object(auto_draw.time,"sleep") as sleep:
+    require(auto_draw.fetch("https://example.invalid")=="ok","transient source failure should recover")
+    require(calls[0]==3 and [c.args[0] for c in sleep.call_args_list]==[2,5],"retry schedule must be 2s then 5s")
+
+calls[0]=0
+def dead(*args,**kwargs):
+    calls[0]+=1
+    raise urllib.error.HTTPError("https://example.invalid",504,"Gateway Time-out",None,None)
+with patch.object(auto_draw.urllib.request,"urlopen",side_effect=dead), patch.object(auto_draw.time,"sleep") as sleep:
+    try:
+        auto_draw.fetch("https://example.invalid")
+        require(False,"persistent transient failure must fail closed")
+    except urllib.error.HTTPError:
+        pass
+    require(calls[0]==3 and sleep.call_count==2,"persistent failure must stop after three attempts")
+
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
 print("Double-conditional resolution: PASS")
@@ -41,3 +70,6 @@ print("Official kickoff promotion: PASS")
 print("Ordinary fixture preservation: PASS")
 print("Missing evidence retains placeholder: PASS")
 print("Ambiguity fails closed: PASS")
+
+print("Transient source retry: PASS")
+print("Persistent source failure fails closed: PASS")
