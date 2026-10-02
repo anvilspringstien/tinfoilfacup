@@ -18,7 +18,7 @@ official=[
     {"round":"Third Round Qualifying","home":"Beta FC","away":"Fixed Town","date":"2026-10-03","kickoff":"15:00"},
     {"round":"Third Round Qualifying","home":"Delta","away":"Zeta AFC","date":"2026-10-03","kickoff":"12:30"},
 ]
-final,transitions,ambiguities=reconcile_active_conditionals(saved,official)
+final,transitions,metadata_updates,ambiguities=reconcile_active_conditionals(saved,official)
 require(not ambiguities,"unique official resolutions must not be ambiguous")
 require(len(transitions)==2,"both single- and double-conditional slots should collapse")
 require(final[0]["home"]=="Beta FC" and "conditional" not in final[0],"single conditional did not collapse")
@@ -28,11 +28,13 @@ require(final[2]==saved[2],"ordinary fixture metadata must remain untouched when
 
 definite_saved=[{"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"15:00"}]
 definite_official=[{"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"12:30"}]
-definite_final,definite_changes,definite_ambiguities=reconcile_active_conditionals(definite_saved,definite_official)
+definite_final,definite_changes,definite_metadata,definite_ambiguities=reconcile_active_conditionals(definite_saved,definite_official)
 require(not definite_ambiguities,"unique definite fixture metadata refresh must not be ambiguous")
 require(definite_final[0]["home"]=="Brentwood Town" and definite_final[0]["away"]=="Dagenham & Redbridge","metadata refresh must never change participants")
 require(definite_final[0]["kickoff"]=="12:30","definite active fixture must accept authoritative kickoff refresh")
-require(len(definite_changes)==1 and definite_changes[0].get("metadata_only"),"definite metadata refresh must be reported")
+require(not definite_changes,"definite metadata refresh must not be reported as a conditional resolution")
+require(len(definite_metadata)==1,"definite metadata refresh must be reported separately")
+require(definite_metadata[0]["changes"]==[{"field":"kickoff","from":"15:00","to":"12:30"}],"metadata report must show the exact kickoff change")
 
 
 fa_row_html = """<tr><td>12:30</td><td>22</td><td>Brentwood Town</td><td>VS</td><td>Dagenham &amp; Redbridge</td><td>information</td></tr>"""
@@ -48,14 +50,14 @@ require(len(duplicate_ties)==1 and duplicate_ties[0]["kickoff"]=="12:30","duplic
 
 
 unresolved=[{"round":"Third Round Qualifying","home":"One or Two","away":"Three","conditional":True}]
-final,transitions,ambiguities=reconcile_active_conditionals(unresolved,[])
+final,transitions,_metadata,ambiguities=reconcile_active_conditionals(unresolved,[])
 require(final==unresolved and not transitions and not ambiguities,"missing source evidence must retain placeholder")
 
 amb_source=[
     {"round":"Third Round Qualifying","home":"One","away":"Three"},
     {"round":"Third Round Qualifying","home":"Two","away":"Three"},
 ]
-final,transitions,ambiguities=reconcile_active_conditionals(unresolved,amb_source)
+final,transitions,_metadata,ambiguities=reconcile_active_conditionals(unresolved,amb_source)
 require(len(ambiguities)==1 and not transitions,"multiple compatible official fixtures must fail closed")
 
 calls=[0]
