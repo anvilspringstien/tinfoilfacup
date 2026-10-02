@@ -12,6 +12,7 @@ import argparse
 import html as H
 import json
 import re
+import time
 import urllib.error
 import urllib.request
 from collections import Counter
@@ -181,8 +182,18 @@ def diagnose_unresolved_conditionals(current_fixtures, official_fixtures):
 
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=35) as r:
-        return r.read().decode("utf-8", "replace")
+    waits = (2, 5)
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=35) as r:
+                return r.read().decode("utf-8", "replace")
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            transient = not isinstance(e, urllib.error.HTTPError) or e.code in {429, 500, 502, 503, 504}
+            if not transient or attempt == 2:
+                raise
+            wait = waits[attempt]
+            print(f"FA SOURCE RETRY: attempt {attempt + 1} failed ({e}); waiting {wait}s.")
+            time.sleep(wait)
 
 
 def round_from_context(context):
