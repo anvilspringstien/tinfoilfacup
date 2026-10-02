@@ -3,7 +3,7 @@
 import urllib.error
 from unittest.mock import patch
 import auto_draw
-from auto_draw import reconcile_active_conditionals
+from auto_draw import reconcile_active_conditionals, compatible
 
 def require(ok,msg):
     if not ok:
@@ -63,6 +63,18 @@ with patch.object(auto_draw.urllib.request,"urlopen",side_effect=dead), patch.ob
         pass
     require(calls[0]==3 and sleep.call_count==2,"persistent failure must stop after three attempts")
 
+
+real_abbreviations=[
+    ("G'borough T","Gainsborough Trinity"),
+    ("Win Finch","Wingate & Finchley"),
+    ("Dag & Red","Dagenham & Redbridge"),
+    ("Cray Wands","Cray Wanderers"),
+    ("Thame Utd","Thame United"),
+]
+for short,full in real_abbreviations:
+    require(compatible(short,full),f"FA abbreviation not recognized: {short} -> {full}")
+require(not compatible("Town United","Town Wanderers"),"unrelated club words must not match")
+
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
 print("Double-conditional resolution: PASS")
@@ -73,3 +85,4 @@ print("Ambiguity fails closed: PASS")
 
 print("Transient source retry: PASS")
 print("Persistent source failure fails closed: PASS")
+print("Real FA abbreviation forms: PASS")
