@@ -97,9 +97,37 @@ def alternatives(s):
     return [p.strip() for p in re.split(r"\s+or\s+", s or "", flags=re.I) if p.strip()]
 
 
+def token_compatible(short_token, full_token):
+    if short_token == full_token:
+        return True
+    if len(short_token) < 2:
+        return False
+    # FA draw labels often shorten a club-name word (Utd/United,
+    # Wands/Wanderers, G'borough/Gainsborough). Require a substantial
+    # shared prefix; this is abbreviation expansion, not fuzzy spelling.
+    return (
+        len(short_token) >= 3
+        and full_token.startswith(short_token)
+    ) or (
+        len(full_token) >= 3
+        and short_token.startswith(full_token)
+    )
+
+
+def abbreviation_compatible(a, b):
+    aa, bb = norm(a).split(), norm(b).split()
+    if not aa or not bb or len(aa) != len(bb):
+        return False
+    return all(token_compatible(x, y) for x, y in zip(aa, bb))
+
+
 def compatible(a, b):
     a, b = norm(a), norm(b)
-    return bool(a and b and (a == b or a.startswith(b + " ") or b.startswith(a + " ")))
+    if not a or not b:
+        return False
+    if a == b or a.startswith(b + " ") or b.startswith(a + " "):
+        return True
+    return abbreviation_compatible(a, b)
 
 
 def is_conditional_fixture(fixture):
