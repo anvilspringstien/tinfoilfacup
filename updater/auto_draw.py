@@ -340,7 +340,15 @@ def unique_ties(rows):
     for r in rows:
         k = (fixture_key_text(r["round"]), fixture_key_text(r["home"]), fixture_key_text(r["away"]), r.get("date", ""))
         existing = out.get(k)
-        if existing is None or (not existing.get("kickoff") and r.get("kickoff")):
+        replace = existing is None or (not existing.get("kickoff") and r.get("kickoff"))
+        if "brentwood" in fixture_key_text(r.get("home", "")) or "dagenham" in fixture_key_text(r.get("away", "")):
+            print("FA DEDUPE DECISION:", {
+                "key": k,
+                "existing_kickoff": existing.get("kickoff") if existing else None,
+                "incoming_kickoff": r.get("kickoff"),
+                "replace": replace,
+            })
+        if replace:
             out[k] = r
     return list(out.values())
 
