@@ -164,6 +164,10 @@ def compatible(a, b):
     return abbreviation_compatible(a, b)
 
 
+def active_source_complete(official_ties, expected_ties):
+    return len(official_ties) == int(expected_ties)
+
+
 def is_conditional_fixture(fixture):
     return len(alternatives(fixture.get("home", ""))) > 1 or len(alternatives(fixture.get("away", ""))) > 1
 
@@ -415,8 +419,8 @@ def main():
     current_official = unique_ties([r for r in all_rows if r["round"] == current])
     saved_current = fixture_values(data.get("fixtures") or {})
     expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
-    active_source_complete = len(current_official) == expected_active_ties
-    if not active_source_complete:
+    source_complete = active_source_complete(current_official, expected_active_ties)
+    if not source_complete:
         print(
             "ACTIVE ROUND SOURCE INCOMPLETE:",
             f"official={len(current_official)} expected={expected_active_ties}",
