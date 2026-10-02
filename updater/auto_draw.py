@@ -117,6 +117,9 @@ def abbreviation_tokens(value):
 def token_compatible(short_token, full_token):
     if short_token == full_token:
         return True
+    conventional = {("utd", "united"), ("united", "utd")}
+    if (short_token, full_token) in conventional:
+        return True
     if len(short_token) < 2:
         return False
     if (len(short_token) >= 3 and full_token.startswith(short_token)) or (len(full_token) >= 3 and short_token.startswith(full_token)):
