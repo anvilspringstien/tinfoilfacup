@@ -309,7 +309,9 @@ def unique_ties(rows):
     out = {}
     for r in rows:
         k = (r["round"], norm(r["home"]), norm(r["away"]), r.get("date", ""))
-        out[k] = r
+        existing = out.get(k)
+        if existing is None or (not existing.get("kickoff") and r.get("kickoff")):
+            out[k] = r
     return list(out.values())
 
 
