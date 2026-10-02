@@ -323,6 +323,10 @@ def parse_page(page_html):
         home = canonical_conditional(cells[vi - 1])
         away = canonical_conditional(cells[vi + 1])
         kickoff = next((c for c in cells[:vi] if re.fullmatch(r"\d{1,2}:\d{2}", c)), "")
+        if "brentwood" in norm(home) or "dagenham" in norm(away):
+            diagnostic_row = clean(row)
+            print("FA ROW DIAGNOSTIC:", {"cells": cells, "clean_row": diagnostic_row[:1000], "parsed_kickoff": kickoff})
+
         if rnd and home and away:
             rows.append({"round": rnd, "home": home, "away": away, "date": date, "kickoff": kickoff})
     return rows
