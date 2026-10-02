@@ -114,6 +114,46 @@ noisy_duplicates=[
 noisy_unique=unique_ties(noisy_duplicates)
 require(len(noisy_unique)==1,"Unicode/HTML whitespace noise must not split one official fixture")
 require(noisy_unique[0].get("kickoff")=="12:30","explicit kickoff must survive a noisy blank duplicate")
+
+# Acceptance: the exact eleven stale Third Round Qualifying conditional slots
+# present in protected main at PR creation must collapse as one set.
+stale_trq = [
+    {"round":"Third Round Qualifying","home":"Leamington or G'borough T","away":"Anstey Nomads","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"AFC Telford or Worksop","away":"FC United of Manchester","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Bedford Town","away":"Hemel H or Win Finch","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Brentwood Town","away":"Waltham A or Dag & Red","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"AFC Rushden & Diamonds","away":"Needham M or Braintree","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Southall or Dorking Wanderers","away":"Chatham Town","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Merthyr or Truro City","away":"Cirencester or Farnham","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Cray Wands or Maidstone","away":"Yate Town or Chippenham","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Hamp & Rich or Crowborough","away":"Weston SM or Wimborne","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Uxbridge or Farnborough","away":"Hungerford Town","date":"2026-10-03","kickoff":"15:00","conditional":True},
+    {"round":"Third Round Qualifying","home":"Thame Utd or Exmouth Town","away":"Eastbourne Borough","date":"2026-10-03","kickoff":"15:00","conditional":True},
+]
+resolved_trq = [
+    {"round":"Third Round Qualifying","home":"Gainsborough Trinity","away":"Anstey Nomads","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Worksop Town","away":"FC United of Manchester","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Bedford Town","away":"Wingate & Finchley","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"12:30"},
+    {"round":"Third Round Qualifying","home":"AFC Rushden & Diamonds","away":"Braintree Town","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Dorking Wanderers","away":"Chatham Town","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Truro City","away":"Cirencester Town","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Cray Wanderers","away":"Chippenham Town","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Crowborough Athletic","away":"Wimborne Town","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Uxbridge","away":"Hungerford Town","date":"2026-10-03","kickoff":"15:00"},
+    {"round":"Third Round Qualifying","home":"Thame United","away":"Eastbourne Borough","date":"2026-10-03","kickoff":"15:00"},
+]
+accepted, accepted_transitions, accepted_metadata, accepted_ambiguities = reconcile_active_conditionals(stale_trq, resolved_trq)
+require(not accepted_ambiguities, "eleven-slot TRQ acceptance set must resolve without ambiguity")
+require(len(accepted_transitions) == 11, "all eleven stale TRQ conditional slots must collapse")
+require(not accepted_metadata, "conditional acceptance set must not masquerade as definite metadata refresh")
+require(all("conditional" not in fixture for fixture in accepted), "no conditional flag may survive eleven-slot acceptance")
+expected_pairs = [(fixture["home"], fixture["away"]) for fixture in resolved_trq]
+actual_pairs = [(fixture["home"], fixture["away"]) for fixture in accepted]
+require(actual_pairs == expected_pairs, "eleven-slot TRQ participant identities must match the verified definite fixtures")
+require(accepted[3]["kickoff"] == "12:30", "Brentwood acceptance fixture must carry authoritative 12:30 kickoff")
+print("Eleven-slot TRQ acceptance: PASS")
+
 print("Noisy duplicate fixture identity: PASS")
 
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
