@@ -26,6 +26,18 @@ require(final[1]["home"]=="Delta" and final[1]["away"]=="Zeta AFC","double condi
 require(final[1]["kickoff"]=="12:30","official kickoff change was not promoted")
 require(final[2]==saved[2],"ordinary fixture metadata must remain untouched")
 
+fa_row_html = """<tr><td>12:30</td><td>22</td><td>Brentwood Town</td><td>VS</td><td>Dagenham &amp; Redbridge</td><td>information</td></tr>"""
+fa_context = "<h2>Saturday 3 October 2026 | Third Round Qualifying</h2>" + fa_row_html
+parsed = auto_draw.parse_page(fa_context)
+require(parsed and parsed[0]["kickoff"]=="12:30","explicit FA kickoff must be parsed, not defaulted")
+
+duplicate_ties = auto_draw.unique_ties([
+    {"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"12:30"},
+    {"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":""},
+])
+require(len(duplicate_ties)==1 and duplicate_ties[0]["kickoff"]=="12:30","duplicate FA row without kickoff must not overwrite explicit kickoff")
+
+
 unresolved=[{"round":"Third Round Qualifying","home":"One or Two","away":"Three","conditional":True}]
 final,transitions,ambiguities=reconcile_active_conditionals(unresolved,[])
 require(final==unresolved and not transitions and not ambiguities,"missing source evidence must retain placeholder")
@@ -88,6 +100,8 @@ print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
 print("Double-conditional resolution: PASS")
 print("Official kickoff promotion: PASS")
+print("Explicit FA kickoff parsing: PASS")
+print("Duplicate kickoff preservation: PASS")
 print("Ordinary fixture preservation: PASS")
 print("Missing evidence retains placeholder: PASS")
 print("Ambiguity fails closed: PASS")
