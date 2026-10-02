@@ -105,12 +105,13 @@ const assertions=`
       throw new Error('Replay regression: Thame should become custodian after verified Exmouth 1–3 Thame replay; got '+exmouthCarrier.name);
     const thameDraw=canonicalFixtures.find(f=>
       String(f.round||'')==='Third Round Qualifying'&&
-      /Thame Utd or Exmouth Town/i.test(String(f.home||'')+' | '+String(f.away||''))&&
-      /Eastbourne Borough/i.test(String(f.home||'')+' | '+String(f.away||'')));
-    if(!thameDraw)throw new Error('Replay regression: conditional Thame–Eastbourne Third Qualifying draw missing');
+      same(f.home,'Thame United')&&same(f.away,'Eastbourne Borough'));
+    if(!thameDraw)throw new Error('Replay regression: definite Thame United–Eastbourne Borough Third Qualifying fixture missing');
+    if(thameDraw.conditional)
+      throw new Error('Replay regression: published Thame–Eastbourne fixture must no longer be conditional');
     const resolved=resolveLiveFixtureForCarrier(thameDraw,exmouthCarrier);
     if(!resolved||!same(resolved.home,'Thame United')||!same(resolved.away,'Eastbourne Borough')||resolved.conditional)
-      throw new Error('Replay regression: verified Thame winner did not resolve Third Qualifying fixture');
+      throw new Error('Replay regression: definite Thame–Eastbourne fixture did not remain resolved');
   }else if(!same(exmouthCarrier.name,'Exmouth Town')){
     throw new Error('Replay regression: Exmouth should remain custodian until a published Second Qualifying result advances it');
   }
