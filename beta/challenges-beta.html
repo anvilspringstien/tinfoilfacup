@@ -13,7 +13,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:#141210;color:#f3e6c7;font-family:Georgia,"Times New Roman",serif}
 body{background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed}
-button{font:inherit}
+button{font:inherit;touch-action:manipulation}
 .app{min-height:100vh;padding:32px 18px 60px}
 .shell{max-width:980px;margin:auto}
 .actions{display:flex;justify-content:center;margin-top:26px}
@@ -23,14 +23,14 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .secondary{background:white;border:1px solid #ddd;border-radius:10px;padding:10px 15px;cursor:pointer}
 .statusline{margin:14px 3px 0;font:13px/1.4 Arial,sans-serif;opacity:.75}
 .deckcabwrap{width:100%;max-width:330px;margin:8px auto 0}.deckcabhead{display:flex;align-items:center;justify-content:space-between;padding:0 3px 6px;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#bcae95}
-.deckcabinet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding:2px 4px 8px 2px;touch-action:pan-y}
+.deckcabinet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding:2px 4px 8px 2px;touch-action:manipulation}
 .trophy-slot{position:relative;min-width:0;width:100%;aspect-ratio:1 / 1;border:1px solid #554b3d;background:#1b1814;border-radius:9px;padding:4px;overflow:hidden;cursor:default}
 
 /* BETA Trophy inspection: independent of the live Challenge Deck. */
 .trophy-viewer[hidden]{display:none!important}
-.trophy-viewer{position:fixed;inset:0;z-index:90;background:rgba(6,7,7,.89);display:flex;align-items:center;justify-content:center;overflow:auto;overscroll-behavior:contain;touch-action:none;padding:16px}
+.trophy-viewer{position:fixed;inset:0;z-index:90;background:rgba(6,7,7,.89);display:flex;align-items:center;justify-content:center;overflow:auto;overscroll-behavior:contain;touch-action:manipulation;padding:16px}
 .trophy-viewer-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%;animation:trophy-view-in .2s ease-out both}
-.trophy-viewer-mat{width:min(640px,90vw,calc(100dvh - 110px));aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
+.trophy-viewer-mat{width:min(610px,96vw,calc(100dvh - 110px));aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
 .trophy-viewer-mat:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px;border-radius:15px}
 .trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1)}
 .trophy-viewer-card.flipped{transform:rotateX(180deg)}
@@ -47,11 +47,11 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .overlay{position:fixed;inset:0;background:rgba(8,9,9,.94);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .overlay::-webkit-scrollbar{display:none;width:0;height:0}
 .overlay.open{display:flex}
-.deck{width:min(1020px,100%);min-height:min(880px,94vh);height:auto;margin:auto;background:#100f0d;border:1px solid #332d26;border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.72);display:block;overflow:visible}
+.deck{width:min(1020px,100%);min-height:min(880px,94vh);height:auto;margin:auto;background:#100f0d;border:1px solid #332d26;border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.72);display:block;overflow:visible;user-select:none;-webkit-user-select:none}
 .deckbody{height:min(660px,calc(94vh - 220px));min-height:300px;display:flex;align-items:center;justify-content:center;padding:10px 14px 18px;overflow:hidden;background:#100f0d}
 .nav{width:52px;height:52px;border-radius:50%;border:2px solid #241e17;background:#f1dfb2;font-size:28px;cursor:pointer;justify-self:center;flex:0 0 auto}
 .nav[disabled]{opacity:.35;cursor:not-allowed}
-.cardstage{height:100%;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;perspective:1500px;touch-action:pan-y}
+.cardstage{height:100%;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;perspective:1500px;touch-action:manipulation}
 .flipcard{width:min(650px,92vw,calc(94vh - 330px));height:auto;aspect-ratio:1;position:relative;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1);cursor:pointer;outline:none}
 .flipcard.instant-reset{transition:none!important}
 .flipcard:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px}
