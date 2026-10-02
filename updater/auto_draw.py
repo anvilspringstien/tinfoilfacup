@@ -323,7 +323,12 @@ def parse_page(page_html):
         date = date_from_context(context)
         home = canonical_conditional(cells[vi - 1])
         away = canonical_conditional(cells[vi + 1])
-        kickoff = next((c for c in cells[:vi] if re.fullmatch(r"\d{1,2}:\d{2}", c)), "")
+        kickoff = ""
+        for cell in cells[:vi]:
+            match = re.search(r"(?<!\\d)([01]?\\d|2[0-3]):[0-5]\\d(?!\\d)", cell)
+            if match:
+                kickoff = match.group(0)
+                break
         if rnd and home and away:
             rows.append({"round": rnd, "home": home, "away": away, "date": date, "kickoff": kickoff})
     return rows
@@ -341,13 +346,6 @@ def unique_ties(rows):
         k = (fixture_key_text(r["round"]), fixture_key_text(r["home"]), fixture_key_text(r["away"]), r.get("date", ""))
         existing = out.get(k)
         replace = existing is None or (not existing.get("kickoff") and r.get("kickoff"))
-        if "brentwood" in fixture_key_text(r.get("home", "")) or "dagenham" in fixture_key_text(r.get("away", "")):
-            print("FA DEDUPE DECISION:", {
-                "key": k,
-                "existing_kickoff": existing.get("kickoff") if existing else None,
-                "incoming_kickoff": r.get("kickoff"),
-                "replace": replace,
-            })
         if replace:
             out[k] = r
     return list(out.values())
