@@ -119,15 +119,17 @@ def token_compatible(short_token, full_token):
         return True
     if len(short_token) < 2:
         return False
-    if (
-        len(short_token) >= 3 and full_token.startswith(short_token)
-    ) or (
-        len(full_token) >= 3 and short_token.startswith(full_token)
-    ):
+    if (len(short_token) >= 3 and full_token.startswith(short_token)) or (len(full_token) >= 3 and short_token.startswith(full_token)):
         return True
-    # Initial-plus-suffix contractions: gborough -> gainsborough.
     shorter, longer = sorted((short_token, full_token), key=len)
-    if len(shorter) >= 4 and shorter[0] == longer[0] and longer.endswith(shorter[1:]):\n        return True\n    common = 0\n    for left, right in zip(shorter, longer):\n        if left != right:\n            break\n        common += 1\n    return common >= 4 and len(shorter) >= 5 and len(longer) >= 6\n
+    if len(shorter) >= 4 and shorter[0] == longer[0] and longer.endswith(shorter[1:]):
+        return True
+    common = 0
+    for left, right in zip(shorter, longer):
+        if left != right:
+            break
+        common += 1
+    return common >= 4 and len(shorter) >= 5 and len(longer) >= 6
 
 def abbreviation_compatible(a, b):
     aa, bb = abbreviation_tokens(a), abbreviation_tokens(b)
