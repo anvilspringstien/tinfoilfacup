@@ -24,7 +24,16 @@ require(len(transitions)==2,"both single- and double-conditional slots should co
 require(final[0]["home"]=="Beta FC" and "conditional" not in final[0],"single conditional did not collapse")
 require(final[1]["home"]=="Delta" and final[1]["away"]=="Zeta AFC","double conditional did not collapse")
 require(final[1]["kickoff"]=="12:30","official kickoff change was not promoted")
-require(final[2]==saved[2],"ordinary fixture metadata must remain untouched")
+require(final[2]==saved[2],"ordinary fixture metadata must remain untouched when official metadata agrees")
+
+definite_saved=[{"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"15:00"}]
+definite_official=[{"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"12:30"}]
+definite_final,definite_changes,definite_ambiguities=reconcile_active_conditionals(definite_saved,definite_official)
+require(not definite_ambiguities,"unique definite fixture metadata refresh must not be ambiguous")
+require(definite_final[0]["home"]=="Brentwood Town" and definite_final[0]["away"]=="Dagenham & Redbridge","metadata refresh must never change participants")
+require(definite_final[0]["kickoff"]=="12:30","definite active fixture must accept authoritative kickoff refresh")
+require(len(definite_changes)==1 and definite_changes[0].get("metadata_only"),"definite metadata refresh must be reported")
+
 
 fa_row_html = """<tr><td>12:30</td><td>22</td><td>Brentwood Town</td><td>VS</td><td>Dagenham &amp; Redbridge</td><td>information</td></tr>"""
 fa_context = "<h2>Saturday 3 October 2026 | Third Round Qualifying</h2>" + fa_row_html
@@ -103,6 +112,7 @@ print("Official kickoff promotion: PASS")
 print("Explicit FA kickoff parsing: PASS")
 print("Duplicate kickoff preservation: PASS")
 print("Ordinary fixture preservation: PASS")
+print("Definite fixture metadata refresh: PASS")
 print("Missing evidence retains placeholder: PASS")
 print("Ambiguity fails closed: PASS")
 
