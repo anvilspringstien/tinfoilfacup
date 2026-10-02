@@ -356,6 +356,12 @@ def main():
         saved_current, current_official
     )
     active_unresolved = diagnose_unresolved_conditionals(saved_current, current_official)
+    if active_unresolved:
+        print(f"ACTIVE ROUND CONDITIONALS UNRESOLVED: {len(active_unresolved)}")
+        for diagnostic in active_unresolved:
+            print("UNRESOLVED:", diagnostic["slot"])
+            print("  HOME CANDIDATES:", diagnostic["home_side_official_candidates"] or ["none"])
+            print("  AWAY CANDIDATES:", diagnostic["away_side_official_candidates"] or ["none"])
     if active_ambiguities:
         write_report(
             status="blocked",
