@@ -127,8 +127,7 @@ def token_compatible(short_token, full_token):
         return True
     # Initial-plus-suffix contractions: gborough -> gainsborough.
     shorter, longer = sorted((short_token, full_token), key=len)
-    return len(shorter) >= 4 and shorter[0] == longer[0] and longer.endswith(shorter[1:])
-
+    if len(shorter) >= 4 and shorter[0] == longer[0] and longer.endswith(shorter[1:]):\n        return True\n    common = 0\n    for left, right in zip(shorter, longer):\n        if left != right:\n            break\n        common += 1\n    return common >= 4 and len(shorter) >= 5 and len(longer) >= 6\n
 
 def abbreviation_compatible(a, b):
     aa, bb = abbreviation_tokens(a), abbreviation_tokens(b)
