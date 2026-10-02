@@ -3,7 +3,7 @@
 import urllib.error
 from unittest.mock import patch
 import auto_draw
-from auto_draw import reconcile_active_conditionals, compatible
+from auto_draw import reconcile_active_conditionals, compatible, active_source_complete
 
 def require(ok,msg):
     if not ok:
@@ -94,4 +94,7 @@ print("Ambiguity fails closed: PASS")
 
 print("Transient source retry: PASS")
 print("Persistent source failure fails closed: PASS")
+require(active_source_complete([{"tie": 1}, {"tie": 2}], 2),"complete active-round source must pass")
+require(not active_source_complete([{"tie": 1}], 2),"partial active-round source must fail closed")
+print("Active-round source completeness: PASS")
 print("Real FA abbreviation forms: PASS")
