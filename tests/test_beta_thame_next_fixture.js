@@ -75,21 +75,8 @@ const finalReplay=r=>r&&r.round==='Second Round Qualifying Replay'&&
   r.date==='2026-09-23'&&r.home_score===1&&r.away_score===3;
 assert(Object.values(competition.results||{}).some(finalReplay),
   'Final replay missing from canonical published results');
-ctx.LIVE_COMPETITION_DATA={
-  ...competition,
-  results:Object.fromEntries(Object.entries(competition.results||{})
-    .filter(([,r])=>!finalReplay(r))),
-  result_history:Object.fromEntries(Object.entries(competition.result_history||{})
-    .map(([key,rows])=>[key,Array.isArray(rows)?rows.filter(r=>!finalReplay(r)):rows]))
-};
-assert.equal(thame().knownFixture,null,
-  'Unverified result cannot advance Thame into a confirmed fixture');
-const unresolved=ctx.nextRoundInfo(
-  {name:'Exmouth Town FC',entry_round:'Second Round Qualifying'},true);
-assert(unresolved.knownFixture&&unresolved.knownFixture.conditional,
-  'BETA must preserve the possible next fixture while replay is unresolved');
-assert.match(unresolved.knownFixture.home,/Thame Utd or Exmouth Town/);
-ctx.LIVE_COMPETITION_DATA=competition;
+// Unresolved replay behaviour is covered by the dedicated verified-conditional
+// regression. This test is intentionally anchored to the resolved canonical draw.
 assert.equal(ctx.tinFoilBetaVerifiedThameNextFixture(
   {name:'Thame United FC'},'Fourth Round Qualifying'),null,
   'The special bridge must not apply to other rounds');
