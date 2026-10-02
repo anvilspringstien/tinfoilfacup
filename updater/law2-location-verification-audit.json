@@ -2,12 +2,12 @@
   "season": "2026-27",
   "added_law2_origins": 160,
   "counts": {
-    "review-supporting-evidence": 11,
+    "review-supporting-evidence": 10,
     "verified-canonical": 6,
-    "verified-supplemental": 143
+    "verified-supplemental": 144
   },
   "remaining_review_by_entry_round": {
-    "First Round Qualifying": 5,
+    "First Round Qualifying": 4,
     "Fourth Round Qualifying": 3,
     "Second Round Qualifying": 3
   },
@@ -551,10 +551,10 @@
     {
       "club": "Gloucester City FC",
       "entry_round": "First Round Qualifying",
-      "state": "review-supporting-evidence",
-      "ground": "Tiger Turf Stadium",
-      "postcode": "GL2 5FD",
-      "source": "Law 2 supporting home-ground evidence; not automatically verified"
+      "state": "verified-supplemental",
+      "ground": "The KMM Energy Stadium",
+      "postcode": "GL2 5HD",
+      "source": "Guarded Law 2 verified-location ledger"
     },
     {
       "club": "Gosport Borough FC",
