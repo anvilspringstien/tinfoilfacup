@@ -38,14 +38,13 @@ assert.equal(typeof ctx.tinFoilBetaVerifiedThameNextFixture,'function',
   'The isolated Thame fixture bridge was not installed');
 const fixture=Object.values(competition.fixtures||{}).find(f=>f&&
   f.round==='Third Round Qualifying'&&
-  f.home==='Thame Utd or Exmouth Town'&&f.away==='Eastbourne Borough');
-assert(fixture,'Actual published Third Qualifying draw not found');
-const exmouthIndex=ctx.liveLookup('fixtures','Exmouth Town FC');
-assert(exmouthIndex&&exmouthIndex.home===fixture.home,
-  'Exmouth direct index unavailable: regression would miss original defect');
-const exmouthConditional=ctx.liveConditionalFixtureForClub('Exmouth Town FC');
-assert(exmouthConditional&&exmouthConditional.home===fixture.home,
-  'Exmouth conditional index unavailable: regression would miss fallback defect');
+  f.home==='Thame United'&&f.away==='Eastbourne Borough');
+assert(fixture,'Actual published resolved Third Qualifying draw not found');
+assert(!fixture.conditional,'Published Thame–Eastbourne fixture must not remain conditional');
+assert.equal(ctx.liveLookup('fixtures','Exmouth Town FC'),null,
+  'Losing Exmouth must not retain a direct Third Qualifying fixture index');
+assert.equal(ctx.liveConditionalFixtureForClub('Exmouth Town FC'),null,
+  'Resolved canonical draw must not retain an Exmouth conditional index');
 const eastbourne=ctx.nextRoundInfo(
   {name:'Eastbourne Borough FC',entry_round:'Second Round Qualifying'},true);
 assert(eastbourne.knownFixture,'Legitimate Eastbourne opponent lost its fixture');
@@ -62,9 +61,10 @@ assert.equal(next.knownFixture.date,'2026-10-03');
 assert.equal(next.knownFixture.conditional,false);
 const duplicateEntries=Object.values(competition.fixtures||{}).filter(f=>f&&
   f.round===fixture.round&&f.home===fixture.home&&f.away===fixture.away);
-assert(duplicateEntries.length>=2,'Expected multiple index keys for one real FA tie');
-assert.equal(ctx.tinFoilBetaVerifiedThameNextFixture(
-  {name:'Thame United FC'},'Third Round Qualifying').home,fixture.home);
+assert(duplicateEntries.length>=2,'Expected home/away index keys for one real FA tie');
+const bridged=ctx.tinFoilBetaVerifiedThameNextFixture(
+  {name:'Thame United FC'},'Third Round Qualifying');
+assert(bridged&&bridged.home===fixture.home,'Verified Thame bridge lost the resolved fixture');
 // The losing club must not inherit the fixture through this bridge.
 assert.equal(ctx.nextRoundInfo(
   {name:'Exmouth Town FC',entry_round:'Second Round Qualifying'},true
