@@ -325,7 +325,7 @@ def parse_page(page_html):
         away = canonical_conditional(cells[vi + 1])
         kickoff = ""
         for cell in cells[:vi]:
-            match = re.search(r"(?<!\\d)([01]?\\d|2[0-3]):[0-5]\\d(?!\\d)", cell)
+            match = re.search(r"(?<!\d)([01]?\d|2[0-3]):[0-5]\d(?!\d)", cell)
             if match:
                 kickoff = match.group(0)
                 break
