@@ -20,7 +20,11 @@ assert(/\.cardstage\{[^}]*touch-action:manipulation/.test(html),
 assert(/\.trophy-viewer\{[^}]*touch-action:manipulation/.test(html) &&
        /\.trophy-viewer-mat\{[^}]*touch-action:manipulation/.test(html),
   'Trophy viewer must permit pinch zoom without restoring double-tap zoom');
-assert(/\.trophy-viewer-mat\{[^}]*width:min\(610px,96vw,calc\(100dvh - 110px\)\)/.test(html),
+assert(/\.trophy-viewer-mat\{[^}]*width:min\(610px,96vw,calc\(100dvh - 110px\)\)[^}]*\}/.test(html),
   'Mobile Trophy mat must use the same 96vw legibility target as the main Deck');
+assert(/\.deckcabinet\{[^}]*touch-action:manipulation\}/.test(html) &&
+       /\.trophy-viewer\{[^}]*padding:16px\}/.test(html) &&
+       /\.trophy-viewer-mat\{[^}]*touch-action:manipulation\}/.test(html),
+  'Touch CSS rules must remain structurally closed before following selectors');
 
 console.log('BETA DECK TEXT-SELECTION + TOUCH LEGIBILITY GUARD: PASS');
