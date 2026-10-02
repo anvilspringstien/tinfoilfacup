@@ -128,8 +128,8 @@ thameResolved = ctx.resolveLiveFixtureForCarrier(thameFixture,
   {name: 'Exmouth Town FC'}, true);
 check(thameResolved, 'Thame United', 'Eastbourne Borough', false);
 
-// The post-publication production dataset must also resolve the final replay,
-// not merely a hand-written fixture and synthetic Thame observation.
+// The post-publication production dataset must retain the decisive replay
+// and expose the now-resolved Third Qualifying fixture.
 const isFinalReplay = r => r && r.round === 'Second Round Qualifying Replay' &&
   r.home === 'Exmouth Town' && r.away === 'Thame United' &&
   r.home_score === 1 && r.away_score === 3 &&
@@ -141,27 +141,20 @@ assert.ok(Object.values(competition.result_history || {})
   'Live published result is missing from canonical history');
 const liveThameDraw = Object.values(competition.fixtures || {}).find(f =>
   f && f.round === 'Third Round Qualifying' &&
-  f.home === 'Thame Utd or Exmouth Town' &&
+  f.home === 'Thame United' &&
   f.away === 'Eastbourne Borough');
-assert.ok(liveThameDraw, 'Published Third Qualifying draw is absent');
+assert.ok(liveThameDraw, 'Resolved Third Qualifying Thame–Eastbourne fixture is absent');
+assert.ok(!liveThameDraw.conditional,
+  'Resolved Third Qualifying Thame–Eastbourne fixture must not remain conditional');
 ctx.LIVE_COMPETITION_DATA = competition;
 const actualThame = ctx.resolveLiveFixtureForCarrier(liveThameDraw,
-  {name: 'Exmouth Town FC'}, true);
+  {name: 'Thame United FC'}, true);
 check(actualThame, 'Thame United', 'Eastbourne Borough', false);
 
-// Removing only the decisive final replay from the otherwise published data
-// must leave the home draw conditional: no guessed winner from a drawn leg.
-const withoutFinal = {
-  ...competition,
-  results: Object.fromEntries(Object.entries(competition.results || {})
-    .filter(([,r]) => !isFinalReplay(r))),
-  result_history: Object.fromEntries(
-    Object.entries(competition.result_history || {})
-      .map(([key,rows]) => [key, Array.isArray(rows)
-        ? rows.filter(r => !isFinalReplay(r)) : rows]))
-};
-ctx.LIVE_COMPETITION_DATA = withoutFinal;
-const stillPending = ctx.resolveLiveFixtureForCarrier(liveThameDraw,
+// The synthetic conditional fixture above remains the fail-closed control:
+// without decisive replay evidence it must stay conditional rather than guess.
+ctx.LIVE_COMPETITION_DATA = {result_history: {}, results: {}};
+const stillPending = ctx.resolveLiveFixtureForCarrier(thameFixture,
   {name: 'Exmouth Town FC'}, true);
 check(stillPending, 'Thame Utd or Exmouth Town', 'Eastbourne Borough', true);
 assert.equal(stillPending.venue.postcode, 'Postcode TBC');
