@@ -198,7 +198,30 @@ def reconcile_active_conditionals(current_fixtures, official_fixtures):
     ambiguities = []
     for saved in current_fixtures:
         if not is_conditional_fixture(saved):
-            final.append(dict(saved))
+            matches = [f for f in official_fixtures if fixture_matches_slot(f, saved)]
+            if len(matches) == 1:
+                source = matches[0]
+                refreshed = dict(saved)
+                changed = False
+                for field in ("date", "kickoff"):
+                    value = source.get(field)
+                    if value and value != saved.get(field):
+                        refreshed[field] = value
+                        changed = True
+                if changed:
+                    transitions.append({
+                        "from": f'{saved.get("home")} v {saved.get("away")}',
+                        "to": f'{refreshed.get("home")} v {refreshed.get("away")}',
+                        "metadata_only": True,
+                    })
+                final.append(refreshed)
+            else:
+                if len(matches) > 1:
+                    ambiguities.append({
+                        "slot": f'{saved.get("home")} v {saved.get("away")}',
+                        "matches": [f'{f.get("home")} v {f.get("away")}' for f in matches],
+                    })
+                final.append(dict(saved))
             continue
         matches = [f for f in official_fixtures if fixture_matches_slot(f, saved)]
         if len(matches) > 1:
