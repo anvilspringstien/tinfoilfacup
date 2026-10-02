@@ -23,4 +23,4 @@ assert(/\.trophy-viewer\{[^}]*touch-action:manipulation/.test(html) &&
 assert(/\.trophy-viewer-mat\{[^}]*width:min\(610px,96vw,calc\(100dvh - 110px\)\)/.test(html),
   'Mobile Trophy mat must use the same 96vw legibility target as the main Deck');
 
-console.log('BETA DECK TEXT-SELECTION GUARD: PASS');
+console.log('BETA DECK TEXT-SELECTION + TOUCH LEGIBILITY GUARD: PASS');
