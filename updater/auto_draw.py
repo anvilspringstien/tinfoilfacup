@@ -96,6 +96,72 @@ def alternatives(s):
     return [p.strip() for p in re.split(r"\s+or\s+", s or "", flags=re.I) if p.strip()]
 
 
+def compatible(a, b):
+    a, b = norm(a), norm(b)
+    return bool(a and b and (a == b or a.startswith(b + " ") or b.startswith(a + " ")))
+
+
+def is_conditional_fixture(fixture):
+    return len(alternatives(fixture.get("home", ""))) > 1 or len(alternatives(fixture.get("away", ""))) > 1
+
+
+def side_matches(value, side):
+    return any(compatible(value, option) for option in alternatives(side))
+
+
+def fixture_matches_slot(fixture, slot):
+    return (
+        not is_conditional_fixture(fixture)
+        and side_matches(fixture.get("home", ""), slot.get("home", ""))
+        and side_matches(fixture.get("away", ""), slot.get("away", ""))
+    )
+
+
+def reconcile_active_conditionals(current_fixtures, official_fixtures):
+    """Collapse saved conditional slots only when the official current-round
+    fixture catalogue supplies exactly one compatible definite fixture.
+
+    Non-conditional saved fixtures are retained byte-for-byte in meaning. A
+    missing source match leaves the placeholder untouched; multiple matches fail
+    closed upstream. This makes same-round replay resolution a producer concern
+    rather than a Clubfinder-only inference.
+    """
+    final = []
+    transitions = []
+    ambiguities = []
+    for saved in current_fixtures:
+        if not is_conditional_fixture(saved):
+            final.append(dict(saved))
+            continue
+        matches = [f for f in official_fixtures if fixture_matches_slot(f, saved)]
+        if len(matches) > 1:
+            ambiguities.append({
+                "slot": f'{saved.get("home")} v {saved.get("away")}',
+                "matches": [f'{f.get("home")} v {f.get("away")}' for f in matches],
+            })
+            final.append(dict(saved))
+            continue
+        if not matches:
+            final.append(dict(saved))
+            continue
+        source = matches[0]
+        resolved = dict(saved)
+        resolved.update({
+            "round": saved.get("round") or source.get("round"),
+            "home": source["home"],
+            "away": source["away"],
+            "date": source.get("date") or saved.get("date", ""),
+            "kickoff": source.get("kickoff") or saved.get("kickoff", "15:00"),
+        })
+        resolved.pop("conditional", None)
+        transitions.append({
+            "from": f'{saved.get("home")} v {saved.get("away")}',
+            "to": f'{resolved.get("home")} v {resolved.get("away")}',
+        })
+        final.append(resolved)
+    return final, transitions, ambiguities
+
+
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=35) as r:
@@ -252,18 +318,58 @@ def main():
             fetch_stop = "empty-page"
             break
 
+    # Before looking for the next draw, allow the official fixture catalogue to
+    # collapse conditional slots in the *current* active round. This is the
+    # normal replay-resolution path: the machine updates its canonical fixture
+    # producer instead of relying on Clubfinder to infer the winner forever.
+    current_official = unique_ties([r for r in all_rows if r["round"] == current])
+    saved_current = fixture_values(data.get("fixtures") or {})
+    refreshed_current, active_transitions, active_ambiguities = reconcile_active_conditionals(
+        saved_current, current_official
+    )
+    if active_ambiguities:
+        write_report(
+            status="blocked",
+            current_round=current,
+            target_round=target,
+            pages_checked=pages_checked,
+            pagination_stop=fetch_stop,
+            active_round_official_ties=len(current_official),
+            active_round_ambiguities=active_ambiguities,
+        )
+        raise SystemExit("Publication blocked: active-round conditional slots resolved ambiguously.")
+
+    active_published = False
+    if active_transitions:
+        print(f"ACTIVE ROUND CONDITIONALS RESOLVED: {len(active_transitions)}")
+        for transition in active_transitions:
+            print("RESOLVED:", transition["from"], "->", transition["to"])
+        if args.publish:
+            data["fixtures"] = fixture_map(refreshed_current)
+            data["source_tie_count"] = len(refreshed_current)
+            data["source_url"] = OFFICIAL_SOURCE
+            data["updated_at"] = datetime.now(timezone.utc).isoformat()
+            DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+            active_published = True
+        else:
+            print("DRY RUN: active-round resolutions not written.")
+
     target_ties = unique_ties([r for r in all_rows if r["round"] == target])
     report = write_report(
-        status="detected" if target_ties else "no-new-draw",
+        status="detected" if target_ties else ("active-round-refreshed" if active_published else "no-new-draw"),
         current_round=current,
         target_round=target,
         target_ties_detected=len(target_ties),
         pages_checked=pages_checked,
         pagination_stop=fetch_stop,
-        published=False,
+        published=active_published,
+        active_round_official_ties=len(current_official),
+        active_round_conditional_resolutions=active_transitions,
     )
 
     if not target_ties:
+        if active_published:
+            print(f"ACTIVE ROUND REFRESH PUBLISHED: {len(active_transitions)} conditional slots collapsed.")
         print(f"NO NEW DRAW: official Emirates FA Cup fixture pages do not yet expose {target}.")
         return
 
