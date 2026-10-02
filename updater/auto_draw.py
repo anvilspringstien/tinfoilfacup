@@ -446,6 +446,10 @@ def main():
     # normal replay-resolution path: the machine updates its canonical fixture
     # producer instead of relying on Clubfinder to infer the winner forever.
     current_official = unique_ties([r for r in all_rows if r["round"] == current])
+    for fixture in current_official:
+        if "brentwood" in norm(fixture.get("home", "")) or "dagenham" in norm(fixture.get("away", "")):
+            print("FA DEDUPED FIXTURE DIAGNOSTIC:", fixture)
+
     saved_current = fixture_values(data.get("fixtures") or {})
     expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
     source_complete = active_source_complete(current_official, expected_active_ties)
