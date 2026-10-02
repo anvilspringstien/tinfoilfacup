@@ -12,6 +12,7 @@ import argparse
 import html as H
 import json
 import re
+import unicodedata
 import time
 import urllib.error
 import urllib.request
@@ -323,19 +324,21 @@ def parse_page(page_html):
         home = canonical_conditional(cells[vi - 1])
         away = canonical_conditional(cells[vi + 1])
         kickoff = next((c for c in cells[:vi] if re.fullmatch(r"\d{1,2}:\d{2}", c)), "")
-        if "brentwood" in norm(home) or "dagenham" in norm(away):
-            diagnostic_row = clean(row)
-            print("FA ROW DIAGNOSTIC:", {"round": rnd, "date": date, "cells": cells, "clean_row": diagnostic_row[:1000], "parsed_kickoff": kickoff})
-
         if rnd and home and away:
             rows.append({"round": rnd, "home": home, "away": away, "date": date, "kickoff": kickoff})
     return rows
 
 
+def fixture_key_text(value):
+    value = unicodedata.normalize("NFKC", value or "")
+    value = value.replace("\u00a0", " ").replace("\u200b", "").replace("\ufeff", "")
+    return norm(value)
+
+
 def unique_ties(rows):
     out = {}
     for r in rows:
-        k = (r["round"], norm(r["home"]), norm(r["away"]), r.get("date", ""))
+        k = (fixture_key_text(r["round"]), fixture_key_text(r["home"]), fixture_key_text(r["away"]), r.get("date", ""))
         existing = out.get(k)
         if existing is None or (not existing.get("kickoff") and r.get("kickoff")):
             out[k] = r
@@ -446,9 +449,6 @@ def main():
     # normal replay-resolution path: the machine updates its canonical fixture
     # producer instead of relying on Clubfinder to infer the winner forever.
     current_official = unique_ties([r for r in all_rows if r["round"] == current])
-    for fixture in current_official:
-        if "brentwood" in norm(fixture.get("home", "")) or "dagenham" in norm(fixture.get("away", "")):
-            print("FA DEDUPED FIXTURE DIAGNOSTIC:", fixture)
 
     saved_current = fixture_values(data.get("fixtures") or {})
     expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
