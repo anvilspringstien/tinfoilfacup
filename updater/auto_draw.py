@@ -98,8 +98,8 @@ def alternatives(s):
 
 
 def abbreviation_tokens(value):
-    tokens = norm(value).split()
-    # Apostrophe contractions such as G'borough normalize to ["g","borough"].
+    tokens = [token for token in norm(value).split() if token != "and"]
+    # Connective "and" (including normalized &) is non-semantic only for\n    # abbreviation comparison; the general club-name normalizer is unchanged.\n    # Apostrophe contractions such as G'borough normalize to ["g","borough"].
     # Rejoin an initial with its retained suffix so it can be compared
     # structurally with the full word without naming a specific club.
     out = []
