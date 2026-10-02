@@ -3,7 +3,7 @@
 import urllib.error
 from unittest.mock import patch
 import auto_draw
-from auto_draw import reconcile_active_conditionals, compatible, active_source_complete
+from auto_draw import reconcile_active_conditionals, compatible, active_source_complete, unique_ties
 
 def require(ok,msg):
     if not ok:
@@ -104,6 +104,15 @@ require(compatible("Cray Wands","Cray Wanderers"),"guarded stem contraction must
 require(not compatible("Cray Wands","Cray Waltham"),"shared short opening must not match unrelated token")
 require(compatible("Thame Utd","Thame United"),"conventional Utd abbreviation must match")
 require(not compatible("Thame Utd","Thame University"),"Utd must not become generic Ut-prefix matching")
+
+noisy_duplicates=[
+    {"round":"Third Round Qualifying","home":"Brentwood Town","away":"Dagenham & Redbridge","date":"2026-10-03","kickoff":"12:30"},
+    {"round":"Third Round Qualifying\u200b","home":"Brentwood\u00a0Town","away":"Dagenham & Redbridge\ufeff","date":"2026-10-03","kickoff":""},
+]
+noisy_unique=unique_ties(noisy_duplicates)
+require(len(noisy_unique)==1,"Unicode/HTML whitespace noise must not split one official fixture")
+require(noisy_unique[0].get("kickoff")=="12:30","explicit kickoff must survive a noisy blank duplicate")
+print("Noisy duplicate fixture identity: PASS")
 
 print("ACTIVE CONDITIONAL REFRESH REGRESSION: PASS")
 print("Unique resolution: PASS")
