@@ -63,6 +63,7 @@ on:
       - "updater/replay_progression_regression.js"
       - "updater/clubfinder_stats_regression.js"
       - "updater/journey_integrity_regression.js"
+      - "tests/test_production_thame_next_fixture.js"
       - ".github/workflows/competition-health.yml"
 
 permissions:
