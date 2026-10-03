@@ -160,7 +160,6 @@ const assertions=`
   console.log('Exmouth Town 2-1 Banbury United replay: PASS');
   console.log('Exmouth post-replay custodian:',exmouthCarrier.name);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
-  console.log('Enfield Second Qualifying fixture:',enfieldSecondQ.home,'v',enfieldSecondQ.away);
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
