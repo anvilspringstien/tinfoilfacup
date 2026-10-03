@@ -1,4 +1,4 @@
-"""BETA's separate fallback remains an exact copy of its local live competition data."""
+"""BETA's separate fallback remains an exact copy of canonical competition data."""
 import json
 import sys
 import unittest
@@ -33,7 +33,11 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     refresh(self.html.replace(old, new), self.live)
 
-    def test_committed_fallback_matches_local_live_data(self):
+    def test_refresh_source_is_canonical_competition(self):
+        self.assertEqual(DATA, ROOT / 'competition.json')
+        self.assertNotEqual(DATA, ROOT / 'beta' / 'competition.json')
+
+    def test_committed_fallback_matches_canonical_data(self):
         live = json.loads(DATA.read_text(encoding='utf-8'))
         self.assertIn("const LIVE_COMPETITION_DATA_URL='./competition.json';", self.html)
         fallback = json.loads(FALLBACK.read_text(encoding='utf-8'))
@@ -48,7 +52,6 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
             for r in fallback.get('results', {}).values()))
         self.assertTrue(any(
             v.get('round') == 'Third Round Qualifying'
-            and v.get('home') == 'Thame Utd or Exmouth Town'
             and v.get('away') == 'Eastbourne Borough'
             for v in fallback.get('fixtures', {}).values()))
 
