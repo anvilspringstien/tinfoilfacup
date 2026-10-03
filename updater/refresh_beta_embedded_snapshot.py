@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""Refresh BETA's separate fallback from its local live competition.json."""
+"""Refresh BETA's separate fallback from canonical competition.json."""
 import argparse
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BETA = ROOT / 'beta/clubfinder-beta.html'
-DATA = ROOT / 'beta' / 'competition.json'
+DATA = ROOT / 'competition.json'
 FALLBACK = ROOT / 'beta/competition-fallback.json'
 
 
 def refresh(html, data):
     if data.get('schema_version') != 1 or not data.get('updated_at'):
-        raise ValueError('BETA live competition schema/timestamp missing')
+        raise ValueError('Canonical competition schema/timestamp missing')
     if not data.get('result_history') or not data.get('fixtures'):
-        raise ValueError('BETA live result history/fixtures missing')
+        raise ValueError('Canonical result history/fixtures missing')
     required = (
         "const LIVE_COMPETITION_DATA_URL='./competition.json';",
         "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';",
@@ -42,7 +42,7 @@ def main():
     if not args.check and current != expected:
         FALLBACK.write_text(expected, encoding='utf-8')
     print('BETA FALLBACK GUARD: PASS')
-    print('BETA live snapshot updated_at:', live['updated_at'])
+    print('Canonical competition updated_at:', live['updated_at'])
     print('Mode:', 'check-only' if args.check else 'refresh')
     print('Production files: untouched')
 
