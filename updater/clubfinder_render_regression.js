@@ -101,8 +101,16 @@ const assertions=`
     if(!exmouthHistory.some(r=>/Second Round Qualifying Replay$/i.test(String(r.round||''))&&
         same(r.winner,'Thame United')))
       throw new Error('Replay regression: published Exmouth–Thame replay absent from journey');
-    if(!same(exmouthCarrier.name,'Thame United'))
+    const thameActiveResult=canonicalHistory.find(r=>
+      /Third Round Qualifying$/i.test(String(r.round||''))&&
+      same(r.home,'Thame United')&&same(r.away,'Eastbourne Borough')&&
+      same(r.winner,'Eastbourne Borough'));
+    if(allowActiveAdvance&&thameActiveResult){
+      if(!same(exmouthCarrier.name,'Eastbourne Borough'))
+        throw new Error('Replay regression: verified Thame–Eastbourne result did not advance custodian to Eastbourne Borough; got '+exmouthCarrier.name);
+    }else if(!same(exmouthCarrier.name,'Thame United')){
       throw new Error('Replay regression: Thame should become custodian after verified Exmouth 1–3 Thame replay; got '+exmouthCarrier.name);
+    }
     const thameDraw=canonicalFixtures.find(f=>
       String(f.round||'')==='Third Round Qualifying'&&
       same(f.home,'Thame United')&&same(f.away,'Eastbourne Borough'));
