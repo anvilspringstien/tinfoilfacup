@@ -101,8 +101,16 @@ const assertions=`
     if(!exmouthHistory.some(r=>/Second Round Qualifying Replay$/i.test(String(r.round||''))&&
         same(r.winner,'Thame United')))
       throw new Error('Replay regression: published Exmouth–Thame replay absent from journey');
-    if(!same(exmouthCarrier.name,'Thame United'))
+    const thameActiveResult=canonicalHistory.find(r=>
+      /Third Round Qualifying$/i.test(String(r.round||''))&&
+      same(r.home,'Thame United')&&same(r.away,'Eastbourne Borough')&&
+      same(r.winner,'Eastbourne Borough'));
+    if(allowActiveAdvance&&thameActiveResult){
+      if(!same(exmouthCarrier.name,'Eastbourne Borough'))
+        throw new Error('Replay regression: verified Thame–Eastbourne result did not advance custodian to Eastbourne Borough; got '+exmouthCarrier.name);
+    }else if(!same(exmouthCarrier.name,'Thame United')){
       throw new Error('Replay regression: Thame should become custodian after verified Exmouth 1–3 Thame replay; got '+exmouthCarrier.name);
+    }
     const thameDraw=canonicalFixtures.find(f=>
       String(f.round||'')==='Third Round Qualifying'&&
       same(f.home,'Thame United')&&same(f.away,'Eastbourne Borough'));
@@ -124,13 +132,23 @@ const assertions=`
   if(frenfordReplay.kickoff!=='19:45')throw new Error('W1D regression: Frenford replay kick-off expected 19:45, got '+frenfordReplay.kickoff);
   const frenfordLoss=whistory.find(r=>same(r.home,'Frenford')&&same(r.away,'Enfield Town')&&Number(r.home_score)===0&&Number(r.away_score)===4);
   if(!frenfordLoss)throw new Error('W1D regression: Frenford 0-4 Enfield Town missing from journey history');
-  if(!same(wcarrier.name,'Enfield Town'))throw new Error('W1D regression: expected live custodian Enfield Town after Frenford loss and active-round win, got '+wcarrier.name);
-  const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: Enfield should be a confirmed winner');
   const enfieldActiveResult=canonicalHistory.find(r=>same(r.home,'Billericay Town')&&same(r.away,'Enfield Town')&&Number(r.home_score)===1&&Number(r.away_score)===3&&/Second Round Qualifying/i.test(r.round||''));
   if(allowActiveAdvance&&!enfieldActiveResult)throw new Error('W1D regression: canonical Billericay 1-3 Enfield active-round result missing');
-  const enfieldNext=nextRoundInfo(wcarrier);
-  const enfieldSecondQ=allowActiveAdvance?canonicalSecondQFixture(wcarrier,'W1D regression'):assertSecondQFixture(enfieldNext,wcarrier,'W1D regression');
-  if(same(enfieldSecondQ.home,'Frenford')||same(enfieldSecondQ.away,'Frenford'))throw new Error('W1D regression: played Frenford-Enfield First Qualifying tie leaked into Enfield next-round fixture');
+  const oxfordActiveResult=canonicalHistory.find(r=>
+    /Third Round Qualifying$/i.test(String(r.round||''))&&
+    same(r.home,'Oxford City')&&same(r.away,'Enfield Town')&&
+    Number(r.home_score)===6&&Number(r.away_score)===1&&same(r.winner,'Oxford City'));
+  if(allowActiveAdvance&&oxfordActiveResult){
+    if(!same(wcarrier.name,'Oxford City'))throw new Error('W1D regression: verified Oxford City 6-1 Enfield result did not advance custodian to Oxford City; got '+wcarrier.name);
+  }else if(!same(wcarrier.name,'Enfield Town')){
+    throw new Error('W1D regression: expected Enfield Town custodian after Frenford loss and verified Second Qualifying win; got '+wcarrier.name);
+  }
+  const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: current W1D custodian should be a confirmed winner');
+  if(!oxfordActiveResult){
+    const enfieldNext=nextRoundInfo(wcarrier);
+    const enfieldSecondQ=allowActiveAdvance?canonicalSecondQFixture(wcarrier,'W1D regression'):assertSecondQFixture(enfieldNext,wcarrier,'W1D regression');
+    if(same(enfieldSecondQ.home,'Frenford')||same(enfieldSecondQ.away,'Frenford'))throw new Error('W1D regression: played Frenford-Enfield First Qualifying tie leaked into Enfield next-round fixture');
+  }
 
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
@@ -142,7 +160,6 @@ const assertions=`
   console.log('Exmouth Town 2-1 Banbury United replay: PASS');
   console.log('Exmouth post-replay custodian:',exmouthCarrier.name);
   console.log('W1D custody: Sporting Bengal United -> Frenford ->',wcarrier.name);
-  console.log('Enfield Second Qualifying fixture:',enfieldSecondQ.home,'v',enfieldSecondQ.away);
   console.log('W1D Frenford replay kick-off:',frenfordReplay.kickoff);
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}

@@ -75,10 +75,33 @@ const coords={
   'BR28HQ':{latitude:51.384,longitude:0.022},
   'BN237QH':{latitude:50.796,longitude:0.323}
 };
+function addCanonicalCoords(value){
+  if(!value||typeof value!=='object')return;
+  const postcode=String(value.postcode||'').replace(/\\s+/g,'').toUpperCase();
+  const latitude=Number(value.latitude??value.lat);
+  const longitude=Number(value.longitude??value.lon??value.lng);
+  if(postcode&&Number.isFinite(latitude)&&Number.isFinite(longitude)&&!coords[postcode]){
+    coords[postcode]={latitude,longitude};
+  }
+  for(const child of Object.values(value)){
+    if(child&&typeof child==='object')addCanonicalCoords(child);
+  }
+}
+addCanonicalCoords(competition);
 function postcodeFromUrl(url){
   const s=decodeURIComponent(String(url));
   const m=s.match(/\/postcodes\/([^?/#]+)/i);
   return m?String(m[1]).replace(/\s+/g,'').toUpperCase():'';
+}
+function syntheticPostcodeCoords(pc){
+  // This regression tests browser/bridge behaviour, not postcodes.io's database.
+  // Accept any syntactically plausible UK postcode and give it stable, distinct
+  // coordinates so future canonical venues do not require another fixture edit.
+  const compact=String(pc||'').replace(/\s+/g,'').toUpperCase();
+  if(!/^[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2}$/.test(compact))return null;
+  let hash=2166136261;
+  for(const ch of compact){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619)>>>0;}
+  return {latitude:49.8+(hash%9000)/10000,longitude:-7.5+((hash>>>12)%9000)/1000};
 }
 const locationStub={href:'https://anvilspringstien.github.io/tinfoilfacup/clubfinder.html'};
 const sandbox={
@@ -101,7 +124,7 @@ const sandbox={
     }
     if(s.includes('competition.json'))return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};
     if(/postcodes\//i.test(s)){
-      const pc=postcodeFromUrl(s),hit=coords[pc];
+      const pc=postcodeFromUrl(s),hit=coords[pc]||syntheticPostcodeCoords(pc);
       return hit?{ok:true,status:200,json:async()=>({status:200,result:hit})}:{ok:false,status:404,json:async()=>({status:404,result:null})};
     }
     throw new Error('Unexpected network request in production UI regression: '+s);

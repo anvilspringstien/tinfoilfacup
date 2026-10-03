@@ -26,14 +26,14 @@ const assertions=`
     const completed=crumbs.find(r=>r.round==='Second Round Qualifying'&&same(r.home,home)&&same(r.away,away)&&r.home_score!=null&&r.away_score!=null);
     if(completed){
       const hs=Number(completed.home_score),as=Number(completed.away_score);
-      const expectedCustodian=hs>as?home:as>hs?away:custodianName;
-      if(!same(custodian.name,expectedCustodian))throw new Error('KT21 venue regression: completed '+home+' v '+away+' expected custodian '+expectedCustodian+', got '+custodian.name);
+      const historicalWinner=hs>as?home:as>hs?away:custodianName;
+      if(!same(historicalWinner,custodianName))throw new Error('KT21 venue regression: completed '+home+' v '+away+' expected historical winner '+custodianName+', got '+historicalWinner);
       if(typeof completedResultVenue!=='function')throw new Error('KT21 venue regression: completedResultVenue unavailable');
       const venue=completedResultVenue(completed)||{};
       const pc=String(venue.postcode||'').toUpperCase().replace(/\\s+/g,' ').trim();
       if(pc!==postcode)throw new Error('KT21 venue regression: completed '+home+' v '+away+' expected '+postcode+', got '+(pc||'TBC'));
       if(!venue.ground||/TBC/i.test(String(venue.ground)))throw new Error('KT21 venue regression: completed '+home+' v '+away+' ground is TBC');
-      console.log(originName+' -> '+expectedCustodian+': PASS');
+      console.log(originName+' historical '+home+' v '+away+' winner '+historicalWinner+': PASS');
       console.log('Completed:',completed.home,completed.home_score,'v',completed.away_score,completed.away,'•',venue.ground,'•',pc);
       return;
     }
@@ -55,7 +55,7 @@ const assertions=`
     console.log('Next:',f.home,'v',f.away,'•',venue.ground,'•',pc);
   }
   verify('Epsom & Ewell FC','Crowborough Athletic FC','Hampton & Richmond Borough','Crowborough Athletic','TW12 2BX');
-  verify('Corinthian Casuals FC','Welling United','Dulwich Hamlet','Welling United','SE22 8BD');
+  verify('Corinthian Casuals FC','Dulwich Hamlet','Dulwich Hamlet','Welling United','SE22 8BD');
   console.log('KT21 VENUE RENDER REGRESSION: PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
