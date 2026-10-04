@@ -1,0 +1,27 @@
+name: One-shot BETA Stats logo q80 comparison
+on:
+  push:
+    branches: [perf/beta-stats-q80-webp]
+permissions:
+  contents: read
+jobs:
+  compare:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install pillow
+      - name: Convert logo without resizing
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          import os
+          src='beta/assets/stats-report/header-logo-f533fc07b55f.png'
+          dst='/tmp/header-logo-q80.webp'
+          im=Image.open(src).convert('RGBA')
+          size=im.size
+          im.save(dst,'WEBP',quality=80,method=6)
+          check=Image.open(dst)
+          assert check.size == size
+          print(f'LOGO: {size[0]}x{size[1]} {os.path.getsize(src)} -> {os.path.getsize(dst)} ({(1-os.path.getsize(dst)/os.path.getsize(src))*100:.1f}% reduction)')
+          PY
