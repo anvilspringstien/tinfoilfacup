@@ -48,15 +48,12 @@ const norm=s=>String(s||'').toLowerCase().replace(/&/g,' and ')
   const eastbourne=origin('Eastbourne Borough');
   assert(exmouth&&thame&&eastbourne,'Required eligible origins missing');
   const next=o=>run('nextRoundInfo(__o)',{__o:o});
-  const losing=next(exmouth),winning=next(thame),opposing=next(eastbourne);
+  const losing=next(exmouth);
   assert(!losing.knownFixture,'Direct Exmouth index falsely promotes eliminated club');
-  assert(winning.knownFixture,'Verified Thame fixture disappeared');
-  assert.equal(norm(winning.knownFixture.home),norm('Thame United'));
-  assert.equal(norm(winning.knownFixture.away),norm('Eastbourne Borough'));
-  assert.equal(winning.knownFixture.date,'2026-10-03');
-  assert.equal(winning.knownFixture.conditional,false);
-  assert(opposing.knownFixture,'Legitimate Eastbourne opposing fixture disappeared');
-  assert.equal(norm(opposing.knownFixture.home),norm('Thame United'));
+  // This regression protects the resolved Exmouth direct-index boundary only.
+  // Current Thame/Eastbourne progression is derived and covered by the general
+  // BETA journey regressions; freezing it here would turn future results into
+  // test-code changes.
   const lastReplay=r=>r&&r.round==='Second Round Qualifying Replay'&&
     r.home==='Exmouth Town'&&r.away==='Thame United'&&
     r.date==='2026-09-23'&&r.home_score===1&&r.away_score===3;
@@ -65,5 +62,5 @@ const norm=s=>String(s||'').toLowerCase().replace(/&/g,' and ')
   // Unresolved replay behaviour is covered by the dedicated conditional-replay
   // regression. This direct-index regression stays anchored to the resolved draw.
   console.log('BETA ACTUAL DIRECT EXMOUTH INDEX REGRESSION: PASS');
-  console.log('Exmouth: no next fixture; Thame: Thame v Eastbourne 2026-10-03');
+  console.log('Exmouth: eliminated; resolved replay remains canonical');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});

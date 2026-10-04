@@ -138,8 +138,16 @@ const sandbox={
     }
     if(s.includes('competition.json')){competitionFetchCalls++;return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};}
     if(/postcodes\//i.test(s)){
-      const pc=postcodeFromUrl(s),hit=coords[pc];
-      return hit?{ok:true,status:200,json:async()=>({status:200,result:hit})}:{ok:false,status:404,json:async()=>({status:404,result:null})};
+      const pc=postcodeFromUrl(s),known=coords[pc];
+      if(known)return {ok:true,status:200,json:async()=>({status:200,result:known})};
+      // The product accepts any valid venue postcode via postcodes.io. Keep the
+      // regression deterministic without teaching it each future ground.
+      if(/^[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2}$/.test(pc)){
+        let h=0;for(const ch of pc)h=(h*33+ch.charCodeAt(0))>>>0;
+        const synthetic={latitude:49.5+(h%9000)/1000,longitude:-7.5+((h>>>8)%9500)/1000};
+        return {ok:true,status:200,json:async()=>({status:200,result:synthetic})};
+      }
+      return {ok:false,status:404,json:async()=>({status:404,result:null})};
     }
     throw new Error('Unexpected network request in production UI regression: '+s);
   }

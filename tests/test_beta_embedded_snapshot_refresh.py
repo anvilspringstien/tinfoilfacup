@@ -25,7 +25,7 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
 
     def test_changed_loader_boundary_fails_closed(self):
         for old, new in (
-            ("./competition.json", "../competition.json"),
+            ("../competition.json", "./competition.json"),
             ("./competition-fallback.json", "../competition.json"),
             ("fetch(FALLBACK_COMPETITION_DATA_URL", "fetch('missing.json'"),
         ):
@@ -39,7 +39,8 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
 
     def test_committed_fallback_matches_canonical_data(self):
         live = json.loads(DATA.read_text(encoding='utf-8'))
-        self.assertIn("const LIVE_COMPETITION_DATA_URL='./competition.json';", self.html)
+        self.assertIn("const LIVE_COMPETITION_DATA_URL='../competition.json';", self.html)
+        self.assertNotIn("const LIVE_COMPETITION_DATA_URL='./competition.json';", self.html)
         fallback = json.loads(FALLBACK.read_text(encoding='utf-8'))
         self.assertEqual(FALLBACK.read_text(encoding='utf-8'), refresh(self.html, live))
         self.assertEqual(fallback, live)
