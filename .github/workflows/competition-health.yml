@@ -127,7 +127,6 @@ jobs:
 
       - name: Audit full competition chronology
         id: health_audit
-        continue-on-error: true
         run: python updater/competition_health.py
 
       - name: Apply guarded Clubfinder competition presentation fixes
@@ -261,8 +260,3 @@ jobs:
             updater/kickoff-venue-enrichment-report.json
             updater/venue-copy-consistency-report.json
 
-      - name: Fail run if competition health is critical
-        if: ${{ steps.health_audit.outcome == 'failure' }}
-        run: |
-          echo "Competition health report was published, but the audit is critical."
-          exit 1
