@@ -63,6 +63,7 @@ on:
       - "updater/replay_progression_regression.js"
       - "updater/clubfinder_stats_regression.js"
       - "updater/journey_integrity_regression.js"
+      - "updater/future_round_stats_regression.js"
       - "tests/test_production_thame_next_fixture.js"
       - ".github/workflows/competition-health.yml"
 
@@ -210,6 +211,9 @@ jobs:
 
       - name: Run all-club journey integrity regression
         run: node updater/journey_integrity_regression.js
+
+      - name: Run Future Round Stats and Pigeon Miles truth drill
+        run: node updater/future_round_stats_regression.js
 
       - name: Run historical Campaign regression
         run: node updater/historical_journey_regression.js
