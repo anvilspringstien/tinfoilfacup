@@ -3,7 +3,7 @@ const html=fs.readFileSync('beta/clubfinder-beta.html','utf8');
 function assert(cond,msg){if(!cond)throw new Error(msg);}
 
 const assets=[
-  'assets/stats-report/header-logo-f533fc07b55f.png',
+  'assets/stats-report/header-logo-q80.webp',
   'assets/stats-report/rounds-completed-q80.webp',
   'assets/stats-report/matches-played-q80.webp',
   'assets/stats-report/clubs-encountered-q80.webp',
