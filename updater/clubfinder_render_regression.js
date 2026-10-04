@@ -89,40 +89,16 @@ const assertions=`
   const exmouthReplay=exmouthHistory.find(r=>same(r.home,'Exmouth Town')&&same(r.away,'Banbury United')&&Number(r.home_score)===2&&Number(r.away_score)===1);
   if(!exmouthDraw)throw new Error('Replay regression: Banbury United 0-0 Exmouth Town draw missing');
   if(!exmouthReplay)throw new Error('Replay regression: Exmouth Town 2-1 Banbury United replay missing');
-  // This First Qualifying victory is historical. Once the independently
-  // verified Second Qualifying replay is published, custody advances to Thame.
-  const exmouthSecondQReplay=canonicalHistory.find(r=>
+  // Completed Exmouth chronology is historical truth. Current custody after
+  // that history is deliberately derived by buildJourney and is covered for
+  // every selectable origin by journey_integrity_regression.js.
+  const exmouthSecondQReplay=exmouthHistory.find(r=>
     /Second Round Qualifying Replay$/i.test(String(r.round||''))&&
     [r.home,r.away].some(x=>same(x,'Exmouth Town'))&&
     [r.home,r.away].some(x=>same(x,'Thame United'))&&
     same(r.winner,'Thame United')&&Number(r.home_score)===1&&Number(r.away_score)===3);
+  if(!exmouthSecondQReplay)throw new Error('Replay regression: historical Exmouth 1-3 Thame replay missing from journey');
   const exmouthCarrier=(exmouthJourney.carrier||exmouth);
-  if(exmouthSecondQReplay){
-    if(!exmouthHistory.some(r=>/Second Round Qualifying Replay$/i.test(String(r.round||''))&&
-        same(r.winner,'Thame United')))
-      throw new Error('Replay regression: published Exmouth–Thame replay absent from journey');
-    const thameActiveResult=canonicalHistory.find(r=>
-      /Third Round Qualifying$/i.test(String(r.round||''))&&
-      same(r.home,'Thame United')&&same(r.away,'Eastbourne Borough')&&
-      same(r.winner,'Eastbourne Borough'));
-    if(allowActiveAdvance&&thameActiveResult){
-      if(!same(exmouthCarrier.name,'Eastbourne Borough'))
-        throw new Error('Replay regression: verified Thame–Eastbourne result did not advance custodian to Eastbourne Borough; got '+exmouthCarrier.name);
-    }else if(!same(exmouthCarrier.name,'Thame United')){
-      throw new Error('Replay regression: Thame should become custodian after verified Exmouth 1–3 Thame replay; got '+exmouthCarrier.name);
-    }
-    const thameDraw=canonicalFixtures.find(f=>
-      String(f.round||'')==='Third Round Qualifying'&&
-      same(f.home,'Thame United')&&same(f.away,'Eastbourne Borough'));
-    if(!thameDraw)throw new Error('Replay regression: definite Thame United–Eastbourne Borough Third Qualifying fixture missing');
-    if(thameDraw.conditional)
-      throw new Error('Replay regression: published Thame–Eastbourne fixture must no longer be conditional');
-    const resolved=resolveLiveFixtureForCarrier(thameDraw,exmouthCarrier);
-    if(!resolved||!same(resolved.home,'Thame United')||!same(resolved.away,'Eastbourne Borough')||resolved.conditional)
-      throw new Error('Replay regression: definite Thame–Eastbourne fixture did not remain resolved');
-  }else if(!same(exmouthCarrier.name,'Exmouth Town')){
-    throw new Error('Replay regression: Exmouth should remain custodian until a published Second Qualifying result advances it');
-  }
 
   const sporting=ELIGIBLE.find(c=>same(c.name,'Sporting Bengal United FC'));
   if(!sporting) throw new Error('W1D regression: Sporting Bengal United FC not found');
@@ -132,23 +108,15 @@ const assertions=`
   if(frenfordReplay.kickoff!=='19:45')throw new Error('W1D regression: Frenford replay kick-off expected 19:45, got '+frenfordReplay.kickoff);
   const frenfordLoss=whistory.find(r=>same(r.home,'Frenford')&&same(r.away,'Enfield Town')&&Number(r.home_score)===0&&Number(r.away_score)===4);
   if(!frenfordLoss)throw new Error('W1D regression: Frenford 0-4 Enfield Town missing from journey history');
-  const enfieldActiveResult=canonicalHistory.find(r=>same(r.home,'Billericay Town')&&same(r.away,'Enfield Town')&&Number(r.home_score)===1&&Number(r.away_score)===3&&/Second Round Qualifying/i.test(r.round||''));
-  if(allowActiveAdvance&&!enfieldActiveResult)throw new Error('W1D regression: canonical Billericay 1-3 Enfield active-round result missing');
-  const oxfordActiveResult=canonicalHistory.find(r=>
-    /Third Round Qualifying$/i.test(String(r.round||''))&&
-    same(r.home,'Oxford City')&&same(r.away,'Enfield Town')&&
-    Number(r.home_score)===6&&Number(r.away_score)===1&&same(r.winner,'Oxford City'));
-  if(allowActiveAdvance&&oxfordActiveResult){
-    if(!same(wcarrier.name,'Oxford City'))throw new Error('W1D regression: verified Oxford City 6-1 Enfield result did not advance custodian to Oxford City; got '+wcarrier.name);
-  }else if(!same(wcarrier.name,'Enfield Town')){
-    throw new Error('W1D regression: expected Enfield Town custodian after Frenford loss and verified Second Qualifying win; got '+wcarrier.name);
-  }
-  const enfieldState=competitionState(wcarrier);if(enfieldState.type!=='won')throw new Error('W1D regression: current W1D custodian should be a confirmed winner');
-  if(!oxfordActiveResult){
-    const enfieldNext=nextRoundInfo(wcarrier);
-    const enfieldSecondQ=allowActiveAdvance?canonicalSecondQFixture(wcarrier,'W1D regression'):assertSecondQFixture(enfieldNext,wcarrier,'W1D regression');
-    if(same(enfieldSecondQ.home,'Frenford')||same(enfieldSecondQ.away,'Frenford'))throw new Error('W1D regression: played Frenford-Enfield First Qualifying tie leaked into Enfield next-round fixture');
-  }
+  const enfieldSecondQResult=whistory.find(r=>
+    /Second Round Qualifying$/i.test(String(r.round||''))&&
+    same(r.home,'Billericay Town')&&same(r.away,'Enfield Town')&&
+    Number(r.home_score)===1&&Number(r.away_score)===3&&same(r.winner,'Enfield Town'));
+  if(!enfieldSecondQResult)throw new Error('W1D regression: historical Billericay 1-3 Enfield result missing from journey');
+  // Do not freeze the current W1D custodian here. Future-round custody is
+  // derived from the complete breadcrumb chain and checked generically by
+  // journey_integrity_regression.js.
+  if(same(wcarrier.name,'Frenford'))throw new Error('W1D regression: custody failed to advance beyond historical Frenford loss');
 
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
