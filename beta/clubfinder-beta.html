@@ -53,14 +53,11 @@
 .tin-foil-result-health-item+ .tin-foil-result-health-item{margin-top:9px;padding-top:9px;border-top:1px solid rgba(0,0,0,.12)}
 .tin-foil-result-health-title{font-weight:600;margin-bottom:2px}
 .tin-foil-result-health--grace{background:#fff7d6;border:1px solid #d5b84b;color:#3d3300}
-.tin-foil-result-health--overdue{background:#fff0d8;border:1px solid #cf8128;color:#4d2a00}.challenges-launch{background:#e4bb26!important;color:#111!important}.challenges-launch:hover{filter:brightness(.92)}.campaign-identity{margin:0 0 10px;padding:7px 10px;border-radius:5px;background:#eeeeee;border-left:4px solid #084c61;color:#084c61;font-size:12px;font-weight:600}.pigeon-name-input{display:inline-block;width:200px;max-width:40vw;border:0;border-radius:0;background:transparent;color:inherit;padding:0 2px;margin:0;font:inherit;font-weight:inherit;line-height:inherit;vertical-align:baseline;outline:none}.pigeon-name-input::placeholder{color:inherit;opacity:.68}.pigeon-name-input:focus{border:0}.campaign-identity[hidden]{display:none}
-/* BETA mobile: put the Call Sign and the full Pigeon Name on separate lines. */
+.tin-foil-result-health--overdue{background:#fff0d8;border:1px solid #cf8128;color:#4d2a00}.challenges-launch{background:#e4bb26!important;color:#111!important}.challenges-launch:hover{filter:brightness(.92)}.campaign-identity{margin:0 0 10px;padding:7px 10px;border-radius:5px;background:#eeeeee;border-left:4px solid #084c61;color:#084c61;font-size:12px;font-weight:600;white-space:normal}.campaign-call-sign{display:block;overflow-wrap:anywhere}.campaign-pigeon-name{display:block;margin-top:4px}.campaign-pigeon-label{white-space:nowrap}.pigeon-name-input{display:inline-block;width:200px;max-width:40vw;border:0;border-radius:0;background:transparent;color:inherit;padding:0 2px;margin:0;font:inherit;font-weight:inherit;line-height:inherit;vertical-align:baseline;outline:none}.pigeon-name-input::placeholder{color:inherit;opacity:.68}.pigeon-name-input:focus{border:0}.campaign-identity[hidden]{display:none}
+/* BETA mobile: preserve the two identity rows while allowing the name field to flex safely. */
 @media(max-width:680px){
- .campaign-identity{white-space:normal}
- .campaign-call-sign{display:block;overflow-wrap:anywhere}
- .campaign-identity-separator{display:none}
- .campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;min-width:0;margin-top:4px}
- .campaign-pigeon-label{flex:0 0 auto;white-space:nowrap}
+ .campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;min-width:0}
+ .campaign-pigeon-label{flex:0 0 auto}
  .campaign-pigeon-name .pigeon-name-input{display:block;flex:1 1 205px;min-width:0;width:auto;max-width:none;padding:0 2px 1px;line-height:1.4}
 }
 </style></head><!-- C13 UX POSTCODE SEARCH v2: explicit Find My Club fresh-search semantics -->
@@ -1219,7 +1216,7 @@ function tinFoilPigeonNameInputHtml(saved){
 function tinFoilCampaignIdentityInnerHtml(saved){
   const callSign=tinFoilSavedCallSign(saved);
   if(!callSign)return '';
-  return '<span class="campaign-call-sign">Pigeon Call Sign: '+esc(callSign)+'</span><span class="campaign-identity-separator" aria-hidden="true"> · </span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';
+  return '<span class="campaign-call-sign">Pigeon Call Sign: '+esc(callSign)+'</span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';
 }
 function tinFoilSavePigeonName(value){
   const saved=loadSavedJourney();
