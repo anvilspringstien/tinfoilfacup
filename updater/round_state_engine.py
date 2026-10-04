@@ -27,6 +27,7 @@ REPLAY_ROUNDS = {
 }
 NON_TERMINAL_STATUSES = {"POSTPONED", "ABANDONED", "SUSPENDED"}
 AWARD_STATUSES = {"AWARDED", "WALKOVER"}
+VOID_STATUSES = {"VOID", "VOIDED"}
 
 TEAM_IDENTITY_ALIASES = {
     "bedfont sports club": "bedfont sports",
@@ -164,6 +165,33 @@ def classify_observation(fixture, observation, history=None):
         row for row in unique_history(history)
         if pair_key(row) == pair_key(fixture) and base_round(row.get("round")) == round_name
     ]
+
+    # A later governing-body disposition may supersede the competitive
+    # authority of a match that really took place. Preserve the played match
+    # fields, but explicitly withdraw its winner and create replay ancestry.
+    if status in VOID_STATUSES:
+        decision = str(obs.get("decision") or "").lower()
+        if decision != "voided-replay-ordered":
+            raise ValueError("void disposition requires explicit replay-order decision")
+        target_date = str(obs.get("date") or "")
+        prior = [
+            row for row in relevant
+            if str(row.get("date") or "") == target_date and is_terminal(row)
+        ]
+        if len(prior) != 1:
+            raise ValueError("void disposition must identify exactly one recorded terminal match")
+        superseded = dict(prior[0])
+        superseded.update({
+            "status": "VOID",
+            "winner": "",
+            "decision": "voided-replay-ordered",
+        })
+        return {
+            "kind": "disposition",
+            "result": superseded,
+            "supersedes": prior[0],
+            "reason": "explicit-void-replay-order",
+        }
 
     duplicate_candidate = dict(obs)
     if status.startswith("FT"):

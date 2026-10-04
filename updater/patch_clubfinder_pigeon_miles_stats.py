@@ -66,7 +66,8 @@ text = text.replace(sig, helper + 'async function journeyCertificate(origin){\n 
 venue_anchor = "    return {ground:(g&&g.ground)||'Venue TBC',postcode:(g&&g.postcode)||'Postcode TBC'};\n  }\n\n\n  const clubs=[];"
 if text.count(venue_anchor) != 1:
     raise SystemExit(f'ABORT: expected one venueForResult completion anchor, found {text.count(venue_anchor)}')
-pigeon_calc = "    return {ground:(g&&g.ground)||'Venue TBC',postcode:(g&&g.postcode)||'Postcode TBC'};\n  }\n\n  const savedJourneyForStats=loadSavedJourney();\n  const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);\n  const pigeonMilesDisplay=pigeonStats.display;\n\n\n  const clubs=[];"
+pigeon_calc = "    return {ground:(g&&g.ground)||'Venue TBC',postcode:(g&&g.postcode)||'Postcode TBC'};\n  }\n\n  const savedJourneyForStats=loadSavedJourney();\n  const travelHistory=tinFoilPlayedTravelHistory(origin);
+  const pigeonStats=await tinFoilPigeonMilesForStats(travelHistory,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);\n  const pigeonMilesDisplay=pigeonStats.display;\n\n\n  const clubs=[];"
 text = text.replace(venue_anchor, pigeon_calc, 1)
 
 stats_old = "• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Wins by Current Custodian: '+custodianWins+'<br>• Draws: '+draws+'<br>• Defeats by Current Custodian: '+custodianDefeats+'"
@@ -86,6 +87,7 @@ required = [
     'async function journeyCertificate(origin)',
     '2*hav(start,venue)',
     'savedJourneyForStats&&savedJourneyForStats.postcode',
+    'const travelHistory=tinFoilPlayedTravelHistory(origin);',
     'Pigeon Miles Flown:',
     'Awaiting venue location',
     'Pigeon Miles = twice the straight-line distance from your Campaign start postcode to each tie venue.',

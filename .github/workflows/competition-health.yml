@@ -64,6 +64,9 @@ on:
       - "updater/clubfinder_stats_regression.js"
       - "updater/journey_integrity_regression.js"
       - "updater/future_round_stats_regression.js"
+      - "updater/pigeon_vale_catastrophe_regression.py"
+      - "updater/pigeon_vale_final_boss_build.py"
+      - "updater/pigeon_vale_final_boss_clubfinder.js"
       - "tests/test_production_thame_next_fixture.js"
       - ".github/workflows/competition-health.yml"
 
@@ -214,6 +217,24 @@ jobs:
 
       - name: Run Future Round Stats and Pigeon Miles truth drill
         run: node updater/future_round_stats_regression.js
+      - name: Run Pigeon Vale Catastrophe canonical disposition drill
+        run: python updater/pigeon_vale_catastrophe_regression.py
+      - name: Run Pigeon Vale Final Boss continuous handoff
+        run: |
+          python updater/pigeon_vale_final_boss_build.py
+          node updater/pigeon_vale_final_boss_clubfinder.js
+          python - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'updater')
+          from refresh_beta_embedded_snapshot import refresh, BETA
+          p=Path('updater/pigeon-vale-catastrophe-candidate.json')
+          candidate=json.loads(p.read_text(encoding='utf-8'))
+          propagated=json.loads(refresh(BETA.read_text(encoding='utf-8'),candidate))
+          assert propagated == candidate
+          print('FINAL BOSS STAGE 3 — EXACT BETA FALLBACK PROPAGATION: PASS')
+          p.unlink()
+          PY
 
       - name: Run historical Campaign regression
         run: node updater/historical_journey_regression.js

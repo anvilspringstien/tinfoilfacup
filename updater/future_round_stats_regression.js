@@ -85,6 +85,56 @@ const assertions=`
   console.log('Generic postcode geocoding contract: PASS');
   console.log('Production round-trip formula 2 x hav(start, venue): PASS');
   console.log('Pigeon Miles:',stats.display);
+
+  // Mileage Preservation Society: a played match can lose competitive
+  // authority without ceasing to be a journey that actually happened.
+  const voided={
+    round:'Fourth Round Qualifying',date:'2099-10-10',
+    home:'Pigeon Vale',away:'Deterministic United',
+    home_score:1,away_score:1,winner:'',status:'VOID',
+    decision:'voided-replay-ordered',
+    venue:{ground:'The Great Deterministic Boundary',postcode:'ZZ1 1ZZ',verification:'verified'}
+  };
+  const replay={
+    round:'Fourth Round Qualifying Replay',date:'2099-10-14',
+    home:'Deterministic United',away:'Pigeon Vale',
+    home_score:2,away_score:2,winner:'Deterministic United',status:'FT(AET)',
+    decision:'penalties',
+    venue:{ground:'Tomorrow Stadium',postcode:'XX1 1XX',verification:'verified'}
+  };
+  const saved=LIVE_COMPETITION_DATA;
+  try{
+    LIVE_COMPETITION_DATA={
+      schema_version:1,
+      result_history:{'Pigeon Vale':[voided,replay],'Deterministic United':[voided,replay]},
+      results:{'Pigeon Vale':replay,'Deterministic United':replay},
+      fixtures:{}
+    };
+    const origin={name:'Pigeon Vale',entry_round:'Fourth Round Qualifying',fixture:{}};
+    const journey=buildJourney(origin);
+    if(!sameClubIdentity(journey.carrier.name,'Deterministic United'))
+      throw new Error('VOID contaminated custody: '+journey.carrier.name);
+    if((journey.breadcrumbs||[]).some(x=>String(x.result.status).toUpperCase()==='VOID'))
+      throw new Error('VOID leaked into competitive breadcrumbs');
+
+    const travel=tinFoilPlayedTravelHistory(origin);
+    if(travel.length!==2)throw new Error('expected original played trip + replay trip, got '+travel.length);
+    if(!travel.some(x=>String(x.result.status).toUpperCase()==='VOID'))
+      throw new Error('voided played trip disappeared from travel history');
+
+    const catastropheMiles=await tinFoilPigeonMilesForStats(travel,'WW1 1WW',completedResultVenue);
+    const start=syntheticPostcodeCoords('WW1 1WW');
+    const first=syntheticPostcodeCoords('ZZ1 1ZZ');
+    const second=syntheticPostcodeCoords('XX1 1XX');
+    const expectedCatastrophe=
+      2*hav({lat:start.latitude,lon:start.longitude},{lat:first.latitude,lon:first.longitude})+
+      2*hav({lat:start.latitude,lon:start.longitude},{lat:second.latitude,lon:second.longitude});
+    if(Math.abs(Number(catastropheMiles.miles)-expectedCatastrophe)>1e-9)
+      throw new Error('Catastrophe mileage did not preserve both trips');
+    console.log('MILEAGE PRESERVATION SOCIETY: PASS');
+    console.log('VOID excluded from custody but retained as played travel: PASS');
+    console.log('Original trip + replay trip both contribute Pigeon Miles: PASS');
+  }finally{LIVE_COMPETITION_DATA=saved;}
 })().catch(e=>{console.error('FUTURE ROUND STATS TRUTH ERROR:',e&&e.message?e.message:String(e));process.exitCode=1});
 `;
 
