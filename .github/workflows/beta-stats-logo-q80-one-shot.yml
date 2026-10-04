@@ -3,7 +3,7 @@ on:
   push:
     branches: [perf/beta-stats-q80-webp]
 permissions:
-  contents: read
+  contents: write
 jobs:
   compare:
     if: github.actor != 'github-actions[bot]'
@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python -m pip install pillow
-      - name: Convert logo without resizing
+      - name: Build comparison asset
         run: |
           python - <<'PY'
           from PIL import Image
           import os
           src='beta/assets/stats-report/header-logo-f533fc07b55f.png'
-          dst='/tmp/header-logo-q80.webp'
+          dst='beta/assets/stats-report/header-logo-q80.webp'
           im=Image.open(src).convert('RGBA')
           size=im.size
           im.save(dst,'WEBP',quality=80,method=6)
@@ -25,3 +25,11 @@ jobs:
           assert check.size == size
           print(f'LOGO: {size[0]}x{size[1]} {os.path.getsize(src)} -> {os.path.getsize(dst)} ({(1-os.path.getsize(dst)/os.path.getsize(src))*100:.1f}% reduction)')
           PY
+      - name: Commit comparison asset and remove one-shot workflow
+        run: |
+          rm .github/workflows/beta-stats-logo-q80-one-shot.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beta/assets/stats-report/header-logo-q80.webp .github/workflows/beta-stats-logo-q80-one-shot.yml
+          git commit -m "BETA: add q80 Stats logo comparison asset"
+          git push
