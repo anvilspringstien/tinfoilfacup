@@ -72,4 +72,4 @@ const futureAssertions=`
   }finally{LIVE_COMPETITION_DATA=saved;}
 })();
 `;
-try{vm.runInContext(scripts+'\\n'+futureAssertions,sandbox,{filename:'clubfinder-future-round.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
+try{vm.runInContext(scripts+'\n'+futureAssertions,sandbox,{filename:'clubfinder-future-round.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
