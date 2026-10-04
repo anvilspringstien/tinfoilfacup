@@ -16,7 +16,7 @@ def refresh(html, data):
     if not data.get('result_history') or not data.get('fixtures'):
         raise ValueError('Canonical result history/fixtures missing')
     required = (
-        "const LIVE_COMPETITION_DATA_URL='./competition.json';",
+        "const LIVE_COMPETITION_DATA_URL='../competition.json';",
         "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';",
         "let LIVE_COMPETITION_DATA=null;",
         'fetch(FALLBACK_COMPETITION_DATA_URL',
