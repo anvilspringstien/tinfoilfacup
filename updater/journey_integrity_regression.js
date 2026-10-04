@@ -44,3 +44,32 @@ const assertions=`
   console.log('Live competition cache-busting: PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 try{vm.runInContext(scripts+'\n'+assertions,sandbox,{filename:'clubfinder.html'});}catch(e){console.error(e.stack||e);process.exit(1)}
+
+
+// Construction Law Future Round Fire Drill: inject a completely unfamiliar
+// canonical result into the real production Clubfinder engine. The fictional
+// clubs are deliberately absent from ELIGIBLE; buildJourney must still derive
+// the winning custodian from canonical history without a club-specific patch.
+const futureAssertions=`
+(()=>{
+  const saved=LIVE_COMPETITION_DATA;
+  try{
+    const r={round:'Fourth Round Qualifying',date:'2099-10-10',home:'Pigeon Vale',away:'Anvil Rovers',home_score:3,away_score:1,winner:'Pigeon Vale',status:'FT',decision:''};
+    LIVE_COMPETITION_DATA={
+      schema_version:1,
+      result_history:{'Pigeon Vale':[r],'Anvil Rovers':[r]},
+      results:{'Pigeon Vale':r,'Anvil Rovers':r},
+      fixtures:{}
+    };
+    const origin={name:'Anvil Rovers',entry_round:'Fourth Round Qualifying',fixture:{}};
+    const j=buildJourney(origin);
+    if(!j||!j.carrier||!sameClubIdentity(j.carrier.name,'Pigeon Vale'))
+      throw new Error('Future Round Clubfinder Truth failed: expected Pigeon Vale custodian, got '+((j&&j.carrier&&j.carrier.name)||'none'));
+    if(!j.breadcrumbs||j.breadcrumbs.length!==1||!sameClubIdentity(j.breadcrumbs[0].result.home,'Pigeon Vale'))
+      throw new Error('Future Round Clubfinder Truth failed: canonical breadcrumb missing');
+    console.log('FUTURE ROUND CLUBFINDER TRUTH: PASS');
+    console.log('Unknown origin Anvil Rovers -> derived custodian Pigeon Vale: PASS');
+  }finally{LIVE_COMPETITION_DATA=saved;}
+})();
+`;
+try{vm.runInContext(futureAssertions,sandbox,{filename:'future-round-assertions.js'});}catch(e){console.error('FUTURE ROUND CLUBFINDER TRUTH ERROR:',e&&e.message?e.message:String(e));process.exit(1)}
