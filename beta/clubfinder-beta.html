@@ -1851,13 +1851,13 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '<div class="top-right"><img class="logo" src="assets/stats-report/header-logo-f533fc07b55f.png" alt="Tin Foil FA Cup — The Four Laws"><div class="tiny-rule"></div><div class="season">'+season+'</div><div class="tiny-rule"></div></div></section>'+(campaignCallSign?'<section class="campaign-identity-band"><span class="campaign-identity-label">PIGEON CALL SIGN:</span> <span class="campaign-identity-value">'+certEsc(campaignCallSign)+'</span>'+(campaignPigeonName?' <span class="campaign-identity-name-row"><span class="campaign-identity-label"><span class="campaign-identity-separator" aria-hidden="true">· </span>PIGEON NAME:</span> <span class="campaign-identity-value">'+certEsc(campaignPigeonName)+'</span></span>':'')+'</section>':'')+
 
   '<section class="section"><div class="section-title">AT A GLANCE</div><div class="glance">'+
-  '<div class="g"><div class="g-label">Rounds<br>Completed</div><div class="icon-circle"><img src="assets/stats-report/rounds-completed-b2fef60a225c.png" alt="Rounds Completed"></div><div class="g-num">'+rounds+'</div></div>'+
-  '<div class="g"><div class="g-label">Matches<br>Played</div><div class="icon-circle"><img src="assets/stats-report/matches-played-298ff9e75570.png" alt="Matches Played"></div><div class="g-num">'+matches+'</div></div>'+
-  '<div class="g"><div class="g-label">Clubs<br>Encountered</div><div class="icon-circle"><img src="assets/stats-report/clubs-encountered-ef3c16d79856.png" alt="Clubs Encountered"></div><div class="g-num">'+clubs.length+'</div></div>'+
-  '<div class="g"><div class="g-label">Goals<br>Seen</div><div class="icon-circle"><img src="assets/stats-report/goals-seen-7de1249b67bf.png" alt="Goals Seen"></div><div class="g-num">'+goals+'</div></div>'+
-  '<div class="g"><div class="g-label">Grounds<br>Visited</div><div class="icon-circle"><img src="assets/stats-report/grounds-visited-6848e3eb51f9.png" alt="Grounds Visited"></div><div class="g-num">'+grounds+'</div></div>'+
+  '<div class="g"><div class="g-label">Rounds<br>Completed</div><div class="icon-circle"><img src="../assets/stats/rounds-completed.svg" alt="Rounds Completed"></div><div class="g-num">'+rounds+'</div></div>'+
+  '<div class="g"><div class="g-label">Matches<br>Played</div><div class="icon-circle"><img src="../assets/stats/matches-played.svg" alt="Matches Played"></div><div class="g-num">'+matches+'</div></div>'+
+  '<div class="g"><div class="g-label">Clubs<br>Encountered</div><div class="icon-circle"><img src="../assets/stats/clubs-encountered.svg" alt="Clubs Encountered"></div><div class="g-num">'+clubs.length+'</div></div>'+
+  '<div class="g"><div class="g-label">Goals<br>Seen</div><div class="icon-circle"><img src="../assets/stats/goals-seen.svg" alt="Goals Seen"></div><div class="g-num">'+goals+'</div></div>'+
+  '<div class="g"><div class="g-label">Grounds<br>Visited</div><div class="icon-circle"><img src="../assets/stats/grounds-visited.svg" alt="Grounds Visited"></div><div class="g-num">'+grounds+'</div></div>'+
   /* TIN_FOIL_PIGEON_MILES_GLANCE */
-  '<div class="g"><div class="g-label">Pigeon<br><span style="white-space:nowrap">Miles Flown</span></div><div class="icon-circle"><img src="assets/stats-report/pigeon-miles-flown-143c833d4cdf.png" alt="Pigeon Miles Flown"></div><div class="g-num">'+certEsc(pigeonMilesDisplay)+'</div></div>'+
+  '<div class="g"><div class="g-label">Pigeon<br><span style="white-space:nowrap">Miles Flown</span></div><div class="icon-circle"><img src="../assets/stats/pigeon-miles-flown.svg" alt="Pigeon Miles Flown"></div><div class="g-num">'+certEsc(pigeonMilesDisplay)+'</div></div>'+
   '</div></section>'+
 
   '<section class="section"><div class="section-title">THE CAMPAIGN SO FAR</div><div class="journey-head"><div>Round</div><div>Fixture</div><div>Date</div><div>Venue</div><div>Winner / Next Custodian</div></div>'+historyRows+'</section>'+
