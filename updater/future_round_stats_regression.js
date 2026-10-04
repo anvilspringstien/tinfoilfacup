@@ -29,6 +29,7 @@ function syntheticPostcodeCoords(pc){
 }
 const sandbox={
   console,process,document:documentStub,MutationObserver:undefined,
+  syntheticPostcodeCoords,
   localStorage:{getItem(){return null},setItem(){},removeItem(){}},
   navigator:{},location:{href:'https://example.test/clubfinder.html'},
   URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,
