@@ -290,9 +290,12 @@ const assertions=`
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
   function checkStatsImages(page){
-    const urls=[...page.matchAll(new RegExp('<img[^>]+src="(assets/stats-report/[a-z0-9-]+[.]png)"','g'))].map(m=>m[1]);
-    if(urls.length!==7||new Set(urls).size!==7||page.includes('data:image/png;base64,'))
-      throw new Error('BETA Stats: expected seven distinct external report images; got '+JSON.stringify(urls));
+    const pngs=[...page.matchAll(new RegExp('<img[^>]+src="(assets/stats-report/[a-z0-9-]+[.]png)"','g'))].map(m=>m[1]);
+    const svgs=[...page.matchAll(new RegExp('<img[^>]+src="([.][.]\\/assets\\/stats\\/[a-z0-9-]+[.]svg)"','g'))].map(m=>m[1]);
+    const urls=[...pngs,...svgs];
+    if(pngs.length!==1||!pngs[0].includes('header-logo-')||
+       svgs.length!==6||new Set(urls).size!==7||page.includes('data:image/png;base64,'))
+      throw new Error('BETA Stats: expected one external PNG header and six external SVG roundels; got '+JSON.stringify(urls));
     return urls;
   }
   const statsImages=checkStatsImages(instantPage);
