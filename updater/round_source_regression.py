@@ -99,6 +99,51 @@ different_score = [
 ]
 require(len(dedupe_observations(different_score)) == 2, "different cross-source scorelines must never collapse")
 
+# Construction Law source-parser fire drill. Keep these fictional names aligned
+# with round_state_regression.py: the parser must accept a completely unfamiliar
+# future draw without learning any club names.
+future_known = [
+    {"round": "Fourth Round Qualifying", "home": "Pigeon Vale", "away": "Anvil Rovers", "date": "2099-10-10"},
+    {"round": "Fourth Round Qualifying", "home": "Tin Foil Athletic", "away": "Mission Control", "date": "2099-10-10"},
+    {"round": "Fourth Round Qualifying", "home": "Fossil Town", "away": "Deterministic United", "date": "2099-10-10"},
+]
+future_html = """
+<h3>Saturday 10th October 2099</h3>
+<table>
+<tr><td>FT</td><td>Pigeon Vale</td><td>3</td><td>1</td><td>Anvil Rovers</td></tr>
+<tr><td>FT</td><td>Tin Foil Athletic</td><td>0</td><td>2</td><td>Mission Control</td></tr>
+<tr><td>FT</td><td>Fossil Town</td><td>2</td><td>2</td><td>Deterministic United</td></tr>
+</table>
+"""
+future_rows = parse_fwp_observations(future_html, future_known, "synthetic-future-round")
+require(len(future_rows) == 3, "unfamiliar future round should map all canonical ties")
+future_scores = {
+    (row["observation"]["home"], row["observation"]["away"]):
+    (row["observation"]["home_score"], row["observation"]["away_score"])
+    for row in future_rows
+}
+require(future_scores[("Pigeon Vale", "Anvil Rovers")] == (3, 1),
+        "Pigeon Vale source row should parse without club-specific knowledge")
+require(future_scores[("Tin Foil Athletic", "Mission Control")] == (0, 2),
+        "unfamiliar away win should parse without club-specific knowledge")
+require(future_scores[("Fossil Town", "Deterministic United")] == (2, 2),
+        "unfamiliar draw should parse without club-specific knowledge")
+
+future_replay_html = """
+<h3>Tuesday 13th October 2099</h3>
+<table>
+<tr><td>FT (AET)</td><td>Deterministic United</td><td>1</td><td>1</td><td>Fossil Town</td></tr>
+<tr><td>Fossil Town win 5-4 on penalties</td></tr>
+</table>
+"""
+future_replay_rows = parse_fwp_observations(future_replay_html, future_known, "synthetic-future-replay")
+require(len(future_replay_rows) == 1, "unfamiliar reversed replay should map to its canonical tie")
+future_replay_obs = future_replay_rows[0]["observation"]
+require(future_replay_obs["status"] == "FT (AET)",
+        "future replay extra-time status should survive parsing")
+require(future_replay_obs["winner"] == "Fossil Town" and future_replay_obs["decision"] == "penalties",
+        "future replay penalty winner should parse generically")
+
 print("ROUND SOURCE REGRESSION: PASS")
 print("Penalty winner note: PASS")
 print("P-P postponed event: PASS")
@@ -107,4 +152,4 @@ print("Unrelated rows ignored: PASS")
 print("Cross-source adjacent-date dedupe: PASS")
 print("Same-source replay chronology preserved: PASS")
 print("Different scorelines preserved: PASS")
-print("Active-round FWP archive pinning: PASS")
+print("Active-round FWP archive pinning: PASS")\nprint("Future Round source-parser drill — unfamiliar draw/replay: PASS")
