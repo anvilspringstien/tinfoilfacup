@@ -82,6 +82,61 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
         self.assertNotIn('Thame United', rendered)
         self.assertNotIn('Eastbourne Borough', rendered)
 
+    def test_pigeon_vale_catastrophe_reaches_fallback_exactly(self):
+        voided = {
+            'round': 'Fourth Round Qualifying', 'date': '2099-10-10',
+            'home': 'Pigeon Vale', 'away': 'Deterministic United',
+            'home_score': 1, 'away_score': 1, 'winner': '',
+            'status': 'VOID', 'decision': 'voided-replay-ordered',
+            'venue': {'ground': 'The Great Deterministic Boundary',
+                      'postcode': 'ZZ1 1ZZ', 'verification': 'verified'},
+        }
+        replay = {
+            'round': 'Fourth Round Qualifying Replay', 'date': '2099-10-14',
+            'home': 'Deterministic United', 'away': 'Pigeon Vale',
+            'home_score': 2, 'away_score': 2, 'winner': 'Deterministic United',
+            'status': 'FT(AET)', 'decision': 'penalties',
+            'venue': {'ground': 'Tomorrow Stadium',
+                      'postcode': 'YY1 1YY', 'verification': 'verified'},
+        }
+        catastrophe = {
+            'schema_version': 1,
+            'updated_at': '2099-10-14T22:17:00Z',
+            'source_round': 'Fourth Round Qualifying',
+            'result_history': {
+                'Pigeon Vale': [voided, replay],
+                'Deterministic United': [voided, replay],
+            },
+            'results': {
+                'Pigeon Vale': replay,
+                'Deterministic United': replay,
+            },
+            'fixtures': {
+                'future-wednesday-v-deterministic-united': {
+                    'round': 'First Round Proper', 'date': '2099-11-07',
+                    'home': 'Future Wednesday', 'away': 'Deterministic United',
+                    'venue': {'ground': 'The Far Side of Tomorrow',
+                              'postcode': 'XX1 1XX', 'verification': 'verified'},
+                },
+            },
+            'match_events': [],
+        }
+        propagated = json.loads(refresh(self.html, catastrophe))
+        self.assertEqual(propagated, catastrophe)
+        history = propagated['result_history']['Pigeon Vale']
+        self.assertEqual(len(history), 2)
+        self.assertEqual(history[0]['status'], 'VOID')
+        self.assertEqual(history[0]['decision'], 'voided-replay-ordered')
+        self.assertEqual(history[0]['venue']['postcode'], 'ZZ1 1ZZ')
+        self.assertEqual(history[1]['round'], 'Fourth Round Qualifying Replay')
+        self.assertEqual(history[1]['winner'], 'Deterministic United')
+        self.assertEqual(history[1]['venue']['postcode'], 'YY1 1YY')
+        self.assertEqual(propagated['results']['Pigeon Vale']['winner'], 'Deterministic United')
+        self.assertEqual(
+            propagated['fixtures']['future-wednesday-v-deterministic-united']['venue']['postcode'],
+            'XX1 1XX',
+        )
+
     def test_changed_loader_boundary_fails_closed(self):
         for old, new in (
             ("../competition.json", "./competition.json"),
