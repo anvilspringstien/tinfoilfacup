@@ -1807,7 +1807,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
       afterReplayHtml=
         '<div class="after-replay"><div class="after-label">IF THROUGH</div>'+
         '<div class="after-round">'+certEsc(next.name||'Next Round')+'</div>'+
-        '<div class="after-meta">'+certEsc(next.date||'Date TBC')+'</div></div>';
+        '<div class="after-meta">'+certEsc(dateLabel(next.date))+'</div></div>';
     }
   }else if(next && next.knownFixture){
     const k=next.knownFixture, v=k.venue||{};
