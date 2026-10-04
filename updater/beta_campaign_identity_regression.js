@@ -5,12 +5,20 @@ const path=require('path');
 
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
-const reportImages=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.]png/g)].map(m=>m[0]);
-if(reportImages.length!==7||new Set(reportImages).size!==7)throw new Error('BETA Stats: report assets missing from renderer');
-for(const url of reportImages){
+const reportPngs=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.]png/g)].map(m=>m[0]);
+const reportSvgs=[...html.matchAll(/[.][.]\/assets\/stats\/[a-z0-9-]+[.]svg/g)].map(m=>m[0]);
+if(reportPngs.length!==1||!reportPngs[0].includes('header-logo-')||
+   reportSvgs.length!==6||new Set(reportSvgs).size!==6)
+  throw new Error('BETA Stats: report assets missing from renderer');
+for(const url of reportPngs){
   const bytes=fs.readFileSync(path.join(ROOT,'beta',url));
   if(!bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))
     throw new Error('BETA Stats: missing or invalid report image '+url);
+}
+for(const url of reportSvgs){
+  const file=path.resolve(ROOT,'beta',url);
+  const svg=fs.readFileSync(file,'utf8');
+  if(!/<svg\b/i.test(svg))throw new Error('BETA Stats: missing or invalid SVG report image '+url);
 }
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const liteRoute=fs.readFileSync(path.join(ROOT,'beta','stats-beta.html'),'utf8');
