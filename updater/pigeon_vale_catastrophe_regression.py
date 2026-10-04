@@ -4,6 +4,9 @@ from copy import deepcopy
 
 from auto_round_results import merge_disposition, merge_result, history_rows
 from round_state_engine import classify_observation
+from fixture_publishability_shadow import classify_publishability
+from refresh_beta_embedded_snapshot import refresh, BETA
+import json
 
 
 def require(value, message):
@@ -100,6 +103,47 @@ require(any(r.get("round") == "Fourth Round Qualifying Replay" and r.get("venue"
         "replay history/new venue did not survive")
 require(data["results"]["Pigeon Vale"]["winner"] == "Deterministic United",
         "latest canonical authority did not advance Deterministic United")
+
+# Final Boss: prove the abnormal state crosses the independent publication
+# decision and the real BETA fallback boundary as one disposable transaction.
+probe = {
+    "fixture": fixture,
+    "observation": {
+        "home": "Pigeon Vale", "away": "Deterministic United",
+        "date": "2099-10-10", "status": "VOID",
+        "decision": "voided-replay-ordered", "source_url": "synthetic-final-boss",
+    },
+}
+pre_void = {"result_history": {}, "results": {}, "match_events": []}
+merge_result(pre_void, terminal)
+publication = classify_publishability(
+    fixture["round"], [fixture], [probe], history_rows(pre_void)
+)
+require(len(publication["publishable"]) == 1, "VOID disposition failed publication boundary")
+require(publication["publishable"][0]["decision"] == "publishable-disposition",
+        "VOID disposition lost semantic publication type")
+
+data.update({
+    "schema_version": 1,
+    "updated_at": "2099-10-14T22:17:00Z",
+    "source_round": fixture["round"],
+    "fixtures": {
+        "future-next": {
+            "round": "First Round Proper", "date": "2099-11-07",
+            "home": "Future Wednesday", "away": "Deterministic United",
+            "venue": {"ground": "Far Side", "postcode": "XX1 1XX"},
+        }
+    },
+})
+fallback = json.loads(refresh(BETA.read_text(encoding="utf-8"), data))
+require(fallback == data, "BETA fallback changed continuous Catastrophe state")
+require(fallback["results"]["Pigeon Vale"]["winner"] == "Deterministic United",
+        "fallback resurrected obsolete winner")
+require(fallback["fixtures"]["future-next"]["venue"]["postcode"] == "XX1 1XX",
+        "fallback lost unfamiliar next fixture")
+
+print("PIGEON VALE FINAL BOSS DATA PIPELINE: PASS")
+print("Publication decision -> disposition -> replay -> next fixture -> fallback: PASS")
 
 print("PIGEON VALE CATASTROPHE — CANONICAL DISPOSITION: PASS")
 print("Initial AET/penalty result recorded: PASS")
