@@ -25,30 +25,9 @@ def fixture_id(fixture):
     ])
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--url", default="https://www.thefa.com/competitions/thefacup/results")
-    args = parser.parse_args()
-
-    data = json.loads(scanner.DATA.read_text(encoding="utf-8"))
-    round_name, known = scanner.active_fixtures(data)
-    if not round_name or not known:
-        raise SystemExit("Publishability shadow health failure: no canonical active draw available.")
-
-    source_url = scanner.fwp_round_url(round_name)
-    primary_raw = scanner.fetch(args.url)
-    fixtures_raw = scanner.fetch(source_url)
-    scanner.validate_fwp_round_page(fixtures_raw, round_name, source_url)
-    live_raw = scanner.fetch(scanner.FWP_LIVE_URL)
-
-    by_source = {
-        "primary_awards": scanner.parse_primary_awards(primary_raw, known, args.url),
-        "fwp_fixtures": scanner.parse_fwp_observations(fixtures_raw, known, source_url),
-        "fwp_live": scanner.parse_fwp_observations(live_raw, known, scanner.FWP_LIVE_URL),
-    }
-    observations = scanner.dedupe_observations(sum(by_source.values(), []))
-    history = scanner.history_rows(data)
-
+def classify_publishability(round_name, known, observations, history):
+    """Classify fixture observations without network, files, or publication side effects."""
+    history = list(history)
     observed_pairs = set()
     decisions = []
     publishable = []
@@ -126,6 +105,48 @@ def main():
                 "decision": "no-observation",
                 "reason": "No current source observation mapped to this canonical tie.",
             })
+
+    return {
+        "publishable": publishable,
+        "already_recorded": already_recorded,
+        "unresolved": unresolved,
+        "quarantined": quarantined,
+        "no_observation": no_observation,
+        "decisions": decisions,
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--url", default="https://www.thefa.com/competitions/thefacup/results")
+    args = parser.parse_args()
+
+    data = json.loads(scanner.DATA.read_text(encoding="utf-8"))
+    round_name, known = scanner.active_fixtures(data)
+    if not round_name or not known:
+        raise SystemExit("Publishability shadow health failure: no canonical active draw available.")
+
+    source_url = scanner.fwp_round_url(round_name)
+    primary_raw = scanner.fetch(args.url)
+    fixtures_raw = scanner.fetch(source_url)
+    scanner.validate_fwp_round_page(fixtures_raw, round_name, source_url)
+    live_raw = scanner.fetch(scanner.FWP_LIVE_URL)
+
+    by_source = {
+        "primary_awards": scanner.parse_primary_awards(primary_raw, known, args.url),
+        "fwp_fixtures": scanner.parse_fwp_observations(fixtures_raw, known, source_url),
+        "fwp_live": scanner.parse_fwp_observations(live_raw, known, scanner.FWP_LIVE_URL),
+    }
+    observations = scanner.dedupe_observations(sum(by_source.values(), []))
+    history = scanner.history_rows(data)
+
+    classified = classify_publishability(round_name, known, observations, history)
+    publishable = classified["publishable"]
+    already_recorded = classified["already_recorded"]
+    unresolved = classified["unresolved"]
+    quarantined = classified["quarantined"]
+    no_observation = classified["no_observation"]
+    decisions = classified["decisions"]
 
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
