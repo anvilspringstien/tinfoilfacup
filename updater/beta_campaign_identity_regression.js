@@ -44,6 +44,8 @@ if(!html.includes('.campaign-identity-label{display:inline;font-stretch:condense
 if(!html.includes('.campaign-identity-value{display:inline;font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:10pt'))throw new Error('BETA identity regression: Stats identity value sizing drifted');
 if(!html.includes("'petts wood & holmesdale|windsor & eton':{ground:'The New Inn Stadium',postcode:'BR2 8HQ'"))throw new Error('BETA parity regression: Petts Wood historical venue override missing');
 if(!html.includes('Pigeon Miles Flown:'))throw new Error('BETA parity regression: canonical Pigeon Miles Flown wording missing');
+if(!html.includes("certEsc(dateLabel(next.date))"))throw new Error('BETA Stats regression: round-only IF THROUGH date bypasses human date formatter');
+if(html.includes("certEsc(next.date||'Date TBC')"))throw new Error('BETA Stats regression: raw ISO IF THROUGH date formatter returned');
 if(html.includes('Pigeon Miles Travelled:')||html.includes('Pigeon Miles Traveled:'))throw new Error('BETA parity regression: retired Pigeon Miles travel wording returned');
 if(!html.includes('Pigeon<br><span style="white-space:nowrap">Miles Flown</span>'))throw new Error('BETA parity regression: At-a-Glance Pigeon Miles Flown label drifted');
 
