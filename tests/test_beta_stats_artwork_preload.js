@@ -4,12 +4,12 @@ function assert(cond,msg){if(!cond)throw new Error(msg);}
 
 const assets=[
   'assets/stats-report/header-logo-f533fc07b55f.png',
-  'assets/stats-report/rounds-completed-b2fef60a225c.png',
-  'assets/stats-report/matches-played-298ff9e75570.png',
-  'assets/stats-report/clubs-encountered-ef3c16d79856.png',
-  'assets/stats-report/goals-seen-7de1249b67bf.png',
-  'assets/stats-report/grounds-visited-6848e3eb51f9.png',
-  'assets/stats-report/pigeon-miles-flown-143c833d4cdf.png'
+  '../assets/stats/rounds-completed.svg',
+  '../assets/stats/matches-played.svg',
+  '../assets/stats/clubs-encountered.svg',
+  '../assets/stats/goals-seen.svg',
+  '../assets/stats/grounds-visited.svg',
+  '../assets/stats/pigeon-miles-flown.svg'
 ];
 const prepStart=html.indexOf("Preparing Your Stats");
 assert(prepStart>=0,'Stats prep page missing');
@@ -21,9 +21,12 @@ assert(prepWindow.includes("link.rel='preload';link.as='image';link.href=asset")
 assert(prepWindow.includes("if(asset.includes('header-logo-'))link.fetchPriority='high'"),
   'Stats header logo preload must have high fetch priority');
 
-const reportImages=[...html.matchAll(/assets\/stats-report\/[^"'\\]+\.png/g)].map(m=>m[0]);
-assert(reportImages.length===7&&new Set(reportImages).size===7,
-  'Stats renderer must retain exactly seven literal artwork references');
+const reportPngs=[...html.matchAll(/assets\/stats-report\/[^"'\\]+\.png/g)].map(m=>m[0]);
+const reportSvgs=[...html.matchAll(/\.\.\/assets\/stats\/[^"'\\]+\.svg/g)].map(m=>m[0]);
+assert(reportPngs.length===1&&reportPngs[0].includes('header-logo-'),
+  'Stats renderer must retain only the header logo PNG');
+assert(reportSvgs.length===6&&new Set(reportSvgs).size===6,
+  'Stats renderer must use the six SVG roundel masters');
 
 const statsDoc=html.indexOf('</style></head><body><main class="sheet"><div class="stats-return">');
 assert(statsDoc>=0,'Stats return control must be inside the Stats sheet');
