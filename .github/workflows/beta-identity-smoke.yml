@@ -43,9 +43,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Require BETA offline fallback to match canonical live competition data
-        run: |
-          python updater/refresh_beta_embedded_snapshot.py --check
-          python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+        run: python updater/refresh_beta_embedded_snapshot.py --check
+      - name: Prove Future Round canonical state reaches BETA fallback
+        run: python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
       - name: Regress BETA counter, Pigeon and refresh persistence
         run: node updater/beta_campaign_identity_regression.js
       - name: Regress live competition, fallback and unavailable loading
