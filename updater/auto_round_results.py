@@ -440,6 +440,24 @@ def merge_result(data, result):
     return changed
 
 
+
+def merge_disposition(data, supersedes, replacement):
+    """Replace one recorded match's competitive authority without erasing play/travel facts."""
+    changed = False
+    for club, arr in (data.setdefault("result_history", {}) or {}).items():
+        if not isinstance(arr, list):
+            continue
+        for index, old in enumerate(arr):
+            if isinstance(old, dict) and same_result(old, supersedes):
+                if old != replacement:
+                    arr[index] = dict(replacement)
+                    changed = True
+        arr.sort(key=lambda row: (str(row.get("date") or ""), 1 if str(row.get("round") or "").lower().endswith(" replay") else 0))
+        if arr and data.setdefault("results", {}).get(club) != arr[-1]:
+            data["results"][club] = arr[-1]
+            changed = True
+    return changed
+
 def merge_event(data, event):
     events = data.setdefault("match_events", [])
     key = (
@@ -504,6 +522,10 @@ def main():
                 changed = True
                 history.append(result)
                 history = unique_history(history)
+        elif outcome["kind"] == "disposition":
+            if merge_disposition(data, outcome["supersedes"], outcome["result"]):
+                changed = True
+                history = history_rows(data)
         elif outcome["kind"] == "event":
             if merge_event(data, outcome["event"]):
                 changed = True
