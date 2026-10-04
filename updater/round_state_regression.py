@@ -82,6 +82,39 @@ try:
 except ValueError:
     pass
 
+# Construction Law future-round fire drill. These clubs are deliberately
+# fictional and unfamiliar: adding an ordinary future round must not require
+# teaching the classifier their names.
+future_round = "Fourth Round Qualifying"
+future_fixtures = [
+    {"round": future_round, "home": "Pigeon Vale", "away": "Anvil Rovers", "date": "2099-10-10"},
+    {"round": future_round, "home": "Tin Foil Athletic", "away": "Mission Control", "date": "2099-10-10"},
+    {"round": future_round, "home": "Fossil Town", "away": "Deterministic United", "date": "2099-10-10"},
+]
+future_observations = [
+    obs("2099-10-10", home="Pigeon Vale", away="Anvil Rovers", hs=3, ass=1),
+    obs("2099-10-10", home="Tin Foil Athletic", away="Mission Control", hs=0, ass=2),
+    obs("2099-10-10", home="Fossil Town", away="Deterministic United", hs=2, ass=2),
+]
+future_results = [
+    classify_observation(fixture_row, observation, [])["result"]
+    for fixture_row, observation in zip(future_fixtures, future_observations)
+]
+require([row["winner"] for row in future_results[:2]] == ["Pigeon Vale", "Mission Control"],
+        "unfamiliar home/away winners must derive from scores")
+require(future_results[2]["winner"] == "" and future_results[2]["decision"] == "draw-replay",
+        "unfamiliar qualifying draw must create replay ancestry")
+future_replay = classify_observation(
+    future_fixtures[2],
+    obs("2099-10-13", home="Deterministic United", away="Fossil Town", hs=1, ass=1,
+        winner="Fossil Town", decision="penalties"),
+    [future_results[2]],
+)["result"]
+require(future_replay["round"] == future_round + " Replay",
+        "unfamiliar later match after draw must become replay")
+require(future_replay["winner"] == "Fossil Town",
+        "unfamiliar replay penalty winner must resolve custody")
+
 print("ROUND STATE REGRESSION: PASS")
 print("Ordinary decisive result: PASS")
 print("Draw -> replay ancestry (orientation independent): PASS")
@@ -90,4 +123,4 @@ print("Walkover/award without invented score: PASS")
 print("Qualifying replay penalties: PASS")
 print("Competition Proper no-replay rule: PASS")
 print("FA-ordered replay after void result: PASS")
-print("Terminal chronology conflict fails closed: PASS")
+print("Terminal chronology conflict fails closed: PASS")\nprint("Future Round Fire Drill — unfamiliar multi-tie round: PASS")
