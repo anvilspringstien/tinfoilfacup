@@ -214,6 +214,8 @@ jobs:
 
       - name: Run Future Round Stats and Pigeon Miles truth drill
         run: node updater/future_round_stats_regression.js
+      - name: Run Pigeon Vale Catastrophe canonical disposition drill
+        run: python updater/pigeon_vale_catastrophe_regression.py
 
       - name: Run historical Campaign regression
         run: node updater/historical_journey_regression.js
