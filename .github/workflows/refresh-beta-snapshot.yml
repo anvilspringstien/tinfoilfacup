@@ -3,7 +3,7 @@ name: Refresh BETA fallback from canonical competition
 on:
   workflow_dispatch:
   push:
-    branches: [main, hardening/future-round-beta-fallback-truth]
+    branches: [main]
     paths:
       - 'competition.json'
       - '.github/workflows/refresh-beta-snapshot.yml'
