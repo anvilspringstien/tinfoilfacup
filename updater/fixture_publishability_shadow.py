@@ -78,6 +78,21 @@ def classify_publishability(round_name, known, observations, history):
             decisions.append(row)
             history.append(result)
             history = scanner.unique_history(history)
+        elif kind == "disposition":
+            result = outcome["result"]
+            row = {
+                **base,
+                "decision": "publishable-disposition",
+                "reason": outcome.get("reason", ""),
+                "result": result,
+                "supersedes": outcome.get("supersedes"),
+            }
+            publishable.append(row)
+            decisions.append(row)
+            supersedes = outcome.get("supersedes")
+            if supersedes:
+                history = [result if scanner.same_result(r, supersedes) else r for r in history]
+            history = scanner.unique_history(history)
         elif kind == "duplicate":
             row = {**base, "decision": "already-recorded", "reason": outcome.get("reason", "")}
             already_recorded.append(row)
