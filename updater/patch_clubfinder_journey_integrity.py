@@ -69,27 +69,32 @@ text, n = journey_pat.subn(lambda m: new_build + ' function previousRoundsHtml',
 if n != 1:
     raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-render_helper = r'''function tinFoilPlayedTravelHistory(origin){
-  const seen=[];
-  const clubs=[origin];
-  let competitive=origin;
-  for(let hop=0;hop<20;hop++){
-    const history=historicalResultsForClub(competitive);
-    for(const item of history){
-      const r=(item||{}).result||{};
-      const status=String(r.status||'').toUpperCase();
-      const hs=Number(r.home_score),as=Number(r.away_score);
-      const actuallyPlayed=(status.startsWith('FT')||status==='VOID'||status==='VOIDED')&&Number.isFinite(hs)&&Number.isFinite(as);
-      if(actuallyPlayed&&!seen.some(x=>sameSemanticResult(x.result,r)))seen.push(item);
-    }
-    const journey=buildJourney(origin);
-    const next=(journey&&journey.carrier)||competitive;
-    if(sameClubIdentity(next.name,competitive.name))break;
-    competitive=next;
-    clubs.push(competitive);
+render_helper = r'''function tinFoilRawHistoryForClub(club){
+  const live=(typeof LIVE_COMPETITION_DATA!=='undefined'&&LIVE_COMPETITION_DATA)||{};
+  const target=club&&club.name?club.name:club;
+  const out=[];
+  const add=r=>{
+    if(!r||!(sameClubIdentity(r.home,target)||sameClubIdentity(r.away,target)))return;
+    if(!out.some(item=>sameSemanticResult(item.result,r)))out.push({result:r});
+  };
+  for(const bucket of Object.values(live.result_history||{})){
+    if(Array.isArray(bucket))for(const r of bucket)add(r);
   }
+  for(const r of Object.values(live.results||{}))add(r);
+  return out;
+}
+function tinFoilPlayedTravelHistory(origin){
+  const seen=[];
+  const competitiveJourney=buildJourney(origin);
+  const clubs=[origin];
+  for(const item of (competitiveJourney.breadcrumbs||[])){
+    const r=(item||{}).result||{};
+    const winner=canonicalResultWinner(r);
+    if(winner)clubs.push({name:winner});
+  }
+  if(competitiveJourney.carrier)clubs.push(competitiveJourney.carrier);
   for(const club of clubs){
-    for(const item of historicalResultsForClub(club)){
+    for(const item of tinFoilRawHistoryForClub(club)){
       const r=(item||{}).result||{};
       const status=String(r.status||'').toUpperCase();
       const hs=Number(r.home_score),as=Number(r.away_score);
@@ -199,6 +204,7 @@ required = (
     'function resolveChain(){',
     'if(!participant)continue;',
     'breadcrumbs:resolved.breadcrumbs',
+    'function tinFoilRawHistoryForClub(club)',
     'function tinFoilPlayedTravelHistory(origin)',
     'function tinFoilJourneyForRender(origin)',
     'j=tinFoilJourneyForRender(origin),c=j.carrier||origin',
