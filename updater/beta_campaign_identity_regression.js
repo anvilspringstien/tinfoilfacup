@@ -5,12 +5,13 @@ const path=require('path');
 
 const ROOT=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
-const reportImages=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.]png/g)].map(m=>m[0]);
+const reportImages=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.](?:png|webp)/g)].map(m=>m[0]);
 if(reportImages.length!==7||new Set(reportImages).size!==7)throw new Error('BETA Stats: report assets missing from renderer');
 for(const url of reportImages){
   const bytes=fs.readFileSync(path.join(ROOT,'beta',url));
-  if(!bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))
-    throw new Error('BETA Stats: missing or invalid report image '+url);
+  const png=bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]));
+  const webp=bytes.subarray(0,4).toString()==='RIFF'&&bytes.subarray(8,12).toString()==='WEBP';
+  if(!png&&!webp)throw new Error('BETA Stats: missing or invalid report image '+url);
 }
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const liteRoute=fs.readFileSync(path.join(ROOT,'beta','stats-beta.html'),'utf8');
@@ -282,7 +283,7 @@ const assertions=`
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
   function checkStatsImages(page){
-    const urls=[...page.matchAll(new RegExp('<img[^>]+src="(assets/stats-report/[a-z0-9-]+[.]png)"','g'))].map(m=>m[1]);
+    const urls=[...page.matchAll(new RegExp('<img[^>]+src="(assets/stats-report/[a-z0-9-]+[.](?:png|webp))"','g'))].map(m=>m[1]);
     if(urls.length!==7||new Set(urls).size!==7||page.includes('data:image/png;base64,'))
       throw new Error('BETA Stats: expected seven distinct external report images; got '+JSON.stringify(urls));
     return urls;
