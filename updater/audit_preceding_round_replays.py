@@ -9,6 +9,7 @@ It does NOT enable publication.
 import argparse
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 import auto_round_results as scan
@@ -51,7 +52,8 @@ ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifyin
           "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying"]
 
 
-def audit(data, source_html, live_html="", source_url=""):
+def audit(data, source_html, live_html="", source_url="", as_of=None):
+    as_of = as_of or date.today()
     current = base_round(data.get("source_round"))
     if current not in ROUNDS or ROUNDS.index(current) == 0:
         raise ValueError("no eligible preceding qualifying round")
@@ -136,7 +138,12 @@ def audit(data, source_html, live_html="", source_url=""):
         if not all(pair) or pair in seen_scheduled:
             continue
         seen_scheduled.add(pair)
-        if pair not in recorded_pairs:
+        scheduled_date = scheduled.get("date")
+        try:
+            due = not scheduled_date or date.fromisoformat(str(scheduled_date)) <= as_of
+        except ValueError:
+            due = True  # malformed dates fail closed
+        if pair not in recorded_pairs and due:
             scheduled_replay_gaps.append({
                 "home": scheduled.get("home"), "away": scheduled.get("away"),
                 "date": scheduled.get("date"),
