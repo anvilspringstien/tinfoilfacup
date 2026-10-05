@@ -29,6 +29,21 @@ FA_PAGE = "https://www.thefa.com/Competitions/Fixtures/Fixtures?competitionId=1&
 OFFICIAL_SOURCE = "https://www.thefa.com/competitions/thefacup/fixtures"
 UA = {"User-Agent": "Mozilla/5.0 TinFoilFACupDrawWatcher/1.1", "Accept": "text/html,application/xhtml+xml"}
 
+EXPECTED_ROUND_TIES = {
+    "First Round Qualifying": 112,
+    "Second Round Qualifying": 80,
+    "Third Round Qualifying": 40,
+    "Fourth Round Qualifying": 32,
+    "First Round Proper": 40,
+    "Second Round Proper": 20,
+    "Third Round Proper": 32,
+    "Fourth Round Proper": 16,
+    "Fifth Round Proper": 8,
+    "Quarter Final": 4,
+    "Semi Final": 2,
+    "Final": 1,
+}
+
 ROUND_ORDER = [
     "Extra Preliminary Round",
     "Preliminary Round",
@@ -365,14 +380,11 @@ def fixture_values(fixtures):
 
 
 def validate_target(target, ties):
-    if len(ties) < 20 and target not in {"Quarter Final", "Semi Final", "Final"}:
+    expected = EXPECTED_ROUND_TIES.get(target)
+    if expected is not None and len(ties) != expected:
+        raise SystemExit(f"Publication blocked: expected {expected} {target} ties, found {len(ties)}.")
+    if expected is None and len(ties) < 20:
         raise SystemExit(f"Publication blocked: only {len(ties)} {target} ties found on official Emirates FA Cup fixture pages.")
-    if target == "Quarter Final" and len(ties) != 4:
-        raise SystemExit(f"Publication blocked: expected 4 Quarter Final ties, found {len(ties)}.")
-    if target == "Semi Final" and len(ties) != 2:
-        raise SystemExit(f"Publication blocked: expected 2 Semi Final ties, found {len(ties)}.")
-    if target == "Final" and len(ties) != 1:
-        raise SystemExit(f"Publication blocked: expected 1 Final tie, found {len(ties)}.")
 
     concrete = []
     for f in ties:
@@ -455,31 +467,53 @@ def main():
     # normal replay-resolution path: the machine updates its canonical fixture
     # producer instead of relying on Clubfinder to infer the winner forever.
     current_official = unique_ties([r for r in all_rows if r["round"] == current])
+    target_ties = unique_ties([r for r in all_rows if r["round"] == target])
 
     saved_current = fixture_values(data.get("fixtures") or {})
     expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
     source_complete = active_source_complete(current_official, expected_active_ties)
+    target_complete = False
+    if target_ties:
+        # A newly published next-round draw is an independent source instrument.
+        # Validate its exact coverage before allowing it to cross a round boundary
+        # where the FA may expose only the unresolved fixtures from the old round.
+        validate_target(target, target_ties)
+        target_complete = True
+
     if not source_complete:
         print(
             "ACTIVE ROUND SOURCE INCOMPLETE:",
             f"official={len(current_official)} expected={expected_active_ties}",
         )
-        if args.publish:
-            write_report(
-                status="blocked",
-                current_round=current,
-                target_round=target,
-                pages_checked=pages_checked,
-                pagination_stop=fetch_stop,
-                active_round_official_ties=len(current_official),
-                active_round_expected_ties=expected_active_ties,
-                active_round_source_complete=False,
+        if not target_complete:
+            if args.publish:
+                write_report(
+                    status="blocked",
+                    current_round=current,
+                    target_round=target,
+                    pages_checked=pages_checked,
+                    pagination_stop=fetch_stop,
+                    active_round_official_ties=len(current_official),
+                    active_round_expected_ties=expected_active_ties,
+                    active_round_source_complete=False,
+                )
+                raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
+        else:
+            print(
+                "ROUND BOUNDARY:",
+                f"active catalogue is partial ({len(current_official)}/{expected_active_ties});",
+                f"independently validated {target} draw has {len(target_ties)} ties.",
             )
-            raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
 
-    refreshed_current, active_transitions, active_metadata_updates, active_ambiguities = reconcile_active_conditionals(
-        saved_current, current_official
-    )
+    if source_complete:
+        refreshed_current, active_transitions, active_metadata_updates, active_ambiguities = reconcile_active_conditionals(
+            saved_current, current_official
+        )
+    else:
+        # Never use a partial old-round catalogue to mutate canonical active
+        # fixtures. It may only coexist with an independently complete new draw.
+        refreshed_current = saved_current
+        active_transitions, active_metadata_updates, active_ambiguities = [], [], []
     active_unresolved = diagnose_unresolved_conditionals(saved_current, current_official)
     if active_unresolved:
         print(f"ACTIVE ROUND CONDITIONALS UNRESOLVED: {len(active_unresolved)}")
@@ -521,7 +555,6 @@ def main():
         else:
             print("DRY RUN: active-round changes not written.")
 
-    target_ties = unique_ties([r for r in all_rows if r["round"] == target])
     report = write_report(
         status="detected" if target_ties else ("active-round-refreshed" if active_published else "no-new-draw"),
         current_round=current,
@@ -531,6 +564,9 @@ def main():
         pagination_stop=fetch_stop,
         published=active_published,
         active_round_official_ties=len(current_official),
+        active_round_expected_ties=expected_active_ties,
+        active_round_source_complete=source_complete,
+        target_round_source_complete=target_complete,
         active_round_conditional_resolutions=active_transitions,
         active_round_metadata_updates=active_metadata_updates,
         active_round_unresolved_diagnostics=active_unresolved,
@@ -542,7 +578,6 @@ def main():
         print(f"NO NEW DRAW: official Emirates FA Cup fixture pages do not yet expose {target}.")
         return
 
-    validate_target(target, target_ties)
     print(f"OFFICIAL EMIRATES FA CUP DRAW DETECTED: {target}: {len(target_ties)} ties")
     if not args.publish:
         print("DRY RUN: competition.json unchanged.")
