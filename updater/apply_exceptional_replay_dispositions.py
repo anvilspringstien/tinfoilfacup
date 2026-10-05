@@ -49,6 +49,19 @@ def all_history_rows(data):
                 if isinstance(row,dict):
                     yield row
 
+def downstream_fixture_rows(data, expected):
+    """Return only the authoritative bucket for the reviewed downstream round.
+
+    While that round is active it lives in fixtures. After round promotion the
+    draw watcher archives it under round_fixtures/<round>. Never search newer
+    active fixtures or unrelated historical buckets for an exceptional replay.
+    """
+    active = [f for f in fixture_values(data.get("fixtures") or {}) if str(f.get("round") or "") == expected["round"]]
+    if active:
+        return active
+    archived = (data.get("round_fixtures") or {}).get(expected["round"])
+    return fixture_values(archived or [])
+
 def apply_one(data, item):
     if item.get("verification_state")!="human-reviewed-exception":
         raise SystemExit("Exceptional replay disposition is not human-reviewed: "+str(item.get("id")))
@@ -59,7 +72,7 @@ def apply_one(data, item):
     replay=item["replay_result"]
     downstream=item["downstream"]
 
-    downstream_matches=[f for f in fixture_values(data.get("fixtures") or {}) if exact_downstream(f,downstream)]
+    downstream_matches=[f for f in downstream_fixture_rows(data,downstream) if exact_downstream(f,downstream)]
     unique={(f.get("round"),f.get("date"),norm(f.get("home")),norm(f.get("away")),f.get("kickoff","15:00")) for f in downstream_matches}
     if len(unique)!=1:
         raise SystemExit("Exceptional replay safety stop: downstream Third Qualifying slot is missing or ambiguous.")
