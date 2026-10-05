@@ -32,7 +32,6 @@ on:
       - "updater/sync_extra_preliminary_chronology.py"
       - "updater/extra_preliminary_replay_regression.py"
       - "updater/apply_replay_orientation_fix.py"
-      - "updater/repair_first_qualifying_replays_20260909.py"
       - "updater/sync_second_qualifying_resolved.py"
       - "updater/sync_second_qualifying_stable.py"
       - "updater/active_draw_stability_regression.py"
@@ -102,8 +101,6 @@ jobs:
         run: python updater/extra_preliminary_replay_regression.py
       - name: Apply guarded replay-orientation fix
         run: python updater/apply_replay_orientation_fix.py
-      - name: Repair verified 9 September First Qualifying replays
-        run: python updater/repair_first_qualifying_replays_20260909.py
       - name: Synchronise resolved Second Qualifying draw
         run: python updater/run_source_resilient.py --label "Resolved Second Qualifying sync" -- python updater/sync_second_qualifying_stable.py
       - name: Guard active draw stability
