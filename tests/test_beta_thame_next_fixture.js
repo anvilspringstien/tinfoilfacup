@@ -33,50 +33,45 @@ vm.runInContext(
   between('function canonicalClubKey(','function sameSemanticResult(')+
   between('function drawAlternatives(','\nfunction canonicalClubKey('),ctx
 );
-// Exercise the real direct and conditional indexes; stubbing them masked Exmouth.
+// After FQR promotion, the resolved Thame–Eastbourne TRQ tie is historical.
 assert.equal(typeof ctx.tinFoilBetaVerifiedThameNextFixture,'function',
   'The isolated Thame fixture bridge was not installed');
-const fixture=Object.values(competition.fixtures||{}).find(f=>f&&
+const archived=(competition.round_fixtures||{})['Third Round Qualifying']||[];
+const archivedRows=Array.isArray(archived)?archived:Object.values(archived);
+const fixture=archivedRows.find(f=>f&&
   f.round==='Third Round Qualifying'&&
   f.home==='Thame United'&&f.away==='Eastbourne Borough');
-assert(fixture,'Actual published resolved Third Qualifying draw not found');
-assert(!fixture.conditional,'Published Thame–Eastbourne fixture must not remain conditional');
-assert.equal(ctx.liveLookup('fixtures','Exmouth Town FC'),null,
-  'Losing Exmouth must not retain a direct Third Qualifying fixture index');
-assert.equal(ctx.liveConditionalFixtureForClub('Exmouth Town FC'),null,
-  'Resolved canonical draw must not retain an Exmouth conditional index');
-const eastbourne=ctx.nextRoundInfo(
-  {name:'Eastbourne Borough FC',entry_round:'Second Round Qualifying'},true);
-assert(eastbourne.knownFixture,'Legitimate Eastbourne opponent lost its fixture');
-assert.equal(eastbourne.knownFixture.home,'Thame United');
-assert.equal(eastbourne.knownFixture.away,'Eastbourne Borough');
-assert.equal(eastbourne.knownFixture.conditional,false);
-const thame=()=>ctx.nextRoundInfo({name:'Thame United FC',entry_round:'Second Round Qualifying'},true);
-const next=thame();
-assert.equal(next.name,'Third Round Qualifying');
-assert(next.knownFixture,'Verified Thame custodian has no next fixture');
-assert.equal(next.knownFixture.home,'Thame United');
-assert.equal(next.knownFixture.away,'Eastbourne Borough');
-assert.equal(next.knownFixture.date,'2026-10-03');
-assert.equal(next.knownFixture.conditional,false);
-const duplicateEntries=Object.values(competition.fixtures||{}).filter(f=>f&&
-  f.round===fixture.round&&f.home===fixture.home&&f.away===fixture.away);
-assert(duplicateEntries.length>=2,'Expected home/away index keys for one real FA tie');
-const bridged=ctx.tinFoilBetaVerifiedThameNextFixture(
-  {name:'Thame United FC'},'Third Round Qualifying');
-assert.equal(bridged,null,
-  'Conditional-only Thame bridge must stand down once canonical draw is definite');
-// The losing club must not inherit the fixture through this bridge.
-assert.equal(ctx.nextRoundInfo(
-  {name:'Exmouth Town FC',entry_round:'Second Round Qualifying'},true
-).knownFixture,null,'Losing Exmouth was incorrectly advanced');
+assert(fixture,'Archived resolved Thame–Eastbourne draw missing');
+assert(!fixture.conditional,'Archived Thame–Eastbourne fixture must not remain conditional');
+assert.equal(fixture.date,'2026-10-03');
+
 const finalReplay=r=>r&&r.round==='Second Round Qualifying Replay'&&
-  r.home==='Exmouth Town'&&r.away==='Thame United'&&
-  r.date==='2026-09-23'&&r.home_score===1&&r.away_score===3;
-assert(Object.values(competition.results||{}).some(finalReplay),
-  'Final replay missing from canonical published results');
-// Unresolved replay behaviour is covered by the dedicated verified-conditional
-// regression. This test is intentionally anchored to the resolved canonical draw.
+  r.home==='Exmouth Town'&&r.away==='Thame United'&&r.date==='2026-09-23'&&
+  r.home_score===1&&r.away_score===3;
+assert(Object.values(competition.results||{}).some(finalReplay),'Final replay missing');
+
+const thameLoss=r=>r&&r.round==='Third Round Qualifying'&&r.date==='2026-10-03'&&
+  r.home==='Thame United'&&r.away==='Eastbourne Borough'&&
+  r.home_score===0&&r.away_score===1&&r.winner==='Eastbourne Borough';
+const history=Object.values(competition.result_history||{}).flatMap(x=>Array.isArray(x)?x:[]);
+assert(history.some(thameLoss),'Canonical Thame 0-1 Eastbourne TRQ result missing');
+
+const active=Object.values(competition.fixtures||{});
+const activeFqr=active.filter(f=>f&&f.round==='Fourth Round Qualifying');
+const uniqueFqr=new Map(activeFqr.map(f=>[
+  [f.round,f.date,f.home,f.away].join('|'),f
+]));
+assert.equal(uniqueFqr.size,32,'Active FQR draw must remain exactly 32 unique ties');
+assert(!active.some(f=>f&&/Thame United|Exmouth Town/.test((f.home||'')+' '+(f.away||''))),
+  'Eliminated Thame/Exmouth leaked into active FQR draw');
+
+assert.equal(ctx.tinFoilBetaVerifiedThameNextFixture(
+  {name:'Thame United FC'},'Third Round Qualifying'),null,
+  'Historical Thame bridge must not resurrect an archived TRQ fixture');
+assert.equal(ctx.liveLookup('fixtures','Exmouth Town FC'),null,
+  'Losing Exmouth must not retain an active fixture index');
+assert.equal(ctx.liveLookup('fixtures','Thame United FC'),null,
+  'Losing Thame must not retain an active fixture index');
 assert.equal(ctx.tinFoilBetaVerifiedThameNextFixture(
   {name:'Thame United FC'},'Fourth Round Qualifying'),null,
   'The special bridge must not apply to other rounds');
