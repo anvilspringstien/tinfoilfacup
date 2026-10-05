@@ -119,6 +119,26 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         self.assertEqual(len(report["scheduled_replay_gaps"]), 1)
         self.assertTrue(report["scheduled_replay_gaps"][0]["source_observed"])
 
+    def test_future_scheduled_replay_is_not_a_publication_gap(self):
+        data = fixture_data()
+        data["replays"] = {"Future": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Future Town", "away": "Tomorrow United",
+            "date": "2026-10-06"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(data, "<html/>", as_of=audit.date(2026, 10, 5))
+        self.assertFalse(report["scheduled_replay_gaps"])
+
+    def test_due_scheduled_replay_remains_a_publication_gap(self):
+        data = fixture_data()
+        data["replays"] = {"Due": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Due Town", "away": "Today United",
+            "date": "2026-10-05"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(data, "<html/>", as_of=audit.date(2026, 10, 5))
+        self.assertEqual(len(report["scheduled_replay_gaps"]), 1)
+
     def test_missing_archive_fails_closed(self):
         data = fixture_data()
         data["round_fixtures"] = {}
