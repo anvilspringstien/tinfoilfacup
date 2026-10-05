@@ -29,33 +29,40 @@ const ctx={
 vm.createContext(ctx);
 vm.runInContext(between('function drawAlternatives(','function sameSemanticResult('),ctx);
 assert.equal(typeof ctx.tinFoilVerifiedThameNextFixture,'function');
-const fixture=Object.values(competition.fixtures||{}).find(f=>f&&
+const archived=(competition.round_fixtures||{})['Third Round Qualifying']||[];
+const archivedRows=Array.isArray(archived)?archived:Object.values(archived);
+const fixture=archivedRows.find(f=>f&&
   f.round==='Third Round Qualifying'&&
   f.home==='Thame United'&&f.away==='Eastbourne Borough');
-assert(fixture,'Actual published resolved Thame–Eastbourne draw missing');
-assert(!fixture.conditional,'Published Thame–Eastbourne fixture must not remain conditional');
-assert.equal(ctx.liveLookup('fixtures','Exmouth Town FC'),null,
-  'Losing Exmouth must not retain a direct Third Qualifying fixture index');
-const eastbourne=ctx.nextRoundInfo({name:'Eastbourne Borough FC',entry_round:'Second Round Qualifying'});
-assert(eastbourne.knownFixture,'Legitimate Eastbourne opposing fixture must survive the Exmouth guard');
-assert.equal(eastbourne.knownFixture.away,'Eastbourne Borough');
-assert.equal(eastbourne.knownFixture.home,'Thame United');
-assert.equal(eastbourne.knownFixture.conditional,false);
+assert(fixture,'Archived resolved Thame–Eastbourne draw missing');
+assert(!fixture.conditional,'Archived Thame–Eastbourne fixture must not remain conditional');
+assert.equal(fixture.date,'2026-10-03');
 
-const thame=()=>ctx.nextRoundInfo({name:'Thame United FC',entry_round:'Second Round Qualifying'});
-const next=thame();
-assert(next.knownFixture,'Production Thame has no verified next fixture');
-assert.equal(next.knownFixture.home,'Thame United');
-assert.equal(next.knownFixture.away,'Eastbourne Borough');
-assert.equal(next.knownFixture.date,'2026-10-03');
-assert.equal(next.knownFixture.conditional,false);
-assert.equal(ctx.nextRoundInfo({name:'Exmouth Town FC',entry_round:'Second Round Qualifying'}).knownFixture,null,
-  'Losing Exmouth was incorrectly advanced');
 const finalReplay=r=>r&&r.round==='Second Round Qualifying Replay'&&
   r.home==='Exmouth Town'&&r.away==='Thame United'&&r.date==='2026-09-23'&&
   r.home_score===1&&r.away_score===3;
 assert(Object.values(competition.results||{}).some(finalReplay),'Final replay missing');
-// Unresolved replay behaviour is covered by the dedicated conditional-replay
-// guards. This regression is anchored to the resolved canonical draw.
+
+const thameLoss=r=>r&&r.round==='Third Round Qualifying'&&r.date==='2026-10-03'&&
+  r.home==='Thame United'&&r.away==='Eastbourne Borough'&&
+  r.home_score===0&&r.away_score===1&&r.winner==='Eastbourne Borough';
+const history=Object.values(competition.result_history||{}).flatMap(x=>Array.isArray(x)?x:[]);
+assert(history.some(thameLoss),'Canonical Thame 0-1 Eastbourne TRQ result missing');
+
+const active=Object.values(competition.fixtures||{});
+assert.equal(active.filter(f=>f&&f.round==='Fourth Round Qualifying').length,32,
+  'Active FQR draw must remain exactly 32 ties');
+assert(!active.some(f=>f&&/Thame United|Exmouth Town/.test((f.home||'')+' '+(f.away||''))),
+  'Eliminated Thame/Exmouth leaked into active FQR draw');
+
+// The old fixture-local Thame bridge was deliberately scoped to an active
+// Third Qualifying conditional. Once TRQ is archived it must fail closed.
+assert.equal(ctx.tinFoilVerifiedThameNextFixture({name:'Thame United FC'},'Third Round Qualifying'),null,
+  'Historical Thame bridge must not resurrect an archived TRQ fixture');
+assert.equal(ctx.liveLookup('fixtures','Exmouth Town FC'),null,
+  'Losing Exmouth must not retain an active fixture index');
+assert.equal(ctx.liveLookup('fixtures','Thame United FC'),null,
+  'Losing Thame must not retain an active fixture index');
 assert.equal(ctx.tinFoilVerifiedThameNextFixture({name:'Thame United FC'},'Fourth Round Qualifying'),null);
-console.log('Production Thame next-fixture and Exmouth fail-closed regression: PASS');
+
+console.log('Production Thame/Exmouth historical fail-closed regression: PASS');
