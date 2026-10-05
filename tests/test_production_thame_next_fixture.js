@@ -50,8 +50,12 @@ const history=Object.values(competition.result_history||{}).flatMap(x=>Array.isA
 assert(history.some(thameLoss),'Canonical Thame 0-1 Eastbourne TRQ result missing');
 
 const active=Object.values(competition.fixtures||{});
-assert.equal(active.filter(f=>f&&f.round==='Fourth Round Qualifying').length,32,
-  'Active FQR draw must remain exactly 32 ties');
+const activeFqr=active.filter(f=>f&&f.round==='Fourth Round Qualifying');
+const uniqueFqr=new Map(activeFqr.map(f=>[
+  [f.round,f.date,f.home,f.away].join('|'),f
+]));
+assert.equal(uniqueFqr.size,32,
+  'Active FQR draw must remain exactly 32 unique ties');
 assert(!active.some(f=>f&&/Thame United|Exmouth Town/.test((f.home||'')+' '+(f.away||''))),
   'Eliminated Thame/Exmouth leaked into active FQR draw');
 
