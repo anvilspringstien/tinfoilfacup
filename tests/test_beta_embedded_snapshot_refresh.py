@@ -51,10 +51,19 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
             and r.get('winner') == 'Thame United'
             and r.get('home_score') == 1 and r.get('away_score') == 3
             for r in fallback.get('results', {}).values()))
+        archived = fallback.get('round_fixtures', {}).get('Third Round Qualifying', [])
+        archived_rows = archived if isinstance(archived, list) else archived.values()
         self.assertTrue(any(
             v.get('round') == 'Third Round Qualifying'
+            and v.get('home') == 'Thame United'
             and v.get('away') == 'Eastbourne Borough'
-            for v in fallback.get('fixtures', {}).values()))
+            for v in archived_rows))
+        active_fqr = {
+            (v.get('round'), v.get('date'), v.get('home'), v.get('away'))
+            for v in fallback.get('fixtures', {}).values()
+            if v.get('round') == 'Fourth Round Qualifying'
+        }
+        self.assertEqual(len(active_fqr), 32)
 
 
 if __name__ == '__main__':
