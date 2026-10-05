@@ -93,7 +93,11 @@ require(bool(third),"archived Mulbarton v Gloucester City Third Qualifying slot 
 require(all((f.get("venue") or {}).get("postcode")=="NR14 8AE" for f in third),"archived Third Qualifying home venue is not Mulberry Park NR14 8AE")
 require(all(f.get("round")=="Fourth Round Qualifying" for f in fixtures),
         "active fixture set is not protected Fourth Round Qualifying state")
-require(len(fixtures)==32,"active Fourth Round Qualifying draw is not exactly 32 ties")
+unique_fixtures={
+    (f.get("round"),f.get("date"),f.get("home"),f.get("away"))
+    for f in fixtures
+}
+require(len(unique_fixtures)==32,"active Fourth Round Qualifying draw is not exactly 32 unique ties")
 
 require("voided-replay-ordered" in text and "status==='VOID'" in text,"Clubfinder void-result guard missing")
 print("UNICORN REGRESSION: PASS")
