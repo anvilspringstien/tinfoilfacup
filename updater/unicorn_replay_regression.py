@@ -84,14 +84,22 @@ require(bool(voided),"superseded 19 September result is not explicitly voided")
 require(bool(replay),"29 September Mulbarton 2-0 replay result missing")
 
 fixtures=list((data.get("fixtures") or {}).values()) if isinstance(data.get("fixtures"),dict) else (data.get("fixtures") or [])
-third=[f for f in fixtures if f.get("round")=="Third Round Qualifying" and f.get("date")=="2026-10-03" and norm(f.get("home"))=="mulbarton wanderers" and norm(f.get("away"))=="gloucester city"]
-require(bool(third),"Mulbarton v Gloucester City Third Qualifying slot missing")
-require(all((f.get("venue") or {}).get("postcode")=="NR14 8AE" for f in third),"Third Qualifying home venue is not Mulberry Park NR14 8AE")
+require(not any(f.get("round")=="Third Round Qualifying" for f in fixtures),
+        "post-promotion canary expected active fixtures to have advanced beyond Third Qualifying")
+archived=(data.get("round_fixtures") or {}).get("Third Round Qualifying") or []
+archived=list(archived.values()) if isinstance(archived,dict) else archived
+third=[f for f in archived if f.get("round")=="Third Round Qualifying" and f.get("date")=="2026-10-03" and norm(f.get("home"))=="mulbarton wanderers" and norm(f.get("away"))=="gloucester city"]
+require(bool(third),"archived Mulbarton v Gloucester City Third Qualifying slot missing")
+require(all((f.get("venue") or {}).get("postcode")=="NR14 8AE" for f in third),"archived Third Qualifying home venue is not Mulberry Park NR14 8AE")
+require(all(f.get("round")=="Fourth Round Qualifying" for f in fixtures),
+        "active fixture set is not protected Fourth Round Qualifying state")
+require(len(fixtures)==32,"active Fourth Round Qualifying draw is not exactly 32 ties")
 
 require("voided-replay-ordered" in text and "status==='VOID'" in text,"Clubfinder void-result guard missing")
 print("UNICORN REGRESSION: PASS")
 print("19 September result: VOIDED / replay ordered")
 print("29 September replay: Mulbarton Wanderers 2-0 Woodford Town")
-print("3 October: Mulbarton Wanderers v Gloucester City AFC")
+print("3 October archived TRQ: Mulbarton Wanderers v Gloucester City AFC")
+print("Active FQR draw: 32 ties / untouched")
 print("Gloucester current ground: The KMM Energy Stadium • GL2 5HD")
 print("GL1 1AJ nearest three:", " | ".join(name for _,name,_ in top3))
