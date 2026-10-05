@@ -176,4 +176,29 @@ print("Persistent source failure fails closed: PASS")
 require(active_source_complete([{"tie": 1}, {"tie": 2}], 2),"complete active-round source must pass")
 require(not active_source_complete([{"tie": 1}], 2),"partial active-round source must fail closed")
 print("Active-round source completeness: PASS")
+
+# Round-boundary acceptance: the FA may retain only unresolved old-round
+# fixtures once it publishes the next draw. Partial old-round evidence must
+# remain insufficient for active mutation, while the new draw must meet exact
+# independent coverage before promotion.
+fqr32 = [
+    {"round":"Fourth Round Qualifying","home":f"Home {i}","away":f"Away {i}","date":"2026-10-17","kickoff":"15:00"}
+    for i in range(1, 33)
+]
+auto_draw.validate_target("Fourth Round Qualifying", fqr32)
+try:
+    auto_draw.validate_target("Fourth Round Qualifying", fqr32[:-1])
+    require(False, "31 FQR ties must fail closed")
+except SystemExit:
+    pass
+try:
+    auto_draw.validate_target("Fourth Round Qualifying", fqr32 + [
+        {"round":"Fourth Round Qualifying","home":"Home 33","away":"Away 33","date":"2026-10-17","kickoff":"15:00"}
+    ])
+    require(False, "33 FQR ties must fail closed")
+except SystemExit:
+    pass
+require(not active_source_complete([{"tie": i} for i in range(5)], 40),
+        "five surviving TRQ rows must never count as complete 40-tie active evidence")
+print("Round-boundary next-draw coverage: PASS")
 print("Real FA abbreviation forms: PASS")

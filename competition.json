@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-10-05T07:05:59.103231+00:00",
+  "updated_at": "2026-10-05T15:14:18.751396+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -26887,1063 +26887,536 @@
     }
   },
   "fixtures": {
-    "Macclesfield": {
-      "round": "Third Round Qualifying",
-      "home": "Macclesfield",
-      "away": "Scarborough Athletic",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Leasing.com Stadium",
-        "postcode": "SK11 7SP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Scarborough Athletic": {
-      "round": "Third Round Qualifying",
-      "home": "Macclesfield",
-      "away": "Scarborough Athletic",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Leasing.com Stadium",
-        "postcode": "SK11 7SP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Marine": {
-      "round": "Third Round Qualifying",
-      "home": "Marine",
-      "away": "Warrington Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Marine Travel Arena",
-        "postcode": "L23 3AS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Warrington Town": {
-      "round": "Third Round Qualifying",
-      "home": "Marine",
-      "away": "Warrington Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Marine Travel Arena",
-        "postcode": "L23 3AS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Trafford": {
-      "round": "Third Round Qualifying",
-      "home": "Trafford",
-      "away": "Atherton Collieries",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Shawe View",
-        "postcode": "M41 5DL",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Atherton Collieries": {
-      "round": "Third Round Qualifying",
-      "home": "Trafford",
-      "away": "Atherton Collieries",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Shawe View",
-        "postcode": "M41 5DL",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Guiseley AFC": {
-      "round": "Third Round Qualifying",
-      "home": "Guiseley AFC",
-      "away": "Bradford (Park Avenue)",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Nethermoor Park",
-        "postcode": "LS20 8BT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Guiseley": {
-      "round": "Third Round Qualifying",
-      "home": "Guiseley AFC",
-      "away": "Bradford (Park Avenue)",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Nethermoor Park",
-        "postcode": "LS20 8BT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bradford (Park Avenue)": {
-      "round": "Third Round Qualifying",
-      "home": "Guiseley AFC",
-      "away": "Bradford (Park Avenue)",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Nethermoor Park",
-        "postcode": "LS20 8BT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Gainsborough Trinity": {
-      "round": "Third Round Qualifying",
-      "home": "Gainsborough Trinity",
-      "away": "Anstey Nomads",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Kai Group Stadium",
-        "postcode": "DN21 2QW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Anstey Nomads": {
-      "round": "Third Round Qualifying",
-      "home": "Gainsborough Trinity",
-      "away": "Anstey Nomads",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Kai Group Stadium",
-        "postcode": "DN21 2QW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Morecambe": {
-      "round": "Third Round Qualifying",
-      "home": "Morecambe",
-      "away": "Darlington_",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Mazuma Mobile Stadium",
-        "postcode": "LA4 4TB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Darlington_": {
-      "round": "Third Round Qualifying",
-      "home": "Morecambe",
-      "away": "Darlington_",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Mazuma Mobile Stadium",
-        "postcode": "LA4 4TB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Buxton": {
-      "round": "Third Round Qualifying",
-      "home": "Buxton",
-      "away": "South Shields",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Silverlands",
-        "postcode": "SK17 6QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "South Shields": {
-      "round": "Third Round Qualifying",
-      "home": "Buxton",
-      "away": "South Shields",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Silverlands",
-        "postcode": "SK17 6QH",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bury": {
-      "round": "Third Round Qualifying",
-      "home": "Bury",
-      "away": "Bromsgrove Sporting",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Gigg Lane",
-        "postcode": "BL9 9HR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bromsgrove Sporting": {
-      "round": "Third Round Qualifying",
-      "home": "Bury",
-      "away": "Bromsgrove Sporting",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Gigg Lane",
-        "postcode": "BL9 9HR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Barton Town": {
-      "round": "Third Round Qualifying",
-      "home": "Barton Town",
-      "away": "Chorley",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Easy Buy Stadium",
-        "postcode": "DN18 5JD",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Chorley": {
-      "round": "Third Round Qualifying",
-      "home": "Barton Town",
-      "away": "Chorley",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Easy Buy Stadium",
-        "postcode": "DN18 5JD",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Worksop Town": {
-      "round": "Third Round Qualifying",
-      "home": "Worksop Town",
-      "away": "FC United of Manchester",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Windsor Foodservice Stadium",
-        "postcode": "S80 1UJ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "FC United of Manchester": {
-      "round": "Third Round Qualifying",
-      "home": "Worksop Town",
-      "away": "FC United of Manchester",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Windsor Foodservice Stadium",
-        "postcode": "S80 1UJ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Stafford Rangers": {
-      "round": "Third Round Qualifying",
-      "home": "Stafford Rangers",
-      "away": "Halesowen Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Halesowen Town": {
-      "round": "Third Round Qualifying",
-      "home": "Stafford Rangers",
-      "away": "Halesowen Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+    "Harborough Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Harborough Town",
+      "away": "Spennymoor Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
     "Spennymoor Town": {
-      "round": "Third Round Qualifying",
-      "home": "Spennymoor Town",
-      "away": "Chester",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Brewery Field",
-        "postcode": "DL16 6JN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chester": {
-      "round": "Third Round Qualifying",
-      "home": "Spennymoor Town",
-      "away": "Chester",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Brewery Field",
-        "postcode": "DL16 6JN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Mulbarton Wanderers": {
-      "round": "Third Round Qualifying",
-      "home": "Mulbarton Wanderers",
-      "away": "Gloucester City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Abode Arena at Mulberry Park",
-        "postcode": "NR14 8AE",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Gloucester City": {
-      "round": "Third Round Qualifying",
-      "home": "Mulbarton Wanderers",
-      "away": "Gloucester City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Abode Arena at Mulberry Park",
-        "postcode": "NR14 8AE",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Bury Town": {
-      "round": "Third Round Qualifying",
-      "home": "Bury Town",
-      "away": "Spalding United",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Getaway Cars Stadium",
-        "postcode": "IP33 1XP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Spalding United": {
-      "round": "Third Round Qualifying",
-      "home": "Bury Town",
-      "away": "Spalding United",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Getaway Cars Stadium",
-        "postcode": "IP33 1XP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Harborough Town": {
-      "round": "Third Round Qualifying",
+      "round": "Fourth Round Qualifying",
       "home": "Harborough Town",
-      "away": "St Albans City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Bowden's Park",
-        "postcode": "LE16 9HF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Spennymoor Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "St Albans City": {
-      "round": "Third Round Qualifying",
-      "home": "Harborough Town",
-      "away": "St Albans City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Bowden's Park",
-        "postcode": "LE16 9HF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bedford Town": {
-      "round": "Third Round Qualifying",
-      "home": "Bedford Town",
-      "away": "Wingate & Finchley",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Eyrie",
-        "postcode": "MK44 3LW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Wingate & Finchley": {
-      "round": "Third Round Qualifying",
-      "home": "Bedford Town",
-      "away": "Wingate & Finchley",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Eyrie",
-        "postcode": "MK44 3LW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Kettering Town": {
-      "round": "Third Round Qualifying",
-      "home": "Kettering Town",
+    "Chorley": {
+      "round": "Fourth Round Qualifying",
+      "home": "Chorley",
       "away": "Worcester City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Latimer Park",
-        "postcode": "NN15 5PS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
     "Worcester City": {
-      "round": "Third Round Qualifying",
-      "home": "Kettering Town",
+      "round": "Fourth Round Qualifying",
+      "home": "Chorley",
       "away": "Worcester City",
-      "date": "2026-10-03",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Gateshead": {
+      "round": "Fourth Round Qualifying",
+      "home": "Gateshead",
+      "away": "Stafford R or Halesowen T",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Latimer Park",
-        "postcode": "NN15 5PS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "conditional": true
     },
-    "Cambridge City": {
-      "round": "Third Round Qualifying",
-      "home": "Cambridge City",
-      "away": "Alvechurch",
-      "date": "2026-10-03",
+    "Stafford R": {
+      "round": "Fourth Round Qualifying",
+      "home": "Gateshead",
+      "away": "Stafford R or Halesowen T",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Milton Road",
-        "postcode": "CB4 1UY",
-        "source": "FCHD 2025-26 gazetteer / verified build record",
-        "verification": "clubfinder-canonical"
-      }
+      "conditional": true
     },
-    "Alvechurch": {
-      "round": "Third Round Qualifying",
-      "home": "Cambridge City",
-      "away": "Alvechurch",
-      "date": "2026-10-03",
+    "Halesowen T": {
+      "round": "Fourth Round Qualifying",
+      "home": "Gateshead",
+      "away": "Stafford R or Halesowen T",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Milton Road",
-        "postcode": "CB4 1UY",
-        "source": "FCHD 2025-26 gazetteer / verified build record",
-        "verification": "clubfinder-canonical"
-      }
+      "conditional": true
     },
-    "Brackley Town": {
-      "round": "Third Round Qualifying",
-      "home": "Brackley Town",
-      "away": "Chelmsford City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "St James Park",
-        "postcode": "NN13 7EJ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "FC Halifax Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "FC Halifax Town",
+      "away": "South Shields",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Chelmsford City": {
-      "round": "Third Round Qualifying",
-      "home": "Brackley Town",
-      "away": "Chelmsford City",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "St James Park",
-        "postcode": "NN13 7EJ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chesham United": {
-      "round": "Third Round Qualifying",
-      "home": "Chesham United",
-      "away": "Real Bedford",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Meadow",
-        "postcode": "HP5 1NE",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Real Bedford": {
-      "round": "Third Round Qualifying",
-      "home": "Chesham United",
-      "away": "Real Bedford",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Meadow",
-        "postcode": "HP5 1NE",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Oxford City": {
-      "round": "Third Round Qualifying",
-      "home": "Oxford City",
-      "away": "Enfield Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "RAW Charging Stadium",
-        "postcode": "OX3 0NQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Enfield Town": {
-      "round": "Third Round Qualifying",
-      "home": "Oxford City",
-      "away": "Enfield Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "RAW Charging Stadium",
-        "postcode": "OX3 0NQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Brentwood Town": {
-      "round": "Third Round Qualifying",
-      "home": "Brentwood Town",
-      "away": "Dagenham & Redbridge",
-      "date": "2026-10-03",
-      "kickoff": "12:30",
-      "venue": {
-        "ground": "The Arena",
-        "postcode": "CM15 9NN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Dagenham & Redbridge": {
-      "round": "Third Round Qualifying",
-      "home": "Brentwood Town",
-      "away": "Dagenham & Redbridge",
-      "date": "2026-10-03",
-      "kickoff": "12:30",
-      "venue": {
-        "ground": "The Arena",
-        "postcode": "CM15 9NN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "South Shields": {
+      "round": "Fourth Round Qualifying",
+      "home": "FC Halifax Town",
+      "away": "South Shields",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
     "Leiston": {
-      "round": "Third Round Qualifying",
+      "round": "Fourth Round Qualifying",
       "home": "Leiston",
-      "away": "Coventry United",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Leiston Town Athletic Association",
-        "postcode": "IP16 4DQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Guiseley AFC",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Coventry United": {
-      "round": "Third Round Qualifying",
+    "Guiseley AFC": {
+      "round": "Fourth Round Qualifying",
       "home": "Leiston",
-      "away": "Coventry United",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Leiston Town Athletic Association",
-        "postcode": "IP16 4DQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Guiseley AFC",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Redditch United": {
-      "round": "Third Round Qualifying",
-      "home": "Redditch United",
-      "away": "Berkhamsted",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Valley Stadium",
-        "postcode": "B97 4RN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Guiseley": {
+      "round": "Fourth Round Qualifying",
+      "home": "Leiston",
+      "away": "Guiseley AFC",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Berkhamsted": {
-      "round": "Third Round Qualifying",
-      "home": "Redditch United",
-      "away": "Berkhamsted",
-      "date": "2026-10-03",
+    "Barrow AFC": {
+      "round": "Fourth Round Qualifying",
+      "home": "Barrow AFC",
+      "away": "Gloucester City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Barrow": {
+      "round": "Fourth Round Qualifying",
+      "home": "Barrow AFC",
+      "away": "Gloucester City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Gloucester City": {
+      "round": "Fourth Round Qualifying",
+      "home": "Barrow AFC",
+      "away": "Gloucester City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Hartlepool United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Hartlepool United",
+      "away": "Marine",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Marine": {
+      "round": "Fourth Round Qualifying",
+      "home": "Hartlepool United",
+      "away": "Marine",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Boston United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Boston United",
+      "away": "Scunthorpe United",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Scunthorpe United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Boston United",
+      "away": "Scunthorpe United",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Macclesfield": {
+      "round": "Fourth Round Qualifying",
+      "home": "Macclesfield or Scarboro A",
+      "away": "Anstey Nomads",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "The Valley Stadium",
-        "postcode": "B97 4RN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "conditional": true
+    },
+    "Scarboro A": {
+      "round": "Fourth Round Qualifying",
+      "home": "Macclesfield or Scarboro A",
+      "away": "Anstey Nomads",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Anstey Nomads": {
+      "round": "Fourth Round Qualifying",
+      "home": "Macclesfield or Scarboro A",
+      "away": "Anstey Nomads",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Altrincham": {
+      "round": "Fourth Round Qualifying",
+      "home": "Altrincham",
+      "away": "FC United of Manchester",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "FC United of Manchester": {
+      "round": "Fourth Round Qualifying",
+      "home": "Altrincham",
+      "away": "FC United of Manchester",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Bury": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bury",
+      "away": "Harrogate Town AFC",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Harrogate Town AFC": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bury",
+      "away": "Harrogate Town AFC",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Harrogate Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bury",
+      "away": "Harrogate Town AFC",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Bury Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bury Town or Spalding",
+      "away": "Alvechurch",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Spalding": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bury Town or Spalding",
+      "away": "Alvechurch",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Alvechurch": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bury Town or Spalding",
+      "away": "Alvechurch",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
     },
     "AFC Rushden & Diamonds": {
-      "round": "Third Round Qualifying",
+      "round": "Fourth Round Qualifying",
       "home": "AFC Rushden & Diamonds",
-      "away": "Braintree Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Rushden & Higham United FC",
-        "postcode": "NN10 0HX",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
+      "away": "Morecambe",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Braintree Town": {
-      "round": "Third Round Qualifying",
+    "Morecambe": {
+      "round": "Fourth Round Qualifying",
       "home": "AFC Rushden & Diamonds",
-      "away": "Braintree Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Rushden & Higham United FC",
-        "postcode": "NN10 0HX",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
+      "away": "Morecambe",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Dorking Wanderers": {
-      "round": "Third Round Qualifying",
-      "home": "Dorking Wanderers",
-      "away": "Chatham Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Meadowbank Stadium",
-        "postcode": "RH4 1DX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Kidderminster Harriers": {
+      "round": "Fourth Round Qualifying",
+      "home": "Kidderminster Harriers",
+      "away": "Solihull Moors",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Chatham Town": {
-      "round": "Third Round Qualifying",
-      "home": "Dorking Wanderers",
-      "away": "Chatham Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Meadowbank Stadium",
-        "postcode": "RH4 1DX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Solihull Moors": {
+      "round": "Fourth Round Qualifying",
+      "home": "Kidderminster Harriers",
+      "away": "Solihull Moors",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Truro City": {
-      "round": "Third Round Qualifying",
-      "home": "Truro City",
-      "away": "Cirencester Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Truro City Stadium",
-        "postcode": "TR4 9AN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Carlisle United AFC": {
+      "round": "Fourth Round Qualifying",
+      "home": "Carlisle United AFC",
+      "away": "Tamworth",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Cirencester Town": {
-      "round": "Third Round Qualifying",
-      "home": "Truro City",
-      "away": "Cirencester Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Truro City Stadium",
-        "postcode": "TR4 9AN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Carlisle United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Carlisle United AFC",
+      "away": "Tamworth",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Tonbridge Angels": {
-      "round": "Third Round Qualifying",
-      "home": "Tonbridge Angels",
-      "away": "Torquay United",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Longmead Stadium",
-        "postcode": "TN10 3JF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Tamworth": {
+      "round": "Fourth Round Qualifying",
+      "home": "Carlisle United AFC",
+      "away": "Tamworth",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Torquay United": {
-      "round": "Third Round Qualifying",
-      "home": "Tonbridge Angels",
-      "away": "Torquay United",
-      "date": "2026-10-03",
+    "AFC Fylde": {
+      "round": "Fourth Round Qualifying",
+      "home": "AFC Fylde",
+      "away": "Trafford or Atherton",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Longmead Stadium",
-        "postcode": "TN10 3JF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "conditional": true
     },
-    "Weymouth": {
-      "round": "Third Round Qualifying",
-      "home": "Weymouth",
-      "away": "SE Dons_",
-      "date": "2026-10-03",
+    "Trafford": {
+      "round": "Fourth Round Qualifying",
+      "home": "AFC Fylde",
+      "away": "Trafford or Atherton",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Bob Lucas Stadium",
-        "postcode": "DT4 9XJ",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
+      "conditional": true
     },
-    "SE Dons_": {
-      "round": "Third Round Qualifying",
-      "home": "Weymouth",
-      "away": "SE Dons_",
-      "date": "2026-10-03",
+    "Atherton": {
+      "round": "Fourth Round Qualifying",
+      "home": "AFC Fylde",
+      "away": "Trafford or Atherton",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Bob Lucas Stadium",
-        "postcode": "DT4 9XJ",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Sheppey United": {
-      "round": "Third Round Qualifying",
-      "home": "Sheppey United",
-      "away": "Chertsey Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Holm Park",
-        "postcode": "ME12 3DB",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Chertsey Town": {
-      "round": "Third Round Qualifying",
-      "home": "Sheppey United",
-      "away": "Chertsey Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Holm Park",
-        "postcode": "ME12 3DB",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Cray Wanderers": {
-      "round": "Third Round Qualifying",
-      "home": "Cray Wanderers",
-      "away": "Chippenham Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Flamingo Park",
-        "postcode": "BR7 6HL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Chippenham Town": {
-      "round": "Third Round Qualifying",
-      "home": "Cray Wanderers",
-      "away": "Chippenham Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Flamingo Park",
-        "postcode": "BR7 6HL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Crowborough Athletic": {
-      "round": "Third Round Qualifying",
-      "home": "Crowborough Athletic",
-      "away": "Wimborne Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Charles Centrury Community Stadium",
-        "postcode": "TN6 3BU",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Wimborne Town": {
-      "round": "Third Round Qualifying",
-      "home": "Crowborough Athletic",
-      "away": "Wimborne Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Charles Centrury Community Stadium",
-        "postcode": "TN6 3BU",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Plymouth Parkway": {
-      "round": "Third Round Qualifying",
-      "home": "Plymouth Parkway",
-      "away": "Horsham",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Bolitho Park",
-        "postcode": "PL5 3JG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Horsham": {
-      "round": "Third Round Qualifying",
-      "home": "Plymouth Parkway",
-      "away": "Horsham",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Bolitho Park",
-        "postcode": "PL5 3JG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Uxbridge": {
-      "round": "Third Round Qualifying",
-      "home": "Uxbridge",
-      "away": "Hungerford Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Honeycroft",
-        "postcode": "UB7 8HX",
-        "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Hungerford Town": {
-      "round": "Third Round Qualifying",
-      "home": "Uxbridge",
-      "away": "Hungerford Town",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Honeycroft",
-        "postcode": "UB7 8HX",
-        "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Ebbsfleet United": {
-      "round": "Third Round Qualifying",
-      "home": "Ebbsfleet United",
-      "away": "Sholing",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Stonebridge Road",
-        "postcode": "DA11 9GN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Sholing": {
-      "round": "Third Round Qualifying",
-      "home": "Ebbsfleet United",
-      "away": "Sholing",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Stonebridge Road",
-        "postcode": "DA11 9GN",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "conditional": true
     },
     "Salisbury": {
-      "round": "Third Round Qualifying",
+      "round": "Fourth Round Qualifying",
       "home": "Salisbury",
-      "away": "Dulwich Hamlet",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Raymond McEnhill Stadium",
-        "postcode": "SP4 6PU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Dulwich Hamlet": {
-      "round": "Third Round Qualifying",
-      "home": "Salisbury",
-      "away": "Dulwich Hamlet",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Raymond McEnhill Stadium",
-        "postcode": "SP4 6PU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Thame United": {
-      "round": "Third Round Qualifying",
-      "home": "Thame United",
       "away": "Eastbourne Borough",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The ASM Stadium",
-        "postcode": "OX9 3RN",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
     "Eastbourne Borough": {
-      "round": "Third Round Qualifying",
-      "home": "Thame United",
+      "round": "Fourth Round Qualifying",
+      "home": "Salisbury",
       "away": "Eastbourne Borough",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The ASM Stadium",
-        "postcode": "OX9 3RN",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Hanwell Town": {
-      "round": "Third Round Qualifying",
-      "home": "Hanwell Town",
-      "away": "Dover Athletic",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Powerday Stadium",
-        "postcode": "UB6 8TL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Sutton United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Sutton United",
+      "away": "Truro City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Dover Athletic": {
-      "round": "Third Round Qualifying",
-      "home": "Hanwell Town",
-      "away": "Dover Athletic",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Powerday Stadium",
-        "postcode": "UB6 8TL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Truro City": {
+      "round": "Fourth Round Qualifying",
+      "home": "Sutton United",
+      "away": "Truro City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Tadley Calleva": {
-      "round": "Third Round Qualifying",
-      "home": "Tadley Calleva",
-      "away": "Dartford",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Barlows Park",
-        "postcode": "RG26 3PX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+    "Chesham United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Chesham United",
+      "away": "Forest Green Rovers",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Dartford": {
-      "round": "Third Round Qualifying",
-      "home": "Tadley Calleva",
-      "away": "Dartford",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Barlows Park",
-        "postcode": "RG26 3PX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+    "Forest Green Rovers": {
+      "round": "Fourth Round Qualifying",
+      "home": "Chesham United",
+      "away": "Forest Green Rovers",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
     "Leatherhead": {
-      "round": "Third Round Qualifying",
+      "round": "Fourth Round Qualifying",
       "home": "Leatherhead",
-      "away": "Hanworth Villa",
-      "date": "2026-10-03",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Fetcham Grove",
-        "postcode": "KT22 9AS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Yeovil Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     },
-    "Hanworth Villa": {
-      "round": "Third Round Qualifying",
+    "Yeovil Town": {
+      "round": "Fourth Round Qualifying",
       "home": "Leatherhead",
-      "away": "Hanworth Villa",
-      "date": "2026-10-03",
+      "away": "Yeovil Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Bedford T": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bedford T or Win Finch",
+      "away": "Cray Wanderers",
+      "date": "2026-10-17",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Fetcham Grove",
-        "postcode": "KT22 9AS",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "conditional": true
+    },
+    "Win Finch": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bedford T or Win Finch",
+      "away": "Cray Wanderers",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Cray Wanderers": {
+      "round": "Fourth Round Qualifying",
+      "home": "Bedford T or Win Finch",
+      "away": "Cray Wanderers",
+      "date": "2026-10-17",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Uxbridge": {
+      "round": "Fourth Round Qualifying",
+      "home": "Uxbridge",
+      "away": "Hornchurch",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Hornchurch": {
+      "round": "Fourth Round Qualifying",
+      "home": "Uxbridge",
+      "away": "Hornchurch",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Aldershot Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Aldershot Town",
+      "away": "Tadley Calleva",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Tadley Calleva": {
+      "round": "Fourth Round Qualifying",
+      "home": "Aldershot Town",
+      "away": "Tadley Calleva",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Torquay United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Torquay United",
+      "away": "Oxford City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Oxford City": {
+      "round": "Fourth Round Qualifying",
+      "home": "Torquay United",
+      "away": "Oxford City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Wimborne Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Wimborne Town",
+      "away": "Chelmsford City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Chelmsford City": {
+      "round": "Fourth Round Qualifying",
+      "home": "Wimborne Town",
+      "away": "Chelmsford City",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Wealdstone": {
+      "round": "Fourth Round Qualifying",
+      "home": "Wealdstone",
+      "away": "Worthing",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Worthing": {
+      "round": "Fourth Round Qualifying",
+      "home": "Wealdstone",
+      "away": "Worthing",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Boreham Wood": {
+      "round": "Fourth Round Qualifying",
+      "home": "Boreham Wood",
+      "away": "Woking",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Woking": {
+      "round": "Fourth Round Qualifying",
+      "home": "Boreham Wood",
+      "away": "Woking",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Eastleigh": {
+      "round": "Fourth Round Qualifying",
+      "home": "Eastleigh",
+      "away": "Brentwood Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Brentwood Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Eastleigh",
+      "away": "Brentwood Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Southend United": {
+      "round": "Fourth Round Qualifying",
+      "home": "Southend United",
+      "away": "Berkhamsted",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Berkhamsted": {
+      "round": "Fourth Round Qualifying",
+      "home": "Southend United",
+      "away": "Berkhamsted",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Sholing": {
+      "round": "Fourth Round Qualifying",
+      "home": "Sholing",
+      "away": "SE Dons_",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "SE Dons_": {
+      "round": "Fourth Round Qualifying",
+      "home": "Sholing",
+      "away": "SE Dons_",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Plymouth Parkway": {
+      "round": "Fourth Round Qualifying",
+      "home": "Plymouth Parkway",
+      "away": "Chertsey Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Chertsey Town": {
+      "round": "Fourth Round Qualifying",
+      "home": "Plymouth Parkway",
+      "away": "Chertsey Town",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Dover Athletic": {
+      "round": "Fourth Round Qualifying",
+      "home": "Dover Athletic",
+      "away": "Dorking Wanderers",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
+    },
+    "Dorking Wanderers": {
+      "round": "Fourth Round Qualifying",
+      "home": "Dover Athletic",
+      "away": "Dorking Wanderers",
+      "date": "2026-10-17",
+      "kickoff": "15:00"
     }
   },
   "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
-  "source_round": "Third Round Qualifying",
-  "source_tie_count": 40,
+  "source_round": "Fourth Round Qualifying",
+  "source_tie_count": 32,
   "last_result_source_url": "https://www.thefa.com/competitions/thefacup/results",
   "last_result_round": "Preliminary Round Replay",
   "last_result": {
@@ -99747,6 +99220,528 @@
           "postcode": "UB7 8HX",
           "source": "Current 2026/27 venue evidence: https://www.southallfc.com/contact",
           "verification": "clubfinder-canonical"
+        }
+      }
+    ],
+    "Third Round Qualifying": [
+      {
+        "round": "Third Round Qualifying",
+        "home": "Macclesfield",
+        "away": "Scarborough Athletic",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Leasing.com Stadium",
+          "postcode": "SK11 7SP",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Marine",
+        "away": "Warrington Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Marine Travel Arena",
+          "postcode": "L23 3AS",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Trafford",
+        "away": "Atherton Collieries",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Shawe View",
+          "postcode": "M41 5DL",
+          "source": "protected Clubfinder GROUNDS",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Guiseley AFC",
+        "away": "Bradford (Park Avenue)",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Nethermoor Park",
+          "postcode": "LS20 8BT",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Gainsborough Trinity",
+        "away": "Anstey Nomads",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Kai Group Stadium",
+          "postcode": "DN21 2QW",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Morecambe",
+        "away": "Darlington_",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Mazuma Mobile Stadium",
+          "postcode": "LA4 4TB",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Buxton",
+        "away": "South Shields",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Silverlands",
+          "postcode": "SK17 6QH",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Bury",
+        "away": "Bromsgrove Sporting",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Gigg Lane",
+          "postcode": "BL9 9HR",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Barton Town",
+        "away": "Chorley",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Easy Buy Stadium",
+          "postcode": "DN18 5JD",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Worksop Town",
+        "away": "FC United of Manchester",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Windsor Foodservice Stadium",
+          "postcode": "S80 1UJ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Stafford Rangers",
+        "away": "Halesowen Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Stan Robinson Stadium",
+          "postcode": "ST16 3BX",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Spennymoor Town",
+        "away": "Chester",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Brewery Field",
+          "postcode": "DL16 6JN",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Mulbarton Wanderers",
+        "away": "Gloucester City",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Abode Arena at Mulberry Park",
+          "postcode": "NR14 8AE",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Bury Town",
+        "away": "Spalding United",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Getaway Cars Stadium",
+          "postcode": "IP33 1XP",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Harborough Town",
+        "away": "St Albans City",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Bowden's Park",
+          "postcode": "LE16 9HF",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Bedford Town",
+        "away": "Wingate & Finchley",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Eyrie",
+          "postcode": "MK44 3LW",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Kettering Town",
+        "away": "Worcester City",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Latimer Park",
+          "postcode": "NN15 5PS",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Cambridge City",
+        "away": "Alvechurch",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Milton Road",
+          "postcode": "CB4 1UY",
+          "source": "FCHD 2025-26 gazetteer / verified build record",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Brackley Town",
+        "away": "Chelmsford City",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "St James Park",
+          "postcode": "NN13 7EJ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Chesham United",
+        "away": "Real Bedford",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Meadow",
+          "postcode": "HP5 1NE",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Oxford City",
+        "away": "Enfield Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "RAW Charging Stadium",
+          "postcode": "OX3 0NQ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Brentwood Town",
+        "away": "Dagenham & Redbridge",
+        "date": "2026-10-03",
+        "kickoff": "12:30",
+        "venue": {
+          "ground": "The Arena",
+          "postcode": "CM15 9NN",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Leiston",
+        "away": "Coventry United",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Leiston Town Athletic Association",
+          "postcode": "IP16 4DQ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Redditch United",
+        "away": "Berkhamsted",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Valley Stadium",
+          "postcode": "B97 4RN",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "AFC Rushden & Diamonds",
+        "away": "Braintree Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Rushden & Higham United FC",
+          "postcode": "NN10 0HX",
+          "source": "protected Clubfinder GROUNDS",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Dorking Wanderers",
+        "away": "Chatham Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Meadowbank Stadium",
+          "postcode": "RH4 1DX",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Truro City",
+        "away": "Cirencester Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Truro City Stadium",
+          "postcode": "TR4 9AN",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Tonbridge Angels",
+        "away": "Torquay United",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Longmead Stadium",
+          "postcode": "TN10 3JF",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Weymouth",
+        "away": "SE Dons_",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Bob Lucas Stadium",
+          "postcode": "DT4 9XJ",
+          "source": "protected Clubfinder GROUNDS",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Sheppey United",
+        "away": "Chertsey Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Holm Park",
+          "postcode": "ME12 3DB",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Cray Wanderers",
+        "away": "Chippenham Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Flamingo Park",
+          "postcode": "BR7 6HL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Crowborough Athletic",
+        "away": "Wimborne Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Charles Centrury Community Stadium",
+          "postcode": "TN6 3BU",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Plymouth Parkway",
+        "away": "Horsham",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Bolitho Park",
+          "postcode": "PL5 3JG",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Uxbridge",
+        "away": "Hungerford Town",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Honeycroft",
+          "postcode": "UB7 8HX",
+          "source": "Current 2026/27 host venue evidence: https://www.uxbridgefc.com/how-to-find-us",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Ebbsfleet United",
+        "away": "Sholing",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Stonebridge Road",
+          "postcode": "DA11 9GN",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Salisbury",
+        "away": "Dulwich Hamlet",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Raymond McEnhill Stadium",
+          "postcode": "SP4 6PU",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Thame United",
+        "away": "Eastbourne Borough",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The ASM Stadium",
+          "postcode": "OX9 3RN",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Hanwell Town",
+        "away": "Dover Athletic",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Powerday Stadium",
+          "postcode": "UB6 8TL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Tadley Calleva",
+        "away": "Dartford",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Barlows Park",
+          "postcode": "RG26 3PX",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "Third Round Qualifying",
+        "home": "Leatherhead",
+        "away": "Hanworth Villa",
+        "date": "2026-10-03",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Fetcham Grove",
+          "postcode": "KT22 9AS",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
         }
       }
     ]
