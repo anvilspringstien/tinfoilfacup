@@ -5,7 +5,9 @@ const honour=[...html.matchAll(/\['(01|03|04|06|07|09|10|14|23)'\s*,/g)].map(m=>
 if(new Set(campaign).size!==14)throw new Error('Stats truth must define exactly 14 Campaign Challenges');
 if(new Set(honour).size!==9)throw new Error('Stats truth must define exactly 9 Honour Challenges');
 if(!html.includes("deck&&deck.campaignKey===tinFoilChallengeCampaignKey(truth)"))throw new Error('Honour snapshot must be isolated to the matching Campaign');
+if(!html.includes("return selected?[origin,selected].join('|'):[origin,callSign].join('|')"))throw new Error('Stats truth must use the Deck campaign-key contract');
 if(!html.includes("verification:'campaign'")||!html.includes("verification:'honour'"))throw new Error('Stats snapshot must retain verification class');
-if(!html.includes("challengeHonours:tinFoilChallengeHonoursSnapshot"))throw new Error('Challenge honours must be included in the Stats truth snapshot');
+if(html.includes("challengeHonours:tinFoilChallengeHonoursSnapshot"))throw new Error('Challenge honours must not change the locked Stage C bridge schema');
+if(!html.includes("function tinFoilChallengeHonoursSnapshot(truth,progress)"))throw new Error('Stats honours collector missing');
 for(const id of ['12','15','21','24'])if(new RegExp("\\['"+id+"'\\s*,").test(html))throw new Error('Coming Soon challenge '+id+' must not enter permanent Stats truth');
 console.log('BETA CHALLENGE HONOURS STATS TRUTH: PASS');
