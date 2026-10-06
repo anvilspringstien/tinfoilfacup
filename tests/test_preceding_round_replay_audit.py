@@ -1,6 +1,7 @@
 """Regression cases for read-only preceding-round replay auditing."""
 import copy
 import sys
+from datetime import datetime
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -129,14 +130,57 @@ class PrecedingReplayAuditTests(unittest.TestCase):
             report = audit.audit(data, "<html/>", as_of=audit.date(2026, 10, 5))
         self.assertFalse(report["scheduled_replay_gaps"])
 
-    def test_due_scheduled_replay_remains_a_publication_gap(self):
+    def test_same_day_replay_before_kickoff_is_not_a_publication_gap(self):
+        data = fixture_data()
+        data["replays"] = {"Today": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Due Town", "away": "Today United",
+            "date": "2026-10-06", "kickoff": "19:45"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(
+                data, "<html/>",
+                as_of=datetime(2026, 10, 6, 10, 33, tzinfo=audit.UK_TZ))
+        self.assertFalse(report["scheduled_replay_gaps"])
+
+    def test_same_day_replay_during_completion_grace_is_not_a_publication_gap(self):
+        data = fixture_data()
+        data["replays"] = {"Today": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Due Town", "away": "Today United",
+            "date": "2026-10-06", "kickoff": "19:45"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(
+                data, "<html/>",
+                as_of=datetime(2026, 10, 6, 22, 30, tzinfo=audit.UK_TZ))
+        self.assertFalse(report["scheduled_replay_gaps"])
+
+    def test_same_day_replay_after_completion_grace_is_a_publication_gap(self):
         data = fixture_data()
         data["replays"] = {"Due": {
             "round": "Second Round Qualifying Replay",
             "home": "Due Town", "away": "Today United",
-            "date": "2026-10-05"}}
+            "date": "2026-10-06", "kickoff": "19:45"}}
         with patch.object(scan, "parse_fwp_observations", return_value=[]):
-            report = audit.audit(data, "<html/>", as_of=audit.date(2026, 10, 5))
+            report = audit.audit(
+                data, "<html/>",
+                as_of=datetime(2026, 10, 6, 23, 50, tzinfo=audit.UK_TZ))
+        self.assertEqual(len(report["scheduled_replay_gaps"]), 1)
+
+    def test_same_day_replay_without_kickoff_waits_until_next_day(self):
+        data = fixture_data()
+        data["replays"] = {"Today": {
+            "round": "Second Round Qualifying Replay",
+            "home": "Due Town", "away": "Today United",
+            "date": "2026-10-06"}}
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(
+                data, "<html/>",
+                as_of=datetime(2026, 10, 6, 23, 59, tzinfo=audit.UK_TZ))
+        self.assertFalse(report["scheduled_replay_gaps"])
+        with patch.object(scan, "parse_fwp_observations", return_value=[]):
+            report = audit.audit(
+                data, "<html/>",
+                as_of=datetime(2026, 10, 7, 0, 1, tzinfo=audit.UK_TZ))
         self.assertEqual(len(report["scheduled_replay_gaps"]), 1)
 
     def test_missing_archive_fails_closed(self):
