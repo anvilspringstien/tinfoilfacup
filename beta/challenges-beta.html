@@ -930,6 +930,18 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   font:700 12px/1.2 Arial,sans-serif;
   letter-spacing:.035em;
 }
+.beta-sim-toggle{
+  display:block;
+  width:100%;
+  margin:0;
+  padding:3px 0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+.beta-sim-toggle:hover,.beta-sim-toggle:focus-visible{color:#fff0a8}
+.beta-sim-toggle[aria-expanded="true"]{margin-bottom:13px}
+.beta-sim-tools[hidden]{display:none}
 
 .beta-row{
   display:flex;
@@ -1208,7 +1220,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 
 
 <div class="beta-panel beta-sim-panel" aria-label="BETA Campaign Progress Simulator">
-  <div class="beta-title">BETA – Campaign Progress Simulator</div>
+  <button class="beta-title beta-sim-toggle" id="betaSimToggle" type="button" aria-expanded="false" aria-controls="betaSimTools">BETA – Campaign Progress Simulator – BETA</button>
+  <div class="beta-sim-tools" id="betaSimTools" hidden>
 
   <div class="beta-row beta-row-ties">
     <button class="beta-button" id="addTie" type="button">Play a<br>Home Tie</button>
@@ -1265,6 +1278,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   <!-- Kept only because the established render loop uses campaignStatus internally.
        It is intentionally not shown in the simplified BETA UI. -->
   <div id="campaignStatus" aria-live="polite" hidden>IN PROGRESS</div>
+  </div>
 </div>
 
 
@@ -2044,6 +2058,15 @@ function applySimulationChange(message) {
     else if (newlyCompleted.length) $("feedback").textContent="Challenge Completed – This Beer Mat added to Your Trophy Cabinet";
     else $("feedback").textContent=message;
   }
+}
+const betaSimToggle=$("betaSimToggle");
+const betaSimTools=$("betaSimTools");
+if(betaSimToggle&&betaSimTools){
+  betaSimToggle.onclick=()=>{
+    const opening=betaSimTools.hidden;
+    betaSimTools.hidden=!opening;
+    betaSimToggle.setAttribute("aria-expanded",String(opening));
+  };
 }
 $("addTie").onclick=()=>{
   if (state.campaignStatus==="ENDED") { applySimulationChange(""); return; }
