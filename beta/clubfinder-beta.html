@@ -13,11 +13,12 @@
 .history-item{padding:5px 0;border-top:1px solid #ddd}
 .history-item:first-of-type{border-top:0}
 .carrier{margin-top:8px;font-size:12px;font-weight:600;color:#084C61}
-.custodian-name{font-size:20px;font-weight:400;line-height:1.2;margin-top:3px;color:inherit}
-.chosen-campaign-current{margin:4px 0 12px;padding:12px 13px;border-radius:5px;background:#eeeeee;border-left:4px solid #084c61}
+.custodian-name{font-size:22px;font-weight:600;line-height:1.2;margin-top:3px;color:#111}
+.chosen-campaign-current{margin:4px 0 12px}
 .chosen-campaign-current .carrier{margin-top:0}
-.chosen-campaign-current .fixture{margin-bottom:0}
-.campaign-origin{margin:0 0 10px;padding:8px 10px;border-radius:5px;background:#f7f7f7;font-size:12px;line-height:1.45;color:#555}
+.chosen-campaign-current .fixture{margin-bottom:10px}
+.chosen-campaign-current .meta{font-size:13px;margin-bottom:10px}
+.campaign-origin{margin:0 0 10px;padding:8px 0;font-size:12px;line-height:1.45;color:#555}
 .campaign-origin-title{font-weight:700;color:#084c61;margin-bottom:3px}
 .campaign-origin-name{font-size:14px;font-weight:600;color:#111}
 .campaign-origin .meta{font-size:12px;margin:2px 0 0}
@@ -1922,7 +1923,11 @@ async function go(explicitPostcodeSearch=false){
    else if(selected&&showOriginal)tools='<div class="my-journey-bar"><button class="round" type="button" onclick="returnToMyJourney()">Return to My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button></div>';
    const ended=mine&&saved&&saved.ended?'<div class="journey-ended"><strong>Campaign completed here.</strong><br>You can still view your certificate or resume this Tin Foil FA Cup Campaign.</div>':'';
    const chosen=mine&&selected&&!showOriginal;
-   const currentCampaign=chosen?'<div class="chosen-campaign-current">'+carrierHtml(j)+'<div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c)+'</div>':'';
+   const cg=findGround(c)||{},currentHasLoc=!!(cg.ground||cg.postcode),currentVerified=Number.isFinite(Number(cg.lat))&&Number.isFinite(Number(cg.lon))&&verification(c,cg)==='verified';
+   const currentLoc=currentVerified?'✅ Verified Location.':currentHasLoc?'⚠️ Unverified Location - Please check before travelling.':'❌ No location data available.',currentLc=currentVerified?'#176b2c':currentHasLoc?'#8a5a00':'#a32626';
+   const currentWebsite=(c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'')?(' • <a href="'+esc(c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'')+'" target="_blank" rel="noopener noreferrer">Website</a>'):'';
+   const currentGround=esc(cg.ground||'Ground location unavailable')+' • '+esc(cg.postcode||'Postcode unavailable')+currentWebsite;
+   const currentCampaign=chosen?'<div class="chosen-campaign-current"><div class="carrier">The current custodian of your Tin Foil FA Cup is:<div class="custodian-name">'+esc(c.name)+'</div></div><div class="meta">'+currentGround+'</div><div class="meta" style="color:'+currentLc+';font-weight:600">'+currentLoc+'</div><div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c)+'</div>':'';
    const campaignOrigin=chosen?'<div class="campaign-origin"><div class="campaign-origin-title">Campaign Origin</div><div class="campaign-origin-name">'+esc(origin.name)+'</div><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div></div>':'';
    const standardCampaign=!chosen?'<h2>'+(oi===0&&origin.hasCoords?'Nearest: ':'')+esc(origin.name)+'</h2><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div>'+carrierHtml(j)+'<div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c):'';
    return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}${currentCampaign}${standardCampaign}${campaignOrigin}${previousRoundsHtml(j,chosen)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div>${mine&&selected&&!showOriginal?'<div class="tffc-beta-help" aria-label="BETA support links"><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><button type="button" onclick="tinFoilPrivacyNotice()">Privacy</button></div>':''}</div>`;
