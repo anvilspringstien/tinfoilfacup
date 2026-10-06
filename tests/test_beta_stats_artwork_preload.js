@@ -23,6 +23,18 @@ assert(prepWindow.includes("\\.(?:png|webp)/g"),
 assert(prepWindow.includes("if(asset.includes('header-logo-'))link.fetchPriority='high'"),
   'Stats header logo preload must have high fetch priority');
 
+const writeStart=html.indexOf("if(w){",prepStart);
+const writeEnd=html.indexOf("async function tinFoilRenderStatsFromOpener",writeStart);
+const writeBlock=html.slice(writeStart,writeEnd);
+assert(writeBlock.includes("await Promise.all(assets.map(asset=>new Promise(resolve=>"),
+  'Stats report must keep Preparing visible while report artwork loads');
+assert(writeBlock.includes("if(typeof img.decode==='function')await img.decode()"),
+  'Stats report must wait for image decode before revealing the report');
+assert(writeBlock.includes("img.onerror=finish"),
+  'Stats artwork failure must fail open instead of trapping the Preparing screen');
+assert(writeBlock.indexOf("await Promise.all(assets.map(asset=>new Promise(resolve=>")<writeBlock.indexOf("w.document.open();"),
+  'Stats artwork readiness must complete before replacing the Preparing document');
+
 const reportImages=[...html.matchAll(/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g)].map(m=>m[0]);
 assert(reportImages.length===7&&new Set(reportImages).size===7,
   'Stats renderer must retain exactly seven literal artwork references');
