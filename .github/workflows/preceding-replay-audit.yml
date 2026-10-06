@@ -42,9 +42,9 @@ jobs:
               r = json.load(f)
           assert r['production_mutation'] is False
           assert r['archived_ties'] > 0, r['archived_ties']
-          # The source audit is round-scoped: every archived tie must be observed,
-          # regardless of which competition round is currently preceding.
-          assert r['observations'] == r['archived_ties'], (r['observations'], r['archived_ties'])
+          # The dedicated replay source is sparse by design: it need not repeat
+          # every archived original tie. Completeness is enforced below against
+          # independently scheduled replays that are actually due.
           # An observation can be new, quarantined, or already in chronology.
           assert len(r['blocked']) <= 1, r['blocked']
           if r['blocked']:
