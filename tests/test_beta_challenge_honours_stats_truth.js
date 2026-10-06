@@ -9,5 +9,7 @@ if(!html.includes("return selected?[origin,selected].join('|'):[origin,callSign]
 if(!html.includes("verification:'campaign'")||!html.includes("verification:'honour'"))throw new Error('Stats snapshot must retain verification class');
 if(html.includes("challengeHonours:tinFoilChallengeHonoursSnapshot"))throw new Error('Challenge honours must not change the locked Stage C bridge schema');
 if(!html.includes("function tinFoilChallengeHonoursSnapshot(truth,progress)"))throw new Error('Stats honours collector missing');
+if(!html.includes("const finalChallengeHonours=tinFoilChallengeHonoursSnapshot(challengeTruth"))throw new Error('Stats generation must collect permanent Challenge honours');
+if(!html.includes("tinFoilChallengeCampaignKey(bridge)===tinFoilChallengeCampaignKey(challengeTruth)"))throw new Error('Giant Killer bridge evidence must match the certified Campaign');
 for(const id of ['12','15','21','24'])if(new RegExp("\\['"+id+"'\\s*,").test(html))throw new Error('Coming Soon challenge '+id+' must not enter permanent Stats truth');
 console.log('BETA CHALLENGE HONOURS STATS TRUTH: PASS');
