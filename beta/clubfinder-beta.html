@@ -1583,6 +1583,32 @@ function tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,pigeonMiles){
 
 // Stage C: pure v1 bridge assembly. Keep source-of-truth calculations and
 // browser storage/navigation in openChallenges; the timestamp is passed in.
+const TIN_FOIL_CHALLENGE_HONOURS = Object.freeze([
+ ['01','The First Law'],['03','The Fourth Law'],['04','The Dogs Bollocks'],['06','The Pie’d Piper'],['07','Rockerfeller'],['09','Cop That!'],['10','Ad Astra'],['14','The Third Law'],['23','Scorcese']
+]);
+const TIN_FOIL_CAMPAIGN_HONOURS = Object.freeze([
+ ['02','The Second Law',p=>p.campaignRound>=2],['05','The Graduate',p=>p.campaignRound>=5],['08','Ding Ding Ding',p=>p.campaignRound>=6],['11','Away Days',p=>p.awayTies>=3],['13','The Difficult Second Round',p=>p.campaignRound>=7],['16','Doing A Richard',p=>p.campaignRound>=8],['17','A Proclaimer',p=>p.pigeonMiles>=500],['18','Giant Killer',p=>p.giantKillAchieved===true],['19','Seeing Double',p=>p.pigeonMiles>=1000],['20','The Fourth Be With You',p=>p.campaignRound>=9],['22','A Beethoven',p=>p.campaignRound>=10],['25','Quartermeister!',p=>p.campaignRound>=11],['26','Get A Semi On!',p=>p.campaignRound>=12],['27','Wembley Wizard',p=>p.campaignRound>=13]
+]);
+function tinFoilChallengeCampaignKey(truth){
+ const origin=String((truth&&truth.originName)||'').trim();
+ const selected=String((truth&&truth.selectedAt)||'').trim();
+ const callSign=String((truth&&truth.callSign)||'').trim();
+ if(!origin)return '';
+ return selected?[origin,selected].join('|'):[origin,callSign].join('|');
+}
+function tinFoilChallengeHonoursSnapshot(truth,progress){
+ const honours=TIN_FOIL_CAMPAIGN_HONOURS.filter(([, ,earned])=>earned(progress)).map(([id,title])=>({id,title,verification:'campaign'}));
+ try{
+  const deck=JSON.parse(localStorage.getItem('tffc.challengeDeck.v1')||'null');
+  if(deck&&deck.campaignKey===tinFoilChallengeCampaignKey(truth)&&deck.completed){
+   for(const [id,title] of TIN_FOIL_CHALLENGE_HONOURS){
+    if(deck.completed[id])honours.push({id,title,verification:'honour'});
+   }
+  }
+ }catch(_){}
+ return honours.sort((a,b)=>Number(a.id)-Number(b.id));
+}
+
 function tinFoilBuildChallengeBridgeRecord(origin,journey,crumbs,saved,progress,statsSnapshot,updatedAt){
  return {
   source:'Clubfinder v7.6',
@@ -1698,6 +1724,10 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   const campaignPigeonName=tinFoilSavedPigeonName(savedJourneyForStats);
   const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);
   const pigeonMilesDisplay=pigeonStats.display;
+  let challengeRoundIndex=0;
+  crumbs.forEach(cr=>challengeRoundIndex=Math.max(challengeRoundIndex,tinFoilChallengeRoundIndex((cr.result||{}).round)));
+  [journey.round,journey.nextRound,journey.fixture&&journey.fixture.round,journey.next&&journey.next.round].forEach(x=>challengeRoundIndex=Math.max(challengeRoundIndex,tinFoilChallengeRoundIndex(x)));
+  const challengeTruth={originName:origin.name,selectedAt:savedJourneyForStats&&savedJourneyForStats.selectedAt||null,callSign:campaignCallSign};
 
 
   const clubs=[];
@@ -1757,6 +1787,14 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
         .replace(/\s+Replay$/i,'')
     )
   );
+  let challengeGiantKill=false;
+  try{
+    const bridge=JSON.parse(localStorage.getItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY)||'null');
+    if(bridge&&tinFoilChallengeCampaignKey(bridge)===tinFoilChallengeCampaignKey(challengeTruth))challengeGiantKill=bridge.giantKillAchieved===true;
+  }catch(_){}
+  const finalChallengeHonours=tinFoilChallengeHonoursSnapshot(challengeTruth,{awayTies:awayGames,pigeonMiles:Number.isFinite(pigeonStats.miles)?pigeonStats.miles:0,campaignRound:challengeRoundIndex,giantKillAchieved:challengeGiantKill});
+  const challengeHonoursHtml=finalChallengeHonours.length?'<section class="section challenge-honours"><div class="section-title">CHALLENGE HONOURS</div><div class="challenge-count">'+finalChallengeHonours.length+' CHALLENGE'+(finalChallengeHonours.length===1?'':'S')+' COMPLETED</div><div class="challenge-list">'+finalChallengeHonours.map(h=>'<div class="challenge-honour"><span>'+certEsc(h.title)+'</span><small>'+certEsc(h.verification.toUpperCase())+'</small></div>').join('')+'</div></section>':'';
+
   const rounds=completedRoundNames.size;
   const matches=crumbs.length;
   const grounds=venueKeys.size;
@@ -1844,6 +1882,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '.section{margin-top:16px}.section-title{font-stretch:condensed;display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;color:#c90000;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:18pt;font-weight:700;letter-spacing:.7px;margin:4px 0 14px;text-transform:uppercase;}.section-title:before,.section-title:after{content:"";display:block;width:92px;height:2px;background:#cc0000}'+
   '.glance{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-bottom:1px solid #d40000;padding-bottom:18px}.g{text-align:center;padding:3px 4px;border-right:1px solid #d40000;min-height:154px}.g:last-child{border-right:0}.g-label{font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:11pt;font-weight:700;letter-spacing:.3px;line-height:1.18;text-transform:uppercase;}.icon-circle{width:70px;height:70px;margin:12px auto 11px;display:flex;align-items:center;justify-content:center}.icon-circle img{display:block;width:70px;height:70px;object-fit:contain}.g-num{font-stretch:condensed;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:20pt;font-weight:700;line-height:1}'+
   '.journey-head,.journey-row{display:grid;grid-template-columns:1.08fr 1.85fr .82fr 1.18fr 1.35fr;gap:12px}.journey-head{font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:11px;font-weight:400;text-transform:uppercase;border-bottom:1px solid #d40000;padding:0 4px 7px}.journey-row{font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.32;padding:10px 4px;border-bottom:1px dotted #d40000}.jr-round{font-weight:400;}.jr-winner{color:#c90000;font-weight:400;}.journey-empty{text-align:center;padding:16px;font-size:12px}'+
+  '.challenge-honours{border-top:1px solid #d40000;padding-top:16px}.challenge-count{text-align:center;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:12pt;font-weight:700;letter-spacing:.6px;margin:-4px 0 10px}.challenge-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px;border-top:1px dotted #d40000}.challenge-honour{display:flex;justify-content:space-between;gap:12px;padding:7px 2px;border-bottom:1px dotted #d40000;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.25}.challenge-honour span{font-weight:700}.challenge-honour small{flex:0 0 auto;color:#c90000;font:700 9px/1.35 Arial Narrow,Arial,Helvetica,sans-serif;letter-spacing:.35px}'+
   '.bottom{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #d40000;border-radius:12px;margin-top:18px}.bottom>div{padding:14px 16px;min-height:150px}.bottom>div+div{border-left:1px solid #d40000}.bt{font-stretch:condensed;color:#c90000;text-align:center;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:18pt;font-weight:700;letter-spacing:.4px;margin-bottom:10px;text-transform:uppercase;}.list{font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:400;line-height:1.55}.next{text-align:center}.cup{display:block;width:54px;height:54px;object-fit:contain;filter:grayscale(1) contrast(1.15);margin:0 auto 6px}.next-round{font-size:14pt;font-weight:700;text-align:center;margin:2px 0 8px}.next-fixture{font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:15px;font-weight:400;line-height:1.25}.after-replay{margin-top:12px;padding-top:10px;border-top:1px solid #c90000;text-align:center}.after-label{font-size:10pt;font-weight:700;color:#c90000;letter-spacing:.4px}.after-round{font-size:12pt;font-weight:700;margin-top:3px}.after-fixture{font-size:11pt;font-weight:700;line-height:1.3;margin-top:3px}.after-meta{font-size:10pt;line-height:1.35;margin-top:3px}.next-meta{font-size:11px;line-height:1.4;margin-top:4px}.notes{text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:400;line-height:1.45}.crow{color:#c90000;margin-top:8px;display:flex;justify-content:center}'+
   '.motto{font-stretch:condensed;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:14pt;font-weight:400;font-style:italic;letter-spacing:1px;margin:22px 0 14pxtext-transform:none;}.motto-star{font-size:28px;color:#c90000}.print{text-align:center}.print button{font:inherit;font-size:11px;padding:7px 12px}.stats-return{text-align:center;margin:0 auto 18px}.stats-return button{border:0;border-radius:20px;background:#084c61;color:#fff;padding:8px 14px;font:600 12px Arial,sans-serif;cursor:pointer}.stats-return button:hover{filter:brightness(.92)}@media (hover:none) and (pointer:coarse){.stats-return{position:sticky;top:calc(env(safe-area-inset-top) + 56px);z-index:20}}'+
   '@media(max-width:650px){body{padding:8px}.sheet{padding:20px 14px;min-height:0}.top{grid-template-columns:1.35fr .75fr;gap:10px}.logo{width:140px}.glance{grid-template-columns:repeat(2,1fr)}.g:nth-child(2n){border-right:0}.g:last-child{grid-column:auto}.journey-head{display:none}.journey-row{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.bottom>div+div{border-left:0;border-top:1px solid #d40000}.section-title:before,.section-title:after{width:45px}}'+
@@ -1865,6 +1904,8 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '</div></section>'+
 
   '<section class="section"><div class="section-title">THE CAMPAIGN SO FAR</div><div class="journey-head"><div>Round</div><div>Fixture</div><div>Date</div><div>Venue</div><div>Winner / Next Custodian</div></div>'+historyRows+'</section>'+
+
+  challengeHonoursHtml+
 
   '<section class="bottom"><div><div class="bt">STATISTICS</div><div class="list">• Home Games Played: '+homeGames+'<br>• Away Games Played: '+awayGames+'<br>• Custodian Match Wins: '+custodianWins+'<br>• Draws: '+draws+'<br>• Custodian Match Defeats: '+custodianDefeats+'<br>• Shootouts Won: '+penaltyWins+'<br>• Shootouts Lost: '+penaltyLosses+'<br>• Pigeon Miles Flown: '+certEsc(pigeonMilesDisplay)+'</div></div>'+
   '<div class="next"><div class="bt">NEXT UP</div><div class="next-round">'+certEsc(nextRoundLabel)+'</div><div class="next-fixture">'+certEsc(nextTitle)+'</div><div class="next-meta">'+certEsc(nextDate)+(nextVenue?'<br>'+certEsc(nextVenue):'')+'</div>'+afterReplayHtml+'</div>'+
