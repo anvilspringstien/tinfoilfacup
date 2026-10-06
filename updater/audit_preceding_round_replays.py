@@ -9,7 +9,8 @@ It does NOT enable publication.
 import argparse
 import json
 import re
-from datetime import date
+from datetime import date, datetime, time, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import auto_round_results as scan
@@ -50,10 +51,39 @@ def validate_archived_replay_page(raw, preceding, url):
 
 ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifying",
           "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying"]
+UK_TZ = ZoneInfo("Europe/London")
+REPLAY_COMPLETION_GRACE = timedelta(hours=4)
+
+
+def replay_is_due(scheduled, as_of):
+    """A replay is due only after its canonical UK-local KO plus completion grace.
+
+    Date-only fixtures become due the following local day rather than being
+    treated as overdue from midnight. Missing/malformed dates still fail closed.
+    """
+    raw_date = scheduled.get("date")
+    if not raw_date:
+        return True
+    try:
+        fixture_date = date.fromisoformat(str(raw_date))
+    except ValueError:
+        return True
+    if isinstance(as_of, datetime):
+        now = as_of if as_of.tzinfo else as_of.replace(tzinfo=UK_TZ)
+        now = now.astimezone(UK_TZ)
+    else:
+        now = datetime.combine(as_of, time.max, tzinfo=UK_TZ)
+    raw_kickoff = str(scheduled.get("kickoff") or "").strip()
+    if re.fullmatch(r"\d{1,2}:\d{2}", raw_kickoff):
+        hour, minute = map(int, raw_kickoff.split(":"))
+        if 0 <= hour <= 23 and 0 <= minute <= 59:
+            due_at = datetime.combine(fixture_date, time(hour, minute), tzinfo=UK_TZ) + REPLAY_COMPLETION_GRACE
+            return now >= due_at
+    return now.date() > fixture_date
 
 
 def audit(data, source_html, live_html="", source_url="", as_of=None):
-    as_of = as_of or date.today()
+    as_of = as_of or datetime.now(UK_TZ)
     current = base_round(data.get("source_round"))
     if current not in ROUNDS or ROUNDS.index(current) == 0:
         raise ValueError("no eligible preceding qualifying round")
@@ -138,11 +168,7 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
         if not all(pair) or pair in seen_scheduled:
             continue
         seen_scheduled.add(pair)
-        scheduled_date = scheduled.get("date")
-        try:
-            due = not scheduled_date or date.fromisoformat(str(scheduled_date)) <= as_of
-        except ValueError:
-            due = True  # malformed dates fail closed
+        due = replay_is_due(scheduled, as_of)
         if pair not in recorded_pairs and due:
             scheduled_replay_gaps.append({
                 "home": scheduled.get("home"), "away": scheduled.get("away"),
