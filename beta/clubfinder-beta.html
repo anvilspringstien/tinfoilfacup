@@ -1822,7 +1822,9 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '<div class="journey-empty">Your first Tin Foil FA Cup tie is still ahead.</div>';
 
   const currentState=competitionState(carrier);
-  const next=nextRoundInfo(carrier);
+  // Stats is a permanent record: do not collapse an unresolved draw side to
+  // the current custodian before the replay/result has canonically resolved it.
+  const next=nextRoundInfo(carrier,true);
 
   let nextRoundLabel='Upcoming Round TBC';
   let nextTitle='Next fixture TBC';
