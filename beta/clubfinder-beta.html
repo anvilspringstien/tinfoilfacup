@@ -1875,6 +1875,18 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '</main></body></html>';
 
   if(w){
+    try{
+      const assets=[...new Set([...doc.matchAll(/assets\\/stats-report\\/[^"'\\\\]+\\.(?:png|webp)/g)].map(m=>m[0]))];
+      await Promise.all(assets.map(asset=>new Promise(resolve=>{
+        const img=new Image();
+        let settled=false;
+        const finish=()=>{if(settled)return;settled=true;resolve();};
+        img.onload=async()=>{try{if(typeof img.decode==='function')await img.decode();}catch(_){}finish();};
+        img.onerror=finish;
+        img.src=asset;
+        if(img.complete)img.onload();
+      })));
+    }catch(_){}
     w.document.open();
     w.document.write(doc);
     w.document.close();
