@@ -372,8 +372,10 @@ function resolveLiveFixtureForCarrier(f,carrier,preserveConditional){
   const home=parentRound?verifiedConditionalWinner(ownHome,parentRound):ownHome;
   const away=parentRound?verifiedConditionalWinner(ownAway,parentRound):ownAway;
   const unresolved=/\s+or\s+/i.test(home)||/\s+or\s+/i.test(away);
+  const homeUnresolved=/\s+or\s+/i.test(home);
   let venue={ground:'Venue TBC',postcode:'Postcode TBC',verification:'none'};
-  if(!unresolved&&home){
+  // A conditional away side does not make a definite home venue conditional.
+  if(!homeUnresolved&&home){
     const ov=VERIFIED_MATCH_VENUE_OVERRIDES[home]||VERIFIED_MATCH_VENUE_OVERRIDES[(candidateClubByName(home)||{}).name]||null;
     if(ov)venue={ground:ov.ground||'Venue TBC',postcode:ov.postcode||'Postcode TBC',verification:'verified'};
     else{
@@ -1841,13 +1843,13 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
     if(next && next.knownFixture){
       const k=next.knownFixture;
       afterReplayHtml=
-        '<div class="after-replay"><div class="after-label">IF THROUGH</div>'+
+        '<div class="after-replay"><div class="after-label">NEXT ROUND DRAW</div>'+
         '<div class="after-round">'+certEsc(next.name||k.round||'Next Round')+'</div>'+
         '<div class="after-fixture">'+certEsc((k.home||'')+' v '+(k.away||''))+'</div>'+
         '<div class="after-meta">'+certEsc(dateLabel(k.date)+' • '+(k.kickoff||'Kick-off TBC'))+'</div></div>';
     }else if(next){
       afterReplayHtml=
-        '<div class="after-replay"><div class="after-label">IF THROUGH</div>'+
+        '<div class="after-replay"><div class="after-label">NEXT ROUND</div>'+
         '<div class="after-round">'+certEsc(next.name||'Next Round')+'</div>'+
         '<div class="after-meta">'+certEsc(next.date||'Date TBC')+'</div></div>';
     }
@@ -1887,7 +1889,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '.motto{font-stretch:condensed;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:14pt;font-weight:400;font-style:italic;letter-spacing:1px;margin:22px 0 14pxtext-transform:none;}.motto-star{font-size:28px;color:#c90000}.print{text-align:center}.print button{font:inherit;font-size:11px;padding:7px 12px}.stats-return{text-align:center;margin:0 auto 18px}.stats-return button{border:0;border-radius:20px;background:#084c61;color:#fff;padding:8px 14px;font:600 12px Arial,sans-serif;cursor:pointer}.stats-return button:hover{filter:brightness(.92)}@media (hover:none) and (pointer:coarse){.stats-return{position:sticky;top:calc(env(safe-area-inset-top) + 56px);z-index:20}}'+
   '@media(max-width:650px){body{padding:8px}.sheet{padding:20px 14px;min-height:0}.top{grid-template-columns:1.35fr .75fr;gap:10px}.logo{width:140px}.glance{grid-template-columns:repeat(2,1fr)}.g:nth-child(2n){border-right:0}.g:last-child{grid-column:auto}.journey-head{display:none}.journey-row{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.bottom>div+div{border-left:0;border-top:1px solid #d40000}.section-title:before,.section-title:after{width:45px}}'+
   '@media screen and (max-width:650px),screen and (max-device-width:650px){.campaign-identity-band{padding:11px 10px;white-space:normal;overflow-wrap:anywhere}.campaign-identity-label{font-size:8pt}.campaign-identity-value{font-size:9pt;letter-spacing:0;overflow-wrap:anywhere}.campaign-identity-name-row{display:flex;align-items:baseline;flex-wrap:nowrap;gap:0 5px;margin-top:4px;min-width:0}.campaign-identity-name-row .campaign-identity-separator{display:none}.campaign-identity-name-row .campaign-identity-label{flex:0 0 auto;white-space:nowrap}.campaign-identity-name-row .campaign-identity-value{flex:1 1 auto;min-width:0;white-space:normal;overflow-wrap:anywhere}}'+
-  '@page{size:A4 portrait;margin:8mm}@media print{html,body{width:100%;margin:0;padding:0;background:#fff}.sheet{width:100%;min-height:0;margin:0;border-width:4px;box-shadow:none;padding:7mm 6.5mm 5mm}.stats-return,.print{display:none}.top{break-inside:avoid;page-break-inside:avoid}.section-title{break-after:avoid;page-break-after:avoid}.glance,.challenge-honours,.bottom,.motto{break-inside:avoid;page-break-inside:avoid}.journey-row{break-inside:avoid;page-break-inside:avoid}.bottom{break-before:auto;page-break-before:auto}}'+
+  '@page{size:A4 portrait;margin:8mm}@media print{html,body{width:100%;margin:0;padding:0;background:#fff}.sheet{width:100%;min-height:0;margin:0;border-width:4px;box-shadow:none;padding:7mm 6.5mm 5mm}.stats-return,.print{display:none!important}.top{break-inside:avoid;page-break-inside:avoid}.section-title{break-after:avoid;page-break-after:avoid}.glance,.challenge-honours,.bottom,.motto{break-inside:avoid;page-break-inside:avoid}.journey-row{break-inside:avoid;page-break-inside:avoid}.bottom{break-before:auto;page-break-before:auto;margin-bottom:4mm}.bottom>div{min-height:0;padding:10px 12px}.bt{font-size:16pt;margin-bottom:7px}.next-round{font-size:12pt;margin-bottom:6px}.next-fixture{font-size:13px}.after-replay{margin-top:8px;padding-top:7px}.after-round{font-size:10.5pt}.after-fixture{font-size:10pt}.after-meta{font-size:9pt}.motto{margin-top:4mm}}'+
   '</style></head><body><main class="sheet"><div class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){window.opener.focus();window.close();}else{history.back();}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"Back to Challenges":"Back to Clubfinder")+'</button></div>'+
 
   '<section class="top"><div class="top-left"><div class="stats-title">STATS</div><div class="sub">YOUR TIN FOIL FA CUP CAMPAIGN</div><div class="red-star">★</div><div class="minor">STARTED WITH:</div><div class="club">'+certEsc(origin.name)+'</div><div class="tiny-rule"></div><div class="minor">CURRENT CUSTODIAN:</div><div class="club">'+certEsc(carrier.name)+'</div></div>'+
