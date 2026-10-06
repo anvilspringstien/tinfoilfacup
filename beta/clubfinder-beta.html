@@ -1876,7 +1876,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
 
   if(w){
     try{
-      const assets=[...new Set([...doc.matchAll(/assets\\/stats-report\\/[^"'\\\\]+\\.(?:png|webp)/g)].map(m=>m[0]))];
+      const assets=[...new Set([...doc.matchAll(/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g)].map(m=>m[0]))];
       await Promise.all(assets.map(asset=>new Promise(resolve=>{
         const img=new Image();
         let settled=false;
