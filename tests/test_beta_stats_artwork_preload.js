@@ -18,6 +18,8 @@ assert(prepWindow.includes("journeyCertificate.toString()"),
   'Stats prep must derive preload assets from the existing renderer');
 assert(prepWindow.includes("link.rel='preload';link.as='image';link.href=asset"),
   'Stats prep must create image preload links');
+assert(prepWindow.includes("\\.(?:png|webp)/g"),
+  'Stats prep asset discovery must include q80 WebP artwork');
 assert(prepWindow.includes("if(asset.includes('header-logo-'))link.fetchPriority='high'"),
   'Stats header logo preload must have high fetch priority');
 
