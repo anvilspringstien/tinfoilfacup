@@ -916,7 +916,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .beta-sim-panel{
   width:min(500px, calc(100% - 28px));
   margin:0 auto 42px;
-  padding:14px 14px 28px;
+  padding:8px 14px 28px;
   box-sizing:border-box;
   border:1px solid rgba(255,255,255,.22);
   border-radius:10px;
@@ -939,7 +939,6 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   background:transparent;
   cursor:pointer;
 }
-.beta-sim-panel:has(.beta-sim-toggle[aria-expanded="false"]){padding:8px 14px}
 .beta-sim-toggle:hover,.beta-sim-toggle:focus-visible{color:#fff0a8}
 .beta-sim-toggle[aria-expanded="true"]{margin-bottom:13px}
 .beta-sim-tools[hidden]{display:none}
@@ -1060,8 +1059,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 
 @media(max-width:560px){
   .campaign-truth{margin-bottom:34px !important}
-  .beta-sim-panel{width:calc(100% - 20px);padding:12px 10px 20px;margin-bottom:34px}
-  .beta-sim-panel:has(.beta-sim-toggle[aria-expanded="false"]){padding:8px 10px}
+  .beta-sim-panel{width:calc(100% - 20px);padding:8px 10px 20px;margin-bottom:34px}
   .beta-row{gap:7px}
   .beta-button{width:78px;flex-basis:78px;height:56px;font-size:10px}
   .beta-odometer-block{width:67px;flex-basis:67px}
