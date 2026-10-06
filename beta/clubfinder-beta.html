@@ -1590,7 +1590,11 @@ const TIN_FOIL_CAMPAIGN_HONOURS = Object.freeze([
  ['02','The Second Law',p=>p.campaignRound>=2],['05','The Graduate',p=>p.campaignRound>=5],['08','Ding Ding Ding',p=>p.campaignRound>=6],['11','Away Days',p=>p.awayTies>=3],['13','The Difficult Second Round',p=>p.campaignRound>=7],['16','Doing A Richard',p=>p.campaignRound>=8],['17','A Proclaimer',p=>p.pigeonMiles>=500],['18','Giant Killer',p=>p.giantKillAchieved===true],['19','Seeing Double',p=>p.pigeonMiles>=1000],['20','The Fourth Be With You',p=>p.campaignRound>=9],['22','A Beethoven',p=>p.campaignRound>=10],['25','Quartermeister!',p=>p.campaignRound>=11],['26','Get A Semi On!',p=>p.campaignRound>=12],['27','Wembley Wizard',p=>p.campaignRound>=13]
 ]);
 function tinFoilChallengeCampaignKey(truth){
- return [truth&&truth.postcode||'',truth&&truth.originName||'',truth&&truth.selectedAt||''].map(v=>String(v).trim().toUpperCase()).join('|');
+ const origin=String((truth&&truth.originName)||'').trim();
+ const selected=String((truth&&truth.selectedAt)||'').trim();
+ const callSign=String((truth&&truth.callSign)||'').trim();
+ if(!origin)return '';
+ return selected?[origin,selected].join('|'):[origin,callSign].join('|');
 }
 function tinFoilChallengeHonoursSnapshot(truth,progress){
  const honours=TIN_FOIL_CAMPAIGN_HONOURS.filter(([, ,earned])=>earned(progress)).map(([id,title])=>({id,title,verification:'campaign'}));
@@ -1621,7 +1625,6 @@ function tinFoilBuildChallengeBridgeRecord(origin,journey,crumbs,saved,progress,
   campaignRound:progress.campaignRound,
   ended:!!(saved&&saved.ended),
   statsSnapshot,
-  challengeHonours:tinFoilChallengeHonoursSnapshot({originName:origin.name,postcode:saved&&saved.postcode||'',selectedAt:saved&&saved.selectedAt||null},progress),
   updatedAt
  };
 }
