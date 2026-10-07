@@ -242,6 +242,25 @@ jobs:
             competition-health.md
             updater/competition-health.json
           if-no-files-found: error
+      - name: Stage browser-testable Shed preview
+        if: ${{ success() && github.ref_name != 'main' }}
+        run: |
+          rm -rf shed-preview
+          mkdir -p shed-preview
+          cp clubfinder.html shed-preview/index.html
+          cp competition.json shed-preview/competition.json
+          cp -a beta shed-preview/beta
+          cp -a assets shed-preview/assets 2>/dev/null || true
+          cp stats.html shed-preview/stats.html 2>/dev/null || true
+          cp challenges.html shed-preview/challenges.html 2>/dev/null || true
+          printf '%s\n' "validated candidate: ${GITHUB_SHA}" > shed-preview/VALIDATED-CANDIDATE.txt
+      - name: Retain browser-testable Shed preview
+        if: ${{ success() && github.ref_name != 'main' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-testable-shed-preview-${{ github.sha }}
+          path: shed-preview/
+          if-no-files-found: error
       - name: Commit validated competition data and Clubfinder
         if: ${{ github.ref_name == 'main' && (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish) }}
         run: |
