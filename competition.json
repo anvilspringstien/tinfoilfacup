@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-10-07T08:39:18.785441+00:00",
+  "updated_at": "2026-10-07T09:12:35.072839+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -26942,26 +26942,16 @@
     "Gateshead": {
       "round": "Fourth Round Qualifying",
       "home": "Gateshead",
-      "away": "Stafford R or Halesowen T",
+      "away": "Stafford Rangers",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Stafford R": {
+    "Stafford Rangers": {
       "round": "Fourth Round Qualifying",
       "home": "Gateshead",
-      "away": "Stafford R or Halesowen T",
+      "away": "Stafford Rangers",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Halesowen T": {
-      "round": "Fourth Round Qualifying",
-      "home": "Gateshead",
-      "away": "Stafford R or Halesowen T",
-      "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "FC Halifax Town": {
       "round": "Fourth Round Qualifying",
@@ -27121,27 +27111,17 @@
     },
     "Macclesfield": {
       "round": "Fourth Round Qualifying",
-      "home": "Macclesfield or Scarboro A",
+      "home": "Macclesfield",
       "away": "Anstey Nomads",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Scarboro A": {
-      "round": "Fourth Round Qualifying",
-      "home": "Macclesfield or Scarboro A",
-      "away": "Anstey Nomads",
-      "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Anstey Nomads": {
       "round": "Fourth Round Qualifying",
-      "home": "Macclesfield or Scarboro A",
+      "home": "Macclesfield",
       "away": "Anstey Nomads",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Altrincham": {
       "round": "Fourth Round Qualifying",
@@ -27208,29 +27188,19 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Bury Town": {
+    "Spalding United": {
       "round": "Fourth Round Qualifying",
-      "home": "Bury Town or Spalding",
+      "home": "Spalding United",
       "away": "Alvechurch",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Spalding": {
-      "round": "Fourth Round Qualifying",
-      "home": "Bury Town or Spalding",
-      "away": "Alvechurch",
-      "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Alvechurch": {
       "round": "Fourth Round Qualifying",
-      "home": "Bury Town or Spalding",
+      "home": "Spalding United",
       "away": "Alvechurch",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "AFC Rushden & Diamonds": {
       "round": "Fourth Round Qualifying",
@@ -27326,26 +27296,16 @@
     "AFC Fylde": {
       "round": "Fourth Round Qualifying",
       "home": "AFC Fylde",
-      "away": "Trafford or Atherton",
+      "away": "Atherton Collieries",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Trafford": {
+    "Atherton Collieries": {
       "round": "Fourth Round Qualifying",
       "home": "AFC Fylde",
-      "away": "Trafford or Atherton",
+      "away": "Atherton Collieries",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Atherton": {
-      "round": "Fourth Round Qualifying",
-      "home": "AFC Fylde",
-      "away": "Trafford or Atherton",
-      "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Salisbury": {
       "round": "Fourth Round Qualifying",
@@ -27451,29 +27411,19 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Bedford T": {
+    "Bedford Town": {
       "round": "Fourth Round Qualifying",
-      "home": "Bedford T or Win Finch",
+      "home": "Bedford Town",
       "away": "Cray Wanderers",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Win Finch": {
-      "round": "Fourth Round Qualifying",
-      "home": "Bedford T or Win Finch",
-      "away": "Cray Wanderers",
-      "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Cray Wanderers": {
       "round": "Fourth Round Qualifying",
-      "home": "Bedford T or Win Finch",
+      "home": "Bedford Town",
       "away": "Cray Wanderers",
       "date": "2026-10-17",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Uxbridge": {
       "round": "Fourth Round Qualifying",
