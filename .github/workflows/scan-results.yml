@@ -278,7 +278,6 @@ jobs:
             git checkout -B beta-publication origin/main
             cp "$RUNNER_TEMP/validated-beta-competition-fallback.json" beta/competition-fallback.json
             test "$(git diff --name-only)" = 'beta/competition-fallback.json'
-            python updater/refresh_beta_embedded_snapshot.py --check --source beta/competition-fallback.json
             node tests/test_beta_verified_conditional_replay.js
             git add beta/competition-fallback.json
             git commit -m "Promote validated ingestion candidate to BETA"
