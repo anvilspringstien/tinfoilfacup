@@ -125,6 +125,12 @@ jobs:
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
 
+      - name: Guard next-round advancement reconciliation
+        run: python updater/next_round_advancement_regression.py
+
+      - name: Reconcile replay winners from definite next-round fixtures
+        run: python updater/reconcile_next_round_advancement.py
+
       - name: Audit full competition chronology
         id: health_audit
         continue-on-error: true
@@ -229,7 +235,7 @@ jobs:
         run: |
           git config user.name "Tin Foil FA Cup Health Monitor"
           git config user.email "actions@users.noreply.github.com"
-          git add competition.json clubfinder.html competition-health.md updater/competition-health.json law2-location-verification-audit.md updater/law2-location-verification-audit.json
+          git add competition.json clubfinder.html competition-health.md updater/competition-health.json law2-location-verification-audit.md updater/law2-location-verification-audit.json updater/next-round-advancement-report.json
           if git diff --cached --quiet; then
             echo "Competition state and health report unchanged."
           else
