@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-10-07T09:12:56.079252+00:00",
+  "updated_at": "2026-10-07T13:34:30.673861+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -1182,22 +1182,18 @@
       "source_url": "https://www.footballwebpages.co.uk/fa-cup/20260822"
     },
     "Atherton Collieries": {
-      "home": "Trafford",
-      "away": "Atherton Collieries",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "Shawe View",
-        "postcode": "M41 5DL",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Atherton Collieries",
+      "away": "Trafford",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Atherton Collieries",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "AFC Fylde v Atherton Collieries"
     },
     "Atherton Collieries FC": {
       "home": "Trafford",
@@ -8472,22 +8468,18 @@
       "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/"
     },
     "Trafford": {
-      "home": "Trafford",
-      "away": "Atherton Collieries",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "Shawe View",
-        "postcode": "M41 5DL",
-        "source": "protected Clubfinder GROUNDS",
-        "verification": "clubfinder-canonical"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Atherton Collieries",
+      "away": "Trafford",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Atherton Collieries",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "AFC Fylde v Atherton Collieries"
     },
     "Runcorn Linnets": {
       "home": "Runcorn Linnets",
@@ -9198,22 +9190,18 @@
       }
     },
     "Stafford Rangers": {
-      "home": "Stafford Rangers",
-      "away": "Halesowen Town",
-      "home_score": 1,
-      "away_score": 1,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Halesowen Town",
+      "away": "Stafford Rangers",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Stafford Rangers",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Gateshead v Stafford Rangers"
     },
     "Matlock Town FC": {
       "home": "Stafford Rangers",
@@ -13908,22 +13896,18 @@
       }
     },
     "Halesowen Town": {
-      "home": "Stafford Rangers",
-      "away": "Halesowen Town",
-      "home_score": 1,
-      "away_score": 1,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Halesowen Town",
+      "away": "Stafford Rangers",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Stafford Rangers",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Gateshead v Stafford Rangers"
     },
     "Halesowen Town FC": {
       "home": "Stafford Rangers",
@@ -14340,22 +14324,18 @@
       }
     },
     "Bury Town": {
-      "home": "Bury Town",
-      "away": "Spalding United",
-      "home_score": 1,
-      "away_score": 1,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "The Getaway Cars Stadium",
-        "postcode": "IP33 1XP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Spalding United",
+      "away": "Bury Town",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Spalding United",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Spalding United v Alvechurch"
     },
     "Malvern Town AFC": {
       "home": "Redditch United",
@@ -15834,22 +15814,18 @@
       }
     },
     "Wingate & Finchley": {
-      "home": "Bedford Town",
-      "away": "Wingate & Finchley",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "The Eyrie",
-        "postcode": "MK44 3LW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Wingate & Finchley",
+      "away": "Bedford Town",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Bedford Town",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Bedford Town v Cray Wanderers"
     },
     "Wingate & Finchley AFC": {
       "home": "Bedford Town",
@@ -24394,22 +24370,18 @@
       }
     },
     "Bedford Town": {
-      "home": "Bedford Town",
-      "away": "Wingate & Finchley",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "The Eyrie",
-        "postcode": "MK44 3LW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Wingate & Finchley",
+      "away": "Bedford Town",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Bedford Town",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Bedford Town v Cray Wanderers"
     },
     "Billericay Town AFC": {
       "home": "Billericay Town",
@@ -25222,22 +25194,18 @@
       }
     },
     "Scarborough Athletic": {
-      "home": "Macclesfield",
-      "away": "Scarborough Athletic",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "Leasing.com Stadium",
-        "postcode": "SK11 7SP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Scarborough Athletic",
+      "away": "Macclesfield",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Macclesfield",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Macclesfield v Anstey Nomads"
     },
     "Scarborough Athletic FC": {
       "home": "Macclesfield",
@@ -25618,22 +25586,18 @@
       }
     },
     "Spalding United": {
-      "home": "Bury Town",
-      "away": "Spalding United",
-      "home_score": 1,
-      "away_score": 1,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "The Getaway Cars Stadium",
-        "postcode": "IP33 1XP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Spalding United",
+      "away": "Bury Town",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Spalding United",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Spalding United v Alvechurch"
     },
     "Harborough Town AFC": {
       "home": "Harborough Town",
@@ -25888,22 +25852,18 @@
       }
     },
     "Macclesfield": {
-      "home": "Macclesfield",
-      "away": "Scarborough Athletic",
-      "home_score": 2,
-      "away_score": 2,
-      "winner": "",
-      "status": "FT",
-      "decision": "draw-replay",
-      "date": "2026-10-03",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round",
-      "round": "Third Round Qualifying",
-      "venue": {
-        "ground": "Leasing.com Stadium",
-        "postcode": "SK11 7SP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Third Round Qualifying Replay",
+      "home": "Scarborough Athletic",
+      "away": "Macclesfield",
+      "home_score": null,
+      "away_score": null,
+      "winner": "Macclesfield",
+      "status": "ADVANCEMENT_CONFIRMED",
+      "decision": "next-round-fixture",
+      "date": "2026-10-06",
+      "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+      "evidence_round": "Fourth Round Qualifying",
+      "evidence_fixture": "Macclesfield v Anstey Nomads"
     },
     "Macclesfield FC": {
       "home": "Macclesfield",
@@ -31688,6 +31648,20 @@
           "source": "protected Clubfinder GROUNDS",
           "verification": "clubfinder-canonical"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Atherton Collieries",
+        "away": "Trafford",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Atherton Collieries",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "AFC Fylde v Atherton Collieries"
       }
     ],
     "Atherton Collieries FC": [
@@ -53034,6 +53008,20 @@
           "source": "protected Clubfinder GROUNDS",
           "verification": "clubfinder-canonical"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Atherton Collieries",
+        "away": "Trafford",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Atherton Collieries",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "AFC Fylde v Atherton Collieries"
       }
     ],
     "Runcorn Linnets": [
@@ -55366,6 +55354,20 @@
           "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
           "verification": "clubfinder-canonical"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Halesowen Town",
+        "away": "Stafford Rangers",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Stafford Rangers",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Gateshead v Stafford Rangers"
       }
     ],
     "Matlock Town FC": [
@@ -67998,6 +68000,20 @@
           "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
           "verification": "clubfinder-canonical"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Halesowen Town",
+        "away": "Stafford Rangers",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Stafford Rangers",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Gateshead v Stafford Rangers"
       }
     ],
     "Halesowen Town FC": [
@@ -69140,6 +69156,20 @@
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Spalding United",
+        "away": "Bury Town",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Spalding United",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Spalding United v Alvechurch"
       }
     ],
     "Malvern Town AFC": [
@@ -73282,6 +73312,20 @@
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Wingate & Finchley",
+        "away": "Bedford Town",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Bedford Town",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Bedford Town v Cray Wanderers"
       }
     ],
     "Wingate & Finchley AFC": [
@@ -85648,6 +85692,20 @@
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Wingate & Finchley",
+        "away": "Bedford Town",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Bedford Town",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Bedford Town v Cray Wanderers"
       }
     ],
     "Billericay Town AFC": [
@@ -87312,6 +87370,20 @@
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Scarborough Athletic",
+        "away": "Macclesfield",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Macclesfield",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Macclesfield v Anstey Nomads"
       }
     ],
     "Scarborough Athletic FC": [
@@ -88006,6 +88078,20 @@
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Spalding United",
+        "away": "Bury Town",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Spalding United",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Spalding United v Alvechurch"
       }
     ],
     "Harborough Town AFC": [
@@ -88488,6 +88574,20 @@
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }
+      },
+      {
+        "round": "Third Round Qualifying Replay",
+        "home": "Scarborough Athletic",
+        "away": "Macclesfield",
+        "home_score": null,
+        "away_score": null,
+        "winner": "Macclesfield",
+        "status": "ADVANCEMENT_CONFIRMED",
+        "decision": "next-round-fixture",
+        "date": "2026-10-06",
+        "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
+        "evidence_round": "Fourth Round Qualifying",
+        "evidence_fixture": "Macclesfield v Anstey Nomads"
       }
     ],
     "Macclesfield FC": [
