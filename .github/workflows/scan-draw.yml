@@ -16,6 +16,7 @@ on:
       - "updater/active_conditional_refresh_regression.py"
       - "updater/reconcile_next_round_advancement.py"
       - "updater/next_round_advancement_regression.py"
+      - "updater/system_ingestion_health.py"
       - ".github/workflows/scan-draw.yml"
 
 permissions:
