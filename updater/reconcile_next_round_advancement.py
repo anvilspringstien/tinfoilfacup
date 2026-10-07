@@ -59,6 +59,8 @@ def aliases(name):
     name=str(name or "").strip(); out={name}
     suffix=re.compile(r"\s+(FC|AFC|CFC)$",re.I)
     out.add(suffix.sub("",name))
+    if name and not suffix.search(name):
+        out |= {name+" FC",name+" AFC"}
     return {x for x in out if x}
 
 def merge_evidence(data,row):
