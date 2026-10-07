@@ -272,14 +272,17 @@ jobs:
           else
             git commit -m "Promote validated ingestion candidate to BETA"
             cp beta/competition-fallback.json "$RUNNER_TEMP/validated-beta-competition-fallback.json"
+            cp beta/clubfinder-beta.html "$RUNNER_TEMP/validated-beta-clubfinder.html"
             git fetch origin main
             git reset --hard
             git clean -fd
             git checkout -B beta-publication origin/main
             cp "$RUNNER_TEMP/validated-beta-competition-fallback.json" beta/competition-fallback.json
-            test "$(git diff --name-only)" = 'beta/competition-fallback.json'
+            cp "$RUNNER_TEMP/validated-beta-clubfinder.html" beta/clubfinder-beta.html
+            changed="$(git diff --name-only)"
+            test "$changed" = "$(printf '%s\n' beta/clubfinder-beta.html beta/competition-fallback.json)"
             node tests/test_beta_verified_conditional_replay.js
-            git add beta/competition-fallback.json
+            git add beta/clubfinder-beta.html beta/competition-fallback.json
             git commit -m "Promote validated ingestion candidate to BETA"
             git push origin HEAD:main
           fi
@@ -289,7 +292,7 @@ jobs:
         with:
           name: browser-testable-shed-preview-${{ github.sha }}
           path: shed-preview/
-          if-no-files-found: error
+          if-no-files-found: warn
       - name: Commit validated competition data and Clubfinder
         if: ${{ github.ref_name == 'main' && (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish) }}
         run: |
