@@ -197,8 +197,8 @@ const VERIFIED_MATCH_VENUE_OVERRIDES={
   }
 };
 
-const LIVE_COMPETITION_DATA_URL='../competition.json';
-const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';
+const BETA_COMPETITION_DATA_URL='./competition-fallback.json';
+const PRODUCTION_COMPETITION_DATA_URL='../competition.json';
 
 let LIVE_COMPETITION_DATA=null;
 let LIVE_DATA_STATUS={state:'loading',updated_at:null,message:'Loading competition data'};
@@ -231,17 +231,18 @@ function applyLiveRoundDates(){
 }
 async function refreshCompetitionData(force=false){
   try{
-    const u=LIVE_COMPETITION_DATA_URL+(LIVE_COMPETITION_DATA_URL.includes('?')?'&':'?')+'t='+Date.now();
+    const u=BETA_COMPETITION_DATA_URL+(BETA_COMPETITION_DATA_URL.includes('?')?'&':'?')+'t='+Date.now();
     const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();if(!d||Number(d.schema_version)!==1)throw new Error('Unsupported schema');
+    const d=await r.json();if(!d||Number(d.schema_version)!==1)throw new Error('Unsupported BETA schema');
     LIVE_COMPETITION_DATA=d;applyLiveRoundDates();
-    LIVE_DATA_STATUS={state:'live',updated_at:d.updated_at||null,message:'BETA diagnostic competition data loaded'};
+    LIVE_DATA_STATUS={state:'live',updated_at:d.updated_at||null,message:'BETA validated competition data loaded'};
   }catch(e){
     try{
-      const r=await fetch(FALLBACK_COMPETITION_DATA_URL,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
-      const d=await r.json();if(!d||Number(d.schema_version)!==1)throw new Error('Unsupported fallback schema');
+      const u=PRODUCTION_COMPETITION_DATA_URL+(PRODUCTION_COMPETITION_DATA_URL.includes('?')?'&':'?')+'t='+Date.now();
+      const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
+      const d=await r.json();if(!d||Number(d.schema_version)!==1)throw new Error('Unsupported production schema');
       LIVE_COMPETITION_DATA=d;applyLiveRoundDates();
-      LIVE_DATA_STATUS={state:'fallback',updated_at:d.updated_at||null,message:'Fallback snapshot — live data unavailable'};
+      LIVE_DATA_STATUS={state:'fallback',updated_at:d.updated_at||null,message:'Production fallback — BETA data unavailable'};
     }catch(fallbackError){
       LIVE_COMPETITION_DATA=null;
       LIVE_DATA_STATUS={state:'unavailable',updated_at:null,message:'Competition data unavailable. Please try again later.'};
