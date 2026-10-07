@@ -52,6 +52,8 @@ on:
       - "updater/kt21_venue_render_regression.js"
       - "updater/ex8_venue_render_regression.js"
       - "updater/refresh_clubfinder_embedded_snapshot.py"
+      - "updater/refresh_beta_embedded_snapshot.py"
+      - "tests/test_beta_embedded_snapshot_refresh.py"
       - "updater/embedded_snapshot_regression.py"
       - "updater/patch_clubfinder_replay_progression.py"
       - "updater/patch_clubfinder_journey_integrity.py"
