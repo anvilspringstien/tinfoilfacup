@@ -180,6 +180,10 @@ def classify_observation(fixture, observation, history=None):
         row for row in relevant
         if str(row.get("date") or "")
         and str(row.get("date") or "") == str(obs.get("date") or "")
+        # A definite official next-round fixture can prove the winner before a
+        # score source catches up. That evidence is intentionally supersedable
+        # by the later real result from the same match date.
+        and str(row.get("decision") or "").lower() != "next-round-fixture"
     ]
     if same_date_conflicts:
         raise ValueError("conflicting observation for a date already recorded for this tie")
