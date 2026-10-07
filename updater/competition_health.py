@@ -53,6 +53,7 @@ def has_result(f,results):
         if norm(r.get('home'))==fh and norm(r.get('away'))==fa:
             if fd and r.get('date') and fd!=r.get('date'):continue
             if r.get('home_score') is not None and r.get('away_score') is not None:return True
+            if str(r.get('status') or '').upper()=='ADVANCEMENT_CONFIRMED' and r.get('winner') and str(r.get('decision') or '').lower()=='next-round-fixture':return True
     return False
 def unique_count(obj):
     vals=obj.values() if isinstance(obj,dict) else (obj or []);seen=set()
