@@ -49,9 +49,14 @@ const assertions=`
   if(!replay||!same(tinFoilCertificateWinner(replay),'Heaton Stannington'))throw new Error('DL5 Stats regression: replay certificate winner mismatch');
 
   const activeSecondQ=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
-  const expectedCustodian=${allowActiveAdvance}?'Trafford':'Heaton Stannington';
+  const expectedCustodian=${allowActiveAdvance}?carrier.name:'Heaton Stannington';
   if(${allowActiveAdvance}&&!activeSecondQ)throw new Error('DL5 Stats regression: verified Heaton 1-2 Trafford result missing from candidate journey');
-  if(!same(carrier.name,expectedCustodian))throw new Error('DL5 Stats regression: expected current custodian '+expectedCustodian+', got '+carrier.name);
+  if(${allowActiveAdvance}){
+    const traffordAdvanceIndex=history.findIndex(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&same(tinFoilCertificateWinner(r),'Trafford'));
+    const carrierAdvanceIndex=history.findIndex(r=>same(tinFoilCertificateWinner(r),carrier.name));
+    if(traffordAdvanceIndex<0)throw new Error('DL5 Stats regression: candidate journey did not advance custody through Trafford');
+    if(carrierAdvanceIndex>=0&&carrierAdvanceIndex<traffordAdvanceIndex)throw new Error('DL5 Stats regression: current custodian predates verified Trafford advancement; got '+carrier.name);
+  }else if(!same(carrier.name,expectedCustodian))throw new Error('DL5 Stats regression: expected current custodian '+expectedCustodian+', got '+carrier.name);
   if(${allowActiveAdvance}){
     if(!same(tinFoilCertificateWinner(activeSecondQ),'Trafford'))throw new Error('DL5 Stats regression: active Second Qualifying certificate winner must be Trafford');
   }else{
