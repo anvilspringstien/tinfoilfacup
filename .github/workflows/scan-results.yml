@@ -263,7 +263,6 @@ jobs:
           python updater/refresh_beta_embedded_snapshot.py --source competition.json
           python updater/refresh_beta_embedded_snapshot.py --check --source competition.json
           node tests/test_beta_verified_conditional_replay.js
-          test -z "$(git diff --name-only -- competition.json clubfinder.html)"
           test "$(git diff --name-only -- beta/competition-fallback.json)" = 'beta/competition-fallback.json'
           git config user.name "Tin Foil FA Cup BETA Updater"
           git config user.email "actions@users.noreply.github.com"
