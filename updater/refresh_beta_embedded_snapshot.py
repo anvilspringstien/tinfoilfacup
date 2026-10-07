@@ -33,8 +33,12 @@ def refresh(html, data):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--source', default=str(DATA), help='Competition snapshot that the BETA fallback must match')
     args = parser.parse_args()
-    live = json.loads(DATA.read_text(encoding='utf-8'))
+    source = Path(args.source)
+    if not source.is_absolute():
+        source = ROOT / source
+    live = json.loads(source.read_text(encoding='utf-8'))
     expected = refresh(BETA.read_text(encoding='utf-8'), live)
     current = FALLBACK.read_text(encoding='utf-8') if FALLBACK.exists() else None
     if args.check and current != expected:
@@ -42,7 +46,8 @@ def main():
     if not args.check and current != expected:
         FALLBACK.write_text(expected, encoding='utf-8')
     print('BETA FALLBACK GUARD: PASS')
-    print('Canonical competition updated_at:', live['updated_at'])
+    print('Validated BETA source:', source.relative_to(ROOT) if source.is_relative_to(ROOT) else source)
+    print('Competition updated_at:', live['updated_at'])
     print('Mode:', 'check-only' if args.check else 'refresh')
     print('Production files: untouched')
 
