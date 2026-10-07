@@ -16,15 +16,20 @@ def refresh(html, data):
     if not data.get('result_history') or not data.get('fixtures'):
         raise ValueError('Canonical result history/fixtures missing')
     required = (
-        "const LIVE_COMPETITION_DATA_URL='../competition.json';",
-        "const FALLBACK_COMPETITION_DATA_URL='./competition-fallback.json';",
+        "const BETA_COMPETITION_DATA_URL='./competition-fallback.json';",
+        "const PRODUCTION_COMPETITION_DATA_URL='../competition.json';",
         "let LIVE_COMPETITION_DATA=null;",
-        'fetch(FALLBACK_COMPETITION_DATA_URL',
-        "LIVE_DATA_STATUS={state:'fallback'",
+        'fetch(u,{cache:\'no-store\'})',
+        "message:'BETA validated competition data loaded'",
+        "message:'Production fallback — BETA data unavailable'",
         "LIVE_DATA_STATUS={state:'unavailable'",
     )
-    if any(html.count(x) != 1 for x in required):
-        raise ValueError('BETA live/fallback loader boundary changed')
+    if any(html.count(x) < 1 for x in required):
+        raise ValueError('BETA data-source loader boundary changed')
+    beta_first = html.find('const u=BETA_COMPETITION_DATA_URL')
+    production_fallback = html.find('const u=PRODUCTION_COMPETITION_DATA_URL')
+    if beta_first < 0 or production_fallback < 0 or beta_first >= production_fallback:
+        raise ValueError('BETA must prefer validated BETA data before production fallback')
     if 'EMBEDDED_COMPETITION_DATA' in html:
         raise ValueError('BETA still contains an embedded snapshot')
     return json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n'
