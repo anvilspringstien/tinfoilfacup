@@ -14,6 +14,8 @@ on:
     paths:
       - "updater/auto_draw.py"
       - "updater/active_conditional_refresh_regression.py"
+      - "updater/reconcile_next_round_advancement.py"
+      - "updater/next_round_advancement_regression.py"
       - ".github/workflows/scan-draw.yml"
 
 permissions:
