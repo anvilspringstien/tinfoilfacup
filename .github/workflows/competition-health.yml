@@ -125,6 +125,9 @@ jobs:
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
 
+      - name: Run synthetic system ingestion health
+        run: python updater/system_ingestion_health.py
+
       - name: Guard next-round advancement reconciliation
         run: python updater/next_round_advancement_regression.py
 
