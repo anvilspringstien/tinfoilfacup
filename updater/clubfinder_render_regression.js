@@ -53,7 +53,12 @@ const assertions=`
   };
   if(!same(carrier.name,'Heaton Stannington')&&!allowActiveAdvance) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
   const heatonActiveResult=canonicalHistory.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
-  if(allowActiveAdvance&&heatonActiveResult&&!same(carrier.name,'Trafford'))throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance custodian to Trafford; got '+carrier.name);
+  if(allowActiveAdvance&&heatonActiveResult){
+    const carrierHistoryIndex=history.findIndex(r=>same(r.winner,carrier.name));
+    const heatonTraffordIndex=history.findIndex(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&same(r.winner,'Trafford'));
+    if(heatonTraffordIndex<0)throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance journey chronology through Trafford');
+    if(carrierHistoryIndex>=0&&carrierHistoryIndex<heatonTraffordIndex)throw new Error('DL5 render regression: current custodian predates verified Trafford advancement; got '+carrier.name);
+  }
   if(allowActiveAdvance&&!heatonActiveResult&&!same(carrier.name,'Heaton Stannington'))throw new Error('DL5 render regression: custodian advanced without canonical Heaton-Trafford result; got '+carrier.name);
   const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
   const state=competitionState(heaton);
