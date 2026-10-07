@@ -260,7 +260,7 @@ jobs:
         if: ${{ success() && github.ref_name != 'main' }}
         run: |
           set -euo pipefail
-          cp competition.json beta/competition-fallback.json
+          python updater/refresh_beta_embedded_snapshot.py --source competition.json
           python updater/refresh_beta_embedded_snapshot.py --check --source competition.json
           node tests/test_beta_verified_conditional_replay.js
           test -z "$(git diff --name-only -- competition.json clubfinder.html)"
