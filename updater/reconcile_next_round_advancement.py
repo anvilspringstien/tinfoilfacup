@@ -40,7 +40,9 @@ def terminal_replay_exists(results,replay):
         if pair(r)!=p or base_round(r.get("round"))!=rnd: continue
         if not str(r.get("round") or "").lower().endswith(" replay"): continue
         hs,aw=score(r.get("home_score")),score(r.get("away_score"))
-        if (hs is not None and aw is not None and hs!=aw) or r.get("winner"):
+        if hs is not None and aw is not None and hs!=aw:
+            return True
+        if r.get("winner") and str(r.get("decision") or "").lower()!="next-round-fixture":
             return True
     return False
 
