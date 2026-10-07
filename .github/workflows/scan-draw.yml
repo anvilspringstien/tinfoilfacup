@@ -50,6 +50,9 @@ jobs:
             python updater/auto_draw.py
           fi
 
+      - name: Run synthetic system ingestion health
+        run: python updater/system_ingestion_health.py
+
       - name: Guard next-round advancement reconciliation
         run: python updater/next_round_advancement_regression.py
 
