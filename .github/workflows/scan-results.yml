@@ -231,6 +231,17 @@ jobs:
         with:
           name: results-pilot-report
           path: updater/results-pilot-report.json
+      - name: Retain validated Shed candidate
+        if: ${{ success() && github.ref_name != 'main' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: validated-shed-candidate-${{ github.sha }}
+          path: |
+            competition.json
+            clubfinder.html
+            competition-health.md
+            updater/competition-health.json
+          if-no-files-found: error
       - name: Commit validated competition data and Clubfinder
         if: ${{ github.ref_name == 'main' && (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish) }}
         run: |
