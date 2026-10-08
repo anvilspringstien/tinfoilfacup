@@ -16,6 +16,10 @@ assert out["fixtures"]==p["fixtures"],"Bury kickoff overwritten"
 assert out["replays"]==p["replays"],"Replay records lost"
 assert p["result_history"]["Trafford"][0] in out["result_history"]["Trafford"],"Draw history lost"
 assert out["results"]["Trafford"]["winner"]=="Atherton Collieries"
+alias=copy.deepcopy(p)
+alias["fixtures"]["fylde-alias"]=copy.deepcopy(alias["fixtures"]["fylde"])
+alias_out,alias_rows,alias_issues=build(alias,b)
+assert not alias_issues and len(alias_rows)==1,"Fixture alias treated as ambiguous"
 again,rows,issues=build(out,b)
 assert not issues and again==out,"Repeated reconciliation not idempotent"
 newer=copy.deepcopy(p)
