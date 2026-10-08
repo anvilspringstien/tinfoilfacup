@@ -3,18 +3,23 @@
 <style>
 :root{--cream:#f6f3e8;--field:#505050}*{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#373737;color:var(--cream)}
-body{font-family:"Helvetica Neue",Arial,sans-serif;font-weight:300}
-.stage{height:100svh;padding:clamp(6px,1.2vh,13px);display:flex}
-.field{position:relative;flex:1;min-height:0;min-width:0;overflow:hidden;background:#505050;border:1px solid #818181;border-radius:12px}
-.content{height:100%;width:100%;max-width:580px;margin:auto;display:flex;flex-direction:column;align-items:center;padding:clamp(10px,1.8vh,20px) clamp(15px,5vw,30px) clamp(14px,2.5vh,26px)}
-.crest{display:block;object-fit:contain;width:min(91vw,430px,43svh);max-height:43svh;height:auto;flex:0 1 auto;min-height:0}
-.intro{width:100%;margin-top:clamp(4px,1.5vh,15px);text-align:left}
-h1{font-size:clamp(27px,7.3vw,49px);font-weight:200;line-height:1.07;letter-spacing:.012em;margin:0}
-h1 span{display:block;font-size:.58em;line-height:1.18}
-p{font-size:clamp(17px,4.3vw,25px);line-height:1.35;font-weight:300;text-align:left;align-self:center;width:max-content;max-width:100%;margin:clamp(9px,2vh,23px) 0 0;padding-left:clamp(5px,3vw,18px)}p .line{display:block;white-space:nowrap}
-a.start{display:block;text-decoration:none;color:var(--cream);background:#292724;border:1px solid #1c1b1a;border-radius:11px;padding:12px 30px;font-size:clamp(16px,4vw,20px);box-shadow:0 2px 6px #252525;margin-top:clamp(12px,2.6vh,25px);flex:none}
+body{font-family:"Poppins","Helvetica Neue",Arial,sans-serif;font-weight:300}
+.stage{min-height:100svh;height:100svh;padding:clamp(6px,1.2vh,13px);display:flex}
+.field{position:relative;flex:1;min-width:0;min-height:0;overflow:hidden;background:var(--field);border:1px solid #818181;border-radius:12px}
+.content{height:100%;width:100%;max-width:580px;margin:auto;display:flex;flex-direction:column;align-items:center;padding:0 0 clamp(9px,1.5vh,18px)}
+.crest{display:block;object-fit:contain;width:83.333%;max-width:450px;height:auto;aspect-ratio:1;flex:0 1 auto;min-height:0;margin-top:8.333cqw}
+.field{container-type:inline-size}
+.intro{width:83.333%;margin-top:clamp(3px,0.9vh,11px);text-align:left}
+h1{font-size:clamp(27px,8.88cqw,51px);font-weight:300;line-height:1.05;letter-spacing:-.025em;margin:0;white-space:nowrap}
+h1 span{display:block;font-size:52.083%;line-height:1.2;letter-spacing:0}
+p{font-size:clamp(13px,3.24cqw,20px);line-height:1.35;font-weight:300;text-align:left;align-self:center;width:max-content;max-width:90%;margin:clamp(9px,1.6vh,18px) 0 0}
+p .line{display:block;white-space:nowrap}
+a.start{display:block;text-decoration:none;color:var(--cream);background:#292724;border:1px solid #1c1b1a;border-radius:11px;padding:12px 30px;font-size:clamp(16px,4vw,20px);box-shadow:0 2px 6px #252525;flex:none;margin-top:auto;margin-bottom:auto}
 a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
-.grassroots{margin-top:auto;padding-top:12px;font-size:clamp(10px,2.45vw,14px);line-height:1.3;text-align:center}
-@media(max-height:730px){.content{padding-top:9px;padding-bottom:13px}.crest{width:min(91vw,40svh);max-height:40svh}h1{font-size:clamp(24px,6.8vw,37px)}p{font-size:clamp(15px,3.8vw,20px);margin-top:8px}a.start{margin-top:10px;padding:10px 25px}.grassroots{padding-top:7px}}
-@media(max-height:580px){.crest{width:min(84vw,32svh);max-height:32svh}h1{font-size:clamp(20px,5.7vw,30px)}p{font-size:14px;line-height:1.25;margin-top:5px}a.start{margin-top:6px;padding:8px 20px}.grassroots{font-size:10px;padding-top:4px}}
-</style></head><body><main class="stage"><section class="field" aria-label="Tin Foil FA Cup introduction"><div class="content"><img class="crest" src="tin-foil-fa-cup-four-laws-beta.png" alt="Tin Foil FA Cup crest"><div class="intro"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1></div><p><span class="line">Experience the magic of your</span><span class="line">own Cup Run as you try to</span><span class="line">get to Wembley — for real!</span></p><a class="start" href="clubfinder-beta.html">Start Campaign</a><div class="grassroots">Tin Foil FA Cup supports Grassroots Football in the best way possible — Through the Turnstiles</div></div></section></main></body></html>
+.grassroots{width:96%;font-size:clamp(8px,1.45cqw,11px);line-height:1.3;text-align:center;white-space:nowrap}
+.grassroots .short{display:none}
+@media(max-width:600px){.grassroots .full{display:none}.grassroots .short{display:inline}.grassroots{font-size:clamp(9px,2.5cqw,13px)}}
+@media(max-height:760px){.crest{width:min(83.333%,38svh);margin-top:clamp(8px,1.6vh,15px)}.intro{margin-top:4px}p{margin-top:7px}a.start{padding:10px 26px}.content{padding-bottom:8px}}
+@media(max-height:600px){.crest{width:min(76%,30svh)}h1{font-size:clamp(24px,7cqw,38px)}p{font-size:clamp(12px,2.8cqw,17px);margin-top:4px}a.start{padding:8px 20px}.grassroots{font-size:9px}}
+@media(max-height:470px){.stage{height:auto;min-height:100svh}.field{overflow:visible}.content{min-height:100svh}.crest{width:min(60%,26svh)}}
+</style></head><body><main class="stage"><section class="field" aria-label="Tin Foil FA Cup introduction"><div class="content"><img class="crest" src="tin-foil-fa-cup-four-laws-beta.png" alt="Tin Foil FA Cup crest"><div class="intro"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1></div><p><span class="line">Experience the magic of your</span><span class="line">own Cup Run as you try to</span><span class="line">get to Wembley — for real!</span></p><a class="start" href="clubfinder-beta.html">Start Campaign</a><div class="grassroots"><span class="full">Tin Foil FA Cup supports Grassroots Football in the best way possible — Through the Turnstiles</span><span class="short">Supporting grassroots football — Through the Turnstiles</span></div></div></section></main></body></html>
