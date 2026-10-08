@@ -51,9 +51,20 @@ const assertions=`
   const activeSecondQ=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
   const athertonAdvancement=history.find(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.decision==='next-round-fixture'&&same(r.winner,'Atherton Collieries')&&r.home_score==null&&r.away_score==null&&r.source_url&&r.evidence_fixture==='AFC Fylde v Atherton Collieries');
   const fourthQFixtures=Object.values(${JSON.stringify(competition.fixtures||{})});
+  // Accept an observed, decided replay as well as a scoreless official-draw
+  // advancement. The draw alone cannot establish the replay winner.
+  const athertonScoredReplay=history.find(r=>
+    same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&
+    r.round==='Third Round Qualifying Replay'&&r.date==='2026-10-06'&&
+    same(r.winner,'Atherton Collieries')&&
+    Number.isInteger(r.home_score)&&Number.isInteger(r.away_score)&&
+    r.home_score>r.away_score&&r.status==='FT'&&
+    typeof r.source_url==='string'&&
+    r.source_url.startsWith('https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round-replay'));
+  const athertonEvidence=athertonAdvancement||athertonScoredReplay;
   const athertonFourthQ=fourthQFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
-  if(athertonAdvancement&&!athertonFourthQ)throw new Error('DL5 Stats regression: advancement lacks definite Fourth Qualifying fixture');
-  const expectedCustodian=${allowActiveAdvance}?(athertonAdvancement&&athertonFourthQ?'Atherton Collieries':'Trafford'):'Heaton Stannington';
+  if(athertonEvidence&&!athertonFourthQ)throw new Error('DL5 Stats regression: advancement lacks definite Fourth Qualifying fixture');
+  const expectedCustodian=${allowActiveAdvance}?(athertonEvidence&&athertonFourthQ?'Atherton Collieries':'Trafford'):'Heaton Stannington';
   if(${allowActiveAdvance}&&!activeSecondQ)throw new Error('DL5 Stats regression: verified Heaton 1-2 Trafford result missing from candidate journey');
   if(!same(carrier.name,expectedCustodian))throw new Error('DL5 Stats regression: expected current custodian '+expectedCustodian+', got '+carrier.name);
   if(${allowActiveAdvance}){
