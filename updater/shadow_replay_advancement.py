@@ -7,8 +7,30 @@ fixture is evidence of advancement, not evidence of the replay score.
 import argparse
 import json
 from pathlib import Path
+from datetime import date
+from round_state_engine import REPLAY_ROUNDS, base_round
 
 from build_reconciliation_candidate import build, match
+
+ROUND_SEQUENCE = [
+    "Extra Preliminary Round", "Preliminary Round", "First Round Qualifying",
+    "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying",
+    "First Round Proper", "Second Round Proper", "Third Round Proper",
+    "Fourth Round Proper", "Fifth Round Proper", "Quarter Final",
+    "Semi Final", "Final",
+]
+
+def chronological_successor(replay, fixture):
+    earlier = base_round(replay.get("round"))
+    later = base_round(fixture.get("round"))
+    if earlier not in REPLAY_ROUNDS or earlier not in ROUND_SEQUENCE or later not in ROUND_SEQUENCE:
+        return False
+    if ROUND_SEQUENCE.index(later) != ROUND_SEQUENCE.index(earlier) + 1:
+        return False
+    try:
+        return date.fromisoformat(str(replay.get("date"))) < date.fromisoformat(str(fixture.get("date")))
+    except ValueError:
+        return False
 
 def rows(value):
     return list(value.values()) if isinstance(value, dict) else list(value or [])
@@ -31,6 +53,7 @@ def propose(data):
         # Only a unique, definite canonical fixture may establish advancement.
         matches = [f for f in fixtures if isinstance(f, dict) and
                    len(set(key) & set(match(f))) == 1 and
+                   chronological_successor(replay, f) and
                    not f.get("conditional") and
                    " or " not in str(f.get("home", "")).lower() and
                    " or " not in str(f.get("away", "")).lower()]
