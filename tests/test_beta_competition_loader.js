@@ -20,7 +20,7 @@ async function scenario(liveOK,fallbackOK){
         if(!liveOK)throw Error('live unavailable');
         return {ok:true,json:async()=>live};
       }
-      assert.equal(url,'./competition-fallback.json');
+      assert.match(String(url),/^\.\/competition-fallback\.json\?t=\d+$/);
       if(!fallbackOK)throw Error('fallback unavailable');
       return {ok:true,json:async()=>fallback};
     }};
