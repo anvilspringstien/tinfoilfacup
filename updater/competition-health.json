@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-08T13:15:11.781068+01:00",
+  "checked_at": "2026-10-08T15:34:27.487825+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -11,79 +11,21 @@
   },
   "counts": {
     "known_fixtures": 174,
-    "complete": 137,
+    "complete": 142,
     "awaiting_grace": 0,
-    "overdue": 5,
+    "overdue": 0,
     "upcoming": 32,
-    "critical": 1
+    "critical": 0
   },
-  "critical": [
-    "5 played fixtures are overdue a result."
-  ],
+  "critical": [],
   "fixture_local_health": false,
-  "overdue": [
-    {
-      "round": "Third Round Qualifying Replay",
-      "home": "Wingate & Finchley",
-      "away": "Bedford Town",
-      "date": "2026-10-06",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-06T19:45:00+01:00",
-      "deadline": "2026-10-06T22:45:00+01:00"
-    },
-    {
-      "round": "Third Round Qualifying Replay",
-      "home": "Spalding United",
-      "away": "Bury Town",
-      "date": "2026-10-06",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-06T19:45:00+01:00",
-      "deadline": "2026-10-06T22:45:00+01:00"
-    },
-    {
-      "round": "Third Round Qualifying Replay",
-      "home": "Scarborough Athletic",
-      "away": "Macclesfield",
-      "date": "2026-10-06",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-06T19:45:00+01:00",
-      "deadline": "2026-10-06T22:45:00+01:00"
-    },
-    {
-      "round": "Third Round Qualifying Replay",
-      "home": "Halesowen Town",
-      "away": "Stafford Rangers",
-      "date": "2026-10-06",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-06T19:45:00+01:00",
-      "deadline": "2026-10-06T22:45:00+01:00"
-    },
-    {
-      "round": "Third Round Qualifying Replay",
-      "home": "Atherton Collieries",
-      "away": "Trafford",
-      "date": "2026-10-06",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-06T19:45:00+01:00",
-      "deadline": "2026-10-06T22:45:00+01:00"
-    }
-  ],
+  "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-10-08T12:15:06.577294+00:00",
+    "synced_at": "2026-10-08T14:34:21.683358+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,

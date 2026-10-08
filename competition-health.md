@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **08/10/2026, 13:15:11 BST**
+Last checked: **08/10/2026, 15:34:27 BST**
 
 ## Chronology coverage
 
@@ -13,19 +13,11 @@ Last checked: **08/10/2026, 13:15:11 BST**
 
 ## Fixture health
 
-- 🟢 Played fixtures with results: **137**
+- 🟢 Played fixtures with results: **142**
 - 🟡 Recently played / grace period: **0**
-- 🔴 Results requiring confirmation: **5**
+- 🔴 Results requiring confirmation: **0**
 - ⚪ Upcoming / incomplete-date fixtures: **32**
 
-## 🔴 Critical competition-data issues
+## 🟢 Competition chronology healthy
 
-- 5 played fixtures are overdue a result.
-
-## Results requiring confirmation
-
-- **Wingate & Finchley v Bedford Town** — Third Round Qualifying Replay — 2026-10-06 • 19:45
-- **Spalding United v Bury Town** — Third Round Qualifying Replay — 2026-10-06 • 19:45
-- **Scarborough Athletic v Macclesfield** — Third Round Qualifying Replay — 2026-10-06 • 19:45
-- **Halesowen Town v Stafford Rangers** — Third Round Qualifying Replay — 2026-10-06 • 19:45
-- **Atherton Collieries v Trafford** — Third Round Qualifying Replay — 2026-10-06 • 19:45
+Preliminary and First Qualifying chronology is preserved, the active **Fourth Round Qualifying** draw has canonical coverage, and no played fixture is overdue a result.
