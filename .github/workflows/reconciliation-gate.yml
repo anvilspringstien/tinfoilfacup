@@ -41,6 +41,8 @@ jobs:
           cp reconciliation-candidate.json competition.json
           node updater/clubfinder_render_regression.js
           node updater/clubfinder_stats_regression.js
+          python updater/competition_health.py
+          python -c 'import json; d=json.load(open("updater/competition-health.json")); assert d["counts"]["overdue"]==0, d["overdue"]; print("RECONCILED COMPETITION HEALTH: no overdue fixtures")'
           mv competition-original.json competition.json
       - name: Audit current branch data (expected to fail closed if divergent)
         shell: bash
