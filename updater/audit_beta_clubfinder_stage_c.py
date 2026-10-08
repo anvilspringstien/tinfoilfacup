@@ -60,7 +60,7 @@ def mask_payload(text):
         if ("const BETA_COMPETITION_DATA_URL='./competition-fallback.json';" not in text or
                 "const PRODUCTION_COMPETITION_DATA_URL='../competition.json';" not in text or
                 text.index('loadSource(PRODUCTION_COMPETITION_DATA_URL') >=
-                text.index('loadSource(BETA_COMPETITION_DATA_URL'))):
+                text.index('loadSource(BETA_COMPETITION_DATA_URL')):
             raise ValueError("BETA external competition fallback missing")
         return text
     if text.count(START)!=1 or text.count(STOP)!=1:
