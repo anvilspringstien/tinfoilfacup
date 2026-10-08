@@ -230,19 +230,23 @@ function applyLiveRoundDates(){
   Object.keys(d).forEach(k=>{if(ROUND_META[k])ROUND_META[k].date=d[k];});
 }
 async function refreshCompetitionData(force=false){
-  try{
-    const u=BETA_COMPETITION_DATA_URL+(BETA_COMPETITION_DATA_URL.includes('?')?'&':'?')+'t='+Date.now();
+  // Canonical publication is authoritative. The BETA snapshot is an offline fallback only.
+  async function loadSource(url,label){
+    const u=url+(url.includes('?')?'&':'?')+'t='+Date.now();
     const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();if(!d||Number(d.schema_version)!==1)throw new Error('Unsupported BETA schema');
+    const d=await r.json();
+    if(!d||Number(d.schema_version)!==1||!d.updated_at||!d.results||!d.fixtures)throw new Error('Invalid '+label+' competition data');
+    return d;
+  }
+  try{
+    const d=await loadSource(PRODUCTION_COMPETITION_DATA_URL,'canonical');
     LIVE_COMPETITION_DATA=d;applyLiveRoundDates();
-    LIVE_DATA_STATUS={state:'live',updated_at:d.updated_at||null,message:'BETA validated competition data loaded'};
+    LIVE_DATA_STATUS={state:'live',updated_at:d.updated_at||null,message:'Canonical competition data loaded'};
   }catch(e){
     try{
-      const u=PRODUCTION_COMPETITION_DATA_URL+(PRODUCTION_COMPETITION_DATA_URL.includes('?')?'&':'?')+'t='+Date.now();
-      const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
-      const d=await r.json();if(!d||Number(d.schema_version)!==1)throw new Error('Unsupported production schema');
+      const d=await loadSource(BETA_COMPETITION_DATA_URL,'BETA fallback');
       LIVE_COMPETITION_DATA=d;applyLiveRoundDates();
-      LIVE_DATA_STATUS={state:'fallback',updated_at:d.updated_at||null,message:'Production fallback — BETA data unavailable'};
+      LIVE_DATA_STATUS={state:'fallback',updated_at:d.updated_at||null,message:'BETA snapshot fallback — canonical data unavailable'};
     }catch(fallbackError){
       LIVE_COMPETITION_DATA=null;
       LIVE_DATA_STATUS={state:'unavailable',updated_at:null,message:'Competition data unavailable. Please try again later.'};
