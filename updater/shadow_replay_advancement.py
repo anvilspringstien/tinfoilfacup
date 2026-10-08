@@ -85,7 +85,9 @@ def shadow(data):
         for club in (row["home"], row["away"]):
             evidence["result_history"].setdefault(club, []).append(row)
     candidate, imported, issues = build(data, evidence)
+    distinct = {(match(row), str(row.get("round")), str(row.get("date"))) for row in proposals}
     return {"status": "BLOCKED" if blocked or issues else "SHADOW_OK",
+            "raw_replay_proposals": len(proposals), "distinct_ties_proposed": len(distinct),
             "proposed": len(proposals), "accepted": len(imported),
             "issues": blocked + issues}, candidate
 
