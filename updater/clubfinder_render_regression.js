@@ -53,7 +53,11 @@ const assertions=`
   };
   if(!same(carrier.name,'Heaton Stannington')&&!allowActiveAdvance) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
   const heatonActiveResult=canonicalHistory.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
-  if(allowActiveAdvance&&heatonActiveResult&&!same(carrier.name,'Trafford'))throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance custodian to Trafford; got '+carrier.name);
+  const athertonAdvancement=canonicalHistory.find(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.decision==='next-round-fixture'&&same(r.winner,'Atherton Collieries')&&r.home_score==null&&r.away_score==null&&r.source_url&&r.evidence_fixture==='AFC Fylde v Atherton Collieries');
+  const athertonFourthQ=canonicalFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
+  if(allowActiveAdvance&&heatonActiveResult&&athertonAdvancement&&athertonFourthQ&&!same(carrier.name,'Atherton Collieries'))throw new Error('DL5 render regression: verified scoreless replay advancement did not move custodian from Trafford to Atherton Collieries; got '+carrier.name);
+  if(allowActiveAdvance&&heatonActiveResult&&!athertonAdvancement&&!same(carrier.name,'Trafford'))throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance custodian to Trafford; got '+carrier.name);
+  if(allowActiveAdvance&&athertonAdvancement&&!athertonFourthQ)throw new Error('DL5 render regression: replay advancement lacks definite Fourth Qualifying fixture evidence');
   if(allowActiveAdvance&&!heatonActiveResult&&!same(carrier.name,'Heaton Stannington'))throw new Error('DL5 render regression: custodian advanced without canonical Heaton-Trafford result; got '+carrier.name);
   const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
   const state=competitionState(heaton);
