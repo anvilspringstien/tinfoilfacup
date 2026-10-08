@@ -17,6 +17,8 @@ on:
     paths:
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/shadow_replay_advancement.py"
+      - "updater/shadow_replay_advancement_regression.py"
       - "updater/exceptional-replay-dispositions.json"
       - "updater/apply_exceptional_replay_dispositions.py"
       - "updater/unicorn_replay_regression.py"
@@ -151,6 +153,16 @@ jobs:
         run: python updater/propagate_historical_match_venues.py
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
+      # Diagnostic only: neither the shadow producer nor this step can write
+      # canonical competition data or approve a publication.
+      - name: Guard canonical replay shadow producer
+        run: python updater/shadow_replay_advancement_regression.py
+      - name: Assess replay advancement shadow (non-publishing)
+        continue-on-error: true
+        run: |
+          python updater/shadow_replay_advancement.py \
+            --competition competition.json \
+            --report updater/replay-advancement-shadow-report.json
       - name: Audit repaired competition chronology
         env:
           TFFC_FIXTURE_LOCAL_HEALTH: "1"
@@ -218,7 +230,9 @@ jobs:
         if: always()
         with:
           name: results-pilot-report
-          path: updater/results-pilot-report.json
+          path: |
+            updater/results-pilot-report.json
+            updater/replay-advancement-shadow-report.json
       - name: Commit validated competition data and Clubfinder
         if: ${{ github.ref_name == 'main' && (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish) }}
         run: |
