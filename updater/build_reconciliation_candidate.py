@@ -64,7 +64,7 @@ def build(prod,beta):
         if not aliases: errors.append(f"no aliases: {key}");continue
         for club in aliases:
             current=results.get(club)
-            if isinstance(current,dict) and match(current)==key and current.get("decision")!="next-round-fixture" and (current.get("winner") or (current.get("home_score") is not None and current.get("away_score") is not None)):
+            if isinstance(current,dict) and match(current)==key and current.get("date")==row.get("date") and str(current.get("round","")).lower().endswith(" replay") and current.get("decision")!="next-round-fixture" and (current.get("winner") or (current.get("home_score") is not None and current.get("away_score") is not None)):
                 errors.append(f"authoritative current result exists: {key}")
         if errors:continue
         for club in aliases:
