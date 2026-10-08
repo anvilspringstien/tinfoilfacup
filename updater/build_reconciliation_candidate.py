@@ -40,7 +40,7 @@ def build(prod,beta):
         winner=str(row.get("winner") or "").strip()
         if winner.lower() not in key or not row.get("source_url") or not row.get("evidence_fixture"):
             errors.append(f"invalid provenance: {key}");continue
-        next_matches=[f for f in fixtures if isinstance(f,dict) and winner.lower() in match(f) and f.get("round")==row.get("evidence_round") and not f.get("conditional") and " or " not in str(f.get("home","")).lower() and " or " not in str(f.get("away","")).lower()]
+        next_matches=list({(match(f),str(f.get("round")),str(f.get("date"))):f for f in fixtures if isinstance(f,dict) and winner.lower() in match(f) and f.get("round")==row.get("evidence_round") and not f.get("conditional") and " or " not in str(f.get("home","")).lower() and " or " not in str(f.get("away","")).lower()}.values())
         if len(next_matches)!=1 or row["evidence_fixture"]!=f'{next_matches[0].get("home")} v {next_matches[0].get("away")}':
             errors.append(f"missing/ambiguous canonical next-round evidence: {key}");continue
         # A newer or authoritative result is never overwritten.
