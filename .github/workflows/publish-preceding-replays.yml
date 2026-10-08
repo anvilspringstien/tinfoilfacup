@@ -12,6 +12,7 @@ on:
       - 'tests/test_archived_replay_source.py'
       - 'tests/test_stage_preceding_replay_candidates.py'
       - 'tests/test_guard_archived_replay_promotion.py'
+      - 'tests/test_archived_replay_publication_boundary.py'
       - '.github/workflows/publish-preceding-replays.yml'
   push:
     branches: [main]
@@ -39,6 +40,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Guard manual opt-in publication boundary
+        run: python -m unittest discover -s tests -p 'test_archived_replay_publication_boundary.py' -v
       - name: Guard dedicated archived replay source selection
         run: python -m unittest discover -s tests -p 'test_archived_replay_source.py' -v
       - name: Guard staging chronology and publication boundary
