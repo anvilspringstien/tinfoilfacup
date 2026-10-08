@@ -1,4 +1,5 @@
 name: Guarded publication of outstanding preceding-round replays
+# Nonpublishing PR acceptance rerun against canonical main 4479544; no change to publication conditions.
 on:
   pull_request:
     paths:
