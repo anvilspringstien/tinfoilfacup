@@ -27,11 +27,19 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
         for old, new in (
             ("../competition.json", "./competition.json"),
             ("./competition-fallback.json", "../competition.json"),
-            ("fetch(FALLBACK_COMPETITION_DATA_URL", "fetch('missing.json'"),
+            ("loadSource(BETA_COMPETITION_DATA_URL", "loadSource('missing.json'"),
+            ("loadSource(PRODUCTION_COMPETITION_DATA_URL", "loadSource('missing.json'"),
         ):
             with self.subTest(old=old):
                 with self.assertRaises(ValueError):
                     refresh(self.html.replace(old, new), self.live)
+
+    def test_reversed_source_precedence_fails_closed(self):
+        canonical = "const d=await loadSource(PRODUCTION_COMPETITION_DATA_URL,'canonical');"
+        fallback = "const d=await loadSource(BETA_COMPETITION_DATA_URL,'BETA fallback');"
+        changed = self.html.replace(canonical, '__CANONICAL__').replace(fallback, canonical).replace('__CANONICAL__', fallback)
+        with self.assertRaises(ValueError):
+            refresh(changed, self.live)
 
     def test_refresh_source_is_canonical_competition(self):
         self.assertEqual(DATA, ROOT / 'competition.json')
@@ -39,8 +47,8 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
 
     def test_committed_fallback_matches_canonical_data(self):
         live = json.loads(DATA.read_text(encoding='utf-8'))
-        self.assertIn("const LIVE_COMPETITION_DATA_URL='../competition.json';", self.html)
-        self.assertNotIn("const LIVE_COMPETITION_DATA_URL='./competition.json';", self.html)
+        self.assertIn("const PRODUCTION_COMPETITION_DATA_URL='../competition.json';", self.html)
+        self.assertNotIn("const PRODUCTION_COMPETITION_DATA_URL='./competition.json';", self.html)
         fallback = json.loads(FALLBACK.read_text(encoding='utf-8'))
         self.assertEqual(FALLBACK.read_text(encoding='utf-8'), refresh(self.html, live))
         self.assertEqual(fallback, live)
