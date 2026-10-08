@@ -8,6 +8,9 @@ on:
       - updater/reconciliation_gate_regression.py
       - updater/build_reconciliation_candidate.py
       - updater/build_reconciliation_candidate_regression.py
+      - updater/clubfinder_render_regression.js
+      - updater/clubfinder_stats_regression.js
+      - updater/competition_health.py
       - .github/workflows/reconciliation-gate.yml
   workflow_dispatch:
 
