@@ -2,7 +2,22 @@ name: Reconciliation Gate (read-only)
 on:
   push:
     branches:
+      - main
       - beta/reconciliation-gate-v1
+    paths:
+      - updater/reconciliation_gate.py
+      - updater/reconciliation_gate_regression.py
+      - updater/build_reconciliation_candidate.py
+      - updater/build_reconciliation_candidate_regression.py
+      - updater/clubfinder_render_regression.js
+      - updater/clubfinder_stats_regression.js
+      - updater/competition_health.py
+      - updater/shadow_replay_advancement.py
+      - updater/shadow_replay_advancement_regression.py
+      - .github/workflows/reconciliation-gate.yml
+  pull_request:
+    branches:
+      - main
     paths:
       - updater/reconciliation_gate.py
       - updater/reconciliation_gate_regression.py
