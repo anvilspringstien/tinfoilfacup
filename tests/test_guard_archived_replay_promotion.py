@@ -15,7 +15,7 @@ def audit():
                  "date": "2026-09-22", "round": "Second Round Qualifying Replay",
                  "winner": "Wimborne Town", "decision": "penalties",
                  "home_score": 1, "away_score": 1})
-    return {"production_mutation": False, "replay_candidates": rows, "blocked": [],
+    return {"production_mutation": False, "archived_round": "Second Round Qualifying", "replay_candidates": rows, "blocked": [],
             "observations": 13, "already_recorded": 0, "events": [],
             "scheduled_replay_gaps": [
                 {"home": row["home"], "away": row["away"],
@@ -58,6 +58,32 @@ class ReadinessTests(unittest.TestCase):
             item.update({"home_pens": 3, "away_pens": 4, "winner": "Weston-super-Mare"})
         self.assertEqual(readiness(audit(), reports)["held_count"], 1)
 
+    def test_next_archived_round_accepts_matching_replay(self):
+        report = audit()
+        report["archived_round"] = "Third Round Qualifying"
+        for row in report["replay_candidates"]:
+            row["round"] = "Third Round Qualifying Replay"
+        result = readiness(report)
+        self.assertEqual((result["approved_count"], result["held_count"]), (12, 1))
+
+    def test_next_archived_round_rejects_stale_replay(self):
+        report = audit()
+        report["archived_round"] = "Third Round Qualifying"
+        with self.assertRaisesRegex(ValueError, "wrong-round replay candidate"):
+            readiness(report)
+
+    def test_missing_archived_round_fails_closed(self):
+        report = audit()
+        del report["archived_round"]
+        with self.assertRaisesRegex(ValueError, "invalid archived qualifying round"):
+            readiness(report)
+
+    def test_unknown_archived_round_fails_closed(self):
+        report = audit()
+        report["archived_round"] = "First Round Proper"
+        with self.assertRaisesRegex(ValueError, "invalid archived qualifying round"):
+            readiness(report)
+
     def test_missing_fixture_fails_closed(self):
         source = audit()
         source["replay_candidates"].pop()
@@ -70,7 +96,7 @@ class ReadinessTests(unittest.TestCase):
                  "date": "2026-09-23", "round": "Second Round Qualifying Replay",
                  "winner": "Thame United", "home_score": 1, "away_score": 3,
                  "status": "FT", "decision": ""}
-        report = {"production_mutation": False, "replay_candidates": [thame],
+        report = {"production_mutation": False, "archived_round": "Second Round Qualifying", "replay_candidates": [thame],
                   "blocked": [], "events": [], "observations": 14,
                   "already_recorded": 13,
                   "scheduled_replay_gaps": [
@@ -105,7 +131,7 @@ class ReadinessTests(unittest.TestCase):
             readiness(report)
 
     def test_all_already_published_is_clean_noop(self):
-        report = {"production_mutation": False, "replay_candidates": [],
+        report = {"production_mutation": False, "archived_round": "Second Round Qualifying", "replay_candidates": [],
                   "blocked": [], "events": [], "observations": 14,
                   "already_recorded": 14, "scheduled_replay_gaps": []}
         result = readiness(report)

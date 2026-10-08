@@ -6,21 +6,29 @@ on:
       - 'updater/stage_preceding_replay_candidates.py'
       - 'updater/patch_clubfinder_replay_progression.py'
       - 'updater/clubfinder_render_regression.js'
+      - 'updater/clubfinder_stats_regression.js'
       - 'updater/guard_archived_replay_promotion.py'
       - 'updater/reconcile_quarantined_replay_evidence.py'
       - 'tests/test_archived_replay_source.py'
       - 'tests/test_stage_preceding_replay_candidates.py'
       - 'tests/test_guard_archived_replay_promotion.py'
+      - 'tests/test_archived_replay_publication_boundary.py'
       - '.github/workflows/publish-preceding-replays.yml'
   push:
     branches: [main]
     paths:
       - '.github/workflows/publish-preceding-replays.yml'
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Explicitly publish fully guarded replay candidates on main'
+        type: boolean
+        required: true
+        default: false
 permissions:
   contents: write
 concurrency:
-  group: competition-state-${{ github.ref_name }}
+  group: ${{ github.event_name == 'pull_request' && format('replay-review-{0}', github.run_id) || format('competition-state-{0}', github.ref_name) }}
   cancel-in-progress: false
 jobs:
   staging:
@@ -32,6 +40,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Guard manual opt-in publication boundary
+        run: python -m unittest discover -s tests -p 'test_archived_replay_publication_boundary.py' -v
       - name: Guard dedicated archived replay source selection
         run: python -m unittest discover -s tests -p 'test_archived_replay_source.py' -v
       - name: Guard staging chronology and publication boundary
@@ -140,7 +150,7 @@ jobs:
           print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'new cleared,',report['held_count'],'held,',report['already_recorded'],'previously published')
           PY
       - name: Publish guarded candidate only after all isolated guards pass
-        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' && steps.stage.outputs.has_changes == 'true' }}
+        if: ${{ github.ref_name == 'main' && github.event_name == 'workflow_dispatch' && inputs.publish == true && steps.stage.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
           SIM="$(cat /tmp/replay-simulation-path)"

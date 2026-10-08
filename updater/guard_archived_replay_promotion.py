@@ -48,6 +48,12 @@ def readiness(report, evidence_by_fixture=None):
             raise ValueError("scheduled replay absent from source")
         expected[key] = gap
 
+    archived_round = str(report.get("archived_round") or "")
+    if archived_round not in ("Extra Preliminary Round", "Preliminary Round",
+                              "First Round Qualifying", "Second Round Qualifying",
+                              "Third Round Qualifying", "Fourth Round Qualifying"):
+        raise ValueError("missing or invalid archived qualifying round")
+    expected_replay_round = archived_round + " Replay"
     seen = set()
     approved, held = [], []
     for row in candidates:
@@ -55,7 +61,7 @@ def readiness(report, evidence_by_fixture=None):
         if key not in expected or key in seen:
             raise ValueError("unmatched or duplicate replay candidate")
         seen.add(key)
-        if row.get("round") != "Second Round Qualifying Replay" or not row.get("winner"):
+        if row.get("round") != expected_replay_round or not row.get("winner"):
             raise ValueError("undecided or wrong-round replay candidate")
         if row.get("decision") == "penalties":
             fixture = {"home": row["home"], "away": row["away"],

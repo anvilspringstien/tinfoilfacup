@@ -54,6 +54,27 @@ def has_result(f,results):
             if fd and r.get('date') and fd!=r.get('date'):continue
             if r.get('home_score') is not None and r.get('away_score') is not None:return True
     return False
+
+def has_proven_advancement(f,results,fixtures):
+    """A scoreless replay can have a confirmed winner without a known score."""
+    if 'replay' not in str(f.get('round','')).lower():return False
+    fh,fa=norm(f.get('home')),norm(f.get('away'));fd=f.get('date','')
+    distinct={}
+    for next_f in fixtures:
+        if next_f.get('section')!='fixtures' or next_f.get('conditional'):continue
+        if ' or ' in str(next_f.get('home','')).lower() or ' or ' in str(next_f.get('away','')).lower():continue
+        key=(norm(next_f.get('home')),norm(next_f.get('away')),next_f.get('round'),next_f.get('date'))
+        distinct[key]=next_f
+    for r in results:
+        if r.get('decision')!='next-round-fixture':continue
+        if norm(r.get('home'))!=fh or norm(r.get('away'))!=fa:continue
+        if fd and r.get('date')!=fd:continue
+        if r.get('home_score') is not None or r.get('away_score') is not None:continue
+        winner=norm(r.get('winner'))
+        if winner not in (fh,fa) or not r.get('source_url') or not r.get('evidence_fixture') or not r.get('evidence_round'):continue
+        matches=[n for n in distinct.values() if n.get('round')==r['evidence_round'] and winner in (norm(n.get('home')),norm(n.get('away'))) and r['evidence_fixture']==f"{n.get('home')} v {n.get('away')}"]
+        if len(matches)==1:return True
+    return False
 def unique_count(obj):
     vals=obj.values() if isinstance(obj,dict) else (obj or []);seen=set()
     for f in vals:
@@ -82,7 +103,7 @@ fixtures=unique_fixtures(data);results=all_results(data)
 overdue=[];recent=[];upcoming=[];complete=[]
 for f in fixtures:
     when=dt_for(f)
-    if has_result(f,results):complete.append(f);continue
+    if has_result(f,results) or has_proven_advancement(f,results,fixtures):complete.append(f);continue
     if when is None:upcoming.append({**f,'health_note':'Date/time incomplete'});continue
     deadline=when+timedelta(hours=GRACE_HOURS)
     if now>deadline:overdue.append({**f,'scheduled':when.isoformat(),'deadline':deadline.isoformat()})
