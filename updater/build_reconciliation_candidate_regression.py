@@ -61,4 +61,20 @@ ambiguous["fixtures"]["other"]={"round":"Fourth Round Qualifying","home":"Athert
 out,rows,issues=build(ambiguous,b)
 assert out is None and any("ambiguous" in x for x in issues),issues
 
-print("PRODUCTION-FIRST CANDIDATE REGRESSION: PASS (preservation, replay, history, idempotency, newer result, invented score, canonical evidence, contradictory winners, missing provenance, authoritative results, ambiguous fixtures)")
+# Future-round fixture evidence: no October-specific advancement logic.
+future=copy.deepcopy(p)
+future["fixtures"]={"future":{"round":"First Round Proper","home":"Example United","away":"Future Winners","date":"2026-11-07"}}
+future["replays"]={"future-replay":{"round":"Fourth Round Qualifying Replay","home":"Future Winners","away":"Example Town","date":"2026-10-20"}}
+future["result_history"]={"Example Town":[]}
+future["results"]={}
+future_adv={"round":"Fourth Round Qualifying Replay","home":"Future Winners","away":"Example Town","date":"2026-10-20","home_score":None,"away_score":None,"winner":"Future Winners","decision":"next-round-fixture","source_url":"https://www.thefa.com/competitions/thefacup/fixtures","evidence_round":"First Round Proper","evidence_fixture":"Example United v Future Winners"}
+future_evidence=copy.deepcopy(future)
+future_evidence["result_history"]={"Example Town":[future_adv],"Future Winners":[future_adv]}
+out,rows,issues=build(future,future_evidence)
+assert not issues and len(rows)==1 and out["results"]["Example Town"]["winner"]=="Future Winners",(rows,issues)
+future_missing=copy.deepcopy(future)
+future_missing["fixtures"]={}
+out,rows,issues=build(future_missing,future_evidence)
+assert out is None and issues,"Future-round advancement accepted without canonical fixture"
+
+print("PRODUCTION-FIRST CANDIDATE REGRESSION: PASS (preservation, replay, history, idempotency, newer result, invented score, canonical evidence, contradictory winners, missing provenance, authoritative results, ambiguous fixtures, future-round success and rejection)")
