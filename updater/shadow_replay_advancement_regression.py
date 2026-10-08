@@ -13,6 +13,7 @@ data=state()
 report,candidate=shadow(data)
 assert report["status"]=="SHADOW_OK" and report["accepted"]==1,report
 assert data["results"]=={},"shadow mutated canonical input"
+assert report["raw_replay_proposals"]==1 and report["distinct_ties_proposed"]==1,report
 data=state()
 data["fixtures"]={}
 report,candidate=shadow(data)
