@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#444444"><title>Tin Foil FA Cup — Splash Preview</title>
+<style>
+:root{--cream:#f4eee0;--field:#4b4b4b;--edge:#8c8c8c}*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#363636;color:var(--cream)}
+body{font-family:Arial,Helvetica,sans-serif}
+.stage{height:100svh;min-height:0;padding:clamp(7px,1.8vh,16px);display:flex}
+.field{position:relative;flex:1;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#555 0%,var(--field) 65%,#424242 100%);border:1px solid var(--edge);box-shadow:inset 0 0 0 5px #494949,inset 0 0 0 6px #777}
+.field:after{content:"";pointer-events:none;position:absolute;inset:11px;border:1px solid rgba(234,234,234,.42)}
+.content{height:100%;max-width:560px;margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2.2vh,23px);padding:clamp(18px,4vh,38px) 24px;position:relative;z-index:1;text-align:center}
+.crest{display:block;object-fit:contain;width:min(78vw,390px,44svh);height:auto;max-height:44svh;flex-shrink:1;min-height:0}
+h1{font-weight:300;letter-spacing:.025em;font-size:clamp(21px,5vw,32px);line-height:1.17;margin:0}
+p{font-weight:300;line-height:1.38;font-size:clamp(14px,3.7vw,19px);margin:0;max-width:420px}
+a.start{display:block;flex:none;text-decoration:none;color:var(--cream);background:#292724;border:1px solid #1c1b1a;border-radius:11px;padding:13px 30px;font-size:clamp(16px,4vw,20px);box-shadow:0 2px 6px #252525}
+a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(max-height:690px){.content{gap:9px;padding:17px 22px}.crest{width:min(66vw,34svh);max-height:34svh}h1{font-size:clamp(19px,4.7vw,27px)}p{font-size:clamp(13px,3.5vw,16px)}a.start{padding:10px 24px}}
+@media(max-height:520px){.content{gap:6px;padding:12px 20px}.crest{width:min(45vw,26svh);max-height:26svh}h1{font-size:18px}p{font-size:13px}a.start{padding:8px 20px;font-size:15px}}
+</style></head><body><main class="stage"><section class="field" aria-label="Tin Foil FA Cup introduction"><div class="content"><img class="crest" src="tin-foil-fa-cup-four-laws-beta.png" alt="Tin Foil FA Cup crest"><h1>Start your Tin Foil FA Cup journey here.</h1><p>Experience the magic of your own Cup Run as you try to get to Wembley — for real!</p><a class="start" href="clubfinder-beta.html">Start Campaign</a></div></section></main></body></html>
