@@ -18,6 +18,12 @@ on:
     paths:
       - '.github/workflows/publish-preceding-replays.yml'
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Explicitly publish fully guarded replay candidates on main'
+        type: boolean
+        required: true
+        default: false
 permissions:
   contents: write
 concurrency:
@@ -141,7 +147,7 @@ jobs:
           print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'new cleared,',report['held_count'],'held,',report['already_recorded'],'previously published')
           PY
       - name: Publish guarded candidate only after all isolated guards pass
-        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' && steps.stage.outputs.has_changes == 'true' }}
+        if: ${{ github.ref_name == 'main' && github.event_name == 'workflow_dispatch' && inputs.publish == true && steps.stage.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
           SIM="$(cat /tmp/replay-simulation-path)"
