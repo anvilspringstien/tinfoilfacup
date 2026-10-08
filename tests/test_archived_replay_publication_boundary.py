@@ -12,9 +12,12 @@ class PublicationBoundaryTests(unittest.TestCase):
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
 
     def test_dispatch_requires_default_off_boolean(self):
-        self.assertRegex(self.workflow, r"(?m)^  workflow_dispatch:\s*\n    inputs:\s*\n      publish:")
-        self.assertRegex(self.workflow, r"(?ms)^      publish:\s*\n(?:        .*\n)*?        type: boolean\s*$")
-        self.assertRegex(self.workflow, r"(?ms)^      publish:\s*\n(?:        .*\n)*?        default: false\s*$")
+        self.assertIn("  workflow_dispatch:\n    inputs:\n      publish:", self.workflow)
+        dispatch = self.workflow.split("  workflow_dispatch:", 1)[1].split("\npermissions:", 1)[0]
+        publish = dispatch.split("      publish:", 1)[1]
+        self.assertIn("        type: boolean", publish)
+        self.assertIn("        required: true", publish)
+        self.assertIn("        default: false", publish)
 
     def test_publication_requires_main_manual_opt_in_and_staged_changes(self):
         block = self.workflow.split("      - name: Publish guarded candidate only after all isolated guards pass", 1)[1]
