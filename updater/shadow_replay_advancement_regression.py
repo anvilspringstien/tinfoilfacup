@@ -25,4 +25,20 @@ data=state()
 data["result_history"]={"Example Town":[{"round":"Fourth Round Qualifying Replay","home":"Example Town","away":"Future Winners","date":"2026-10-20","winner":"Example Town","home_score":1,"away_score":0}]}
 report,candidate=shadow(data)
 assert report["status"]=="BLOCKED",report
+data=state()
+data["fixtures"]["next"]["round"]="Second Round Proper"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("skipped round",report)
+data=state()
+data["fixtures"]["next"]["date"]="2026-10-19"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("earlier date",report)
+data=state()
+data["replays"]["tie"]["round"]="Third Round Qualifying Replay"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("stale replay",report)
+data=state()
+data["fixtures"]["next"]["round"]="Unrecognised Cup Stage"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("unknown round",report)
 print("SHADOW PRODUCER REGRESSION: PASS")
