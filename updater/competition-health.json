@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-08T00:34:47.848213+01:00",
+  "checked_at": "2026-10-08T02:56:23.438494+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -15,12 +15,10 @@
     "awaiting_grace": 0,
     "overdue": 5,
     "upcoming": 32,
-    "critical": 1
+    "critical": 0
   },
-  "critical": [
-    "5 played fixtures are overdue a result."
-  ],
-  "fixture_local_health": false,
+  "critical": [],
+  "fixture_local_health": true,
   "overdue": [
     {
       "round": "Third Round Qualifying Replay",
