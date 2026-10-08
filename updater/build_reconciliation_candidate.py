@@ -15,14 +15,21 @@ def match(row):
     return tuple(sorted((str(row.get("home","")).strip().lower(),str(row.get("away","")).strip().lower())))
 
 def unique_rows(history):
-    seen=set()
+    """Reject conflicting evidence for one tie instead of silently choosing first."""
+    seen={}
+    errors=[]
     for entries in history.values():
+        if not isinstance(entries,list):
+            errors.append("malformed evidence history")
+            continue
         for row in entries:
             if not isinstance(row,dict) or row.get("decision")!="next-round-fixture": continue
             key=(match(row),str(row.get("round")),str(row.get("date")))
-            if key not in seen:
-                seen.add(key)
-                yield row
+            if key in seen and seen[key]!=row:
+                errors.append(f"contradictory advancement evidence: {key}")
+            else:
+                seen[key]=row
+    return list(seen.values()),errors
 
 def build(prod,beta):
     out=copy.deepcopy(prod)
@@ -33,12 +40,14 @@ def build(prod,beta):
     fixtures=list(prod.get("fixtures",{}).values())
     histories=out.setdefault("result_history",{})
     results=out.setdefault("results",{})
-    for row in unique_rows(beta.get("result_history",{})):
+    evidence_rows,evidence_errors=unique_rows(beta.get("result_history",{}))
+    if evidence_errors:return None,[],evidence_errors
+    for row in evidence_rows:
         key=match(row)
         if any(row.get(x) is not None for x in ("home_score","away_score")):
             errors.append(f"score invented: {key}");continue
         winner=str(row.get("winner") or "").strip()
-        if winner.lower() not in key or not row.get("source_url") or not row.get("evidence_fixture"):
+        if winner.lower() not in key or not row.get("source_url") or not row.get("evidence_fixture") or not row.get("evidence_round"):
             errors.append(f"invalid provenance: {key}");continue
         next_matches=list({(match(f),str(f.get("round")),str(f.get("date"))):f for f in fixtures if isinstance(f,dict) and winner.lower() in match(f) and f.get("round")==row.get("evidence_round") and not f.get("conditional") and " or " not in str(f.get("home","")).lower() and " or " not in str(f.get("away","")).lower()}.values())
         if len(next_matches)!=1 or row["evidence_fixture"]!=f'{next_matches[0].get("home")} v {next_matches[0].get("away")}':
@@ -53,6 +62,11 @@ def build(prod,beta):
         if errors: continue
         aliases=[club for club,entries in beta.get("result_history",{}).items() if isinstance(entries,list) and row in entries]
         if not aliases: errors.append(f"no aliases: {key}");continue
+        for club in aliases:
+            current=results.get(club)
+            if isinstance(current,dict) and match(current)==key and current.get("decision")!="next-round-fixture" and (current.get("winner") or (current.get("home_score") is not None and current.get("away_score") is not None)):
+                errors.append(f"authoritative current result exists: {key}")
+        if errors:continue
         for club in aliases:
             existing=histories.setdefault(club,[])
             if row not in existing: existing.append(copy.deepcopy(row))
