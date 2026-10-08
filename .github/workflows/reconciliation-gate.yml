@@ -11,6 +11,8 @@ on:
       - updater/clubfinder_render_regression.js
       - updater/clubfinder_stats_regression.js
       - updater/competition_health.py
+      - updater/shadow_replay_advancement.py
+      - updater/shadow_replay_advancement_regression.py
       - .github/workflows/reconciliation-gate.yml
   workflow_dispatch:
 
@@ -28,6 +30,8 @@ jobs:
         run: python updater/reconciliation_gate_regression.py
       - name: Production-first candidate regression
         run: python updater/build_reconciliation_candidate_regression.py
+      - name: Guard canonical draw shadow producer (synthetic only)
+        run: python updater/shadow_replay_advancement_regression.py
       - name: Build reconciled candidate from canonical fixtures
         run: |
           python updater/build_reconciliation_candidate.py \
