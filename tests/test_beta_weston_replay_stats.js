@@ -85,7 +85,7 @@ assert.equal(JSON.stringify(stats),JSON.stringify({
 assert.match(html,/• Shootouts Won: '\+penaltyWins/);
 assert.match(html,/• Shootouts Lost: '\+penaltyLosses/);
 assert.match(html,/jr-winner[^;]*tinFoilBetaPenaltyResultNote\(r\)/s);
-assert.match(html,/const FALLBACK_COMPETITION_DATA_URL='\.\/competition-fallback\.json'/);
+assert.match(html,/const BETA_COMPETITION_DATA_URL='\.\/competition-fallback\.json'/);
 
 function requireVoidReplayPresentation(){
   assert(html.includes("function tinFoilBetaResultVoided(r){"),'void-result helper missing');
