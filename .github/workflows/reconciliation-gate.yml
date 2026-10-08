@@ -35,6 +35,13 @@ jobs:
             --production competition.json \
             --candidate reconciliation-candidate.json > reconciliation-candidate-audit.json
           cat reconciliation-candidate-audit.json
+      - name: Clubfinder and Stats regression against reconciled candidate
+        run: |
+          cp competition.json competition-original.json
+          cp reconciliation-candidate.json competition.json
+          node updater/clubfinder_render_regression.js
+          node updater/clubfinder_stats_regression.js
+          mv competition-original.json competition.json
       - name: Audit current branch data (expected to fail closed if divergent)
         shell: bash
         run: |
