@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-08T15:34:27.487825+01:00",
+  "checked_at": "2026-10-08T17:29:14.539701+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -10,15 +10,15 @@
     "active_round_conditional_slots": 0
   },
   "counts": {
-    "known_fixtures": 174,
-    "complete": 142,
+    "known_fixtures": 169,
+    "complete": 137,
     "awaiting_grace": 0,
     "overdue": 0,
     "upcoming": 32,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": false,
+  "fixture_local_health": true,
   "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
