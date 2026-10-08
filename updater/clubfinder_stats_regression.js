@@ -50,7 +50,7 @@ const assertions=`
 
   const activeSecondQ=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
   const athertonAdvancement=history.find(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.decision==='next-round-fixture'&&same(r.winner,'Atherton Collieries')&&r.home_score==null&&r.away_score==null&&r.source_url&&r.evidence_fixture==='AFC Fylde v Atherton Collieries');
-  const fourthQFixtures=Object.values(canonicalCompetition.fixtures||{});
+  const fourthQFixtures=Object.values(${JSON.stringify(competition.fixtures||{})});
   const athertonFourthQ=fourthQFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
   if(athertonAdvancement&&!athertonFourthQ)throw new Error('DL5 Stats regression: advancement lacks definite Fourth Qualifying fixture');
   const expectedCustodian=${allowActiveAdvance}?(athertonAdvancement&&athertonFourthQ?'Atherton Collieries':'Trafford'):'Heaton Stannington';
