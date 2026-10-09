@@ -2147,7 +2147,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   host.hidden=true;document.body.style.overflow='';window.scrollTo(0,previousScroll);
   if(previousFocus&&previousFocus.isConnected)previousFocus.focus({preventScroll:true});
  };
- window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='tffc-share-close'&&e.source===document.getElementById('tffcShareHost')?.querySelector('iframe')?.contentWindow)tffcCloseShare()});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcCloseShare()});
+ if(typeof window.addEventListener==='function')window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='tffc-share-close'&&e.source===document.getElementById('tffcShareHost')?.querySelector('iframe')?.contentWindow)tffcCloseShare()});
+ if(typeof document.addEventListener==='function')document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcCloseShare()});
 })();
 </script></body></html>
