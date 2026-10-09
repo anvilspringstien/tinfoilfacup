@@ -2103,4 +2103,18 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
    tffcRevealChoices();
  }
 }
+</script><script>
+/* Read-only, opt-in viewport geometry diagnostic. No layout changes in normal use. */
+(function(){
+ if(new URLSearchParams(location.search).get('crestMeasure')!=='1')return;
+ const css='position:fixed;z-index:2147483647;left:8px;right:8px;bottom:8px;max-height:45vh;overflow:auto;background:#171717;color:white;padding:12px;border:2px solid #fff;border-radius:8px;font:12px/1.4 monospace;white-space:pre-wrap;box-sizing:border-box';
+ const panel=document.createElement('div');panel.style.cssText=css;
+ const button=document.createElement('button');button.textContent='Copy measurement';button.style.cssText='padding:8px;margin-bottom:8px;display:block;font:14px system-ui';
+ const pre=document.createElement('pre');pre.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;margin:0';
+ panel.append(button,pre);document.body.append(panel);
+ function box(selector){const el=document.querySelector(selector);if(!el)return null;const r=el.getBoundingClientRect();return {top:+r.top.toFixed(2),left:+r.left.toFixed(2),width:+r.width.toFixed(2),height:+r.height.toFixed(2)}}
+ function measure(){const splash=!!document.querySelector('.stage .field');const field=box(splash?'.stage .field':'#tffcFourLaws .tffcOuter');const crest=box(splash?'.stage .crest':'#tffcFourLaws .tffcCrest');const result={page:splash?'Splash':'Clubfinder',viewport:{width:innerWidth,height:innerHeight,visualWidth:visualViewport?.width,visualHeight:visualViewport?.height},field,crest,crestFromField:field&&crest?+(crest.top-field.top).toFixed(2):null,crestFromScreen:crest?.top??null};pre.textContent=JSON.stringify(result,null,2);return pre.textContent}
+ button.onclick=async()=>{const value=measure();try{await navigator.clipboard.writeText(value);button.textContent='Copied!'}catch(e){const ta=document.createElement('textarea');ta.value=value;panel.append(ta);ta.select();button.textContent='Select and copy report below'}};
+ window.addEventListener('load',()=>setTimeout(measure,400));measure();
+})();
 </script></body></html>
