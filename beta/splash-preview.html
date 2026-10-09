@@ -26,6 +26,7 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
 /* Read-only, opt-in viewport geometry diagnostic. No layout changes in normal use. */
 (function(){
  if(new URLSearchParams(location.search).get('crestMeasure')!=='1')return;
+ const start=document.querySelector('a.start[href="clubfinder-beta.html"]');if(start)start.href='clubfinder-beta.html?crestMeasure=1';
  const css='position:fixed;z-index:2147483647;left:8px;right:8px;bottom:8px;max-height:45vh;overflow:auto;background:#171717;color:white;padding:12px;border:2px solid #fff;border-radius:8px;font:12px/1.4 monospace;white-space:pre-wrap;box-sizing:border-box';
  const panel=document.createElement('div');panel.style.cssText=css;
  const button=document.createElement('button');button.textContent='Copy measurement';button.style.cssText='padding:8px;margin-bottom:8px;display:block;font:14px system-ui';
