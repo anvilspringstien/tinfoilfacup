@@ -2091,7 +2091,7 @@ if(tinFoilStatsRouteRequested){
 }
 
 // BETA opening transition: reveal choices only after actual results appear.
-if(!document.documentElement.classList.contains('tffc-stats-route')){
+if(typeof document!=='undefined' && document.documentElement && typeof document.documentElement.classList?.contains==='function' && typeof MutationObserver==='function' && typeof requestAnimationFrame==='function' && typeof getComputedStyle==='function' && !document.documentElement.classList.contains('tffc-stats-route')){
  const tffcChoiceResults=document.getElementById('results');
  let tffcResultsRevealed=false;
  const tffcRevealChoices=()=>{
