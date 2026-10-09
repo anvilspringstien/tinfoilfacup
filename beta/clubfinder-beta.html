@@ -107,7 +107,7 @@ html:not(.tffc-stats-route):not(.tffc-campaign-results) body{min-height:100svh}
 /* Keep the Four Laws at their natural size before and after search; do not flex-compress the crest. */
 html:not(.tffc-stats-route):not(.tffc-campaign-results) #clubfinderField{flex:0 0 auto}
 @media(max-width:600px){
- html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{max-height:none;width:83.333%;max-width:450px}
+ html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{max-height:none;width:min(83.333%,70vw);max-width:450px;margin-top:6px}
  html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws ol{margin-top:clamp(10px,2vh,20px)}
  html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcSmall{margin-top:clamp(8px,1.5vh,16px)}
  html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcInvitation{margin-top:clamp(8px,1.5vh,16px)}
