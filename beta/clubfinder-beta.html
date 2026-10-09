@@ -2139,7 +2139,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   }
   previousFocus=document.activeElement;previousScroll=window.scrollY;
   host.hidden=false;document.body.style.overflow='hidden';
-  const frame=host.querySelector('iframe');if(!frame.getAttribute('src'))frame.src='share-popup-embed.html';
+  const frame=host.querySelector('iframe');frame.src='share-popup-embed.html';
   frame.focus();
  };
  window.tffcCloseShare=function(){
