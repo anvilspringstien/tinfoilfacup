@@ -2038,7 +2038,7 @@ async function go(explicitPostcodeSearch=false){
    const currentCampaign=chosen?'<div class="chosen-campaign-current"><div class="carrier">The current custodian of your Tin Foil FA Cup is:<div class="custodian-name">'+esc(c.name)+'</div></div><div class="meta">'+currentGround+'</div><div class="meta" style="color:'+currentLc+';font-weight:600">'+currentLoc+'</div><div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c)+'</div>':'';
    const campaignOrigin=chosen?'<div class="campaign-origin"><div class="campaign-origin-title">Campaign Origin</div><div class="campaign-origin-name">'+esc(origin.name)+'</div><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div></div>':'';
    const standardCampaign=!chosen?'<h2>'+(oi===0&&origin.hasCoords?'Nearest: ':'')+esc(origin.name)+'</h2><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div>'+carrierHtml(j)+'<div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c):'';
-   return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}${currentCampaign}${standardCampaign}${campaignOrigin}${previousRoundsHtml(j,chosen)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div>${mine&&selected&&!showOriginal?'<div class="tffc-beta-help" aria-label="BETA support links"><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><button type="button" onclick="tinFoilPrivacyNotice()">Privacy</button></div>':''}</div>`;
+   return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}${currentCampaign}${standardCampaign}${campaignOrigin}${previousRoundsHtml(j,chosen)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div>${mine&&selected&&!showOriginal?'<div class="tffc-beta-help" aria-label="BETA support links"><button type="button" onclick="tffcOpenShare()">Share</button><span class="tffc-beta-help-sep" aria-hidden="true">·</span><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Clubfinder%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a><span class="tffc-beta-help-sep" aria-hidden="true">·</span><button type="button" onclick="tinFoilPrivacyNotice()">Privacy</button></div>':''}</div>`;
   }).join('');
   results.style.display='block';const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';status.textContent=selected&&!showOriginal?'Your Tin Foil FA Cup Campaign. Dates & times may change. Always check before travelling':top.length+' Tin Foil FA Cup Campaigns found for '+u.postcode+'. Dates & times may change. Always check before travelling';
  }catch(e){status.textContent=e.message||'Unable to complete the search.'}finally{btn.disabled=false}
@@ -2120,5 +2120,34 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  function measure(){const splash=!!document.querySelector('.stage .field');const field=box(splash?'.stage .field':'#tffcFourLaws .tffcOuter');const crest=box(splash?'.stage .crest':'#tffcFourLaws .tffcCrest');const result={page:splash?'Splash':'Clubfinder',viewport:{width:innerWidth,height:innerHeight,visualWidth:visualViewport?.width,visualHeight:visualViewport?.height},field,crest,crestFromField:field&&crest?+(crest.top-field.top).toFixed(2):null,crestFromScreen:crest?.top??null};pre.textContent=JSON.stringify(result,null,2);return pre.textContent}
  button.onclick=async()=>{const value=measure();try{await navigator.clipboard.writeText(value);button.textContent='Copied!'}catch(e){const ta=document.createElement('textarea');ta.value=value;panel.append(ta);ta.select();button.textContent='Select and copy report below'}};
  window.addEventListener('load',()=>setTimeout(measure,400));measure();
+})();
+</script><style>
+#tffcShareHost[hidden]{display:none!important}
+#tffcShareHost{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.76);display:flex;align-items:center;justify-content:center}
+#tffcShareHost iframe{display:block;border:0;width:100%;height:100%;background:transparent}
+</style>
+<script>
+(function(){
+ let previousFocus=null,previousScroll=0;
+ window.tffcOpenShare=function(){
+  let host=document.getElementById('tffcShareHost');
+  if(!host){
+   host=document.createElement('div');host.id='tffcShareHost';host.hidden=true;
+   host.setAttribute('role','presentation');
+   const frame=document.createElement('iframe');frame.title='Share Tin Foil FA Cup';frame.setAttribute('aria-label','Share Tin Foil FA Cup');frame.setAttribute('allow','clipboard-write');frame.dataset.shareFrame='1';host.appendChild(frame);document.body.appendChild(host);
+   host.addEventListener('click',e=>{if(e.target===host)tffcCloseShare()});
+  }
+  previousFocus=document.activeElement;previousScroll=window.scrollY;
+  host.hidden=false;document.body.style.overflow='hidden';
+  const frame=host.querySelector('iframe');if(!frame.getAttribute('src'))frame.src='share-popup-embed.html';
+  frame.focus();
+ };
+ window.tffcCloseShare=function(){
+  const host=document.getElementById('tffcShareHost');if(!host||host.hidden)return;
+  host.hidden=true;document.body.style.overflow='';window.scrollTo(0,previousScroll);
+  if(previousFocus&&previousFocus.isConnected)previousFocus.focus({preventScroll:true});
+ };
+ window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='tffc-share-close'&&e.source===document.getElementById('tffcShareHost')?.querySelector('iframe')?.contentWindow)tffcCloseShare()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcCloseShare()});
 })();
 </script></body></html>
