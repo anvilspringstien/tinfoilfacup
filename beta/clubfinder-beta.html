@@ -1534,7 +1534,21 @@ async function chooseJourney(name,postcode){
  const input=document.getElementById('postcode');if(input)input.value=String(postcode||'').toUpperCase();
  window.__showOriginalTinFoilJourneys=false;go(false,true);
 }
-function tffcScrollToFinder(){requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById('clubfinderField')?.scrollIntoView({behavior:'smooth',block:'start'})))}
+/* One scroll owner for every explicit Campaign navigation. Avoid overlapping smooth
+   animations when repeated renders change the page height. */
+let tffcFinderScrollSequence=0;
+function tffcScrollToFinder(){
+ const sequence=++tffcFinderScrollSequence;
+ let passes=0;
+ const settle=()=>{
+  if(sequence!==tffcFinderScrollSequence)return;
+  const field=document.getElementById('clubfinderField');
+  if(!field)return;
+  field.scrollIntoView({behavior:'instant',block:'start'});
+  if(++passes<4)requestAnimationFrame(settle);
+ };
+ requestAnimationFrame(()=>requestAnimationFrame(settle));
+}
 function viewOriginalJourneys(){window.__showOriginalTinFoilJourneys=true;go(false,true)}
 function returnToMyJourney(){
  const saved=loadSavedJourney(),input=document.getElementById('postcode');
