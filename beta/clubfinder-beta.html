@@ -2021,7 +2021,10 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
  if(!LIVE_COMPETITION_DATA){status.textContent=LIVE_DATA_STATUS.message;return}
  let pc=input.value.trim(),saved=loadSavedJourney();if(!pc){status.textContent='Please enter a postcode.';return}
  const requestedDifferentPostcode=!!(explicitPostcodeSearch&&saved&&saved.postcode&&!samePostcode(saved.postcode,pc));
- btn.disabled=true;status.textContent='Finding your Tin Foil FA Cup Campaign…';results.style.display='none';
+ btn.disabled=true;status.textContent='Finding your Tin Foil FA Cup Campaign…';
+ // Keep the existing result frame in layout during repeat searches/navigation.
+ // Hiding it collapses the page and briefly snaps the viewport to Frame 1.
+ if(!results.children.length)results.style.display='none';
  try{
   const u=await lookup(pc),rows=[];
   for(const c of ELIGIBLE){const g=findGround(c)||{},v=verification(c,g),hasCoords=Number.isFinite(Number(g.lat))&&Number.isFinite(Number(g.lon));rows.push({...c,...g,website:c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'',verification:v,hasCoords,distance:Infinity})}
