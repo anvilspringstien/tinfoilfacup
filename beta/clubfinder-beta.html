@@ -1564,7 +1564,10 @@ function resumeMyJourney(){updateSavedJourney({ended:false,endedAt:null});go()}f
   if(input)input.value='';
   if(status)status.textContent='';
   if(results){results.innerHTML='';results.style.display='none';}const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='none';
-  if(input)input.focus();
+  if(input)input.focus({preventScroll:true});
+  // Reset returns to Frame 1, after the results frame has collapsed.
+  ++tffcFinderScrollSequence;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'instant'})));
 }
 
 async function hardResetFinder(){
