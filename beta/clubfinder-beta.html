@@ -1534,11 +1534,12 @@ async function chooseJourney(name,postcode){
  const input=document.getElementById('postcode');if(input)input.value=String(postcode||'').toUpperCase();
  window.__showOriginalTinFoilJourneys=false;go();
 }
-function viewOriginalJourneys(){window.__showOriginalTinFoilJourneys=true;go()}
+function tffcScrollToFinder(){requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById('clubfinderField')?.scrollIntoView({behavior:'smooth',block:'start'})))}
+function viewOriginalJourneys(){window.__showOriginalTinFoilJourneys=true;go();tffcScrollToFinder()}
 function returnToMyJourney(){
  const saved=loadSavedJourney(),input=document.getElementById('postcode');
  if(saved&&saved.postcode&&input)input.value=String(saved.postcode).toUpperCase();
- window.__showOriginalTinFoilJourneys=false;go();
+ window.__showOriginalTinFoilJourneys=false;go();tffcScrollToFinder();
 }
 async function endMyJourney(){if(await tinFoilConfirm('End your Tin Foil FA Cup Campaign here? You can resume it later.')){updateSavedJourney({ended:true,endedAt:new Date().toISOString()});go()}}
 function resumeMyJourney(){updateSavedJourney({ended:false,endedAt:null});go()}function resetFinder(){
@@ -2100,7 +2101,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
       getComputedStyle(tffcChoiceResults).display==='none')return;
    tffcResultsRevealed=true;
    document.documentElement.classList.add('tffc-campaign-results');
-   requestAnimationFrame(()=>requestAnimationFrame(()=>tffcChoiceResults.scrollIntoView({behavior:'smooth',block:'start'})));
+   requestAnimationFrame(()=>requestAnimationFrame(()=>(document.getElementById('clubfinderField')||tffcChoiceResults).scrollIntoView({behavior:'smooth',block:'start'})));
  };
  if(tffcChoiceResults){
    new MutationObserver(tffcRevealChoices).observe(tffcChoiceResults,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
