@@ -1580,7 +1580,10 @@ async function hardResetFinder(){
  if(input)input.value='';
  if(status)status.textContent='';
  if(results){results.innerHTML='';results.style.display='none';}
- if(input)input.focus();
+ if(input)input.focus({preventScroll:true});
+ // Hard Reset follows the same Frame 1 navigation contract as Reset.
+ ++tffcFinderScrollSequence;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'instant'})));
 }
 function certEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function resultLinePlain(r){if(!r)return '';if(r.decision==='walkover')return r.home+' (W/O) v '+r.away;let x=r.home+' ('+r.home_score+') v ('+r.away_score+') '+r.away;if(tinFoilBetaResultVoided(r))x+=' • Result voided; replay ordered';else if(r.decision==='a.e.t.')x+=' • AET';if(r.decision==='penalties'&&r.winner)x+=' • '+r.winner+' '+tinFoilBetaPenaltyResultNote(r);return x}
