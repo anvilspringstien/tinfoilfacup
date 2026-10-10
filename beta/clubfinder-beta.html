@@ -1495,7 +1495,7 @@ function tinFoilRestoreClubfinderReturnSnapshot(){
     results.innerHTML=snapshot.resultsHtml;
     results.style.display='block';
     const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';
-    tffcScrollToFinder();
+    requestAnimationFrame(()=>{try{window.scrollTo(0,Math.max(0,Number(snapshot.scrollY)||0))}catch(e){}});
     return true;
   }catch(e){return false}
 }
@@ -2057,6 +2057,7 @@ try{sessionStorage.removeItem('tffc.openStatsOnReturn')}catch(e){}
 const tinFoilReturnedCampaignSnapshot=!tinFoilStatsRouteRequested&&tinFoilChallengeExitReturn
   ? tinFoilRestoreClubfinderReturnSnapshot()
   : false;
+if(tinFoilReturnedCampaignSnapshot){requestAnimationFrame(()=>requestAnimationFrame(()=>tffcScrollToFinder()))}
 if(tinFoilChallengeExitReturn){
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}
 }
