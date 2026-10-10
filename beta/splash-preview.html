@@ -23,6 +23,18 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
 @media(max-height:635px){.crest{width:83.333%}h1{font-size:clamp(29px,8.6cqw,47px)}p{font-size:clamp(14px,3.7cqw,20px)}a.start{padding:10px 30px;margin:8px 0}.grassroots{font-size:9px}}
 @media(max-height:599px){.crest{width:min(83.333%,43svh)}}
 @media(max-height:470px){.crest{width:min(60%,26svh)}.content{padding-bottom:6px}a.start{margin-bottom:8px}}
+/* Short, wide viewports: keep the complete journey accessible without changing phone portrait geometry. */
+@media (min-width:700px) and (max-height:850px){
+ .stage{height:auto;min-height:100svh}
+ .field{flex:initial;width:100%;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));overflow:visible}
+ .content{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));justify-content:flex-start;padding:0 12px 14px}
+ .crest{width:min(83.333%,450px,34svh);margin-top:6px}
+ .intro{margin-top:10px}
+ p{margin-top:12px;transform:none}
+ a.start{margin:14px 0 16px}
+ .grassroots{white-space:normal}
+}
+
 </style></head><body><main class="stage"><section class="field" aria-label="Tin Foil FA Cup introduction"><div class="content"><img class="crest" src="tffc-splash-logo-q80.webp" alt="Tin Foil FA Cup crest"><div class="intro"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1></div><p><span class="line">Experience the magic of your</span><span class="line">own Cup Run as you try to</span><span class="line">get to Wembley — for real!</span></p><a class="start" href="clubfinder-beta.html">Start Campaign</a><div class="grassroots"><span class="full">Tin Foil FA Cup supports Grassroots Football in the best way possible — Through the Turnstiles</span><span class="short">Supporting grassroots football — Through the Turnstiles</span></div></div></section></main><script>
 /* Read-only, opt-in viewport geometry diagnostic. No layout changes in normal use. */
 (function(){
