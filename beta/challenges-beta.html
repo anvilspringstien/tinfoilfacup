@@ -48,6 +48,9 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .overlay::-webkit-scrollbar{display:none;width:0;height:0}
 .overlay.open{display:flex}
 .deck{width:min(1020px,100%);min-height:min(880px,94vh);height:auto;margin:auto;background:#100f0d;border:1px solid #818181;border-radius:12px;box-shadow:0 30px 90px rgba(0,0,0,.72);display:block;overflow:visible;user-select:none;-webkit-user-select:none}
+/* Clip the Deck's own charcoal panels at the rounded frame without changing overflow or mat interactions. */
+.deckbody{border-radius:11px 11px 0 0}
+.deckfoot{border-radius:0 0 11px 11px}
 .deckbody{height:min(660px,calc(94vh - 220px));min-height:300px;display:flex;align-items:center;justify-content:center;padding:10px 14px 18px;overflow:hidden;background:#100f0d}
 .nav{width:52px;height:52px;border-radius:50%;border:2px solid #241e17;background:#f1dfb2;font-size:28px;cursor:pointer;justify-self:center;flex:0 0 auto}
 .nav[disabled]{opacity:.35;cursor:not-allowed}
