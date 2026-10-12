@@ -74,7 +74,10 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
   const fieldRect=field.getBoundingClientRect();
   const lastBottom=Math.max(...children.map(el=>el.getBoundingClientRect().bottom));
   // Reserve visible breathing room beneath the footer inside the border.
-  const required=Math.ceil(lastBottom-fieldRect.top+40);
+  // Tall iPad portrait needs 40px; wide desktop has a shorter, flex-start
+  // layout and needs less reserve. Keep iPad landscape and phone unchanged.
+  const footerReserve=window.innerWidth>=1200?20:40;
+  const required=Math.ceil(lastBottom-fieldRect.top+footerReserve);
   field.style.minHeight=Math.max(fieldRect.height,required)+'px';
   content.style.minHeight=required+'px';
   // In tall portrait layouts the flex child may extend beyond the stage's
