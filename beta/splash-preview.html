@@ -73,7 +73,8 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
   const children=[...content.children];
   const fieldRect=field.getBoundingClientRect();
   const lastBottom=Math.max(...children.map(el=>el.getBoundingClientRect().bottom));
-  const required=Math.ceil(lastBottom-fieldRect.top+16);
+  // Reserve visible breathing room beneath the footer inside the border.
+  const required=Math.ceil(lastBottom-fieldRect.top+28);
   field.style.minHeight=Math.max(fieldRect.height,required)+'px';
   content.style.minHeight=required+'px';
   // In tall portrait layouts the flex child may extend beyond the stage's
