@@ -2203,7 +2203,22 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   root.style.setProperty('--tffc-opening-scale','1');
   const bottom=Math.max(upper.getBoundingClientRect().bottom,lower.getBoundingClientRect().bottom);
   const viewport=window.visualViewport?.height||window.innerHeight;
-  root.style.setProperty('--tffc-opening-scale',String(Math.min(1,Math.max(1,viewport-16)/Math.max(1,bottom))));
+  const initialScale=Math.min(1,Math.max(1,viewport-16)/Math.max(1,bottom));
+  root.style.setProperty('--tffc-opening-scale',String(initialScale));
+  // iPad landscape only: zoom may reflow the postcode frame. Check its
+  // rendered bottom after zoom rather than trusting the natural-size estimate.
+  const tabletLandscape=window.innerWidth>=700&&window.innerWidth<1200&&window.innerWidth>window.innerHeight;
+  if(tabletLandscape){
+   requestAnimationFrame(()=>{
+    if(root.classList.contains('tffc-campaign-results'))return;
+    const actualBottom=Math.max(upper.getBoundingClientRect().bottom,lower.getBoundingClientRect().bottom);
+    const visibleHeight=window.visualViewport?.height||window.innerHeight;
+    if(actualBottom>visibleHeight-16){
+     const corrected=initialScale*Math.max(.5,(visibleHeight-20)/actualBottom);
+     root.style.setProperty('--tffc-opening-scale',String(corrected));
+    }
+   });
+  }
  };
  const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(update)}};
  const observer=new MutationObserver(schedule);
