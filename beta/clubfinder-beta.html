@@ -2182,6 +2182,13 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   zoom:var(--tffc-opening-scale,1);
  }
 }
+/* Only the opt-in iPad landscape opening: keep the full placeholder readable
+   in the narrow search input without changing its geometry or entered text. */
+@media(min-width:700px) and (max-width:1199px) and (orientation:landscape){
+ html.tffc-opening-fit:not(.tffc-campaign-results) #postcode::placeholder{
+  font-size:10px;
+ }
+}
 </style>
 <script>
 /* BETA-only ?viewportFit=1: fit the two opening frames as one unit. */
