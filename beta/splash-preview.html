@@ -76,10 +76,14 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
   const required=Math.ceil(lastBottom-fieldRect.top+16);
   field.style.minHeight=Math.max(fieldRect.height,required)+'px';
   content.style.minHeight=required+'px';
-  // Fit the actual stage bottom, including its top offset, not just its height.
+  // In tall portrait layouts the flex child may extend beyond the stage's
+  // fixed 100svh box. Fit the lowest actual border/content edge instead.
   const stageBottom=stage.getBoundingClientRect().bottom;
+  const fieldBottom=field.getBoundingClientRect().bottom;
+  const contentBottom=content.getBoundingClientRect().bottom;
+  const naturalBottom=Math.max(stageBottom,fieldBottom,contentBottom);
   const viewport=window.visualViewport?.height||window.innerHeight;
-  const scale=Math.min(1,Math.max(1,viewport-20)/Math.max(1,stageBottom));
+  const scale=Math.min(1,Math.max(1,viewport-20)/Math.max(1,naturalBottom));
   stage.style.setProperty('--tffc-fit-scale',String(scale));
  };
  const schedule=()=>{
