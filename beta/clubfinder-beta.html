@@ -302,13 +302,32 @@ async function refreshCompetitionData(force=false){
   }
   updateLiveDataBadge();return LIVE_DATA_STATUS.state==='live';
 }
+let TFFC_CHECK_STATUS=null;
+let TFFC_CHECK_STATUS_REQUESTED=false;
+function tffcLoadVerifiedCheckStatus(){
+  if(TFFC_CHECK_STATUS_REQUESTED)return;
+  TFFC_CHECK_STATUS_REQUESTED=true;
+  fetch('./competition-check-status.json',{cache:'no-store'})
+    .then(r=>{if(!r.ok)throw new Error('Check status unavailable');return r.json()})
+    .then(d=>{
+      if(d&&d.schema_version===1&&d.state==='checked'&&d.results==='success'&&d.draw==='success'&&d.last_checked_at){
+        const checked=new Date(d.last_checked_at);
+        if(Number.isFinite(checked.getTime())&&checked.getTime()<=Date.now()&&Date.now()-checked.getTime()<=3*60*60*1000)
+          TFFC_CHECK_STATUS=checked;
+      }
+      updateLiveDataBadge();
+    }).catch(()=>{});
+}
 function updateLiveDataBadge(){
   const e=document.getElementById('liveDataBadge');if(!e)return;
+  tffcLoadVerifiedCheckStatus();
   const searchLabel=typeof tinFoilSearchNumberLabel==='function'?tinFoilSearchNumberLabel(tinFoilCurrentSearchNumber()):'';
   const suffix=searchLabel?'  '+searchLabel:'';
   if(LIVE_DATA_STATUS.state==='live'){
     let w=LIVE_DATA_STATUS.updated_at||'';try{w=new Date(w).toLocaleString('en-GB');}catch(x){}
-    e.textContent='Clubfinder v7.6 — Data updated: '+w+suffix;
+    e.textContent=TFFC_CHECK_STATUS
+      ? 'Clubfinder v7.6 — Data last checked: '+TFFC_CHECK_STATUS.toLocaleString('en-GB')+suffix
+      : 'Clubfinder v7.6 — Data updated: '+w+suffix;
   }else e.textContent='Clubfinder v7.6 — '+LIVE_DATA_STATUS.message+suffix;
 }
 
