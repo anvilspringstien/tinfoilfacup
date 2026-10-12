@@ -1180,6 +1180,14 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .tffc-confirm-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 #tffcConfirmCancel{background:#fff;color:#084C61}
 #tffcConfirmOk{background:#084C61;color:#FAFAFA}
+.tffc-about-box{width:min(500px,100%);max-height:min(82vh,720px);display:flex;flex-direction:column;box-sizing:border-box}
+.tffc-about-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tffc-about-close,.tffc-share-close{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;background:#084C61;color:#FAFAFA;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
+.tffc-about-actions{display:flex;justify-content:flex-end;padding-top:12px;flex-shrink:0}
+.tffc-about-story{overflow-y:auto;overscroll-behavior:contain;min-height:0;padding-right:5px}
+.tffc-about-story p{margin:0 0 12px}.tffc-about-story p:last-child{margin-bottom:0;font-weight:600;color:#084C61}
+.tffc-share-link{display:block;width:100%;box-sizing:border-box;margin:12px 0;padding:10px;border:1px solid #084C61;border-radius:5px;color:#084C61;font:400 13px Poppins,Arial,sans-serif;overflow-wrap:anywhere}
+
 .tffc-privacy-actions{display:flex;justify-content:flex-end}
 .tffc-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 </style>
@@ -1898,13 +1906,23 @@ const challengePrivacyLink=$("challengePrivacyLink");
 const challengeAboutLinkFooter=$("challengeAboutLinkFooter");
 if(challengeAboutLinkFooter)challengeAboutLinkFooter.onclick=(e)=>{e.preventDefault();e.stopPropagation();tffcChallengesAboutUs();};
 const challengeShareLinkFooter=$("challengeShareLinkFooter");
-if(challengeShareLinkFooter)challengeShareLinkFooter.onclick=async(e)=>{
+if(challengeShareLinkFooter)challengeShareLinkFooter.onclick=(e)=>{
  e.preventDefault();e.stopPropagation();
  const url=new URL('clubfinder-beta.html',location.href).href;
- const title='Tin Foil FA Cup Clubfinder v7.6 BETA';
- const message='Find your nearest eligible clubs, follow your Campaign and try our new Challenges.';
- if(navigator.share){try{await navigator.share({title,text:message,url});return}catch(err){if(err?.name==='AbortError')return;}}
- try{await navigator.clipboard.writeText(title+' — '+message+' '+url);alert('Clubfinder link copied.')}catch(_){prompt('Copy the Clubfinder link:',url)}
+ let panel=document.getElementById('tffcChallengeShareOverlay');
+ if(!panel){
+  panel=document.createElement('div');
+  panel.id='tffcChallengeShareOverlay';panel.className='tffc-confirm-overlay';panel.hidden=true;
+  panel.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcChallengeShareTitle"><div id="tffcChallengeShareTitle" class="tffc-confirm-title">Share Tin Foil FA Cup</div><p>Find your nearest eligible clubs, follow your Campaign and try our new Challenges.</p><input class="tffc-share-link" type="text" readonly aria-label="Clubfinder BETA link"><div class="tffc-about-actions"><button type="button" class="tffc-share-close">Close</button></div></div>';
+  document.body.appendChild(panel);
+ }
+ const input=panel.querySelector('input');input.value=url;
+ const close=panel.querySelector('.tffc-share-close');
+ const finish=()=>{panel.hidden=true;document.removeEventListener('keydown',onKey);panel.onclick=null;close.onclick=null;};
+ const onKey=ev=>{if(ev.key==='Escape'){ev.preventDefault();finish()}};
+ panel.hidden=false;panel.onclick=ev=>{if(ev.target===panel)finish()};close.onclick=finish;
+ document.addEventListener('keydown',onKey);
+ input.onclick=()=>input.select();input.focus();input.select();
 };
 const challengePrivacyLinkFooter=$("challengePrivacyLinkFooter");
 if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
