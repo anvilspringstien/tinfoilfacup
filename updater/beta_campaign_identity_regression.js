@@ -134,6 +134,7 @@ const sandbox={
   getCounterIncrementCalls:()=>counterIncrementCalls,
   getLocalStoreSnapshot:()=>JSON.stringify(localStore),
   getSessionStoreSnapshot:()=>JSON.stringify(sessionStore),
+  getLocationHistory:()=>JSON.stringify(locationHistory),
   fetch:async(url)=>{
     const s=String(url);
     if(s.includes('counter-config.json'))return {ok:true,status:200,json:async()=>({increment_url:'https://counter.test/increment'})};
@@ -433,7 +434,7 @@ const assertions=`
 
   if(sessionStorage.getItem('tffc.challengeOrigin')!=='clubfinder-beta')throw new Error('BETA bridge contract: origin marker was not saved');
   if(window.location.href!=='challenges-beta.html')throw new Error('BETA bridge contract: direct Deck route missing');
-  if(locationHistory.length!==1||locationHistory[0]!=='challenges-beta.html')
+  if(JSON.stringify(JSON.parse(getLocationHistory()))!==JSON.stringify(['challenges-beta.html']))
     throw new Error('BETA navigation: Challenges launch must replace, not stack, the Clubfinder history entry');
   const returnRecord=JSON.parse(sessionStorage.getItem(TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY)||'null');
   if(!returnRecord||returnRecord.postcode!=='HP7 0EJ'||!returnRecord.resultsHtml.includes('Pigeon McPigeonface'))throw new Error('BETA bridge contract: full Campaign return snapshot missing');
