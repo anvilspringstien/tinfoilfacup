@@ -39,6 +39,29 @@ payload = {
     "results": "success" if times["results"] else "unverified",
     "draw": "success" if times["draw"] else "unverified",
 }
+# Keep the public health verdict strict, but expose why each scanner was rejected.
+# These fields describe GitHub Actions metadata, not competition data.
+def diagnostic(run):
+    if not run:
+        return {"reason": "no_scheduled_run_on_main", "run_id": None, "url": None,
+                "status": None, "conclusion": None, "updated_at": None}
+    stamp = dt.datetime.fromisoformat(run["updated_at"].replace("Z", "+00:00"))
+    age = NOW - stamp
+    if run["status"] != "completed":
+        reason = "not_completed"
+    elif run["conclusion"] != "success":
+        reason = "not_successful"
+    elif age < dt.timedelta(0):
+        reason = "future_timestamp"
+    elif age > MAX_AGE:
+        reason = "stale"
+    else:
+        reason = "verified"
+    return {"reason": reason, "run_id": run["id"], "url": run.get("html_url"),
+            "status": run["status"], "conclusion": run["conclusion"],
+            "updated_at": run["updated_at"]}
+
+payload["diagnostics"] = {key: diagnostic(run) for key, run in runs.items()}
 destination = Path("beta/competition-check-status.json")
 old = json.loads(destination.read_text()) if destination.exists() else None
 if old != payload:
