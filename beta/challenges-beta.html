@@ -866,6 +866,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#17130f;
   font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;overflow-wrap:anywhere
 }
+.campaign-truth #challengePigeonNameInput{width:100%;min-width:0;min-height:34px;border:0;background:transparent;color:#17130f;font:inherit;outline-offset:2px}
 .campaign-truth .name-pigeon-action{
   width:100%;min-width:0;min-height:36px;padding:6px 9px;box-sizing:border-box;
   border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#084c61;
@@ -1994,13 +1995,36 @@ function renderCampaignTruthFrame() {
 $("campaignRound").value=String(state.campaignRound);
 $("truthCallSign").textContent=campaignIdentity.callSign||"—";
 const pigeonNameField=$("truthPigeonName");
-if(campaignIdentity.pigeonName){
-  pigeonNameField.textContent=campaignIdentity.pigeonName;
-}else{
-  pigeonNameField.innerHTML='<button type="button" class="name-pigeon-action" id="namePigeonInClubfinder">Name Your Pigeon in Clubfinder</button>';
-  const nameButton=$("namePigeonInClubfinder");
-  if(nameButton)nameButton.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilReturnToClubfinder();};
+// Edit the existing Clubfinder Campaign identity; never create a parallel name.
+const storedCampaign=readChallengeStorageJSON("tinFoilFACupJourney_v7");
+if(storedCampaign && campaignIdentity.callSign &&
+   String(storedCampaign.callSign||"").trim()===campaignIdentity.callSign){
+  campaignIdentity.pigeonName=String(storedCampaign.pigeonName||"").replace(/\\s+/g," ").trim().slice(0,20);
 }
+pigeonNameField.innerHTML='<input id="challengePigeonNameInput" type="text" maxlength="20" autocomplete="off" aria-label="Pigeon name" placeholder="Name your pigeon">';
+const pigeonInput=$("challengePigeonNameInput");
+pigeonInput.value=campaignIdentity.pigeonName;
+pigeonInput.onchange=()=>{
+  const saved=readChallengeStorageJSON("tinFoilFACupJourney_v7");
+  if(!saved || !campaignIdentity.callSign ||
+     String(saved.callSign||"").trim()!==campaignIdentity.callSign)return;
+  const name=pigeonInput.value.replace(/\\s+/g," ").trim().slice(0,20);
+  saved.pigeonName=name;
+  localStorage.setItem("tinFoilFACupJourney_v7",JSON.stringify(saved));
+  const backup=readChallengeStorageJSON("tffc.clubfinderCampaignIdentity.v1");
+  if(backup && String(backup.originName||"")===String(saved.originName||"")){
+    backup.pigeonName=name;
+    localStorage.setItem("tffc.clubfinderCampaignIdentity.v1",JSON.stringify(backup));
+  }
+  const bridge=readChallengeStorageJSON(CLUBFINDER_BRIDGE_KEY);
+  if(bridge && String(bridge.callSign||"")===campaignIdentity.callSign){
+    bridge.pigeonName=name;
+    localStorage.setItem(CLUBFINDER_BRIDGE_KEY,JSON.stringify(bridge));
+  }
+  campaignIdentity.pigeonName=name;
+  pigeonInput.value=name;
+};
+pigeonInput.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();pigeonInput.blur();}};
 const truthMiles=Math.max(0,Math.round(state.pigeonMiles));
 $("truthPigeonMiles").textContent=truthMiles.toLocaleString("en-GB");
 $("truthPigeonMilesOdometer").innerHTML=String(Math.min(9999,truthMiles)).padStart(4,"0").split("").map(n=>`<span>${n}</span>`).join("");
