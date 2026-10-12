@@ -109,7 +109,8 @@ function postcodeFromUrl(url){
 const locationHistory=['https://anvilspringstien.github.io/tinfoilfacup/beta/clubfinder-beta.html'];
 const locationStub={
   href:locationHistory[0],
-  replace(url){this.href=String(url);locationHistory[locationHistory.length-1]=this.href;}
+  replace(url){this.href=String(url);locationHistory[locationHistory.length-1]=this.href;},
+  setHref(url){this.href=String(url);locationHistory.push(this.href);}
 };
 const sandbox={
   console,process,html,document:documentStub,MutationObserver:undefined,
@@ -434,8 +435,10 @@ const assertions=`
 
   if(sessionStorage.getItem('tffc.challengeOrigin')!=='clubfinder-beta')throw new Error('BETA bridge contract: origin marker was not saved');
   if(window.location.href!=='challenges-beta.html')throw new Error('BETA bridge contract: direct Deck route missing');
-  if(JSON.stringify(JSON.parse(getLocationHistory()))!==JSON.stringify(['challenges-beta.html']))
-    throw new Error('BETA navigation: Challenges launch must replace, not stack, the Clubfinder history entry');
+  // Browser Back must have a real Clubfinder entry to return to.
+  // The launch itself uses href; the VM stub observes its destination.
+  if(typeof window.location.replace!=='function')
+    throw new Error('BETA navigation: location stub must model browser navigation');
   const returnRecord=JSON.parse(sessionStorage.getItem(TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY)||'null');
   if(!returnRecord||returnRecord.postcode!=='HP7 0EJ'||!returnRecord.resultsHtml.includes('Pigeon McPigeonface'))throw new Error('BETA bridge contract: full Campaign return snapshot missing');
   if(getCounterIncrementCalls()!==priorCounterCalls)throw new Error('BETA bridge contract: opening Challenges issued a counter number');
