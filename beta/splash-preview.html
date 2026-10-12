@@ -65,19 +65,20 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
  const update=()=>{
   scheduled=false;
   stage.style.setProperty('--tffc-fit-scale','1');
-  // The actual content bottom, rather than scrollHeight, catches Safari clipping.
-  const stageRect=stage.getBoundingClientRect();
-  const fieldRect=field.getBoundingClientRect();
+  field.style.removeProperty('overflow');
+  // Measure unscaled content and grow the frame before calculating fit.
   const content=field.querySelector('.content');
   const children=[...content.children];
-  const bottom=Math.max(fieldRect.bottom,...children.map(el=>el.getBoundingClientRect().bottom));
-  const natural=Math.max(stageRect.bottom,bottom)-stageRect.top;
+  const fieldRect=field.getBoundingClientRect();
+  const lastBottom=Math.max(...children.map(el=>el.getBoundingClientRect().bottom));
+  const required=Math.ceil(lastBottom-fieldRect.top+16);
+  field.style.minHeight=Math.max(fieldRect.height,required)+'px';
+  content.style.minHeight=required+'px';
+  const stageRect=stage.getBoundingClientRect();
+  const natural=stageRect.height;
   const viewport=window.visualViewport?.height||window.innerHeight;
-  const available=Math.max(1,viewport-16);
-  const scale=Math.min(1,available/Math.max(1,natural));
+  const scale=Math.min(1,Math.max(1,viewport-20)/Math.max(1,natural));
   stage.style.setProperty('--tffc-fit-scale',String(scale));
-  // Allow scrolling if Safari still needs it, rather than clipping the button.
-  field.style.overflow='visible';
  };
  const schedule=()=>{
   if(scheduled)return;
