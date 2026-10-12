@@ -60,16 +60,35 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
  if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
  document.documentElement.classList.add('tffc-viewport-fit');
  const stage=document.querySelector('.stage');
+ const field=stage.querySelector('.field');
+ let scheduled=false;
  const update=()=>{
+  scheduled=false;
   stage.style.setProperty('--tffc-fit-scale','1');
-  const available=window.innerHeight-12;
-  const natural=Math.max(stage.getBoundingClientRect().height,document.documentElement.scrollHeight);
-  const scale=Math.min(1,available/natural);
-  stage.style.setProperty('--tffc-fit-scale',String(Math.max(.5,scale)));
+  // The actual content bottom, rather than scrollHeight, catches Safari clipping.
+  const stageRect=stage.getBoundingClientRect();
+  const fieldRect=field.getBoundingClientRect();
+  const content=field.querySelector('.content');
+  const children=[...content.children];
+  const bottom=Math.max(fieldRect.bottom,...children.map(el=>el.getBoundingClientRect().bottom));
+  const natural=Math.max(stageRect.bottom,bottom)-stageRect.top;
+  const viewport=window.visualViewport?.height||window.innerHeight;
+  const available=Math.max(1,viewport-16);
+  const scale=Math.min(1,available/Math.max(1,natural));
+  stage.style.setProperty('--tffc-fit-scale',String(scale));
+  // Allow scrolling if Safari still needs it, rather than clipping the button.
+  field.style.overflow='visible';
  };
- window.addEventListener('load',update);
- window.addEventListener('resize',update);
- document.fonts?.ready?.then(update);
- update();
+ const schedule=()=>{
+  if(scheduled)return;
+  scheduled=true;
+  requestAnimationFrame(update);
+ };
+ window.addEventListener('load',schedule);
+ window.addEventListener('resize',schedule);
+ window.addEventListener('orientationchange',schedule);
+ window.visualViewport?.addEventListener('resize',schedule);
+ document.fonts?.ready?.then(schedule);
+ schedule();
 })();
 </script></body></html>
