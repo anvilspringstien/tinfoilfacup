@@ -1565,7 +1565,8 @@ function resumeMyJourney(){updateSavedJourney({ended:false,endedAt:null});go()}f
   if(status)status.textContent='';
   if(results){results.innerHTML='';results.style.display='none';}const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='none';
   if(input&&document.activeElement===input)input.blur();
-  // Reset returns to Frame 1, after the results frame has collapsed.
+  // Restore the same fitted opening layout as a fresh Splash arrival.
+  document.documentElement.classList.remove('tffc-campaign-results');
   ++tffcFinderScrollSequence;
   requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'instant'})));
 }
@@ -1581,7 +1582,8 @@ async function hardResetFinder(){
  if(status)status.textContent='';
  if(results){results.innerHTML='';results.style.display='none';}
  if(input&&document.activeElement===input)input.blur();
- // Hard Reset follows the same Frame 1 navigation contract as Reset.
+ // Restore the same fitted opening layout as a fresh Splash arrival.
+ document.documentElement.classList.remove('tffc-campaign-results');
  ++tffcFinderScrollSequence;
  requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'instant'})));
 }
@@ -2121,12 +2123,10 @@ if(tinFoilStatsRouteRequested){
 // BETA opening transition: reveal choices only after actual results appear.
 if(typeof document!=='undefined' && document.documentElement && typeof document.documentElement.classList?.contains==='function' && typeof MutationObserver==='function' && typeof requestAnimationFrame==='function' && typeof getComputedStyle==='function' && !document.documentElement.classList.contains('tffc-stats-route')){
  const tffcChoiceResults=document.getElementById('results');
- let tffcResultsRevealed=false;
  const tffcRevealChoices=()=>{
-   if(tffcResultsRevealed||!tffcChoiceResults||!tffcChoiceResults.children.length||
-      getComputedStyle(tffcChoiceResults).display==='none')return;
-   tffcResultsRevealed=true;
-   document.documentElement.classList.add('tffc-campaign-results');
+   const visible=!!(tffcChoiceResults&&tffcChoiceResults.children.length&&
+      getComputedStyle(tffcChoiceResults).display!=='none');
+   document.documentElement.classList.toggle('tffc-campaign-results',visible);
    /* Scroll is owned by completed go() renders or the Challenges return snapshot. */
  };
  if(tffcChoiceResults){
