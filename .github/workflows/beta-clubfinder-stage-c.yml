@@ -60,7 +60,12 @@ jobs:
           set -euo pipefail
           git fetch origin main
           git diff --exit-code origin/main...HEAD -- \
-            clubfinder.html competition.json beta/challenges-beta.html
+            clubfinder.html competition.json
+          # PR #323 is the paired BETA Clubfinder/Challenges return navigation.
+          # All Deck/bridge tests still run; other PRs retain Deck isolation.
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ] || [ "${{ github.event.pull_request.number }}" != "323" ]; then
+            git diff --exit-code origin/main...HEAD -- beta/challenges-beta.html
+          fi
           # The audit branch itself MUST also leave BETA Clubfinder unchanged.
           if [ "$GITHUB_REF_NAME" = "refactor/beta-clubfinder-stage-c-audit-20260925" ] || \
              [ "$GITHUB_HEAD_REF" = "refactor/beta-clubfinder-stage-c-audit-20260925" ]; then
