@@ -55,6 +55,17 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
  window.addEventListener('load',()=>setTimeout(measure,400));measure();
 })();
 </script><script>
+/* Keep the opt-in viewport-fit experiment active across Splash → Clubfinder.
+   Preserve the existing crestMeasure diagnostic when requested. */
+(function(){
+ const params=new URLSearchParams(location.search);
+ if(params.get('viewportFit')!=='1')return;
+ const start=document.querySelector('a.start');
+ if(!start)return;
+ const target=new URL(start.getAttribute('href'),location.href);
+ target.searchParams.set('viewportFit','1');
+ start.href=target.href;
+})();
 /* Opt-in proof of concept: ?viewportFit=1; no persistent settings. */
 (function(){
  if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
