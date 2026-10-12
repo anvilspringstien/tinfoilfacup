@@ -1295,11 +1295,15 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
     </div>
     <div class="beta-help deck-footer-help" aria-label="BETA tester feedback">
       <div class="beta-help-links">
+        <button class="beta-help-link" type="button" id="challengeShareLinkFooter">Share</button>
+        <span class="beta-help-sep" aria-hidden="true">·</span>
         <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a>
         <span class="beta-help-sep" aria-hidden="true">·</span>
         <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
         <span class="beta-help-sep" aria-hidden="true">·</span>
         <button class="beta-help-link" type="button" id="challengePrivacyLinkFooter">Privacy</button>
+        <span class="beta-help-sep" aria-hidden="true">·</span>
+        <button class="beta-help-link" type="button" id="challengeAboutLinkFooter">About Us</button>
       </div>
     </div>
   </footer>
@@ -1803,6 +1807,27 @@ function openAt(i=0, showBack=false) {
 function close() { tinFoilReturnToClubfinder(); }
 
 
+function tffcChallengesAboutUs(){
+  let overlay=document.getElementById('tffcAboutOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='tffcAboutOverlay';
+    overlay.className='tffc-confirm-overlay';
+    overlay.hidden=true;
+    overlay.innerHTML="<div class=\"tffc-confirm-box tffc-about-box\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"tffcAboutTitle\"><div class=\"tffc-about-head\"><div id=\"tffcAboutTitle\" class=\"tffc-confirm-title\">About Us</div></div><div class=\"tffc-about-story\"><p>We went the footie. On the bus. Heaton Stan’ vs Tow Law in the extra preliminary round of the FA Cup. Made a Tin Foil FA Cup. There were pies & we won. Then to Hebburn. Beat them, too. ‘C’mon you Stan!’ Then the ‘away bus’ to Tadcaster – a footie ground in a brewery, what more could you want?</p><p>The magic of the Cup and the stuff broken dreams are made of. Beaten 2-1.</p><p>“Ah well, always next year, eh?<br>Well, unless we just keep going?<br>What? Follow the winner? All the way to Wembley?<br>Well, at least till we can’t get tickets!”</p><p>And that was that. That first year we got to the 4th Round. Some years we get close, others it’s an early bath. Last year we travelled 4,751 miles and got to the Semi’s!</p><p>What a run! What an adventure! What pies!</p><p>Time to do it all again?</p><p>You bet.</p><p>At Tin Foil FA Cup you can do it, too!</p></div><div class=\"tffc-about-actions\"><button type=\"button\" class=\"tffc-about-close\" aria-label=\"Close About Us\">Close</button></div></div>";
+    document.body.appendChild(overlay);
+  }
+  const previous=document.activeElement;
+  const close=overlay.querySelector('.tffc-about-close');
+  overlay.hidden=false;
+  function finish(){document.removeEventListener('keydown',onKey);overlay.hidden=true;overlay.onclick=null;close.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus()}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
+  close.onclick=finish;
+  overlay.onclick=e=>{if(e.target===overlay)finish()};
+  document.addEventListener('keydown',onKey);
+  close.focus();
+}
+
 function tinFoilPrivacyNotice(){
   let privacyOverlay=document.getElementById('tffcPrivacyOverlay');
   if(!privacyOverlay){
@@ -1870,6 +1895,17 @@ function tinFoilReturnToClubfinder(){
 }
 
 const challengePrivacyLink=$("challengePrivacyLink");
+const challengeAboutLinkFooter=$("challengeAboutLinkFooter");
+if(challengeAboutLinkFooter)challengeAboutLinkFooter.onclick=(e)=>{e.preventDefault();e.stopPropagation();tffcChallengesAboutUs();};
+const challengeShareLinkFooter=$("challengeShareLinkFooter");
+if(challengeShareLinkFooter)challengeShareLinkFooter.onclick=async(e)=>{
+ e.preventDefault();e.stopPropagation();
+ const url=new URL('clubfinder-beta.html',location.href).href;
+ const title='Tin Foil FA Cup Clubfinder v7.6 BETA';
+ const message='Find your nearest eligible clubs, follow your Campaign and try our new Challenges.';
+ if(navigator.share){try{await navigator.share({title,text:message,url});return}catch(err){if(err?.name==='AbortError')return;}}
+ try{await navigator.clipboard.writeText(title+' — '+message+' '+url);alert('Clubfinder link copied.')}catch(_){prompt('Copy the Clubfinder link:',url)}
+};
 const challengePrivacyLinkFooter=$("challengePrivacyLinkFooter");
 if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
 if(challengePrivacyLinkFooter)challengePrivacyLinkFooter.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
