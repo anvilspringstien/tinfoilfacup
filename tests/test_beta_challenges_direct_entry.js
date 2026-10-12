@@ -95,7 +95,7 @@ assert.equal(vm.runInContext('state.completed["01"]',first.ctx),true,'Previously
 assert.equal(first.nodes.deckCabinet.children.length,27,'Trophy Cabinet cards lost during navigation change');
 assert.equal(first.nodes.cabinetCount.textContent,'2 / 27','Verified Third Qualifying progress should award the campaign milestone trophy');
 assert.equal(first.nodes.truthCallSign.textContent,'Tango Foxtrot 2 Alpha Charlie 01123','Challenge Deck Call Sign did not follow Clubfinder identity');
-assert.equal(first.nodes.truthPigeonName.textContent,'Esmeralda','Challenge Deck Pigeon Name did not follow Clubfinder identity');
+assert.equal(first.nodes.challengePigeonNameInput.value,'Esmeralda','Challenge Deck Pigeon Name did not follow Clubfinder identity');
 assert.equal(first.nodes.truthPigeonMiles.textContent,'314','Pigeon Miles Flown did not follow Clubfinder truth');
 assert.equal(first.nodes.truthCampaignRound.textContent,'3rd Qualifying Round','Current Campaign Round did not follow Clubfinder truth');
 assert(!html.includes('Pigeon Miles Travelled'),'Legacy Pigeon Miles Travelled wording remains');
