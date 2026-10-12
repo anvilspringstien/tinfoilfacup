@@ -97,11 +97,11 @@ html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest
 #clubfinderField #status{overflow-wrap:anywhere}
 /* Keep the idle field compact; show status spacing only when populated. */
 #clubfinderField #status:empty{display:none}
-/* Visual 100px teal console: 20px top + 40px controls + 13/14/13px status band.
-   Keep the original 80px search panel and status layout boxes unchanged. */
+/* Visual 94px teal console: 20px top + 40px controls + 10/14/10px status band.
+   Preserve existing 80px search panel and status layout boxes. */
 #clubfinderField #searchPanel{border-radius:5px 5px 0 0}
-#clubfinderField #liveDataTools{margin-top:6px;position:relative;width:min(360px,100%);margin-left:auto;margin-right:auto;padding:0 6px;color:#fafafa;isolation:isolate;transform:translateY(-13px)}
-#clubfinderField #liveDataTools::before{content:"";position:absolute;z-index:-1;top:-13px;right:0;bottom:-13px;left:0;background:rgba(8,76,97,.90);border-radius:0 0 5px 5px;pointer-events:none}
+#clubfinderField #liveDataTools{margin-top:6px;position:relative;width:min(360px,100%);margin-left:auto;margin-right:auto;padding:0 6px;color:#fafafa;isolation:isolate;transform:translateY(-16px)}
+#clubfinderField #liveDataTools::before{content:"";position:absolute;z-index:-1;top:-10px;right:0;bottom:-10px;left:0;background:rgba(8,76,97,.90);border-radius:0 0 5px 5px;pointer-events:none}
 #clubfinderField #liveDataBadge{position:relative;z-index:1;color:#fafafa;text-align:center;font-size:11px;line-height:14px}
 #clubfinderField{padding-bottom:8px}
 html.tffc-stats-route #tffcFourLaws,html.tffc-stats-route .tffcPostcodeHelp{display:none!important}
