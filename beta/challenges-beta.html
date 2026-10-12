@@ -1274,6 +1274,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
       <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
       <span class="beta-help-sep" aria-hidden="true">·</span>
       <button class="beta-help-link" type="button" id="challengePrivacyLink">Privacy</button>
+      <span class="beta-help-sep" aria-hidden="true">·</span>
+      <button class="beta-help-link" type="button" id="challengeSimulatorAboutLink">About Simulator</button>
     </div>
   </div>
 
@@ -1821,6 +1823,25 @@ function tinFoilPrivacyNotice(){
   closeButton.onclick=finish;privacyOverlay.onclick=e=>{if(e.target===privacyOverlay)finish()};document.addEventListener('keydown',onKey);closeButton.focus();
 }
 
+function tinFoilSimulatorAboutNotice(){
+  let overlay=document.getElementById('tffcSimulatorAboutOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='tffcSimulatorAboutOverlay';
+    overlay.className='tffc-confirm-overlay';
+    overlay.hidden=true;
+    overlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcSimulatorAboutTitle" aria-describedby="tffcSimulatorAboutMessage"><div id="tffcSimulatorAboutTitle" class="tffc-confirm-title">About the Simulator</div><div id="tffcSimulatorAboutMessage" class="tffc-confirm-message"></div><div class="tffc-privacy-actions"><button id="tffcSimulatorAboutClose" type="button">Close</button></div></div>';
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('tffcSimulatorAboutMessage').textContent='The Simulator lets us test how Challenges are earned, completed and displayed without waiting for real FA Cup results.\n\nWe\'ve kept it available so you can explore how the Challenge Deck works and have a little fun with Barry.\n\nSimulated progress is separate from your real Tin Foil FA Cup Campaign. Playing with it can\'t break anything and hitting the big reset button will bring you back to real life.';
+  const close=document.getElementById('tffcSimulatorAboutClose'),previous=document.activeElement;
+  overlay.hidden=false;
+  function finish(){document.removeEventListener('keydown',onKey);overlay.hidden=true;close.onclick=null;overlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus();}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish();}}
+  close.onclick=finish;overlay.onclick=e=>{if(e.target===overlay)finish();};
+  document.addEventListener('keydown',onKey);close.focus();
+}
+
 function tinFoilConfirm(message){
   return new Promise(resolve=>{
     let overlay=document.getElementById('tffcConfirmOverlay');
@@ -1858,6 +1879,8 @@ const challengePrivacyLink=$("challengePrivacyLink");
 const challengePrivacyLinkFooter=$("challengePrivacyLinkFooter");
 if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
 if(challengePrivacyLinkFooter)challengePrivacyLinkFooter.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
+const simulatorAboutLink=$("challengeSimulatorAboutLink");
+if(simulatorAboutLink)simulatorAboutLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilSimulatorAboutNotice();};
 
 $("exitBtn").onclick=(e)=>{
   e.preventDefault();
