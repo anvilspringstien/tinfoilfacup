@@ -112,7 +112,7 @@ function store(deck,bridge,identity){
   const first=boot(local,session);
   assert(first.nodes.overlay.classList.contains('open'),'Deck must open directly');
   assert.equal(first.nodes.truthCallSign.textContent,CALL,'Call Sign not bridged');
-  assert.equal(first.nodes.truthPigeonName.textContent,LONG_NAME,'Long name not bridged');
+  assert.equal(first.nodes.challengePigeonNameInput.value,LONG_NAME,'Long name not bridged');
   assert.equal(first.nodes.truthPigeonMiles.textContent,'314','Verified miles not bridged');
   assert.equal(first.nodes.truthCampaignRound.textContent,'3rd Qualifying Round','Round not bridged');
   assert.equal(first.read('state.tiesPlayed'),5,'Verified ties must supersede simulator save');
@@ -140,7 +140,7 @@ function store(deck,bridge,identity){
   assert.equal(JSON.parse(local[BRIDGE]).pigeonName,LONG_NAME,
     'Exit unexpectedly erased the Clubfinder campaign bridge');
   const refreshed=boot(local,session);
-  assert.equal(refreshed.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(refreshed.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Name lost across exit and Deck refresh');
   assert.equal(refreshed.nodes.truthPigeonMiles.textContent,'314',
     'Mileage lost across exit and Deck refresh');
@@ -168,7 +168,7 @@ function store(deck,bridge,identity){
 // selection date. The backup must never leak another campaign's identity.
 {
   const matching=boot(store(baseSave(),truth({pigeonName:''}),backup()));
-  assert.equal(matching.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(matching.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Matching backup did not restore the full Pigeon Name');
   const wrongOrigin=boot(store(baseSave(),truth({pigeonName:''}),
     backup({originName:'Wimborne Town FC',pigeonName:'Wrong Origin'})));
@@ -186,7 +186,7 @@ function store(deck,bridge,identity){
     'Old selection pigeon identity leaked into new campaign');
   const bridgeWins=boot(store(baseSave(),truth(),
     backup({originName:'Wimborne Town FC',pigeonName:'Wrong Origin'})));
-  assert.equal(bridgeWins.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(bridgeWins.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Fresh bridge identity must take precedence over stale backup');
 }
 
@@ -205,7 +205,7 @@ function store(deck,bridge,identity){
   assert.equal(app.read('state.giantKillAchieved'),false,
     'String true must not be trusted as a verified Giant Kill');
   assert.equal(app.nodes.truthCallSign.textContent,CALL,'Call Sign whitespace changed');
-  assert.equal(app.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(app.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Name whitespace collapsed incorrectly or 20-character cap changed');
   assert.equal(app.nodes.truthCampaignRound.textContent,'Extra Preliminary Round',
     'Non-numeric campaign round must render the default');
@@ -237,7 +237,7 @@ function store(deck,bridge,identity){
 
   const oldUndated=boot(store(baseSave(),
     truth({pigeonName:'',selectedAt:undefined}),backup()));
-  assert.equal(oldUndated.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(oldUndated.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Previously supported undated matching-origin backup was rejected');
   const undatedMismatch=boot(store(baseSave(),
     truth({pigeonName:'',selectedAt:undefined}),
@@ -351,7 +351,7 @@ async function testDisplayAndReset(){
     'Simulator away tie odometer drifted');
   assert.equal(n.campaignRound.value,'4','Simulator round selection drifted');
   assert.equal(n.truthCallSign.textContent,CALL,'Truth Call Sign missing');
-  assert.equal(n.truthPigeonName.textContent,LONG_NAME,'Truth Pigeon Name missing');
+  assert.equal(n.challengePigeonNameInput.value,LONG_NAME,'Truth Pigeon Name missing');
   assert.equal(n.truthPigeonMiles.textContent,'314','Truth Pigeon Miles missing');
   assert.equal(n.truthCampaignRound.textContent,'3rd Qualifying Round',
     'Truth round label drifted');
@@ -374,7 +374,7 @@ async function testDisplayAndReset(){
     'Display-only refresh duplicated or lost Trophy Cabinet slots');
 
   app.read('campaignIdentity.pigeonName="Percy"; state.pigeonMiles=1234.6; state.campaignRound=5; save()');
-  assert.equal(n.truthPigeonName.textContent,'Percy','Save failed to refresh truth name');
+  assert.equal(n.challengePigeonNameInput.value,'Percy','Save failed to refresh truth name');
   assert.equal(n.truthPigeonMiles.textContent,'1,235','Miles rounding/grouping changed');
   assert.equal(n.truthCampaignRound.textContent,'4th Qualifying Round',
     'Save failed to refresh round label');
@@ -405,7 +405,7 @@ async function testDisplayAndReset(){
   for(const key of ['addTie','addAwayTie','addPigeonMiles','simulateGiantKill',
     'campaignRound'])assert.equal(ended.nodes[key].disabled,true,
       'Ended campaign control must remain disabled: '+key);
-  assert.equal(ended.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(ended.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Ended campaign lost its verified identity');
   assert.equal(ended.nodes.cabinetCount.textContent,'3 / 27',
     'Ended campaign must retain historical and verified Giant Kill trophies');
@@ -423,7 +423,7 @@ async function testDisplayAndReset(){
     'Hard Reset must immediately restore verified Campaign milestone');
   assert.equal(reset.nodes.cabinetCount.textContent,'1 / 27',
     'Hard Reset cabinet count did not reflect verified-only awards');
-  assert.equal(reset.nodes.truthPigeonName.textContent,LONG_NAME,
+  assert.equal(reset.nodes.challengePigeonNameInput.value,LONG_NAME,
     'Hard Reset lost verified Pigeon Name');
   assert.equal(reset.nodes.truthPigeonMiles.textContent,'314',
     'Hard Reset lost verified Pigeon Miles');
