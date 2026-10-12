@@ -1190,6 +1190,9 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 
 .tffc-privacy-actions{display:flex;justify-content:flex-end}
 .tffc-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
+#tffcShareHost[hidden]{display:none!important}
+#tffcShareHost{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.76);display:flex;align-items:center;justify-content:center}
+#tffcShareHost iframe{display:block;border:0;width:100%;height:100%;background:transparent}
 </style>
 </head>
 <body>
@@ -1815,6 +1818,35 @@ function openAt(i=0, showBack=false) {
 function close() { tinFoilReturnToClubfinder(); }
 
 
+function tffcChallengesOpenShare(){
+ let host=document.getElementById('tffcShareHost');
+ if(!host){
+  host=document.createElement('div');host.id='tffcShareHost';host.hidden=true;
+  host.setAttribute('role','presentation');
+  const frame=document.createElement('iframe');frame.title='Share Tin Foil FA Cup';
+  frame.setAttribute('aria-label','Share Tin Foil FA Cup');frame.setAttribute('allow','clipboard-write');
+  host.appendChild(frame);document.body.appendChild(host);
+  host.addEventListener('click',e=>{if(e.target===host)tffcChallengesCloseShare()});
+ }
+ window.tffcChallengesSharePreviousFocus=document.activeElement;
+ host.hidden=false;
+ document.body.style.overflow='hidden';
+ const frame=host.querySelector('iframe');frame.src='share-popup-embed.html';frame.focus();
+}
+function tffcChallengesCloseShare(){
+ const host=document.getElementById('tffcShareHost');if(!host||host.hidden)return;
+ host.hidden=true;document.body.style.overflow='';
+ const previous=window.tffcChallengesSharePreviousFocus;
+ if(previous&&previous.isConnected)previous.focus({preventScroll:true});
+}
+window.addEventListener('message',e=>{
+ const frame=document.getElementById('tffcShareHost')?.querySelector('iframe');
+ if(e.origin===location.origin&&e.data?.type==='tffc-share-close'&&e.source===frame?.contentWindow)tffcChallengesCloseShare();
+});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcChallengesCloseShare();
+});
+
 function tffcChallengesAboutUs(){
   let overlay=document.getElementById('tffcAboutOverlay');
   if(!overlay){
@@ -1908,21 +1940,7 @@ if(challengeAboutLinkFooter)challengeAboutLinkFooter.onclick=(e)=>{e.preventDefa
 const challengeShareLinkFooter=$("challengeShareLinkFooter");
 if(challengeShareLinkFooter)challengeShareLinkFooter.onclick=(e)=>{
  e.preventDefault();e.stopPropagation();
- const url=new URL('clubfinder-beta.html',location.href).href;
- let panel=document.getElementById('tffcChallengeShareOverlay');
- if(!panel){
-  panel=document.createElement('div');
-  panel.id='tffcChallengeShareOverlay';panel.className='tffc-confirm-overlay';panel.hidden=true;
-  panel.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcChallengeShareTitle"><div id="tffcChallengeShareTitle" class="tffc-confirm-title">Share Tin Foil FA Cup</div><p>Find your nearest eligible clubs, follow your Campaign and try our new Challenges.</p><input class="tffc-share-link" type="text" readonly aria-label="Clubfinder BETA link"><div class="tffc-about-actions"><button type="button" class="tffc-share-close">Close</button></div></div>';
-  document.body.appendChild(panel);
- }
- const input=panel.querySelector('input');input.value=url;
- const close=panel.querySelector('.tffc-share-close');
- const finish=()=>{panel.hidden=true;document.removeEventListener('keydown',onKey);panel.onclick=null;close.onclick=null;};
- const onKey=ev=>{if(ev.key==='Escape'){ev.preventDefault();finish()}};
- panel.hidden=false;panel.onclick=ev=>{if(ev.target===panel)finish()};close.onclick=finish;
- document.addEventListener('keydown',onKey);
- input.onclick=()=>input.select();input.focus();input.select();
+ tffcChallengesOpenShare();
 };
 const challengePrivacyLinkFooter=$("challengePrivacyLinkFooter");
 if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
