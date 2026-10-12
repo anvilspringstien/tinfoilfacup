@@ -1794,6 +1794,9 @@ async function openChallenges(origin){
     exact Campaign view without another postcode lookup. */
  tinFoilSaveClubfinderReturnSnapshot();
  try{sessionStorage.setItem('tffc.challengeOrigin','clubfinder-beta');}catch(_){}
+ // Leave a clean Clubfinder document for browser Back / page-cache restoration.
+ // The preparation screen has served its purpose once the bridge is ready.
+ tinFoilRemoveChallengesPrep();
  /* Preserve Clubfinder as the browser Back destination from Challenges.
     The pagehide/pageshow cleanup removes the preparation overlay on return. */
  window.location.href='challenges-beta.html';
