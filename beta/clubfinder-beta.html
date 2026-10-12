@@ -1794,7 +1794,9 @@ async function openChallenges(origin){
     exact Campaign view without another postcode lookup. */
  tinFoilSaveClubfinderReturnSnapshot();
  try{sessionStorage.setItem('tffc.challengeOrigin','clubfinder-beta');}catch(_){}
- /* Keep browser Back from revisiting the obsolete Challenges launch entry.\n     The deterministic Exit route restores the saved Campaign snapshot. */\n  window.location.replace('challenges-beta.html');
+ /* Keep browser Back from revisiting the obsolete Challenges launch entry.
+     The deterministic Exit route restores the saved Campaign snapshot. */
+  window.location.replace('challenges-beta.html');
 }
 
 async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder"){
