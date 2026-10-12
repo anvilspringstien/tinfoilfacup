@@ -2194,6 +2194,8 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
 /* BETA-only ?viewportFit=1: fit the two opening frames as one unit. */
 (function(){
  if(new URLSearchParams(location.search).get('viewportFit')==='0'||window.innerWidth<700)return;
+ // Browser-only presentation enhancement; Node regression harnesses lack a DOM root.
+ if(!document.documentElement||!document.documentElement.classList)return;
  const root=document.documentElement;
  if(root.classList.contains('tffc-stats-route'))return;
  root.classList.add('tffc-opening-fit');
