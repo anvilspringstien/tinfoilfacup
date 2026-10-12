@@ -66,18 +66,20 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
   scheduled=false;
   stage.style.setProperty('--tffc-fit-scale','1');
   field.style.removeProperty('overflow');
-  // Measure unscaled content and grow the frame before calculating fit.
+  // Clear previous orientation's measurements before measuring at natural size.
+  field.style.removeProperty('min-height');
   const content=field.querySelector('.content');
+  content.style.removeProperty('min-height');
   const children=[...content.children];
   const fieldRect=field.getBoundingClientRect();
   const lastBottom=Math.max(...children.map(el=>el.getBoundingClientRect().bottom));
   const required=Math.ceil(lastBottom-fieldRect.top+16);
   field.style.minHeight=Math.max(fieldRect.height,required)+'px';
   content.style.minHeight=required+'px';
-  const stageRect=stage.getBoundingClientRect();
-  const natural=stageRect.height;
+  // Fit the actual stage bottom, including its top offset, not just its height.
+  const stageBottom=stage.getBoundingClientRect().bottom;
   const viewport=window.visualViewport?.height||window.innerHeight;
-  const scale=Math.min(1,Math.max(1,viewport-20)/Math.max(1,natural));
+  const scale=Math.min(1,Math.max(1,viewport-20)/Math.max(1,stageBottom));
   stage.style.setProperty('--tffc-fit-scale',String(scale));
  };
  const schedule=()=>{
