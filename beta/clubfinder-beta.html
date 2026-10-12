@@ -2260,8 +2260,11 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  const lower=document.querySelector('#clubfinderField');
  if(!upper||!lower)return;
  let pending=false;
+ const postcode=document.getElementById('postcode');
+ const keyboardFocused=()=>document.activeElement===postcode;
  const update=()=>{
   pending=false;
+  if(keyboardFocused())return; // Do not fit against the keyboard-reduced visual viewport.
   if(root.classList.contains('tffc-campaign-results')){
    root.style.removeProperty('--tffc-opening-scale');
    return;
@@ -2276,7 +2279,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   const tabletLandscape=window.innerWidth>=700&&window.innerWidth<1200&&window.innerWidth>window.innerHeight;
   if(tabletLandscape){
    requestAnimationFrame(()=>{
-    if(root.classList.contains('tffc-campaign-results'))return;
+    if(root.classList.contains('tffc-campaign-results')||keyboardFocused())return;
     const actualBottom=Math.max(upper.getBoundingClientRect().bottom,lower.getBoundingClientRect().bottom);
     const visibleHeight=window.visualViewport?.height||window.innerHeight;
     if(actualBottom>visibleHeight-16){
@@ -2293,6 +2296,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  window.addEventListener('resize',schedule);
  window.addEventListener('orientationchange',schedule);
  window.visualViewport?.addEventListener('resize',schedule);
+ postcode?.addEventListener('blur',()=>setTimeout(schedule,300));
  document.fonts?.ready?.then(schedule);
  schedule();
 })();
