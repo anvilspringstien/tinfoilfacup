@@ -34,6 +34,7 @@ times = {key: checked_time(run) for key, run in runs.items()}
 both = all(times.values())
 payload = {
     "schema_version": 1,
+    "monitor_ran_at": NOW.isoformat().replace("+00:00", "Z"),
     "state": "checked" if both else "unverified",
     "last_checked_at": min(times.values()).isoformat().replace("+00:00", "Z") if both else None,
     "results": "success" if times["results"] else "unverified",
