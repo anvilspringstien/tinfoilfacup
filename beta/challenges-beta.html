@@ -1998,7 +1998,7 @@ const pigeonNameField=$("truthPigeonName");
 // Edit the existing Clubfinder Campaign identity; never create a parallel name.
 const storedCampaign=readChallengeStorageJSON("tinFoilFACupJourney_v7");
 if(storedCampaign && campaignIdentity.callSign &&
-   String(storedCampaign.callSign||"").trim()===campaignIdentity.callSign){
+   String(storedCampaign.callSign||"").trim()===campaignIdentity.callSign && Object.prototype.hasOwnProperty.call(storedCampaign,"pigeonName")){
   campaignIdentity.pigeonName=String(storedCampaign.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
 }
 pigeonNameField.innerHTML='<input id="challengePigeonNameInput" type="text" maxlength="20" autocomplete="off" aria-label="Pigeon name" placeholder="Name your pigeon">';
