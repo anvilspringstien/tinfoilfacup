@@ -35,6 +35,10 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
  .grassroots{white-space:normal}
 }
 
+/* Opt-in large-screen proportional-fit experiment; phone and default BETA unchanged. */
+@media(min-width:700px){
+ html.tffc-viewport-fit .stage{zoom:var(--tffc-fit-scale,1)}
+}
 </style></head><body><main class="stage"><section class="field" aria-label="Tin Foil FA Cup introduction"><div class="content"><img class="crest" src="tffc-splash-logo-q80.webp" alt="Tin Foil FA Cup crest"><div class="intro"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1></div><p><span class="line">Experience the magic of your</span><span class="line">own Cup Run as you try to</span><span class="line">get to Wembley — for real!</span></p><a class="start" href="clubfinder-beta.html">Start Campaign</a><div class="grassroots"><span class="full">Tin Foil FA Cup supports Grassroots Football in the best way possible — Through the Turnstiles</span><span class="short">Supporting grassroots football — Through the Turnstiles</span></div></div></section></main><script>
 /* Read-only, opt-in viewport geometry diagnostic. No layout changes in normal use. */
 (function(){
@@ -49,5 +53,23 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
  function measure(){const splash=!!document.querySelector('.stage .field');const field=box(splash?'.stage .field':'#tffcFourLaws .tffcOuter');const crest=box(splash?'.stage .crest':'#tffcFourLaws .tffcCrest');const result={page:splash?'Splash':'Clubfinder',viewport:{width:innerWidth,height:innerHeight,visualWidth:visualViewport?.width,visualHeight:visualViewport?.height},field,crest,crestFromField:field&&crest?+(crest.top-field.top).toFixed(2):null,crestFromScreen:crest?.top??null};pre.textContent=JSON.stringify(result,null,2);return pre.textContent}
  button.onclick=async()=>{const value=measure();try{await navigator.clipboard.writeText(value);button.textContent='Copied!'}catch(e){const ta=document.createElement('textarea');ta.value=value;panel.append(ta);ta.select();button.textContent='Select and copy report below'}};
  window.addEventListener('load',()=>setTimeout(measure,400));measure();
+})();
+</script><script>
+/* Opt-in proof of concept: ?viewportFit=1; no persistent settings. */
+(function(){
+ if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
+ document.documentElement.classList.add('tffc-viewport-fit');
+ const stage=document.querySelector('.stage');
+ const update=()=>{
+  stage.style.setProperty('--tffc-fit-scale','1');
+  const available=window.innerHeight-12;
+  const natural=Math.max(stage.getBoundingClientRect().height,document.documentElement.scrollHeight);
+  const scale=Math.min(1,available/natural);
+  stage.style.setProperty('--tffc-fit-scale',String(Math.max(.5,scale)));
+ };
+ window.addEventListener('load',update);
+ window.addEventListener('resize',update);
+ document.fonts?.ready?.then(update);
+ update();
 })();
 </script></body></html>
