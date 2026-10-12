@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-10-12",
+  "verified": [
+    {
+      "club": "Alton FC",
+      "url": "https://www.altonfc.com/",
+      "evidence_url": "https://www.altonfc.com/",
+      "status": "verified_official_club_site"
+    },
+    {
+      "club": "Arlesey Town FC",
+      "url": "https://www.arleseytownfc.co.uk/",
+      "evidence_url": "https://www.arleseytownfc.co.uk/",
+      "status": "verified_official_club_site"
+    },
+    {
+      "club": "Barnstaple Town FC",
+      "url": "https://www.barnstapletownfc.co.uk/",
+      "evidence_url": "https://www.barnstapletownfc.co.uk/",
+      "status": "verified_official_club_site"
+    }
+  ],
+  "deferred": [
+    {
+      "club": "Barwell FC",
+      "reason": "Search results conflate senior Barwell FC with AFC Barwell youth/community organisation"
+    },
+    {
+      "club": "Barking FC",
+      "reason": "Official club identity and URL not yet corroborated"
+    },
+    {
+      "club": "Bashley FC",
+      "reason": "Official club identity and URL not yet corroborated"
+    }
+  ]
+}
