@@ -130,10 +130,10 @@ function store(deck,bridge,identity){
   assert(savedAfterLaunch.completed['02'],'Verified milestone not persisted');
 
   first.nodes.exitBtn.onclick({preventDefault(){},stopPropagation(){},stopImmediatePropagation(){}});
-  assert.equal(first.location.href,'__HISTORY_BACK__',
-    'Normal Clubfinder-origin Exit must return through existing browser history');
-  assert.equal(first.ctx.history.backCalls,1,
-    'Normal Clubfinder-origin Exit must use one history.back call');
+  assert.equal(first.location.href,'clubfinder-beta.html?from=challenges-exit-v3',
+    'Clubfinder-origin Exit must use deterministic Frame 2 return route');
+  assert.equal(first.ctx.history.backCalls,0,
+    'Clubfinder-origin Exit must not rely on browser history');
   assert.equal(session['tffc.challengeOrigin'],undefined,
     'Exit must consume only the Challenges origin marker');
   assert.equal(session.otherSession,'preserve me','Exit cleared unrelated session data');

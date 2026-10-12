@@ -1495,7 +1495,7 @@ function tinFoilRestoreClubfinderReturnSnapshot(){
     results.innerHTML=snapshot.resultsHtml;
     results.style.display='block';
     const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';
-    requestAnimationFrame(()=>{try{window.scrollTo(0,Math.max(0,Number(snapshot.scrollY)||0))}catch(e){}});
+    /* Return position is owned by tffcScrollToFinder after the restored view paints. */
     return true;
   }catch(e){return false}
 }
@@ -1965,7 +1965,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '@media(max-width:650px){body{padding:8px}.sheet{padding:20px 14px;min-height:0}.top{grid-template-columns:1.35fr .75fr;gap:10px}.logo{width:140px}.glance{grid-template-columns:repeat(2,1fr)}.g:nth-child(2n){border-right:0}.g:last-child{grid-column:auto}.journey-head{display:none}.journey-row{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.bottom>div+div{border-left:0;border-top:1px solid #d40000}.section-title:before,.section-title:after{width:45px}}'+
   '@media screen and (max-width:650px),screen and (max-device-width:650px){.campaign-identity-band{padding:11px 10px;white-space:normal;overflow-wrap:anywhere}.campaign-identity-label{font-size:8pt}.campaign-identity-value{font-size:9pt;letter-spacing:0;overflow-wrap:anywhere}.campaign-identity-name-row{display:flex;align-items:baseline;flex-wrap:nowrap;gap:0 5px;margin-top:4px;min-width:0}.campaign-identity-name-row .campaign-identity-separator{display:none}.campaign-identity-name-row .campaign-identity-label{flex:0 0 auto;white-space:nowrap}.campaign-identity-name-row .campaign-identity-value{flex:1 1 auto;min-width:0;white-space:normal;overflow-wrap:anywhere}}'+
   '@page{size:A4 portrait;margin:8mm}@media print{html,body{width:100%;margin:0;padding:0;background:#fff}.sheet{width:100%;min-height:0;margin:0;border-width:4px;box-shadow:none;padding:7mm 6.5mm 5mm}.stats-return,.print{display:none!important}.top{break-inside:avoid;page-break-inside:avoid}.section-title{break-after:avoid;page-break-after:avoid}.glance,.challenge-honours,.bottom,.motto{break-inside:avoid;page-break-inside:avoid}.journey-row{break-inside:avoid;page-break-inside:avoid}.bottom{break-before:auto;page-break-before:auto;margin-bottom:4mm}.bottom>div{min-height:0;padding:10px 12px}.bt{font-size:16pt;margin-bottom:7px}.next-round{font-size:12pt;margin-bottom:6px}.next-fixture{font-size:13px}.after-replay{margin-top:8px;padding-top:7px}.after-round{font-size:10.5pt}.after-fixture{font-size:10pt}.after-meta{font-size:9pt}.motto{margin-top:4mm}}'+
-  '</style></head><body><main class="sheet"><div class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){window.opener.focus();window.close();}else{history.back();}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"Back to Challenges":"Back to Clubfinder")+'</button></div>'+
+  '</style></head><body><main class="sheet"><div class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"Back to Challenges":"Back to Clubfinder")+'</button></div>'+
 
   '<section class="top"><div class="top-left"><div class="stats-title">STATS</div><div class="sub">YOUR TIN FOIL FA CUP CAMPAIGN</div><div class="red-star">★</div><div class="minor">STARTED WITH:</div><div class="club">'+certEsc(origin.name)+'</div><div class="tiny-rule"></div><div class="minor">CURRENT CUSTODIAN:</div><div class="club">'+certEsc(carrier.name)+'</div></div>'+
   '<div class="top-right"><img class="logo" src="assets/stats-report/header-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><div class="tiny-rule"></div><div class="season">'+season+'</div><div class="tiny-rule"></div></div></section>'+(campaignCallSign?'<section class="campaign-identity-band"><span class="campaign-identity-label">PIGEON CALL SIGN:</span> <span class="campaign-identity-value">'+certEsc(campaignCallSign)+'</span>'+(campaignPigeonName?' <span class="campaign-identity-name-row"><span class="campaign-identity-label"><span class="campaign-identity-separator" aria-hidden="true">· </span>PIGEON NAME:</span> <span class="campaign-identity-value">'+certEsc(campaignPigeonName)+'</span></span>':'')+'</section>':'')+
@@ -2072,16 +2072,18 @@ document.getElementById('postcode').addEventListener('input',function(){this.val
 const tinFoilRouteParams=new URLSearchParams(window.location.search||'');
 const tinFoilStatsRouteRequested=tinFoilRouteParams.get('stats')==='1';
 const tinFoilChallengeExitReturn=tinFoilRouteParams.get('from')==='challenges-exit-v3';
+const tinFoilStatsExitReturn=tinFoilRouteParams.get('from')==='stats-exit-v1';
+const tinFoilAnyReturn=tinFoilChallengeExitReturn||tinFoilStatsExitReturn;
 try{sessionStorage.removeItem('tffc.openStatsOnReturn')}catch(e){}
 
 /* On a Challenges Exit/Maybe Later return, repaint the exact Campaign view
    immediately. This avoids a blank Clubfinder while postcode/live-data
    services are being contacted and keeps navigation independent of history. */
-const tinFoilReturnedCampaignSnapshot=!tinFoilStatsRouteRequested&&tinFoilChallengeExitReturn
+const tinFoilReturnedCampaignSnapshot=!tinFoilStatsRouteRequested&&tinFoilAnyReturn
   ? tinFoilRestoreClubfinderReturnSnapshot()
   : false;
-if(tinFoilReturnedCampaignSnapshot){requestAnimationFrame(()=>requestAnimationFrame(()=>tffcScrollToFinder()))}
-if(tinFoilChallengeExitReturn){
+if(tinFoilAnyReturn){requestAnimationFrame(()=>requestAnimationFrame(()=>tffcScrollToFinder()))}
+if(tinFoilAnyReturn){
   try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}
 }
 
