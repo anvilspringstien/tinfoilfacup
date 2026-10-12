@@ -1999,7 +1999,7 @@ const pigeonNameField=$("truthPigeonName");
 const storedCampaign=readChallengeStorageJSON("tinFoilFACupJourney_v7");
 if(storedCampaign && campaignIdentity.callSign &&
    String(storedCampaign.callSign||"").trim()===campaignIdentity.callSign){
-  campaignIdentity.pigeonName=String(storedCampaign.pigeonName||"").replace(/\\s+/g," ").trim().slice(0,20);
+  campaignIdentity.pigeonName=String(storedCampaign.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
 }
 pigeonNameField.innerHTML='<input id="challengePigeonNameInput" type="text" maxlength="20" autocomplete="off" aria-label="Pigeon name" placeholder="Name your pigeon">';
 const pigeonInput=$("challengePigeonNameInput");
@@ -2008,7 +2008,7 @@ pigeonInput.onchange=()=>{
   const saved=readChallengeStorageJSON("tinFoilFACupJourney_v7");
   if(!saved || !campaignIdentity.callSign ||
      String(saved.callSign||"").trim()!==campaignIdentity.callSign)return;
-  const name=pigeonInput.value.replace(/\\s+/g," ").trim().slice(0,20);
+  const name=pigeonInput.value.replace(/\s+/g," ").trim().slice(0,20);
   saved.pigeonName=name;
   localStorage.setItem("tinFoilFACupJourney_v7",JSON.stringify(saved));
   const backup=readChallengeStorageJSON("tffc.clubfinderCampaignIdentity.v1");
