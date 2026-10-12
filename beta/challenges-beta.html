@@ -1271,10 +1271,6 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
     <div class="beta-help-links">
       <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a>
       <span class="beta-help-sep" aria-hidden="true">·</span>
-      <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
-      <span class="beta-help-sep" aria-hidden="true">·</span>
-      <button class="beta-help-link" type="button" id="challengePrivacyLink">Privacy</button>
-      <span class="beta-help-sep" aria-hidden="true">·</span>
       <button class="beta-help-link" type="button" id="challengeSimulatorAboutLink">About Simulator</button>
     </div>
   </div>
@@ -1833,7 +1829,7 @@ function tinFoilSimulatorAboutNotice(){
     overlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcSimulatorAboutTitle" aria-describedby="tffcSimulatorAboutMessage"><div id="tffcSimulatorAboutTitle" class="tffc-confirm-title">About the Simulator</div><div id="tffcSimulatorAboutMessage" class="tffc-confirm-message"></div><div class="tffc-privacy-actions"><button id="tffcSimulatorAboutClose" type="button">Close</button></div></div>';
     document.body.appendChild(overlay);
   }
-  document.getElementById('tffcSimulatorAboutMessage').textContent='The Simulator lets us test how Challenges are earned, completed and displayed without waiting for real FA Cup results.\n\nWe\'ve kept it available so you can explore how the Challenge Deck works and have a little fun with Barry.\n\nSimulated progress is separate from your real Tin Foil FA Cup Campaign. Playing with it can\'t break anything and hitting the big reset button will bring you back to real life.';
+  document.getElementById('tffcSimulatorAboutMessage').textContent='The Simulator lets us test how Challenges are earned, completed and displayed without waiting for real FA Cup results.\n\nWe\'ve kept it available so you can explore how the Challenge Deck works and have a little fun with Barry the Pigeon.\n\nSimulated progress is separate from your real Tin Foil FA Cup Campaign. Playing with it can\'t break anything and hitting the big reset button will bring you back to real life.';
   const close=document.getElementById('tffcSimulatorAboutClose'),previous=document.activeElement;
   overlay.hidden=false;
   function finish(){document.removeEventListener('keydown',onKey);overlay.hidden=true;close.onclick=null;overlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus();}
