@@ -3,6 +3,13 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "55 * * * *"
+  # Bootstrap and validate the monitor after changes to its own machinery.
+  # GITHUB_TOKEN status commits do not retrigger push workflows.
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-competition-check-status.yml"
+      - "updater/publish_competition_check_status.py"
 
 permissions:
   actions: read
