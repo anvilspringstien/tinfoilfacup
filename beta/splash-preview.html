@@ -59,7 +59,7 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
    Preserve the existing crestMeasure diagnostic when requested. */
 (function(){
  const params=new URLSearchParams(location.search);
- if(params.get('viewportFit')!=='1')return;
+ if(params.get('viewportFit')==='0')return;
  const start=document.querySelector('a.start');
  if(!start)return;
  const target=new URL(start.getAttribute('href'),location.href);
@@ -68,7 +68,7 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
 })();
 /* Opt-in proof of concept: ?viewportFit=1; no persistent settings. */
 (function(){
- if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
+ if(new URLSearchParams(location.search).get('viewportFit')==='0'||window.innerWidth<700)return;
  document.documentElement.classList.add('tffc-viewport-fit');
  const stage=document.querySelector('.stage');
  const field=stage.querySelector('.field');
