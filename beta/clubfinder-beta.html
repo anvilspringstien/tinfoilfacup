@@ -103,6 +103,9 @@ html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest
 #clubfinderField #liveDataTools{margin-top:6px;position:relative;width:min(360px,100%);margin-left:auto;margin-right:auto;padding:0 6px;color:#fafafa;isolation:isolate;transform:translateY(-16px)}
 #clubfinderField #liveDataTools::before{content:"";position:absolute;z-index:-1;top:-10px;right:0;bottom:-10px;left:0;background:rgba(8,76,97,.90);border-radius:0 0 5px 5px;pointer-events:none}
 #clubfinderField #liveDataBadge{position:relative;z-index:1;color:#fafafa;text-align:center;font-size:clamp(8px,2.5vw,11px);line-height:14px;white-space:nowrap;letter-spacing:-.15px}
+/* Match the existing iPad landscape postcode placeholder sizing without changing console geometry. */
+@media (min-width:700px) and (max-width:1199px) and (orientation:landscape){html.tffc-opening-fit:not(.tffc-campaign-results) #clubfinderField #liveDataBadge{font-size:8.5px}}
+
 #clubfinderField{padding-bottom:8px}
 html.tffc-stats-route #tffcFourLaws,html.tffc-stats-route .tffcPostcodeHelp{display:none!important}
 @media(max-width:600px){#tffcFourLaws .tffcSmall{font-size:clamp(10px,2.6cqw,13px)}#tffcFourLaws ol{font-size:clamp(13px,3.6cqw,18px)}#tffcFourLaws h1{font-size:clamp(35px,10cqw,52px)}}
