@@ -3,5 +3,23 @@
   "state": "unverified",
   "last_checked_at": null,
   "results": "unverified",
-  "draw": "unverified"
+  "draw": "unverified",
+  "diagnostics": {
+    "results": {
+      "reason": "not_successful",
+      "run_id": 38270189514,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/38270189514",
+      "status": "completed",
+      "conclusion": "failure",
+      "updated_at": "2026-10-12T15:29:06Z"
+    },
+    "draw": {
+      "reason": "stale",
+      "run_id": 38212682949,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/38212682949",
+      "status": "completed",
+      "conclusion": "success",
+      "updated_at": "2026-10-12T06:28:41Z"
+    }
+  }
 }
