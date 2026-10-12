@@ -172,7 +172,7 @@ function store(deck,bridge,identity){
     'Matching backup did not restore the full Pigeon Name');
   const wrongOrigin=boot(store(baseSave(),truth({pigeonName:''}),
     backup({originName:'Wimborne Town FC',pigeonName:'Wrong Origin'})));
-  assert.match(wrongOrigin.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+  assert.match(wrongOrigin.nodes.truthPigeonName.innerHTML,/placeholder="Name your pigeon"/,
     'Missing name did not offer the safe Clubfinder naming action');
   assert.doesNotMatch(wrongOrigin.nodes.truthPigeonName.innerHTML,/Wrong Origin/,
     'Different origin pigeon identity leaked into current campaign');
@@ -180,7 +180,7 @@ function store(deck,bridge,identity){
     'Different-origin backup replaced current verified Call Sign');
   const wrongSelection=boot(store(baseSave(),truth({pigeonName:''}),
     backup({selectedAt:'2026-09-20T08:00:00.000Z',pigeonName:'Old Campaign'})));
-  assert.match(wrongSelection.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+  assert.match(wrongSelection.nodes.truthPigeonName.innerHTML,/placeholder="Name your pigeon"/,
     'Missing name did not offer the safe Clubfinder naming action');
   assert.doesNotMatch(wrongSelection.nodes.truthPigeonName.innerHTML,/Old Campaign/,
     'Old selection pigeon identity leaked into new campaign');
@@ -221,7 +221,7 @@ function store(deck,bridge,identity){
     'Numeric-string campaign round not accepted');
 
   const noBackup=boot(store(baseSave(),truth({pigeonName:'',callSign:''})));
-  assert.match(noBackup.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+  assert.match(noBackup.nodes.truthPigeonName.innerHTML,/placeholder="Name your pigeon"/,
     'Absent identity backup should offer safe Clubfinder naming');
   assert.doesNotMatch(noBackup.nodes.truthPigeonName.innerHTML,/Pigeon McPigeonface/,
     'Absent identity backup should not invent a Pigeon Name');
@@ -230,7 +230,7 @@ function store(deck,bridge,identity){
   const malformedBackup=store(baseSave(),truth({pigeonName:'',callSign:''}));
   malformedBackup[IDENTITY]='{malformed json';
   const bad=boot(malformedBackup);
-  assert.match(bad.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+  assert.match(bad.nodes.truthPigeonName.innerHTML,/placeholder="Name your pigeon"/,
     'Malformed identity backup should fall back to safe Clubfinder naming');
   assert.doesNotMatch(bad.nodes.truthPigeonName.innerHTML,/Pigeon McPigeonface/,
     'Malformed identity backup should not crash or leak another Pigeon Name');
@@ -242,7 +242,7 @@ function store(deck,bridge,identity){
   const undatedMismatch=boot(store(baseSave(),
     truth({pigeonName:'',selectedAt:undefined}),
     backup({originName:'Wimborne Town FC',pigeonName:'Other Pigeon'})));
-  assert.match(undatedMismatch.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+  assert.match(undatedMismatch.nodes.truthPigeonName.innerHTML,/placeholder="Name your pigeon"/,
     'Undated wrong-origin backup should offer safe Clubfinder naming');
   assert.doesNotMatch(undatedMismatch.nodes.truthPigeonName.innerHTML,/Other Pigeon/,
     'Missing date must not allow a different-origin identity to leak');
@@ -284,7 +284,7 @@ function store(deck,bridge,identity){
     assert.equal(app.read('state.pigeonMiles'),75,'Invalid bridge overwrote saved mileage');
     assert.equal(app.read('Boolean(state.completed["01"])'),true,
       'Invalid bridge erased earned trophy');
-    assert.match(app.nodes.truthPigeonName.innerHTML,/Name Your Pigeon in Clubfinder/,
+    assert.match(app.nodes.truthPigeonName.innerHTML,/placeholder="Name your pigeon"/,
       'Invalid bridge should fall back to safe Clubfinder naming');
     assert.doesNotMatch(app.nodes.truthPigeonName.innerHTML,/Wrong Origin|Old Campaign|Other Pigeon/,
       'Invalid bridge invented a campaign identity');
