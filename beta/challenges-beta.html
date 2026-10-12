@@ -1908,21 +1908,35 @@ if(challengeAboutLinkFooter)challengeAboutLinkFooter.onclick=(e)=>{e.preventDefa
 const challengeShareLinkFooter=$("challengeShareLinkFooter");
 if(challengeShareLinkFooter)challengeShareLinkFooter.onclick=(e)=>{
  e.preventDefault();e.stopPropagation();
- const url=new URL('clubfinder-beta.html',location.href).href;
- let panel=document.getElementById('tffcChallengeShareOverlay');
- if(!panel){
-  panel=document.createElement('div');
-  panel.id='tffcChallengeShareOverlay';panel.className='tffc-confirm-overlay';panel.hidden=true;
-  panel.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcChallengeShareTitle"><div id="tffcChallengeShareTitle" class="tffc-confirm-title">Share Tin Foil FA Cup</div><p>Find your nearest eligible clubs, follow your Campaign and try our new Challenges.</p><input class="tffc-share-link" type="text" readonly aria-label="Clubfinder BETA link"><div class="tffc-about-actions"><button type="button" class="tffc-share-close">Close</button></div></div>';
-  document.body.appendChild(panel);
+ let host=document.getElementById('tffcChallengeShareHost');
+ if(!host){
+  host=document.createElement('div');host.id='tffcChallengeShareHost';
+  host.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.76);display:flex;align-items:center;justify-content:center';
+  const frame=document.createElement('iframe');
+  frame.title='Share Tin Foil FA Cup';frame.setAttribute('aria-label','Share Tin Foil FA Cup');
+  frame.setAttribute('allow','clipboard-write');
+  frame.style.cssText='display:block;border:0;width:100%;height:100%;background:transparent';
+  host.appendChild(frame);document.body.appendChild(host);
+  host.addEventListener('click',ev=>{if(ev.target===host)closeChallengeShare()});
  }
- const input=panel.querySelector('input');input.value=url;
- const close=panel.querySelector('.tffc-share-close');
- const finish=()=>{panel.hidden=true;document.removeEventListener('keydown',onKey);panel.onclick=null;close.onclick=null;};
- const onKey=ev=>{if(ev.key==='Escape'){ev.preventDefault();finish()}};
- panel.hidden=false;panel.onclick=ev=>{if(ev.target===panel)finish()};close.onclick=finish;
+ const priorFocus=document.activeElement;
+ const priorOverflow=document.body.style.overflow;
+ function closeChallengeShare(){
+  if(!host.isConnected)return;
+  host.remove();document.body.style.overflow=priorOverflow;
+  window.removeEventListener('message',onMessage);
+  document.removeEventListener('keydown',onKey);
+  if(priorFocus&&priorFocus.isConnected)priorFocus.focus({preventScroll:true});
+ }
+ function onMessage(ev){
+  if(ev.origin===location.origin&&ev.source===host.querySelector('iframe')?.contentWindow&&ev.data?.type==='tffc-share-close')closeChallengeShare();
+ }
+ function onKey(ev){if(ev.key==='Escape')closeChallengeShare();}
+ window.addEventListener('message',onMessage);
  document.addEventListener('keydown',onKey);
- input.onclick=()=>input.select();input.focus();input.select();
+ document.body.style.overflow='hidden';
+ host.querySelector('iframe').src='share-popup-embed.html';
+ host.querySelector('iframe').focus();
 };
 const challengePrivacyLinkFooter=$("challengePrivacyLinkFooter");
 if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
