@@ -2175,4 +2175,44 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  if(typeof window.addEventListener==='function')window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='tffc-share-close'&&e.source===document.getElementById('tffcShareHost')?.querySelector('iframe')?.contentWindow)tffcCloseShare()});
  if(typeof document.addEventListener==='function')document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcCloseShare()});
 })();
+</script><style>
+/* Opt-in large-screen opening fit. Never scale phone or Campaign results. */
+@media(min-width:700px){
+ html.tffc-opening-fit:not(.tffc-campaign-results):not(.tffc-stats-route) body{
+  zoom:var(--tffc-opening-scale,1);
+ }
+}
+</style>
+<script>
+/* BETA-only ?viewportFit=1: fit the two opening frames as one unit. */
+(function(){
+ if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
+ const root=document.documentElement;
+ if(root.classList.contains('tffc-stats-route'))return;
+ root.classList.add('tffc-opening-fit');
+ const upper=document.querySelector('#tffcFourLaws .tffcOuter');
+ const lower=document.querySelector('#clubfinderField');
+ if(!upper||!lower)return;
+ let pending=false;
+ const update=()=>{
+  pending=false;
+  if(root.classList.contains('tffc-campaign-results')){
+   root.style.removeProperty('--tffc-opening-scale');
+   return;
+  }
+  root.style.setProperty('--tffc-opening-scale','1');
+  const bottom=Math.max(upper.getBoundingClientRect().bottom,lower.getBoundingClientRect().bottom);
+  const viewport=window.visualViewport?.height||window.innerHeight;
+  root.style.setProperty('--tffc-opening-scale',String(Math.min(1,Math.max(1,viewport-16)/Math.max(1,bottom))));
+ };
+ const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(update)}};
+ const observer=new MutationObserver(schedule);
+ observer.observe(root,{attributes:true,attributeFilter:['class']});
+ window.addEventListener('load',schedule);
+ window.addEventListener('resize',schedule);
+ window.addEventListener('orientationchange',schedule);
+ window.visualViewport?.addEventListener('resize',schedule);
+ document.fonts?.ready?.then(schedule);
+ schedule();
+})();
 </script></body></html>
