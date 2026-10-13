@@ -2265,8 +2265,8 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
    if(selected&&!showOriginal){
      // Clear primary navigation versus secondary Campaign housekeeping.
      // My Campaign returns to the field without another postcode search.
-     const statsButton='<button class="round stats-action" type="button" onclick=\'journeyCertificate(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\\'>My Stats</button>';
-     const challengesButton='<button class="round challenges-launch" type="button" onclick=\'openChallenges(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\\'>My Challenges</button>';
+     const statsButton='<button class="round stats-action" type="button" onclick=\'journeyCertificate(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Stats</button>';
+     const challengesButton='<button class="round challenges-launch" type="button" onclick=\'openChallenges(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Challenges</button>';
      const campaignHousekeeping=saved&&saved.ended
        ?'<button class="round" type="button" onclick="resumeMyJourney()">Resume My Campaign</button>'
        :'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button>';
