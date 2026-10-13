@@ -116,14 +116,14 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--csv", type=Path)
     p.add_argument("--date", help="UTC creation date, YYYY-MM-DD")
-    p.add_argument("--through", required=True, help="UTC observation boundary, ISO timestamp")
+    p.add_argument("--through", help="UTC observation boundary, ISO timestamp")
     p.add_argument("--self-test", action="store_true")
     args = p.parse_args()
     if args.self_test:
         self_test()
         return
-    if not args.csv or not args.date:
-        p.error("--csv and --date are required unless --self-test")
+    if not args.csv or not args.date or not args.through:
+        p.error("--csv, --date and --through are required unless --self-test")
     result = inspect(read_csv(args.csv), dt.date.fromisoformat(args.date),
                      parse_time(args.through) if args.through else None)
     print(json.dumps(result, indent=2))
