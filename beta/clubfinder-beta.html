@@ -153,6 +153,66 @@
   line-height:1.4;
  }
 }
+/* BETA Clubfinder — preserve the existing round button language; promote the next action.
+   44px is deliberately close to Find My Club's 40px, not a new 60px button system. */
+.journey-choice{width:100%;margin-bottom:10px}
+.journey-choice .journey-lozenge{
+ display:inline-flex;
+ align-items:stretch;
+ width:min(100%,370px);
+ max-width:100%;
+ min-height:44px;
+}
+.journey-choice .journey-lozenge .round{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ width:100%;
+ min-height:44px;
+ padding:8px 12px;
+ font:600 13px/1.25 Poppins,Arial,sans-serif;
+ text-align:center;
+ white-space:normal;
+}
+.my-journey-bar.campaign-nav-tiered{
+ display:flex;
+ flex-direction:column;
+ align-items:stretch;
+ gap:8px;
+ margin:0 0 12px;
+}
+.campaign-primary-nav{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:6px;
+ width:100%;
+}
+.my-journey-bar .campaign-primary-nav button.round{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ min-width:0;
+ width:100%;
+ min-height:44px;
+ padding:6px 5px;
+ margin:0;
+ font:600 clamp(11px,3vw,13px)/1.25 Poppins,Arial,sans-serif;
+ text-align:center;
+ white-space:normal;
+ overflow-wrap:normal;
+}
+.campaign-secondary-nav{
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:6px;
+}
+.campaign-secondary-nav button.round{margin:0}
+.my-journey-bar .campaign-primary-nav button.round:focus-visible,
+.journey-choice .journey-lozenge:focus-visible{
+ outline:2px solid #084c61;
+ outline-offset:3px;
+}
 .campaign-identity[hidden]{display:none}
 /* BETA mobile: preserve the two identity rows while allowing the name field to flex safely. */
 @media(max-width:680px){
@@ -2202,7 +2262,25 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
    const mine=saved&&sameClubIdentity(saved.originName,origin.name),jn=oi>=0?oi+1:di+1;
    const heading=selected&&!showOriginal?'':`<div class="journey-choice"><button class="journey-lozenge" type="button" title="Make This My Tin Foil FA Cup Campaign" aria-label="Make Tin Foil FA Cup Campaign ${jn} my Campaign" onclick='chooseJourney(${JSON.stringify(origin.name)},${JSON.stringify(u.postcode)})'><span class="round"><span class="default-label">Choose Tin Foil FA Cup Campaign ${jn}</span><span class="hover-label">Make This My Tin Foil FA Cup Campaign</span></span></button></div>`;
    let tools='';
-   if(selected&&!showOriginal)tools='<div class="my-journey-bar"><span class="round">My Tin Foil FA Cup Campaign</span><button class="round" type="button" onclick="viewOriginalJourneys()">View Original Campaigns</button><button class="round stats-action" type="button" onclick=\'journeyCertificate(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>'+(saved&&saved.ended?'Stats':'Stats')+'</button><button class="round challenges-launch" type="button" onclick=\'openChallenges(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>Challenges</button>'+(saved&&saved.ended?'<button class="round" type="button" onclick="resumeMyJourney()">Resume My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>':'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>')+'</div>';
+   if(selected&&!showOriginal){
+     // Clear primary navigation versus secondary Campaign housekeeping.
+     // My Campaign returns to the field without another postcode search.
+     const statsButton='<button class="round stats-action" type="button" onclick=\'journeyCertificate(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Stats</button>';
+     const challengesButton='<button class="round challenges-launch" type="button" onclick=\'openChallenges(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Challenges</button>';
+     const campaignHousekeeping=saved&&saved.ended
+       ?'<button class="round" type="button" onclick="resumeMyJourney()">Resume My Campaign</button>'
+       :'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button>';
+     tools='<div class="my-journey-bar campaign-nav-tiered">'
+       +'<div class="campaign-primary-nav" aria-label="Your Campaign sections">'
+       +'<button class="round campaign-current" type="button" aria-current="page" onclick="tffcScrollToFinder()">My Campaign</button>'
+       +statsButton+challengesButton+'</div>'
+       +'<div class="campaign-secondary-nav" aria-label="Campaign controls">'
+       +'<button class="round" type="button" onclick="viewOriginalJourneys()">View Original Campaigns</button>'
+       +campaignHousekeeping
+       +'<button class="round" type="button" onclick="resetFinder()">Reset</button>'
+       +'<button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>'
+       +'</div></div>';
+   }
    else if(selected&&showOriginal)tools='<div class="my-journey-bar"><button class="round" type="button" onclick="returnToMyJourney()">Return to My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button></div>';
    const ended=mine&&saved&&saved.ended?'<div class="journey-ended"><strong>Campaign completed here.</strong><br>You can still view your certificate or resume this Tin Foil FA Cup Campaign.</div>':'';
    const chosen=mine&&selected&&!showOriginal;
