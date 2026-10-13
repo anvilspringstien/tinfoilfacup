@@ -34,11 +34,13 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .trophy-viewer-mat:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px;border-radius:15px}
 .trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1)}
 .trophy-viewer-card.flipped{transform:rotateX(180deg)}
+.trophy-viewer-card.barry-flipped{transform:rotateX(360deg)}
 .trophy-viewer-face{position:absolute;inset:0;overflow:hidden;border:2px solid #3b2c1d;border-radius:18px;background:#d7c49d;backface-visibility:hidden;box-shadow:0 18px 45px rgba(0,0,0,.38)}
 .trophy-viewer-face.back{transform:rotateX(180deg)}
 .trophy-viewer-face img{width:100%;height:100%;object-fit:cover;display:block}
 .barrys-bit-mat[hidden]{display:none!important}
-.barrys-bit-mat{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(9px,2.2vw,17px);padding:clamp(22px,6vw,55px);border:3px solid #9b7b43;border-radius:18px;background:#f1e5bd;color:#34291b;box-shadow:inset 0 0 0 10px #e4d0a1,0 18px 45px rgba(0,0,0,.38);font-family:Poppins,Arial,sans-serif}
+.barrys-bit-mat.revealed{transform:rotateX(0deg)}
+.barrys-bit-mat{transform:rotateX(-180deg);backface-visibility:hidden;transition:transform .52s cubic-bezier(.2,.75,.25,1);position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(9px,2.2vw,17px);padding:clamp(22px,6vw,55px);border:3px solid #9b7b43;border-radius:18px;background:#f1e5bd;color:#34291b;box-shadow:inset 0 0 0 10px #e4d0a1,0 18px 45px rgba(0,0,0,.38);font-family:Poppins,Arial,sans-serif}
 .barrys-bit-heading{font-size:clamp(20px,5.5vw,39px);font-weight:700;letter-spacing:.05em}
 .barrys-bit-sub{font-size:clamp(12px,2.5vw,19px);font-weight:600;letter-spacing:.15em}
 .barrys-bit-rule{width:65%;border-top:2px solid #9b7b43}
@@ -1783,10 +1785,11 @@ function openTrophy(c,origin){
   trophyViewerProclaimer=(c.id==="17");
   trophyViewerBitShown=false;
   $("barrysBitMat").hidden=true;
+  $("barrysBitMat").classList.remove("revealed");
   $("trophyViewerFront").src=ART[c.id]?.front || CANONICAL_CUP || "";
   $("trophyViewerBack").src=ART[c.id]?.back || CANONICAL_CUP || "";
   trophyViewer.setAttribute("aria-label",c.title+" — achieved trophy");
-  trophyViewerCard.classList.remove("flipped");
+  trophyViewerCard.classList.remove("flipped","barry-flipped");
   trophyViewerHint.textContent="Tap to flip";
   trophyViewerMat.setAttribute("aria-label",c.title+" — tap to flip");
   trophyViewerOpen=true;
@@ -1799,8 +1802,9 @@ function closeTrophy(){
   trophyViewerOpen=false;
   trophyViewer.classList.remove("open");
   trophyViewer.hidden=true;
-  trophyViewerCard.classList.remove("flipped");
+  trophyViewerCard.classList.remove("flipped","barry-flipped");
   $("barrysBitMat").hidden=true;
+  $("barrysBitMat").classList.remove("revealed");
   trophyViewerBitShown=false;
   trophyViewerProclaimer=false;
   const origin=trophyOrigin;
@@ -1815,7 +1819,11 @@ function advanceTrophy(){
   if(trophyViewerFlipped){
     if(!trophyViewerProclaimer){closeTrophy();return;}
     trophyViewerBitShown=true;
-    $("barrysBitMat").hidden=false;
+    const bit=$("barrysBitMat");
+    bit.hidden=false;
+    void bit.offsetWidth; // Ensure reverse face is ready before the flip begins.
+    trophyViewerCard.classList.add("barry-flipped");
+    bit.classList.add("revealed");
     trophyViewerHint.textContent="Tap to close";
     trophyViewerMat.setAttribute("aria-label","Barry’s Bits — tap to close Trophy");
     return;
