@@ -33,6 +33,7 @@ const nodes={
 };
 const pigeon={hidden:false,innerHTML:'Before Stats'};
 const context={
+  TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY:key,
   document:{
     getElementById:id=>nodes[id]||null,
     querySelectorAll:selector=>selector==='[data-tin-foil-campaign-identity]'?[pigeon]:[]
