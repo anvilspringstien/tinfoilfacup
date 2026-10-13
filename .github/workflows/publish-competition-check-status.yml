@@ -1,6 +1,14 @@
 name: Publish verified competition check status
 on:
   workflow_dispatch:
+  # Recalculate as soon as a scheduled scanner finishes; the hourly
+  # publisher remains a fallback if an upstream completion is missed.
+  workflow_run:
+    workflows:
+      - "Scan FA Cup results (v7.6 guarded)"
+      - "Scan FA Cup draw (guarded)"
+    types: [completed]
+    branches: [main]
   schedule:
     - cron: "55 * * * *"
   # Bootstrap and validate the monitor after changes to its own machinery.
@@ -21,7 +29,13 @@ concurrency:
 
 jobs:
   publish:
-    if: github.ref_name == 'main'
+    # workflow_run has write-capable credentials. Only trust scheduled main
+    # scanner completions, never pull-request or manually dispatched runs.
+    if: >-
+      github.ref_name == 'main' &&
+      (github.event_name != 'workflow_run' ||
+       (github.event.workflow_run.event == 'schedule' &&
+        github.event.workflow_run.head_branch == 'main'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
