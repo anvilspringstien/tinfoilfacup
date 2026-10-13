@@ -155,13 +155,16 @@
 }
 /* BETA Clubfinder — preserve the existing round button language; promote the next action.
    44px is deliberately close to Find My Club's 40px, not a new 60px button system. */
-.journey-choice{width:100%;margin-bottom:10px}
+.journey-choice{width:100%;margin-bottom:10px;justify-content:flex-start;align-items:flex-start;text-align:left}
 .journey-choice .journey-lozenge{
  display:inline-flex;
  align-items:stretch;
  width:min(100%,370px);
  max-width:100%;
  min-height:44px;
+ margin-left:0;
+ margin-right:auto;
+ align-self:flex-start;
 }
 .journey-choice .journey-lozenge .round{
  display:flex;
@@ -201,7 +204,8 @@
  white-space:normal;
  overflow-wrap:normal;
 }
-.my-journey-bar .campaign-primary-nav button.round,.journey-choice .journey-lozenge .round{border-radius:10px}\n.campaign-secondary-nav{
+.my-journey-bar .campaign-primary-nav button.round,.journey-choice .journey-lozenge .round{border-radius:10px}
+.campaign-secondary-nav{
  display:flex;
  flex-wrap:wrap;
  align-items:center;
@@ -1760,7 +1764,7 @@ function tffcMyCampaignInfo(){
   overlay.id='tffcMyCampaignInfoOverlay';
   overlay.className='tin-foil-confirm-overlay';
   overlay.hidden=true;
-  overlay.innerHTML='<div class="tin-foil-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcMyCampaignInfoTitle" aria-describedby="tffcMyCampaignInfoMessage"><div id="tffcMyCampaignInfoTitle" class="tin-foil-confirm-title">My Campaign</div><div id="tffcMyCampaignInfoMessage" class="tin-foil-confirm-message">Your Tin Foil FA Cup Campaign is saved on this device, in this browser.\\n\\nYour Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.\\n\\nYour progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there.</div><div class="tin-foil-privacy-actions"><button id="tffcMyCampaignInfoClose" type="button">Got it!</button></div></div>';
+  overlay.innerHTML='<div class="tin-foil-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcMyCampaignInfoTitle" aria-describedby="tffcMyCampaignInfoMessage"><div id="tffcMyCampaignInfoTitle" class="tin-foil-confirm-title">My Campaign</div><div id="tffcMyCampaignInfoMessage" class="tin-foil-confirm-message">Your Tin Foil FA Cup Campaign is saved on this device, in this browser.\n\nYour Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.\n\nYour progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there.</div><div class="tin-foil-privacy-actions"><button id="tffcMyCampaignInfoClose" type="button">Got it!</button></div></div>';
   document.body.appendChild(overlay);
  }
  const close=document.getElementById('tffcMyCampaignInfoClose');
