@@ -282,6 +282,19 @@ const assertions=`
      openedHistory.length!==1||openedHistory[0]!=='stats-beta.html')
     throw new Error('BETA Stats fast-open: did not open and label the tiny same-origin route: '+JSON.stringify({openedUrls,openedHistory}));
   const firstOpenPage=getCertificateHtml();
+  // Stats' actual emitted editor script must save through the shared Campaign
+  // and refresh the original Clubfinder tab; Back must sync before closing.
+  const editorTagStart=firstOpenPage.indexOf('<script>(function(){var key=');
+  const editorTagEnd=firstOpenPage.indexOf('</script>',editorTagStart);
+  if(editorTagStart<0||editorTagEnd<0)
+    throw new Error('BETA Stats: generated pigeon-name editor script not found');
+  const editorJs=firstOpenPage.slice(editorTagStart+'<script>'.length,editorTagEnd);
+  try{new Function(editorJs)}
+  catch(e){throw new Error('BETA Stats: generated pigeon-name editor JavaScript invalid: '+e.message)}
+  if(!editorJs.includes('window.opener.tinFoilRefreshCampaignIdentityDisplay()'))
+    throw new Error('BETA Stats: save no longer tells original Clubfinder to redraw its identity');
+  if(!firstOpenPage.includes('try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}'))
+    throw new Error('BETA Stats: Back no longer synchronises the Clubfinder name before focus');
   if(!firstOpenPage.includes('YOUR TIN FOIL FA CUP CAMPAIGN')||
      firstOpenPage.includes('Preparing Your Stats…'))
     throw new Error('BETA Stats fast-open: prepared tab did not finish with the campaign certificate');
