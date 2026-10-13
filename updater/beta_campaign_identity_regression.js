@@ -238,7 +238,10 @@ const assertions=`
   if(!primaryNav.includes('My Campaign</button>')||
      !primaryNav.includes('My Stats</button>')||
      !primaryNav.includes('My Challenges</button>')||
-     !primaryNav.includes('onclick="tffcScrollToFinder()"')||
+     !primaryNav.includes('onclick="tffcMyCampaignInfo()"')||
+     !html.includes('function tffcMyCampaignInfo()')||
+     !html.includes('tffcScrollToFinder();')||
+     !html.includes('Your Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.')||
      !primaryNav.includes('journeyCertificate(')||
      !primaryNav.includes('openChallenges(')||
      (primaryNav.match(/<button /g)||[]).length!==3||
