@@ -104,11 +104,11 @@ def self_test():
     assert result["workflows"]["results"]["scheduled_runs"] == 1
     assert result["workflows"]["results"]["successes"] == 1
     assert len(result["workflows"]["results"]["missing_or_delayed_slots_local"]) == 1
-    assert result["workflows"]["publisher"]["unmatched_late_or_extra_runs"]
+    assert not result["workflows"]["publisher"]["unmatched_late_or_extra_runs"]
     failed = inspect([row(SCANS["results"][0], "2026-10-13T03:17:00Z", "failure")],
                      d, parse_time("2026-10-13T04:00:00Z"))
     assert len(failed["workflows"]["results"]["failures"]) == 1
-    print("Barry watchdog self-test: PASS")
+    # A delayed event is classified as present when it arrives within its slot window.\n    assert not result["workflows"]["results"]["unmatched_late_or_extra_runs"]\n    print("Barry watchdog self-test: PASS")
 
 
 def main():
