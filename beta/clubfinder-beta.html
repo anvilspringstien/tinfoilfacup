@@ -69,6 +69,97 @@
  .campaign-pigeon-label{flex:0 0 auto}
  .campaign-pigeon-name .pigeon-name-input{display:block;flex:1 1 205px;min-width:0;width:auto;max-width:none;padding:0 2px 1px;line-height:1.4}
 }
+/* BETA Clubfinder ONLY — Campaign pigeon identity: make naming feel personal.
+   The original identity rows and saving code remain unchanged; Stats is untouched. */
+.campaign-identity{
+ margin:3px 0 16px;
+ padding:13px 14px 15px;
+ border:1px solid #a5c8c9;
+ border-left:5px solid #084c61;
+ border-radius:8px;
+ background:#edf5f3;
+ color:#084c61;
+ box-shadow:0 2px 7px rgba(8,76,97,.10);
+ font:400 12px/1.5 Poppins,Arial,sans-serif;
+}
+.campaign-identity::before{
+ content:"YOUR CAMPAIGN PIGEON";
+ display:block;
+ margin:0 0 6px;
+ font:600 12px/1.45 Poppins,Arial,sans-serif;
+ letter-spacing:.07em;
+}
+.campaign-identity .campaign-call-sign{
+ display:block;
+ font-size:12px;
+ font-weight:400;
+ line-height:1.5;
+ overflow-wrap:anywhere;
+}
+.campaign-identity .campaign-pigeon-name{
+ display:flex;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:7px 12px;
+ padding-top:10px;
+ margin-top:11px;
+ border-top:1px solid #c2d7d8;
+}
+.campaign-identity .campaign-pigeon-label{
+ flex:0 0 auto;
+ color:#084c61;
+ font-size:13px;
+ font-weight:600;
+ white-space:nowrap;
+}
+.campaign-identity .pigeon-name-input{
+ display:block;
+ flex:1 1 205px;
+ width:100%;
+ min-width:0;
+ max-width:360px;
+ height:44px;
+ margin:0;
+ padding:0 12px;
+ border:2px solid #084c61;
+ border-radius:6px;
+ background:#fff;
+ color:#132e35;
+ font:600 16px/1.4 Poppins,Arial,sans-serif;
+ box-shadow:0 1px 3px rgba(8,76,97,.12);
+ outline:none;
+}
+.campaign-identity .pigeon-name-input::placeholder{
+ color:#084c61;
+ opacity:1;
+ font-weight:400;
+}
+.campaign-identity .pigeon-name-input:focus{
+ border:2px solid #084c61;
+ outline:3px solid #e4bb26;
+ outline-offset:2px;
+}
+@supports selector(.campaign-identity:has(.pigeon-name-input[value=""])){
+ .campaign-identity:has(.pigeon-name-input[value=""]) .pigeon-name-input{
+  border-color:#af8514;
+  box-shadow:0 0 0 3px rgba(228,187,38,.25);
+ }
+}
+@media(max-width:680px){
+ .campaign-identity{padding:12px 12px 14px}
+ .campaign-identity .campaign-pigeon-name{align-items:stretch;gap:6px}
+ .campaign-identity .campaign-pigeon-label{flex:0 0 100%}
+ .campaign-identity .campaign-pigeon-name .pigeon-name-input{
+  display:block;
+  flex:1 1 100%;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  height:44px;
+  padding:0 12px;
+  line-height:1.4;
+ }
+}
 </style></head><!-- C13 UX POSTCODE SEARCH v2: explicit Find My Club fresh-search semantics -->
 <body><style>/* BETA skin: Challenges background and translucent field; preserve original Clubfinder controls/cards. */
 html:not(.tffc-stats-route),html:not(.tffc-stats-route) body{background:#141210;color:#f3e6c7}
