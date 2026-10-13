@@ -37,6 +37,14 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .trophy-viewer-face{position:absolute;inset:0;overflow:hidden;border:2px solid #3b2c1d;border-radius:18px;background:#d7c49d;backface-visibility:hidden;box-shadow:0 18px 45px rgba(0,0,0,.38)}
 .trophy-viewer-face.back{transform:rotateX(180deg)}
 .trophy-viewer-face img{width:100%;height:100%;object-fit:cover;display:block}
+.barrys-bit-mat[hidden]{display:none!important}
+.barrys-bit-mat{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(9px,2.2vw,17px);padding:clamp(22px,6vw,55px);border:3px solid #9b7b43;border-radius:18px;background:#f1e5bd;color:#34291b;box-shadow:inset 0 0 0 10px #e4d0a1,0 18px 45px rgba(0,0,0,.38);font-family:Poppins,Arial,sans-serif}
+.barrys-bit-heading{font-size:clamp(20px,5.5vw,39px);font-weight:700;letter-spacing:.05em}
+.barrys-bit-sub{font-size:clamp(12px,2.5vw,19px);font-weight:600;letter-spacing:.15em}
+.barrys-bit-rule{width:65%;border-top:2px solid #9b7b43}
+.barrys-bit-fact{font-size:clamp(18px,4vw,27px);font-weight:600}
+.barrys-bit-mat p{font-size:clamp(14px,3.2vw,23px);line-height:1.4;margin:0;max-width:430px}
+.barrys-bit-signoff{font-size:clamp(11px,2.5vw,17px);font-style:italic}
 .trophy-viewer-hint{font:12px/1.3 Arial,sans-serif;letter-spacing:.04em;color:#d5c8b3;text-align:center;pointer-events:none}
 @keyframes trophy-view-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.trophy-viewer-inner{animation:none}.trophy-viewer-card{transition:none}}
@@ -1326,6 +1334,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
         <div class="trophy-viewer-face front"><img id="trophyViewerFront" alt="" draggable="false" decoding="async"></div>
         <div class="trophy-viewer-face back"><img id="trophyViewerBack" alt="" draggable="false" decoding="async"></div>
       </div>
+    <div id="barrysBitMat" class="barrys-bit-mat" hidden aria-label="Barry’s Bits — Tin Foil Facts"><div class="barrys-bit-heading">BARRY’S BITS</div><div class="barrys-bit-sub">TIN FOIL FACTS</div><div class="barrys-bit-rule"></div><div class="barrys-bit-fact">Did you know?</div><p>In your Tin Foil FA Cup Campaign, Pigeon Miles are counted as the pigeon flies — from your starting postcode to the match ground and back.</p><div class="barrys-bit-signoff">A little nugget from Barry 🐦</div></div>
     </div>
     <div id="trophyViewerHint" class="trophy-viewer-hint" aria-live="polite">Tap to flip</div>
   </div>
@@ -1766,11 +1775,14 @@ function render() {
 /* Trophy inspection is a separate, transient UI state: no deck index, flips or storage writes. */
 const trophyViewer=$("trophyViewer"), trophyViewerMat=$("trophyViewerMat");
 const trophyViewerCard=$("trophyViewerCard"), trophyViewerHint=$("trophyViewerHint");
-let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null;
+let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null, trophyViewerProclaimer=false, trophyViewerBitShown=false;
 function openTrophy(c,origin){
   if(!state.completed[c.id]) return;
   trophyOrigin=origin;
   trophyViewerFlipped=false;
+  trophyViewerProclaimer=(c.id==="17");
+  trophyViewerBitShown=false;
+  $("barrysBitMat").hidden=true;
   $("trophyViewerFront").src=ART[c.id]?.front || CANONICAL_CUP || "";
   $("trophyViewerBack").src=ART[c.id]?.back || CANONICAL_CUP || "";
   trophyViewer.setAttribute("aria-label",c.title+" — achieved trophy");
@@ -1788,6 +1800,9 @@ function closeTrophy(){
   trophyViewer.classList.remove("open");
   trophyViewer.hidden=true;
   trophyViewerCard.classList.remove("flipped");
+  $("barrysBitMat").hidden=true;
+  trophyViewerBitShown=false;
+  trophyViewerProclaimer=false;
   const origin=trophyOrigin;
   trophyOrigin=null;
   if(origin && origin.isConnected!==false && typeof origin.focus==="function"){
@@ -1796,11 +1811,19 @@ function closeTrophy(){
 }
 function advanceTrophy(){
   if(!trophyViewerOpen)return;
-  if(trophyViewerFlipped){closeTrophy();return;}
+  if(trophyViewerBitShown){closeTrophy();return;}
+  if(trophyViewerFlipped){
+    if(!trophyViewerProclaimer){closeTrophy();return;}
+    trophyViewerBitShown=true;
+    $("barrysBitMat").hidden=false;
+    trophyViewerHint.textContent="Tap to close";
+    trophyViewerMat.setAttribute("aria-label","Barry’s Bits — tap to close Trophy");
+    return;
+  }
   trophyViewerFlipped=true;
   trophyViewerCard.classList.add("flipped");
-  trophyViewerHint.textContent="Tap to return";
-  trophyViewerMat.setAttribute("aria-label","Tap to return to Trophy Cabinet");
+  trophyViewerHint.textContent=trophyViewerProclaimer?"Tap for Barry’s Bit":"Tap to return";
+  trophyViewerMat.setAttribute("aria-label",trophyViewerProclaimer?"Tap to discover Barry’s Bit":"Tap to return to Trophy Cabinet");
 }
 trophyViewerMat.onclick=advanceTrophy;
 trophyViewerMat.addEventListener("keydown",e=>{
