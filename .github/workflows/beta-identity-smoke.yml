@@ -10,6 +10,8 @@ on:
       - 'tests/test_beta_conditional_draw_alias.js'
       - 'tests/test_beta_holmesdale_campaign.js'
       - 'tests/test_beta_gloucester_current_identity.js'
+      - 'tests/test_beta_stats_pigeon_return_sync.js'
+      - 'updater/beta_campaign_identity_regression.js'
       - 'tests/test_beta_weston_replay_stats.js'
       - 'updater/refresh_beta_embedded_snapshot.py'
       - 'tests/test_beta_embedded_snapshot_refresh.py'
@@ -48,6 +50,8 @@ jobs:
           python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
       - name: Regress BETA counter, Pigeon and refresh persistence
         run: node updater/beta_campaign_identity_regression.js
+      - name: Regress Stats Pigeon Name return and stale Campaign snapshot
+        run: node tests/test_beta_stats_pigeon_return_sync.js
       - name: Regress live competition, fallback and unavailable loading
         run: node tests/test_beta_competition_loader.js
       - name: Regress first-keystroke competition prefetch
