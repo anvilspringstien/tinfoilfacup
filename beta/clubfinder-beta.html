@@ -201,7 +201,7 @@
  white-space:normal;
  overflow-wrap:normal;
 }
-.campaign-secondary-nav{
+.my-journey-bar .campaign-primary-nav button.round,.journey-choice .journey-lozenge .round{border-radius:10px}\n.campaign-secondary-nav{
  display:flex;
  flex-wrap:wrap;
  align-items:center;
@@ -1752,6 +1752,32 @@ function tffcScrollToFinder(){
  };
  requestAnimationFrame(()=>requestAnimationFrame(settle));
 }
+function tffcMyCampaignInfo(){
+ tffcScrollToFinder();
+ let overlay=document.getElementById('tffcMyCampaignInfoOverlay');
+ if(!overlay){
+  overlay=document.createElement('div');
+  overlay.id='tffcMyCampaignInfoOverlay';
+  overlay.className='tin-foil-confirm-overlay';
+  overlay.hidden=true;
+  overlay.innerHTML='<div class="tin-foil-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcMyCampaignInfoTitle" aria-describedby="tffcMyCampaignInfoMessage"><div id="tffcMyCampaignInfoTitle" class="tin-foil-confirm-title">My Campaign</div><div id="tffcMyCampaignInfoMessage" class="tin-foil-confirm-message">Your Tin Foil FA Cup Campaign is saved on this device, in this browser.\\n\\nYour Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.\\n\\nYour progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there.</div><div class="tin-foil-privacy-actions"><button id="tffcMyCampaignInfoClose" type="button">Got it!</button></div></div>';
+  document.body.appendChild(overlay);
+ }
+ const close=document.getElementById('tffcMyCampaignInfoClose');
+ const previous=document.activeElement;
+ overlay.hidden=false;
+ function finish(){
+  document.removeEventListener('keydown',onKey);
+  overlay.hidden=true;
+  close.onclick=null;overlay.onclick=null;
+  if(previous&&typeof previous.focus==='function')previous.focus();
+ }
+ function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
+ close.onclick=finish;
+ overlay.onclick=e=>{if(e.target===overlay)finish()};
+ document.addEventListener('keydown',onKey);
+ close.focus();
+}
 function viewOriginalJourneys(){window.__showOriginalTinFoilJourneys=true;go(false,true)}
 function returnToMyJourney(){
  const saved=loadSavedJourney(),input=document.getElementById('postcode');
@@ -2272,7 +2298,7 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
        :'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button>';
      tools='<div class="my-journey-bar campaign-nav-tiered">'
        +'<div class="campaign-primary-nav" aria-label="Your Campaign sections">'
-       +'<button class="round campaign-current" type="button" aria-current="page" onclick="tffcScrollToFinder()">My Campaign</button>'
+       +'<button class="round campaign-current" type="button" aria-current="page" onclick="tffcMyCampaignInfo()">My Campaign</button>'
        +statsButton+challengesButton+'</div>'
        +'<div class="campaign-secondary-nav" aria-label="Campaign controls">'
        +'<button class="round" type="button" onclick="viewOriginalJourneys()">View Original Campaigns</button>'
