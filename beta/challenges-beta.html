@@ -40,13 +40,16 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .trophy-viewer-face img{width:100%;height:100%;object-fit:cover;display:block}
 .barrys-bit-mat[hidden]{display:none!important}
 .barrys-bit-mat.revealed{transform:rotateX(0deg)}
-.barrys-bit-mat{transform:rotateX(-180deg);backface-visibility:hidden;transition:transform .52s cubic-bezier(.2,.75,.25,1);position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(9px,2.2vw,17px);padding:clamp(22px,6vw,55px);border:3px solid #9b7b43;border-radius:18px;background:#f1e5bd;color:#34291b;box-shadow:inset 0 0 0 10px #e4d0a1,0 18px 45px rgba(0,0,0,.38);font-family:Poppins,Arial,sans-serif}
-.barrys-bit-heading{font-size:clamp(20px,5.5vw,39px);font-weight:700;letter-spacing:.05em}
-.barrys-bit-sub{font-size:clamp(12px,2.5vw,19px);font-weight:600;letter-spacing:.15em}
+.barrys-bit-mat{transform:rotateX(-180deg);backface-visibility:hidden;transition:transform .52s cubic-bezier(.2,.75,.25,1);position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(4px,1.3vw,11px);padding:clamp(15px,3.8vw,32px);border:3px solid #9b7b43;border-radius:18px;background:#f1e5bd;color:#34291b;box-shadow:inset 0 0 0 8px #e4d0a1,0 18px 45px rgba(0,0,0,.38);font-family:Poppins,Arial,sans-serif;box-sizing:border-box}
+.barrys-bit-heading{font-size:clamp(17px,4.5vw,30px);font-weight:700;letter-spacing:.05em}
+.barrys-bit-sub{font-size:clamp(10px,2.1vw,15px);font-weight:600;letter-spacing:.10em}
 .barrys-bit-rule{width:65%;border-top:2px solid #9b7b43}
-.barrys-bit-fact{font-size:clamp(18px,4vw,27px);font-weight:600}
-.barrys-bit-mat p{font-size:clamp(14px,3.2vw,23px);line-height:1.4;margin:0;max-width:430px}
-.barrys-bit-signoff{font-size:clamp(11px,2.5vw,17px);font-style:italic}
+.barrys-bit-fact{font-size:clamp(13px,3vw,21px);line-height:1.2;font-weight:700}
+.barrys-bit-story{font-size:clamp(10px,2.25vw,17px);line-height:1.38;margin:0;max-width:490px;overflow:auto;min-height:0}
+.barrys-bit-footer{display:flex;align-items:center;justify-content:center;gap:10px;max-width:100%;flex-shrink:0}
+.barrys-bit-credit{display:flex;flex-direction:column;font-size:clamp(9px,1.85vw,14px);line-height:1.3}
+.barrys-bit-footer img{width:clamp(34px,10vw,80px);height:auto;object-fit:contain;flex-shrink:0}
+@media(max-height:580px){.barrys-bit-mat{gap:4px}.barrys-bit-story{font-size:clamp(9px,2vw,13px)}}
 .trophy-viewer-hint{font:12px/1.3 Arial,sans-serif;letter-spacing:.04em;color:#d5c8b3;text-align:center;pointer-events:none}
 @keyframes trophy-view-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.trophy-viewer-inner{animation:none}.trophy-viewer-card{transition:none}}
@@ -1336,7 +1339,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
         <div class="trophy-viewer-face front"><img id="trophyViewerFront" alt="" draggable="false" decoding="async"></div>
         <div class="trophy-viewer-face back"><img id="trophyViewerBack" alt="" draggable="false" decoding="async"></div>
       </div>
-    <div id="barrysBitMat" class="barrys-bit-mat" hidden aria-label="Barry’s Bits — Tin Foil Facts"><div class="barrys-bit-heading">BARRY’S BITS</div><div class="barrys-bit-sub">TIN FOIL FACTS</div><div class="barrys-bit-rule"></div><div class="barrys-bit-fact">Did you know?</div><p>In your Tin Foil FA Cup Campaign, Pigeon Miles are counted as the pigeon flies — from your starting postcode to the match ground and back.</p><div class="barrys-bit-signoff">A little nugget from Barry 🐦</div></div>
+    <div id="barrysBitMat" class="barrys-bit-mat" hidden aria-label="Barry’s Bits — Facts on Foil No. 087: The Cup That Never Was"><div class="barrys-bit-heading">BARRY’S BITS</div><div class="barrys-bit-sub">FACTS ON FOIL No. 087</div><div class="barrys-bit-rule"></div><div class="barrys-bit-fact">THE CUP THAT NEVER WAS</div><p class="barrys-bit-story">“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”</p><div class="barrys-bit-footer"><div class="barrys-bit-credit"><em>A Hidden History of The FA Cup</em><span>James Higginbottom</span></div><img src="barry-pigeon-mail-small.webp" alt="Barry the Mail Pigeon" loading="lazy" decoding="async" onerror="this.hidden=true"></div></div></div>
     </div>
     <div id="trophyViewerHint" class="trophy-viewer-hint" aria-live="polite">Tap to flip</div>
   </div>
