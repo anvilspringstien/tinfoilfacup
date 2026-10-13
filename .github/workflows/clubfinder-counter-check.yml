@@ -50,6 +50,23 @@ jobs:
           echo "$body" | grep -q '"contract_version":2'
           echo "$body" | grep -q '"increment_response":"number"'
 
+      - name: Guard both official origins in Worker configuration
+        run: |
+          node --input-type=commonjs - <<'NODE'
+          const fs=require('node:fs');
+          const assert=require('node:assert/strict');
+          const config=JSON.parse(fs.readFileSync('wrangler.jsonc','utf8'));
+          const origins=config.vars.ALLOWED_ORIGINS.split(',').map(x=>x.trim());
+          assert.deepEqual(origins,[
+            'https://anvilspringstien.github.io',
+            'https://tinfoilfacup.com'
+          ]);
+          assert.equal(new Set(origins).size,origins.length);
+          assert.equal(config.vars.COUNTER_SEED,'1000');
+          assert.equal(config.durable_objects.bindings[0].name,'CLUBFINDER_COUNTER');
+          console.log('Both exact website origins allowed; counter identity and seed unchanged.');
+          NODE
+
       - name: Probe GitHub Pages CORS permission
         run: |
           headers="$(mktemp)"
@@ -61,4 +78,20 @@ jobs:
             -o /dev/null \
             https://tffac-clubfinder-counter.anvilspringstien.workers.dev/increment
           grep -qi '^access-control-allow-origin: https://anvilspringstien.github.io' "$headers"
+          grep -qi '^access-control-allow-methods: .*POST' "$headers"
+
+      # This live check must be run AFTER deploying the updated Worker.
+      # Never make the pre-deployment PR fail for the expected old allowlist.
+      - name: Probe new custom-domain CORS permission after deployment
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          headers="$(mktemp)"
+          curl --fail --silent --show-error \
+            -X OPTIONS \
+            -H 'Origin: https://tinfoilfacup.com' \
+            -H 'Access-Control-Request-Method: POST' \
+            -D "$headers" \
+            -o /dev/null \
+            https://tffac-clubfinder-counter.anvilspringstien.workers.dev/increment
+          grep -qi '^access-control-allow-origin: https://tinfoilfacup.com' "$headers"
           grep -qi '^access-control-allow-methods: .*POST' "$headers"
