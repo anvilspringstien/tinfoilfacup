@@ -47,23 +47,22 @@ def read_csv(path):
     return rows
 
 
-def inspect(rows, date, observed_until=None):
+def inspect(rows, date, observed_until):
     start = dt.datetime.combine(date, dt.time.min, tzinfo=UTC)
     end = start + dt.timedelta(days=1)
-    # Don't classify future hours as missed: use the latest observed run timestamp
-    # if no explicit observation boundary is provided.
-    boundary = observed_until or max((r["created"] for r in rows), default=start)
-    boundary = min(boundary, end)
+    # Require explicit cutoff so the last incomplete hour is not marked missing.
+    boundary = observed_until.astimezone(UTC)
     report = {"date_utc": date.isoformat(), "observed_through_utc": boundary.isoformat(),
               "note": "Missing launch means no matching schedule run in exported history; root cause unproven.",
               "workflows": {}}
     for key, (name, minute) in SCANS.items():
         found = sorted((r for r in rows if r["name"] == name and r["event"] == "schedule"
-                        and start <= r["created"] < end), key=lambda r: r["created"])
+                        and start <= r["created"] < end and r["created"] <= boundary), key=lambda r: r["created"])
         # Match a created run to its nominal slot only when within 59 minutes
         # after that slot. Late runs beyond this are reported but not assigned.
         slots = [start + dt.timedelta(hours=h, minutes=minute) for h in range(24)]
-        slots = [s for s in slots if s <= boundary]
+        pending_slots = [s for s in slots if s <= boundary < s + dt.timedelta(hours=1)]
+        slots = [s for s in slots if s + dt.timedelta(hours=1) <= boundary]
         remaining = found.copy()
         missing = []
         for slot in slots:
@@ -80,7 +79,8 @@ def inspect(rows, date, observed_until=None):
             "failures": [{"id": r["id"], "url": r["url"], "conclusion": r["conclusion"]} for r in failures],
             "unfinished": [r["id"] for r in pending],
             "missing_or_delayed_slots_local": missing,
-            "unmatched_late_or_extra_runs": [r["id"] for r in remaining],
+            "not_yet_evaluable_slots_local": [s.astimezone(LONDON).isoformat() for s in pending_slots],
+            "unmatched_runs": [r["id"] for r in remaining if not any(s <= r["created"] < s + dt.timedelta(hours=1) for s in pending_slots)],
             "latest": {"id": latest["id"], "created_local": latest["created"].astimezone(LONDON).isoformat(),
                        "updated_local": latest["updated"].astimezone(LONDON).isoformat(),
                        "url": latest["url"]} if latest else None,
@@ -103,19 +103,20 @@ def self_test():
     result = inspect(rows, d, parse_time("2026-10-13T05:00:00Z"))
     assert result["workflows"]["results"]["scheduled_runs"] == 1
     assert result["workflows"]["results"]["successes"] == 1
-    assert len(result["workflows"]["results"]["missing_or_delayed_slots_local"]) == 4
-    assert not result["workflows"]["publisher"]["unmatched_late_or_extra_runs"]
+    assert len(result["workflows"]["results"]["missing_or_delayed_slots_local"]) == 3
+    assert not result["workflows"]["publisher"]["unmatched_runs"]
     failed = inspect([row(SCANS["results"][0], "2026-10-13T03:17:00Z", "failure")],
                      d, parse_time("2026-10-13T04:00:00Z"))
     assert len(failed["workflows"]["results"]["failures"]) == 1
-    # A delayed event is classified as present when it arrives within its slot window.\n    assert not result["workflows"]["results"]["unmatched_late_or_extra_runs"]\n    print("Barry watchdog self-test: PASS")
+    assert not result["workflows"]["results"]["unmatched_runs"]
+    print("Barry watchdog self-test: PASS")
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--csv", type=Path)
     p.add_argument("--date", help="UTC creation date, YYYY-MM-DD")
-    p.add_argument("--through", help="UTC observation boundary, ISO timestamp")
+    p.add_argument("--through", required=True, help="UTC observation boundary, ISO timestamp")
     p.add_argument("--self-test", action="store_true")
     args = p.parse_args()
     if args.self_test:
