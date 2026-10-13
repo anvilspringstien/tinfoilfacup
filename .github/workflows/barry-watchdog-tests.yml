@@ -20,4 +20,4 @@ jobs:
         with:
           python-version: "3.11"
       - name: Run read-only watchdog regression tests
-        run: python -m unittest discover -s beta -p "test_barry*watch.py" -v
+        run: python -m unittest discover -s beta -p "test_barry*.py" -v
