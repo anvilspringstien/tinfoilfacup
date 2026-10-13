@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-13T18:45:23.069471Z",
+  "monitor_ran_at": "2026-10-13T19:21:13.532288Z",
   "state": "unverified",
   "last_checked_at": null,
-  "results": "unverified",
+  "results": "success",
   "draw": "unverified",
   "diagnostics": {
     "results": {
-      "reason": "stale",
-      "run_id": 38392773478,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/38392773478",
+      "reason": "verified",
+      "run_id": 38453697827,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/38453697827",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-10-13T11:51:41Z"
+      "updated_at": "2026-10-13T19:21:02Z"
     },
     "draw": {
       "reason": "stale",
