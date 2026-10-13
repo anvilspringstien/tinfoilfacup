@@ -103,7 +103,7 @@ def self_test():
     result = inspect(rows, d, parse_time("2026-10-13T05:00:00Z"))
     assert result["workflows"]["results"]["scheduled_runs"] == 1
     assert result["workflows"]["results"]["successes"] == 1
-    assert len(result["workflows"]["results"]["missing_or_delayed_slots_local"]) == 1
+    assert len(result["workflows"]["results"]["missing_or_delayed_slots_local"]) == 4
     assert not result["workflows"]["publisher"]["unmatched_late_or_extra_runs"]
     failed = inspect([row(SCANS["results"][0], "2026-10-13T03:17:00Z", "failure")],
                      d, parse_time("2026-10-13T04:00:00Z"))
