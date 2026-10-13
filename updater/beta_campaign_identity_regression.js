@@ -221,6 +221,38 @@ const assertions=`
   // the Pigeon Call Sign before we test browser refresh.
   await go(false);
   const rendered=String(document.getElementById('results').innerHTML||'');
+  // Campaign UI hierarchy: choices attract first-time users, while selected
+  // Campaign shows three equal primary destinations above housekeeping.
+  // Rendering these must not issue an extra counter request.
+  if(!html.includes('.journey-choice .journey-lozenge .round{')||
+     !html.includes('.campaign-primary-nav{')||
+     !html.includes('grid-template-columns:repeat(3,minmax(0,1fr))')||
+     !html.includes('min-height:44px')||
+     !html.includes('Choose Tin Foil FA Cup Campaign ${jn}')||
+     !html.includes('class="hover-label">Make This My Tin Foil FA Cup Campaign'))
+    throw new Error('BETA UX: 44px Campaign choice buttons / desktop hover contract drifted');
+  if(!rendered.includes('class="campaign-primary-nav"')||
+     !rendered.includes('class="campaign-secondary-nav"'))
+    throw new Error('BETA UX: chosen Campaign must separate primary navigation and secondary controls');
+  const primaryNav=rendered.split('<div class="campaign-primary-nav"')[1]?.split('</div>')[0]||'';
+  const secondaryNav=rendered.split('<div class="campaign-secondary-nav"')[1]?.split('</div>')[0]||'';
+  if(!/My Campaign<\/button>/.test(primaryNav)||
+     !/My Stats<\/button>/.test(primaryNav)||
+     !/My Challenges<\/button>/.test(primaryNav)||
+     !/onclick="tffcScrollToFinder\(\)"/.test(primaryNav)||
+     (primaryNav.match(/<button /g)||[]).length!==3||
+     /Reset|End My Campaign|View Original Campaigns/.test(primaryNav))
+    throw new Error('BETA UX: primary Campaign navigation hierarchy or action wiring drifted');
+  if(!secondaryNav.includes('View Original Campaigns')||
+     !secondaryNav.includes('End My Campaign')||
+     !secondaryNav.includes('Reset')||
+     !secondaryNav.includes('Hard Reset')||
+     !secondaryNav.includes('viewOriginalJourneys()')||
+     !secondaryNav.includes('endMyJourney()'))
+    throw new Error('BETA UX: Campaign housekeeping moved or handlers changed');
+  if(getCounterIncrementCalls()!==1)
+    throw new Error('BETA UX: rendering navigation caused an extra counter increment');
+  console.log('BETA 44px CAMPAIGN CHOICE + THREE-TIER NAVIGATION: PASS');
   if(!rendered.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: Pigeon Call Sign did not render');
   if(!rendered.includes('placeholder="Name your pigeon"'))throw new Error('BETA identity regression: inline pigeon-name field did not render');
   if(/Save(?: My)? Pigeon/i.test(rendered))throw new Error('BETA identity regression: pigeon naming unexpectedly requires a Save control');
