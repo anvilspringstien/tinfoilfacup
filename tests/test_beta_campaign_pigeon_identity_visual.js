@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const html=fs.readFileSync('beta/clubfinder-beta.html','utf8');
+const opening=html.slice(0,html.indexOf('</style></head>'));
+const marker='/* BETA Clubfinder ONLY — Campaign pigeon identity: make naming feel personal.';
+assert.equal(html.split(marker).length,2,'One isolated presentation treatment only');
+assert(opening.includes(marker),'Identity treatment must stay in the ordinary Clubfinder head stylesheet');
+assert(opening.includes('content:"YOUR CAMPAIGN PIGEON"'),'Identity heading missing');
+assert(opening.includes('.campaign-identity .pigeon-name-input{'),'Prominent editor missing');
+assert(opening.includes('height:44px'),'Input touch target must be at least 44 pixels');
+assert(opening.includes('font:600 16px/1.4 Poppins'),'iPhone name input must not trigger focus zoom');
+assert(opening.includes('outline:3px solid #e4bb26'),'Keyboard focus indication missing');
+assert(opening.includes('border-left:5px solid #084c61'),'Identity panel must retain Clubfinder teal grammar');
+assert(opening.includes('.campaign-identity .campaign-pigeon-name{'),'Named pigeon row remains available');
+assert(opening.includes('max-width:100%'),'Name field must fit phone portrait');
+assert(opening.includes(':has(.pigeon-name-input[value=""])'),'Unnamed pigeon should get a restrained visual cue');
+assert(html.includes('onblur="tinFoilSavePigeonName(this.value)"'),'Existing save-on-blur contract changed');
+assert(html.includes('class="campaign-call-sign"') && html.includes('class="campaign-pigeon-name"'),'Original identity rows changed');
+assert(html.includes('function tinFoilCampaignIdentityHtml(saved)'),'Saved Campaign renderer missing');
+assert(html.includes('function tinFoilRefreshCampaignIdentityDisplay()'),'Pigeon identity refresh missing');
+assert(html.includes('.campaign-identity-band{margin:0 0 4px;'),'Stats certificate identity stylesheet must remain present');
+console.log('BETA Campaign Pigeon identity presentation: PASS (Clubfinder-only style, safe mobile input, saved-name contract).');
