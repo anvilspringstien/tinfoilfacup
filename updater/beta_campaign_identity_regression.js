@@ -344,6 +344,30 @@ const assertions=`
     throw new Error('BETA Stats: navigation altered campaign or allocated a call sign');
   console.log('BETA STATS LIGHT FIRST OPEN + CANONICAL REFRESH: PASS');
 
+  // Execute the exact editor script rendered into Stats. A name entered there
+  // must persist to the shared Campaign AND notify the still-open Clubfinder.
+  const statsHandlers={};
+  let identityRefreshCalls=0;
+  const fakeStatsDocument={addEventListener(name,listener){statsHandlers[name]=listener;}};
+  const fakeStatsWindow={opener:{closed:false,tinFoilRefreshCampaignIdentityDisplay(){identityRefreshCalls++;}}};
+  new Function('window','document','localStorage',editorJs)(fakeStatsWindow,fakeStatsDocument,localStorage);
+  if(typeof statsHandlers.change!=='function')
+    throw new Error('BETA Stats editor: real generated change handler was not installed');
+  const nameBeforeStatsEdit=loadSavedJourney().pigeonName;
+  statsHandlers.change({target:{
+    matches(selector){return selector==='.stats-pigeon-editor';},
+    dataset:{campaignCallSign:tinFoilSavedCallSign(loadSavedJourney())},
+    value:'Stats Named Me'
+  }});
+  if(loadSavedJourney().pigeonName!=='Stats Named Me'||identityRefreshCalls!==1)
+    throw new Error('BETA Stats editor: name was not persisted and synchronised immediately with opener');
+  if(getCounterIncrementCalls()!==statsCounterBefore)
+    throw new Error('BETA Stats editor: name edit incremented the counter');
+  tinFoilSavePigeonName(nameBeforeStatsEdit);
+  if(JSON.stringify(loadSavedJourney())!==statsSavedBefore)
+    throw new Error('BETA Stats editor: test restoration unexpectedly changed saved Campaign identity');
+  console.log('BETA STATS NAME EDIT -> ORIGINAL CLUBFINDER: PASS');
+
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity
   // while retaining the exact rendered Campaign for Exit/Back navigation.
