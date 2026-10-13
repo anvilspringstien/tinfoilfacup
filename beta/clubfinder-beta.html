@@ -2418,7 +2418,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   if(!host){
    host=document.createElement('div');host.id='tffcShareHost';host.hidden=true;
    host.setAttribute('role','presentation');
-   const frame=document.createElement('iframe');frame.title='Share Tin Foil FA Cup';frame.setAttribute('aria-label','Share Tin Foil FA Cup');frame.setAttribute('allow','clipboard-write; web-share');frame.dataset.shareFrame='1';host.appendChild(frame);document.body.appendChild(host);
+   const frame=document.createElement('iframe');frame.title='Share Tin Foil FA Cup';frame.setAttribute('aria-label','Share Tin Foil FA Cup');frame.setAttribute('allow','clipboard-write');frame.dataset.shareFrame='1';host.appendChild(frame);document.body.appendChild(host);
    host.addEventListener('click',e=>{if(e.target===host)tffcCloseShare()});
   }
   previousFocus=document.activeElement;previousScroll=window.scrollY;
