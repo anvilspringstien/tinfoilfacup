@@ -49,3 +49,33 @@ test("initial healthy report does not email",async()=>{
     assert.equal(result.delivered,false);
   } finally {globalThis.fetch=oldFetch}
 });
+
+test("test-email endpoint requires POST and bearer token, and never touches KV",async()=>{
+  const {default:worker}=await import("./worker.mjs");
+  const kv={get:async()=>{throw new Error("KV read")},put:async()=>{throw new Error("KV write")}};
+  const env={STATUS_TOKEN:"health-secret",OMBUDSMAN_KV:kv,ALERT_RELAY_URL:"https://example.invalid/relay",ALERT_RELAY_SECRET:"relay-secret"};
+  const oldFetch=globalThis.fetch;
+  const sent=[];
+  globalThis.fetch=async(_url,options)=>{sent.push(JSON.parse(options.body));return {ok:true,text:async()=>"OK"}};
+  try {
+    const url="https://ombudsman.example/test-email";
+    assert.equal((await worker.fetch(new Request(url,{method:"GET",headers:{Authorization:"Bearer health-secret"}}),env)).status,405);
+    assert.equal((await worker.fetch(new Request(url,{method:"POST"}),env)).status,401);
+    assert.equal((await worker.fetch(new Request(url,{method:"POST",headers:{Authorization:"Bearer wrong"}}),env)).status,401);
+    const result=await worker.fetch(new Request(url,{method:"POST",headers:{Authorization:"Bearer health-secret"}}),env);
+    assert.equal(result.status,200);
+    assert.equal((await result.json()).status,"sent");
+    assert.equal(sent.length,1);
+    assert.equal(sent[0].subject,"TFFC Ombudsman: TEST");
+    assert.match(sent[0].message,/TEST ONLY/);
+  } finally {globalThis.fetch=oldFetch}
+});
+test("test-email endpoint returns failure when relay does not confirm",async()=>{
+  const {default:worker}=await import("./worker.mjs");
+  const oldFetch=globalThis.fetch;
+  globalThis.fetch=async()=>({ok:true,text:async()=>"Request not processed"});
+  try {
+    const result=await worker.fetch(new Request("https://ombudsman.example/test-email",{method:"POST",headers:{Authorization:"Bearer health-secret"}}),{STATUS_TOKEN:"health-secret",ALERT_RELAY_URL:"https://example.invalid/relay",ALERT_RELAY_SECRET:"relay-secret"});
+    assert.equal(result.status,502);
+  } finally {globalThis.fetch=oldFetch}
+});
