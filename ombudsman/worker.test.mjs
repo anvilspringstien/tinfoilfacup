@@ -1,0 +1,14 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {classify} from "./worker.mjs";
+const now=Date.parse("2026-10-14T12:00:00Z");
+const run=(overrides={})=>({id:123,event:"schedule",created_at:"2026-10-14T11:00:00Z",status:"completed",conclusion:"success",...overrides});
+test("fresh successful schedule is healthy",()=>assert.equal(classify([run()],now).state,"healthy"));
+test("old successful schedule is a missed-launch warning",()=>assert.equal(classify([run({created_at:"2026-10-14T07:00:00Z"})],now).reason,"no_recent_scheduled_launch"));
+test("failed schedule is critical",()=>assert.equal(classify([run({conclusion:"failure"})],now).state,"critical"));
+test("cancelled schedule is critical",()=>assert.equal(classify([run({conclusion:"cancelled"})],now).state,"critical"));
+test("new pending run is not healthy",()=>assert.equal(classify([run({status:"in_progress",conclusion:null})],now).state,"pending"));
+test("manual dispatch cannot masquerade as scheduled run",()=>assert.equal(classify([run({event:"workflow_dispatch"})],now).reason,"no_scheduled_runs"));
+test("newest scheduled run wins",()=>assert.equal(classify([run({id:1,created_at:"2026-10-14T06:00:00Z"}),run({id:2})],now).run_id,2));
+test("empty run history warns",()=>assert.equal(classify([],now).state,"warning"));
+test("bad timestamps are unknown",()=>assert.equal(classify([run({created_at:"invalid"})],now).state,"unknown"));
