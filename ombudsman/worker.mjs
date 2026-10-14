@@ -35,20 +35,23 @@ async function check(env) {
   const state=states.includes("critical")?"critical":states.includes("warning")?"warning":states.includes("unknown")?"unknown":states.includes("pending")?"pending":"healthy";
   return {state,checked_at:new Date(now).toISOString(),checks};
 }
+async function publish(report,env) {
+  if (!env.OMBUDSMAN_KV) return {delivered:false,reason:"no_state_store"};
+  const key=JSON.stringify({state:report.state,reason:report.reason,checks:Object.fromEntries(Object.entries(report.checks||{}).map(([k,v])=>[k,{state:v.state,reason:v.reason}]))});
+  const prev=await env.OMBUDSMAN_KV.get("last_report");
+  const old=prev?JSON.parse(prev):null;
+  const changed=!old||old.key!==key;
+  if(changed && env.ALERT_WEBHOOK_URL) {
+    const response=await fetch(env.ALERT_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:"TFFC Ombudsman: "+report.state+"\\n"+JSON.stringify(report),report})});
+    if(!response.ok) throw new Error("alert_delivery_failed_"+response.status);
+  }
+  await env.OMBUDSMAN_KV.put("last_report",JSON.stringify({key,report}));
+  return {delivered:changed&&!!env.ALERT_WEBHOOK_URL,changed};
+}
 async function inspect(env) {
   let report;
   try {report=await check(env);} catch(e) {report={state:"unknown",reason:"api_unavailable_or_error",detail:String(e.message||e)};}
-  const key=JSON.stringify({state:report.state,reason:report.reason,checks:Object.fromEntries(Object.entries(report.checks||{}).map(([k,v])=>[k,{state:v.state,reason:v.reason}]))});
-  if(env.OMBUDSMAN_KV) {
-    const prev=await env.OMBUDSMAN_KV.get("last_report");
-    const old=prev?JSON.parse(prev):null;
-    const changed=!old||old.key!==key;
-    if(changed && env.ALERT_WEBHOOK_URL) {
-      const response=await fetch(env.ALERT_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:"TFFC Ombudsman: "+report.state+"\n"+JSON.stringify(report),report})});
-      if(!response.ok) throw new Error("alert_delivery_failed_"+response.status);
-    }
-    await env.OMBUDSMAN_KV.put("last_report",JSON.stringify({key,report}));
-  }
+  await publish(report,env);
   return report;
 }
 export default {
@@ -60,4 +63,4 @@ export default {
     return Response.json(report?.report||{state:"unknown",reason:"no_report_yet"});
   }
 };
-export {classify,check};
+export {classify,check,publish,inspect};
