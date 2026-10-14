@@ -2477,9 +2477,16 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  if(typeof document.addEventListener==='function')document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcCloseShare()});
 })();
 </script><style>
-/* Opt-in large-screen opening fit. Never scale phone or Campaign results. */
+/* Opt-in opening fit; retain the measured desktop scale across Campaign results. */
 @media(min-width:700px){
  html.tffc-opening-fit:not(.tffc-campaign-results):not(.tffc-stats-route) body{
+  zoom:var(--tffc-opening-scale,1);
+ }
+}
+/* Desktop-only: keep the opening scale after Find My Club so the frame and crest
+   do not jump wider. Do not affect phone, iPad, or Stats routes. */
+@media(min-width:1200px){
+ html.tffc-opening-fit.tffc-campaign-results:not(.tffc-stats-route) body{
   zoom:var(--tffc-opening-scale,1);
  }
 }
@@ -2510,7 +2517,8 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   pending=false;
   if(keyboardFocused())return; // Do not fit against the keyboard-reduced visual viewport.
   if(root.classList.contains('tffc-campaign-results')){
-   root.style.removeProperty('--tffc-opening-scale');
+   // Desktop keeps the opening fit; smaller devices retain natural-size results.
+   if(window.innerWidth<1200)root.style.removeProperty('--tffc-opening-scale');
    return;
   }
   root.style.setProperty('--tffc-opening-scale','1');
