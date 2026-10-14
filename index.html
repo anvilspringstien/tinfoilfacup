@@ -98,7 +98,10 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
   const contentBottom=content.getBoundingClientRect().bottom;
   const naturalBottom=Math.max(stageBottom,fieldBottom,contentBottom);
   const viewport=window.visualViewport?.height||window.innerHeight;
-  const scale=Math.min(1,Math.max(1,viewport-20)/Math.max(1,naturalBottom));
+  const heightFit=Math.min(1,Math.max(1,viewport-20)/Math.max(1,naturalBottom));
+  // Big Boy workaround: match Clubfinder's proven opening presentation
+  // instead of shrinking Clubfinder. Do not change tablet/mobile behaviour.
+  const scale=window.innerWidth>=1200?Math.max(heightFit,0.958):heightFit;
   stage.style.setProperty('--tffc-fit-scale',String(scale));
  };
  const schedule=()=>{
