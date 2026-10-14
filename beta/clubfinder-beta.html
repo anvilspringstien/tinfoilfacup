@@ -2500,9 +2500,23 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  let pending=false;
  const postcode=document.getElementById('postcode');
  const keyboardFocused=()=>document.activeElement===postcode;
+ // Freeze the measured desktop opening zoom at the instant Find is activated.
+ // Results rendering can otherwise trigger another fit calculation before its
+ // class is applied, producing the observed 95.81% -> 91.78% jump.
+ let lockedDesktopScale=null;
+ if(window.innerWidth>=1200){
+  document.getElementById('findBtn')?.addEventListener('click',()=>{
+   if(!root.classList.contains('tffc-campaign-results'))
+    lockedDesktopScale=getComputedStyle(root).getPropertyValue('--tffc-opening-scale').trim()||'1';
+  },{capture:true});
+ }
  const update=()=>{
   pending=false;
   if(keyboardFocused())return; // Do not fit against the keyboard-reduced visual viewport.
+  if(lockedDesktopScale&&window.innerWidth>=1200){
+   root.style.setProperty('--tffc-opening-scale',lockedDesktopScale);
+   return;
+  }
   if(root.classList.contains('tffc-campaign-results')){
    // Desktop keeps the opening fit; smaller devices retain natural-size results.
    if(window.innerWidth<1200)root.style.removeProperty('--tffc-opening-scale');
