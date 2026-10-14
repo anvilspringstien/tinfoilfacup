@@ -1,0 +1,16 @@
+name = "tffc-ombudsman"
+main = "worker.mjs"
+compatibility_date = "2026-10-14"
+workers_dev = true
+
+[triggers]
+crons = ["20 * * * *"]
+
+[vars]
+MAX_AGE_HOURS = "3"
+RESULTS_WORKFLOW_ID = "scan-results.yml"
+DRAW_WORKFLOW_ID = "scan-draw.yml"
+
+# Bind KV as OMBUDSMAN_KV in Cloudflare before deployment.
+# Set STATUS_TOKEN and optional GITHUB_TOKEN / ALERT_WEBHOOK_URL as Worker secrets.
+# Do not commit tokens, namespace IDs, or webhook URLs.
