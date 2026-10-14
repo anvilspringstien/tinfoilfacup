@@ -82,8 +82,20 @@ async function inspect(env) {
 export default {
   async scheduled(_event,env,ctx){ctx.waitUntil(inspect(env));},
   async fetch(request,env){
-    if(new URL(request.url).pathname!=="/health") return new Response("Not found",{status:404});
+    const pathname=new URL(request.url).pathname;
+    if(pathname!=="/health" && pathname!=="/test-email") return new Response("Not found",{status:404});
+    if(pathname==="/test-email" && request.method!=="POST") return new Response("Method not allowed",{status:405,headers:{"Allow":"POST"}});
     if(!env.STATUS_TOKEN || request.headers.get("Authorization")!=="Bearer "+env.STATUS_TOKEN) return new Response("Unauthorized",{status:401});
+    if(pathname==="/test-email") {
+      const report={state:"test",checked_at:new Date().toISOString(),reason:"TEST ONLY — email relay delivery check; no scanner failure"};
+      try {
+        await deliverEmail(report,env);
+        return Response.json({status:"sent"});
+      } catch(e) {
+        console.error("Ombudsman test email failed:",String(e.message||e));
+        return Response.json({status:"failed",reason:"email_relay_delivery_unconfirmed"},{status:502});
+      }
+    }
     const report=env.OMBUDSMAN_KV?JSON.parse((await env.OMBUDSMAN_KV.get("last_report"))||"null"):null;
     return Response.json(report?.report||{state:"unknown",reason:"no_report_yet"});
   }
