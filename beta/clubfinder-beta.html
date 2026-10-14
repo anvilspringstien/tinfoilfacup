@@ -2464,6 +2464,12 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  if(typeof document.addEventListener==='function')document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('tffcShareHost')?.hidden)tffcCloseShare()});
 })();
 </script><style>
+/* Desktop BETA: reserve the vertical scrollbar track before Campaigns render,
+   preventing the centred Clubfinder from shifting when results grow tall.
+   Exclude mobile and tablet layouts. */
+@media (min-width:1200px) {
+ html { scrollbar-gutter: stable; }
+}
 /* Opt-in opening fit; retain the measured desktop scale across Campaign results. */
 @media(min-width:700px){
  html.tffc-opening-fit:not(.tffc-campaign-results):not(.tffc-stats-route) body{
