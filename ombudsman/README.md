@@ -30,3 +30,6 @@ Runs on Cloudflare Cron, not GitHub Actions. Reads GitHub Actions workflow run h
 - GitHub API failures are `unknown`, not scanner failures.
 - Run unit tests and injected outage/failure/recovery simulations before deployment.
 - Cloudflare itself can fail; this is independent of GitHub Actions, not infallible.
+
+## Git-connected deployment
+Cloudflare Builds is connected to this branch with root directory `/ombudsman` and deploy command `npx wrangler deploy`. The existing KV namespace is declared in `wrangler.toml`; the hourly Cron Trigger remains `20 * * * *`. Relay credentials and health token remain encrypted Cloudflare Worker secrets, never repository variables. Verify the first build and Worker bindings before relying on email alerts.
