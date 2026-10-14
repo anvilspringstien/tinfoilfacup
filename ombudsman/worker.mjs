@@ -35,18 +35,43 @@ async function check(env) {
   const state=states.includes("critical")?"critical":states.includes("warning")?"warning":states.includes("unknown")?"unknown":states.includes("pending")?"pending":"healthy";
   return {state,checked_at:new Date(now).toISOString(),checks};
 }
+function alertText(report) {
+  const lines=["TFFC Ombudsman: "+String(report.state||"unknown").toUpperCase(),"Checked: "+(report.checked_at||"unknown")];
+  for(const [name,check] of Object.entries(report.checks||{})) {
+    lines.push(name+": "+check.state+" ("+check.reason+")"+(check.run_id?" | run "+check.run_id:""));
+  }
+  if(report.reason) lines.push("Reason: "+report.reason);
+  return lines.join("\n");
+}
+async function deliverEmail(report,env) {
+  if(!env.ALERT_RELAY_URL || !env.ALERT_RELAY_SECRET) throw new Error("email_relay_not_configured");
+  const response=await fetch(env.ALERT_RELAY_URL,{
+    method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({secret:env.ALERT_RELAY_SECRET,subject:"TFFC Ombudsman: "+report.state.toUpperCase(),message:alertText(report)}),
+    redirect:"follow"
+  });
+  // Apps Script ContentService can return HTTP 200 even on a caught error.
+  if(!response.ok || (await response.text()).trim()!=="OK") throw new Error("email_relay_delivery_unconfirmed");
+}
 async function publish(report,env) {
-  if (!env.OMBUDSMAN_KV) return {delivered:false,reason:"no_state_store"};
+  if(!env.OMBUDSMAN_KV) return {delivered:false,reason:"no_state_store"};
   const key=JSON.stringify({state:report.state,reason:report.reason,checks:Object.fromEntries(Object.entries(report.checks||{}).map(([k,v])=>[k,{state:v.state,reason:v.reason}]))});
   const prev=await env.OMBUDSMAN_KV.get("last_report");
   const old=prev?JSON.parse(prev):null;
   const changed=!old||old.key!==key;
-  if(changed && env.ALERT_WEBHOOK_URL) {
+  const oldState=old?.report?.state;
+  const needsEmail=changed && (["critical","warning","unknown"].includes(report.state) || (report.state==="healthy" && ["critical","warning","unknown"].includes(oldState)));
+  let delivered=false;
+  if(needsEmail && env.ALERT_RELAY_URL && env.ALERT_RELAY_SECRET) {
+    await deliverEmail(report,env);
+    delivered=true;
+  } else if(changed && env.ALERT_WEBHOOK_URL && !env.ALERT_RELAY_URL) {
     const response=await fetch(env.ALERT_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:"TFFC Ombudsman: "+report.state+"\\n"+JSON.stringify(report),report})});
     if(!response.ok) throw new Error("alert_delivery_failed_"+response.status);
+    delivered=true;
   }
   await env.OMBUDSMAN_KV.put("last_report",JSON.stringify({key,report}));
-  return {delivered:changed&&!!env.ALERT_WEBHOOK_URL,changed};
+  return {delivered,changed};
 }
 async function inspect(env) {
   let report;
