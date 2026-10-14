@@ -38,6 +38,8 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
 /* Opt-in large-screen proportional-fit experiment; phone and default BETA unchanged. */
 @media(min-width:700px){
  html.tffc-viewport-fit .stage{zoom:var(--tffc-fit-scale,1)}
+ /* A desktop minimum zoom can exceed viewport height; retain the footer via scrolling. */
+ @media(min-width:1200px){html.tffc-viewport-fit .stage{height:auto;min-height:100svh}html.tffc-viewport-fit .field{overflow:visible}}
 }
 </style></head><body><main class="stage"><section class="field" aria-label="Tin Foil FA Cup introduction"><div class="content"><img class="crest" src="beta/tffc-splash-logo-q80.webp" alt="Tin Foil FA Cup crest"><div class="intro"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1></div><p><span class="line">Experience the magic of your</span><span class="line">own Cup Run as you try to</span><span class="line">get to Wembley — for real!</span></p><a class="start" href="beta/clubfinder-beta.html">Start Campaign</a><div class="grassroots"><span class="full">Tin Foil FA Cup supports Grassroots Football in the best way possible — Through the Turnstiles</span><span class="short">Supporting grassroots football — Through the Turnstiles</span></div></div></section></main><script>
 /* Read-only, opt-in viewport geometry diagnostic. No layout changes in normal use. */
