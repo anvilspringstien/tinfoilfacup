@@ -12,3 +12,5 @@ test("manual dispatch cannot masquerade as scheduled run",()=>assert.equal(class
 test("newest scheduled run wins",()=>assert.equal(classify([run({id:1,created_at:"2026-10-14T06:00:00Z"}),run({id:2})],now).run_id,2));
 test("empty run history warns",()=>assert.equal(classify([],now).state,"warning"));
 test("bad timestamps are unknown",()=>assert.equal(classify([run({created_at:"invalid"})],now).state,"unknown"));
+test("stuck running schedule is critical",()=>assert.equal(classify([run({created_at:"2026-10-14T06:00:00Z",status:"in_progress",conclusion:null})],now).reason,"scheduled_run_stuck"));
+test("fresh run following failure is recovery",()=>assert.equal(classify([run({id:1,created_at:"2026-10-14T05:00:00Z",conclusion:"failure"}),run({id:2})],now).state,"healthy"));
