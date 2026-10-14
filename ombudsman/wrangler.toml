@@ -6,11 +6,15 @@ workers_dev = true
 [triggers]
 crons = ["20 * * * *"]
 
+[[kv_namespaces]]
+binding = "OMBUDSMAN_KV"
+id = "592fac6fa2bb4d4f858fb057cf9f4f77"
+
 [vars]
 MAX_AGE_HOURS = "3"
 RESULTS_WORKFLOW_ID = "scan-results.yml"
 DRAW_WORKFLOW_ID = "scan-draw.yml"
 
-# Bind KV as OMBUDSMAN_KV in Cloudflare before deployment.
-# Set STATUS_TOKEN and optional GITHUB_TOKEN / ALERT_WEBHOOK_URL as Worker secrets.
-# Do not commit tokens, namespace IDs, or webhook URLs.
+# Existing KV namespace is declared above so GitHub deployments retain the binding.
+# Configure STATUS_TOKEN, ALERT_RELAY_URL, and ALERT_RELAY_SECRET as encrypted Worker secrets.
+# Never commit secret values or relay URLs.
