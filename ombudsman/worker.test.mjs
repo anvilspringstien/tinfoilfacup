@@ -15,26 +15,37 @@ test("bad timestamps are unknown",()=>assert.equal(classify([run({created_at:"in
 test("stuck running schedule is critical",()=>assert.equal(classify([run({created_at:"2026-10-14T06:00:00Z",status:"in_progress",conclusion:null})],now).reason,"scheduled_run_stuck"));
 test("fresh run following failure is recovery",()=>assert.equal(classify([run({id:1,created_at:"2026-10-14T05:00:00Z",conclusion:"failure"}),run({id:2})],now).state,"healthy"));
 
-test("failure alert is sent once, recovery sends a fresh alert",async()=>{
-  const values=new Map(), sent=[];
-  const kv={get:async k=>values.get(k)||null,put:async(k,v)=>{values.set(k,v)}};
+test("email warning sent once and recovery sent once",async()=>{
+  const values=new Map(),sent=[];
+  const kv={get:async k=>values.get(k)||null,put:async(k,v)=>values.set(k,v)};
   const oldFetch=globalThis.fetch;
-  globalThis.fetch=async(_url,options)=>{sent.push(JSON.parse(options.body));return {ok:true}};
+  globalThis.fetch=async(_url,options)=>{sent.push(JSON.parse(options.body));return {ok:true,text:async()=>"OK"}};
   try {
-    const env={OMBUDSMAN_KV:kv,ALERT_WEBHOOK_URL:"https://example.invalid/hook"};
+    const env={OMBUDSMAN_KV:kv,ALERT_RELAY_URL:"https://script.google.com/macros/s/example/exec",ALERT_RELAY_SECRET:"test-secret"};
     const failed={state:"critical",checks:{results:{state:"critical",reason:"scheduled_run_failure"}}};
     const recovered={state:"healthy",checks:{results:{state:"healthy",reason:"recent_scheduled_success"}}};
     await publish(failed,env);await publish(failed,env);await publish(recovered,env);
     assert.equal(sent.length,2);
-    assert.deepEqual(sent.map(x=>x.report.state),["critical","healthy"]);
+    assert.deepEqual(sent.map(x=>x.subject),["TFFC Ombudsman: CRITICAL","TFFC Ombudsman: HEALTHY"]);
+    assert.equal(sent[0].secret,"test-secret");
+    assert.match(sent[0].message,/results: critical/);
   } finally {globalThis.fetch=oldFetch}
 });
-test("failed webhook delivery does not mark alert delivered",async()=>{
-  const values=new Map(), kv={get:async k=>values.get(k)||null,put:async(k,v)=>values.set(k,v)};
+test("unconfirmed relay response does not mark warning delivered",async()=>{
+  const values=new Map(),kv={get:async k=>values.get(k)||null,put:async(k,v)=>values.set(k,v)};
   const oldFetch=globalThis.fetch;
-  globalThis.fetch=async()=>({ok:false,status:503});
+  globalThis.fetch=async()=>({ok:true,text:async()=>"Request not processed"});
   try {
-    await assert.rejects(publish({state:"critical"}, {OMBUDSMAN_KV:kv,ALERT_WEBHOOK_URL:"https://example.invalid/hook"}),/alert_delivery_failed_503/);
+    await assert.rejects(publish({state:"critical"}, {OMBUDSMAN_KV:kv,ALERT_RELAY_URL:"https://example.invalid/relay",ALERT_RELAY_SECRET:"secret"}),/email_relay_delivery_unconfirmed/);
     assert.equal(values.has("last_report"),false);
+  } finally {globalThis.fetch=oldFetch}
+});
+test("initial healthy report does not email",async()=>{
+  const values=new Map(),kv={get:async k=>values.get(k)||null,put:async(k,v)=>values.set(k,v)};
+  const oldFetch=globalThis.fetch;
+  globalThis.fetch=async()=>{throw new Error("unexpected email")};
+  try {
+    const result=await publish({state:"healthy",checks:{}},{OMBUDSMAN_KV:kv,ALERT_RELAY_URL:"https://example.invalid/relay",ALERT_RELAY_SECRET:"secret"});
+    assert.equal(result.delivered,false);
   } finally {globalThis.fetch=oldFetch}
 });
