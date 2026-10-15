@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TFFC Shed — Single-frame desktop geometry proof</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#141210;color:#f6f3e8;font-family:Poppins,Arial,sans-serif;font-weight:300}
+body{background:radial-gradient(circle at 50% 8%,#27221c,#181512 38%,#100f0d);background-attachment:fixed}
+.note{position:fixed;top:10px;right:12px;color:#e6cf8e;font:12px Arial;z-index:2;max-width:230px;text-align:right}
+.stage{min-height:100svh;display:flex;justify-content:center;padding:10px 12px 16px}
+.frame{width:min(550.31px,100%);min-height:calc(100svh - 26px);background:#100f0d;border:1px solid #818181;border-radius:12px;display:flex;flex-direction:column;align-items:center;padding:16px 16px 18px}
+.crest{display:block;width:min(394.33px,100%);aspect-ratio:1;object-fit:contain;flex:none}
+.screen{width:100%;display:flex;flex-direction:column;align-items:center;gap:13px}
+h1{font-size:clamp(25px,4vw,44px);font-weight:300;line-height:1.08;margin:0;text-align:center}h1 span{display:block;font-size:.56em}
+.copy{text-align:center;font-size:16px;line-height:1.35;margin:0}
+button,input{font:inherit}button{cursor:pointer;color:#f6f3e8;border:1px solid #818181;border-radius:8px;background:#084c61;padding:10px 20px;min-height:42px}input{width:min(340px,100%);padding:11px;background:#222;border:1px solid #818181;color:#fff;border-radius:7px;text-transform:uppercase;text-align:center}
+.footer{font-size:10px;text-align:center;margin-top:auto;padding-top:12px}
+.laws{font-size:14px;line-height:1.5;align-self:center;margin:0;padding-left:20px}.laws li{margin-bottom:2px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.results{border-top:1px solid #818181;margin-top:16px;padding-top:14px;width:100%;text-align:center}
+.results[hidden],.screen[hidden]{display:none}
+@media(max-height:820px) and (min-width:1200px){.crest{width:min(34svh,394.33px)}.screen{gap:7px}.frame{padding-top:10px}.laws{font-size:12px}.copy{font-size:14px}}
+@media(max-width:1199px){.note{position:static;text-align:center;margin:8px auto}.stage{padding-top:8px}.frame{min-height:calc(100svh - 24px)}.crest{width:min(60vw,394.33px)}}
+</style></head><body>
+<div class="note">SHED PROOF ONLY — no postcode lookup or live Campaign data</div>
+<main class="stage"><section class="frame" id="frame" aria-label="Shared single frame">
+<img class="crest" id="crest" src="tffc-splash-logo-q80.webp" alt="Tin Foil FA Cup crest">
+<div class="screen" id="splash"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1><p class="copy">Experience the magic of your<br>own Cup Run as you try to<br>get to Wembley — for real!</p><button id="start">Start Campaign</button></div>
+<div class="screen" id="club" hidden><ol class="laws"><li>Make a Tin Foil FA Cup</li><li>Find your nearest Qualifying Round</li><li>Follow the Winner until you Can't Get Tickets</li><li>Eat Pies</li></ol><p class="copy">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><input id="postcode" placeholder="Enter Your Postcode" aria-label="Test postcode"><div class="controls"><button id="find">Find My Club</button><button id="back">Back to Splash</button></div><div class="results" id="results" hidden><strong>Campaign Choices — geometry demonstration</strong><p>In the real Clubfinder, the existing engine supplies the three eligible clubs. This proof only demonstrates the frame extending without changing its width or crest.</p></div></div>
+<p class="footer" id="footer">Supporting grassroots football — Through the Turnstiles</p>
+</section></main>
+<script>
+const splash=document.getElementById('splash'),club=document.getElementById('club'),results=document.getElementById('results'),crest=document.getElementById('crest');
+document.getElementById('start').onclick=()=>{splash.hidden=true;club.hidden=false;crest.src='tffc-four-laws-logo-q80.webp'};
+document.getElementById('back').onclick=()=>{club.hidden=true;splash.hidden=false;results.hidden=true;crest.src='tffc-splash-logo-q80.webp'};
+document.getElementById('find').onclick=()=>{results.hidden=false;results.scrollIntoView({block:'nearest',behavior:'smooth'})};
+</script></body></html>
