@@ -319,7 +319,8 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
    Never respond to the on-screen keyboard by shrinking the layout. */
 (function(){
  const root=document.documentElement;
- if(!root.classList.contains('tffc-single-frame'))return;
+ // Node regression harnesses may expose document without documentElement.
+ if(!root||!root.classList||!root.classList.contains('tffc-single-frame'))return;
  const frame=document.querySelector('#tffcFourLaws .tffcOuter');
  const postcode=document.getElementById('postcode');
  if(!frame)return;
