@@ -295,6 +295,9 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
 }
 
 
+/* The shared geometry proof must never inherit the legacy body-level fit. */
+html.tffc-geometry-proof.tffc-opening-fit:not(.tffc-stats-route) body{zoom:1!important}
+html.tffc-geometry-proof:not(.tffc-stats-route){scrollbar-gutter:auto}
 /* Shared-frame structural proof: one viewport frame, crest anchored to frame.
    Opening only; results retain natural document flow. */
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) body{padding:0!important}
@@ -310,6 +313,8 @@ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-camp
  if(q.get('geometryProof')!=='1'||q.get('singleFrame')==='0'||q.has('stats'))return;
  const root=document.documentElement,stage=document.getElementById('tffcFourLaws');
  if(!stage)return;
+ root.classList.remove('tffc-opening-fit');
+ root.style.removeProperty('--tffc-opening-scale');
  root.classList.add('tffc-geometry-proof');
  let pending=false;
  function measure(){
@@ -2559,7 +2564,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
 <script>
 /* Legacy two-frame viewport fitter, opt-in only with ?viewportFit=1. */
 (function(){
- if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
+ if(new URLSearchParams(location.search).get('geometryProof')==='1'||new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
  // Browser-only presentation enhancement; Node regression harnesses lack a DOM root.
  if(!document.documentElement||!document.documentElement.classList)return;
  const root=document.documentElement;
