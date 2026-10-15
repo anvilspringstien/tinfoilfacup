@@ -6,7 +6,6 @@
 @media(min-width:1200px){html{scrollbar-gutter:stable}}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#141210;color:#f6f3e8;font-family:Poppins,Arial,sans-serif;font-weight:300}
 body{background:radial-gradient(circle at 50% 8%,#27221c,#181512 38%,#100f0d);background-attachment:fixed}
-.note{position:fixed;top:10px;right:12px;color:#e6cf8e;font:12px Arial;z-index:2;max-width:230px;text-align:right}
 .stage{min-height:100svh;display:flex;justify-content:center;padding:10px 12px 16px}
 .frame{width:min(550.31px,100%);min-height:calc(100svh - 26px);background:#100f0d;border:1px solid #818181;border-radius:12px;display:flex;flex-direction:column;align-items:center;padding:16px 16px 18px}
 .crest{display:block;width:min(394.33px,100%);aspect-ratio:1;object-fit:contain;flex:none}
@@ -20,9 +19,8 @@ button,input{font:inherit}button{cursor:pointer;color:#f6f3e8;border:1px solid #
 .results{border-top:1px solid #818181;margin-top:16px;padding-top:14px;width:100%;text-align:center}
 .results[hidden],.screen[hidden]{display:none}
 @media(max-height:820px) and (min-width:1200px){.crest{width:min(34svh,394.33px)}.screen{gap:7px}.frame{padding-top:10px}.laws{font-size:12px}.copy{font-size:14px}}
-@media(max-width:1199px){.note{position:static;text-align:center;margin:8px auto}.stage{padding-top:8px}.frame{min-height:calc(100svh - 24px)}.crest{width:min(60vw,394.33px)}}
+@media(max-width:1199px){.stage{padding-top:8px}.frame{min-height:calc(100svh - 24px)}.crest{width:min(60vw,394.33px)}}
 </style></head><body>
-<div class="note">SHED PROOF ONLY — no postcode lookup or live Campaign data</div>
 <main class="stage"><section class="frame" id="frame" aria-label="Shared single frame">
 <img class="crest" id="crest" src="tffc-splash-logo-q80.webp" alt="Tin Foil FA Cup crest">
 <div class="screen" id="splash"><h1><span>Start your</span>Tin Foil FA Cup<span>journey here</span></h1><p class="copy">Experience the magic of your<br>own Cup Run as you try to<br>get to Wembley — for real!</p><button id="start">Start Campaign</button></div>
