@@ -341,6 +341,9 @@ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-camp
   const contentBottom=Math.max(...Array.from(frame.querySelectorAll('.tffcContent, #clubfinderField')).map(e=>e.getBoundingClientRect().bottom));
   const rect=frame.getBoundingClientRect();
   const required=Math.max(rect.height,contentBottom-rect.top+20);
+  // Splash expands its field to the natural content height before applying
+  // viewport fit. Keep the same height authority on the proof frame.
+  frame.style.minHeight=Math.ceil(required)+'px';
   const viewport=window.visualViewport?.height||window.innerHeight;
   // Splash's desktop geometry uses a 628px frame scaled to 550.31px
   // at 1680×889. Apply the same proportional stage scale in this opt-in proof.
@@ -348,6 +351,13 @@ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-camp
    ? Math.min(1,550.31/628, (viewport-20)/(required+2*parseFloat(getComputedStyle(stage).paddingTop)))
    : innerWidth>=700?Math.min(1,(viewport-20)/(required+2*parseFloat(getComputedStyle(stage).paddingTop))):1;
   stage.style.setProperty('--tffc-shared-frame-scale',String(Math.max(.1,scale)));
+  // Match Splash's visible field bottom, rather than a viewport height
+  // that is itself reduced by CSS zoom. Preserve the established scale.
+  if(innerWidth>=1200){
+   const pad=parseFloat(getComputedStyle(stage).paddingTop)||0;
+   const targetHeight=(viewport-20)/Math.max(.1,scale)-pad;
+   frame.style.minHeight=Math.max(required,targetHeight)+'px';
+  }
  }
  function schedule(){if(!pending){pending=true;requestAnimationFrame(measure)}}
  window.addEventListener('load',schedule);
