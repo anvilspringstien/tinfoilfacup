@@ -295,32 +295,36 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
 }
 
 
-/* Opt-in geometry proof: use Splash's 628px natural frame and viewport-height fit.
-   Isolated from the default journey until Big Boy measurements confirm parity. */
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) body{padding:0}
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws{padding:clamp(6px,1.2vh,13px);zoom:var(--tffc-shared-frame-scale,1)}
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws .tffcOuter{max-width:628px;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px))}
-<script>
-/* Read-only outside ?geometryProof=1. Measure the complete single frame
-   at natural size, then apply Splash's height-fit formula. */
+/* Shared-frame structural proof: one viewport frame, crest anchored to frame.
+   Opening only; results retain natural document flow. */
+html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) body{padding:0!important}
+html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws{height:100svh;min-height:0;padding:clamp(6px,1.2vh,13px);display:flex;justify-content:center;zoom:var(--tffc-shared-frame-scale,1)}
+html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcOuter{flex:0 1 628px;width:100%;max-width:628px;height:calc(100svh - 2 * clamp(6px,1.2vh,13px));min-height:0;overflow:hidden;display:flex;flex-direction:column;position:relative}
+html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{width:83.333%;max-width:450px;margin-top:clamp(8px,7.2cqw,38px)}
+html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcContent{flex:0 0 auto}
+html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #clubfinderField{flex:0 0 auto}
+</style><script>
+/* Experimental opening-frame fit; no changes to the default or result routes. */
 (function(){
  const q=new URLSearchParams(location.search);
  if(q.get('geometryProof')!=='1'||q.get('singleFrame')==='0'||q.has('stats'))return;
  const root=document.documentElement,stage=document.getElementById('tffcFourLaws');
- const frame=stage?.querySelector('.tffcOuter');
- if(!frame)return;
+ if(!stage)return;
  root.classList.add('tffc-geometry-proof');
  let pending=false;
  function measure(){
   pending=false;
-  if(root.classList.contains('tffc-campaign-results'))return;
   stage.style.setProperty('--tffc-shared-frame-scale','1');
-  const outer=frame.getBoundingClientRect();
-  const stageBottom=stage.getBoundingClientRect().bottom;
-  const naturalBottom=Math.max(stageBottom,outer.bottom);
+  if(root.classList.contains('tffc-campaign-results'))return;
+  const frame=stage.querySelector('.tffcOuter');
+  const crest=frame?.querySelector('.tffcCrest');
+  if(!frame||!crest)return;
+  const contentBottom=Math.max(...Array.from(frame.querySelectorAll('.tffcContent, #clubfinderField')).map(e=>e.getBoundingClientRect().bottom));
+  const rect=frame.getBoundingClientRect();
+  const required=Math.max(rect.height,contentBottom-rect.top+20);
   const viewport=window.visualViewport?.height||window.innerHeight;
-  const scale=window.innerWidth>=700?Math.min(1,Math.max(1,viewport-20)/Math.max(1,naturalBottom)):1;
-  stage.style.setProperty('--tffc-shared-frame-scale',String(scale));
+  const scale=innerWidth>=700?Math.min(1,(viewport-20)/(required+2*parseFloat(getComputedStyle(stage).paddingTop))):1;
+  stage.style.setProperty('--tffc-shared-frame-scale',String(Math.max(.1,scale)));
  }
  function schedule(){if(!pending){pending=true;requestAnimationFrame(measure)}}
  window.addEventListener('load',schedule);
@@ -329,8 +333,7 @@ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws 
  document.fonts?.ready?.then(schedule);
  schedule();
 })();
-</script>
-</style><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div></main><script>
+</script><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div></main><script>
 /* Real BETA single-frame presentation, default in the Shed. The existing
    search/results DOM nodes retain their IDs, listeners and engine. */
 (function(){
