@@ -315,6 +315,13 @@ html.tffc-geometry-proof:not(.tffc-stats-route){scrollbar-gutter:auto}
   width:83.333%;max-width:450px;margin-top:38px
  }
 }
+/* Splash frame is a full-height flex child. Match its height independently
+   of the opening furniture and the stage's proportional zoom. */
+@media(min-width:1200px){
+ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcOuter{
+  height:calc(100svh / var(--tffc-shared-frame-scale,1) - 2 * clamp(6px,1.2vh,13px));
+ }
+}
 /* Shared-frame structural proof: one viewport frame, crest anchored to frame.
    Opening only; results retain natural document flow. */
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) body{padding:0!important}
