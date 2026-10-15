@@ -293,6 +293,25 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
  html.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws .tffcSmall{margin-top:12px}
  html.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws .tffcInvitation{margin-top:10px}
 }
+
+/* Single-frame iPad landscape opening only: adapt content to the shorter viewport.
+   No zoom; Campaign results may grow and scroll naturally. */
+@media(min-width:700px) and (max-width:1199px) and (orientation:landscape) and (max-height:850px){
+ html.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{
+  width:min(83.333%,34svh);margin-top:6px;
+ }
+ html.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws ol{
+  margin-top:8px;font-size:clamp(12px,1.7svh,16px);line-height:1.2;
+ }
+ html.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcSmall{
+  margin-top:6px;font-size:10px;
+ }
+ html.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcInvitation{
+  margin:6px 0 4px;font-size:clamp(13px,2svh,17px);
+ }
+ html.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #clubfinderField{padding-top:2px;padding-bottom:6px}
+}
+
 </style><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div></main><script>
 /* Real BETA single-frame presentation trial, opt-in only. The existing
    search/results DOM nodes retain their IDs, listeners and engine. */
