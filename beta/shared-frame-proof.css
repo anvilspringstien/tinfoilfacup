@@ -1,19 +1,27 @@
-/* Standalone geometry proof: both pages load this exact stylesheet. */
-:root{--frame:#084c61;--ink:#fafafa;--edge:#818181}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:#181512;color:var(--ink)}
-.stage{height:100svh;min-height:0;padding:clamp(6px,1.2vh,13px);display:flex;zoom:var(--shared-scale,1)}
-.frame{container-type:inline-size;position:relative;flex:1;min-width:0;min-height:0;max-width:628px;margin:0 auto;overflow:hidden;background:var(--frame);border:1px solid var(--edge);border-radius:12px}
+/* Extracted verbatim from production Splash index.html. Selectors are
+   intentionally unchanged: .stage, .field, .content, .crest. */
+:root{--cream:#f6f3e8;--field:#100f0d}*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#141210;color:var(--cream)}
+body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed}
+.stage{height:100svh;min-height:0;padding:clamp(6px,1.2vh,13px);display:flex}
+.field{container-type:inline-size;position:relative;flex:1;min-width:0;min-height:0;max-width:628px;margin:0 auto;overflow:hidden;background:var(--field);border:1px solid #818181;border-radius:12px}
 .content{height:100%;min-height:0;width:100%;max-width:580px;margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-bottom:clamp(12px,2.4vh,24px)}
 .crest{display:block;object-fit:contain;width:83.333%;max-width:450px;height:auto;aspect-ratio:1;flex:none;margin-top:clamp(8px,7.2cqw,38px)}
-.furniture{width:90%;text-align:center;display:grid;gap:16px;place-items:center}
-.furniture h1{font-size:clamp(24px,6cqw,38px);font-weight:300;margin:0}
-.furniture p{margin:0;line-height:1.5}
-.furniture button,.furniture a{font:inherit;padding:12px 24px;background:#292724;border:1px solid var(--edge);border-radius:10px;color:var(--ink);text-decoration:none}
-.footer{font-size:clamp(9px,1.45cqw,11px);text-align:center;margin:0}
-@media(min-width:700px) and (max-height:850px){
+
+@media (min-width:700px) and (max-height:850px){
  .stage{height:auto;min-height:100svh}
- .frame{flex:initial;width:100%;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));overflow:visible}
- .content{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));justify-content:flex-start;gap:22px;padding:0 12px 14px}
- .crest{margin-top:38px}
+ .field{flex:initial;width:100%;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));overflow:visible}
+ .content{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));justify-content:flex-start;padding:0 12px 14px}
+ .crest{width:83.333%;max-width:450px;margin-top:38px}
+ .intro{margin-top:10px}
+ p{margin-top:12px;transform:none}
+ a.start{margin:14px 0 16px}
+ .grassroots{white-space:normal}
 }
+
+
+/* Opt-in large-screen proportional-fit experiment; phone and default BETA unchanged. */
+@media(min-width:700px){
+ html.tffc-viewport-fit .stage{zoom:var(--tffc-fit-scale,1)}
+}
+
