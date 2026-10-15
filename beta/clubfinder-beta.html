@@ -311,14 +311,18 @@ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-camp
 (function(){
  const q=new URLSearchParams(location.search);
  if(q.get('geometryProof')!=='1'||q.get('singleFrame')==='0'||q.has('stats'))return;
- const root=document.documentElement,stage=document.getElementById('tffcFourLaws');
- if(!stage)return;
+ const root=document.documentElement;
+ // This script runs before the frame markup is parsed. Defer measurement until
+ // the parser has built the frame, but enable the class immediately.
+ root.classList.add('tffc-geometry-proof');
+ const stageReady=()=>document.getElementById('tffcFourLaws');
  root.classList.remove('tffc-opening-fit');
  root.style.removeProperty('--tffc-opening-scale');
- root.classList.add('tffc-geometry-proof');
  let pending=false;
  function measure(){
   pending=false;
+  const stage=stageReady();
+  if(!stage)return;
   stage.style.setProperty('--tffc-shared-frame-scale','1');
   if(root.classList.contains('tffc-campaign-results'))return;
   const frame=stage.querySelector('.tffcOuter');
