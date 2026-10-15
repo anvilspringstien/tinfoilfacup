@@ -34,3 +34,13 @@ body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;backg
 .crest{flex:none!important}
 .furniture{min-height:0;flex:1;overflow:auto;width:100%;text-align:center}
 .footer{flex:none}
+
+/* Desktop reference: the room fills the viewport after stage zoom.
+   Unlike the old proof, zoom must not shorten the room itself.
+   Furniture remains clipped/scrollable within the room. */
+@media(min-width:700px){
+ html.tffc-viewport-fit .stage{
+  height:calc(100svh / var(--tffc-fit-scale,1))!important;
+  min-height:0!important;
+ }
+}
