@@ -280,7 +280,7 @@ html:not(.tffc-stats-route):not(.tffc-campaign-results) #clubfinderField{flex:0 
 @media(max-width:600px) and (max-height:599px){
  html:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{width:min(83.333%,70vw)}
 }
-/* Opt-in real-engine single-frame Shed trial: ?singleFrame=1&viewportFit=0.
+/* Default real-engine single-frame Shed layout (singleFrame=0 opts out).
    Preserve the default BETA and all Stats, search, results and data machinery. */
 html.tffc-single-frame:not(.tffc-stats-route) body{padding:10px 12px 16px}
 html.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws{padding:0}
@@ -296,11 +296,11 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
 
 
 </style><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div></main><script>
-/* Real BETA single-frame presentation trial, opt-in only. The existing
+/* Real BETA single-frame presentation, default in the Shed. The existing
    search/results DOM nodes retain their IDs, listeners and engine. */
 (function(){
  const q=new URLSearchParams(location.search);
- if(q.get('singleFrame')!=='1'||q.has('stats'))return;
+ if(q.get('singleFrame')==='0'||q.has('stats'))return;
  document.documentElement.classList.add('tffc-single-frame');
  const outer=document.querySelector('#tffcFourLaws .tffcOuter');
  const field=document.getElementById('clubfinderField');
@@ -2519,9 +2519,9 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
 }
 </style>
 <script>
-/* BETA-only ?viewportFit=1: fit the two opening frames as one unit. */
+/* Legacy two-frame viewport fitter, opt-in only with ?viewportFit=1. */
 (function(){
- if(new URLSearchParams(location.search).get('viewportFit')==='0'||window.innerWidth<700)return;
+ if(new URLSearchParams(location.search).get('viewportFit')!=='1'||window.innerWidth<700)return;
  // Browser-only presentation enhancement; Node regression harnesses lack a DOM root.
  if(!document.documentElement||!document.documentElement.classList)return;
  const root=document.documentElement;
