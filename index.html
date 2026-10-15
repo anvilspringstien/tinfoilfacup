@@ -35,6 +35,16 @@ a.start:focus-visible{outline:3px solid #fff;outline-offset:4px}
  .grassroots{white-space:normal}
 }
 
+/* Big Boy landing composition: fit every element above the fold while
+   preserving the matched desktop frame width from PR #398. */
+@media(min-width:1200px){
+ .content{justify-content:flex-start;padding-bottom:12px}
+ .crest{width:75%;max-width:395px;margin-top:18px}
+ .intro{margin-top:8px}
+ p{margin-top:22px;transform:none}
+ a.start{margin:14px 0 16px}
+ .grassroots{margin-top:0;white-space:normal}
+}
 /* Opt-in large-screen proportional-fit experiment; phone and default BETA unchanged. */
 @media(min-width:700px){
  html.tffc-viewport-fit .stage{zoom:var(--tffc-fit-scale,1)}
