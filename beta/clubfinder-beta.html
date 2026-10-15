@@ -328,6 +328,8 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
  function update(){
   scheduled=false;
   if(document.activeElement===postcode)return;
+  // Once Campaigns appear, freeze the opening fit. Results must scroll at a stable width.
+  if(root.classList.contains('tffc-campaign-results'))return;
   const landscape=matchMedia('(min-width:700px) and (max-width:1199px) and (orientation:landscape) and (max-height:850px)').matches;
   root.style.setProperty('--tffc-single-landscape-scale','1');
   if(!landscape)return;
