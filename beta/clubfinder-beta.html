@@ -300,6 +300,36 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) body{padding:0}
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws{padding:clamp(6px,1.2vh,13px);zoom:var(--tffc-shared-frame-scale,1)}
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route) #tffcFourLaws .tffcOuter{max-width:628px;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px))}
+<script>
+/* Read-only outside ?geometryProof=1. Measure the complete single frame
+   at natural size, then apply Splash's height-fit formula. */
+(function(){
+ const q=new URLSearchParams(location.search);
+ if(q.get('geometryProof')!=='1'||q.get('singleFrame')==='0'||q.has('stats'))return;
+ const root=document.documentElement,stage=document.getElementById('tffcFourLaws');
+ const frame=stage?.querySelector('.tffcOuter');
+ if(!frame)return;
+ root.classList.add('tffc-geometry-proof');
+ let pending=false;
+ function measure(){
+  pending=false;
+  if(root.classList.contains('tffc-campaign-results'))return;
+  stage.style.setProperty('--tffc-shared-frame-scale','1');
+  const outer=frame.getBoundingClientRect();
+  const stageBottom=stage.getBoundingClientRect().bottom;
+  const naturalBottom=Math.max(stageBottom,outer.bottom);
+  const viewport=window.visualViewport?.height||window.innerHeight;
+  const scale=window.innerWidth>=700?Math.min(1,Math.max(1,viewport-20)/Math.max(1,naturalBottom)):1;
+  stage.style.setProperty('--tffc-shared-frame-scale',String(scale));
+ }
+ function schedule(){if(!pending){pending=true;requestAnimationFrame(measure)}}
+ window.addEventListener('load',schedule);
+ window.addEventListener('resize',schedule);
+ window.visualViewport?.addEventListener('resize',schedule);
+ document.fonts?.ready?.then(schedule);
+ schedule();
+})();
+</script>
 </style><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div></main><script>
 /* Real BETA single-frame presentation, default in the Shed. The existing
    search/results DOM nodes retain their IDs, listeners and engine. */
@@ -2035,37 +2065,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
     if(!w)return;
     try{
       w.document.open();
-      w.document.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tin Foil FA Cup Stats</title><style>:root{--deep:#084c61;--paper:#f4efe3}*{box-sizing:border-box}html,body{min-height:100%;min-height:100vh}body{margin:0;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed;}@supports(height:100dvh){html,body{min-height:100dvh}}body{background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed;color:var(--deep);font-family:Arial,sans-serif}.prep-card{width:min(420px,calc(100vw - 40px));padding:28px 24px 26px;border:1px solid #d7d2c8;border-radius:10px;background:#fafafa;box-shadow:0 12px 28px rgba(0,0,0,.12);text-align:center}.prep-kicker{margin:0 0 12px;font:800 11px/1 Arial,sans-serif;letter-spacing:.14em;color:#6b6257}.prep-title{margin:0;font:800 19px/1.15 Arial,sans-serif;letter-spacing:.02em;color:var(--deep)}.prep-copy{margin:12px auto 18px;max-width:300px;font:600 13px/1.4 Arial,sans-serif;color:#4a4742}.prep-rollers{display:flex;justify-content:center;gap:6px}.prep-rollers span{width:34px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:#111;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),var(--paper);box-shadow:inset 0 0 6px rgba(71,52,25,.22);font:900 24px/1 Georgia,"Times New Roman",serif}@media (prefers-reduced-motion:reduce){.prep-rollers span{animation:none}}</style></head><body><main class="prep-card" aria-live="polite" aria-busy="true"><div class="prep-kicker">TIN FOIL FA CUP</div><h1 class="prep-title">Preparing Your Stats…</h1><p class="prep-copy">Checking your Campaign and calculating Pigeon Miles</p><div class="prep-rollers" aria-hidden="true"><span>3</span><span>7</span><span>1</span></div></main><script>(()=>{const r=[...document.querySelectorAll(".prep-rollers span")];if(!r.length||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches))return;let t=0;setInterval(()=>{t=(t+1)%10;r.forEach((x,i)=>x.textContent=String((t+i*3)%10))},180)})()<\/script><script>
-/* Read-only outside ?geometryProof=1. Measure the complete single frame
-   at natural size, then apply Splash's height-fit formula. */
-(function(){
- const q=new URLSearchParams(location.search);
- if(q.get('geometryProof')!=='1'||q.get('singleFrame')==='0'||q.has('stats'))return;
- const root=document.documentElement,stage=document.getElementById('tffcFourLaws');
- const frame=stage?.querySelector('.tffcOuter');
- if(!frame)return;
- root.classList.add('tffc-geometry-proof');
- let pending=false;
- function measure(){
-  pending=false;
-  if(root.classList.contains('tffc-campaign-results'))return;
-  stage.style.setProperty('--tffc-shared-frame-scale','1');
-  const outer=frame.getBoundingClientRect();
-  const stageBottom=stage.getBoundingClientRect().bottom;
-  const naturalBottom=Math.max(stageBottom,outer.bottom);
-  const viewport=window.visualViewport?.height||window.innerHeight;
-  const scale=window.innerWidth>=700?Math.min(1,Math.max(1,viewport-20)/Math.max(1,naturalBottom)):1;
-  stage.style.setProperty('--tffc-shared-frame-scale',String(scale));
- }
- function schedule(){if(!pending){pending=true;requestAnimationFrame(measure)}}
- window.addEventListener('load',schedule);
- window.addEventListener('resize',schedule);
- window.visualViewport?.addEventListener('resize',schedule);
- document.fonts?.ready?.then(schedule);
- schedule();
-})();
-</script>
-</body></html>');
+      w.document.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tin Foil FA Cup Stats</title><style>:root{--deep:#084c61;--paper:#f4efe3}*{box-sizing:border-box}html,body{min-height:100%;min-height:100vh}body{margin:0;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed;}@supports(height:100dvh){html,body{min-height:100dvh}}body{background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed;color:var(--deep);font-family:Arial,sans-serif}.prep-card{width:min(420px,calc(100vw - 40px));padding:28px 24px 26px;border:1px solid #d7d2c8;border-radius:10px;background:#fafafa;box-shadow:0 12px 28px rgba(0,0,0,.12);text-align:center}.prep-kicker{margin:0 0 12px;font:800 11px/1 Arial,sans-serif;letter-spacing:.14em;color:#6b6257}.prep-title{margin:0;font:800 19px/1.15 Arial,sans-serif;letter-spacing:.02em;color:var(--deep)}.prep-copy{margin:12px auto 18px;max-width:300px;font:600 13px/1.4 Arial,sans-serif;color:#4a4742}.prep-rollers{display:flex;justify-content:center;gap:6px}.prep-rollers span{width:34px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:#111;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),var(--paper);box-shadow:inset 0 0 6px rgba(71,52,25,.22);font:900 24px/1 Georgia,"Times New Roman",serif}@media (prefers-reduced-motion:reduce){.prep-rollers span{animation:none}}</style></head><body><main class="prep-card" aria-live="polite" aria-busy="true"><div class="prep-kicker">TIN FOIL FA CUP</div><h1 class="prep-title">Preparing Your Stats…</h1><p class="prep-copy">Checking your Campaign and calculating Pigeon Miles</p><div class="prep-rollers" aria-hidden="true"><span>3</span><span>7</span><span>1</span></div></main><script>(()=>{const r=[...document.querySelectorAll(".prep-rollers span")];if(!r.length||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches))return;let t=0;setInterval(()=>{t=(t+1)%10;r.forEach((x,i)=>x.textContent=String((t+i*3)%10))},180)})()<\/script></body></html>');
       w.document.close();
       try{
         const seen=new Set(),src=journeyCertificate.toString(),rx=/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g;
