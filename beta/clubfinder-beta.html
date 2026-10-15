@@ -298,36 +298,22 @@ html.tffc-single-frame:not(.tffc-stats-route) #clubfinderField{width:100%;max-wi
 /* The shared geometry proof must never inherit the legacy body-level fit. */
 html.tffc-geometry-proof.tffc-opening-fit:not(.tffc-stats-route) body{zoom:1!important}
 html.tffc-geometry-proof:not(.tffc-stats-route){scrollbar-gutter:auto}
-/* Geometry proof desktop: match Splash's measured stage scaling and frame rules.
-   The opening furniture may flow; the frame and crest must not drift. */
+/* Splash-matched desktop geometry: one stage, one flex frame.
+   The stage's existing proportional scale is the only scaling authority. */
 @media(min-width:1200px){
  html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws{
-  width:100%;height:100svh;min-height:0;box-sizing:border-box;
-  padding:clamp(6px,1.2vh,13px);display:flex;align-items:stretch;justify-content:center;
+  width:100%;height:100svh;min-height:0;padding:clamp(6px,1.2vh,13px);
+  display:flex;align-items:stretch;justify-content:center;
   zoom:var(--tffc-shared-frame-scale,1)
  }
  html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcOuter{
-  flex:1 1 auto;width:100%;max-width:628px;min-height:0;
-  height:calc(100svh - 2 * clamp(6px,1.2vh,13px));box-sizing:border-box;
-  margin:0 auto;overflow:hidden
+  flex:1 1 auto;width:100%;max-width:628px;min-width:0;min-height:0;
+  height:auto;margin:0 auto;overflow:hidden;box-sizing:border-box
  }
  html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{
   width:83.333%;max-width:450px;margin-top:38px
  }
 }
-/* Splash frame is a full-height flex child. Match its height independently
-   of the opening furniture and the stage's proportional zoom. */
-@media(min-width:1200px){
- html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcOuter{
-  height:calc(100svh / var(--tffc-shared-frame-scale,1) - 2 * clamp(6px,1.2vh,13px));
- }
-}
-/* Shared-frame structural proof: one viewport frame, crest anchored to frame.
-   Opening only; results retain natural document flow. */
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) body{padding:0!important}
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws{height:100svh;min-height:0;padding:clamp(6px,1.2vh,13px);display:flex;justify-content:center;zoom:var(--tffc-shared-frame-scale,1)}
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcOuter{flex:0 1 628px;width:100%;max-width:628px;height:calc(100svh - 2 * clamp(6px,1.2vh,13px));min-height:0;overflow:hidden;display:flex;flex-direction:column;position:relative}
-html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcCrest{width:83.333%;max-width:450px;margin-top:clamp(8px,7.2cqw,38px)}
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #tffcFourLaws .tffcContent{flex:0 0 auto}
 html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-campaign-results) #clubfinderField{flex:0 0 auto}
 </style><script>
