@@ -26,4 +26,5 @@ for(const [width,height] of sizes){
 await browser.close();
 await writeFile('splash-parity-evidence/report.json',JSON.stringify(results,null,2));
 console.log(JSON.stringify(results,null,2));
-console.log('DIAGNOSTIC ONLY: parity differences are recorded, not silently treated as passing.');
+const mismatches=results.flatMap(r=>Object.entries(r.differences).filter(([,delta])=>Math.abs(delta)>1).map(([key,delta])=>r.viewport+' '+key+' '+delta));
+if(mismatches.length){console.error('FAIL: approved Splash parity differs beyond 1px:',mismatches);process.exitCode=1;}else console.log('PASS: approved Splash geometry parity within 1px');
