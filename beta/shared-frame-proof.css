@@ -25,3 +25,12 @@ body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;backg
  html.tffc-viewport-fit .stage{zoom:var(--tffc-fit-scale,1)}
 }
 
+
+/* Two rooms, fixed crest: content can neither resize the room nor move the crest.
+   Isolated proof only. */
+.stage{height:100svh!important;min-height:0!important}
+.field{height:100%;min-height:0!important;max-height:100%;overflow:hidden!important;flex:1!important}
+.content{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important}
+.crest{flex:none!important}
+.furniture{min-height:0;flex:1;overflow:auto;width:100%;text-align:center}
+.footer{flex:none}

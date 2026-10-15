@@ -1,0 +1,30 @@
+name: Shared frame proof multi-viewport (Shed)
+on:
+  pull_request:
+    paths:
+      - 'beta/shared-frame-*-proof.html'
+      - 'beta/shared-frame-proof.css'
+      - 'beta/shared-frame-proof.js'
+      - 'tests/shared-frame-multiviewport.mjs'
+      - '.github/workflows/shared-frame-multiviewport.yml'
+  workflow_dispatch:
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Serve static proof
+        run: python3 -m http.server 8765 --bind 127.0.0.1 &
+      - name: Compare five viewports
+        run: node tests/shared-frame-multiviewport.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shared-frame-geometry-evidence
+          path: geometry-evidence/
