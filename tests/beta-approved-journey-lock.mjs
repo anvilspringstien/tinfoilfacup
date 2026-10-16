@@ -14,7 +14,7 @@ const approved={
  'beta/two-rooms-splash-locked.html':'9d0565eda94ea221e2c6689865ae26da31fc8894',
  'beta/two-rooms-splash-locked.css':'309779e2751e316695365fbb67d5238b9624eb4b',
  'beta/two-rooms-clubfinder.html':'789a0de355ec93211767eb7fbb9ccd513c0f7c13',
- 'beta/two-rooms.css':'1f982d6c3d70337234e0e43041eb6c77639e6706',
+ 'beta/two-rooms.css':'1f982dfecd70337234e0e43041eb6c77639e6706',
  'beta/two-rooms-shed-scrollbar.css':'a92c0386b383f4c701fa679c56e60d67597b34be',
  'beta/two-rooms-splash-iframe-proof.html':'243534419d8eff53e8858eec93fc7eb307979806',
  'beta/two-rooms-iframe-engine-proof.html':'cef56a18d00fefd7f4aa10647d7120f1240b5504',
