@@ -23,3 +23,26 @@ html.tffc-exact-master:not(.tffc-stats-route):not(.tffc-campaign-results) #clubf
 html.tffc-exact-master.tffc-campaign-results:not(.tffc-stats-route) #clubfinderField{
  display:block!important;margin:0 auto!important;
 }
+
+/* Match the approved locked Splash: BETA otherwise reserves a scrollbar
+   gutter at desktop widths and shifts the centred Four Laws on navigation.
+   The original BETA CSS and approved master pages are not modified. */
+html.tffc-exact-master:not(.tffc-stats-route) {
+ scrollbar-gutter:auto!important;
+}
+
+/* The approved Four Laws .field measures viewport minus the shared stage
+   padding, capped at 628px on small screens and 550px from 700px up.
+   Apply the same outer width to BETA's existing Campaign result field. */
+html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
+ box-sizing:border-box!important;
+ width:calc(100% - clamp(6px, 1.2vh, 13px) - clamp(6px, 1.2vh, 13px))!important;
+ max-width:628px!important;
+ margin-left:auto!important;
+ margin-right:auto!important;
+}
+@media (min-width:700px) {
+ html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
+  max-width:550px!important;
+ }
+}
