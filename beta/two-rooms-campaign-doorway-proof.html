@@ -3,6 +3,14 @@
 <title>Campaign doorway — isolated Shed proof</title><link rel="stylesheet" href="two-rooms.css">
 <style>
 /* Doorway proof ONLY. No changes to the approved Two Rooms stylesheet. */
+/* Results mode releases the viewport frame and makes the DOCUMENT scroll. */
+html.doorway-campaign-results .stage{height:auto;min-height:100svh}
+html.doorway-campaign-results .field{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));overflow:visible}
+html.doorway-campaign-results .room{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));grid-template-rows:auto auto}
+html.doorway-campaign-results .furniture{overflow:visible;min-height:0}
+html.doorway-campaign-results .clubfinder-laws{margin-top:24px}
+html.doorway-campaign-results .clubfinder-laws-title{margin:24px 0 0}
+
 .doorway-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px auto}
 .doorway-actions button{font-size:13px;padding:9px 12px}
 .doorway-results{display:none;width:100%;padding:12px 8px 20px;color:var(--cream);text-align:left}
@@ -20,7 +28,7 @@
 <div class="furniture clubfinder-furniture">
 <h1 class="clubfinder-laws-title">The Four Laws</h1>
 <div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div>
-<div class="clubfinder-machine"><div class="clubfinder-search"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code"><button id="findBtn" type="button">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status" role="status">Isolated transition demonstration</div></div>
+<div class="clubfinder-machine" id="clubfinderField"><div class="clubfinder-search"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code"><button id="findBtn" type="button">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status" role="status">Isolated transition demonstration</div></div>
 <p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p>
 <p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p>
 <section id="doorway-results" class="doorway-results" aria-label="Campaign doorway preview">
@@ -41,10 +49,11 @@ function showDoorway(){
  if(!pc){status.textContent='Please enter a postcode.';input.focus();return}
  input.value=pc;input.blur();
  results.classList.add('open');
+ document.documentElement.classList.add('doorway-campaign-results');
  status.textContent='Doorway layout preview for '+pc+' — no real search performed';
- requestAnimationFrame(()=>results.scrollIntoView({behavior:'smooth',block:'start'}));
+ requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById('clubfinderField').scrollIntoView({behavior:'instant',block:'start'})));
 }
 document.getElementById('findBtn').addEventListener('click',showDoorway);
 input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();showDoorway()}});
-document.getElementById('hide-results').addEventListener('click',()=>{results.classList.remove('open');status.textContent='Isolated transition demonstration';document.querySelector('.clubfinder-machine').scrollIntoView({behavior:'smooth',block:'start'})});
+document.getElementById('hide-results').addEventListener('click',()=>{results.classList.remove('open');document.documentElement.classList.remove('doorway-campaign-results');status.textContent='Isolated transition demonstration';requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'instant'})))});
 </script></body></html>
