@@ -2639,7 +2639,7 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
 /* Shed-only bridge: override iOS input focus font without changing the locked
    Four Laws master. Applies only when the approved journey embeds that master. */
 (function(){
- if(!document.documentElement.classList.contains('tffc-exact-master'))return;
+ if(!document.documentElement?.classList?.contains('tffc-exact-master'))return;
  const attach=()=>{
   const frame=document.querySelector('iframe.tffc-exact-master-frame');
   if(!frame)return false;
