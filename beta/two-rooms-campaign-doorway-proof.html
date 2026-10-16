@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Campaign doorway — isolated Shed proof</title><link rel="stylesheet" href="two-rooms.css">
+<style>
+/* Doorway proof ONLY. No changes to the approved Two Rooms stylesheet. */
+.doorway-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px auto}
+.doorway-actions button{font-size:13px;padding:9px 12px}
+.doorway-results{display:none;width:100%;padding:12px 8px 20px;color:var(--cream);text-align:left}
+.doorway-results.open{display:block}
+.doorway-results h2{font-size:18px;font-weight:400;margin:4px 0 12px;text-align:center}
+.doorway-choice{border:1px solid #818181;border-radius:9px;padding:12px;margin:8px 0}
+.doorway-choice strong{display:block;font-size:16px;font-weight:400}
+.doorway-choice p{font-size:12px;margin:7px 0}
+.doorway-choice button{font-size:13px;padding:9px 12px}
+.doorway-note{font-size:11px;line-height:1.5;text-align:center}
+.doorway-results button:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+</style></head><body>
+<main class="stage"><section class="field"><div class="room">
+<div class="crest-compartment"><img class="crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div>
+<div class="furniture clubfinder-furniture">
+<h1 class="clubfinder-laws-title">The Four Laws</h1>
+<div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div>
+<div class="clubfinder-machine"><div class="clubfinder-search"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code"><button id="findBtn" type="button">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status" role="status">Isolated transition demonstration</div></div>
+<p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p>
+<p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p>
+<section id="doorway-results" class="doorway-results" aria-label="Campaign doorway preview">
+<h2>Choose Your Tin Foil FA Cup Campaign</h2>
+<p class="doorway-note">Illustrative layout only. These are NOT postcode search results. No campaign or identity is saved.</p>
+<div class="doorway-choice"><strong>Campaign 1 — nearest club</strong><p>Real club, ground, distance and next fixture will be supplied by the existing BETA engine.</p><button type="button" disabled>Choose Campaign 1 — demo</button></div>
+<div class="doorway-choice"><strong>Campaign 2 — second nearest</strong><p>Existing Campaign choice and confirmation logic will remain authoritative.</p><button type="button" disabled>Choose Campaign 2 — demo</button></div>
+<div class="doorway-choice"><strong>Campaign 3 — third nearest</strong><p>Existing saved Campaign, pigeon identity, Stats and Challenges will remain untouched.</p><button type="button" disabled>Choose Campaign 3 — demo</button></div>
+<div class="doorway-actions"><button id="hide-results" type="button">Return to Clubfinder</button></div>
+<p class="doorway-note">Proof of same-room reveal and scrolling only. No network calls, counters, storage writes or BETA engine integration.</p>
+</section>
+</div></div></section></main>
+<script>
+'use strict';
+const input=document.getElementById('postcode'),results=document.getElementById('doorway-results'),status=document.getElementById('clubfinder-status');
+function showDoorway(){
+ const pc=input.value.trim().toUpperCase();
+ if(!pc){status.textContent='Please enter a postcode.';input.focus();return}
+ input.value=pc;input.blur();
+ results.classList.add('open');
+ status.textContent='Doorway layout preview for '+pc+' — no real search performed';
+ requestAnimationFrame(()=>results.scrollIntoView({behavior:'smooth',block:'start'}));
+}
+document.getElementById('findBtn').addEventListener('click',showDoorway);
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();showDoorway()}});
+document.getElementById('hide-results').addEventListener('click',()=>{results.classList.remove('open');status.textContent='Isolated transition demonstration';document.querySelector('.clubfinder-machine').scrollIntoView({behavior:'smooth',block:'start'})});
+</script></body></html>
