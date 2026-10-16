@@ -24,11 +24,16 @@ html.tffc-exact-master.tffc-campaign-results:not(.tffc-stats-route) #clubfinderF
  display:block!important;margin:0 auto!important;
 }
 
-/* Match the approved locked Splash: BETA otherwise reserves a scrollbar
-   gutter at desktop widths and shifts the centred Four Laws on navigation.
-   The original BETA CSS and approved master pages are not modified. */
+/* Match the *test Splash* gutter exactly before and after Find.
+   Reserve desktop scrollbar space from the first paint, without forcing a
+   visible scrollbar. The actual locked masters remain untouched. */
 html.tffc-exact-master:not(.tffc-stats-route) {
  scrollbar-gutter:auto!important;
+}
+@media (min-width:1200px) {
+ html.tffc-exact-master:not(.tffc-stats-route) {
+  scrollbar-gutter:stable!important;
+ }
 }
 
 /* The approved Four Laws .field measures viewport minus the shared stage
@@ -47,27 +52,46 @@ html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
  }
 }
 
-/* BETA's success status belongs between the actual Four Laws master and
-   the existing Campaign cards, never in the master Mean Machine. */
+/* Second matching-width field: separate results summary. The original
+   status stays owned by the BETA engine; the bridge mirrors only completed
+   Campaign text here. A box prevents iPhone edge bleed. */
 html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary {
- box-sizing:border-box;
- width:calc(100% - 2 * clamp(6px, 1.2vh, 13px));
- max-width:628px;
- margin:12px auto 8px;
- padding:0 8px;
- color:#f6f3e8;
- font:300 13px/1.4 Poppins,"Helvetica Neue",Arial,sans-serif;
- text-align:center;
+ box-sizing:border-box!important;
+ flex:0 0 auto!important;
+ display:block;
+ width:calc(100% - 2 * clamp(6px, 1.2vh, 13px))!important;
+ max-width:628px!important;
+ min-width:0!important;
+ margin:12px auto 10px!important;
+ padding:14px 16px!important;
+ background:#100f0d!important;
+ border:1px solid #818181!important;
+ border-radius:12px!important;
+ color:#f6f3e8!important;
+ font:300 clamp(12px, 2.7vw, 14px)/1.45 Poppins,"Helvetica Neue",Arial,sans-serif!important;
+ text-align:center!important;
+ white-space:normal!important;
+ overflow-wrap:anywhere!important;
 }
 html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary[hidden] {
  display:none!important;
 }
 @media (min-width:700px) {
  html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary {
-  max-width:550px;
+  max-width:550px!important;
  }
+}
+
+/* Third matching-width field: surround untouched BETA Campaign cards with
+   the same charcoal, border and corner treatment as the Four Laws field.
+   Do not change .result cards, Campaign buttons or data layout. */
+html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
+ background:#100f0d!important;
+ border:1px solid #818181!important;
+ border-radius:12px!important;
+ padding:14px 12px 16px!important;
 }
 /* BETA's original scroll-to-results should also leave the summary visible. */
 html.tffc-exact-master.tffc-campaign-results:not(.tffc-stats-route) #clubfinderField {
- scroll-margin-top:70px!important;
+ scroll-margin-top:clamp(104px, 14svh, 136px)!important;
 }
