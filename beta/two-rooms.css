@@ -29,7 +29,7 @@ body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;backg
 
 /* Furnishing only: approved frame, room and crest rules above remain frozen. */
 .splash-furniture{gap:0;text-align:left;padding:0 12px 12px;justify-content:flex-start}
-.splash-intro{width:max-content;max-width:100%;align-self:center;margin:clamp(12px,2.2vh,22px) auto 0}
+.splash-intro{width:min(100%,320px);align-self:center;margin:clamp(12px,2.2vh,22px) auto 0}
 .splash-furniture .splash-intro h1{font-size:clamp(36px,12.85cqw,65px);font-weight:300;line-height:1.04;letter-spacing:-.035em;white-space:nowrap;margin:0}
 .splash-intro h1 span{display:block;font-size:52.083%;line-height:1.16;letter-spacing:0}
 .splash-furniture .splash-message{align-self:center;width:max-content;max-width:100%;font-size:clamp(16px,4.45cqw,23px);line-height:1.28;text-align:left;margin:clamp(28px,5.4vh,46px) 0 0}
