@@ -2634,4 +2634,28 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
  document.fonts?.ready?.then(schedule);
  schedule();
 })();
+</script>
+<script>
+/* Shed-only bridge: override iOS input focus font without changing the locked
+   Four Laws master. Applies only when the approved journey embeds that master. */
+(function(){
+ if(!document.documentElement?.classList?.contains('tffc-exact-master'))return;
+ const attach=()=>{
+  const frame=document.querySelector('iframe.tffc-exact-master-frame');
+  if(!frame)return false;
+  frame.addEventListener('load',()=>{
+   const doc=frame.contentDocument;
+   if(!doc||doc.getElementById('tffc-ios-postcode-nozoom'))return;
+   const style=doc.createElement('style');
+   style.id='tffc-ios-postcode-nozoom';
+   style.textContent='.clubfinder-furniture .clubfinder-search input{font-size:16px!important;line-height:16px!important}';
+   doc.head.appendChild(style);
+  });
+  return true;
+ };
+ if(!attach()){
+  const observer=new MutationObserver(()=>{if(attach())observer.disconnect()});
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+ }
+})();
 </script></body></html>
