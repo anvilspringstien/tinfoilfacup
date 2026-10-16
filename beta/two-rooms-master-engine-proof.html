@@ -1,0 +1,54 @@
+<!doctype html><html lang="en" class="tffc-master-engine"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Two Rooms — master-first BETA engine proof</title><link rel="stylesheet" href="two-rooms.css"><style>
+/* Only results-mode styling in the working copy. Master CSS remains untouched. */
+html.tffc-master-engine.tffc-campaign-results .stage{height:auto;min-height:100svh}
+html.tffc-master-engine.tffc-campaign-results .field{height:auto;min-height:calc(100svh - 26px);overflow:visible}
+html.tffc-master-engine.tffc-campaign-results .room{height:auto;min-height:calc(100svh - 26px);grid-template-rows:auto auto}
+html.tffc-master-engine.tffc-campaign-results .furniture{overflow:visible}
+html.tffc-master-engine.tffc-campaign-results .clubfinder-laws-title{margin:24px 0 0}
+html.tffc-master-engine.tffc-campaign-results .clubfinder-laws{margin:24px 0 0}
+html.tffc-master-engine #clubfinderField{width:100%;max-width:100%;min-width:0;margin:0 auto;padding:0 12px 20px}
+html.tffc-master-engine #results{display:none;width:100%;max-width:100%;min-width:0;margin:12px 0 0;color:#111}
+html.tffc-master-engine #results .result{background:#fff;border-radius:6px;padding:14px;margin-bottom:10px;overflow-wrap:anywhere}
+html.tffc-master-engine #liveDataTools{display:flex;justify-content:center}
+html.tffc-master-engine #status{font-size:10px;color:#f6f3e8}
+html.tffc-master-engine .clubfinder-search#searchPanel{width:auto;height:auto;max-width:100%;margin:0;background:transparent}
+html.tffc-master-engine .clubfinder-search#searchPanel input{height:auto}
+html.tffc-master-engine .clubfinder-search#searchPanel button{height:auto}
+html.tffc-master-engine .clubfinder-status{padding:8px}
+html.tffc-master-engine body{overflow-x:clip}
+</style></head><body><main class="stage"><section class="field"><div class="room"><div class="crest-compartment"><img class="crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div><div class="furniture clubfinder-furniture"><h1 class="clubfinder-laws-title">The Four Laws</h1><div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div><div class="clubfinder-machine"><div class="clubfinder-search" id="searchPanel"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button type="button" id="findBtn">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status"><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status" role="status"></div></div></div><p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p></div><section id="clubfinderField" aria-label="Your Campaigns"><div id="results"></div></section></div></section></main><script>
+/* Master-first Shed: use original BETA scripts with the approved opening DOM.
+   Source parsing is deliberately guarded; never alter BETA or production. */
+(async()=>{
+ try{
+ const r=await fetch('clubfinder-beta.html',{cache:'no-store'});
+ if(!r.ok)throw Error('Could not fetch original BETA engine');
+ const source=await r.text();
+ const engineStart=source.indexOf('<script>const ELIGIBLE=');
+ const engineEnd=source.indexOf('</script>',engineStart);
+ if(engineStart<0||engineEnd<0)throw Error('BETA engine script boundary changed');
+ const engine=source.slice(engineStart+8,engineEnd);
+ if(!engine.includes('async function go(')||!engine.includes('function chooseJourney('))throw Error('BETA search/Campaign functions changed');
+ const script=document.createElement('script');
+ script.textContent=engine;
+ document.body.appendChild(script);
+ const root=document.documentElement;
+ const results=document.getElementById('results');
+ const status=document.getElementById('status');
+ const machine=document.querySelector('.clubfinder-machine');
+ const sync=()=>{
+  const shown=results.children.length>0&&getComputedStyle(results).display!=='none';
+  root.classList.toggle('tffc-campaign-results',shown);
+ };
+ new MutationObserver(sync).observe(results,{childList:true,attributes:true,attributeFilter:['style']});
+ const button=document.getElementById('findBtn');
+ const input=document.getElementById('postcode');
+ button.addEventListener('click',async()=>{
+  try{await go(true,false);sync();if(root.classList.contains('tffc-campaign-results'))requestAnimationFrame(()=>requestAnimationFrame(()=>machine.scrollIntoView({block:'start',behavior:'instant'})));}
+  catch(e){status.textContent='Search failed: '+e.message}
+ });
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();button.click();input.blur()}});
+ sync();
+ }catch(e){document.getElementById('status').textContent='Shed engine stopped safely: '+e.message}
+})();
+</script></body></html>
