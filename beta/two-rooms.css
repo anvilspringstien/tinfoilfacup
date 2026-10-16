@@ -6,7 +6,7 @@ body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;backg
 .stage{height:100svh;padding:clamp(6px,1.2vh,13px);display:flex;min-height:0}
 .field{width:100%;max-width:628px;min-width:0;height:100%;margin:0 auto;overflow:hidden;background:var(--field);border:1px solid #818181;border-radius:12px;container-type:inline-size}
 .room{width:100%;max-width:580px;height:100%;min-height:0;margin:auto;display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center}
-.crest-compartment{width:100%;display:grid;place-items:center;padding-top:clamp(8px,7.2cqw,38px);flex:none}
+.crest-compartment{width:100%;display:grid;place-items:center;padding-top:clamp(6px,5.8cqw,30px);flex:none}
 .crest{display:block;object-fit:contain;width:83.333%;max-width:450px;aspect-ratio:1;height:auto}
 .furniture{min-height:0;overflow:auto;overscroll-behavior:contain;width:100%;padding:12px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
 .furniture h1{font-weight:300;font-size:clamp(28px,8cqw,48px);line-height:1.08;margin:0}
