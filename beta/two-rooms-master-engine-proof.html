@@ -6,7 +6,9 @@ html.tffc-master-engine.tffc-campaign-results .room{height:auto;min-height:calc(
 html.tffc-master-engine.tffc-campaign-results .furniture{overflow:visible}
 html.tffc-master-engine.tffc-campaign-results .clubfinder-laws-title{margin:24px 0 0}
 html.tffc-master-engine.tffc-campaign-results .clubfinder-laws{margin:24px 0 0}
-html.tffc-master-engine #clubfinderField{width:100%;max-width:100%;min-width:0;margin:0 auto;padding:0 12px 20px}
+html.tffc-master-engine #clubfinderField{display:none;width:100%;max-width:628px;min-width:0;margin:0 auto;padding:0 12px 20px}
+html.tffc-master-engine.tffc-campaign-results #clubfinderField{display:block}
+html.tffc-master-engine #clubfinderField[hidden]{display:none!important}
 html.tffc-master-engine #results{display:none;width:100%;max-width:100%;min-width:0;margin:12px 0 0;color:#111}
 html.tffc-master-engine #results .result{background:#fff;border-radius:6px;padding:14px;margin-bottom:10px;overflow-wrap:anywhere}
 html.tffc-master-engine #liveDataTools{display:flex;justify-content:center}
@@ -16,7 +18,7 @@ html.tffc-master-engine .clubfinder-search#searchPanel input{height:auto}
 html.tffc-master-engine .clubfinder-search#searchPanel button{height:auto}
 html.tffc-master-engine .clubfinder-status{padding:8px}
 html.tffc-master-engine body{overflow-x:clip}
-</style></head><body><main class="stage"><section class="field"><div class="room"><div class="crest-compartment"><img class="crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div><div class="furniture clubfinder-furniture"><h1 class="clubfinder-laws-title">The Four Laws</h1><div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div><div class="clubfinder-machine"><div class="clubfinder-search" id="searchPanel"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button type="button" id="findBtn">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status"><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status" role="status"></div></div></div><p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p></div><section id="clubfinderField" aria-label="Your Campaigns"><div id="results"></div></section></div></section></main><script>
+</style></head><body><main class="stage"><section class="field"><div class="room"><div class="crest-compartment"><img class="crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div><div class="furniture clubfinder-furniture"><h1 class="clubfinder-laws-title">The Four Laws</h1><div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div><div class="clubfinder-machine"><div class="clubfinder-search" id="searchPanel"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button type="button" id="findBtn">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status"><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status" role="status"></div></div></div><p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p></div></div></section></main><section id="clubfinderField" aria-label="Your Campaigns" hidden><div id="results"></div></section><script>
 /* Master-first Shed: use original BETA scripts with the approved opening DOM.
    Source parsing is deliberately guarded; never alter BETA or production. */
 (async()=>{
@@ -39,6 +41,7 @@ html.tffc-master-engine body{overflow-x:clip}
  const sync=()=>{
   const shown=results.children.length>0&&getComputedStyle(results).display!=='none';
   root.classList.toggle('tffc-campaign-results',shown);
+  document.getElementById('clubfinderField').hidden=!shown;
  };
  new MutationObserver(sync).observe(results,{childList:true,attributes:true,attributeFilter:['style']});
  const button=document.getElementById('findBtn');
