@@ -2,6 +2,7 @@ name: Approved BETA journey lock and regression
 on:
   pull_request:
     paths:
+      - 'index.html'
       - 'beta/index.html'
       - 'beta/clubfinder-journey.html'
       - 'beta/clubfinder-journey.css'
@@ -32,5 +33,5 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Serve BETA locally
         run: python3 -m http.server 8765 --bind 127.0.0.1 &
-      - name: Test Splash, Four Laws, Frame 2 and Reset at four viewports
+      - name: Test public and BETA Splash, Four Laws, Frame 2 and Reset at four viewports
         run: node tests/beta-approved-journey-browser.mjs
