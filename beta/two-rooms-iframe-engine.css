@@ -62,7 +62,9 @@ html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary {
  width:calc(100% - 2 * clamp(6px, 1.2vh, 13px))!important;
  max-width:628px!important;
  min-width:0!important;
- margin:12px auto 10px!important;
+ /* The master field ends one stage-padding inside its 100svh iframe:
+    add only the remainder of a 14px gap before Frame 2. */
+ margin:max(0px, calc(14px - clamp(6px, 1.2vh, 13px))) auto 14px!important;
  padding:14px 16px!important;
  background:#100f0d!important;
  border:1px solid #818181!important;
@@ -91,7 +93,9 @@ html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
  border-radius:12px!important;
  padding:14px 12px 16px!important;
 }
-/* BETA's original scroll-to-results should also leave the summary visible. */
+/* All Campaign navigation now scrolls to Frame 2 itself. Use one small
+   consistent top inset, rather than offsetting Frame 3 by a guessed height. */
+html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary,
 html.tffc-exact-master.tffc-campaign-results:not(.tffc-stats-route) #clubfinderField {
- scroll-margin-top:clamp(104px, 14svh, 136px)!important;
+ scroll-margin-top:14px!important;
 }
