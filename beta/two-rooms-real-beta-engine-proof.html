@@ -5,8 +5,8 @@
  if(!response.ok)throw Error('BETA source unavailable ('+response.status+')');
  let source=await response.text();
  const start=source.indexOf('<section id="tffcFourLaws"');
- const end=source.indexOf('<script>',start);
- if(start<0||end<0||!source.slice(start,end).includes('id="clubfinderField"'))throw Error('BETA opening markup changed; stopped safely');
+ const end=source.indexOf('</section>',start)+'</section>'.length;
+ if(start<0||end<0||!source.slice(end).includes('id="clubfinderField"'))throw Error('BETA opening markup changed; stopped safely');
  if(!source.includes('outer.appendChild(field)'))throw Error('BETA single-frame hook changed; stopped safely');
  source=source.slice(0,start)+"<section id=\"tffcFourLaws\" aria-label=\"The Four Laws\"><div class=\"tffcOuter\"><main class=\"stage\"><div class=\"field\"><div class=\"room\"><div class=\"crest-compartment\"><div class=\"tffcContent\"><img class=\"tffcCrest crest\" src=\"tffc-four-laws-logo-q80.webp\" alt=\"Tin Foil FA Cup crest\"></div></div><div class=\"furniture clubfinder-furniture\"><h1 class=\"clubfinder-laws-title\">The Four Laws</h1><div class=\"clubfinder-laws\"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div><div class=\"clubfinder-machine\"></div><p class=\"clubfinder-invocation\">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><p class=\"clubfinder-footnote\">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p></div></div></div></main></div></section>"+source.slice(end);
  source=source.replace('outer.appendChild(field)','document.querySelector(".clubfinder-machine").appendChild(field)');
