@@ -1933,6 +1933,15 @@ function tinFoilReturnToClubfinder(){
   /* All exits use the same deterministic Campaign snapshot and Frame 2 landing. */
   /* Direct/legacy entry, or a Stats-return path, has no guaranteed Clubfinder
      history entry immediately behind it. Keep the deterministic fallback. */
+  /* The approved BETA journey is opt-in. Preserve the original return for
+     direct/legacy Clubfinder users and restore the three-frame Campaign view
+     only when that BETA journey set its same-tab session marker. */
+  try{
+    if(sessionStorage.getItem('tffc.beta.approved-journey')==='1'){
+      window.location.replace('clubfinder-journey.html?from=challenges-exit-v3');
+      return;
+    }
+  }catch(_){}
   window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
 }
 
