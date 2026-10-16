@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shed — Splash to approved Four Laws to original BETA</title>
+<style>html,body{margin:0;background:#141210;color:#f6f3e8}</style></head><body>
+<script>
+(async()=>{
+ try{
+  const response=await fetch('clubfinder-beta.html',{cache:'no-store'});
+  if(!response.ok)throw Error('Original BETA unavailable');
+  const html=await response.text();
+  const head=html.indexOf('</head>');
+  const body=html.lastIndexOf('</body>');
+  if(head<0||body<head)throw Error('Original BETA document structure changed');
+  const early='<link rel="stylesheet" href="two-rooms-iframe-engine.css">'
+   +'<script>document.documentElement.classList.add("tffc-exact-master")<'+'/script>';
+  const late='<script>'+"\n(function(){\n if(new URLSearchParams(location.search).has('stats'))return;\n const laws=document.getElementById('tffcFourLaws');\n const field=document.getElementById('clubfinderField');\n const source=document.getElementById('postcode');\n const find=document.getElementById('findBtn');\n const results=document.getElementById('results');\n if(!laws||!field||!source||!find||!results){\n  document.body.dataset.masterBridgeError='missing-original-beta-elements';\n  return;\n }\n const frame=document.createElement('iframe');\n frame.className='tffc-exact-master-frame';\n frame.title='Approved Four Laws master';\n frame.src='two-rooms-clubfinder.html';\n frame.setAttribute('loading','eager');\n frame.addEventListener('load',()=>{\n  let page;\n  try{page=frame.contentDocument;}catch(error){frame.title='Four Laws master unavailable';return;}\n  const masterInput=page.getElementById('postcode');\n  const masterFind=page.querySelector('.clubfinder-search button');\n  const masterStatus=page.getElementById('clubfinder-status');\n  if(!masterInput||!masterFind||!masterStatus){frame.title='Four Laws master controls unavailable';return;}\n  const current=(source.value||'').trim();\n  if(current)masterInput.value=current;\n  const copyPostcode=()=>{\n   source.value=masterInput.value;\n   source.dispatchEvent(new Event('input',{bubbles:true}));\n   masterInput.value=source.value;\n  };\n  const search=(event)=>{\n   if(event){event.preventDefault();event.stopImmediatePropagation();}\n   copyPostcode();\n   masterInput.blur();\n   find.click();\n  };\n  masterInput.addEventListener('input',copyPostcode);\n  masterInput.addEventListener('keydown',event=>{if(event.key==='Enter')search(event);},true);\n  masterFind.addEventListener('click',search,true);\n  const betaStatus=document.getElementById('status');\n  const betaBadge=document.getElementById('liveDataBadge');\n  const refreshStatus=()=>{\n   const message=(betaStatus?.textContent||'').trim()||(betaBadge?.textContent||'').trim();\n   if(message)masterStatus.textContent=message;\n  };\n  if(betaStatus)new MutationObserver(refreshStatus).observe(betaStatus,{childList:true,subtree:true,characterData:true});\n  if(betaBadge)new MutationObserver(refreshStatus).observe(betaBadge,{childList:true,subtree:true,characterData:true});\n  refreshStatus();\n });\n laws.before(frame);\n laws.after(field);\n})();\n"+'<'+'/script>';
+  const integrated=html.slice(0,head)+early+html.slice(head,body)+late+html.slice(body);
+  document.open();document.write(integrated);document.close();
+ }catch(error){document.body.textContent='Shed proof could not load: '+error.message;}
+})();
+</script></body></html>
