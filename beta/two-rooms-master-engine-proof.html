@@ -26,8 +26,8 @@ html.tffc-master-engine body{overflow-x:clip}
  const r=await fetch('clubfinder-beta.html',{cache:'no-store'});
  if(!r.ok)throw Error('Could not fetch original BETA engine');
  const source=await r.text();
- const engineStart=source.indexOf('<script>const ELIGIBLE=');
- const engineEnd=source.indexOf('</script>',engineStart);
+ const engineStart=source.indexOf('<scr'+'ipt>const ELIGIBLE=');
+ const engineEnd=source.indexOf('</scr'+'ipt>',engineStart);
  if(engineStart<0||engineEnd<0)throw Error('BETA engine script boundary changed');
  const engine=source.slice(engineStart+8,engineEnd);
  if(!engine.includes('async function go(')||!engine.includes('function chooseJourney('))throw Error('BETA search/Campaign functions changed');
