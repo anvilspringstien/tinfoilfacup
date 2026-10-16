@@ -46,3 +46,28 @@ html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
   max-width:550px!important;
  }
 }
+
+/* BETA's success status belongs between the actual Four Laws master and
+   the existing Campaign cards, never in the master Mean Machine. */
+html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary {
+ box-sizing:border-box;
+ width:calc(100% - 2 * clamp(6px, 1.2vh, 13px));
+ max-width:628px;
+ margin:12px auto 8px;
+ padding:0 8px;
+ color:#f6f3e8;
+ font:300 13px/1.4 Poppins,"Helvetica Neue",Arial,sans-serif;
+ text-align:center;
+}
+html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary[hidden] {
+ display:none!important;
+}
+@media (min-width:700px) {
+ html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary {
+  max-width:550px;
+ }
+}
+/* BETA's original scroll-to-results should also leave the summary visible. */
+html.tffc-exact-master.tffc-campaign-results:not(.tffc-stats-route) #clubfinderField {
+ scroll-margin-top:70px!important;
+}
