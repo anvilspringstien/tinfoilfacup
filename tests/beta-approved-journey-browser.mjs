@@ -1,0 +1,72 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+
+const origin='http://127.0.0.1:8765';
+const browser=await chromium.launch();
+const sizes=[[1680,889],[1024,768],[390,669],[768,1024]];
+try {
+ for(const [width,height] of sizes){
+  const ctx=await browser.newContext({viewport:{width,height}});
+  const page=await ctx.newPage();
+  const errors=[];
+  page.on('pageerror',e=>errors.push(String(e)));
+  await page.goto(origin+'/beta/',{waitUntil:'domcontentloaded'});
+  await page.locator('.splash-start').waitFor();
+  const before=await page.locator('.field').boundingBox();
+  const start=page.locator('.splash-start');
+  assert.equal(await start.getAttribute('href'),'clubfinder-journey.html');
+  await start.click();
+  await page.waitForURL('**/beta/clubfinder-journey.html',{timeout:15000});
+  const frame=page.frameLocator('iframe.tffc-exact-master-frame');
+  await frame.locator('#postcode').waitFor({timeout:25000});
+  const after=await frame.locator('.field').boundingBox();
+  const delta=Math.abs(before.width-after.width);
+  assert.ok(delta<=1.5,width+'x'+height+' Splash vs Four Laws width drift: '+delta);
+  assert.equal(await frame.locator('#postcode').getAttribute('placeholder'),'Enter Your Postcode');
+  assert.equal(await page.evaluate(()=>sessionStorage.getItem('tffc.beta.approved-journey')),'1');
+  await page.evaluate(()=>{
+   document.getElementById('postcode').value='NE6 5NL';
+   document.querySelector('.tffc-exact-master-frame').contentDocument.getElementById('postcode').value='NE6 5NL';
+   const results=document.getElementById('results');
+   results.innerHTML='<div class="result" style="min-height:1300px"><h2>Regression fixture — Campaign</h2></div>';
+   results.style.display='block';
+   document.getElementById('status').textContent=
+    '3 Tin Foil FA Cup Campaigns found for NE6 5NL. Dates & times may change. Always check before travelling';
+  });
+  await page.waitForFunction(()=>!document.getElementById('tffc-results-summary')?.hidden,{timeout:9000});
+  const geometry=await page.evaluate(()=>{
+   const frame=document.querySelector('iframe.tffc-exact-master-frame');
+   const field=frame.contentDocument.querySelector('.field');
+   const summary=document.getElementById('tffc-results-summary');
+   const campaigns=document.getElementById('clubfinderField');
+   const rr=el=>{const b=el.getBoundingClientRect();return{left:b.left,top:b.top,right:b.right,bottom:b.bottom,width:b.width}};
+   const f=rr(field),fr=rr(frame),s=rr(summary),c=rr(campaigns);
+   return{f:{...f,top:f.top+fr.top,bottom:f.bottom+fr.top},s,c,
+    summary:summary.textContent,
+    resultsDisplay:getComputedStyle(campaigns).display};
+  });
+  assert.ok(geometry.resultsDisplay!=='none','Campaigns must display after search');
+  assert.match(geometry.summary,/3 Tin Foil FA Cup Campaigns found/);
+  for(const name of ['s','c'])assert.ok(Math.abs(geometry[name].width-geometry.f.width)<1.5,
+   width+'x'+height+' '+name+' width mismatch '+JSON.stringify(geometry));
+  assert.ok(Math.abs(geometry.s.top-geometry.f.bottom-14)<2,
+   width+'x'+height+' opening to findings gap wrong '+JSON.stringify(geometry));
+  assert.ok(Math.abs(geometry.c.top-geometry.s.bottom-14)<2,
+   width+'x'+height+' findings to Campaign gap wrong '+JSON.stringify(geometry));
+  await page.evaluate(()=>window.tffcScrollToFinder());
+  await page.waitForFunction(()=>Math.abs(document.getElementById('tffc-results-summary').getBoundingClientRect().top-14)<3,
+   null,{timeout:6000});
+  await page.evaluate(()=>window.resetFinder());
+  await page.waitForFunction(()=>{
+   const frame=document.querySelector('iframe.tffc-exact-master-frame');
+   return frame.contentDocument.getElementById('postcode').value===''&&
+      document.getElementById('postcode').value==='';
+  },null,{timeout:6000});
+  assert.equal(await frame.locator('#postcode').getAttribute('placeholder'),'Enter Your Postcode');
+  assert.equal(await page.evaluate(()=>document.getElementById('tffc-results-summary').hidden),true);
+  const unexpected=errors.filter(x=>!x.includes('Failed to fetch'));
+  assert.deepEqual(unexpected,[],width+'x'+height+' browser script errors');
+  console.log(width+'x'+height+': Splash->master, 3 frames, 14px gaps, Frame 2 scroll and reset passed');
+  await ctx.close();
+ }
+} finally {await browser.close();}
