@@ -86,12 +86,20 @@ html.tffc-exact-master:not(.tffc-stats-route) #tffc-results-summary[hidden] {
 
 /* Third matching-width field: surround untouched BETA Campaign cards with
    the same charcoal, border and corner treatment as the Four Laws field.
-   Do not change .result cards, Campaign buttons or data layout. */
+   Make vertical inner clearance match its approved 12px side clearance.
+   Existing BETA adds 10px above #results and 8px below its final card;
+   remove only these outer-facing margins, not inter-card spacing. */
 html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField {
  background:#100f0d!important;
  border:1px solid #818181!important;
  border-radius:12px!important;
- padding:14px 12px 16px!important;
+ padding:12px!important;
+}
+html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField #results {
+ margin-top:0!important;
+}
+html.tffc-exact-master:not(.tffc-stats-route) #clubfinderField #results > .result:last-child {
+ margin-bottom:0!important;
 }
 /* All Campaign navigation now scrolls to Frame 2 itself. Use one small
    consistent top inset, rather than offsetting Frame 3 by a guessed height. */
