@@ -48,7 +48,26 @@ const challenges=read('beta/challenges-beta.html');
 assert.match(challenges,/sessionStorage\.getItem\('tffc\.beta\.approved-journey'\)==='1'/);
 assert.match(challenges,/window\.location\.replace\('clubfinder-journey\.html\?from=challenges-exit-v3'\)/);
 assert.match(challenges,/window\.location\.replace\('clubfinder-beta\.html\?from=challenges-exit-v3'\)/);
+/* The public front door was separately approved. It must now be exactly
+   the locked BETA Splash body, adjusted only for root-relative navigation
+   and image paths. SEO/sharing metadata belongs to the public URL. */
 const homepage=read('index.html');
-assert.ok(homepage.includes('href="beta/clubfinder-beta.html"'),
- 'Live homepage must retain its existing BETA target until separate production approval');
-console.log('Approved visual sources frozen; BETA promoted snapshots exactly match. Existing production entry and legacy BETA route retained.');
+const afterHead=html=>html.slice(html.indexOf('</head>')+7);
+assert.equal(afterHead(homepage)
+ .replace('href="beta/clubfinder-journey.html"','href="clubfinder-journey.html"')
+ .replace('src="beta/tffc-splash-logo-q80.webp"','src="tffc-splash-logo-q80.webp"'),
+ afterHead(permanentSplash),
+ 'Public Splash body must match the approved BETA Splash (except paths)');
+for(const fragment of [
+ 'href="beta/clubfinder-journey.html"',
+ 'src="beta/tffc-splash-logo-q80.webp"',
+ 'href="beta/two-rooms-splash-locked.css"',
+ 'href="beta/two-rooms-shed-scrollbar.css"',
+ '<link rel="canonical" href="https://tinfoilfacup.com/">',
+ 'property="og:image" content="https://tinfoilfacup.com/beta/tffc-share-preview.png.png"',
+ 'property="og:url" content="https://tinfoilfacup.com/"',
+ 'name="twitter:card" content="summary_large_image"'
+ ])assert.ok(homepage.includes(fragment),'Missing public homepage contract: '+fragment);
+assert.ok(!homepage.includes('href="beta/clubfinder-beta.html"'),
+ 'Public Start must not bypass the approved three-frame journey');
+console.log('Approved masters and BETA snapshots unchanged; public Splash matches approved source and retains sharing metadata.');
