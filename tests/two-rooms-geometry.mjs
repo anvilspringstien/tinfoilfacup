@@ -7,6 +7,11 @@ for(const [width,height] of sizes){
   const page=await browser.newPage({viewport:{width,height}});
   await page.goto('http://127.0.0.1:8765/beta/two-rooms-'+name+'.html');
   const geometry=await page.evaluate(()=>Object.fromEntries(['.field','.crest'].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [s,['top','left','width','height'].map(k=>+r[k].toFixed(2))]})));
+  if(name==='clubfinder'){
+   const input=page.locator('.clubfinder-search input');
+   const fontSize=await input.evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+   if(fontSize<16){console.error('iOS input auto-zoom risk:',width,height,fontSize);failures++;}
+  }
   values.push(geometry);await page.close();
  }
  for(const key of ['.field','.crest'])for(let i=0;i<4;i++)if(Math.abs(values[0][key][i]-values[1][key][i])>1)failures++;
