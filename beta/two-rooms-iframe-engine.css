@@ -1,0 +1,25 @@
+/* Experimental glue only; master HTML/CSS runs unchanged in its own iframe. */
+html.tffc-exact-master:not(.tffc-stats-route) body{
+ margin:0!important;padding:0!important;min-height:100svh;
+}
+html.tffc-exact-master:not(.tffc-stats-route) #tffcFourLaws{
+ display:none!important;
+}
+html.tffc-exact-master:not(.tffc-stats-route) .tffc-exact-master-frame{
+ display:block!important;
+ position:relative!important;
+ width:100%!important;height:100svh!important;
+ border:0!important;padding:0!important;margin:0!important;
+ max-width:none!important;zoom:1!important;box-sizing:border-box!important;
+}
+html.tffc-exact-master:not(.tffc-stats-route) #searchPanel,
+html.tffc-exact-master:not(.tffc-stats-route) #liveDataTools,
+html.tffc-exact-master:not(.tffc-stats-route) #status{
+ display:none!important;
+}
+html.tffc-exact-master:not(.tffc-stats-route):not(.tffc-campaign-results) #clubfinderField{
+ display:none!important;
+}
+html.tffc-exact-master.tffc-campaign-results:not(.tffc-stats-route) #clubfinderField{
+ display:block!important;margin:0 auto!important;
+}
