@@ -19,7 +19,7 @@ html.tffc-master-engine .clubfinder-search#searchPanel button{height:auto}
 html.tffc-master-engine .clubfinder-status{padding:8px}
 html.tffc-master-engine body{overflow-x:clip}
 </style></head><body><main class="stage"><section class="field"><div class="room"><div class="crest-compartment"><img class="crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div><div class="furniture clubfinder-furniture"><h1 class="clubfinder-laws-title">The Four Laws</h1><div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div><div class="clubfinder-machine"><div class="clubfinder-search" id="searchPanel"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button type="button" id="findBtn">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status"><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status" role="status"></div></div></div><p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p></div></div></section></main><section id="clubfinderField" aria-label="Your Campaigns" hidden><div id="results"></div></section><script>
-/* Master-first Shed: use original BETA scripts with the approved opening DOM.
+/* Master-first Shed: use original BETA scripts and its native Campaign scroll with the approved opening DOM.
    Source parsing is deliberately guarded; never alter BETA or production. */
 (async()=>{
  try{
@@ -37,7 +37,6 @@ html.tffc-master-engine body{overflow-x:clip}
  const root=document.documentElement;
  const results=document.getElementById('results');
  const status=document.getElementById('status');
- const machine=document.querySelector('.clubfinder-machine');
  const sync=()=>{
   const shown=results.children.length>0&&getComputedStyle(results).display!=='none';
   root.classList.toggle('tffc-campaign-results',shown);
@@ -47,7 +46,7 @@ html.tffc-master-engine body{overflow-x:clip}
  const button=document.getElementById('findBtn');
  const input=document.getElementById('postcode');
  button.addEventListener('click',async()=>{
-  try{await go(true,false);sync();if(root.classList.contains('tffc-campaign-results'))requestAnimationFrame(()=>requestAnimationFrame(()=>machine.scrollIntoView({block:'start',behavior:'instant'})));}
+  try{await go(true,true);sync();}
   catch(e){status.textContent='Search failed: '+e.message}
  });
  input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();button.click();input.blur()}});
