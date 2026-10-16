@@ -10,9 +10,34 @@ try {
   const page=await ctx.newPage();
   const errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
+  /* Public homepage must reproduce the approved BETA Splash's frame before
+     it leads into the very same original-BETA three-frame Clubfinder. */
+  const publicPage=await ctx.newPage();
+  const publicErrors=[];
+  publicPage.on('pageerror',e=>publicErrors.push(String(e)));
+  await publicPage.goto(origin+'/',{waitUntil:'domcontentloaded'});
+  await publicPage.locator('.splash-start').waitFor();
+  const publicSplash=await publicPage.locator('.field').boundingBox();
+  assert.equal(await publicPage.locator('.splash-start').getAttribute('href'),
+   'beta/clubfinder-journey.html','Public Start must open the approved journey');
+  assert.ok(await publicPage.locator('link[rel=canonical]').getAttribute('href')==='https://tinfoilfacup.com/');
+  await publicPage.locator('.splash-start').click();
+  await publicPage.waitForURL('**/beta/clubfinder-journey.html',{timeout:15000});
+  const publicFour=publicPage.frameLocator('iframe.tffc-exact-master-frame');
+  await publicFour.locator('.field').waitFor({timeout:25000});
+  const publicFourBox=await publicFour.locator('.field').boundingBox();
+  assert.ok(Math.abs(publicSplash.width-publicFourBox.width)<1.5,
+   width+'x'+height+' public Splash -> Four Laws width drift');
+  assert.equal(await publicPage.evaluate(()=>sessionStorage.getItem('tffc.beta.approved-journey')),'1');
+  assert.deepEqual(publicErrors,[],width+'x'+height+' public entry produced script errors');
+  await publicPage.close();
   await page.goto(origin+'/beta/',{waitUntil:'domcontentloaded'});
   await page.locator('.splash-start').waitFor();
   const before=await page.locator('.field').boundingBox();
+  assert.ok(Math.abs(publicSplash.width-before.width)<1.5,
+   width+'x'+height+' public vs BETA Splash width mismatch');
+  assert.ok(Math.abs(publicSplash.x-before.x)<1.5,
+   width+'x'+height+' public vs BETA Splash horizontal shift');
   const start=page.locator('.splash-start');
   assert.equal(await start.getAttribute('href'),'clubfinder-journey.html');
   await start.click();
@@ -66,7 +91,7 @@ try {
   assert.equal(await page.evaluate(()=>document.getElementById('tffc-results-summary').hidden),true);
   const unexpected=errors.filter(x=>!x.includes('Failed to fetch'));
   assert.deepEqual(unexpected,[],width+'x'+height+' browser script errors');
-  console.log(width+'x'+height+': Splash->master, 3 frames, 14px gaps, Frame 2 scroll and reset passed');
+  console.log(width+'x'+height+': PUBLIC and BETA Splash->master, 3 frames, 14px gaps, Frame 2 scroll and reset passed');
   await ctx.close();
  }
 } finally {await browser.close();}
