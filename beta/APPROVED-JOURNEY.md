@@ -2,13 +2,14 @@
 
 **Approved:** 16 October 2026, after PRs #449–#460 (visual sign-off from the user).
 
-## Canonical BETA entrance
+## Public front door and canonical BETA entrance
 
-- **https://tinfoilfacup.com/beta/** is the permanent, Splash-first BETA entrance (`beta/index.html`).
+- **https://tinfoilfacup.com/** is the official public front door (`/index.html`), now showing the byte-for-byte approved Splash body with root-correct image/button paths, while preserving canonical and social-sharing metadata.
+- **https://tinfoilfacup.com/beta/** remains the independent, permanent Splash-first BETA entrance (`beta/index.html`). It is the reference and rollback route.
 - **https://tinfoilfacup.com/beta/clubfinder-journey.html** contains the approved Four Laws → Findings → original BETA Campaign presentation, loaded only after Splash.
 - Do not present the second URL as a normal direct-test entry: tests **start at Splash**.
 - The original `beta/clubfinder-beta.html` remains the active, updateable competition engine and direct legacy BETA route, including `?stats=1`. The promoted journey fetches its **entire** live BETA document, including dynamic competition data, CSS, scripts, Campaigns, and Challenges/Stats integration. Never freeze BETA's dynamic data.
-- The root `/index.html` still links to `beta/clubfinder-beta.html`, exactly as before. **This promotion does not change the live homepage's route or production `clubfinder.html`.** A separate explicit decision is required to promote the new flow to the live entrance.
+- The root `/index.html` now links to `beta/clubfinder-journey.html`. The old root design was replaced in a separate, explicitly approved promotion after BETA sign-off. **Production `clubfinder.html` and the updateable original BETA `beta/clubfinder-beta.html` remain unchanged**, as do the ingestion machinery and competition datasets.
 
 ## Frozen visual masters
 
@@ -17,7 +18,7 @@
 - The accepted integration sources remain `two-rooms-splash-iframe-proof.html`, `two-rooms-iframe-engine-proof.html`, `two-rooms-iframe-engine.css`, and `two-rooms-shed-scrollbar.css` for read-only comparison/rollback.
 - Permanent promoted copies: `beta/index.html`, `beta/clubfinder-journey.html`, `beta/clubfinder-journey.css`. They must remain byte-equivalent to the accepted proof except for permanent filenames, page titles, and one session marker needed to return from Challenges.
 - `tests/beta-approved-journey-lock.mjs` guards the accepted original blobs and parity. Changing expected SHA values requires a **new, explicit visual approval**, not a routine test-fix.
-- `tests/beta-approved-journey-browser.mjs` tests Splash-first geometry, matching three-frame widths/gaps, Frame 2 landing, Reset placeholder, across four desktop/tablet/phone viewports. CI: `beta-approved-journey.yml`.
+- `tests/beta-approved-journey-browser.mjs` tests **public and BETA** Splash-first geometry, matching three-frame widths/gaps, Frame 2 landing, Reset placeholder, across four desktop/tablet/phone viewports. CI: `beta-approved-journey.yml` (now watches root `index.html` too).
 
 ## Preserved behaviour
 
@@ -31,6 +32,6 @@
 
 ## Acceptance and rollback
 
-**No production changes.** Before accepting a future edit, test from `/beta/` on Big Boy, iPhone and iPad; test three choices, chosen Campaign, Stats, Challenges Exit, View Original, Reset/Hard Reset and status/fixtures. Geometry CI cannot replace the visual acceptance.
+**The public homepage `index.html` is now promoted and guarded.** Before accepting future edits, start from both `/` (public) and `/beta/` (reference) on Big Boy, iPhone and iPad; test three choices, chosen Campaign, Stats, Challenges Exit, View Original, Reset/Hard Reset and status/fixtures. Geometry CI cannot replace the visual acceptance.
 
-Rollback the BETA promotion PR if necessary: the previous `beta/clubfinder-beta.html`, original Challenges fallback, locked masters and production entrance remain intact. Do not edit live production to roll back this BETA-only promotion.
+If the public front door has a regression, revert **only the public homepage promotion PR** to restore the former root entry; keep the validated `/beta/` journey available. For a BETA regression, revert the earlier BETA promotion separately; its original `beta/clubfinder-beta.html` and locked masters remain intact. Do not modify the live competition scanner or production `clubfinder.html` as part of either rollback.
