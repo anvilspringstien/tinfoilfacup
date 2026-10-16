@@ -16,3 +16,13 @@ body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;backg
 .furniture input{font:inherit;width:min(100%,330px);padding:12px;border-radius:8px;border:1px solid #818181}
 .furniture .small{font-size:12px}
 @media(max-height:700px){.crest-compartment{padding-top:6px}.crest{width:min(83.333%,43svh)}}
+
+/* Desktop-only calibration from approved Splash geometry.
+   At 1680×889, approved frame is ~550px, rather than the 628px
+   natural CSS maximum. The frame and crest stay shared by both rooms.
+   No furniture-dependent scale or browser zoom. */
+@media(min-width:700px){
+ .field{max-width:550px}
+ .room{max-width:508px}
+ .crest{max-width:394px}
+}
