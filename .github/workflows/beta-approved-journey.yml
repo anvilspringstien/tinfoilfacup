@@ -1,0 +1,36 @@
+name: Approved BETA journey lock and regression
+on:
+  pull_request:
+    paths:
+      - 'beta/index.html'
+      - 'beta/clubfinder-journey.html'
+      - 'beta/clubfinder-journey.css'
+      - 'beta/challenges-beta.html'
+      - 'beta/two-rooms-splash-locked.*'
+      - 'beta/two-rooms-clubfinder.html'
+      - 'beta/two-rooms.css'
+      - 'beta/two-rooms-iframe-engine*'
+      - 'beta/two-rooms-splash-iframe-proof.html'
+      - 'beta/two-rooms-shed-scrollbar.css'
+      - 'tests/beta-approved-journey-*.mjs'
+      - '.github/workflows/beta-approved-journey.yml'
+  workflow_dispatch:
+jobs:
+  protect-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Assert accepted masters and BETA snapshots have not drifted
+        run: node tests/beta-approved-journey-lock.mjs
+      - name: Install isolated browser test dependencies
+        run: npm install --no-save playwright
+      - name: Install Chromium for regression check
+        run: npx playwright install --with-deps chromium
+      - name: Serve BETA locally
+        run: python3 -m http.server 8765 --bind 127.0.0.1 &
+      - name: Test Splash, Four Laws, Frame 2 and Reset at four viewports
+        run: node tests/beta-approved-journey-browser.mjs
