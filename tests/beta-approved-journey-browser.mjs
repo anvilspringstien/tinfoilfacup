@@ -34,6 +34,9 @@ try {
   await page.goto(origin+'/beta/',{waitUntil:'domcontentloaded'});
   await page.locator('.splash-start').waitFor();
   const before=await page.locator('.field').boundingBox();
+  console.log('SPLASH-PARITY',JSON.stringify({width,height,publicSplash,betaSplash:before,
+   publicCSS:await publicPage.evaluate(()=>getComputedStyle(document.documentElement).scrollbarGutter).catch(()=>null),
+   betaCSS:await page.evaluate(()=>getComputedStyle(document.documentElement).scrollbarGutter)}));
   assert.ok(Math.abs(publicSplash.width-before.width)<1.5,
    width+'x'+height+' public vs BETA Splash width mismatch');
   assert.ok(Math.abs(publicSplash.left-before.left)<1.5,
