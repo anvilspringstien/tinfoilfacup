@@ -159,7 +159,7 @@
 .journey-choice .journey-lozenge{
  display:inline-flex;
  align-items:stretch;
- width:min(100%,320px);
+ width:max-content;
  max-width:100%;
  min-height:44px;
  margin-left:0;
@@ -176,6 +176,18 @@
  font:600 13px/1.25 Poppins,Arial,sans-serif;
  text-align:left;
  white-space:normal;
+ display:grid;
+ grid-template-columns:minmax(0,max-content);
+}
+.journey-choice .journey-lozenge .default-label,
+.journey-choice .journey-lozenge .hover-label{
+ grid-area:1 / 1;
+ display:block;
+}
+.journey-choice .journey-lozenge .hover-label{visibility:hidden}
+@media (hover:hover) and (pointer:fine){
+ .journey-choice .journey-lozenge:hover .default-label{display:block;visibility:hidden}
+ .journey-choice .journey-lozenge:hover .hover-label{display:block;visibility:visible}
 }
 .my-journey-bar.campaign-nav-tiered{
  display:flex;
