@@ -1,0 +1,39 @@
+name: Barry live schedule watch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "08 * * * *"
+  workflow_run:
+    workflows:
+      - "Scan FA Cup results (v7.6 guarded)"
+      - "Scan FA Cup draw (guarded)"
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: barry-live-watch
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    if: >-
+      github.ref_name == 'main' &&
+      (github.event_name != 'workflow_run' ||
+       (github.event.workflow_run.event == 'schedule' &&
+        github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inspect scheduled flights (read only)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python beta/barry_live_watch.py
