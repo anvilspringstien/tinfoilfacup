@@ -69,3 +69,5 @@ Physical iPhone testing confirmed repeated full-screen launches, Campaign and Pi
 
 ### Corrected application return
 The embedded entry now passes an allowlisted same-origin application return URL. Back to Share and Close return to that application and reopen its existing Share popup; the separate preview Share screen is used only for standalone preview visits. Browser tests exercise both real application hosts with native sharing available at 390×560, including repeated entry and Close. Phone popup geometry reserves room for all three actions.
+
+The Challenges return hook is promoted separately after the Clubfinder correction, preserving both application isolation guards. All three actual entry pages are covered by the final return-cycle suite.

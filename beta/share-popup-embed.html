@@ -7,7 +7,6 @@ try{
  if(parent!==window&&parent.location.origin===location.origin){
   const returnTo=new URL(parent.location.href);
   if(['/beta/clubfinder-beta.html','/beta/clubfinder-journey.html','/beta/challenges-beta.html'].includes(returnTo.pathname)){
-   if(returnTo.pathname==='/beta/challenges-beta.html')returnTo.pathname='/beta/clubfinder-journey.html';
    returnTo.searchParams.set('magicShare','1');
    const link=document.querySelector('.keep-magic');
    const destination=new URL(link.href);destination.searchParams.set('return',returnTo.pathname+returnTo.search+returnTo.hash);link.href=destination.href;
