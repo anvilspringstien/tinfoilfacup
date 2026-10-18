@@ -1,0 +1,32 @@
+{
+  "id": "/beta/keep-the-magic-shed",
+  "name": "Tin Foil FA Cup \u2014 Shed Preview",
+  "short_name": "TFFC Shed",
+  "description": "Keep the Magic installation preview",
+  "lang": "en-GB",
+  "start_url": "/beta/keep-the-magic-shed.html",
+  "scope": "/beta/",
+  "display": "standalone",
+  "background_color": "#232323",
+  "theme_color": "#232323",
+  "icons": [
+    {
+      "src": "assets/keep-magic/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/keep-magic/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/keep-magic/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

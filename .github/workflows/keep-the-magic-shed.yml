@@ -1,0 +1,40 @@
+name: Keep the Magic Shed preview
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'beta/keep-the-magic-shed*'
+      - 'beta/assets/keep-magic/**'
+      - 'tests/keep-the-magic-shed.mjs'
+      - '.github/workflows/keep-the-magic-shed.yml'
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'beta/keep-the-magic-shed*'
+      - 'beta/assets/keep-magic/**'
+      - 'tests/keep-the-magic-shed.mjs'
+      - '.github/workflows/keep-the-magic-shed.yml'
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Serve isolated preview and run browser checks
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/keep-magic-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          node tests/keep-the-magic-shed.mjs
+      - name: Retain preview screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keep-the-magic-preview
+          path: /tmp/tffc-*-magic-*.png
