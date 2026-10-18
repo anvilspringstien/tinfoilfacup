@@ -40,6 +40,7 @@ on:
       - "updater/embedded_snapshot_regression.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/enrich_replay_kickoffs_and_active_venues.py"
+      - "updater/result_metadata.py"
       - "updater/propagate_active_fixture_venues.py"
       - "updater/historical-match-venue-ledger.json"
       - "updater/propagate_historical_match_venues.py"

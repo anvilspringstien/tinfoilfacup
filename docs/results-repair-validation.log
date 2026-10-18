@@ -1,0 +1,267 @@
+Results repair — local passing validation output
+GitHub checks are pending branch/PR publication.
+
+test_captured_fylde_full_time_result_is_classified_not_inferred (test_results_repair.ResultsRepair.test_captured_fylde_full_time_result_is_classified_not_inferred) ... ok
+test_conflicting_populated_metadata_fails_closed (test_results_repair.ResultsRepair.test_conflicting_populated_metadata_fails_closed) ... ok
+test_full_replay_round_label_exception_requires_existing_reviewed_evidence (test_results_repair.ResultsRepair.test_full_replay_round_label_exception_requires_existing_reviewed_evidence) ... ok
+test_import_retains_exact_replay_metadata_across_all_aliases (test_results_repair.ResultsRepair.test_import_retains_exact_replay_metadata_across_all_aliases) ... ok
+test_other_date_round_and_reversed_home_venue_never_leak (test_results_repair.ResultsRepair.test_other_date_round_and_reversed_home_venue_never_leak) ... ok
+test_tbc_is_missing_and_unsourced_metadata_is_not_copied (test_results_repair.ResultsRepair.test_tbc_is_missing_and_unsourced_metadata_is_not_copied) ... ok
+test_third_qualifying_match_page_recovers_1945_with_provenance (test_results_repair.ResultsRepair.test_third_qualifying_match_page_recovers_1945_with_provenance) ... ok
+test_transfer_before_completed_pending_replay_is_pruned (test_results_repair.ResultsRepair.test_transfer_before_completed_pending_replay_is_pruned) ... ok
+test_wrong_date_round_or_orientation_cannot_supply_kickoff (test_results_repair.ResultsRepair.test_wrong_date_round_or_orientation_cannot_supply_kickoff) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 10.082s
+
+OK
+
++ unittest test_active_replay_fixture_sync.py
+test_existing_fixture_is_retained_if_source_temporarily_omits_it (test_active_replay_fixture_sync.ActiveReplayFixtureSyncRegression.test_existing_fixture_is_retained_if_source_temporarily_omits_it) ... ok
+test_only_unresolved_draw_is_pending (test_active_replay_fixture_sync.ActiveReplayFixtureSyncRegression.test_only_unresolved_draw_is_pending) ... ok
+test_parses_replay_schedule_date_orientation_and_kickoff (test_active_replay_fixture_sync.ActiveReplayFixtureSyncRegression.test_parses_replay_schedule_date_orientation_and_kickoff) ... ok
+test_proven_draw_can_create_replay_fixture_but_unrelated_row_cannot (test_active_replay_fixture_sync.ActiveReplayFixtureSyncRegression.test_proven_draw_can_create_replay_fixture_but_unrelated_row_cannot) ... ok
+test_terminal_replay_prunes_pending_fixture (test_active_replay_fixture_sync.ActiveReplayFixtureSyncRegression.test_terminal_replay_prunes_pending_fixture) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+OK
+
++ unittest test_stage_preceding_replay_candidates.py
+test_no_next_round_draw_fails_closed (test_stage_preceding_replay_candidates.StageTests.test_no_next_round_draw_fails_closed) ... ok
+test_reviewed_voided_result_can_stage_ordered_full_replay (test_stage_preceding_replay_candidates.StageTests.test_reviewed_voided_result_can_stage_ordered_full_replay) ... ok
+test_stage_one_verified_replay_without_input_mutation (test_stage_preceding_replay_candidates.StageTests.test_stage_one_verified_replay_without_input_mutation) ... ok
+test_thame_replay_maps_to_abbreviated_third_qualifying_draw (test_stage_preceding_replay_candidates.StageTests.test_thame_replay_maps_to_abbreviated_third_qualifying_draw) ... ok
+test_unexpected_source_conflict_fails_closed (test_stage_preceding_replay_candidates.StageTests.test_unexpected_source_conflict_fails_closed) ... ok
+test_unlisted_decided_result_cannot_be_treated_as_replay_original (test_stage_preceding_replay_candidates.StageTests.test_unlisted_decided_result_cannot_be_treated_as_replay_original) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK
+
++ unittest test_replay_orientation_fix_preserves_regressions.py
+test_stale_custodian_assertion_fails_closed (test_replay_orientation_fix_preserves_regressions.ReplayOrientationRegressionPreservation.test_stale_custodian_assertion_fails_closed) ... ok
+test_two_repairs_preserve_thame_regression_byte_for_byte (test_replay_orientation_fix_preserves_regressions.ReplayOrientationRegressionPreservation.test_two_repairs_preserve_thame_regression_byte_for_byte) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.071s
+
+OK
+
++ unittest test_archived_replay*.py
+test_dispatch_requires_default_off_boolean (test_archived_replay_publication_boundary.PublicationBoundaryTests.test_dispatch_requires_default_off_boolean) ... ok
+test_publication_requires_main_manual_opt_in_and_staged_changes (test_archived_replay_publication_boundary.PublicationBoundaryTests.test_publication_requires_main_manual_opt_in_and_staged_changes) ... ok
+test_staging_and_simulation_precede_publication (test_archived_replay_publication_boundary.PublicationBoundaryTests.test_staging_and_simulation_precede_publication) ... ok
+test_original_round_page_fails_closed (test_archived_replay_source.ReplaySourceTests.test_original_round_page_fails_closed) ... ok
+test_replay_endpoint_distinct_from_original (test_archived_replay_source.ReplaySourceTests.test_replay_endpoint_distinct_from_original) ... ok
+test_replay_round_page_accepted (test_archived_replay_source.ReplaySourceTests.test_replay_round_page_accepted) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK
+
++ unittest test_preceding_round_replay_audit.py
+test_already_recorded_replay_is_a_duplicate (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_already_recorded_replay_is_a_duplicate) ... ok
+test_future_scheduled_replay_is_not_a_publication_gap (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_future_scheduled_replay_is_not_a_publication_gap) ... ok
+test_level_replay_without_winner_is_blocked (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_level_replay_without_winner_is_blocked) ... ok
+test_missing_archive_fails_closed (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_missing_archive_fails_closed) ... ok
+test_real_fwp_wimborne_penalty_score_discrepancy_quarantined (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_real_fwp_wimborne_penalty_score_discrepancy_quarantined) ... ok
+test_same_day_replay_after_completion_grace_is_a_publication_gap (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_same_day_replay_after_completion_grace_is_a_publication_gap) ... ok
+test_same_day_replay_before_kickoff_is_not_a_publication_gap (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_same_day_replay_before_kickoff_is_not_a_publication_gap) ... ok
+test_same_day_replay_during_completion_grace_is_not_a_publication_gap (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_same_day_replay_during_completion_grace_is_not_a_publication_gap) ... ok
+test_same_day_replay_without_kickoff_waits_until_next_day (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_same_day_replay_without_kickoff_waits_until_next_day) ... ok
+test_scheduled_replay_gap_is_not_hidden_by_source_count (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_scheduled_replay_gap_is_not_hidden_by_source_count) ... ok
+test_scheduled_replay_requires_published_not_candidate_result (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_scheduled_replay_requires_published_not_candidate_result) ... ok
+test_wimborne_penalties_progress_only_with_explicit_winner (test_preceding_round_replay_audit.PrecedingReplayAuditTests.test_wimborne_penalties_progress_only_with_explicit_winner) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.004s
+
+OK
+
++ unittest test_guard_archived_replay_promotion.py
+test_all_already_published_is_clean_noop (test_guard_archived_replay_promotion.ReadinessTests.test_all_already_published_is_clean_noop) ... ok
+test_conflicting_penalty_winner_is_held (test_guard_archived_replay_promotion.ReadinessTests.test_conflicting_penalty_winner_is_held) ... ok
+test_duplicate_candidate_fails_closed (test_guard_archived_replay_promotion.ReadinessTests.test_duplicate_candidate_fails_closed) ... ok
+test_missing_archived_round_fails_closed (test_guard_archived_replay_promotion.ReadinessTests.test_missing_archived_round_fails_closed) ... ok
+test_missing_fixture_fails_closed (test_guard_archived_replay_promotion.ReadinessTests.test_missing_fixture_fails_closed) ... ok
+test_next_archived_round_accepts_matching_replay (test_guard_archived_replay_promotion.ReadinessTests.test_next_archived_round_accepts_matching_replay) ... ok
+test_next_archived_round_rejects_stale_replay (test_guard_archived_replay_promotion.ReadinessTests.test_next_archived_round_rejects_stale_replay) ... ok
+test_observed_thame_cannot_pass_before_staging (test_guard_archived_replay_promotion.ReadinessTests.test_observed_thame_cannot_pass_before_staging) ... ok
+test_one_publisher_does_not_approve_penalties (test_guard_archived_replay_promotion.ReadinessTests.test_one_publisher_does_not_approve_penalties) ... ok
+test_same_source_count_cannot_hide_unseen_thame (test_guard_archived_replay_promotion.ReadinessTests.test_same_source_count_cannot_hide_unseen_thame) ... ok
+test_thirteen_recorded_and_one_new_thame_replay (test_guard_archived_replay_promotion.ReadinessTests.test_thirteen_recorded_and_one_new_thame_replay) ... ok
+test_two_independent_matching_publishers_approve_thirteen (test_guard_archived_replay_promotion.ReadinessTests.test_two_independent_matching_publishers_approve_thirteen) ... ok
+test_uncorroborated_penalties_held_other_twelve_approved (test_guard_archived_replay_promotion.ReadinessTests.test_uncorroborated_penalties_held_other_twelve_approved) ... ok
+test_unknown_archived_round_fails_closed (test_guard_archived_replay_promotion.ReadinessTests.test_unknown_archived_round_fails_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.002s
+
+OK
+
+
+tinfoil-results-shared-final.log
++ python updater/round_state_regression.py
+ROUND STATE REGRESSION: PASS
+Ordinary decisive result: PASS
+Draw -> replay ancestry (orientation independent): PASS
+Abandoned/postponed -> rearranged original: PASS
+Walkover/award without invented score: PASS
+Qualifying replay penalties: PASS
+Competition Proper no-replay rule: PASS
+FA-ordered replay after void result: PASS
+Terminal chronology conflict fails closed: PASS
++ python updater/round_source_regression.py
+ROUND SOURCE REGRESSION: PASS
+Penalty winner note: PASS
+P-P postponed event: PASS
+FT (AET) preservation: PASS
+Unrelated rows ignored: PASS
+Cross-source adjacent-date dedupe: PASS
+Same-source replay chronology preserved: PASS
+Different scorelines preserved: PASS
+Active-round FWP archive pinning: PASS
++ python updater/extra_preliminary_replay_regression.py
+EXTRA PRELIMINARY REPLAY REGRESSION: PASS
+Original ties retained: 219
+Distinct draw pairs retained: 219
+Replay records checked: 40
+Every replay has an earlier drawn first leg: PASS
+Aylesbury abandoned -> rearranged original chronology: PASS
+Amersham 2-2 -> 1-2 chronology: PASS
++ python updater/shadow_replay_advancement_regression.py
+SHADOW PRODUCER REGRESSION: PASS
+
+
+tinfoil-results-all-final.log
+Reconstructed 32 source observations; recovered replay kick-off from exact match page.
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python updater/refresh_clubfinder_embedded_snapshot.py
+EMBEDDED SNAPSHOT REFRESH: PASS
+Competition snapshot timestamp: 2026-10-17T21:26:19.504662+00:00
+Active fixtures embedded: 68
+Canonical result aliases embedded: 1946
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python updater/competition_regression_guard.py
+COMPETITION REGRESSION GUARD: PASS
+Preliminary ties: 137
+First Qualifying ties preserved: 112
+Active round: Fourth Round Qualifying
+Active ties: 32
+Canonical active-round tie count: PASS
+Representative chronology results: PASS
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python updater/reconcile_result_history_aliases.py --check
+RESULT HISTORY ALIAS GUARD: PASS
+Replay-participant alias groups checked: 205
+Replay rows protected across alias groups: 232
+Amersham Town FC/bare/AFC decisive replay parity: PASS
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python updater/kickoff_venue_regression.py
+KICK-OFF + VENUE REGRESSION: PASS
+First Qualifying replays preserved: 32
+Verified 19:45 replay anchors: 4/4
+Verified Second Qualifying venue anchors: 3/3
++ node updater/clubfinder_render_regression.js
+Production Thame/Exmouth historical fail-closed regression: PASS
+ACTIVE RESULT ADVANCE MODE: enabled
+DL5 chronological custody, premature advancement and historical metadata: PASS
+CLUBFINDER RENDER REGRESSION: PASS
+DL5 custody: Newton Aycliffe FC -> Kendal Town -> AFC Fylde
+Heaton First Qualifying result: 1-0 Knaresborough — PASS
+Heaton Second Qualifying fixture: Heaton Stannington v Trafford
+Kendal-Heaton draw count: 1
+Heaton replay present: PASS
+Bishop Auckland 0-2 Emley replay: PASS
+Exmouth Town 2-1 Banbury United replay: PASS
+Exmouth post-replay custodian: Salisbury FC
+W1D custody: Sporting Bengal United -> Frenford -> Oxford City FC
+W1D Frenford replay kick-off: 19:45
++ node updater/clubfinder_stats_regression.js
+CLUBFINDER STATS CERTIFICATE REGRESSION: PASS
+Canonical postcode: DL5 4RQ
+Certificate source uses decisive-score winner helper — PASS
+Extra Preliminary: Newton Aycliffe 0-1 Kendal Town -> Kendal Town — PASS
+Draw remains unresolved — PASS
+Replay -> Heaton Stannington — PASS
+Custody: Newton Aycliffe FC -> Kendal Town -> AFC Fylde
+Second Qualifying: Heaton Stannington 1-2 Trafford — PASS
++ node updater/historical_journey_regression.js
+HISTORICAL JOURNEY REGRESSION: PASS
+Fragmented Amersham alias recovered from canonical opponent/alternate bucket: PASS
+Amersham 2-2 -> 1-2 -> Windsor & Eton 5-0 -> Petts Wood 1-5 chronology: PASS
+Petts Wood & Holmesdale v Windsor & Eton historical venue: PASS
+Amersham breadcrumb count: 7
++ node updater/historical_venue_regression.js
+GENERIC HISTORICAL VENUE REGRESSION: PASS
+Canonical result-history venue rows checked: 1184
+Campaign breadcrumbs with canonical venues checked: 2028
+Campaign origins exercising canonical venues: 640
+Canonical result.venue precedence over home-ground fallback: PASS
++ node updater/replay_progression_regression.js
+REPLAY PROGRESSION REGRESSION: PASS
+First Qualifying replay -> Second Qualifying: PASS
+Exmouth, Emley and Crowborough published draw links: PASS
+Abbreviated conditional winner resolver: PRESENT
+Non-replay control Frome Town: PASS
++ node updater/journey_integrity_regression.js
+JOURNEY INTEGRITY REGRESSION: PASS
+Selectable origins checked: 651
+Custody-chain breadcrumbs checked: 3849
+Live competition cache-busting: PASS
++ node updater/amersham_card_render_regression.js
+AMERSHAM CARD RENDER REGRESSION: PASS
+HP7 0EJ go() render: PASS
+Resolved custodian: Salisbury
+Replay details TBC absent from selected HP7 Campaign: PASS
+Petts Wood historical venue rendered: The New Inn Stadium, BR2 8HQ — PASS
++ node updater/amersham_stats_regression.js
+HP7 STATS REGRESSION: PASS
+Campaign chronology through Windsor & Eton preserved; active-round progression permitted
+Petts Wood historical venue: The New Inn Stadium, BR2 8HQ — PASS
+Stats venue resolver delegates to completedResultVenue — PASS
+Pigeon Miles resolved: 473
++ node updater/ex8_venue_render_regression.js
+EX8 VENUE RENDER REGRESSION: PASS
+Frome Town v Plymouth Parkway completed venue retained: Badgers Hill • BA11 2EH
+Current Sidmouth Campaign custodian: Plymouth Parkway FC
++ node updater/kt21_venue_render_regression.js
+Epsom & Ewell FC historical Hampton & Richmond Borough v Crowborough Athletic winner Crowborough Athletic FC: PASS
+Completed: Hampton & Richmond Borough 3 v 3 Crowborough Athletic • Beveree Stadium • TW12 2BX
+Corinthian Casuals FC historical Dulwich Hamlet v Welling United winner Dulwich Hamlet: PASS
+Completed: Dulwich Hamlet 4 v 1 Welling United • Champion Hill Stadium • SE22 8BD
+KT21 VENUE RENDER REGRESSION: PASS
++ node updater/law2_origin_regression.js
+LAW 2 ORIGIN REGRESSION: PASS
+Selectable origins: 651
+Entry cohorts: {"Extra Preliminary Round":438,"Preliminary Round":53,"Fourth Round Qualifying":24,"Second Round Qualifying":48,"First Round Qualifying":88}
+Kendal Town FC -> Extra Preliminary Round: PASS
+KT22 9AS -> Leatherhead FC: Fetcham Grove • KT22 9AS • VERIFIED
+RH4 1DX -> Dorking Wanderers FC: Meadowbank Stadium • RH4 1DX • VERIFIED
+Leatherhead entry explanation: PASS
+Warrington Rylands current postcode: WA2 7RZ
+Nearest journeys returned: 3
+Proper-round-only origins excluded: PASS
++ node updater/production_ui_regression.js
+CLUBFINDER BETA CAMPAIGN IDENTITY PARITY: PASS
+Existing Campaign counter -> Pigeon -> blank refresh persistence: PASS
+PROTECTED PRODUCTION UI REGRESSION: PASS
+Campaign terminology: PASS
+Yellow Challenges launcher + Candidate 13 bridge: PASS
+Pigeon Miles wording is universally Flown: PASS
+Pigeon Miles approved roundel + six-column no-wrap layout: PASS
+HP7 bridge custodian: Salisbury — PASS
+HP7 bridge Petts Wood venue: BR2 8HQ — PASS
+RESULTS REPAIR RECONSTRUCTED CANDIDATE: PASS; checks=all; production inputs unchanged.
+
+
+tinfoil-results-live-enrichment.log
+FETCH https://fchd.info/maps/GAZ.htm
+REPLAY KICK-OFF + ACTIVE VENUE ENRICHMENT: PASS
+Qualifying replays: 52
+Replay records changed: 195
+FWP match pages fetched: 20
+Active venues changed: 0
+Protected GROUNDS hits: 0
+FCHD hits: 0
+Unresolved active home clubs: 0

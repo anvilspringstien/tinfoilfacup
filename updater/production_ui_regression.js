@@ -145,7 +145,8 @@ const hp7ActiveResult=canonicalRows(competition.result_history||competition.resu
   String(r.away||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('windsoreton') &&
   Number(r.home_score)===3 && Number(r.away_score)===0
 );
-const expectedHp7Custodian=allowActiveAdvance&&hp7ActiveResult?'Eastbourne Borough':'Windsor & Eton';
+const followVerified=require('../tests/verified_custody_expectation.js');
+const expectedHp7Custodian=allowActiveAdvance&&hp7ActiveResult?followVerified(competition,'Eastbourne Borough',hp7ActiveResult.date):'Windsor & Eton';
 
 const assertions=`
 (async()=>{

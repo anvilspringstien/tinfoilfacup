@@ -16,6 +16,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from result_metadata import preserve_result_metadata
+
 ROOT = Path(__file__).resolve().parents[1]
 COMP = ROOT / "competition.json"
 HTML = ROOT / "clubfinder.html"
@@ -23,6 +25,7 @@ REPORT = ROOT / "updater" / "kickoff-venue-enrichment-report.json"
 FWP_BASE = "https://www.footballwebpages.co.uk"
 FCHD_URL = "https://fchd.info/maps/GAZ.htm"
 REPLAY_ROUND = "First Round Qualifying Replay"
+REPLAY_ROUNDS = {f"{r} Round Qualifying Replay" for r in ("First", "Second", "Third", "Fourth")}
 UA = "Mozilla/5.0 TinFoilFACupKickoffVenueEnrichment/7.9.26"
 
 
@@ -70,16 +73,34 @@ def replay_identity(r):
     return (norm(r.get("home")), norm(r.get("away")), str(r.get("date") or ""), str(r.get("round") or ""))
 
 
+def source_round_labels(result):
+    expected = norm(result.get("round")).replace("round qualifying", "qualifying round")
+    labels = {expected}
+    # An FA-ordered full replay can retain the original round label on FWP.
+    # Permit that only for an exact, already reviewed exceptional disposition.
+    ledger = ROOT / "updater" / "exceptional-replay-dispositions.json"
+    if ledger.exists():
+        for item in json.loads(ledger.read_text(encoding="utf-8")).get("dispositions", []):
+            replay = item.get("replay_result") or {}
+            if (item.get("verification_state") == "human-reviewed-exception"
+                    and item.get("disposition") == "voided-replay-ordered"
+                    and item.get("disposition_source_url")
+                    and replay_identity(replay) == replay_identity(result)
+                    and all(replay.get(k) == result.get(k) for k in ("home_score", "away_score", "winner", "status"))):
+                labels.add(expected.removesuffix(" replay"))
+    return labels
+
+
 def unique_replays(data):
     out = {}
     for rows in (data.get("result_history") or {}).values():
         if not isinstance(rows, list):
             continue
         for r in rows:
-            if isinstance(r, dict) and str(r.get("round") or "") == REPLAY_ROUND:
+            if isinstance(r, dict) and str(r.get("round") or "") in REPLAY_ROUNDS:
                 out.setdefault(replay_identity(r), r)
     for r in (data.get("results") or {}).values():
-        if isinstance(r, dict) and str(r.get("round") or "") == REPLAY_ROUND:
+        if isinstance(r, dict) and str(r.get("round") or "") in REPLAY_ROUNDS:
             out.setdefault(replay_identity(r), r)
     return list(out.values())
 
@@ -89,15 +110,12 @@ def discover_match_pages(date):
     page = fetch(f"{FWP_BASE}/fa-cup/{ymd}")
     links = []
     for href in re.findall(r'href=["\']([^"\']+)["\']', page, flags=re.I):
-        marker = href.find("/match/2026-2027/fa-cup/")
-        if marker < 0:
-            marker = href.find("match/2026-2027/fa-cup/")
-            if marker < 0:
-                continue
-            path = "/" + href[marker:]
-        else:
-            path = href[marker:]
-        url = urllib.parse.urljoin(FWP_BASE, path)
+        path = urllib.parse.urlparse(href).path
+        if not re.search(r"(?:^|/)match/20\d{2}-20\d{2}/(?:emirates-)?fa-cup/", path):
+            continue
+        url = urllib.parse.urljoin(FWP_BASE + "/", path)
+        if urllib.parse.urlparse(url).netloc != urllib.parse.urlparse(FWP_BASE).netloc:
+            continue
         if url not in links:
             links.append(url)
     return links
@@ -106,7 +124,7 @@ def discover_match_pages(date):
 def replay_source_details(replays):
     by_date = {}
     for r in replays:
-        if not r.get("kickoff"):
+        if not parse_time(r.get("kickoff")):
             by_date.setdefault(str(r.get("date") or ""), []).append(r)
     details = {}
     fetched = 0
@@ -116,18 +134,29 @@ def replay_source_details(replays):
         links = discover_match_pages(date)
         pages = []
         for url in links:
+            parts = urllib.parse.urlparse(url).path.strip("/").split("/")
+            if len(parts) < 6 or not any(
+                norm(parts[-3]) == norm(r.get("home")) and norm(parts[-2]) == norm(r.get("away"))
+                for r in rows
+            ):
+                continue
             raw = fetch(url); fetched += 1
             text = clean_text(raw)
             nt = norm(text)
-            if "first qualifying round replay" not in nt and "first round qualifying replay" not in nt:
-                continue
             pages.append((url, text))
         for r in rows:
             matches = []
             hn, an = norm(r.get("home")), norm(r.get("away"))
             for url, text in pages:
                 nt = norm(text)
-                if hn not in nt or an not in nt:
+                if hn not in nt or an not in nt or not any(label in nt for label in source_round_labels(r)):
+                    continue
+                # A date listing can contain several competitions and replays.
+                # Require the exact date and observed home/away URL orientation.
+                parts = urllib.parse.urlparse(url).path.strip("/").split("/")
+                date_label = datetime.strptime(date, "%Y-%m-%d").strftime("%d %B %Y").lstrip("0")
+                observed_date = re.sub(r"(\d)(st|nd|rd|th)\b", r"\1", text)
+                if date_label not in observed_date or len(parts) < 6 or norm(parts[-3]) != hn or norm(parts[-2]) != an:
                     continue
                 m = re.search(r"Kick-off:\s*([0-9]{1,2}(?:[\.:][0-9]{2})?\s*(?:am|pm)?)", text, flags=re.I)
                 ko = parse_time(m.group(1)) if m else None
@@ -148,7 +177,7 @@ def apply_replay_kickoffs(data, details):
             rows.extend(x for x in arr if isinstance(x, dict))
     rows.extend(x for x in (data.get("results") or {}).values() if isinstance(x, dict))
     for r in rows:
-        if str(r.get("round") or "") != REPLAY_ROUND:
+        if str(r.get("round") or "") not in REPLAY_ROUNDS:
             continue
         detail = details.get(replay_identity(r))
         if not detail:
@@ -251,13 +280,14 @@ def find_replay(replays, home, away):
 
 def main():
     data = json.loads(COMP.read_text(encoding="utf-8"))
+    metadata_changes = preserve_result_metadata(data)
     replays = unique_replays(data)
     details, pages_fetched = replay_source_details(replays)
     replay_changes = apply_replay_kickoffs(data, details)
     after = unique_replays(data)
-    missing = [f"{r.get('home')} v {r.get('away')}" for r in after if not r.get("kickoff")]
+    missing = [f"{r.get('home')} v {r.get('away')}" for r in after if not parse_time(r.get("kickoff"))]
     if missing:
-        raise SystemExit("ABORT: First Qualifying replay kick-offs still missing: " + ", ".join(missing[:10]))
+        raise SystemExit("ABORT: Qualifying replay kick-offs still missing: " + ", ".join(missing[:10]))
 
     # Regression anchors observed directly on Football Web Pages.
     for home, away in (("Exmouth Town", "Banbury United"), ("Welling United", "Faversham Town"), ("AFC Whyteleafe", "Crowborough Athletic")):
@@ -266,14 +296,15 @@ def main():
             raise SystemExit(f"ABORT: replay kick-off regression for {home} v {away}: {None if not r else r.get('kickoff')}")
 
     venue_changes, canonical_hits, fchd_hits, unresolved = enrich_active_venues(data)
-    if replay_changes or venue_changes:
+    if metadata_changes or replay_changes or venue_changes:
         data["updated_at"] = datetime.now(timezone.utc).isoformat()
         COMP.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "status": "PASS",
-        "first_qualifying_replays": len(after),
+        "first_qualifying_replays": sum(r.get("round") == REPLAY_ROUND for r in after),
+        "qualifying_replays": len(after),
         "replay_records_changed": replay_changes,
         "fwp_match_pages_fetched": pages_fetched,
         "active_venue_records_changed": venue_changes,
@@ -283,7 +314,7 @@ def main():
     }
     REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print("REPLAY KICK-OFF + ACTIVE VENUE ENRICHMENT: PASS")
-    print("First Qualifying replays:", len(after))
+    print("Qualifying replays:", len(after))
     print("Replay records changed:", replay_changes)
     print("FWP match pages fetched:", pages_fetched)
     print("Active venues changed:", venue_changes)
