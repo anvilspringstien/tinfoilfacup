@@ -21,3 +21,10 @@ Clubfinder ground identity, Dreams2Remember Stadium, M46 9EY.
 Independent authoritative result corroboration:
 https://www.thefa.com/news/2026/oct/17/20261017-fac4qr-wrap
 The FA reports AFC Fylde ending Atherton Collieries' run with a 5-0 win.
+
+The frozen candidate input `competition-input.json.gz` contains the exact canonical
+`competition.json` from commit `13d0e1f97951281cdc91bf0eb1b128c06e5bc89c` (before Results publication).
+Uncompressed SHA-256: `d10c824122c0cbb3762501d0f0f64bf66980b3bef9222643e627eb9bc7ecbfa5`.
+This keeps the captured 32-tie FRQ scenario independent of later live imports and
+round promotion. The runner still verifies that the actual checkout input remains
+unchanged. The unit test separately proves new-result and duplicate classification.
