@@ -1,0 +1,43 @@
+# Keep the Magic — isolated Shed preview
+
+Entry: `/beta/keep-the-magic-shed.html` (available on the website after merge).
+No existing landing page, Share iframe, Campaign, Stats, Challenges, ingestion
+file or storage key is changed. This prototype is a top-level page because the
+existing popup is an iframe and installation belongs to the top-level browser.
+
+The existing Share QR and production URL are preserved. Keep the Magic opens
+platform-selectable guidance with the established crest as its icon. A native
+install button appears only after a real beforeinstallprompt event. Unsupported
+browsers get instructions, and standalone launches get an already-open-as-app
+message. Cancellation is not reported as installation success.
+
+The manifest uses a separate Shed app identity and launches this prototype. It
+must not be represented as an installed production Clubfinder. No service worker,
+offline fixture caching, notifications or browser-storage writes are introduced.
+The icon assets are deterministic resizes of the current Splash crest: 180px Apple,
+192/512px ordinary PNG, plus a separately padded 512px maskable icon.
+
+## Evidence and remaining acceptance
+
+Run `python3 -m http.server 8765 --bind 127.0.0.1`, then
+`node tests/keep-the-magic-shed.mjs` with Playwright and Chromium installed.
+The read-only GitHub workflow installs these test dependencies and saves phone
+and desktop screenshots. Tests simulate prompt dismissal, not real OS installation.
+
+The local executor's browser download returned invalid ZIP data and its separate
+cloud browser could not reach localhost. Browser verification therefore runs on
+GitHub; do not describe syntax checks as visual or device acceptance.
+
+Before promotion: inspect Share and Keep at 390x669, phone landscape, iPad and
+desktop; install on physical iPhone Safari and Android; close/reopen repeatedly;
+verify actual icon appearance, standalone navigation, live fixture refresh,
+Campaign identity, Pigeon name, Challenges, Trophy Cabinet and mileage. Test
+browser-to-installed storage boundaries and embedded-popup-to-top-level guidance.
+Do not promise Campaign transfer until these pass. Return from the finished app
+should follow the existing Splash/Clubfinder flow; that integration is not part
+of this isolated preview.
+
+Guidance sources checked 18 October 2026:
+- https://support.apple.com/en-gb/guide/iphone/iphea86e5236/27/ios/27
+- https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeinstallprompt_event
+- https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable

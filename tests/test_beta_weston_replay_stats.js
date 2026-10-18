@@ -52,9 +52,14 @@ assert.equal(ctx.tinFoilBetaCompletedKickoff(wimborne,{kickoff:'15:00'}),'19:45'
 assert.equal(ctx.currentDisplayFixture(club).kickoff,'19:45');
 replay={round:'Second Round Qualifying Replay',date:'2026-09-22',kickoff:'15:00'};
 assert.equal(ctx.currentDisplayFixture(club).kickoff,'19:45');
-const other={...wimborne,home:'Another FC',away:'Opponent FC',winner:'Another FC'};
+// The canonical source may acquire verified metadata after enrichment. Build
+// the unknown-time scenario explicitly rather than inheriting that real time.
+const other={...wimborne,home:'Another FC',away:'Opponent FC',winner:'Another FC',
+ kickoff:undefined,kickoff_source_url:undefined};
 assert.equal(ctx.tinFoilBetaCompletedKickoff(other,null),'Kick-off TBC',
  'An unrelated replay without a verified time must not inherit 15:00');
+assert.equal(ctx.tinFoilBetaCompletedKickoff({...other,kickoff:'20:00',kickoff_source_url:'https://example.test/verified-match'},null),'20:00',
+ 'An unrelated replay with its own verified time must retain it');
 assert.match(ctx.resultTeamLine(club),/Wimborne Town won 4–3 on penalties/);
 assert.match(ctx.resultLineFromResult(wimborne),/Wimborne Town won 4–3 on penalties/);
 assert.match(ctx.resultLinePlain(wimborne),/Wimborne Town won 4–3 on penalties/);
