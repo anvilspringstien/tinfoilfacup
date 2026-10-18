@@ -66,3 +66,6 @@ next physical-device acceptance step. Never Reset/Hard Reset for these tests.
 The BETA embedded Share popup now links to the tested installation page with `target="_top"` and `?instructions=1&keep=1`. This opens Keep guidance immediately outside the iframe, including when already installed, while retaining the manifest identity and installed launch route. Back to Share returns to the top-level Share view; its QR, Copy Link and Share actions remain available. The original Clubfinder tab is navigated, and the Campaign remains in existing browser storage. No browser-to-app transfer is promised.
 
 Physical iPhone testing confirmed repeated full-screen launches, Campaign and Pigeon-name retention, and working Stats/Challenges after reopening. Transfer of an older Safari Campaign into installed storage remains a separate unverified gate.
+
+### Corrected application return
+The embedded entry now passes an allowlisted same-origin application return URL. Back to Share and Close return to that application and reopen its existing Share popup; the separate preview Share screen is used only for standalone preview visits. Browser tests exercise both real application hosts with native sharing available at 390×560, including repeated entry and Close. Phone popup geometry reserves room for all three actions.
