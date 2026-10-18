@@ -106,13 +106,15 @@ It recovered all 20 missing qualifying-replay times across the canonical baselin
 no production competition file was written. Its report is summarised in the
 investigation document.
 
-## Remaining remote checks
+## Fresh-session review validation
 
-The isolated executor cannot authenticate GitHub CLI, so it cannot list current
-remote runs, push, open the PR, or establish GitHub check status. The owner's
-already authenticated CLI must publish the prepared branch and create the PR.
-Local passing checks are not represented as passing GitHub checks. No merge or
-deployment is authorised by publication of this branch/PR.
+GitHub CLI device authentication and repository reads now succeed as anvilspringstien.
+The existing repair was absent from main and remote branches/PRs. The review branch
+starts at current main 13d0e1f97951281cdc91bf0eb1b128c06e5bc89c and cherry-picks
+prepared repair ee44a17393fddef7669fb4879ecb142d63d94a89 without conflicts.
+The complete run blocks in .github/workflows/results-repair-tests.yml are rerun
+locally before publication. GitHub checks must pass separately. Publication of
+the review branch/PR does not authorise a merge or deployment.
 
 Final complete default candidate run: **PASS** (`checks=all`). All four Python
 candidate preprocessing/guard checks and all twelve rendered checks completed

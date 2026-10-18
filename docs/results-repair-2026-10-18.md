@@ -12,7 +12,7 @@ Status: isolated repair; no merge or deployment authorised. Draw is a separate t
 - The artifact upload log confirms only the two summary reports were retained. The exact candidate competition.json, rendered page and source payloads were not retained. They cannot be recovered from this bundle.
 - Independent FA evidence: https://www.thefa.com/news/2026/oct/17/20261017-fac4qr-wrap reports a 5–0 Fylde victory.
 - The 18 October FWP round source parses as FT, AFC Fylde 5–0 Atherton Collieries, dated 2026-10-17. This independently corroborates progression; it does not prove the contents of the lost candidate. Offline captures and checksums are in tests/fixtures/results-repair/README.md.
-- Browser-authorised GitHub CLI authentication in the cloud executor failed at a policy-blocked API request. The user's Windows CLI was authenticated as anvilspringstien with repo/workflow scopes; that CLI downloaded the run evidence and cloned/bundled the repository. Publishing still requires that authenticated CLI. No credentials were transferred.
+- Earlier cloud device authentication was policy-blocked. In the fresh session on 18 October, device authentication and direct CLI repository reads succeeded as anvilspringstien. Current main was verified as 13d0e1f97951281cdc91bf0eb1b128c06e5bc89c; the prepared repair was absent from remote branches, PRs and main. The existing repair commit was cherry-picked onto that main in an isolated review checkout. No credentials were transferred.
 
 ## Confirmed causes
 
