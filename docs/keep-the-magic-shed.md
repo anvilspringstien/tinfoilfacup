@@ -60,3 +60,9 @@ data and BETA restore/rendering code are real committed files. This is not proof
 Safari-to-installed storage sharing. The user's first iPhone icon installation and
 preview reopening passed; real Campaign/Stats/Challenges retention remains the
 next physical-device acceptance step. Never Reset/Hard Reset for these tests.
+
+## Existing Share entry
+
+The BETA embedded Share popup now links to the tested installation page with `target="_top"` and `?instructions=1&keep=1`. This opens Keep guidance immediately outside the iframe, including when already installed, while retaining the manifest identity and installed launch route. Back to Share returns to the top-level Share view; its QR, Copy Link and Share actions remain available. The original Clubfinder tab is navigated, and the Campaign remains in existing browser storage. No browser-to-app transfer is promised.
+
+Physical iPhone testing confirmed repeated full-screen launches, Campaign and Pigeon-name retention, and working Stats/Challenges after reopening. Transfer of an older Safari Campaign into installed storage remains a separate unverified gate.
