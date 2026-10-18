@@ -16,15 +16,26 @@ on:
       - 'updater/audit_law2_location_verification.py'
       - 'updater/export_test_postcodes.py'
       - '.github/workflows/ground-health.yml'
+      - 'updater/commit_ground_health_reports.sh'
+      - 'tests/test_ground_health_publication.py'
 
 permissions:
   contents: write
+
+concurrency:
+  group: competition-state-${{ github.ref_name }}
+  cancel-in-progress: false
 
 jobs:
   health:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Guard report-only publication and rebasing
+        run: python -m unittest discover -s tests -p 'test_ground_health_publication.py' -v
 
       - name: Build Law 2 origin view
         run: python updater/patch_clubfinder_law2_origins.py
@@ -62,17 +73,7 @@ jobs:
 
       - name: Commit health report and tester list
         if: ${{ github.ref_name == 'main' }}
-        run: |
-          git config user.name "Tin Foil FA Cup Ground Monitor"
-          git config user.email "actions@users.noreply.github.com"
-          git add ground-health.md updater/ground-health.json law2-location-verification-audit.md updater/law2-location-verification-audit.json tester-club-postcodes.csv
-          if git diff --cached --quiet; then
-            echo "Ground Health outputs unchanged."
-          else
-            git commit -m "Update Ground Health outputs"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
+        run: bash updater/commit_ground_health_reports.sh
 
       - name: Upload Ground Health report
         if: always()
