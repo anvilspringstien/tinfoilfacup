@@ -9,7 +9,7 @@ try{
  // Actual application hosts, native sharing visible, short Safari-sized viewport.
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
  await context.addInitScript(()=>Object.defineProperty(navigator,'share',{configurable:true,value:async()=>{}}));
- for(const host of ['clubfinder-beta.html','challenges-beta.html']){
+ for(const host of ['clubfinder-journey.html','clubfinder-beta.html','challenges-beta.html']){
   await page.setViewportSize({width:390,height:560});
   await page.goto(base+'/beta/'+host+'?magicShare=1');
   const shareFrame=page.frameLocator('iframe[title="Share Tin Foil FA Cup"]');

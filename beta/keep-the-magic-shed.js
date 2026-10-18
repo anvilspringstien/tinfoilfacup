@@ -12,7 +12,7 @@ const QR_ROWS='111111101110010111000001101111111/1000001010101010111001101010000
 let returnTo=null;
 try{
  const candidate=new URL(new URLSearchParams(location.search).get('return')||'',location.href);
- if(candidate.origin===location.origin&&['/beta/clubfinder-beta.html','/beta/challenges-beta.html'].includes(candidate.pathname))returnTo=candidate.href;
+ if(candidate.origin===location.origin&&['/beta/clubfinder-beta.html','/beta/clubfinder-journey.html','/beta/challenges-beta.html'].includes(candidate.pathname))returnTo=candidate.href;
 }catch(_){}
 const returnToShare=()=>{if(returnTo){location.replace(returnTo);return true}return false};
 const dialog=document.getElementById('magic');
