@@ -11,7 +11,7 @@ install button appears only after a real beforeinstallprompt event. Unsupported
 browsers get instructions, and standalone launches get an already-open-as-app
 message. Cancellation is not reported as installation success.
 
-The manifest uses a separate Shed app identity and launches this prototype. It
+The manifest keeps a separate Shed app identity. Browser visits show the preview; installed launches enter the existing BETA Splash. It
 must not be represented as an installed production Clubfinder. No service worker,
 offline fixture caching, notifications or browser-storage writes are introduced.
 The icon assets are deterministic resizes of the current Splash crest: 180px Apple,
@@ -33,11 +33,30 @@ desktop; install on physical iPhone Safari and Android; close/reopen repeatedly;
 verify actual icon appearance, standalone navigation, live fixture refresh,
 Campaign identity, Pigeon name, Challenges, Trophy Cabinet and mileage. Test
 browser-to-installed storage boundaries and embedded-popup-to-top-level guidance.
-Do not promise Campaign transfer until these pass. Return from the finished app
-should follow the existing Splash/Clubfinder flow; that integration is not part
-of this isolated preview.
+Do not promise Campaign transfer until these pass. Installed navigation uses the existing BETA Splash/Clubfinder flow. Production
+Share-popup integration remains outside this isolated test.
 
 Guidance sources checked 18 October 2026:
 - https://support.apple.com/en-gb/guide/iphone/iphea86e5236/27/ios/27
 - https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeinstallprompt_event
 - https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable
+
+
+## Stage 2: installed Campaign entry
+
+The existing manifest identity and start URL remain unchanged. Standalone launches
+of the preview replace their location with `/beta/`, using the accepted BETA
+Splash and original Clubfinder journey. Normal browser visits remain on the
+preview; `?instructions=1` permits viewing guidance inside an installed app.
+No existing application page, storage key, saved Campaign or counter is rewritten
+by the new entry route. iPhone instructions name Safari's square-with-up-arrow
+and distinguish it from our own Share button.
+
+The browser test now enters the real BETA journey after restoring the same storage
+into a new simulated-standalone browser context. It asserts the saved origin,
+postcode, Pigeon name, search number, call sign and selection date survive two
+entries, without a counter request. Only the postcode lookup is stubbed; competition
+data and BETA restore/rendering code are real committed files. This is not proof of
+Safari-to-installed storage sharing. The user's first iPhone icon installation and
+preview reopening passed; real Campaign/Stats/Challenges retention remains the
+next physical-device acceptance step. Never Reset/Hard Reset for these tests.

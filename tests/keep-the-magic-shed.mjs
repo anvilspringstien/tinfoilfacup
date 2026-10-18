@@ -41,7 +41,42 @@ try{
  assert(await page.locator('#close').isVisible());await page.locator('#keep').click();await page.locator('#back').scrollIntoViewIfNeeded();await page.locator('#back').click();
  assert.equal(await page.locator('#heading').innerText(),'Share the Magic');
  await page.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
- await page.reload();await page.locator('#keep').click();assert.match(await page.locator('#install-status').innerText(),/already/);assert(await page.locator('#install').isHidden());
- assert.deepEqual(errors,[]);console.log('KEEP THE MAGIC SHED: PASS — phone/desktop geometry, platform guidance, simulated install dismissal, share/copy, keyboard/backdrop, storage unchanged, no worker, manifest/assets.');
+ await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1');
+ await page.locator('#keep').click();assert.match(await page.locator('#install-status').innerText(),/already/);assert(await page.locator('#install').isHidden());
+ await page.goto(base+'/beta/keep-the-magic-shed.html');
+ await page.waitForURL(base+'/beta/');
+ assert.equal(await page.locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
+ const saved={originName:'Newton Aycliffe FC',postcode:'DL5 4RQ',ended:false,selectedAt:'2026-10-18T12:00:00.000Z',searchNumber:12345,callSign:'Tango Foxtrot 2 Alpha Charlie [12345]',pigeonName:'Shed Pigeon'};
+ await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
+ const stored=await context.storageState();
+ assert.deepEqual(errors,[]);
  await context.close();
+ // Reopen a separate browser context with the same saved storage. This checks
+ // our route and real BETA restore logic; physical OS storage is a device gate.
+ const reopened=await browser.newContext({storageState:stored,viewport:{width:390,height:669}});
+ await reopened.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
+ let counterCalls=0;
+ await reopened.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>{counterCalls++;return route.abort()});
+ await reopened.route('https://api.postcodes.io/**',route=>{
+  const url=new URL(route.request().url());
+  if(decodeURIComponent(url.pathname).toUpperCase()==='/POSTCODES/DL5 4RQ')return route.fulfill({json:{status:200,result:{postcode:'DL5 4RQ',latitude:54.619,longitude:-1.57}}});
+  return route.abort();
+ });
+ const app=await reopened.newPage();const appErrors=[];app.on('pageerror',e=>appErrors.push(String(e)));
+ for(let attempt=0;attempt<2;attempt++){
+  await app.goto(base+'/beta/keep-the-magic-shed.html');await app.waitForURL(base+'/beta/');
+  await app.locator('.splash-start').click();await app.waitForURL('**/beta/clubfinder-journey.html');
+  await app.locator('#results .result').first().waitFor({timeout:30000});
+  assert.match(await app.locator('#results').innerText(),/Newton Aycliffe/);
+  assert.equal(await app.locator('.pigeon-name-input').inputValue(),'Shed Pigeon');
+  const actual=await app.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));
+  for(const key of ['originName','postcode','searchNumber','callSign','pigeonName','selectedAt'])assert.equal(actual[key],saved[key],key+' must survive installed entry');
+  assert.equal(await app.evaluate(()=>localStorage.getItem('tffc-test-campaign')),'preserve-me');
+ }
+ assert.equal(counterCalls,0,'restoring an existing identity must never issue a fresh counter');
+ assert.deepEqual(appErrors,[]);
+ await app.screenshot({path:'/tmp/tffc-campaign-magic-phone.png'});
+ await reopened.close();
+ console.log('KEEP THE MAGIC SHED: PASS — preview geometry and guidance; installed entry into real BETA; saved Campaign/Pigeon survives repeat entry and browser-context restoration without a new counter. Physical installation/storage boundaries remain unverified.');
+
 }finally{await browser.close()}
