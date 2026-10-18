@@ -16,13 +16,21 @@ const coords={
   'OX296SL':{latitude:51.807,longitude:-1.407},
   'SL43DR':{latitude:51.482,longitude:-0.612},
   'BR28HQ':{latitude:51.384,longitude:0.022},
-  'OX93RN':{latitude:51.755598,longitude:-0.975360},
   'BN237QH':{latitude:50.796,longitude:0.323}
 };
 function postcodeFromUrl(url){
   const s=decodeURIComponent(String(url));
   const m=s.match(/\/postcodes\/([^?/#]+)/i);
   return m?String(m[1]).replace(/\s+/g,'').toUpperCase():'';
+}
+function syntheticPostcodeCoords(pc){
+  // This regression tests Stats/Pigeon Miles behaviour, not postcodes.io's database.
+  // Future valid UK postcodes must not require another test-code edit.
+  const compact=String(pc||'').replace(/\s+/g,'').toUpperCase();
+  if(!/^[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2}$/.test(compact))return null;
+  let hash=2166136261;
+  for(const ch of compact){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619)>>>0;}
+  return {latitude:49.8+(hash%9000)/10000,longitude:-7.5+((hash>>>12)%9000)/1000};
 }
 const sandbox={
   console,process,document:documentStub,MutationObserver:undefined,
@@ -33,7 +41,7 @@ const sandbox={
     const s=String(url);
     if(s.includes('competition.json'))return {ok:true,json:async()=>JSON.parse(JSON.stringify(competition)),text:async()=>JSON.stringify(competition)};
     if(/postcodes\//i.test(s)){
-      const pc=postcodeFromUrl(s),hit=coords[pc];
+      const pc=postcodeFromUrl(s),hit=coords[pc]||syntheticPostcodeCoords(pc);
       return hit?{ok:true,json:async()=>({status:200,result:hit})}:{ok:false,json:async()=>({status:404,result:null})};
     }
     throw new Error('Unexpected network request: '+s);
