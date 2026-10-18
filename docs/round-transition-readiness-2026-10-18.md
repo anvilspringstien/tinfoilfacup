@@ -47,6 +47,16 @@ Ground Health is handled separately from changes to draw or replay publishing.
    queued/stuck runs, successful recovery and published-state freshness. A healthy
    request/heartbeat alone is not proof that results reached the public snapshot.
 
+## Repeated-ingestion test stability found during this review
+
+After the production import succeeded, the original Fylde unit test correctly got
+`duplicate`, but expected `result`. It had depended on mutable current history.
+The captured candidate now uses the exact pre-publication canonical input from
+13d0e1f, compressed with a documented checksum, and the unit case explicitly tests
+first and repeated classification. Current published-snapshot guards still run
+against the current checkout separately. Freeze incident scenarios while keeping
+live-state tests dynamic; do not remove duplicate protection to satisfy a test.
+
 ## Ground Health publication regression added here
 
 Its Law 2 audit builders rewrite clubfinder.html but the monitor owns reports,

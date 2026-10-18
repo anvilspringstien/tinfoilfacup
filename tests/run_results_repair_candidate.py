@@ -5,7 +5,7 @@ this is an explicit reconstruction from the 18 October source capture.
 """
 from pathlib import Path
 import argparse
-import copy
+import gzip
 import json
 import shutil
 import subprocess
@@ -26,8 +26,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--check', help='Rerun one named rendered check after fixing a test; default runs all')
     args = parser.parse_args()
-    data = json.loads((ROOT / 'competition.json').read_text())
-    original = copy.deepcopy(data)
+    original = json.loads((ROOT / 'competition.json').read_text())
+    data = json.loads(gzip.decompress((FIXTURES / 'competition-input.json.gz').read_bytes()))
     rnd, known = scan.active_fixtures(data)
     source = scan.fwp_round_url(rnd)
     raw = (FIXTURES / 'fourth-qualifying-round.html').read_text()

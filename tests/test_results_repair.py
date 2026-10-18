@@ -107,18 +107,21 @@ class ResultsRepair(unittest.TestCase):
         self.assertNotIn('second qualifying round', enrich.source_round_labels({**row, 'home_score': 9}))
 
     def test_captured_fylde_full_time_result_is_classified_not_inferred(self):
-        data = json.loads((ROOT / 'competition.json').read_text())
-        rnd, known = scan.active_fixtures(data)
+        verified = json.loads((FIXTURES / 'verified-milestones.json').read_text())
+        expected = verified['fylde']
+        rnd = expected['round']
+        known = [{k: expected[k] for k in ('home', 'away', 'date', 'round')}]
         raw = (FIXTURES / 'fourth-qualifying-round.html').read_text()
         scan.validate_fwp_round_page(raw, rnd, scan.fwp_round_url(rnd))
         rows = scan.parse_fwp_observations(raw, known, scan.fwp_round_url(rnd))
         row = next(x for x in rows if x['observation']['home'] == 'AFC Fylde')
-        out = scan.classify_observation(row['fixture'], row['observation'], scan.history_rows(data))
+        out = scan.classify_observation(row['fixture'], row['observation'], [])
         self.assertEqual(out['kind'], 'result')
         self.assertEqual((out['result']['home_score'], out['result']['away_score'], out['result']['status']), (5, 0, 'FT'))
         self.assertEqual(out['result']['winner'], 'AFC Fylde')
-        verified = json.loads((FIXTURES / 'verified-milestones.json').read_text())
-        self.assertEqual(out['result'], verified['fylde'])
+        self.assertEqual(out['result'], expected)
+        repeated = scan.classify_observation(row['fixture'], row['observation'], [out['result']])
+        self.assertEqual(repeated['kind'], 'duplicate')
         for status in ('HT', 'LIVE', ''):
             with self.subTest(status=status), self.assertRaises(ValueError):
                 scan.classify_observation(row['fixture'], {**row['observation'], 'status': status}, [])
