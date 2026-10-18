@@ -6,6 +6,24 @@ const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{
  const context=await browser.newContext({viewport:{width:390,height:669},deviceScaleFactor:3});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ // Exercise the actual embedded Share entry through a real parent frame.
+ await page.goto(base+'/beta/');
+ await page.evaluate(()=>{const frame=document.createElement('iframe');frame.src='share-popup-embed.html';frame.style='width:100%;height:640px;border:0';document.body.replaceChildren(frame)});
+ const shareFrame=page.frameLocator('iframe');
+ const keepEntry=shareFrame.getByRole('link',{name:'Keep the Magic'});
+ await keepEntry.waitFor();
+ assert(await shareFrame.locator('.panel').evaluate(panel=>panel.scrollHeight<=panel.clientHeight+1),'embedded Share fits phone height with Keep entry');
+ await page.screenshot({path:'/tmp/tffc-embedded-magic-phone.png'});
+ assert.equal(await keepEntry.getAttribute('target'),'_top');
+ await keepEntry.click();
+ await page.waitForURL('**/keep-the-magic-shed.html?instructions=1&keep=1');
+ assert.equal(await page.locator('#heading').innerText(),'Keep the Magic');
+ await page.selectOption('#platform','apple');
+ assert.match(await page.locator('#steps').innerText(),/square with the arrow pointing upwards/);
+ await page.locator('#back').click();
+ assert.equal(await page.locator('#heading').innerText(),'Share the Magic');
+ await page.locator('#keep').click();
+ assert.equal(await page.locator('#heading').innerText(),'Keep the Magic');
  await page.goto(base+'/beta/keep-the-magic-shed.html');
  await page.evaluate(()=>localStorage.setItem('tffc-test-campaign','preserve-me'));
  await page.reload();

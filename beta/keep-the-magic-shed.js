@@ -37,6 +37,6 @@ document.getElementById('share').onclick=async()=>{const status=document.getElem
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pendingInstall=e;updateInstall()});
 window.addEventListener('appinstalled',()=>{pendingInstall=null;updateInstall();installStatus.textContent='Added. Look for TFFC Shed in your apps.'});
 install.onclick=async()=>{const request=pendingInstall;if(!request)return;pendingInstall=null;install.disabled=true;try{await request.prompt();const choice=await request.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation requested. Try the TFFC Shed icon once it appears.':'You can add it later using your browser menu.'}catch{installStatus.textContent='Please use your browser menu to add this page.'}finally{install.hidden=true;install.disabled=false}};
-window.addEventListener('DOMContentLoaded',()=>{renderInstructions();showShare();dialog.showModal()});
+window.addEventListener('DOMContentLoaded',()=>{renderInstructions();showShare();dialog.showModal();if(new URLSearchParams(location.search).get('keep')==='1')showKeep()});
 
 })();
