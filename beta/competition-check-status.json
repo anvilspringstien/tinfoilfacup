@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-18T16:07:05.921412Z",
+  "monitor_ran_at": "2026-10-18T17:42:59.831241Z",
   "state": "unverified",
   "last_checked_at": null,
-  "results": "success",
+  "results": "unverified",
   "draw": "unverified",
   "diagnostics": {
     "results": {
-      "reason": "verified",
+      "reason": "stale",
       "run_id": 39136615055,
       "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39136615055",
       "status": "completed",
