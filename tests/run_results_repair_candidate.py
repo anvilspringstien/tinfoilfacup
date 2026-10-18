@@ -57,6 +57,7 @@ def main():
             [sys.executable, 'updater/competition_regression_guard.py'],
             [sys.executable, 'updater/reconcile_result_history_aliases.py', '--check'],
             [sys.executable, 'updater/kickoff_venue_regression.py'],
+            [sys.executable, 'updater/competition_health.py'],
         ]
         for name in ('clubfinder_render', 'clubfinder_stats', 'historical_journey', 'historical_venue',
                      'replay_progression', 'journey_integrity', 'amersham_card_render', 'amersham_stats',

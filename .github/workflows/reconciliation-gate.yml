@@ -60,12 +60,20 @@ jobs:
       - name: Clubfinder and Stats regression against reconciled candidate
         run: |
           cp competition.json competition-original.json
+          cp clubfinder.html clubfinder-original.html
+          trap 'mv competition-original.json competition.json; mv clubfinder-original.html clubfinder.html' EXIT
           cp reconciliation-candidate.json competition.json
+          # Reconciliation only imports preceding replay evidence. Build current
+          # results through the real guarded importer before auditing freshness.
+          python updater/run_source_resilient.py --label "Reconciliation active-round results" -- python updater/auto_round_results.py --publish
+          python updater/enrich_replay_kickoffs_and_active_venues.py
+          python updater/reconcile_result_history_aliases.py --check
+          python updater/competition_regression_guard.py
+          python updater/refresh_clubfinder_embedded_snapshot.py
           node updater/clubfinder_render_regression.js
           node updater/clubfinder_stats_regression.js
           python updater/competition_health.py
           python -c 'import json; d=json.load(open("updater/competition-health.json")); assert d["counts"]["overdue"]==0, d["overdue"]; print("RECONCILED COMPETITION HEALTH: no overdue fixtures")'
-          mv competition-original.json competition.json
       - name: Audit current branch data (expected to fail closed if divergent)
         shell: bash
         run: |

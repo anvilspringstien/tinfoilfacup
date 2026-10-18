@@ -99,6 +99,9 @@ jobs:
       - name: Apply reviewed exceptional replay dispositions
         run: python updater/apply_exceptional_replay_dispositions.py
 
+      - name: Ingest verified active-round results before health audit
+        run: python updater/run_source_resilient.py --label "Health active-round results" -- python updater/auto_round_results.py --publish
+
       - name: Reconcile replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py
 

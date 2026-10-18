@@ -41,3 +41,17 @@ A live enrichment exercise against the canonical baseline and cached public matc
 ## Publication
 
 Open the Results PR separately. Require all applicable GitHub checks and explicit user approval before any merge or deployment. Do not use this PR to patch competition scores manually, relax fixture completeness, or repair Draw ingestion.
+
+## Health and reconciliation review follow-up
+
+PR #471's first GitHub run passed the real Results scan and both offline repair
+jobs. Health and reconciliation separately failed because neither imported the
+active round before requiring zero overdue results: health synchronised older
+chronology, while reconciliation only imports preceding scoreless replay evidence.
+Both now invoke the existing guarded active-round Results importer before their
+health audit. Reconciliation remains contents:read, restores its checkout inputs
+with an EXIT trap, enriches replay times and runs alias/competition/snapshot guards
+before renderer/Stats validation. Health retains its existing main-only publication
+boundary and all subsequent regression checks. No health thresholds or source
+completeness rules are relaxed. The captured-source candidate test now also runs
+the real competition health audit; it reports zero overdue and zero critical issues.
