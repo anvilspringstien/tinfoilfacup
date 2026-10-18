@@ -18,6 +18,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from result_metadata import metadata_candidates, retain_metadata
+
 from round_state_engine import (
     base_round,
     classify_observation,
@@ -31,6 +33,7 @@ from round_state_engine import (
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "competition.json"
 REPORT = ROOT / "updater" / "results-pilot-report.json"
+SOURCE_CAPTURE = ROOT / "updater" / "results-source-capture.json"
 FWP_FIXTURES_BASE = "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
 FWP_LIVE_URL = "https://www.footballwebpages.co.uk/fa-cup"
 FWP_ROUND_SLUGS = {
@@ -426,6 +429,7 @@ def aliases(name):
 
 
 def merge_result(data, result):
+    result = retain_metadata(result, metadata_candidates(data))
     changed = False
     for club in aliases(result["home"]) | aliases(result["away"]):
         arr = data.setdefault("result_history", {}).setdefault(club, [])
@@ -476,8 +480,14 @@ def main():
     fwp_round_source = fwp_round_url(round_name)
     primary_raw = fetch(args.url)
     fixtures_raw = fetch(fwp_round_source)
-    validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
     live_raw = fetch(FWP_LIVE_URL)
+    SOURCE_CAPTURE.write_text(json.dumps({
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "primary": {"url": args.url, "html": primary_raw},
+        "fixtures": {"url": fwp_round_source, "html": fixtures_raw},
+        "live": {"url": FWP_LIVE_URL, "html": live_raw},
+    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
 
     by_source = {
         "primary_awards": parse_primary_awards(primary_raw, known, args.url),

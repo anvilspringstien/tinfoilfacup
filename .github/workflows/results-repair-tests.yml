@@ -1,0 +1,49 @@
+name: Results chronological custody and metadata guards
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'updater/**'
+      - 'tests/**'
+      - 'clubfinder.html'
+      - '.github/workflows/results-repair-tests.yml'
+      - '.github/workflows/scan-results.yml'
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'updater/**'
+      - 'tests/**'
+      - 'clubfinder.html'
+      - '.github/workflows/results-repair-tests.yml'
+permissions:
+  contents: read
+jobs:
+  results-repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run ingestion and metadata unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_results_repair.py' -v
+          python -m unittest discover -s tests -p 'test_active_replay_fixture_sync.py' -v
+          python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
+          python -m unittest discover -s tests -p 'test_replay_orientation_fix_preserves_regressions.py' -v
+          python -m unittest discover -s tests -p 'test_archived_replay*.py' -v
+          python -m unittest discover -s tests -p 'test_preceding_round_replay_audit.py' -v
+          python -m unittest discover -s tests -p 'test_guard_archived_replay_promotion.py' -v
+      - name: Guard shared chronology and parsing
+        run: |
+          python updater/round_state_regression.py
+          python updater/round_source_regression.py
+          python updater/extra_preliminary_replay_regression.py
+          python updater/shadow_replay_advancement_regression.py
+          python updater/build_reconciliation_candidate_regression.py
+          python updater/reconciliation_gate_regression.py
+          python updater/kickoff_venue_regression.py
+          python updater/embedded_snapshot_regression.py
+      - name: Guard current published snapshot
+        run: |
+          node updater/clubfinder_render_regression.js
+          node updater/clubfinder_stats_regression.js
+      - name: Rebuild and test isolated candidate from captured source observations
+        run: python tests/run_results_repair_candidate.py

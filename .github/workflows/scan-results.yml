@@ -17,6 +17,11 @@ on:
     paths:
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/result_metadata.py"
+      - "tests/test_results_repair.py"
+      - "tests/dl5_chronology_assertions.js"
+      - "tests/verified_custody_expectation.js"
+      - "tests/fixtures/results-repair/**"
       - "updater/shadow_replay_advancement.py"
       - "updater/shadow_replay_advancement_regression.py"
       - "updater/exceptional-replay-dispositions.json"
@@ -93,6 +98,8 @@ jobs:
           # Scheduled runs can wait behind the shared concurrency lock. Re-resolve the branch
           # head when execution starts so a queued run does not build from a stale event SHA.
           ref: ${{ github.ref_name }}
+      - name: Preserve exact Results input for diagnostics
+        run: cp competition.json updater/results-input-competition.json
       - name: Guard universal round-state chronology
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing
@@ -233,6 +240,17 @@ jobs:
           path: |
             updater/results-pilot-report.json
             updater/replay-advancement-shadow-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-candidate-diagnostics
+          path: |
+            updater/results-input-competition.json
+            competition.json
+            clubfinder.html
+            updater/results-source-capture.json
+            updater/kickoff-venue-enrichment-report.json
+            updater/active-replay-fixture-sync-report.json
       - name: Commit validated competition data and Clubfinder
         if: ${{ github.ref_name == 'main' && (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish) }}
         run: |
