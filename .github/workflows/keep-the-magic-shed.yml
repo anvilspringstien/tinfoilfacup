@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'beta/keep-the-magic-shed*'
+      - 'beta/share-popup-embed.html'
+      - 'beta/share-destination.css'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
@@ -11,6 +13,8 @@ on:
     branches-ignore: [main]
     paths:
       - 'beta/keep-the-magic-shed*'
+      - 'beta/share-popup-embed.html'
+      - 'beta/share-destination.css'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
