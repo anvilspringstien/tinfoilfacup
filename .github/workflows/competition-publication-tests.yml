@@ -11,6 +11,10 @@ on:
       - '.github/workflows/scan-draw.yml'
       - '.github/workflows/scan-results.yml'
       - '.github/workflows/competition-health.yml'
+      - '.github/workflows/refresh-beta-snapshot.yml'
+      - '.github/workflows/ground-health.yml'
+      - '.github/workflows/conditional-draw-resolution.yml'
+      - '.github/workflows/publish-preceding-replays.yml'
       - '.github/workflows/competition-publication-tests.yml'
   push:
     branches: [main]
@@ -24,6 +28,10 @@ on:
       - '.github/workflows/scan-draw.yml'
       - '.github/workflows/scan-results.yml'
       - '.github/workflows/competition-health.yml'
+      - '.github/workflows/refresh-beta-snapshot.yml'
+      - '.github/workflows/ground-health.yml'
+      - '.github/workflows/conditional-draw-resolution.yml'
+      - '.github/workflows/publish-preceding-replays.yml'
       - '.github/workflows/competition-publication-tests.yml'
 permissions:
   contents: read

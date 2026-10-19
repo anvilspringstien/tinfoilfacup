@@ -42,6 +42,9 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v5
+      - name: Verify every production queue participant retains pending runs
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
       - env:
           PROBE_RESULT: ${{ needs.probe.result }}
         run: test "$PROBE_RESULT" = success
