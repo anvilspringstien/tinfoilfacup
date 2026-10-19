@@ -227,6 +227,26 @@ class LifecycleTests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.run_results(monday, '<h1>Fixtures/Results, Third Qualifying Round Replay, 2026-2027</h1>')
 
+    def test_generic_abbreviations_preserve_archive_and_source_identity(self):
+        saturday = state('Second Round Qualifying')
+        # Substitute full sourced names and abbreviated FA archive names.
+        raw = json.dumps(saturday).replace('Alpha Town', 'Example United').replace('Beta City', 'Other Town')
+        saturday = json.loads(raw)
+        original_fixtures = draw.fixture_values(saturday['fixtures'])
+        original_fixtures[0]['home'] = 'Example Utd'
+        saturday['fixtures'] = draw.fixture_map(original_fixtures)
+        monday, _ = self.promote(saturday)
+        fixtures = draw.fixture_values(monday['fixtures'])
+        fixtures[0]['home'] = 'Example United or Other Town'
+        monday['fixtures'] = draw.fixture_map(fixtures)
+        source = replay_html('Second Round Qualifying').replace('Alpha Town', 'Example United').replace('Beta City', 'Other Town')
+        before = copy.deepcopy(monday)
+        candidate, report, _ = archived.collect(monday, lambda _: source)
+        self.assertEqual(report['status'], 'staged')
+        self.assertEqual(candidate['fixtures']['Other Town']['home'], 'Other Town')
+        self.assertEqual(candidate['round_fixtures'], before['round_fixtures'])
+        self.assertEqual(monday, before)
+
     def test_workflow_executes_lifecycle_guards_before_candidate_build(self):
         workflow = (Path(__file__).resolve().parents[1]/'.github/workflows/scan-results.yml').read_text()
         self.assertLess(workflow.index('test_round_replay_lifecycle.py\' -v'), workflow.index('- name: Scan active round'))

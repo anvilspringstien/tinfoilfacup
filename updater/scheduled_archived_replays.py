@@ -26,20 +26,31 @@ def collect(data, fetch, live_html="", as_of=None):
     import auto_draw as draw
     original_fixtures = draw.fixture_values((data.get("round_fixtures") or {}).get(preceding) or {})
     scheduled = draw.fixture_values(data.get("replays") or {})
+    audit_originals = copy.deepcopy(original_fixtures)
+    def same_pair(left, right):
+        return ((draw.compatible(left.get("home"), right.get("home")) and draw.compatible(left.get("away"), right.get("away"))) or
+                (draw.compatible(left.get("home"), right.get("away")) and draw.compatible(left.get("away"), right.get("home"))))
     for original in pending:
         matches = [f for f in original_fixtures if f.get("date") == original.get("date")
-                   and scan.match_fixture([f], original.get("home"), original.get("away"))]
+                   and same_pair(f, original)]
         if len(matches) != 1 or not original.get("source_url"):
             raise ValueError("Pending replay lacks unique sourced archived original")
         replay_matches = [r for r in scheduled if r.get("round") == preceding + " Replay"
                           and r.get("source_url") and r.get("date", "") > original.get("date", "")
-                          and scan.match_fixture([matches[0]], r.get("home"), r.get("away"))]
+                          and same_pair(matches[0], r)]
         if len(replay_matches) != 1:
             raise ValueError("Pending replay lacks unique canonical schedule")
+        # Use sourced original names for parsing the replay page. The saved FA
+        # archive may contain abbreviations; only its unique verified pair is
+        # overlaid, in memory, so the parser need not guess a source club name.
+        index = original_fixtures.index(matches[0])
+        audit_originals[index].update(home=original["home"], away=original["away"])
+    audit_data = copy.deepcopy(data)
+    audit_data.setdefault("round_fixtures", {})[preceding] = audit_originals
     url = audit.archived_replay_source(preceding)
     raw = fetch(url)
     audit.validate_archived_replay_page(raw, preceding, url)
-    report = audit.audit(data, raw, live_html, url, as_of=as_of)
+    report = audit.audit(audit_data, raw, live_html, url, as_of=as_of)
     gate = readiness(report)
     # Retain the recovery route's independent penalty-evidence requirement.
     # Held fixtures stay unresolved; independently cleared fixtures may advance.
@@ -93,7 +104,7 @@ def resolve_conditionals(data, preceding):
                 continue
             # Reclassify against original ancestry to reject conflicting outcomes.
             for result in replays:
-                scan.classify_observation(original, result, draws)
+                scan.classify_observation(draws[0], result, draws)
             winners = {draw.norm(r["winner"]) for r in replays}
             if len(winners) != 1:
                 raise ValueError("Conflicting replay winners for conditional slot")
