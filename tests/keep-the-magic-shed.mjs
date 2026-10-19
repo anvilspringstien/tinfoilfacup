@@ -18,6 +18,7 @@ try{
   assert(await page.locator('.keep-card').isVisible());
   await page.screenshot({path:`/tmp/tffc-destination-magic-${width}x${height}.png`});
   const crest=await page.locator('.crest').boundingBox();
+  if(width===390)assert.equal(crest.width,height===669?179:100,'accepted #484 iPhone crest size');
   const type=await page.locator('.heading').evaluate(e=>{const s=getComputedStyle(e);return [s.fontSize,s.fontFamily,s.fontWeight]});
   await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
   await page.selectOption('#platform','apple');
@@ -37,6 +38,27 @@ try{
    assert(!/Shed|BETA|preview/.test(await page.locator('#magic').innerText()),'no build scaffolding in instructions');
    await page.screenshot({path:`/tmp/tffc-${platform}-magic-${width}x${height}.png`});
   }
+ }
+ // Follow the real iframe -> top-level transition: direct-page comparisons
+ // cannot detect a gutter reserved by both the Campaign host and Share iframe.
+ await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
+ await context.addInitScript(()=>Object.defineProperty(navigator,'share',{configurable:true,value:async()=>{}}));
+ for(const [width,height] of [[390,669],[390,560],[1680,889]]){
+  await page.setViewportSize({width,height});
+  await page.goto(base+'/beta/clubfinder-journey.html?magicShare=1');
+  const frame=page.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+  await frame.locator('.keep-magic').waitFor();
+  const before=await frame.locator('.panel').evaluate(e=>{
+   const box=s=>{const r=document.querySelector(s).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}};
+   return {frame:box('.panel'),crest:box('.crest'),surround:getComputedStyle(document.querySelector('.overlay')).backgroundColor,fill:getComputedStyle(e).backgroundColor,border:getComputedStyle(e).borderColor};
+  });
+  await frame.locator('.keep-magic').click();await page.waitForURL('**/keep-the-magic-shed.html?**');
+  const after=await page.locator('#magic').evaluate(e=>{
+   const r=e.getBoundingClientRect(),c=document.querySelector('.brand').getBoundingClientRect();
+   return {frame:{x:r.x,y:r.y,width:r.width,height:r.height},crest:{x:c.x,y:c.y,width:c.width,height:c.height},surround:getComputedStyle(e,'::backdrop').backgroundColor,fill:getComputedStyle(e).backgroundColor,border:getComputedStyle(e).borderColor};
+  });
+  for(const element of ['frame','crest'])for(const key of ['x','y','width','height'])assert(Math.abs(before[element][key]-after[element][key])<1,'real transition preserves '+element+' '+key);
+  for(const key of ['surround','fill','border'])assert.equal(after[key],before[key],'real transition preserves '+key);
  }
  // Actual application hosts, native sharing visible, short Safari-sized viewport.
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
