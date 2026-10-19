@@ -62,6 +62,8 @@ def main():
         with tempfile.TemporaryDirectory(prefix='tffc-round-rehearsal-') as tmp:
             destination = Path(tmp) / 'repo'
             shutil.copytree(ROOT, destination, ignore=shutil.ignore_patterns('.git', '__pycache__', 'node_modules', 'assets'))
+            # The BETA identity guard validates the seven real Stats images.
+            shutil.copytree(ROOT / 'beta/assets/stats-report', destination / 'beta/assets/stats-report')
             write_state(destination, data)
             for command in publication_commands():
                 run(command, destination)
