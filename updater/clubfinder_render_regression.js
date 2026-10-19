@@ -48,6 +48,8 @@ const assertions=`
   const canonicalSecondQFixtures=[...canonicalFixtures,...archivedSecondQFixtures];
   const archivedThirdQFixtures=canonicalRecords((canonicalCompetition.round_fixtures||{})['Third Round Qualifying']);
   const canonicalThirdQFixtures=[...canonicalFixtures,...archivedThirdQFixtures];
+  const archivedFourthQFixtures=canonicalRecords((canonicalCompetition.round_fixtures||{})['Fourth Round Qualifying']);
+  const canonicalFourthQFixtures=[...canonicalFixtures,...archivedFourthQFixtures];
   const canonicalHistory=canonicalRecords(canonicalCompetition.result_history||canonicalCompetition.results||[]);
   const canonicalSecondQFixture=(club,label)=>{
     const f=canonicalSecondQFixtures.find(x=>/Second Round Qualifying/i.test(x.round||'Second Round Qualifying')&&(same(x.home,club.name)||same(x.away,club.name)));
@@ -68,7 +70,7 @@ const assertions=`
     typeof r.source_url==='string'&&
     r.source_url.startsWith('https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round-replay'));
   const athertonEvidence=athertonAdvancement||athertonScoredReplay;
-  const athertonFourthQ=canonicalFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
+  const athertonFourthQ=canonicalFourthQFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
   // This replay is a historical milestone, not a permanent terminal custodian.
   // Follow subsequent source-backed full-time results, independently of buildJourney.
   const expectedAfter=(club,date)=>verifiedCustodianAfter(canonicalCompetition,club,date);

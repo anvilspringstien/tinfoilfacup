@@ -66,12 +66,24 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
             and v.get('home') == 'Thame United'
             and v.get('away') == 'Eastbourne Borough'
             for v in archived_rows))
-        active_fqr = {
+        # FQR remains auditable after auto_draw archives it at promotion.
+        fqr_source = (fallback.get('fixtures', {})
+                      if fallback.get('source_round') == 'Fourth Round Qualifying'
+                      else fallback.get('round_fixtures', {}).get('Fourth Round Qualifying', []))
+        fqr_rows = fqr_source.values() if isinstance(fqr_source, dict) else fqr_source
+        fqr = {
             (v.get('round'), v.get('date'), v.get('home'), v.get('away'))
-            for v in fallback.get('fixtures', {}).values()
+            for v in fqr_rows
             if v.get('round') == 'Fourth Round Qualifying'
         }
-        self.assertEqual(len(active_fqr), 32)
+        self.assertEqual(len(fqr), 32)
+        active = list(fallback.get('fixtures', {}).values())
+        self.assertTrue(active)
+        self.assertTrue(all(v.get('round') == fallback.get('source_round') for v in active))
+        unique_active = {
+            (v.get('round'), v.get('date'), v.get('home'), v.get('away')) for v in active
+        }
+        self.assertEqual(len(unique_active), fallback.get('source_tie_count'))
 
 
 if __name__ == '__main__':
