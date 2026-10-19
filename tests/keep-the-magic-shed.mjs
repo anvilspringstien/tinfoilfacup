@@ -7,7 +7,7 @@ try{
  const context=await browser.newContext({viewport:{width:390,height:669},deviceScaleFactor:3});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(String(e)));
  // The destination frame follows the actual approved front door at each size.
- for(const [width,height] of [[390,669],[390,560],[768,1024],[1024,768],[1680,889]]){
+ for(const [width,height] of [[390,669],[390,645],[390,620],[390,560],[768,1024],[1024,768],[1680,889]]){
   await page.setViewportSize({width,height});
   await page.goto(base+'/index.html');
   const front=await page.locator('.field').boundingBox();
@@ -18,8 +18,8 @@ try{
   assert(await page.locator('.keep-card').isVisible());
   await page.screenshot({path:`/tmp/tffc-destination-magic-${width}x${height}.png`});
   const crest=await page.locator('.crest').boundingBox();
-  if(width===390&&height>=650){
-   assert(crest.width>(height===669?179:100),'phone crest grows into spare space');
+  if(width===390&&height>=500){
+   assert(crest.width>({669:179,645:155,620:130,560:100}[height]),'phone crest grows into spare space');
    const gaps=await page.locator('.panel').evaluate(()=>{const note=document.querySelector('.note').getBoundingClientRect(),buttons=document.querySelector('.buttons').getBoundingClientRect(),keep=document.querySelector('.keep-card').getBoundingClientRect();return [buttons.top-note.bottom,keep.top-buttons.bottom]});
    assert(Math.abs(gaps[0]-gaps[1])<1,'equal gaps above and below sharing buttons');
   }
