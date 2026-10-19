@@ -23,7 +23,7 @@ const platform=document.getElementById('platform'),steps=document.getElementById
 const install=document.getElementById('install'),installStatus=document.getElementById('install-status');
 let pendingInstall=null;
 const instructions={
- apple:['In Safari, tap the square with the arrow pointing upwards — not our Share… button.','Scroll through Safari’s actions and tap Add to Home Screen.','Leave Open as Web App on if offered, then tap Add.'],
+ apple:['In Safari, see the little square icon with the arrow pointing up? It’s on that bar at the bottom of your screen. Tap that.','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
  android:['Open this page in Chrome or your usual browser.','Open the browser menu and look for Install app or Add to Home screen. The wording depends on your browser.','Confirm, then try the TFFC Shed icon. If neither option appears, bookmark this page for an easy way back.'],
  computer:['Open your browser’s menu and look for Install or Apps. Some browsers also show an install icon in the address bar.','If installation is offered, confirm it. Otherwise bookmark this page.','Open TFFC Shed from your apps or your bookmark.']
 };

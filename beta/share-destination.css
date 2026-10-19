@@ -7,7 +7,8 @@ body.modalOpen{overflow:hidden}
 .overlay[hidden]{display:none}
 .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(6px,1.2vh,13px);overflow:hidden;background:transparent}
 .panel,dialog#magic{position:relative;width:100%;max-width:628px;height:calc(100svh - 2 * clamp(6px,1.2vh,13px));max-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));margin:auto;background:#100f0d;color:#f6f3e8;border:1px solid #818181;border-radius:12px;padding:32px 18px 18px;overflow:auto;overscroll-behavior:contain;scrollbar-width:none}
-.panel,dialog#magic[open]:not(.keeping){display:flex;flex-direction:column;align-items:center;gap:10px}
+dialog#magic{width:calc(100% - 2 * clamp(6px,1.2vh,13px))}
+.panel,dialog#magic[open]{display:flex;flex-direction:column;align-items:center;gap:10px}
 .panel::-webkit-scrollbar,dialog#magic::-webkit-scrollbar{display:none}
 button,a{font:inherit}
 button{cursor:pointer}
@@ -29,9 +30,21 @@ button{cursor:pointer}
 dialog#magic .top{position:absolute;top:4px;right:6px}
 dialog#magic .top .close{position:static}
 dialog#magic .tag{display:none}
-dialog#magic.keeping{padding:48px 24px 24px}
-dialog#magic.keeping .brand{display:none}
-dialog#magic.keeping .heading{margin-bottom:20px}
+/* Keep carries Share's frame, crest and heading through the transition. */
+#keep-view{display:flex;flex:1;flex-direction:column;gap:10px;width:100%;max-width:440px;min-height:0}
+dialog#magic.keeping .intro{max-width:400px;font-size:14px;line-height:1.4;margin:0 auto;text-align:center}
+dialog#magic.keeping .platform{margin:0 auto;flex:none}
+dialog#magic.keeping .steps{font-size:14px;line-height:1.45;margin:0;padding-left:24px}
+dialog#magic.keeping .steps li+li{margin-top:10px}
+dialog#magic.keeping .back{margin:auto auto 0;flex:none}
+dialog#magic.keeping .note{margin:0}
+@media(max-width:600px){
+ #keep-view{gap:8px}
+ dialog#magic.keeping .intro{font-size:13px}
+ dialog#magic.keeping .steps{font-size:13px;line-height:1.4}
+ dialog#magic.keeping .steps li+li{margin-top:8px}
+}
+@media(max-height:450px){#keep-view{flex:none}}
 @media(min-width:700px){.panel,dialog#magic{max-width:550px}}
 @media(max-height:600px){
  .panel,dialog#magic{gap:7px;padding:28px 14px 12px}
