@@ -184,6 +184,69 @@ def active_source_complete(official_ties, expected_ties):
     return len(official_ties) == int(expected_ties)
 
 
+def verified_replay_phase(data, official_ties, expected_ties):
+    """Recognise a shrinking fixtures feed without authorising fixture writes.
+
+    Every original tie needs a sourced final result. Drawn originals must have
+    either a sourced decisive replay or an exact outstanding replay in the FA
+    feed. Missing/extra/ambiguous fixtures fail closed.
+    """
+    current = data.get("source_round", "")
+    originals = fixture_values(data.get("fixtures") or {})
+    if len(originals) != expected_ties or any(
+        is_conditional_fixture(f) or f.get("round") != current or not f.get("date") for f in originals
+    ):
+        return False
+    records = list((data.get("results") or {}).values())
+    for history in (data.get("result_history") or {}).values():
+        records.extend(history)
+    records = [r for r in records if isinstance(r, dict) and r.get("source_url")
+               and r.get("status") == "FT"]
+    replays = fixture_values(data.get("replays") or {})
+
+    def same_pair(a, b):
+        return (compatible(a.get("home"), b.get("home")) and compatible(a.get("away"), b.get("away"))) or (
+            compatible(a.get("home"), b.get("away")) and compatible(a.get("away"), b.get("home")))
+
+    pending = []
+    for original in originals:
+        matches = [r for r in records if r.get("round") == current
+                   and r.get("date") == original.get("date") and same_pair(r, original)]
+        outcomes = {(r.get("home_score"), r.get("away_score"), norm(r.get("winner"))) for r in matches}
+        if len(outcomes) != 1:
+            return False
+        home, away, winner = next(iter(outcomes))
+        if not isinstance(home, int) or not isinstance(away, int):
+            return False
+        if winner:
+            if not any(compatible(winner, original.get(side)) for side in ("home", "away")):
+                return False
+            continue
+        if home != away:
+            return False
+        decisive = [r for r in records if r.get("round") == current + " Replay"
+                    and r.get("date", "") > original.get("date", "")
+                    and r.get("winner") and same_pair(r, original)
+                    and any(compatible(r["winner"], original.get(side)) for side in ("home", "away"))]
+        if decisive:
+            if len({norm(r["winner"]) for r in decisive}) != 1:
+                return False
+            continue
+        candidates = [r for r in replays if r.get("round") == current + " Replay"
+                      and r.get("source_url") and r.get("date", "") > original.get("date", "")
+                      and same_pair(r, original)]
+        if len(candidates) != 1:
+            return False
+        pending.append(candidates[0])
+    if len(pending) != len(official_ties):
+        return False
+    # A bijection also rejects ambiguous club abbreviations and duplicate rows.
+    def exact(a, b):
+        return fixture_matches_slot(a, b) and a.get("date") == b.get("date")
+    return all(sum(exact(o, p) for p in pending) == 1 for o in official_ties) and all(
+        sum(exact(o, p) for o in official_ties) == 1 for p in pending)
+
+
 def is_conditional_fixture(fixture):
     return len(alternatives(fixture.get("home", ""))) > 1 or len(alternatives(fixture.get("away", ""))) > 1
 
@@ -472,6 +535,7 @@ def main():
     saved_current = fixture_values(data.get("fixtures") or {})
     expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
     source_complete = active_source_complete(current_official, expected_active_ties)
+    replay_phase_verified = not source_complete and verified_replay_phase(data, current_official, expected_active_ties)
     target_complete = False
     if target_ties:
         # A newly published next-round draw is an independent source instrument.
@@ -485,7 +549,9 @@ def main():
             "ACTIVE ROUND SOURCE INCOMPLETE:",
             f"official={len(current_official)} expected={expected_active_ties}",
         )
-        if not target_complete:
+        if replay_phase_verified:
+            print("VERIFIED REPLAY PHASE: outstanding official fixtures match canonical replay chronology; active fixtures retained.")
+        elif not target_complete:
             if args.publish:
                 write_report(
                     status="blocked",
@@ -567,6 +633,7 @@ def main():
         active_round_expected_ties=expected_active_ties,
         active_round_source_complete=source_complete,
         target_round_source_complete=target_complete,
+        replay_phase_verified=replay_phase_verified,
         active_round_conditional_resolutions=active_transitions,
         active_round_metadata_updates=active_metadata_updates,
         active_round_unresolved_diagnostics=active_unresolved,

@@ -1,0 +1,21 @@
+name: Draw chronology guards
+on:
+  pull_request:
+    paths:
+      - 'updater/auto_draw.py'
+      - 'updater/active_conditional_refresh_regression.py'
+      - '.github/workflows/draw-chronology-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'updater/auto_draw.py'
+      - 'updater/active_conditional_refresh_regression.py'
+      - '.github/workflows/draw-chronology-tests.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: python updater/active_conditional_refresh_regression.py
