@@ -50,3 +50,8 @@ dialog#magic.keeping .heading{margin-bottom:20px}
 }
 dialog#magic:not(.keeping) .note,dialog#magic:not(.keeping) .feedback{margin:0}
 @media(min-width:1200px){html{scrollbar-gutter:stable}}
+/* BB: spend the spare vertical space on the crest while keeping the
+   accepted phone and tablet furniture unchanged. */
+@media(min-width:1200px) and (min-height:801px){
+ .crest,dialog#magic .brand{width:clamp(280px,calc(100svh - 550px),360px)}
+}
