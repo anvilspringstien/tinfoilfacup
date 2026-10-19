@@ -29,8 +29,8 @@ const instructions={
 };
 function renderInstructions(){document.getElementById('platform-note').hidden=platform.value==='apple'||standalone();steps.replaceChildren(...instructions[platform.value].map(text=>{const li=document.createElement('li');li.textContent=text;return li}));}
 function updateInstall(){const isInstalled=standalone();install.hidden=isInstalled||!pendingInstall;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;installStatus.textContent=isInstalled?'You’re already opening Tin Foil FA Cup as an app.':'';installStatus.classList.toggle('installed',isInstalled);}
-function showShare(){dialog.classList.remove('keeping');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
-function showKeep(){dialog.classList.add('keeping');heading.textContent='Keep the Magic';shareView.hidden=true;keepView.hidden=false;renderInstructions();updateInstall();dialog.scrollTop=0;(standalone()?heading:document.getElementById(install.hidden?'platform':'install')).focus();}
+function showShare(){dialog.style.removeProperty('--phone-share-crest-size');dialog.classList.remove('keeping');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
+function showKeep(){if(!dialog.classList.contains('keeping')&&matchMedia('(max-width:600px) and (min-height:650px)').matches)dialog.style.setProperty('--phone-share-crest-size',document.querySelector('.brand').getBoundingClientRect().width+'px');dialog.classList.add('keeping');heading.textContent='Keep the Magic';shareView.hidden=true;keepView.hidden=false;renderInstructions();updateInstall();dialog.scrollTop=0;(standalone()?heading:document.getElementById(install.hidden?'platform':'install')).focus();}
 openButton.onclick=()=>{showShare();dialog.showModal()};
 document.getElementById('close').onclick=()=>{if(!returnToShare())dialog.close()};
 dialog.addEventListener('click',e=>{const box=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom))dialog.close()});

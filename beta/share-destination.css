@@ -76,3 +76,14 @@ dialog#magic:not(.keeping) .note,dialog#magic:not(.keeping) .feedback{margin:0}
 /* Match the embedded Share surround when guidance opens as its own page. */
 dialog#magic::backdrop{background:#141210}
 @media(max-height:600px){#keep-view{gap:12px}}
+/* Phone Share: the crest takes the remaining height, leaving the same
+   gap on either side of the sharing actions. */
+@media(max-width:600px) and (min-height:650px){
+ .panel,dialog#magic[open]:not(.keeping){display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) repeat(5,auto);justify-items:center}
+ .panel>.crest,dialog#magic:not(.keeping)>.brand{width:auto;height:100%;max-width:100%;min-height:0;aspect-ratio:1;object-fit:contain}
+ #magic:not(.keeping) #share-view{display:contents}
+ .panel>.keep-card,#magic:not(.keeping) .keep-card{margin:0 auto}
+ dialog#magic.keeping>.brand{width:var(--phone-share-crest-size);height:auto}
+}
+
+@media(max-width:600px) and (min-height:650px){#keep-view{gap:16px}}

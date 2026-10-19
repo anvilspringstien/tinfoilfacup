@@ -18,7 +18,11 @@ try{
   assert(await page.locator('.keep-card').isVisible());
   await page.screenshot({path:`/tmp/tffc-destination-magic-${width}x${height}.png`});
   const crest=await page.locator('.crest').boundingBox();
-  if(width===390)assert.equal(crest.width,height===669?179:100,'accepted #484 iPhone crest size');
+  if(width===390&&height>=650){
+   assert(crest.width>(height===669?179:100),'phone crest grows into spare space');
+   const gaps=await page.locator('.panel').evaluate(()=>{const note=document.querySelector('.note').getBoundingClientRect(),buttons=document.querySelector('.buttons').getBoundingClientRect(),keep=document.querySelector('.keep-card').getBoundingClientRect();return [buttons.top-note.bottom,keep.top-buttons.bottom]});
+   assert(Math.abs(gaps[0]-gaps[1])<1,'equal gaps above and below sharing buttons');
+  }
   const type=await page.locator('.heading').evaluate(e=>{const s=getComputedStyle(e);return [s.fontSize,s.fontFamily,s.fontWeight]});
   await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
   await page.selectOption('#platform','apple');
@@ -34,7 +38,7 @@ try{
   await page.screenshot({path:`/tmp/tffc-instructions-magic-${width}x${height}.png`});
   for(const platform of ['android','computer']){
    await page.selectOption('#platform',platform);
-   assert(await page.locator('#magic').evaluate(p=>p.scrollHeight<=p.clientHeight+1),platform+' instructions fit the frame');
+   assert(await page.locator('#magic').evaluate(p=>p.scrollHeight<=p.clientHeight+1),platform+' instructions fit the frame '+width+'×'+height);
    assert(!/Shed|BETA|preview/.test(await page.locator('#magic').innerText()),'no build scaffolding in instructions');
    await page.screenshot({path:`/tmp/tffc-${platform}-magic-${width}x${height}.png`});
   }
