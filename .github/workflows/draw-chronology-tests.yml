@@ -1,0 +1,38 @@
+name: Draw chronology guards
+on:
+  pull_request:
+    paths:
+      - 'updater/auto_draw.py'
+      - 'updater/scheduled_archived_replays.py'
+      - 'updater/auto_round_results.py'
+      - 'updater/audit_preceding_round_replays.py'
+      - 'updater/guard_archived_replay_promotion.py'
+      - 'updater/stage_preceding_replay_candidates.py'
+      - 'updater/sync_active_replay_fixtures.py'
+      - 'updater/round_state_engine.py'
+      - 'tests/test_round_replay_lifecycle.py'
+      - 'updater/active_conditional_refresh_regression.py'
+      - '.github/workflows/draw-chronology-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'updater/auto_draw.py'
+      - 'updater/scheduled_archived_replays.py'
+      - 'updater/auto_round_results.py'
+      - 'updater/audit_preceding_round_replays.py'
+      - 'updater/guard_archived_replay_promotion.py'
+      - 'updater/stage_preceding_replay_candidates.py'
+      - 'updater/sync_active_replay_fixtures.py'
+      - 'updater/round_state_engine.py'
+      - 'tests/test_round_replay_lifecycle.py'
+      - 'updater/active_conditional_refresh_regression.py'
+      - '.github/workflows/draw-chronology-tests.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: python updater/active_conditional_refresh_regression.py
+      - run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v

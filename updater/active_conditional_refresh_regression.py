@@ -202,3 +202,47 @@ require(not active_source_complete([{"tie": i} for i in range(5)], 40),
         "five surviving TRQ rows must never count as complete 40-tie active evidence")
 print("Round-boundary next-draw coverage: PASS")
 print("Real FA abbreviation forms: PASS")
+
+# Replay-only source acceptance must prove the complete original chronology.
+import copy
+import json
+import tempfile
+from pathlib import Path
+round_name = "Fourth Round Qualifying"
+originals = [dict(round=round_name, home="Alpha Town", away="Beta City", date="2026-10-17"),
+             dict(round=round_name, home="Gamma Town", away="Delta City", date="2026-10-17")]
+replay = dict(round=round_name + " Replay", home="Beta City", away="Alpha Town", date="2026-10-20", source_url="https://example.test/results")
+results = [dict(originals[0], home_score=1, away_score=1, winner="", status="FT", source_url="https://example.test/results"),
+           dict(originals[1], home_score=2, away_score=0, winner="Gamma Town", status="FT", source_url="https://example.test/results")]
+state = dict(source_round=round_name, source_tie_count=2, fixtures=auto_draw.fixture_map(originals),
+             replays=auto_draw.fixture_map([replay]), results={}, result_history={"history": results})
+feed = [dict(replay, round=round_name)]
+require(auto_draw.verified_replay_phase(state, feed, 2), "complete replay-only phase rejected")
+require(not auto_draw.verified_replay_phase(state, [], 2), "missing outstanding replay accepted")
+require(not auto_draw.verified_replay_phase(state, feed + feed, 2), "duplicate replay accepted")
+require(not auto_draw.verified_replay_phase(state, [dict(feed[0], away="Unknown Town")], 2), "unexpected replay accepted")
+require(not auto_draw.verified_replay_phase(state, [dict(feed[0], date="2026-10-21")], 2), "wrong replay date accepted")
+for mutation in ("missing-result", "unsourced-result", "conflicting-result", "missing-replay", "partial-originals"):
+    bad = copy.deepcopy(state)
+    if mutation == "missing-result": bad["result_history"]["history"].pop()
+    if mutation == "unsourced-result": bad["result_history"]["history"][0].pop("source_url")
+    if mutation == "conflicting-result": bad["result_history"]["history"].append(dict(results[0], home_score=2))
+    if mutation == "missing-replay": bad["replays"] = {}
+    if mutation == "partial-originals": bad["fixtures"] = auto_draw.fixture_map(originals[:1])
+    require(not auto_draw.verified_replay_phase(bad, feed, 2), mutation + " accepted")
+# A completed replay removes that tie from the outstanding feed.
+done = copy.deepcopy(state)
+done["result_history"]["history"].append(dict(replay, home_score=2, away_score=1, winner="Beta City", status="FT"))
+require(auto_draw.verified_replay_phase(done, [], 2), "completed replay phase rejected")
+require(not auto_draw.verified_replay_phase(done, feed, 2), "stale completed replay accepted")
+# Exercise the actual publish path: replay recognition must not write competition.
+with tempfile.TemporaryDirectory() as tmp:
+    data_path, report_path = Path(tmp)/"competition.json", Path(tmp)/"report.json"
+    data_path.write_text(json.dumps(state))
+    before = data_path.read_bytes()
+    with patch.object(auto_draw, "DATA", data_path), patch.object(auto_draw, "REPORT", report_path), patch.object(auto_draw, "fetch", return_value="html"), patch.object(auto_draw, "parse_page", return_value=feed), patch("sys.argv", ["auto_draw.py", "--publish", "--max-pages", "1"]):
+        auto_draw.main()
+    require(data_path.read_bytes() == before, "replay phase mutated canonical competition")
+    report = json.loads(report_path.read_text())
+    require(report["replay_phase_verified"] and not report["published"], "replay phase report is misleading")
+print("Replay-only chronology and non-mutation guards: PASS")

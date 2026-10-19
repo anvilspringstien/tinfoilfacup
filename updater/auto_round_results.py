@@ -518,8 +518,28 @@ def main():
             if merge_event(data, outcome["event"]):
                 changed = True
 
+    # A next-round draw must not make the preceding qualifying replays invisible.
+    # Stage through the same audit/readiness/chronology gates as manual recovery;
+    # the surrounding Results workflow still runs all publication/render guards.
+    from scheduled_archived_replays import collect
+    archived_report = {"status": "blocked-by-active-chronology", "changed": False}
+    if not blocked:
+        try:
+            def capture_archived_source(url):
+                raw = fetch(url)
+                capture = json.loads(SOURCE_CAPTURE.read_text(encoding="utf-8"))
+                capture["archived_replays"] = {"url": url, "html": raw}
+                SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+                return raw
+            data, archived_report, _ = collect(data, capture_archived_source, live_raw)
+            changed = changed or archived_report["changed"]
+        except (ValueError, SystemExit) as exc:
+            blocked.append({"scope": "archived-replays", "error": str(exc)})
+            archived_report = {"status": "blocked", "changed": False, "error": str(exc)}
+
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
+        "archived_replays": archived_report,
         "scan_round": round_name,
         "known_ties": len(known),
         "fwp_round_source_url": fwp_round_source,
@@ -545,6 +565,9 @@ def main():
     print("Results classified:", report["classified_results"])
     print("Unresolved events classified:", report["classified_events"])
     print("Blocked chronology conflicts:", len(blocked))
+    print("Archived replay collection:", archived_report["status"])
+    for held in archived_report.get("held", []):
+        print("::warning::Archived replay remains unresolved: " + str(held))
 
     if blocked and args.publish:
         raise SystemExit("Publication blocked by chronology conflict(s): " + str(blocked[:5]))
