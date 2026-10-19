@@ -6,6 +6,18 @@ const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{
  const context=await browser.newContext({viewport:{width:390,height:669},deviceScaleFactor:3});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ // The destination frame follows the actual approved front door at each size.
+ for(const [width,height] of [[390,669],[390,560],[768,1024],[1024,768],[1680,889]]){
+  await page.setViewportSize({width,height});
+  await page.goto(base+'/index.html');
+  const front=await page.locator('.field').boundingBox();
+  await page.goto(base+'/beta/share-popup-embed.html');
+  const share=await page.locator('.panel').boundingBox();
+  for(const key of ['x','y','width','height'])assert(Math.abs(front[key]-share[key])<2,`Share frame ${key} matches Splash at ${width}×${height}`);
+  assert(await page.locator('.panel').evaluate(p=>p.scrollHeight<=p.clientHeight+1),'Share furniture fits destination frame');
+  assert(await page.locator('.keep-card').isVisible());
+  await page.screenshot({path:`/tmp/tffc-destination-magic-${width}x${height}.png`});
+ }
  // Actual application hosts, native sharing visible, short Safari-sized viewport.
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
  await context.addInitScript(()=>Object.defineProperty(navigator,'share',{configurable:true,value:async()=>{}}));
@@ -26,7 +38,7 @@ try{
   await page.locator('#back').click();
   await page.waitForURL('**/beta/'+host);
   await shareFrame.locator('#copy').waitFor();
-  assert.equal(await shareFrame.locator('#shareHeading').innerText(),'Share');
+  assert.equal(await shareFrame.locator('#shareHeading').innerText(),'Share the Magic');
   await keepEntry.click();
   await page.waitForURL('**/keep-the-magic-shed.html?**');
   await page.locator('#close').click();
