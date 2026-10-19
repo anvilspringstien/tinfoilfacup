@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Guard round draw and archived replay lifecycle
+        run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
       - name: Run ingestion and metadata unit tests
         run: |
           python -m unittest discover -s tests -p 'test_results_repair.py' -v

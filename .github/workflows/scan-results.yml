@@ -17,6 +17,11 @@ on:
     paths:
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/scheduled_archived_replays.py"
+      - "updater/audit_preceding_round_replays.py"
+      - "updater/guard_archived_replay_promotion.py"
+      - "updater/stage_preceding_replay_candidates.py"
+      - "tests/test_round_replay_lifecycle.py"
       - "updater/result_metadata.py"
       - "tests/test_results_repair.py"
       - "tests/dl5_chronology_assertions.js"
@@ -100,6 +105,8 @@ jobs:
           ref: ${{ github.ref_name }}
       - name: Preserve exact Results input for diagnostics
         run: cp competition.json updater/results-input-competition.json
+      - name: Guard complete draw and preceding replay lifecycle
+        run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
       - name: Guard universal round-state chronology
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing

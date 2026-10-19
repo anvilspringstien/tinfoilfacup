@@ -50,7 +50,8 @@ def validate_archived_replay_page(raw, preceding, url):
 
 
 ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifying",
-          "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying"]
+          "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying",
+          "First Round Proper"]
 UK_TZ = ZoneInfo("Europe/London")
 REPLAY_COMPLETION_GRACE = timedelta(hours=4)
 
@@ -153,6 +154,7 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
     # Scheduled preceding-round replays are an independent completeness set.
     # A source count alone cannot prove that the source included every tie.
     observed_pairs = {pair_key(item["observation"]) for item in observations}
+    candidate_pairs = {pair_key(row) for row in results + blocked}
     recorded_pairs = {pair_key(row) for row in published_history
                       if base_round(row.get("round")) == preceding
                       and str(row.get("round") or "").endswith(" Replay")
@@ -169,7 +171,7 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
             continue
         seen_scheduled.add(pair)
         due = replay_is_due(scheduled, as_of)
-        if pair not in recorded_pairs and due:
+        if pair not in recorded_pairs and (due or pair in candidate_pairs):
             scheduled_replay_gaps.append({
                 "home": scheduled.get("home"), "away": scheduled.get("away"),
                 "date": scheduled.get("date"),
