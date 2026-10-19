@@ -1,0 +1,40 @@
+name: Competition publication and health guards
+on:
+  pull_request:
+    paths:
+      - 'updater/publish_competition_check_status.py'
+      - 'updater/guard_publication_base.py'
+      - 'tests/test_competition_check_status.py'
+      - 'tests/test_competition_publication.py'
+      - 'tests/test_round_replay_lifecycle.py'
+      - '.github/workflows/publish-competition-check-status.yml'
+      - '.github/workflows/scan-draw.yml'
+      - '.github/workflows/scan-results.yml'
+      - '.github/workflows/competition-health.yml'
+      - '.github/workflows/competition-publication-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'updater/publish_competition_check_status.py'
+      - 'updater/guard_publication_base.py'
+      - 'tests/test_competition_check_status.py'
+      - 'tests/test_competition_publication.py'
+      - 'tests/test_round_replay_lifecycle.py'
+      - '.github/workflows/publish-competition-check-status.yml'
+      - '.github/workflows/scan-draw.yml'
+      - '.github/workflows/scan-results.yml'
+      - '.github/workflows/competition-health.yml'
+      - '.github/workflows/competition-publication-tests.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify status trust and schedule separation
+        run: python -m unittest discover -s tests -p 'test_competition_check_status.py' -v
+      - name: Stress local publication races and queued checkout safety
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+      - name: Prove First Proper boundary and replay lifecycle
+        run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
