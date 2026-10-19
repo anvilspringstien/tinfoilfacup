@@ -44,3 +44,9 @@ dialog#magic.keeping .heading{margin-bottom:20px}
  .keep-note{font-size:12px;margin-top:7px}
 }
 @media(max-height:450px){#share-view{flex:none}.keep-card{margin-top:6px}}
+/* A wider heading needs a little more vertical room on landscape tablets. */
+@media(min-width:700px) and (min-height:601px) and (max-height:800px){
+ .crest,dialog#magic .brand{width:clamp(100px,calc(100svh - 550px),250px)}
+}
+dialog#magic:not(.keeping) .note,dialog#magic:not(.keeping) .feedback{margin:0}
+@media(min-width:1200px){html{scrollbar-gutter:stable}}
