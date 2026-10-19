@@ -43,8 +43,9 @@ def replay_html(round_name, score='2', other='1', note=''):
 
 
 class LifecycleTests(unittest.TestCase):
-    def promote(self, data):
+    def promote(self, data, target_rows=None):
         target, rows = next_draw(data['source_round'])
+        rows = target_rows if target_rows is not None else rows
         with tempfile.TemporaryDirectory() as tmp:
             dp, rp = Path(tmp)/'competition.json', Path(tmp)/'report.json'
             dp.write_text(json.dumps(data))
@@ -106,6 +107,39 @@ class LifecycleTests(unittest.TestCase):
                 repeated, again, requests = self.run_results(tuesday, replay_html(round_name))
                 self.assertEqual(repeated, tuesday)
                 self.assertNotIn(scan.fwp_round_url(round_name) + '-replay', requests)
+
+    def test_thirty_two_originals_eleven_replays_after_first_proper_draw(self):
+        rnd = 'Fourth Round Qualifying'
+        saturday = dict(source_round=rnd, source_tie_count=32, fixtures={}, replays={}, results={}, result_history={})
+        next_rows = []
+        source_rows = []
+        for i in range(32):
+            home, away = f'Original Home {i:03d}', f'Original Away {i:03d}'
+            original = dict(round=rnd, home=home, away=away, date='2026-10-17')
+            saturday['fixtures'].update(draw.fixture_map([original]))
+            drawn = i < 11
+            scan.merge_result(saturday, dict(original, home_score=1 if drawn else 2, away_score=1 if drawn else 0,
+                                            winner='' if drawn else home, status='FT', decision='draw-replay' if drawn else '',
+                                            source_url='https://example.test/results'))
+            if drawn:
+                replay = dict(round=rnd + ' Replay', home=away, away=home, date='2026-10-20',
+                              source_url='https://example.test/fixtures')
+                saturday['replays'].update(draw.fixture_map([replay]))
+                next_rows.append(dict(round='First Round Proper', home=home + ' or ' + away,
+                                      away=f'League Club {i}', date='2026-11-07'))
+                source_rows.append(f'<tr><td>FT</td><td>{away}</td><td>2</td><td>0</td><td>{home}</td></tr>')
+        next_rows += [dict(round='First Round Proper', home=f'Next Home {i}', away=f'Next Away {i}', date='2026-11-07')
+                      for i in range(11,40)]
+        monday, _ = self.promote(saturday, next_rows)
+        source = '<h1>Fixtures/Results, Fourth Qualifying Round Replay, 2026-2027</h1><h3>Tuesday 20 October 2026</h3><table>' + ''.join(source_rows) + '</table>'
+        tuesday, report, _ = self.run_results(monday, source)
+        self.assertEqual(report['archived_replays']['staged']['staged_count'], 11)
+        self.assertEqual(len(report['archived_replays']['resolutions']), 11)
+        self.assertEqual(len(draw.fixture_values(tuesday['fixtures'])), 40)
+        self.assertEqual(len(tuesday['round_fixtures'][rnd]), 32)
+        self.assertEqual(len(scan.history_rows(tuesday)), 43)
+        for i in range(11):
+            self.assertEqual(tuesday['fixtures'][f'Original Away {i:03d}']['home'], f'Original Away {i:03d}')
 
     def test_awaiting_future_replays_is_noop(self):
         monday, _ = self.promote(state())
