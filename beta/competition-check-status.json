@@ -1,26 +1,54 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-19T07:50:44.921259Z",
+  "monitor_ran_at": "2026-10-19T11:03:09.424631Z",
   "state": "unverified",
   "last_checked_at": null,
-  "results": "success",
+  "results": "unverified",
   "draw": "unverified",
   "diagnostics": {
     "results": {
-      "reason": "verified",
-      "run_id": 39218128594,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39218128594",
-      "status": "completed",
-      "conclusion": "success",
-      "updated_at": "2026-10-19T07:50:34Z"
+      "reason": "not_completed",
+      "run_id": 39241780376,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39241780376",
+      "event": "push",
+      "status": "in_progress",
+      "conclusion": null,
+      "updated_at": "2026-10-19T11:02:52Z"
     },
     "draw": {
       "reason": "not_successful",
-      "run_id": 39203634822,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39203634822",
+      "run_id": 39241780635,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39241780635",
+      "event": "push",
       "status": "completed",
-      "conclusion": "failure",
-      "updated_at": "2026-10-19T05:16:07Z"
+      "conclusion": "cancelled",
+      "updated_at": "2026-10-19T11:02:54Z"
+    }
+  },
+  "scheduled": {
+    "state": "unverified",
+    "last_checked_at": null,
+    "results": "unverified",
+    "draw": "unverified",
+    "diagnostics": {
+      "results": {
+        "reason": "stale",
+        "run_id": 39218128594,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39218128594",
+        "event": "schedule",
+        "status": "completed",
+        "conclusion": "success",
+        "updated_at": "2026-10-19T07:50:34Z"
+      },
+      "draw": {
+        "reason": "not_successful",
+        "run_id": 39203634822,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39203634822",
+        "event": "schedule",
+        "status": "completed",
+        "conclusion": "failure",
+        "updated_at": "2026-10-19T05:16:07Z"
+      }
     }
   }
 }
