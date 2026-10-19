@@ -45,6 +45,7 @@ jobs:
           python updater/embedded_snapshot_regression.py
       - name: Guard current published snapshot
         run: |
+          python updater/unicorn_replay_regression.py
           node updater/clubfinder_render_regression.js
           node updater/clubfinder_stats_regression.js
       - name: Rebuild and test isolated candidate from captured source observations
