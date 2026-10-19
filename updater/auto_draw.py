@@ -29,6 +29,12 @@ FA_PAGE = "https://www.thefa.com/Competitions/Fixtures/Fixtures?competitionId=1&
 OFFICIAL_SOURCE = "https://www.thefa.com/competitions/thefacup/fixtures"
 UA = {"User-Agent": "Mozilla/5.0 TinFoilFACupDrawWatcher/1.1", "Accept": "text/html,application/xhtml+xml"}
 
+# Explicit source-name equivalence where token abbreviation alone cannot
+# establish identity. Shared by draw matching and archived replay resolution.
+# Evidence: frozen FA First Proper slot "Chesham or Forest Grn" and the
+# canonical Fourth Qualifying replay schedule (19 October 2026 import).
+DRAW_TEAM_ALIASES = {"forest grn": "forest green rovers"}
+
 EXPECTED_ROUND_TIES = {
     "First Round Qualifying": 112,
     "Second Round Qualifying": 80,
@@ -97,7 +103,8 @@ def clean(x):
 def norm(s):
     s = (s or "").lower().replace("&", " and ")
     s = re.sub(r"\b(fc|afc|cfc)\b", " ", s)
-    return re.sub(r"[^a-z0-9]+", " ", s).strip()
+    value = re.sub(r"[^a-z0-9]+", " ", s).strip()
+    return DRAW_TEAM_ALIASES.get(value, value)
 
 
 def canonical_conditional(s):

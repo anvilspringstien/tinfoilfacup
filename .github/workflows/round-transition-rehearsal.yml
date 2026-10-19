@@ -1,0 +1,53 @@
+name: Round transition publication rehearsal
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'updater/**'
+      - 'tests/**'
+      - 'clubfinder.html'
+      - 'beta/clubfinder-beta.html'
+      - '.github/workflows/scan-results.yml'
+      - '.github/workflows/competition-health.yml'
+      - '.github/workflows/round-transition-rehearsal.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'updater/**'
+      - 'tests/**'
+      - '.github/workflows/round-transition-rehearsal.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  rejection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m unittest discover -s tests -p 'test_round_transition_rehearsal.py' -v
+
+  publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        state: [qualifying, proper-conditional, proper-resolved, proper-resolved-away, second-proper, third-proper]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python tests/run_round_transition_rehearsal.py --state ${{ matrix.state }}
