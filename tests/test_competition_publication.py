@@ -112,6 +112,22 @@ class PublicationTests(unittest.TestCase):
             self.assertNotEqual(validation.returncode, 0)
             self.assertEqual(git(remote, 'rev-parse', 'main'), original)
 
+    def test_every_competition_lock_participant_retains_waiting_runs(self):
+        participants=[]
+        for path in (ROOT/'.github/workflows').glob('*.yml'):
+            workflow=path.read_text()
+            if 'competition-state-' not in workflow:
+                continue
+            participants.append(path.name)
+            block=workflow.split('\nconcurrency:\n',1)[1].split('\njobs:',1)[0]
+            self.assertIn('queue: max',block,path.name)
+            self.assertIn('cancel-in-progress: false',block,path.name)
+            checkout=workflow.split('uses: actions/checkout@',1)[1].split('      - ',1)[0]
+            self.assertIn('ref:',checkout,path.name)
+        self.assertEqual(len(participants),7)
+        status=(ROOT/'.github/workflows/publish-competition-check-status.yml').read_text()
+        self.assertIn('queue: max',status.split('\nconcurrency:\n',1)[1].split('\njobs:',1)[0])
+
     def test_all_writers_share_lock_and_revalidate_after_rebase(self):
         for name in ['scan-draw.yml', 'scan-results.yml', 'competition-health.yml']:
             with self.subTest(workflow=name):

@@ -1,0 +1,50 @@
+name: Competition queue retention proof
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/competition-queue-proof.yml'
+      - '.github/workflows/scan-draw.yml'
+      - '.github/workflows/scan-results.yml'
+      - '.github/workflows/competition-health.yml'
+      - '.github/workflows/refresh-beta-snapshot.yml'
+      - '.github/workflows/ground-health.yml'
+      - '.github/workflows/conditional-draw-resolution.yml'
+      - '.github/workflows/publish-preceding-replays.yml'
+      - '.github/workflows/publish-competition-check-status.yml'
+      - 'tests/test_competition_publication.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    name: Queued probe (${{ matrix.writer }})
+    strategy:
+      fail-fast: false
+      matrix:
+        writer: [results, draw, health]
+    concurrency:
+      # Isolated from every production writer; only queue behavior is tested.
+      group: competition-queue-proof-${{ github.run_id }}
+      cancel-in-progress: false
+      queue: max
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hold isolated queue slot so all three contenders must wait
+        env:
+          WRITER: ${{ matrix.writer }}
+        run: |
+          echo "$WRITER started at $(date -u +%FT%TZ)"
+          sleep 15
+          echo "$WRITER completed at $(date -u +%FT%TZ)"
+  verify:
+    name: All three queued probes completed
+    needs: probe
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify every production queue participant retains pending runs
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+      - env:
+          PROBE_RESULT: ${{ needs.probe.result }}
+        run: test "$PROBE_RESULT" = success
