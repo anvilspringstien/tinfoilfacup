@@ -10,6 +10,7 @@ const sha=path=>{
 /* Review-controlled acceptance hashes. Change them only after approving a
    new design, never just to make the workflow pass. This does NOT freeze
    competition data or original BETA, which must keep updating. */
+// Bridge hash includes the wheel-boundary fix; all visual master hashes stay fixed.
 const approved={
  'beta/two-rooms-splash-locked.html':'9d0565eda94ea221e2c6689865ae26da31fc8894',
  'beta/two-rooms-splash-locked.css':'309779e2751e316695365fbb67d5238b9624eb4b',
@@ -17,7 +18,7 @@ const approved={
  'beta/two-rooms.css':'1f982dfecd70337234e0e43041eb6c77639e6706',
  'beta/two-rooms-shed-scrollbar.css':'a92c0386b383f4c701fa679c56e60d67597b34be',
  'beta/two-rooms-splash-iframe-proof.html':'243534419d8eff53e8858eec93fc7eb307979806',
- 'beta/two-rooms-iframe-engine-proof.html':'cef56a18d00fefd7f4aa10647d7120f1240b5504',
+ 'beta/two-rooms-iframe-engine-proof.html':'e1d945be8ade01adc59642ef7eee339682b63204',
  'beta/two-rooms-iframe-engine.css':'c5e57adc4d8950a4ab47f9ff348145910e6ec42e',
 };
 for(const [path,expected] of Object.entries(approved)){

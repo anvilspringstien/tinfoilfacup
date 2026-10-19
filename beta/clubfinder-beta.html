@@ -762,7 +762,7 @@ function nextRoundInfo(club,preserveConditional){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }
   const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club,!!preserveConditional);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;
-  return {name:nextName,date:meta.date,drawDate:meta.drawDate,knownFixture,fixturesUrl:FA_FIXTURES_URL};
+  return {name:nextName,date:meta.date,drawDate:meta.drawDate,drawAnnouncement:(LIVE_COMPETITION_DATA?.draw_announcements||{})[nextName]||null,drawClub:club.name,knownFixture,fixturesUrl:FA_FIXTURES_URL};
 }
 
 function canonicalClubKey(name){
@@ -1252,7 +1252,17 @@ function nextProgressHtml(club,next){
   }
 
   let drawLine='';
-  if(next.knownFixture){ drawLine=''; } else if(next.drawDate==='Draw already made'){
+  if(next.knownFixture){ drawLine=''; } else if(next.drawAnnouncement?.at){
+    const announcement=next.drawAnnouncement;
+    const when=new Date(announcement.at);
+    const date=when.toLocaleDateString('en-GB',{timeZone:'Europe/London',weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const time=when.toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+    const pending=Date.now()<when.getTime();
+    drawLine=(pending?'Draw: ':'Draw scheduled for ')+date+' • '+(announcement.approximate?'approximately ':'')+time;
+    if(!pending)drawLine+=' — awaiting confirmed draw';
+    const entry=Object.entries(announcement.ball_numbers||{}).find(([name])=>drawAlternatives(name).some(side=>canonicalClubKey(side)===canonicalClubKey(next.drawClub)));
+    if(entry)drawLine+=' • '+next.drawClub+': ball '+entry[1];
+  } else if(next.drawDate==='Draw already made'){
     drawLine='Draw already made';
   }else if(next.drawDate&&next.drawDate!=='TBC'){
     drawLine='Draw to be made on '+next.drawDate;

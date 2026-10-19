@@ -14,6 +14,7 @@ on:
       - 'beta/two-rooms-splash-iframe-proof.html'
       - 'beta/two-rooms-shed-scrollbar.css'
       - 'tests/beta-approved-journey-*.mjs'
+      - 'tests/four-laws-wheel-browser.mjs'
       - '.github/workflows/beta-approved-journey.yml'
   workflow_dispatch:
 jobs:
@@ -35,3 +36,6 @@ jobs:
         run: python3 -m http.server 8765 --bind 127.0.0.1 &
       - name: Test public and BETA Splash, Four Laws, Frame 2 and Reset at four viewports
         run: node tests/beta-approved-journey-browser.mjs
+
+      - name: Test Four Laws wheel handoff
+        run: node tests/four-laws-wheel-browser.mjs
