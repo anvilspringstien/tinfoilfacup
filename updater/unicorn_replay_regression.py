@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json,re,math
 from pathlib import Path
+from auto_draw import EXPECTED_ROUND_TIES
 
 ROOT=Path(__file__).resolve().parents[1]
 HTML=ROOT/"clubfinder.html"
@@ -91,19 +92,34 @@ archived=list(archived.values()) if isinstance(archived,dict) else archived
 third=[f for f in archived if f.get("round")=="Third Round Qualifying" and f.get("date")=="2026-10-03" and norm(f.get("home"))=="mulbarton wanderers" and norm(f.get("away"))=="gloucester city"]
 require(bool(third),"archived Mulbarton v Gloucester City Third Qualifying slot missing")
 require(all((f.get("venue") or {}).get("postcode")=="NR14 8AE" for f in third),"archived Third Qualifying home venue is not Mulberry Park NR14 8AE")
-require(all(f.get("round")=="Fourth Round Qualifying" for f in fixtures),
-        "active fixture set is not protected Fourth Round Qualifying state")
+active_round=data.get("source_round")
+require(bool(fixtures) and all(f.get("round")==active_round for f in fixtures),
+        "active fixtures do not match the declared current round")
 unique_fixtures={
     (f.get("round"),f.get("date"),f.get("home"),f.get("away"))
     for f in fixtures
 }
-require(len(unique_fixtures)==32,"active Fourth Round Qualifying draw is not exactly 32 unique ties")
+require(active_round in EXPECTED_ROUND_TIES,
+        "active round has no canonical tie count")
+require(len(unique_fixtures)==EXPECTED_ROUND_TIES[active_round],
+        "active draw does not have its canonical number of unique ties")
+require(len(unique_fixtures)==data.get("source_tie_count"),
+        "active draw does not match its declared tie count")
+fqr_source=(data.get("fixtures") if active_round=="Fourth Round Qualifying"
+            else (data.get("round_fixtures") or {}).get("Fourth Round Qualifying")) or []
+fqr_rows=list(fqr_source.values()) if isinstance(fqr_source,dict) else fqr_source
+fqr={
+    (f.get("round"),f.get("date"),f.get("home"),f.get("away"))
+    for f in fqr_rows if f.get("round")=="Fourth Round Qualifying"
+}
+require(len(fqr)==32,"current or archived Fourth Qualifying draw is not exactly 32 unique ties")
 
 require("voided-replay-ordered" in text and "status==='VOID'" in text,"Clubfinder void-result guard missing")
 print("UNICORN REGRESSION: PASS")
 print("19 September result: VOIDED / replay ordered")
 print("29 September replay: Mulbarton Wanderers 2-0 Woodford Town")
 print("3 October archived TRQ: Mulbarton Wanderers v Gloucester City AFC")
-print("Active FQR draw: 32 ties / untouched")
+print("Current or archived FQR draw: 32 ties / preserved")
+print("Active draw:",active_round,"/",len(unique_fixtures),"ties")
 print("Gloucester current ground: The KMM Energy Stadium • GL2 5HD")
 print("GL1 1AJ nearest three:", " | ".join(name for _,name,_ in top3))
