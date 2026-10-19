@@ -57,13 +57,20 @@ const history=Object.values(competition.result_history||{}).flatMap(x=>Array.isA
 assert(history.some(thameLoss),'Canonical Thame 0-1 Eastbourne TRQ result missing');
 
 const active=Object.values(competition.fixtures||{});
-const activeFqr=active.filter(f=>f&&f.round==='Fourth Round Qualifying');
-const uniqueFqr=new Map(activeFqr.map(f=>[
+// Draw promotion archives the outgoing round; its coverage remains protected.
+const fqrSource=competition.source_round==='Fourth Round Qualifying'
+  ? competition.fixtures : (competition.round_fixtures||{})['Fourth Round Qualifying'];
+const fqrRows=Array.isArray(fqrSource)?fqrSource:Object.values(fqrSource||{});
+const uniqueFqr=new Map(fqrRows.filter(f=>f&&f.round==='Fourth Round Qualifying').map(f=>[
   [f.round,f.date,f.home,f.away].join('|'),f
 ]));
-assert.equal(uniqueFqr.size,32,'Active FQR draw must remain exactly 32 unique ties');
+assert.equal(uniqueFqr.size,32,'Current or archived FQR draw must retain exactly 32 unique ties');
+assert(active.length>0&&active.every(f=>f&&f.round===competition.source_round),
+  'Active fixtures must all belong to the declared current round');
+assert.equal(new Set(active.map(f=>[f.round,f.date,f.home,f.away].join('|'))).size,
+  competition.source_tie_count,'Active draw must match its declared tie count');
 assert(!active.some(f=>f&&/Thame United|Exmouth Town/.test((f.home||'')+' '+(f.away||''))),
-  'Eliminated Thame/Exmouth leaked into active FQR draw');
+  'Eliminated Thame/Exmouth leaked into the active draw');
 
 assert.equal(ctx.tinFoilBetaVerifiedThameNextFixture(
   {name:'Thame United FC'},'Third Round Qualifying'),null,

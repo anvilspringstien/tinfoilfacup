@@ -51,7 +51,8 @@ const assertions=`
 
   const activeSecondQ=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
   const athertonAdvancement=history.find(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.decision==='next-round-fixture'&&same(r.winner,'Atherton Collieries')&&r.home_score==null&&r.away_score==null&&r.source_url&&r.evidence_fixture==='AFC Fylde v Atherton Collieries');
-  const fourthQFixtures=Object.values(${JSON.stringify(competition.fixtures||{})});
+  const fourthQFixtures=[...Object.values(${JSON.stringify(competition.fixtures||{})}),
+    ...Object.values(${JSON.stringify((competition.round_fixtures||{})['Fourth Round Qualifying']||{})})];
   // Accept an observed, decided replay as well as a scoreless official-draw
   // advancement. The draw alone cannot establish the replay winner.
   const athertonScoredReplay=history.find(r=>
