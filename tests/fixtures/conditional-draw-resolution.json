@@ -1,0 +1,266 @@
+{
+  "_test_provenance": "Fixed conditional-draw test scenarios; verified Second Qualifying original/replay records copied from canonical result_history on 2026-10-19. These test fixtures are never published as competition data.",
+  "source_round": "Third Round Qualifying",
+  "fixtures": {
+    "Hamp & Rich": {
+      "round": "Third Round Qualifying",
+      "home": "Hamp & Rich or Crowborough",
+      "away": "Weston SM or Wimborne",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Crowborough": {
+      "round": "Third Round Qualifying",
+      "home": "Hamp & Rich or Crowborough",
+      "away": "Weston SM or Wimborne",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Weston SM": {
+      "round": "Third Round Qualifying",
+      "home": "Hamp & Rich or Crowborough",
+      "away": "Weston SM or Wimborne",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Wimborne": {
+      "round": "Third Round Qualifying",
+      "home": "Hamp & Rich or Crowborough",
+      "away": "Weston SM or Wimborne",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Cray Wands": {
+      "round": "Third Round Qualifying",
+      "home": "Cray Wands or Maidstone",
+      "away": "Chippenham or Yate",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Maidstone": {
+      "round": "Third Round Qualifying",
+      "home": "Cray Wands or Maidstone",
+      "away": "Chippenham or Yate",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Chippenham": {
+      "round": "Third Round Qualifying",
+      "home": "Cray Wands or Maidstone",
+      "away": "Chippenham or Yate",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Yate": {
+      "round": "Third Round Qualifying",
+      "home": "Cray Wands or Maidstone",
+      "away": "Chippenham or Yate",
+      "date": "2026-10-03",
+      "kickoff": "15:00",
+      "conditional": true
+    }
+  },
+  "results": {
+    "Crowborough Athletic": {
+      "home": "Crowborough Athletic",
+      "away": "Hampton & Richmond Borough",
+      "home_score": 3,
+      "away_score": 1,
+      "winner": "Crowborough Athletic",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-22",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+      "round": "Second Round Qualifying Replay",
+      "kickoff": "19:45",
+      "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/crowborough-athletic/hampton-and-richmond-borough/593692"
+    },
+    "Wimborne Town": {
+      "home": "Wimborne Town",
+      "away": "Weston-super-Mare",
+      "home_score": 1,
+      "away_score": 1,
+      "winner": "Wimborne Town",
+      "status": "FT",
+      "decision": "penalties",
+      "date": "2026-09-22",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+      "round": "Second Round Qualifying Replay",
+      "kickoff": "19:45",
+      "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/wimborne-town/weston-super-mare/593699"
+    },
+    "Cray Wanderers": {
+      "home": "Maidstone United",
+      "away": "Cray Wanderers",
+      "home_score": 0,
+      "away_score": 2,
+      "winner": "Cray Wanderers",
+      "status": "FT",
+      "decision": "",
+      "date": "2026-09-22",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+      "round": "Second Round Qualifying Replay",
+      "kickoff": "19:45",
+      "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/maidstone-united/cray-wanderers/593697"
+    },
+    "Chippenham Town": {
+      "home": "Chippenham Town",
+      "away": "Yate Town",
+      "home_score": 2,
+      "away_score": 1,
+      "winner": "Chippenham Town",
+      "status": "FT (AET)",
+      "decision": "extra-time",
+      "date": "2026-09-22",
+      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+      "round": "Second Round Qualifying Replay",
+      "kickoff": "19:45",
+      "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/chippenham-town/yate-town/593683"
+    }
+  },
+  "result_history": {
+    "Crowborough Athletic": [
+      {
+        "home": "Hampton & Richmond Borough",
+        "away": "Crowborough Athletic",
+        "home_score": 3,
+        "away_score": 3,
+        "winner": "",
+        "status": "FT",
+        "decision": "draw-replay",
+        "date": "2026-09-19",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round",
+        "round": "Second Round Qualifying",
+        "venue": {
+          "ground": "Beveree Stadium",
+          "postcode": "TW12 2BX",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        },
+        "kickoff": "15:00",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+      },
+      {
+        "home": "Crowborough Athletic",
+        "away": "Hampton & Richmond Borough",
+        "home_score": 3,
+        "away_score": 1,
+        "winner": "Crowborough Athletic",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-22",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+        "round": "Second Round Qualifying Replay",
+        "kickoff": "19:45",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/crowborough-athletic/hampton-and-richmond-borough/593692"
+      }
+    ],
+    "Wimborne Town": [
+      {
+        "home": "Weston-super-Mare",
+        "away": "Wimborne Town",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "draw-replay",
+        "date": "2026-09-19",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round",
+        "round": "Second Round Qualifying",
+        "venue": {
+          "ground": "Woodspring Stadium",
+          "postcode": "BS24 9AA",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        },
+        "kickoff": "15:00",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+      },
+      {
+        "home": "Wimborne Town",
+        "away": "Weston-super-Mare",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "Wimborne Town",
+        "status": "FT",
+        "decision": "penalties",
+        "date": "2026-09-22",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+        "round": "Second Round Qualifying Replay",
+        "kickoff": "19:45",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/wimborne-town/weston-super-mare/593699"
+      }
+    ],
+    "Cray Wanderers": [
+      {
+        "home": "Cray Wanderers",
+        "away": "Maidstone United",
+        "home_score": 1,
+        "away_score": 1,
+        "winner": "",
+        "status": "FT",
+        "decision": "draw-replay",
+        "date": "2026-09-19",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round",
+        "round": "Second Round Qualifying",
+        "venue": {
+          "ground": "Flamingo Park",
+          "postcode": "BR7 6HL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        },
+        "kickoff": "15:00",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+      },
+      {
+        "home": "Maidstone United",
+        "away": "Cray Wanderers",
+        "home_score": 0,
+        "away_score": 2,
+        "winner": "Cray Wanderers",
+        "status": "FT",
+        "decision": "",
+        "date": "2026-09-22",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+        "round": "Second Round Qualifying Replay",
+        "kickoff": "19:45",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/maidstone-united/cray-wanderers/593697"
+      }
+    ],
+    "Chippenham Town": [
+      {
+        "home": "Yate Town",
+        "away": "Chippenham Town",
+        "home_score": 0,
+        "away_score": 0,
+        "winner": "",
+        "status": "FT",
+        "decision": "draw-replay",
+        "date": "2026-09-18",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
+        "round": "Second Round Qualifying"
+      },
+      {
+        "home": "Chippenham Town",
+        "away": "Yate Town",
+        "home_score": 2,
+        "away_score": 1,
+        "winner": "Chippenham Town",
+        "status": "FT (AET)",
+        "decision": "extra-time",
+        "date": "2026-09-22",
+        "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay",
+        "round": "Second Round Qualifying Replay",
+        "kickoff": "19:45",
+        "kickoff_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/chippenham-town/yate-town/593683"
+      }
+    ]
+  }
+}
