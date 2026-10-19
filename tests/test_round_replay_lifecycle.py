@@ -50,7 +50,11 @@ class LifecycleTests(unittest.TestCase):
             dp, rp = Path(tmp)/'competition.json', Path(tmp)/'report.json'
             dp.write_text(json.dumps(data))
             with patch.object(draw, 'DATA', dp), patch.object(draw, 'REPORT', rp), patch.object(draw, 'fetch', return_value='html'), patch.object(draw, 'parse_page', return_value=rows), patch('sys.argv', ['auto_draw.py', '--publish', '--max-pages', '1']):
-                draw.main()
+                try:
+                    draw.main()
+                except SystemExit:
+                    self.assertEqual(json.loads(dp.read_text()), data)
+                    raise
             return json.loads(dp.read_text()), target
 
     def run_results(self, data, replay_source):
@@ -140,6 +144,16 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(len(scan.history_rows(tuesday)), 43)
         for i in range(11):
             self.assertEqual(tuesday['fixtures'][f'Original Away {i:03d}']['home'], f'Original Away {i:03d}')
+
+    def test_first_proper_rejects_39_and_41_ties_without_mutating_history(self):
+        saturday = state('Fourth Round Qualifying')
+        before = copy.deepcopy(saturday)
+        _, forty = next_draw('Fourth Round Qualifying')
+        too_many = forty + [dict(round='First Round Proper', home='Extra Home', away='Extra Away', date='2026-11-07')]
+        for fixtures in (forty[:-1], too_many):
+            with self.subTest(ties=len(fixtures)), self.assertRaisesRegex(SystemExit, 'expected 40 First Round Proper ties'):
+                self.promote(saturday, fixtures)
+            self.assertEqual(saturday, before)
 
     def test_awaiting_future_replays_is_noop(self):
         monday, _ = self.promote(state())

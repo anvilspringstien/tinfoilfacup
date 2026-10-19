@@ -8,6 +8,8 @@ on:
     - cron: "17 19 * * *"
   push:
     paths:
+      - "updater/guard_publication_base.py"
+      - "tests/test_competition_publication.py"
       - "competition.json"
       - "clubfinder.html"
       - "journey-club-registry.json"
@@ -83,6 +85,12 @@ jobs:
           # Scheduled runs can wait behind the shared concurrency lock. Re-resolve the branch
           # head when execution starts so a queued run does not build from a stale event SHA.
           ref: ${{ github.ref_name }}
+
+      - name: Guard publication serialization and stale candidate rejection
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+
+      - name: Record candidate input revision
+        run: git rev-parse HEAD > "$RUNNER_TEMP/competition-build-base"
 
       - name: Probe public competition source
         run: python updater/run_source_resilient.py --label "Football Web Pages probe" -- python updater/probe_fwp_source.py
@@ -239,7 +247,9 @@ jobs:
           else
             git commit -m "Update canonical competition chronology"
             git pull --rebase origin "${GITHUB_REF_NAME}"
+            python updater/guard_publication_base.py --base "$(cat "$RUNNER_TEMP/competition-build-base")" --upstream "origin/${GITHUB_REF_NAME}"
             echo "Re-running critical publish guards after rebase..."
+            python updater/competition_regression_guard.py
             python updater/reconcile_result_history_aliases.py --check
             python updater/extra_preliminary_replay_regression.py
             node updater/amersham_card_render_regression.js

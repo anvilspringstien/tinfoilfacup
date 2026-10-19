@@ -12,6 +12,8 @@ on:
     - cron: "37 * * * *"
   push:
     paths:
+      - "updater/guard_publication_base.py"
+      - "tests/test_competition_publication.py"
       - "updater/auto_draw.py"
       - "updater/active_conditional_refresh_regression.py"
       - ".github/workflows/scan-draw.yml"
@@ -21,7 +23,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: fa-cup-draw-scan-main
+  group: competition-state-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -29,6 +31,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # Resolve the branch again after waiting for the shared writer lock.
+          ref: ${{ github.ref_name }}
+
+      - name: Guard publication serialization and stale candidate rejection
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+
+      - name: Record candidate input revision
+        run: git rev-parse HEAD > "$RUNNER_TEMP/competition-build-base"
 
       - name: Guard active-round conditional resolution
         run: python updater/active_conditional_refresh_regression.py
@@ -76,6 +87,10 @@ jobs:
               git commit -m "Auto-import validated FA Cup draw"
               TARGET_BRANCH="$GITHUB_REF_NAME"
               git pull --rebase origin "$TARGET_BRANCH"
+              python updater/guard_publication_base.py --base "$(cat "$RUNNER_TEMP/competition-build-base")" --upstream "origin/$TARGET_BRANCH"
+              python -m json.tool competition.json >/dev/null
+              python updater/active_conditional_refresh_regression.py
+              python updater/competition_regression_guard.py
               git push origin "HEAD:$TARGET_BRANCH"
               echo "published=true" >> "$GITHUB_OUTPUT"
             fi
