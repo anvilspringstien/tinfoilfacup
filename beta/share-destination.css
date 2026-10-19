@@ -22,8 +22,8 @@ button{cursor:pointer}
 .action{display:inline-block;min-height:44px;padding:10px 20px;background:#084c61;color:#f6f3e8;border:1px solid #b9c5c7;border-radius:8px;text-decoration:none;text-align:center;cursor:pointer}
 .feedback{font-size:12px;line-height:1.3;text-align:center;margin:0}
 .feedback:empty{display:none}
-.keep-card{flex:none;align-self:stretch;width:100%;max-width:440px;margin:auto auto 0;padding:14px 12px;border:1px solid #686868;border-radius:10px;background:#232323;text-align:center}
-.keep-magic{min-width:210px;font-size:20px;line-height:1.2;background:#393939;border:1px solid #818181;border-radius:8px;padding:11px 18px}
+.keep-card{flex:none;align-self:stretch;width:100%;max-width:440px;margin:auto auto 0;padding:14px;border:1px solid #686868;border-radius:10px;background:#232323;text-align:center}
+.keep-magic{display:block;width:100%;min-width:0;font-size:20px;line-height:1.2;background:#393939;border:1px solid #818181;border-radius:8px;padding:11px 18px}
 .keep-note{font-size:13px;line-height:1.4;margin:10px 0 0;color:#f6f3e8}
 #share-view{display:flex;flex:1;min-height:0;flex-direction:column;align-items:center;gap:10px;width:100%}
 dialog#magic .top{position:absolute;top:4px;right:6px}
