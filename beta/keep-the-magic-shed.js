@@ -24,11 +24,11 @@ const install=document.getElementById('install'),installStatus=document.getEleme
 let pendingInstall=null;
 const instructions={
  apple:['In Safari, see the little square icon with the arrow pointing up? It’s on that bar at the bottom of your screen. Tap that.','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
- android:['Open this page in Chrome or your usual browser.','Open the browser menu and look for Install app or Add to Home screen. The wording depends on your browser.','Confirm, then try the TFFC Shed icon. If neither option appears, bookmark this page for an easy way back.'],
- computer:['Open your browser’s menu and look for Install or Apps. Some browsers also show an install icon in the address bar.','If installation is offered, confirm it. Otherwise bookmark this page.','Open TFFC Shed from your apps or your bookmark.']
+ android:['In Chrome, tap the three dots beside the address bar.','Look for ‘Install and create shortcut’, ‘Install app’ or ‘Add to Home screen’. Tap it and follow the prompts.','Look for the Tin Foil FA Cup icon. Tap it whenever you’re ready for more Cup magic!'],
+ computer:['Open your browser’s menu — usually the three dots at the top right.','In Chrome, try ‘Cast, save, and share’. In Edge, look under ‘More tools’, then ‘Apps’.','Choose ‘Install page as app’ or ‘Install this site as an app’, then confirm. You’re done!']
 };
-function renderInstructions(){steps.replaceChildren(...instructions[platform.value].map(text=>{const li=document.createElement('li');li.textContent=text;return li}));}
-function updateInstall(){const isInstalled=standalone();install.hidden=isInstalled||!pendingInstall;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;installStatus.textContent=isInstalled?'You’re already opening the Shed as an app.':'';installStatus.classList.toggle('installed',isInstalled);}
+function renderInstructions(){document.getElementById('platform-note').hidden=platform.value==='apple'||standalone();steps.replaceChildren(...instructions[platform.value].map(text=>{const li=document.createElement('li');li.textContent=text;return li}));}
+function updateInstall(){const isInstalled=standalone();install.hidden=isInstalled||!pendingInstall;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;installStatus.textContent=isInstalled?'You’re already opening Tin Foil FA Cup as an app.':'';installStatus.classList.toggle('installed',isInstalled);}
 function showShare(){dialog.classList.remove('keeping');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
 function showKeep(){dialog.classList.add('keeping');heading.textContent='Keep the Magic';shareView.hidden=true;keepView.hidden=false;renderInstructions();updateInstall();dialog.scrollTop=0;(standalone()?heading:document.getElementById(install.hidden?'platform':'install')).focus();}
 openButton.onclick=()=>{showShare();dialog.showModal()};
@@ -41,8 +41,8 @@ platform.onchange=renderInstructions;
 document.getElementById('copy').onclick=async()=>{const status=document.getElementById('feedback');try{await navigator.clipboard.writeText(URL_TO_SHARE);status.textContent='Link copied'}catch{status.textContent='Copy unavailable. Our address is tinfoilfacup.com'}};
 document.getElementById('share').onclick=async()=>{const status=document.getElementById('feedback');if(!navigator.share){status.textContent='Sharing unavailable — try Copy Link';return}try{await navigator.share({title:'Tin Foil FA Cup — Start Your Journey Here',url:URL_TO_SHARE})}catch(e){if(e.name!=='AbortError')status.textContent='Sharing unavailable — try Copy Link'}};
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pendingInstall=e;updateInstall()});
-window.addEventListener('appinstalled',()=>{pendingInstall=null;updateInstall();installStatus.textContent='Added. Look for TFFC Shed in your apps.'});
-install.onclick=async()=>{const request=pendingInstall;if(!request)return;pendingInstall=null;install.disabled=true;try{await request.prompt();const choice=await request.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation requested. Try the TFFC Shed icon once it appears.':'You can add it later using your browser menu.'}catch{installStatus.textContent='Please use your browser menu to add this page.'}finally{install.hidden=true;install.disabled=false}};
+window.addEventListener('appinstalled',()=>{pendingInstall=null;updateInstall();installStatus.textContent='Added. Look for Tin Foil FA Cup in your apps.'});
+install.onclick=async()=>{const request=pendingInstall;if(!request)return;pendingInstall=null;install.disabled=true;try{await request.prompt();const choice=await request.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation requested. Try the Tin Foil FA Cup icon once it appears.':'You can add it later using your browser menu.'}catch{installStatus.textContent='Please use your browser menu to add this page.'}finally{install.hidden=true;install.disabled=false}};
 window.addEventListener('DOMContentLoaded',()=>{renderInstructions();showShare();dialog.showModal();if(new URLSearchParams(location.search).get('keep')==='1')showKeep()});
 
 })();

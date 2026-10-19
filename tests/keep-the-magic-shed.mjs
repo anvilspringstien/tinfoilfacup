@@ -31,6 +31,12 @@ try{
   assert(await page.locator('#magic').evaluate(p=>p.scrollHeight<=p.clientHeight+1),'Apple instructions fit the frame');
   assert.equal(await page.locator('#steps li').count(),3);
   await page.screenshot({path:`/tmp/tffc-instructions-magic-${width}x${height}.png`});
+  for(const platform of ['android','computer']){
+   await page.selectOption('#platform',platform);
+   assert(await page.locator('#magic').evaluate(p=>p.scrollHeight<=p.clientHeight+1),platform+' instructions fit the frame');
+   assert(!/Shed|BETA|preview/.test(await page.locator('#magic').innerText()),'no build scaffolding in instructions');
+   await page.screenshot({path:`/tmp/tffc-${platform}-magic-${width}x${height}.png`});
+  }
  }
  // Actual application hosts, native sharing visible, short Safari-sized viewport.
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
@@ -76,6 +82,10 @@ try{
  assert(await page.locator('#install').isVisible());await page.locator('#install').click();
  assert.equal(await page.evaluate(()=>window.promptCalls),1);assert.match(await page.locator('#install-status').innerText(),/later/);
  assert(await page.locator('#install').isHidden());
+ await page.evaluate(()=>{const e=new Event('beforeinstallprompt',{cancelable:true});e.prompt=async()=>{};e.userChoice=Promise.resolve({outcome:'accepted'});dispatchEvent(e)});
+ await page.locator('#install').click();assert.match(await page.locator('#install-status').innerText(),/Tin Foil FA Cup icon/);
+ await page.evaluate(()=>dispatchEvent(new Event('appinstalled')));
+ assert.equal(await page.locator('#install-status').innerText(),'Added. Look for Tin Foil FA Cup in your apps.');
  await page.locator('#back').click();
  await page.evaluate(()=>{Object.defineProperty(navigator,'share',{configurable:true,value:undefined})});
  await page.locator('#share').click();assert.match(await page.locator('#feedback').innerText(),/Copy Link/);
@@ -86,7 +96,7 @@ try{
  assert.equal(await page.evaluate(()=>localStorage.getItem('tffc-test-campaign')),'preserve-me');
  assert.equal(await page.evaluate(async()=>('serviceWorker' in navigator)?(await navigator.serviceWorker.getRegistrations()).length:0),0);
  const manifest=await page.evaluate(async()=>{const r=await fetch(document.querySelector('link[rel="manifest"]').href);return r.json()});
- assert.equal(manifest.start_url,'/beta/keep-the-magic-shed.html');assert.equal(manifest.display,'standalone');
+ assert.equal(manifest.id,'/beta/keep-the-magic-shed');assert.equal(manifest.name,'Tin Foil FA Cup');assert.equal(manifest.short_name,'Tin Foil FA Cup');assert.equal(manifest.start_url,'/beta/keep-the-magic-shed.html');assert.equal(manifest.display,'standalone');
  for(const icon of manifest.icons){const response=await page.request.get(base+'/beta/'+icon.src);assert.equal(response.status(),200)}
  await page.setViewportSize({width:1440,height:900});await page.locator('#keep').click();await fits();
  await page.screenshot({path:'/tmp/tffc-keep-magic-desktop.png'});

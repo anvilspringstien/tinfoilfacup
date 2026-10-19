@@ -68,3 +68,5 @@ dialog#magic:not(.keeping) .note,dialog#magic:not(.keeping) .feedback{margin:0}
 @media(min-width:1200px) and (min-height:801px){
  .crest,dialog#magic .brand{width:clamp(280px,calc(100svh - 550px),360px)}
 }
+
+#platform-note a{color:inherit;text-underline-offset:3px}
