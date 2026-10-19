@@ -17,6 +17,20 @@ try{
   assert(await page.locator('.panel').evaluate(p=>p.scrollHeight<=p.clientHeight+1),'Share furniture fits destination frame');
   assert(await page.locator('.keep-card').isVisible());
   await page.screenshot({path:`/tmp/tffc-destination-magic-${width}x${height}.png`});
+  const crest=await page.locator('.crest').boundingBox();
+  const type=await page.locator('.heading').evaluate(e=>{const s=getComputedStyle(e);return [s.fontSize,s.fontFamily,s.fontWeight]});
+  await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
+  await page.selectOption('#platform','apple');
+  const keep=await page.locator('#magic').boundingBox();
+  const keepCrest=await page.locator('.brand').boundingBox();
+  for(const key of ['x','y','width','height']){
+   assert(Math.abs(share[key]-keep[key])<2,`Keep frame ${key} matches Share`);
+   assert(Math.abs(crest[key]-keepCrest[key])<2,`Keep crest ${key} matches Share`);
+  }
+  assert.deepEqual(await page.locator('.heading').evaluate(e=>{const s=getComputedStyle(e);return [s.fontSize,s.fontFamily,s.fontWeight]}),type);
+  assert(await page.locator('#magic').evaluate(p=>p.scrollHeight<=p.clientHeight+1),'Apple instructions fit the frame');
+  assert.equal(await page.locator('#steps li').count(),3);
+  await page.screenshot({path:`/tmp/tffc-instructions-magic-${width}x${height}.png`});
  }
  // Actual application hosts, native sharing visible, short Safari-sized viewport.
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
@@ -34,7 +48,7 @@ try{
   await page.waitForURL('**/keep-the-magic-shed.html?**');
   assert.equal(await page.locator('#heading').innerText(),'Keep the Magic');
   await page.selectOption('#platform','apple');
-  assert.match(await page.locator('#steps').innerText(),/square with the arrow pointing upwards/);
+  assert.match(await page.locator('#steps').innerText(),/square icon with the arrow pointing up/);
   await page.locator('#back').click();
   await page.waitForURL('**/beta/'+host);
   await shareFrame.locator('#copy').waitFor();
