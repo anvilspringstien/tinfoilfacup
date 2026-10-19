@@ -20,5 +20,5 @@ jobs:
         with:
           node-version: '22'
       - run: python -m unittest discover -s tests -p 'test_draw_announcement.py' -v
-      - run: node tests/test_draw_announcement_display.js
+      - run: node tests/test_draw_announcement_display.js beta/clubfinder-beta.html
       - run: python updater/competition_regression_guard.py

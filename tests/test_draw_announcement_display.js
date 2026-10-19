@@ -1,15 +1,15 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
-const data=JSON.parse(fs.readFileSync('competition.json','utf8'));
-for(const path of ['clubfinder.html','beta/clubfinder-beta.html']){
+const announcement=JSON.parse(fs.readFileSync('tests/fixtures/draw-announcement-first-proper.json','utf8'));
+for(const path of (process.argv.length>2?process.argv.slice(2):['clubfinder.html','beta/clubfinder-beta.html'])){
  const html=fs.readFileSync(path,'utf8');
  const a=html.indexOf('function nextProgressHtml('),b=html.indexOf('function stateHtml(',a);
  let now=Date.parse('2026-10-19T16:00:00Z');
  class Clock extends Date {static now(){return now;}}
  const ctx={Date:Clock,esc:String,formatDateGB:String,drawAlternatives:s=>s.split(/\s+or\s+/i),canonicalClubKey:s=>s.toLowerCase().replace(/\s+FC$/i,'')};
  vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);
- const next={name:'First Round Proper',date:'2026-11-07',drawAnnouncement:data.draw_announcements['First Round Proper'],drawClub:'AFC Fylde FC'};
+ const next={name:'First Round Proper',date:'2026-11-07',drawAnnouncement:announcement,drawClub:'AFC Fylde FC'};
  let shown=ctx.nextProgressHtml({},next);
  assert.match(shown,/Monday,? 19 October 2026/);
  assert.match(shown,/approximately 18:35 BST/);
