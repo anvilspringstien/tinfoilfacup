@@ -122,6 +122,8 @@ class PublicationTests(unittest.TestCase):
             block=workflow.split('\nconcurrency:\n',1)[1].split('\njobs:',1)[0]
             self.assertIn('queue: max',block,path.name)
             self.assertIn('cancel-in-progress: false',block,path.name)
+            checkout=workflow.split('uses: actions/checkout@',1)[1].split('      - ',1)[0]
+            self.assertIn('ref:',checkout,path.name)
         self.assertEqual(len(participants),7)
         status=(ROOT/'.github/workflows/publish-competition-check-status.yml').read_text()
         self.assertIn('queue: max',status.split('\nconcurrency:\n',1)[1].split('\njobs:',1)[0])

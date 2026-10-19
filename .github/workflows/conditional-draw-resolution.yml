@@ -4,6 +4,7 @@ on:
     paths:
       - 'updater/patch_clubfinder_replay_progression.py'
       - 'updater/conditional_draw_resolution_regression.js'
+      - 'tests/fixtures/conditional-draw-resolution.json'
       - '.github/workflows/conditional-draw-resolution.yml'
   push:
     branches: [main]
@@ -22,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Test the PR merge ref; re-resolve queued production runs at branch head.
+          ref: ${{ github.event_name == 'pull_request' && github.ref || github.ref_name }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
