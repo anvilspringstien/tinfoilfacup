@@ -66,6 +66,8 @@ jobs:
           path: |
             /tmp/tffc-*-magic-*.png
             /tmp/tffc-campaign-intro-*.png
+            /tmp/tffc-campaign-identity-*.png
+            /tmp/tffc-campaign-origin-*.png
 
   handover-webkit:
     runs-on: ubuntu-latest
