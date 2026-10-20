@@ -54,15 +54,17 @@ try{
    assert(rect.x>=0&&rect.y>=0&&rect.x+rect.width<=width+1&&rect.y+rect.height<=height+1);
    assert(await intro.evaluate(e=>e.scrollHeight<=e.clientHeight+1),'popup frame fits viewport');
    const message=intro.locator('#tffc-intro-message');
-   if(name==='My Campaign'){
-    assert.match(await message.innerText(),/There are many like this, but this one is yours/);
-    assert.match(await message.innerText(),/Coming Soon!/);
-    await message.evaluate(e=>e.scrollTop=e.scrollHeight);
-    assert(await message.evaluate(e=>e.scrollTop+e.clientHeight>=e.scrollHeight-1),'all longer Campaign copy can be reached');
-    assert.deepEqual(await intro.getByRole('button',{name:'Got It!',exact:true}).boundingBox(),button,'reading longer copy does not move confirmation controls');
-    await page.screenshot({path:`/tmp/tffc-campaign-intro-campaign-end-${width}x${height}.png`});
-    await message.evaluate(e=>e.scrollTop=0);
-   }else assert(await message.evaluate(e=>e.scrollHeight<=e.clientHeight+1),'the existing Stats/Challenges explanation fits without scrolling');
+   const endings={
+    'My Campaign':'Your old pigeon identity and locally saved Challenge progress won’t be recovered.',
+    'My Stats':'But it will tell you how many miles your pigeon has flown!',
+    'My Challenges':'Keep an eye out for Barry, our Staff Pigeon. He’s absolutely full of it.'
+   };
+   assert((await message.innerText()).endsWith(endings[name]),'approved final paragraph is present');
+   await message.evaluate(e=>e.scrollTop=e.scrollHeight);
+   assert(await message.evaluate(e=>e.scrollTop+e.clientHeight>=e.scrollHeight-1),'all introduction copy can be reached');
+   assert.deepEqual(await intro.getByRole('button',{name:'Got It!',exact:true}).boundingBox(),button,'reading longer copy does not move confirmation controls');
+   await page.screenshot({path:`/tmp/tffc-campaign-intro-${name.replace('My ','').toLowerCase()}-end-${width}x${height}.png`});
+   await message.evaluate(e=>e.scrollTop=0);
    await page.screenshot({path:`/tmp/tffc-campaign-intro-${name.replace('My ','').toLowerCase()}-${width}x${height}.png`});
    await intro.getByRole('checkbox').check();await intro.getByRole('button',{name:'Close',exact:true}).click();
    assert.equal(page.url(),base+'/beta/clubfinder-journey.html');
