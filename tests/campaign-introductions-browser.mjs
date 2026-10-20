@@ -56,7 +56,7 @@ try{
  await stats.getByText('Preparing Your Stats…',{exact:true}).waitFor();
  assert(await stats.locator('.prep-rollers').isVisible(),'existing Stats preparation counter remains during loading');
  await page.evaluate(()=>window.__releaseStats());await stats.locator('.sheet').waitFor({timeout:30000});
- assert.match(await stats.locator('body').innerText(),/Checky/);
+ assert.equal(await stats.locator('.stats-pigeon-editor').inputValue(),'Checky');
  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).introDismissed.stats),true);
  await Promise.all([stats.waitForEvent('close'),stats.locator('.stats-return button').click()]);
  const again=page.waitForEvent('popup');await page.getByRole('button',{name:'My Stats',exact:true}).click();const repeated=await again;
