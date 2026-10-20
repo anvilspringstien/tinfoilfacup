@@ -1,73 +1,63 @@
-# Keep the Magic — isolated Shed preview
+# Keep the Magic
 
-Entry: `/beta/keep-the-magic-shed.html` (available on the website after merge).
-No existing landing page, Share iframe, Campaign, Stats, Challenges, ingestion
-file or storage key is changed. This prototype is a top-level page because the
-existing popup is an iframe and installation belongs to the top-level browser.
+The installed identity and entry remain `/beta/keep-the-magic-shed` and
+`/beta/keep-the-magic-shed.html`. The manifest, icon, approved Splash and
+competition machinery are unchanged. Browser visits show Share/Keep guidance;
+installed launches enter `/beta/`, then the existing Clubfinder journey.
+Share/Keep close returns to the originating view; Back returns to Share.
 
-The existing Share QR and production URL are preserved. Keep the Magic opens
-platform-selectable guidance with the established crest as its icon. A native
-install button appears only after a real beforeinstallprompt event. Unsupported
-browsers get instructions, and standalone launches get an already-open-as-app
-message. Cancellation is not reported as installation success.
+## Browser to Home Screen handover
 
-The manifest keeps a separate Shed app identity. Browser visits show the preview; installed launches enter the existing BETA Splash. It
-must not be represented as an installed production Clubfinder. No service worker,
-offline fixture caching, notifications or browser-storage writes are introduced.
-The icon assets are deterministic resizes of the current Splash crest: 180px Apple,
-192/512px ordinary PNG, plus a separately padded 512px maskable icon.
+The first full physical iPhone cycle on 20 October exposed the storage boundary:
+Campaign #01755, Pigeon Checky and Challenge progress were in browser localStorage,
+while the installed app started empty and allocated #01756. The earlier test
+reopened already-populated localStorage; it did not exercise installation.
 
-## Evidence and remaining acceptance
+WebKit documents that iOS/iPadOS 17.2+ copies cookies when creating a Home Screen
+app, but does not copy localStorage:
+https://webkit.org/blog/14787/webkit-features-in-safari-17-2/#web-apps
 
-Run `python3 -m http.server 8765 --bind 127.0.0.1`, then
-`node tests/keep-the-magic-shed.mjs` with Playwright and Chromium installed.
-The read-only GitHub workflow installs these test dependencies and saves phone
-and desktop screenshots. Tests simulate prompt dismissal, not real OS installation.
+Opening Keep now prepares a compressed snapshot of the four existing allowlisted
+Campaign/Challenge keys. The snapshot uses at most two first-party cookies,
+under 6KB total, scoped to the installed entry path, with a seven-day expiry.
+Cookies accompany requests to that entry path; the payload is not placed in
+Share links, QR codes, the manifest or other site URLs. This is an installation
+snapshot, not ongoing synchronisation between the app and browser.
 
-The local executor's browser download returned invalid ZIP data and its separate
-cloud browser could not reach localhost. Browser verification therefore runs on
-GitHub; do not describe syntax checks as visual or device acceptance.
+On first standalone launch the page remains hidden until the snapshot is
+validated and restored into empty localStorage. Successful transfer consumes
+the cookies before entering Splash. Any existing Campaign/Challenge key in the
+installed app takes precedence: stale cookies never overwrite later progress.
+Malformed, incomplete, expired or failed writes do not permit a partial restore
+or silently start a fresh Campaign. A failed launch explains how to return to
+the browser. An oversized history or blocked preparation offers the existing
+backup/restore page rather than dropping Challenge history to fit.
 
-Before promotion: inspect Share and Keep at 390x669, phone landscape, iPad and
-desktop; install on physical iPhone Safari and Android; close/reopen repeatedly;
-verify actual icon appearance, standalone navigation, live fixture refresh,
-Campaign identity, Pigeon name, Challenges, Trophy Cabinet and mileage. Test
-browser-to-installed storage boundaries and embedded-popup-to-top-level guidance.
-Do not promise Campaign transfer until these pass. Installed navigation uses the existing BETA Splash/Clubfinder flow. Production
-Share-popup integration remains outside this isolated test.
+## Automated evidence
 
-Guidance sources checked 18 October 2026:
-- https://support.apple.com/en-gb/guide/iphone/iphea86e5236/27/ios/27
-- https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeinstallprompt_event
-- https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable
+- `node tests/keep-the-magic-regression.js`: allowlisted backups and restore.
+- `node tests/keep-magic-install-regression.js`: cookie-only transfer, exact
+  record preservation, existing progress, corruption, missing chunks, expiry,
+  quota rollback, size limits and blocked cookies.
+- `node tests/keep-the-magic-shed.mjs`: actual Share/Keep navigation and geometry;
+  real Campaign/Challenges save, then a new context receiving cookies only,
+  starting with empty localStorage. Checks Checky, #01755, Cabinet awards and
+  mileage through the real application, repeat launch and zero new counters.
 
+The GitHub preview workflow runs these checks and captures phone/desktop images.
+It also runs the isolated cookies-only handover in WebKit, in addition to Chromium.
+Browser contexts model the documented storage boundary; they do not automate
+Apple's installation sheet or prove physical OS cookie copying.
 
-## Stage 2: installed Campaign entry
+## Device acceptance
 
-The existing manifest identity and start URL remain unchanged. Standalone launches
-of the preview replace their location with `/beta/`, using the accepted BETA
-Splash and original Clubfinder journey. Normal browser visits remain on the
-preview; `?instructions=1` permits viewing guidance inside an installed app.
-No existing application page, storage key, saved Campaign or counter is rewritten
-by the new entry route. iPhone instructions name Safari's square-with-up-arrow
-and distinguish it from our own Share button.
+Use the original browser Campaign, remove the test icon and add it again through
+Share > Keep. Do not hard reset the original browser Campaign. The already-created
+#01756 app has its own progress and is deliberately not overwritten automatically.
+Verify #01755, Checky, four Cabinet mats, 0766 miles and Fourth Qualifying after
+Start Campaign, plus Stats, Challenges and repeated icon launches. Until this
+physical cycle passes, describe transfer as awaiting device acceptance.
 
-The browser test now enters the real BETA journey after restoring the same storage
-into a new simulated-standalone browser context. It asserts the saved origin,
-postcode, Pigeon name, search number, call sign and selection date survive two
-entries, without a counter request. Only the postcode lookup is stubbed; competition
-data and BETA restore/rendering code are real committed files. This is not proof of
-Safari-to-installed storage sharing. The user's first iPhone icon installation and
-preview reopening passed; real Campaign/Stats/Challenges retention remains the
-next physical-device acceptance step. Never Reset/Hard Reset for these tests.
-
-## Existing Share entry
-
-The BETA embedded Share popup now links to the tested installation page with `target="_top"` and `?instructions=1&keep=1`. This opens Keep guidance immediately outside the iframe, including when already installed, while retaining the manifest identity and installed launch route. Back to Share returns to the top-level Share view; its QR, Copy Link and Share actions remain available. The original Clubfinder tab is navigated, and the Campaign remains in existing browser storage. No browser-to-app transfer is promised.
-
-Physical iPhone testing confirmed repeated full-screen launches, Campaign and Pigeon-name retention, and working Stats/Challenges after reopening. Transfer of an older Safari Campaign into installed storage remains a separate unverified gate.
-
-### Corrected application return
-The embedded entry now passes an allowlisted same-origin application return URL. Back to Share and Close return to that application and reopen its existing Share popup; the separate preview Share screen is used only for standalone preview visits. Browser tests exercise both real application hosts with native sharing available at 390×560, including repeated entry and Close. Phone popup geometry reserves room for all three actions.
-
-The Challenges return hook is promoted separately after the Clubfinder correction, preserving both application isolation guards. All three actual entry pages are covered by the final return-cycle suite.
+No service worker, fixture cache, notifications or competition data edits are
+introduced. Unsupported browser/version cookie copying remains a device limit;
+the existing private backup/restore page is the manual alternative.

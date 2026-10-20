@@ -7,9 +7,13 @@ on:
       - 'beta/share-popup-embed.html'
       - 'beta/share-destination.css'
       - 'beta/keep-magic-return.js'
+      - 'beta/keep-magic-install.js'
+      - 'beta/keep-the-magic-data.js'
       - 'beta/clubfinder-beta.html'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
+      - 'tests/keep-magic-install-regression.js'
+      - 'tests/keep-magic-install-browser.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
   push:
     branches-ignore: [main]
@@ -18,9 +22,13 @@ on:
       - 'beta/share-popup-embed.html'
       - 'beta/share-destination.css'
       - 'beta/keep-magic-return.js'
+      - 'beta/keep-magic-install.js'
+      - 'beta/keep-the-magic-data.js'
       - 'beta/clubfinder-beta.html'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
+      - 'tests/keep-magic-install-regression.js'
+      - 'tests/keep-magic-install-browser.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
 permissions:
   contents: read
@@ -34,6 +42,10 @@ jobs:
           node-version: '22'
       - run: npm install --no-save playwright
       - run: npx playwright install --with-deps chromium
+      - name: Check installation handover and backup guards
+        run: |
+          node tests/keep-the-magic-regression.js
+          node tests/keep-magic-install-regression.js
       - name: Serve isolated preview and run browser checks
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/keep-magic-server.log 2>&1 &
@@ -46,3 +58,19 @@ jobs:
         with:
           name: keep-the-magic-preview
           path: /tmp/tffc-*-magic-*.png
+
+  handover-webkit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps webkit
+      - name: Regress empty installed storage in WebKit
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/keep-webkit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          node tests/keep-magic-install-browser.mjs

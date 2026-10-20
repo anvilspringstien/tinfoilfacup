@@ -1,3 +1,4 @@
+import { checkInstalledHandover } from './keep-magic-install-browser.mjs';
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(import.meta.url)('playwright');
 import assert from 'node:assert/strict';
@@ -266,6 +267,7 @@ try{
  releaseSplash();await launchPage.waitForURL(base+'/beta/');
  await launchPage.locator('.splash-start').waitFor();
  await launchContext.close();
- console.log('KEEP THE MAGIC SHED: PASS — preview geometry and guidance; installed entry into real BETA; saved Campaign/Pigeon survives repeat entry and browser-context restoration without a new counter. Physical installation/storage boundaries remain unverified.');
+ await checkInstalledHandover(browser,base);
+ console.log('KEEP THE MAGIC SHED: PASS — geometry, navigation and cookies-only migration into empty installed storage; Checky, 01755, Challenge awards and miles persist without a new counter. Physical iPhone installation remains the device acceptance check.');
 
 }finally{await browser.close()}
