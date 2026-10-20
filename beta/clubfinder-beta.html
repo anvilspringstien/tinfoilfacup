@@ -56,8 +56,8 @@
 .tffc-beta-help a,.tffc-beta-help button{border:0;background:transparent;padding:0;color:#666;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .tffc-beta-help a:hover,.tffc-beta-help button:hover{color:#084C61}
 .tffc-beta-help-sep{margin:0 6px;color:#aaa}
-.tffc-choices-help .tffc-beta-help{color:#ddd}
-.tffc-choices-help .tffc-beta-help a,.tffc-choices-help .tffc-beta-help button{color:inherit}
+.tffc-support-footer .tffc-beta-help{color:#ddd}
+.tffc-support-footer .tffc-beta-help a,.tffc-support-footer .tffc-beta-help button{color:inherit}
 .tin-foil-privacy-actions{display:flex;justify-content:flex-end}
 .tin-foil-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}.tin-foil-result-health{margin:10px 0 14px;padding:11px 13px;border-radius:8px;font:300 13px/1.5 Poppins,Arial,sans-serif}
 .tin-foil-result-health[hidden]{display:none}
@@ -2421,8 +2421,8 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
    const currentCampaign=chosen?'<div class="chosen-campaign-current"><div class="carrier">The current custodian of your Tin Foil FA Cup is:<div class="custodian-name">'+esc(c.name)+'</div></div><div class="meta">'+currentGround+'</div><div class="meta" style="color:'+currentLc+';font-weight:600">'+currentLoc+'</div><div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c)+'</div>':'';
    const campaignOrigin=chosen?'<div class="campaign-origin"><div class="campaign-origin-title">Campaign Origin</div><div class="campaign-origin-name">'+esc(origin.name)+'</div><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div></div>':'';
    const standardCampaign=!chosen?'<h2>'+(oi===0&&origin.hasCoords?'Nearest: ':'')+esc(origin.name)+'</h2><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div>'+carrierHtml(j)+'<div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c):'';
-   return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}${currentCampaign}${standardCampaign}${campaignOrigin}${previousRoundsHtml(j,chosen)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div>${mine&&selected&&!showOriginal?tinFoilSupportLinksHtml():''}</div>`;
-  }).join('')+((!selected||showOriginal)?'<div class="tffc-choices-help">'+tinFoilSupportLinksHtml()+'</div>':'');
+   return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}${currentCampaign}${standardCampaign}${campaignOrigin}${previousRoundsHtml(j,chosen)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div></div>`;
+  }).join('')+(shown.length?'<div class="tffc-support-footer">'+tinFoilSupportLinksHtml()+'</div>':'');
   results.style.display='block';if(scrollAfterRender)tffcScrollToFinder();const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';status.textContent=selected&&!showOriginal?'Your Tin Foil FA Cup Campaign. Dates & times may change. Always check before travelling':top.length+' Tin Foil FA Cup Campaigns found for '+u.postcode+'. Dates & times may change. Always check before travelling';
  }catch(e){status.textContent=e.message||'Unable to complete the search.'}finally{btn.disabled=false}
 }

@@ -92,3 +92,6 @@ dialog#magic::backdrop{background:#141210}
 @media(max-width:600px) and (max-height:600px){#keep-view{gap:8px}}
 
 @media(max-height:600px){:root{--phone-share-gap:7px}}
+
+/* Give the Keep device selector equal breathing room where height allows. */
+@media(min-height:620px){dialog#magic.keeping .platform{margin:8px auto}}

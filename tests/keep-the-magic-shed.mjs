@@ -26,6 +26,7 @@ try{
   const type=await page.locator('.heading').evaluate(e=>{const s=getComputedStyle(e);return [s.fontSize,s.fontFamily,s.fontWeight]});
   await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
   await page.selectOption('#platform','apple');
+  if(height>=620){const margins=await page.locator('#platform').evaluate(e=>[getComputedStyle(e).marginTop,getComputedStyle(e).marginBottom]);assert.deepEqual(margins,['8px','8px'],'equal extra space around the device selector')}
   const keep=await page.locator('#magic').boundingBox();
   const keepCrest=await page.locator('.brand').boundingBox();
   for(const key of ['x','y','width','height']){
@@ -174,6 +175,10 @@ try{
   const button=app.getByRole('button',{name:'Share the Magic',exact:true});
   assert.equal(await app.locator('.campaign-secondary-nav button').count(),5);
   assert.equal(await app.locator('.campaign-primary-nav button').count(),3);
+  assert.equal(await app.locator('#results > .tffc-support-footer').count(),1,'Campaign uses the same external footer as choices');
+  assert.equal(await app.locator('#results > .result .tffc-beta-help').count(),0);
+  await app.locator('#results > .tffc-support-footer').scrollIntoViewIfNeeded();
+  await app.screenshot({path:`/tmp/tffc-campaign-footer-magic-${width}x${height}.png`});
   await button.scrollIntoViewIfNeeded();
   const geometry=await button.evaluate(e=>{
    const r=e.getBoundingClientRect(),p=document.querySelector('.campaign-primary-nav button').getBoundingClientRect();
@@ -202,7 +207,7 @@ try{
   else await app.evaluate(async()=>{localStorage.removeItem('tinFoilFACupJourney_v7');window.__showOriginalTinFoilJourneys=false;tinFoilSetCurrentSearchNumber(54321);await go(false)});
   await app.waitForFunction(()=>document.querySelectorAll('#results > .result').length===3);
   assert.equal(await app.locator('#results .tffc-beta-help').count(),1);
-  const footer=app.locator('#results > .tffc-choices-help');
+  const footer=app.locator('#results > .tffc-support-footer');
   await footer.scrollIntoViewIfNeeded();
   assert.equal(await footer.locator('a,button').allTextContents().then(a=>a.join('|')),'Share|Feedback|Report an Issue|Privacy|About Us');
   const cards=await app.locator('#results > .result h2').allTextContents();
