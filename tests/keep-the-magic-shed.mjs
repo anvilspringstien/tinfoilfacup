@@ -89,7 +89,7 @@ try{
   await page.waitForURL('**/keep-the-magic-shed.html?**');
   await page.locator('#close').click();
   await page.waitForURL('**/beta/'+host);
-  await shareFrame.locator('#copy').waitFor();
+  assert(await page.locator('iframe[title="Share Tin Foil FA Cup"]').isHidden(),'closing Keep returns to the originating page without reopening Share');
  }
  await page.setViewportSize({width:390,height:669});
  await page.goto(base+'/beta/keep-the-magic-shed.html');
@@ -117,19 +117,22 @@ try{
  await page.locator('#share').click();assert.match(await page.locator('#feedback').innerText(),/Copy Link/);
  await page.evaluate(()=>{Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async value=>{window.copiedURL=value}}})});
  await page.locator('#copy').click();assert.equal(await page.evaluate(()=>window.copiedURL),'https://tinfoilfacup.com/');
- await page.keyboard.press('Escape');assert.equal(await page.locator('#magic').evaluate(d=>d.open),false);
- await page.locator('#open').click();assert(await page.locator('#magic').evaluate(d=>d.open));
+ assert.equal(await page.locator('.launch,#open,#open-shed').count(),0,'old launcher controls are removed');
  assert.equal(await page.evaluate(()=>localStorage.getItem('tffc-test-campaign')),'preserve-me');
  assert.equal(await page.evaluate(async()=>('serviceWorker' in navigator)?(await navigator.serviceWorker.getRegistrations()).length:0),0);
  const manifest=await page.evaluate(async()=>{const r=await fetch(document.querySelector('link[rel="manifest"]').href);return r.json()});
  assert.equal(manifest.id,'/beta/keep-the-magic-shed');assert.equal(manifest.name,'Tin Foil FA Cup');assert.equal(manifest.short_name,'Tin Foil FA Cup');assert.equal(manifest.start_url,'/beta/keep-the-magic-shed.html');assert.equal(manifest.display,'standalone');
  for(const icon of manifest.icons){const response=await page.request.get(base+'/beta/'+icon.src);assert.equal(response.status(),200)}
+ await page.keyboard.press('Escape');await page.waitForURL(base+'/beta/');
+ await page.goto(base+'/beta/keep-the-magic-shed.html');
  await page.setViewportSize({width:1440,height:900});await page.locator('#keep').click();await fits();
  await page.screenshot({path:'/tmp/tffc-keep-magic-desktop.png'});
- await page.mouse.click(10,10);assert.equal(await page.locator('#magic').evaluate(d=>d.open),false);
- await page.setViewportSize({width:844,height:390});await page.locator('#open').click();
+ await page.mouse.click(10,10);await page.waitForURL(base+'/beta/');
+ await page.goto(base+'/beta/keep-the-magic-shed.html');
+ await page.setViewportSize({width:844,height:390});
  assert(await page.locator('#close').isVisible());await page.locator('#keep').click();await page.locator('#back').scrollIntoViewIfNeeded();await page.locator('#back').click();
  assert.equal(await page.locator('#heading').innerText(),'Share the Magic');
+ await page.locator('#close').click();await page.waitForURL(base+'/beta/');
  await page.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
  await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1');
  await page.locator('#keep').click();assert.match(await page.locator('#install-status').innerText(),/already/);assert(await page.locator('#install').isHidden());
@@ -191,6 +194,39 @@ try{
   assert(await button.evaluate(e=>e===document.activeElement),'close restores the Share button focus');
   assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
  }
+ // One shared footer beneath all three choices, for both an existing
+ // Campaign's original choices and a visitor who has not selected one.
+ for(const selected of [true,false]){
+  await app.setViewportSize({width:390,height:669});
+  if(selected)await app.getByRole('button',{name:'View Original Campaigns',exact:true}).click();
+  else await app.evaluate(async()=>{localStorage.removeItem('tinFoilFACupJourney_v7');window.__showOriginalTinFoilJourneys=false;tinFoilSetCurrentSearchNumber(54321);await go(false)});
+  await app.waitForFunction(()=>document.querySelectorAll('#results > .result').length===3);
+  assert.equal(await app.locator('#results .tffc-beta-help').count(),1);
+  const footer=app.locator('#results > .tffc-choices-help');
+  await footer.scrollIntoViewIfNeeded();
+  assert.equal(await footer.locator('a,button').allTextContents().then(a=>a.join('|')),'Share|Feedback|Report an Issue|Privacy|About Us');
+  const cards=await app.locator('#results > .result h2').allTextContents();
+  const identity=await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
+  const searchNumber=await app.evaluate(()=>tinFoilCurrentSearchNumber());
+  await app.screenshot({path:`/tmp/tffc-choices-magic-${selected?'saved':'new'}.png`});
+  await footer.getByRole('button',{name:'Share',exact:true}).click();
+  const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+  await share.locator('.keep-magic').click();await app.waitForURL('**/keep-the-magic-shed.html?**');
+  await app.locator('#back').click();await app.waitForURL('**/beta/clubfinder-journey.html');
+  await share.locator('#copy').waitFor();
+  await app.evaluate(()=>tffcCloseShare());
+  assert.equal(await app.locator('#results > .result').count(),3,'return preserves the three choices');
+  assert.deepEqual(await app.locator('#results > .result h2').allTextContents(),cards);
+  assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
+  await footer.getByRole('button',{name:'Share',exact:true}).click();
+  await share.locator('.keep-magic').click();await app.waitForURL('**/keep-the-magic-shed.html?**');
+  await app.locator('#close').click();await app.waitForURL('**/beta/clubfinder-journey.html');
+  assert(await app.locator('iframe[title="Share Tin Foil FA Cup"]').isHidden());
+  assert.equal(await app.locator('#results > .result').count(),3,'closing Keep restores the choices directly');
+  assert.equal(await app.evaluate(()=>tinFoilCurrentSearchNumber()),searchNumber,'unselected search identity survives Keep');
+  if(!selected){await app.locator('.journey-lozenge').first().click();assert.equal(await app.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).searchNumber),searchNumber)}
+ }
+ assert.equal(counterCalls,0,'Share/Keep returns never allocate a new identity');
  assert.deepEqual(appErrors,[]);
  await app.screenshot({path:'/tmp/tffc-campaign-magic-phone.png'});
  await reopened.close();
