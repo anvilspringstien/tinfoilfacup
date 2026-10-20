@@ -16,19 +16,19 @@ const shareView=document.getElementById('share-view'),keepView=document.getEleme
 const keepButton=document.getElementById('keep');
 const platform=document.getElementById('platform'),steps=document.getElementById('steps');
 const install=document.getElementById('install'),installStatus=document.getElementById('install-status');
-let pendingInstall=null;
+let pendingInstall=null,installPrepared=false;
 const instructions={
  apple:['In Safari, see the little square icon with the arrow pointing up? It’s on that bar at the bottom of your screen. Tap that.','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
  android:['In Chrome, tap the three dots by the address bar.','Look for ‘Install and create shortcut’, ‘Install app’ or ‘Add to Home screen’. Tap it and follow the prompts.','Look for the Tin Foil FA Cup icon. Tap it whenever you’re ready for more Cup magic!'],
  computer:['Open your browser’s menu — usually the three dots at the top right.','In Chrome, try ‘Cast, save, and share’. In Edge, look under ‘More tools’, then ‘Apps’.','Choose ‘Install page as app’ or ‘Install this site as an app’, then confirm. You’re done!']
 };
 function renderInstructions(){document.getElementById('platform-note').hidden=platform.value==='apple'||standalone();steps.replaceChildren(...instructions[platform.value].map(text=>{const li=document.createElement('li');li.textContent=text;return li}));}
-function updateInstall(){const isInstalled=standalone();install.hidden=isInstalled||!pendingInstall;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;installStatus.textContent=isInstalled?'You’re already opening Tin Foil FA Cup as an app.':'';installStatus.classList.toggle('installed',isInstalled);}
+function updateInstall(){const isInstalled=standalone();install.hidden=isInstalled||!pendingInstall||!installPrepared;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;if(isInstalled)installStatus.textContent='You’re already opening Tin Foil FA Cup as an app.';installStatus.classList.toggle('installed',isInstalled);}
 function showShare(){dialog.style.removeProperty('--phone-share-crest-size');dialog.classList.remove('keeping');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
 async function prepareInstall(){
  if(standalone())return;
- install.disabled=true;installStatus.textContent='Preparing your saved Campaign…';
- try{await TffcMagicInstall.prepare();installStatus.textContent='';install.disabled=false;}
+ installPrepared=false;install.disabled=true;installStatus.textContent='Preparing your saved Campaign…';
+ try{await TffcMagicInstall.prepare();installPrepared=true;installStatus.textContent='';install.disabled=false;updateInstall();}
  catch(_){
   install.hidden=true;installStatus.textContent='Before adding to Home Screen, save a backup of your Campaign and Challenges. ';
   const link=document.createElement('a');link.href='keep-the-magic.html';link.textContent='Save or restore a backup';installStatus.append(link);
