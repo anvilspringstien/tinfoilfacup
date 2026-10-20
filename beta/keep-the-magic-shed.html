@@ -2,12 +2,25 @@
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#232323"><meta name="robots" content="noindex"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Tin Foil FA Cup"><link rel="manifest" href="keep-the-magic-shed.webmanifest"><link rel="apple-touch-icon" href="assets/keep-magic/apple-touch-icon.png"><title>Keep the Magic — Tin Foil FA Cup</title>
 <style>html.tffc-installed-launch body{visibility:hidden}</style>
 <script>
-// Resolve installed entry before any launcher furniture can paint, including
-// when the external Share/Keep script is slow. Keep explicit instructions usable.
-if((matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)&&
-   !new URLSearchParams(location.search).has('instructions')){
- document.documentElement.classList.add('tffc-installed-launch');
- location.replace(new URL('./',location.href).href);
+// Hide the installed entry before any content can paint.
+window.tffcInstalledEntry=(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)&&!new URLSearchParams(location.search).has('instructions');
+if(window.tffcInstalledEntry)document.documentElement.classList.add('tffc-installed-launch');
+</script>
+<script src="keep-the-magic-data.js"></script>
+<script src="keep-magic-install.js"></script>
+<script>
+if(window.tffcInstalledEntry){
+ const handover=/\btffc_keep_v1(?:_\d+)?=/.test(document.cookie);
+ const ready=window.TffcMagicInstall?TffcMagicInstall.restore():handover?Promise.reject(Error('Installation handover unavailable')):Promise.resolve();
+ ready.then(()=>location.replace(new URL('./',location.href).href)).catch(()=>{
+  const explain=()=>{
+   document.body.replaceChildren();const message=document.createElement('p');
+   message.textContent='Your saved Campaign could not be opened. Return to the browser where you chose it and open Keep the Magic again. Your browser Campaign is still safe.';
+   message.style.cssText='padding:24px;line-height:1.6';document.body.append(message);
+   document.documentElement.classList.remove('tffc-installed-launch');
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',explain,{once:true});else explain();
+ });
 }
 </script>
 <style>
