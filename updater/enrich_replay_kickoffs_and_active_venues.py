@@ -237,7 +237,7 @@ def parse_fchd(raw):
 def unique_lookup(rows, club):
     n = norm(club)
     exact = [r for r in rows if norm(r.get("club")) == n]
-    if len(exact) == 1: return exact[0]
+    if exact: return exact[0] if len(exact) == 1 else None
     loose = [r for r in rows if norm(r.get("club")).startswith(n + " ") or n.startswith(norm(r.get("club")) + " ")]
     return loose[0] if len(loose) == 1 else None
 
@@ -258,7 +258,8 @@ def enrich_active_venues(data):
             continue
         home = f.get("home")
         away = f.get("away") or ""
-        if f.get("conditional") or re.search(r"\s+or\s+", str(home), re.I) or re.search(r"\s+or\s+", str(away), re.I):
+        # Resolve only a definite host; the visitor can remain conditional.
+        if re.search(r"\s+or\s+", str(home), re.I):
             continue
         g = canonical.get(norm(home))
         if g:

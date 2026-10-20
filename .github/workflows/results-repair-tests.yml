@@ -26,6 +26,7 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
       - name: Run ingestion and metadata unit tests
         run: |
+          python -m unittest discover -s tests -p 'test_conditional_fixture_venues.py' -v
           python -m unittest discover -s tests -p 'test_results_repair.py' -v
           python -m unittest discover -s tests -p 'test_active_replay_fixture_sync.py' -v
           python -m unittest discover -s tests -p 'test_stage_preceding_replay_candidates.py' -v
