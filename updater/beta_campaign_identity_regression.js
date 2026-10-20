@@ -52,7 +52,7 @@ function nodeStub(){
   return {
     value:'',textContent:'',innerHTML:'',hidden:false,dataset:{},style:{},disabled:false,
     children:[],parentElement:null,
-    addEventListener(){},focus(){},setAttribute(){},removeAttribute(){},appendChild(){},remove(){},insertAdjacentElement(){},
+    addEventListener(){},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},appendChild(){},remove(){},insertAdjacentElement(){},
     querySelectorAll(){return []},classList:{add(){},remove(){}}
   };
 }
