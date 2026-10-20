@@ -1,6 +1,7 @@
 (function(){
 'use strict';
 const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+if(document.documentElement.classList.contains('tffc-installed-launch'))return;
 // Retain the existing installed icon identity and launch URL. Only an installed
 // launch enters the established BETA journey; browser visits keep the preview.
 if(standalone()&&!new URLSearchParams(location.search).has('instructions')){
