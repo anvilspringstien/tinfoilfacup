@@ -1827,7 +1827,7 @@ async function tinFoilRestoreSavedCampaignOnLoad(){
 /* TIN_FOIL_CAMPAIGN_IDENTITY_END */
 const JOURNEY_STORAGE_KEY='tinFoilFACupJourney_v7';
 function loadSavedJourney(){try{const saved=JSON.parse(localStorage.getItem(JOURNEY_STORAGE_KEY)||'null');return typeof tinFoilRecoverCampaignIdentity==='function'?tinFoilRecoverCampaignIdentity(saved):saved}catch(e){return null}}
-function saveJourney(origin,postcode){const existing=loadSavedJourney(),same=existing&&sameClubIdentity(existing.originName,origin.name),identity=tinFoilCampaignIdentityForSave(origin,existing);const s={originName:origin.name,postcode,ended:false,selectedAt:same&&existing.selectedAt?existing.selectedAt:new Date().toISOString()};if(same&&tinFoilSavedPigeonName(existing))s.pigeonName=tinFoilSavedPigeonName(existing);if(identity.searchNumber){s.searchNumber=identity.searchNumber;s.callSign=identity.callSign}localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));tinFoilPersistCampaignIdentityBackup(s);tinFoilRegisterPendingCampaignIdentity(s);return s}
+function saveJourney(origin,postcode){const existing=loadSavedJourney(),same=existing&&sameClubIdentity(existing.originName,origin.name),identity=tinFoilCampaignIdentityForSave(origin,existing);const s={originName:origin.name,postcode,ended:false,selectedAt:same&&existing.selectedAt?existing.selectedAt:new Date().toISOString()};if(same&&existing.introDismissed)s.introDismissed={...existing.introDismissed};if(same&&tinFoilSavedPigeonName(existing))s.pigeonName=tinFoilSavedPigeonName(existing);if(identity.searchNumber){s.searchNumber=identity.searchNumber;s.callSign=identity.callSign}localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(s));tinFoilPersistCampaignIdentityBackup(s);tinFoilRegisterPendingCampaignIdentity(s);return s}
 function updateSavedJourney(p){const s=loadSavedJourney();if(!s)return null;const n=Object.assign({},s,p);localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(n));tinFoilPersistCampaignIdentityBackup(n);return n}
 function savedOrigin(rows,s){return s?rows.find(r=>sameClubIdentity(r.name,s.originName))||null:null}
 function samePostcode(a,b){return String(a||'').toUpperCase().replace(/\s+/g,'')===String(b||'').toUpperCase().replace(/\s+/g,'')}
@@ -1856,29 +1856,8 @@ function tffcScrollToFinder(){
 }
 function tffcMyCampaignInfo(){
  tffcScrollToFinder();
- let overlay=document.getElementById('tffcMyCampaignInfoOverlay');
- if(!overlay){
-  overlay=document.createElement('div');
-  overlay.id='tffcMyCampaignInfoOverlay';
-  overlay.className='tin-foil-confirm-overlay';
-  overlay.hidden=true;
-  overlay.innerHTML='<div class="tin-foil-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcMyCampaignInfoTitle" aria-describedby="tffcMyCampaignInfoMessage"><div id="tffcMyCampaignInfoTitle" class="tin-foil-confirm-title">My Campaign</div><div id="tffcMyCampaignInfoMessage" class="tin-foil-confirm-message">Your Tin Foil FA Cup Campaign is saved on this device, in this browser.\n\nYour Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.\n\nYour progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there.</div><div class="tin-foil-privacy-actions"><button id="tffcMyCampaignInfoClose" type="button">Got it!</button></div></div>';
-  document.body.appendChild(overlay);
- }
- const close=document.getElementById('tffcMyCampaignInfoClose');
- const previous=document.activeElement;
- overlay.hidden=false;
- function finish(){
-  document.removeEventListener('keydown',onKey);
-  overlay.hidden=true;
-  close.onclick=null;overlay.onclick=null;
-  if(previous&&typeof previous.focus==='function')previous.focus();
- }
- function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
- close.onclick=finish;
- overlay.onclick=e=>{if(e.target===overlay)finish()};
- document.addEventListener('keydown',onKey);
- close.focus();
+ const saved=loadSavedJourney(),origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
+ return tffcCampaignIntroduction('campaign',origin);
 }
 function viewOriginalJourneys(){window.__showOriginalTinFoilJourneys=true;go(false,true)}
 function returnToMyJourney(){
@@ -2063,11 +2042,15 @@ async function tinFoilPaintChallengesPrep(){
 }
 if(window&&typeof window.addEventListener==='function'){
  window.addEventListener('pagehide',tinFoilRemoveChallengesPrep);
- window.addEventListener('pageshow',tinFoilRemoveChallengesPrep);
+ window.addEventListener('pageshow',()=>{
+  tinFoilRemoveChallengesPrep();
+  let returning=false;
+  try{returning=sessionStorage.getItem('tffc.challengeOrigin')==='clubfinder-beta';if(returning)sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
+  if(returning){requestAnimationFrame(()=>requestAnimationFrame(()=>tffcScrollToFinder()));}
+ });
 }
 
-async function openChallenges(origin){
- await tinFoilPaintChallengesPrep();
+async function tinFoilPrepareChallenges(origin){
  const journey=buildJourney(origin),crumbs=journey.breadcrumbs||[],saved=loadSavedJourney();
  let away=0,pathCarrier=origin.name;
  for(const cr of crumbs){const r=cr.result||{};if(norm(r.away||'')===norm(pathCarrier))away++;const hs=Number(r.home_score),as=Number(r.away_score);if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)pathCarrier=hs>as?r.home:r.away;}
@@ -2077,7 +2060,13 @@ async function openChallenges(origin){
  const texts=[journey.round,journey.nextRound,journey.fixture&&journey.fixture.round,journey.next&&journey.next.round];texts.forEach(x=>ri=Math.max(ri,tinFoilChallengeRoundIndex(x)));
  const verifiedMiles=Number.isFinite(pm.miles)?pm.miles:0;
  const statsSnapshot=tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,verifiedMiles);
- const truth=tinFoilBuildChallengeBridgeRecord(origin,journey,crumbs,saved,{awayTies:away,pigeonMiles:verifiedMiles,campaignRound:ri},statsSnapshot,new Date().toISOString());
+ return tinFoilBuildChallengeBridgeRecord(origin,journey,crumbs,saved,{awayTies:away,pigeonMiles:verifiedMiles,campaignRound:ri},statsSnapshot,new Date().toISOString());
+}
+async function openChallenges(origin,prepared=null){
+ await tinFoilPaintChallengesPrep();
+ let truth;
+ try{truth=await (prepared||tinFoilPrepareChallenges(origin));}
+ catch(_){tinFoilRemoveChallengesPrep();await tinFoilConfirm('We couldn’t prepare your Challenges. Please try again.');return;}
  localStorage.setItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY,JSON.stringify(truth));
  /* Preserve the fully rendered BETA Campaign before leaving Clubfinder.
     Challenge Stats may replace the current document, but Exit can restore this
@@ -2092,7 +2081,7 @@ async function openChallenges(origin){
  window.location.href='challenges-beta.html';
 }
 
-async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder"){
+async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder", prepared=null){
   // Open an immediate same-origin preparation page while still in the click.
   // This removes the blank-tab delay on cold/private browser sessions. The URL
   // is then labelled as stats-beta.html so refresh still uses the canonical route.
@@ -2104,7 +2093,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
       w.document.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tin Foil FA Cup Stats</title><style>:root{--deep:#084c61;--paper:#f4efe3}*{box-sizing:border-box}html,body{min-height:100%;min-height:100vh}body{margin:0;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed;}@supports(height:100dvh){html,body{min-height:100dvh}}body{background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed;color:var(--deep);font-family:Arial,sans-serif}.prep-card{width:min(420px,calc(100vw - 40px));padding:28px 24px 26px;border:1px solid #d7d2c8;border-radius:10px;background:#fafafa;box-shadow:0 12px 28px rgba(0,0,0,.12);text-align:center}.prep-kicker{margin:0 0 12px;font:800 11px/1 Arial,sans-serif;letter-spacing:.14em;color:#6b6257}.prep-title{margin:0;font:800 19px/1.15 Arial,sans-serif;letter-spacing:.02em;color:var(--deep)}.prep-copy{margin:12px auto 18px;max-width:300px;font:600 13px/1.4 Arial,sans-serif;color:#4a4742}.prep-rollers{display:flex;justify-content:center;gap:6px}.prep-rollers span{width:34px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:#111;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 18%,transparent 80%,rgba(0,0,0,.11)),var(--paper);box-shadow:inset 0 0 6px rgba(71,52,25,.22);font:900 24px/1 Georgia,"Times New Roman",serif}@media (prefers-reduced-motion:reduce){.prep-rollers span{animation:none}}</style></head><body><main class="prep-card" aria-live="polite" aria-busy="true"><div class="prep-kicker">TIN FOIL FA CUP</div><h1 class="prep-title">Preparing Your Stats…</h1><p class="prep-copy">Checking your Campaign and calculating Pigeon Miles</p><div class="prep-rollers" aria-hidden="true"><span>3</span><span>7</span><span>1</span></div></main><script>(()=>{const r=[...document.querySelectorAll(".prep-rollers span")];if(!r.length||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches))return;let t=0;setInterval(()=>{t=(t+1)%10;r.forEach((x,i)=>x.textContent=String((t+i*3)%10))},180)})()<\/script></body></html>');
       w.document.close();
       try{
-        const seen=new Set(),src=journeyCertificate.toString(),rx=/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g;
+        const seen=new Set(),src=tinFoilPrepareStatsDocument.toString(),rx=/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g;
         for(const asset of (src.match(rx)||[])){
           if(seen.has(asset))continue;
           seen.add(asset);
@@ -2120,9 +2109,16 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
         raf(()=>raf(resolve));
       });
     }catch(_){}
-    return journeyCertificate(origin,w,returnMode);
+    return journeyCertificate(origin,w,returnMode,prepared);
   }
   const w=suppliedWindow;
+  let doc;
+  try{doc=await (prepared||tinFoilPrepareStatsDocument(origin,returnMode));}
+  catch(_){if(w&&!w.closed)w.document.body.textContent='We couldn’t prepare your Stats. Close this tab and try My Stats again.';return;}
+  if(!w||w.closed)return;
+  w.document.open();w.document.write(doc);w.document.close();
+}
+async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
   const journey=buildJourney(origin);
   const carrier=journey.carrier||origin;
   const crumbs=journey.breadcrumbs||[];
@@ -2331,8 +2327,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   '<div class="print"><button onclick="window.print()">Print / Save as PDF</button></div>'+
   '</main><scr'+'ipt>(function(){var tab=document.querySelector(".stats-return");if(!tab||!window.matchMedia||!window.matchMedia("(hover:none) and (pointer:coarse)").matches)return;var vv=window.visualViewport;function sync(){var z=vv&&vv.scale||1;var dx=vv?(window.innerWidth-vv.offsetLeft-vv.width):0;var dy=vv?(window.innerHeight-vv.offsetTop-vv.height):0;tab.style.right=dx+"px";tab.style.bottom=dy+"px";tab.style.transform="scale("+(1/z)+")";}sync();if(vv){vv.addEventListener("resize",sync);vv.addEventListener("scroll",sync);}window.addEventListener("resize",sync);window.addEventListener("orientationchange",sync);})();</scr'+'ipt></body></html>';
 
-  if(w){
-    try{
+  try{
       const assets=[...new Set([...doc.matchAll(/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g)].map(m=>m[0]))];
       await Promise.all(assets.map(asset=>new Promise(resolve=>{
         const img=new Image();
@@ -2344,10 +2339,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
         if(img.complete)img.onload();
       })));
     }catch(_){}
-    w.document.open();
-    w.document.write(doc);
-    w.document.close();
-  }
+  return doc;
 }
 
 async function tinFoilRenderStatsFromOpener(target){
@@ -2396,8 +2388,8 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
    if(selected&&!showOriginal){
      // Clear primary navigation versus secondary Campaign housekeeping.
      // My Campaign returns to the field without another postcode search.
-     const statsButton='<button class="round stats-action" type="button" onclick=\'journeyCertificate(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Stats</button>';
-     const challengesButton='<button class="round challenges-launch" type="button" onclick=\'openChallenges(ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Challenges</button>';
+     const statsButton='<button class="round stats-action" type="button" onclick=\'tffcCampaignIntroduction(&quot;stats&quot;,ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Stats</button>';
+     const challengesButton='<button class="round challenges-launch" type="button" onclick=\'tffcCampaignIntroduction(&quot;challenges&quot;,ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Challenges</button>';
      const campaignHousekeeping=saved&&saved.ended
        ?'<button class="round" type="button" onclick="resumeMyJourney()">Resume My Campaign</button>'
        :'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button>';
@@ -2704,4 +2696,4 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   observer.observe(document.documentElement,{childList:true,subtree:true});
  }
 })();
-</script><script src="keep-magic-return.js"></script></body></html>
+</script><script src="campaign-introductions.js"></script><script src="keep-magic-return.js"></script></body></html>
