@@ -224,6 +224,8 @@
  gap:6px;
 }
 .campaign-secondary-nav button.round{margin:0}
+.campaign-secondary-nav .campaign-share{background:#e4bb26!important;color:#111!important}
+.campaign-secondary-nav .campaign-share:hover{filter:brightness(.92)}
 .my-journey-bar .campaign-primary-nav button.round:focus-visible,
 .journey-choice .journey-lozenge:focus-visible{
  outline:2px solid #084c61;
@@ -2401,6 +2403,7 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
        +campaignHousekeeping
        +'<button class="round" type="button" onclick="resetFinder()">Reset</button>'
        +'<button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>'
+       +'<button class="round campaign-share" type="button" onclick="tffcOpenShare()">Share the Magic</button>'
        +'</div></div>';
    }
    else if(selected&&showOriginal)tools='<div class="my-journey-bar"><button class="round" type="button" onclick="returnToMyJourney()">Return to My Campaign</button><button class="round" type="button" onclick="resetFinder()">Reset</button><button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button></div>';

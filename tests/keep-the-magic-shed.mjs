@@ -164,9 +164,67 @@ try{
   assert.equal(await app.evaluate(()=>localStorage.getItem('tffc-test-campaign')),'preserve-me');
  }
  assert.equal(counterCalls,0,'restoring an existing identity must never issue a fresh counter');
+ // Campaign entry uses the existing overlay and restores the exact reading
+ // position/identity, with a smaller yellow fifth secondary control.
+ for(const [width,height] of [[390,669],[390,560],[1680,889]]){
+  await app.setViewportSize({width,height});
+  const button=app.getByRole('button',{name:'Share the Magic',exact:true});
+  assert.equal(await app.locator('.campaign-secondary-nav button').count(),5);
+  assert.equal(await app.locator('.campaign-primary-nav button').count(),3);
+  await button.scrollIntoViewIfNeeded();
+  const geometry=await button.evaluate(e=>{
+   const r=e.getBoundingClientRect(),p=document.querySelector('.campaign-primary-nav button').getBoundingClientRect();
+   return {x:r.x,right:r.right,height:r.height,primaryHeight:p.height,bg:getComputedStyle(e).backgroundColor,color:getComputedStyle(e).color};
+  });
+  assert(geometry.height<geometry.primaryHeight,'Share retains secondary prominence');
+  assert(geometry.x>=0&&geometry.right<=width,'Share button stays inside the viewport');
+  assert.equal(geometry.bg,'rgb(228, 187, 38)');assert.equal(geometry.color,'rgb(17, 17, 17)');
+  const scroll=await app.evaluate(()=>scrollY);
+  const identity=await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
+  await app.screenshot({path:`/tmp/tffc-campaign-share-magic-${width}x${height}.png`});
+  await button.click();
+  const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+  await share.locator('#copy').waitFor();
+  assert.equal(await share.locator('#shareHeading').innerText(),'Share the Magic');
+  await app.evaluate(()=>tffcCloseShare());
+  assert(Math.abs(await app.evaluate(()=>scrollY)-scroll)<2,'close restores Campaign reading position');
+  assert(await button.evaluate(e=>e===document.activeElement),'close restores the Share button focus');
+  assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
+ }
  assert.deepEqual(appErrors,[]);
  await app.screenshot({path:'/tmp/tffc-campaign-magic-phone.png'});
  await reopened.close();
+ // Stall the destination and block external launch JS. The head handoff must
+ // already hide all launcher furniture before the destination is released.
+ const launchContext=await browser.newContext({viewport:{width:390,height:669}});
+ let recordLaunch;
+ const launchRecorded=new Promise(resolve=>{recordLaunch=resolve});
+ await launchContext.exposeBinding('recordInstalledLaunch',(_,value)=>recordLaunch(value));
+ await launchContext.addInitScript(()=>{
+  Object.defineProperty(navigator,'standalone',{value:true});
+  const observer=new MutationObserver(()=>{
+   if(!document.documentElement?.classList.contains('tffc-installed-launch'))return;
+   // Record in the old document's own execution context: automation cannot
+   // evaluate that context while its replacement navigation is pending.
+   const hiddenRule=[...document.querySelectorAll('style')].some(s=>s.textContent.includes('html.tffc-installed-launch body{visibility:hidden}'));
+   window.recordInstalledLaunch({hiddenRule,bodyHidden:!document.body||getComputedStyle(document.body).visibility==='hidden'});
+   observer.disconnect();
+  });
+  observer.observe(document,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+ });
+ const launchPage=await launchContext.newPage();
+ let releaseSplash;
+ const splashGate=new Promise(resolve=>{releaseSplash=resolve});
+ await launchPage.route(base+'/beta/',async route=>{await splashGate;await route.continue()});
+ await launchPage.route('**/keep-the-magic-shed.js',route=>route.abort());
+ const destinationRequested=launchPage.waitForRequest(base+'/beta/');
+ await launchPage.goto(base+'/beta/keep-the-magic-shed.html',{waitUntil:'commit'});
+ await destinationRequested;
+ const hiddenState=await Promise.race([launchRecorded,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Installed launch was not recorded before navigation')),10000))]);
+ assert(hiddenState.hiddenRule&&hiddenState.bodyHidden,'launcher cannot paint while the destination waits');
+ releaseSplash();await launchPage.waitForURL(base+'/beta/');
+ await launchPage.locator('.splash-start').waitFor();
+ await launchContext.close();
  console.log('KEEP THE MAGIC SHED: PASS — preview geometry and guidance; installed entry into real BETA; saved Campaign/Pigeon survives repeat entry and browser-context restoration without a new counter. Physical installation/storage boundaries remain unverified.');
 
 }finally{await browser.close()}
