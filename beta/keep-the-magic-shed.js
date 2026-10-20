@@ -3,7 +3,7 @@
 const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 if(document.documentElement.classList.contains('tffc-installed-launch'))return;
 // Retain the existing installed icon identity and launch URL. Only an installed
-// launch enters the established BETA journey; browser visits keep the preview.
+// launch enters the established BETA journey; browser visits open Share/Keep.
 if(standalone()&&!new URLSearchParams(location.search).has('instructions')){
  location.replace(new URL('./',location.href).href);
  return;
@@ -19,7 +19,7 @@ const returnToShare=()=>{if(returnTo){location.replace(returnTo);return true}ret
 const dialog=document.getElementById('magic');
 const heading=document.getElementById('heading');
 const shareView=document.getElementById('share-view'),keepView=document.getElementById('keep-view');
-const keepButton=document.getElementById('keep'),openButton=document.getElementById('open');
+const keepButton=document.getElementById('keep');
 const platform=document.getElementById('platform'),steps=document.getElementById('steps');
 const install=document.getElementById('install'),installStatus=document.getElementById('install-status');
 let pendingInstall=null;
@@ -32,10 +32,13 @@ function renderInstructions(){document.getElementById('platform-note').hidden=pl
 function updateInstall(){const isInstalled=standalone();install.hidden=isInstalled||!pendingInstall;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;installStatus.textContent=isInstalled?'You’re already opening Tin Foil FA Cup as an app.':'';installStatus.classList.toggle('installed',isInstalled);}
 function showShare(){dialog.style.removeProperty('--phone-share-crest-size');dialog.classList.remove('keeping');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
 function showKeep(){if(!dialog.classList.contains('keeping')&&matchMedia('(max-width:600px) and (min-height:500px)').matches)dialog.style.setProperty('--phone-share-crest-size',document.querySelector('.brand').getBoundingClientRect().width+'px');dialog.classList.add('keeping');heading.textContent='Keep the Magic';shareView.hidden=true;keepView.hidden=false;renderInstructions();updateInstall();dialog.scrollTop=0;(standalone()?heading:document.getElementById(install.hidden?'platform':'install')).focus();}
-openButton.onclick=()=>{showShare();dialog.showModal()};
-document.getElementById('close').onclick=()=>{if(!returnToShare())dialog.close()};
+document.getElementById('close').onclick=()=>dialog.close();
 dialog.addEventListener('click',e=>{const box=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom))dialog.close()});
-dialog.addEventListener('close',()=>openButton.focus());
+dialog.addEventListener('close',()=>{
+ const destination=new URL(returnTo||'./',location.href);
+ if(returnTo){destination.searchParams.delete('magicShare');destination.searchParams.set('magicReturn','1')}
+ location.replace(destination.href);
+});
 keepButton.onclick=showKeep;document.getElementById('back').onclick=()=>{if(!returnToShare()){showShare();keepButton.focus()}};
 platform.value=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'apple':/Android/.test(navigator.userAgent)?'android':'computer';
 platform.onchange=renderInstructions;

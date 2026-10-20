@@ -6,6 +6,12 @@ try{
    returnTo.searchParams.set('magicShare','1');
    const link=document.querySelector('.keep-magic');
    const destination=new URL(link.href);destination.searchParams.set('return',returnTo.pathname+returnTo.search+returnTo.hash);link.href=destination.href;
+   link.addEventListener('click',()=>{
+    try{
+     const hasSnapshot=typeof parent.tinFoilSaveClubfinderReturnSnapshot==='function'&&parent.tinFoilSaveClubfinderReturnSnapshot();
+     parent.sessionStorage.setItem('tffc.shareReturnView.v1',JSON.stringify({path:parent.location.pathname,scrollY:parent.scrollY,showOriginal:!!parent.__showOriginalTinFoilJourneys,searchNumber:typeof parent.tinFoilCurrentSearchNumber==='function'?parent.tinFoilCurrentSearchNumber():null,hasSnapshot:!!hasSnapshot,savedCampaign:parent.localStorage.getItem('tinFoilFACupJourney_v7')}));
+    }catch(_){}
+   });
   }
  }
 }catch(_){}
