@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **20/10/2026, 18:05:30 BST**
+Last checked: **20/10/2026, 21:35:45 BST**
 
 ## Chronology coverage
 
@@ -14,9 +14,9 @@ Last checked: **20/10/2026, 18:05:30 BST**
 ## Fixture health
 
 - 🟢 Played fixtures with results: **137**
-- 🟡 Recently played / grace period: **0**
+- 🟡 Recently played / grace period: **11**
 - 🔴 Results requiring confirmation: **0**
-- ⚪ Upcoming / incomplete-date fixtures: **51**
+- ⚪ Upcoming / incomplete-date fixtures: **40**
 
 ## 🟢 Competition chronology healthy
 
