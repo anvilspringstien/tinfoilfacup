@@ -244,7 +244,7 @@ const assertions=`
      !primaryNav.includes('onclick="tffcMyCampaignInfo()"')||
      !html.includes('function tffcMyCampaignInfo()')||
      !html.includes('tffcScrollToFinder();')||
-     !introSource.includes('Your Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.')||
+     !introSource.includes('This is your Tin Foil FA Cup Campaign. There are many like this, but this one is yours.')||
      !primaryNav.includes('tffcCampaignIntroduction(&quot;stats&quot;,' )||
      !primaryNav.includes('tffcCampaignIntroduction(&quot;challenges&quot;,' )||
      (primaryNav.match(/<button /g)||[]).length!==3||

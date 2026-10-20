@@ -29,7 +29,16 @@ try{
    if(first)assert.deepEqual(geometry,first,'all three popups/buttons have equal dimensions');else first=geometry;
    assert(rect.x>=0&&rect.y>=0&&rect.x+rect.width<=width+1&&rect.y+rect.height<=height+1);
    assert(await intro.evaluate(e=>e.scrollHeight<=e.clientHeight+1),'popup frame fits viewport');
-   assert(await intro.locator('#tffc-intro-message').evaluate(e=>e.scrollHeight<=e.clientHeight+1),'the explanation fits without scrolling');
+   const message=intro.locator('#tffc-intro-message');
+   if(name==='My Campaign'){
+    assert.match(await message.innerText(),/There are many like this, but this one is yours/);
+    assert.match(await message.innerText(),/Coming Soon!/);
+    await message.evaluate(e=>e.scrollTop=e.scrollHeight);
+    assert(await message.evaluate(e=>e.scrollTop+e.clientHeight>=e.scrollHeight-1),'all longer Campaign copy can be reached');
+    assert.deepEqual(await intro.getByRole('button',{name:'Got It!',exact:true}).boundingBox(),button,'reading longer copy does not move confirmation controls');
+    await page.screenshot({path:`/tmp/tffc-campaign-intro-campaign-end-${width}x${height}.png`});
+    await message.evaluate(e=>e.scrollTop=0);
+   }else assert(await message.evaluate(e=>e.scrollHeight<=e.clientHeight+1),'the existing Stats/Challenges explanation fits without scrolling');
    await page.screenshot({path:`/tmp/tffc-campaign-intro-${name.replace('My ','').toLowerCase()}-${width}x${height}.png`});
    await intro.getByRole('checkbox').check();await intro.getByRole('button',{name:'Close',exact:true}).click();
    assert.equal(page.url(),base+'/beta/clubfinder-journey.html');
