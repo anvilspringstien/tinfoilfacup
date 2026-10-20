@@ -28,7 +28,8 @@ const referenceSplash=read('beta/two-rooms-splash-iframe-proof.html');
 const permanentSplash=read('beta/index.html');
 assert.equal(permanentSplash,referenceSplash
  .replace('<title>Two rooms — Approved Master Splash</title>','<title>Tin Foil FA Cup — BETA</title>')
- .replace('href="two-rooms-iframe-engine-proof.html"','href="clubfinder-journey.html"'),
+ .replace('href="two-rooms-iframe-engine-proof.html"','href="clubfinder-journey.html"')
+ .replace('</head>','<script defer src="splash-campaign-label.js"></script></head>'),
  'BETA entrance must remain exactly the accepted Splash');
 const referenceEngine=read('beta/two-rooms-iframe-engine-proof.html');
 const permanentEngine=read('beta/clubfinder-journey.html');
@@ -60,6 +61,7 @@ assert.equal(afterHead(homepage)
  afterHead(permanentSplash),
  'Public Splash body must match the approved BETA Splash (except paths)');
 for(const fragment of [
+ '<script defer src="beta/splash-campaign-label.js"></script>',
  'href="beta/clubfinder-journey.html"',
  'src="beta/tffc-splash-logo-q80.webp"',
  'href="beta/two-rooms-splash-locked.css"',
