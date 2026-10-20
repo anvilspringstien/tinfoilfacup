@@ -260,7 +260,7 @@ const assertions=`
   if(getCounterIncrementCalls()!==1)
     throw new Error('BETA UX: navigation render caused a new counter request');
   console.log('BETA 44px CAMPAIGN CHOICE + THREE-TIER NAVIGATION: PASS');
-  if(!rendered.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: Pigeon Call Sign did not render');
+  if(!rendered.replace(/<[^>]*>/g,'').includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: Pigeon Call Sign did not render');
   if(!rendered.includes('placeholder="Name your pigeon"'))throw new Error('BETA identity regression: inline pigeon-name field did not render');
   if(/Save(?: My)? Pigeon/i.test(rendered))throw new Error('BETA identity regression: pigeon naming unexpectedly requires a Save control');
 
@@ -301,7 +301,7 @@ const assertions=`
   if(tinFoilCurrentSearchNumber()!==9842)throw new Error('BETA identity regression: refresh did not restore #09842');
   if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('BETA identity regression: refresh did not restore saved postcode');
   const refreshed=String(document.getElementById('results').innerHTML||'');
-  if(!refreshed.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: refresh did not redraw Pigeon Call Sign');
+  if(!refreshed.replace(/<[^>]*>/g,'').includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: refresh did not redraw Pigeon Call Sign');
   if(!refreshed.includes('value="Pigeon McPigeonface"'))throw new Error('BETA identity regression: refresh did not preserve full pigeon name');
   if(loadSavedJourney().pigeonName!=='Pigeon McPigeonface')throw new Error('BETA identity regression: long pigeon name changed across refresh');
   if(!refreshed.includes('Amersham Town'))throw new Error('BETA identity regression: refresh returned a blank Clubfinder');

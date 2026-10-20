@@ -12,16 +12,16 @@
 .history-origin{font-weight:600;margin-bottom:6px}
 .history-item{padding:5px 0;border-top:1px solid #ddd}
 .history-item:first-of-type{border-top:0}
-.carrier{margin-top:8px;font-size:12px;font-weight:600;color:#084C61}
-.custodian-name{font-size:22px;font-weight:600;line-height:1.2;margin-top:3px;color:#111}
+.carrier{margin-top:8px}
+.carrier,.campaign-origin-title{font-size:12px;font-weight:600;line-height:1.5;color:#084C61}
+.custodian-name,.campaign-origin-name{font-size:22px;font-weight:600;line-height:1.2;margin-top:3px;color:#111}
 .chosen-campaign-current{margin:4px 0 12px}
 .chosen-campaign-current .carrier{margin-top:0}
 .chosen-campaign-current .fixture{margin-bottom:10px}
 .chosen-campaign-current .meta{font-size:13px;margin-bottom:10px}
 .campaign-origin{margin:0 0 10px;padding:8px 0;font-size:12px;line-height:1.45;color:#555}
-.campaign-origin-title{font-weight:700;color:#084c61;margin-bottom:3px}
-.campaign-origin-name{font-size:14px;font-weight:600;color:#111}
-.campaign-origin .meta{font-size:12px;margin:2px 0 0}
+.campaign-origin-title{margin-bottom:0}
+.campaign-origin .meta{font-size:13px;margin:2px 0 0}
 
 .journey-choice{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px}
 .journey-choice .round{margin:0}.journey-select,.journey-tool{appearance:none;border:1px solid #084c61;background:#fff;color:#084c61;border-radius:5px;padding:5px 8px;font:inherit;font-size:11px;font-weight:600;cursor:pointer;text-decoration:none}
@@ -90,6 +90,10 @@
  font-weight:400;
  line-height:1.5;
  overflow-wrap:anywhere;
+}
+@media(max-width:600px){
+ .campaign-identity .campaign-call-sign-label{display:block}
+ .campaign-identity .campaign-call-sign-value{display:block;white-space:nowrap;overflow-wrap:normal;font-size:clamp(10px,3.1vw,12px)}
 }
 .campaign-identity .campaign-pigeon-name{
  display:flex;
@@ -1578,7 +1582,7 @@ function tinFoilPigeonNameInputHtml(saved){
 function tinFoilCampaignIdentityInnerHtml(saved){
   const callSign=tinFoilSavedCallSign(saved);
   if(!callSign)return '';
-  return '<span class="campaign-call-sign">Pigeon Call Sign: '+esc(callSign)+'</span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';
+  return '<span class="campaign-call-sign"><span class="campaign-call-sign-label">Pigeon Call Sign:</span> <span class="campaign-call-sign-value">'+esc(callSign)+'</span></span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';
 }
 function tinFoilSavePigeonName(value){
   const saved=loadSavedJourney();
@@ -2413,7 +2417,7 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
    const currentWebsite=(c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'')?(' • <a href="'+esc(c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'')+'" target="_blank" rel="noopener noreferrer">Website</a>'):'';
    const currentGround=esc(cg.ground||'Ground location unavailable')+' • '+esc(cg.postcode||'Postcode unavailable')+currentWebsite;
    const currentCampaign=chosen?'<div class="chosen-campaign-current"><div class="carrier">The current custodian of your Tin Foil FA Cup is:<div class="custodian-name">'+esc(c.name)+'</div></div><div class="meta">'+currentGround+'</div><div class="meta" style="color:'+currentLc+';font-weight:600">'+currentLoc+'</div><div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c)+'</div>':'';
-   const campaignOrigin=chosen?'<div class="campaign-origin"><div class="campaign-origin-title">Campaign Origin</div><div class="campaign-origin-name">'+esc(origin.name)+'</div><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div></div>':'';
+   const campaignOrigin=chosen?'<div class="campaign-origin"><div class="campaign-origin-title">Your Tin Foil FA Cup Campaign started with:</div><div class="campaign-origin-name">'+esc(origin.name)+'</div><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div></div>':'';
    const standardCampaign=!chosen?'<h2>'+(oi===0&&origin.hasCoords?'Nearest: ':'')+esc(origin.name)+'</h2><div class="meta">'+ground+'</div><div class="meta" style="color:'+lc+';font-weight:600">'+loc+'</div>'+carrierHtml(j)+'<div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c):'';
    return `<div class="result">${heading}${tools}${mine?tinFoilCampaignIdentityHtml(saved):''}${currentCampaign}${standardCampaign}${campaignOrigin}${previousRoundsHtml(j,chosen)}${ended}<div class="actions">${journeyMapAction(j,u.postcode)}${stateActions(c)}</div></div>`;
   }).join('')+(shown.length?'<div class="tffc-support-footer">'+tinFoilSupportLinksHtml()+'</div>':'');

@@ -15,6 +15,30 @@ try{
  await page.goto(base+'/beta/keep-the-magic-shed.html');
  await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
  await page.goto(base+'/beta/clubfinder-journey.html');await page.locator('.pigeon-name-input').waitFor({timeout:30000});await page.evaluate(()=>document.fonts.ready);
+ // Keep the complete call sign together and give both clubs equal prominence.
+ for(const [width,height] of [[320,669],[390,669],[768,1024],[1680,889]]){
+  await page.setViewportSize({width,height});
+  const value=page.locator('.campaign-identity .campaign-call-sign-value');
+  assert.equal(await value.innerText(),saved.callSign,'full original call sign including number is preserved');
+  if(width<=600){
+   const geometry=await value.evaluate(e=>{const r=e.getBoundingClientRect(),label=document.querySelector('.campaign-call-sign-label').getBoundingClientRect(),parent=e.parentElement.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e);const lines=[...range.getClientRects()];return {top:r.top,labelBottom:label.bottom,right:lines[0].right,parentRight:parent.right,lines:lines.length}});
+   assert(geometry.top>=geometry.labelBottom-1,'Call Sign label has its own line');
+   assert.equal(geometry.lines,1,'complete call sign and number stay together');
+   assert(geometry.right<=geometry.parentRight+1,'complete call sign fits inside the phone identity panel');
+  }
+  const styles=await page.evaluate(()=>{
+   const pick=selector=>{const s=getComputedStyle(document.querySelector(selector));return [s.fontSize,s.fontFamily,s.fontWeight,s.lineHeight,s.letterSpacing,s.color]};
+   return {custodian:pick('.chosen-campaign-current .custodian-name'),origin:pick('.campaign-origin-name'),custodianLabel:pick('.chosen-campaign-current .carrier'),originLabel:pick('.campaign-origin-title')};
+  });
+  assert.deepEqual(styles.origin,styles.custodian,'origin and custodian club names have equal prominence');
+  assert.deepEqual(styles.originLabel,styles.custodianLabel,'origin and custodian introductions use the same type');
+  assert.equal(await page.locator('.campaign-origin-title').innerText(),'Your Tin Foil FA Cup Campaign started with:');
+  await page.locator('.campaign-identity').scrollIntoViewIfNeeded();
+  await page.screenshot({path:`/tmp/tffc-campaign-identity-${width}x${height}.png`});
+  await page.locator('.campaign-origin').scrollIntoViewIfNeeded();
+  await page.screenshot({path:`/tmp/tffc-campaign-origin-${width}x${height}.png`});
+ }
+ await page.setViewportSize({width:390,height:669});
  const original=await page.evaluate(()=>JSON.stringify({...localStorage}));
  for(const [width,height] of [[390,669],[390,560],[1680,889]]){
   await page.setViewportSize({width,height});let first;

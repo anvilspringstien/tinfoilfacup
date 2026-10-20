@@ -17,6 +17,7 @@ MOBILE_CSS = """
 
 OLD_JS = "return 'Pigeon Call Sign: '+esc(callSign)+' · Pigeon Name: '+tinFoilPigeonNameInputHtml(saved);"
 NEW_JS = """return '<span class="campaign-call-sign">Pigeon Call Sign: '+esc(callSign)+'</span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';"""
+RESPONSIVE_JS = """return '<span class="campaign-call-sign"><span class="campaign-call-sign-label">Pigeon Call Sign:</span> <span class="campaign-call-sign-value">'+esc(callSign)+'</span></span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';"""
 
 REPLACEMENTS = [
     (
@@ -36,9 +37,13 @@ REPLACEMENTS = [
 def patch(text):
     count = 0
     for before, after, label in REPLACEMENTS:
-        if text.count(after) == 1 and text.count(before) == 0:
+        # The responsive call-sign spans preserve the already-patched identity rows.
+        applied_count = text.count(after)
+        if after == NEW_JS:
+            applied_count += text.count(RESPONSIVE_JS)
+        if applied_count == 1 and text.count(before) == 0:
             continue  # Already patched; safe to run again.
-        if text.count(before) != 1 or text.count(after) != 0:
+        if text.count(before) != 1 or applied_count != 0:
             raise SystemExit(f"ABORT: {label} drifted or patch only partially applied")
         text = text.replace(before, after, 1)
         count += 1
