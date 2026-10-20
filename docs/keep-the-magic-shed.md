@@ -45,6 +45,7 @@ backup/restore page rather than dropping Challenge history to fit.
   mileage through the real application, repeat launch and zero new counters.
 
 The GitHub preview workflow runs these checks and captures phone/desktop images.
+It also runs the isolated cookies-only handover in WebKit, in addition to Chromium.
 Browser contexts model the documented storage boundary; they do not automate
 Apple's installation sheet or prove physical OS cookie copying.
 

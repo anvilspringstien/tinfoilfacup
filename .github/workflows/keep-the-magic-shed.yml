@@ -13,6 +13,7 @@ on:
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
       - 'tests/keep-magic-install-regression.js'
+      - 'tests/keep-magic-install-browser.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
   push:
     branches-ignore: [main]
@@ -27,6 +28,7 @@ on:
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
       - 'tests/keep-magic-install-regression.js'
+      - 'tests/keep-magic-install-browser.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
 permissions:
   contents: read
@@ -56,3 +58,19 @@ jobs:
         with:
           name: keep-the-magic-preview
           path: /tmp/tffc-*-magic-*.png
+
+  handover-webkit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps webkit
+      - name: Regress empty installed storage in WebKit
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/keep-webkit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          node tests/keep-magic-install-browser.mjs
