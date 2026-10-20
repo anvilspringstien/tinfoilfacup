@@ -4,6 +4,7 @@ const vm=require('vm');
 const path=require('path');
 
 const ROOT=path.resolve(__dirname,'..');
+const introSource=fs.readFileSync(path.join(ROOT,'beta/campaign-introductions.js'),'utf8');
 const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
 const reportImages=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.](?:png|webp)/g)].map(m=>m[0]);
 if(reportImages.length!==7||new Set(reportImages).size!==7)throw new Error('BETA Stats: report assets missing from renderer');
@@ -113,7 +114,7 @@ const locationStub={
   setHref(url){this.href=String(url);locationHistory.push(this.href);}
 };
 const sandbox={
-  console,process,html,document:documentStub,MutationObserver:undefined,
+  console,process,html,introSource,document:documentStub,MutationObserver:undefined,
   localStorage:{
     getItem:k=>localStore[k]??null,
     setItem:(k,v)=>{localStore[k]=String(v)},
@@ -184,9 +185,11 @@ const assertions=`
   }
   const snapshotSource=String(tinFoilChallengeStatsSnapshot);
   if(!snapshotSource.includes('const v=completedResultVenue(r);'))throw new Error('BETA parity regression: Challenge Stats venue resolver bypasses completedResultVenue');
-  const challengeSource=String(openChallenges);
+  const challengeSource=String(tinFoilPrepareChallenges);
+  if(!String(openChallenges).includes("prepared||tinFoilPrepareChallenges(origin)"))throw new Error("Challenges must use the canonical preparation helper");
   if(!challengeSource.includes('function venueForChallenge(r){return completedResultVenue(r);}'))throw new Error('BETA parity regression: Challenges Pigeon Miles resolver bypasses completedResultVenue');
-  const certSource=String(journeyCertificate).replace(/\\s+/g,' ');
+  if(!String(journeyCertificate).includes('prepared||tinFoilPrepareStatsDocument(origin,returnMode)'))throw new Error('Stats must use the canonical preparation helper');
+  const certSource=String(tinFoilPrepareStatsDocument).replace(/\\s+/g,' ');
   if(!certSource.includes('function venueForResult(r){ const v=completedResultVenue(r);'))throw new Error('BETA parity regression: Stats venue resolver bypasses completedResultVenue');
   if(!certSource.includes('const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);'))throw new Error('BETA parity regression: Stats does not recalculate canonical Pigeon Miles');
   if(certSource.includes('bridgeMatches')||certSource.includes('cachedMiles'))throw new Error('BETA parity regression: stale Challenges mileage cache can still override Stats');
@@ -241,9 +244,9 @@ const assertions=`
      !primaryNav.includes('onclick="tffcMyCampaignInfo()"')||
      !html.includes('function tffcMyCampaignInfo()')||
      !html.includes('tffcScrollToFinder();')||
-     !html.includes('Your Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.')||
-     !primaryNav.includes('journeyCertificate(')||
-     !primaryNav.includes('openChallenges(')||
+     !introSource.includes('Your Campaign choice, Pigeon Call Sign and Pigeon Name will be here when you return.')||
+     !primaryNav.includes('tffcCampaignIntroduction(&quot;stats&quot;,' )||
+     !primaryNav.includes('tffcCampaignIntroduction(&quot;challenges&quot;,' )||
      (primaryNav.match(/<button /g)||[]).length!==3||
      /Reset|End My Campaign|View Original Campaigns/.test(primaryNav))
     throw new Error('BETA UX: primary Campaign navigation or action wiring drifted');

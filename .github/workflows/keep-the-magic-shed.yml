@@ -8,12 +8,14 @@ on:
       - 'beta/share-destination.css'
       - 'beta/keep-magic-return.js'
       - 'beta/keep-magic-install.js'
+      - 'beta/campaign-introductions.js'
       - 'beta/keep-the-magic-data.js'
       - 'beta/clubfinder-beta.html'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
       - 'tests/keep-magic-install-regression.js'
       - 'tests/keep-magic-install-browser.mjs'
+      - 'tests/campaign-introductions-browser.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
   push:
     branches-ignore: [main]
@@ -23,12 +25,14 @@ on:
       - 'beta/share-destination.css'
       - 'beta/keep-magic-return.js'
       - 'beta/keep-magic-install.js'
+      - 'beta/campaign-introductions.js'
       - 'beta/keep-the-magic-data.js'
       - 'beta/clubfinder-beta.html'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
       - 'tests/keep-magic-install-regression.js'
       - 'tests/keep-magic-install-browser.mjs'
+      - 'tests/campaign-introductions-browser.mjs'
       - '.github/workflows/keep-the-magic-shed.yml'
 permissions:
   contents: read
@@ -46,18 +50,22 @@ jobs:
         run: |
           node tests/keep-the-magic-regression.js
           node tests/keep-magic-install-regression.js
+          node tests/test_beta_stats_artwork_preload.js
       - name: Serve isolated preview and run browser checks
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/keep-magic-server.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
           node tests/keep-the-magic-shed.mjs
+          node tests/campaign-introductions-browser.mjs
       - name: Retain preview screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: keep-the-magic-preview
-          path: /tmp/tffc-*-magic-*.png
+          path: |
+            /tmp/tffc-*-magic-*.png
+            /tmp/tffc-campaign-intro-*.png
 
   handover-webkit:
     runs-on: ubuntu-latest
@@ -74,3 +82,4 @@ jobs:
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
           node tests/keep-magic-install-browser.mjs
+          TFFC_BROWSER=webkit node tests/campaign-introductions-browser.mjs

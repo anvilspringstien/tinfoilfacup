@@ -10,7 +10,7 @@ export async function checkInstalledHandover(browser,base){
  await sourceContext.route('https://api.postcodes.io/**',postcodeRoute);
  const sourcePage=await sourceContext.newPage();
  await sourcePage.goto(base+'/beta/keep-the-magic-shed.html');
- const checky={originName:'Heaton Stannington FC',postcode:'NE6 5NL',ended:false,selectedAt:'2026-10-20T11:30:00.000Z',searchNumber:1755,callSign:'Tango Foxtrot 2 Alpha Charlie [01755]',pigeonName:'Checky'};
+ const checky={originName:'Heaton Stannington FC',postcode:'NE6 5NL',ended:false,selectedAt:'2026-10-20T11:30:00.000Z',searchNumber:1755,callSign:'Tango Foxtrot 2 Alpha Charlie [01755]',pigeonName:'Checky',introDismissed:{stats:true,challenges:true}};
  await sourcePage.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),checky);
  await sourcePage.goto(base+'/beta/clubfinder-journey.html');
  await sourcePage.locator('.pigeon-name-input').waitFor({timeout:30000});
