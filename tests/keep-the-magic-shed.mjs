@@ -197,7 +197,21 @@ try{
  // Stall the destination and block external launch JS. The head handoff must
  // already hide all launcher furniture before the destination is released.
  const launchContext=await browser.newContext({viewport:{width:390,height:669}});
- await launchContext.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
+ let recordLaunch;
+ const launchRecorded=new Promise(resolve=>{recordLaunch=resolve});
+ await launchContext.exposeBinding('recordInstalledLaunch',(_,value)=>recordLaunch(value));
+ await launchContext.addInitScript(()=>{
+  Object.defineProperty(navigator,'standalone',{value:true});
+  const observer=new MutationObserver(()=>{
+   if(!document.documentElement?.classList.contains('tffc-installed-launch'))return;
+   // Record in the old document's own execution context: automation cannot
+   // evaluate that context while its replacement navigation is pending.
+   const hiddenRule=[...document.querySelectorAll('style')].some(s=>s.textContent.includes('html.tffc-installed-launch body{visibility:hidden}'));
+   window.recordInstalledLaunch({hiddenRule,bodyHidden:!document.body||getComputedStyle(document.body).visibility==='hidden'});
+   observer.disconnect();
+  });
+  observer.observe(document,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+ });
  const launchPage=await launchContext.newPage();
  let releaseSplash;
  const splashGate=new Promise(resolve=>{releaseSplash=resolve});
@@ -206,8 +220,8 @@ try{
  const destinationRequested=launchPage.waitForRequest(base+'/beta/');
  await launchPage.goto(base+'/beta/keep-the-magic-shed.html',{waitUntil:'commit'});
  await destinationRequested;
- await launchPage.waitForFunction(()=>document.documentElement.classList.contains('tffc-installed-launch'));
- assert(await launchPage.locator('.launch').isHidden(),'launcher cannot paint while the destination waits');
+ const hiddenState=await Promise.race([launchRecorded,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Installed launch was not recorded before navigation')),10000))]);
+ assert(hiddenState.hiddenRule&&hiddenState.bodyHidden,'launcher cannot paint while the destination waits');
  releaseSplash();await launchPage.waitForURL(base+'/beta/');
  await launchPage.locator('.splash-start').waitFor();
  await launchContext.close();
