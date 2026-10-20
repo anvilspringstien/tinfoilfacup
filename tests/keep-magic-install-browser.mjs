@@ -39,6 +39,7 @@ export async function checkInstalledHandover(browser,base){
  assert.equal((await installed.cookies()).filter(c=>c.name.startsWith('tffc_keep_v1')).length,0,'handover cookies consumed');
  await installedPage.locator('.splash-start').click();
  await installedPage.locator('.pigeon-name-input').waitFor({timeout:30000});
+ await installedPage.waitForFunction(()=>Math.abs(document.getElementById('tffc-results-summary').getBoundingClientRect().top-14)<3,null,{timeout:10000});
  assert.equal(await installedPage.locator('.pigeon-name-input').inputValue(),'Checky');
  assert.equal(await installedPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).searchNumber),1755);
  assert.match(await installedPage.locator('#results').innerText(),/Heaton Stannington/);

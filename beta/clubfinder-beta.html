@@ -1819,7 +1819,9 @@ async function tinFoilRestoreSavedCampaignOnLoad(){
   // Browsers may restore or clear the form value on refresh. The saved Campaign
   // is authoritative here, so always repopulate it and redraw.
   input.value=String(saved.postcode).toUpperCase();
-  await go(false);
+  // A returning supporter should see their Campaign at the established return
+  // position, after the saved view has rendered, without starting a new search.
+  await go(false,true);
   return true;
 }
 /* TIN_FOIL_CAMPAIGN_IDENTITY_END */
