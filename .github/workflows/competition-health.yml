@@ -124,7 +124,9 @@ jobs:
         run: python updater/replay_completion_guard.py
 
       - name: Enrich later-round fixture venues
-        run: python updater/enrich_later_round_venues.py
+        run: |
+          python -m unittest discover -s tests -p 'test_conditional_fixture_venues.py' -v
+          python updater/enrich_later_round_venues.py
 
       - name: Enrich replay kick-offs and active fixture venues
         run: python updater/enrich_replay_kickoffs_and_active_venues.py
