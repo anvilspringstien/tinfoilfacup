@@ -145,10 +145,14 @@ try{
  assert(await page.locator('#installed-celebration').isVisible());
  assert(await page.locator('#heading').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle==='none'),'installed title has no focus box');
  for(const [width,height] of [[390,669],[390,560],[1680,889]]){
-  await page.setViewportSize({width,height});await fits();
+  await page.setViewportSize({width,height});
+  await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
   await page.screenshot({path:`/tmp/tffc-installed-magic-${width}x${height}.png`});
+  assert(await page.locator('#magic').evaluate(d=>d.scrollHeight<=d.clientHeight+1),'installed confirmation fits '+width+'×'+height);
+  await fits();
  }
  await page.setViewportSize({width:390,height:669});
+ await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
  await page.keyboard.press('Tab');
  assert(await page.locator('#back').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle!=='none'),'keyboard focus remains visible');
  await page.locator('#back').click();
