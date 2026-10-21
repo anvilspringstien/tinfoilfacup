@@ -57,6 +57,8 @@ try{
    assert(await intro.evaluate(e=>e.scrollHeight<=e.clientHeight+1),'popup frame fits viewport');
    assert(await intro.locator('#tffc-intro-title').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle==='none'),'opening focus announces the heading without a box');
    assert.equal(await page.evaluate(()=>document.body.style.position),'fixed','background is locked while reading');
+   await page.keyboard.press('Tab');
+   assert(await intro.locator('.intro-close').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle!=='none'),'Close retains visible keyboard focus');
    const message=intro.locator('#tffc-intro-message');
    const endings={
     'My Campaign':'Your old pigeon identity and locally saved Challenge progress won’t be recovered.',
