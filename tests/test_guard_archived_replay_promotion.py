@@ -107,13 +107,16 @@ class ReadinessTests(unittest.TestCase):
         self.assertEqual(result["already_recorded"], 13)
         self.assertEqual(result["approved"][0]["winner"], "Thame United")
 
-    def test_same_source_count_cannot_hide_unseen_thame(self):
+    def test_missing_source_fixture_is_held_without_blocking_cleared_results(self):
         report = audit()
         report["scheduled_replay_gaps"].append(
             {"home": "Exmouth Town", "away": "Thame United",
              "date": "2026-09-23", "source_observed": False})
-        with self.assertRaisesRegex(ValueError, "absent from source"):
-            readiness(report)
+        result = readiness(report)
+        self.assertEqual(result['approved_count'], 12)
+        self.assertEqual(result['held_count'], 2)
+        self.assertEqual(result['unobserved_scheduled'], 1)
+        self.assertTrue(any('thame united' in row['fixture'] for row in result['held']))
 
     def test_observed_thame_cannot_pass_before_staging(self):
         report = audit()

@@ -11,6 +11,7 @@ from guard_archived_replay_promotion import readiness
 from stage_preceding_replay_candidates import stage
 from sync_active_replay_fixtures import unresolved_draws
 from round_state_engine import base_round, is_draw
+from match_decisions import retain_holds
 
 
 def collect(data, fetch, live_html="", as_of=None):
@@ -48,15 +49,44 @@ def collect(data, fetch, live_html="", as_of=None):
     audit_data = copy.deepcopy(data)
     audit_data.setdefault("round_fixtures", {})[preceding] = audit_originals
     url = audit.archived_replay_source(preceding)
-    raw = fetch(url)
+    try:
+        raw = fetch(url)
+    except OSError as exc:
+        # A historical source outage is fixture-local uncertainty. It must not
+        # discard independently verified current-round results in this scan.
+        candidate = copy.deepcopy(data)
+        decisions = []
+        for original in pending:
+            replay = next(r for r in scheduled if r.get('round') == preceding + ' Replay'
+                          and r.get('date', '') > original.get('date', '') and same_pair(r, original))
+            decisions.append({'fixture': original, 'observation': replay,
+                              'held': 'archived replay source unavailable; automatic retry pending',
+                              'state': 'awaiting-decision', 'sources': [url]})
+        changed = retain_holds(candidate, decisions)
+        return candidate, {'status': 'evidence-held', 'changed': changed, 'archived_round': preceding,
+                           'held': [{'fixture': d['fixture']['home'] + ' v ' + d['fixture']['away'],
+                                     'reason': d['held']} for d in decisions],
+                           'source_failure': str(exc)}, None
     audit.validate_archived_replay_page(raw, preceding, url)
     report = audit.audit(audit_data, raw, live_html, url, as_of=as_of)
     gate = readiness(report)
-    # Retain the recovery route's independent penalty-evidence requirement.
-    # Held fixtures stay unresolved; independently cleared fixtures may advance.
+    # All routes use the same accepted-source and fixture-local decision policy.
+    # Persist holds so an advancing draw cannot hide a missing decision.
+    data = copy.deepcopy(data)
+    decisions = list(report['fixture_decisions'])
+    for gap in report['scheduled_replay_gaps']:
+        if gap['source_observed']:
+            continue
+        originals = [f for f in audit_originals if same_pair(f, gap)]
+        if len(originals) != 1:
+            raise ValueError('unobserved replay lacks unique canonical original')
+        decisions.append({'fixture': dict(originals[0], round=preceding),
+                          'observation': gap, 'held': 'scheduled replay awaiting source observation',
+                          'state': 'awaiting-decision', 'sources': [url]})
+    holds_changed = retain_holds(data, decisions)
     if not gate["approved"]:
         return data, {"status": "evidence-held" if gate["held"] else "awaiting-replays",
-                      "changed": False, "audit": report, "held": gate["held"]}, {"url": url, "html": raw}
+                      "changed": holds_changed, "audit": report, "held": gate["held"]}, {"url": url, "html": raw}
     summary, candidate = stage(data, dict(report, replay_candidates=gate["approved"], blocked=[]))
     candidate, resolutions = resolve_conditionals(candidate, preceding)
     return candidate, {"status": "partial-ready" if gate["held"] else "staged",

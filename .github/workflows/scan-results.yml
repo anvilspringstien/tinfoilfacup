@@ -19,6 +19,9 @@ on:
       - "tests/test_competition_publication.py"
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/match_decisions.py"
+      - "updater/retry_match_decisions.py"
+      - "tests/test_match_decisions.py"
       - "updater/scheduled_archived_replays.py"
       - "updater/audit_preceding_round_replays.py"
       - "updater/guard_archived_replay_promotion.py"
@@ -116,6 +119,8 @@ jobs:
         run: cp competition.json updater/results-input-competition.json
       - name: Guard complete draw and preceding replay lifecycle
         run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
       - name: Guard universal round-state chronology
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing

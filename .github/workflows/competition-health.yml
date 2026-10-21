@@ -13,6 +13,9 @@ on:
       - "competition.json"
       - "clubfinder.html"
       - "journey-club-registry.json"
+      - "updater/match_decisions.py"
+      - "updater/retry_match_decisions.py"
+      - "tests/test_match_decisions.py"
       - "updater/probe_fwp_source.py"
       - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
@@ -92,6 +95,9 @@ jobs:
 
       - name: Record candidate input revision
         run: git rev-parse HEAD > "$RUNNER_TEMP/competition-build-base"
+
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
 
       - name: Probe public competition source
         run: python updater/run_source_resilient.py --label "Football Web Pages probe" -- python updater/probe_fwp_source.py

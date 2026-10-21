@@ -28,7 +28,7 @@ def fixture_data():
 
 
 class PrecedingReplayAuditTests(unittest.TestCase):
-    def test_cross_page_penalty_note_is_one_held_fixture(self):
+    def test_cross_page_penalty_note_is_one_verified_fixture(self):
         from guard_archived_replay_promotion import readiness
         data = fixture_data()
         data['replays'] = {'Weston': {
@@ -38,10 +38,10 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         plain = {'fixture': fixture, 'observation': {
             'home': 'Wimborne Town', 'away': 'Weston-super-Mare',
             'home_score': 1, 'away_score': 1, 'winner': '', 'decision': '',
-            'date': '2026-09-22', 'status': 'FT', 'source_url': 'https://example.test/replays'}}
+            'date': '2026-09-22', 'status': 'FT', 'source_url': 'https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay'}}
         detailed = copy.deepcopy(plain)
         detailed['observation'].update(winner='Wimborne Town', decision='penalties',
-                                       source_url='https://example.test/live')
+                                       source_url='https://www.footballwebpages.co.uk/fa-cup')
         before = copy.deepcopy(data)
         with patch.object(scan, 'parse_fwp_observations', side_effect=[[plain], [detailed]]):
             report = audit.audit(data, '<html/>', '<html/>')
@@ -49,7 +49,7 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         self.assertEqual(len(report['penalty_refinements']), 1)
         self.assertFalse(report['blocked'])
         gate = readiness(report)
-        self.assertEqual((gate['approved_count'], gate['held_count']), (0, 1))
+        self.assertEqual((gate['approved_count'], gate['held_count']), (1, 0))
         self.assertEqual(data, before)
 
     def test_penalty_refinement_never_erases_material_disagreement(self):
@@ -57,13 +57,13 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         plain = {'fixture': fixture, 'observation': {
             'home': 'Wimborne Town', 'away': 'Weston-super-Mare',
             'home_score': 1, 'away_score': 1, 'winner': '', 'decision': '',
-            'date': '2026-09-22', 'status': 'FT', 'source_url': 'https://example.test/replays'}}
+            'date': '2026-09-22', 'status': 'FT', 'source_url': 'https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay'}}
         detailed = copy.deepcopy(plain)
         detailed['observation'].update(winner='Wimborne Town', decision='penalties',
-                                       source_url='https://example.test/live')
+                                       source_url='https://www.footballwebpages.co.uk/fa-cup')
         for change in ({'home_score': 2}, {'date': '2026-09-23'},
                        {'home': 'Weston-super-Mare', 'away': 'Wimborne Town'},
-                       {'source_url': 'https://example.test/replays'},
+                       {'source_url': 'https://www.footballwebpages.co.uk/fa-cup/fixtures-results/second-qualifying-round-replay'},
                        {'winner': 'Unrelated Town'}):
             with self.subTest(change=change):
                 other = copy.deepcopy(detailed)
@@ -84,7 +84,7 @@ class PrecedingReplayAuditTests(unittest.TestCase):
                "observation": {"home": "Wimborne Town", "away": "Weston-super-Mare",
                                "home_score": 1, "away_score": 1, "winner": "Wimborne Town",
                                "status": "FT AET", "decision": "penalties",
-                               "date": "2026-09-22"}}
+                               "date": "2026-09-22", "source_url": "https://www.footballwebpages.co.uk/fa-cup"}}
         with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
             report = audit.audit(data, "<html/>")
         self.assertEqual(len(report["replay_candidates"]), 1)
@@ -100,7 +100,7 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         obs = {"fixture": data["round_fixtures"]["Second Round Qualifying"]["Weston-super-Mare"],
                "observation": {"home": "Wimborne Town", "away": "Weston-super-Mare",
                                "home_score": 1, "away_score": 1, "winner": "",
-                               "status": "FT AET", "date": "2026-09-22"}}
+                               "status": "FT AET", "date": "2026-09-22", "source_url": "https://www.footballwebpages.co.uk/fa-cup"}}
         with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
             report = audit.audit(data, "<html/>")
         self.assertFalse(report["replay_candidates"])
@@ -112,12 +112,12 @@ class PrecedingReplayAuditTests(unittest.TestCase):
                "observation": {"home": "Wimborne Town", "away": "Weston-super-Mare",
                                "home_score": 3, "away_score": 2,
                                "winner": "Wimborne Town", "decision": "penalties",
-                               "status": "FT", "date": "2026-09-22"}}
+                               "status": "FT", "date": "2026-09-22", "source_url": "https://www.footballwebpages.co.uk/fa-cup"}}
         with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
             report = audit.audit(data, "<html/>")
         self.assertFalse(report["replay_candidates"])
         self.assertEqual(len(report["blocked"]), 1)
-        self.assertIn("independent verification", report["blocked"][0]["reason"])
+        self.assertIn("non-level source score", report["blocked"][0]["reason"])
 
     def test_already_recorded_replay_is_a_duplicate(self):
         data = fixture_data()
@@ -125,7 +125,7 @@ class PrecedingReplayAuditTests(unittest.TestCase):
                     "home": "Wimborne Town", "away": "Weston-super-Mare",
                     "home_score": 1, "away_score": 1,
                     "winner": "Wimborne Town", "decision": "penalties",
-                    "status": "FT AET", "date": "2026-09-22"}
+                    "status": "FT AET", "date": "2026-09-22", "source_url": "https://www.footballwebpages.co.uk/fa-cup"}
         data["result_history"]["Wimborne Town"] = [recorded]
         before = copy.deepcopy(data)
         obs = {"fixture": data["round_fixtures"]["Second Round Qualifying"]["Weston-super-Mare"],
@@ -157,12 +157,12 @@ class PrecedingReplayAuditTests(unittest.TestCase):
         data["replays"] = {"Weston": {
             "round": "Second Round Qualifying Replay",
             "home": "Wimborne Town", "away": "Weston-super-Mare",
-            "date": "2026-09-22"}}
+            "date": "2026-09-22", "source_url": "https://www.footballwebpages.co.uk/fa-cup"}}
         obs = {"fixture": data["round_fixtures"]["Second Round Qualifying"]["Weston-super-Mare"],
                "observation": {"home": "Wimborne Town", "away": "Weston-super-Mare",
                                "home_score": 1, "away_score": 1, "winner": "Wimborne Town",
                                "status": "FT AET", "decision": "penalties",
-                               "date": "2026-09-22"}}
+                               "date": "2026-09-22", "source_url": "https://www.footballwebpages.co.uk/fa-cup"}}
         with patch.object(scan, "parse_fwp_observations", return_value=[obs]):
             report = audit.audit(data, "<html/>")
         self.assertEqual(len(report["replay_candidates"]), 1)

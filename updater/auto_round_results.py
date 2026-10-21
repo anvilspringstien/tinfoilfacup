@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from result_metadata import metadata_candidates, retain_metadata
+from match_decisions import classify_batch, retain_holds
 
 from round_state_engine import (
     base_round,
@@ -249,7 +250,7 @@ def parse_fwp_observations(raw, known, source_url):
             if index + 1 < len(tokens) and tokens[index + 1].group(1).lower() == "tr":
                 note = clean(tokens[index + 1].group(0))
             winner, decision = note_winner(note, home, away)
-            observations.append({
+            item = {
                 "fixture": fixture,
                 "observation": {
                     "home": home,
@@ -262,7 +263,13 @@ def parse_fwp_observations(raw, known, source_url):
                     "date": current_date or fixture.get("date", ""),
                     "source_url": source_url,
                 },
-            })
+            }
+            penalties = re.search(r'\b(?:win|wins|won)(?:\s+on\s+penalties)?\s+(\d+)\s*[-–]\s*(\d+)', note, re.I)
+            if decision == 'penalties' and winner and penalties:
+                winning, losing = map(int, penalties.groups())
+                hp, ap = (winning, losing) if norm(winner) == norm(home) else (losing, winning)
+                item['observation'].update(home_pens=hp, away_pens=ap)
+            observations.append(item)
             continue
 
         for i in range(1, len(c) - 2):
@@ -500,23 +507,20 @@ def main():
     blocked = []
     changed = False
 
-    for item in observations:
-        fixture, observation = item["fixture"], item["observation"]
-        try:
-            outcome = classify_observation(fixture, observation, history)
-        except ValueError as exc:
-            blocked.append({"fixture": f'{fixture.get("home")} v {fixture.get("away")}', "date": observation.get("date", ""), "error": str(exc)})
+    decisions = classify_batch(observations, history)
+    for item in decisions:
+        if item.get('held'):
             continue
+        outcome = item['outcome']
         classified.append(outcome)
         if outcome["kind"] == "result":
             result = outcome["result"]
             if merge_result(data, result):
                 changed = True
-                history.append(result)
-                history = unique_history(history)
         elif outcome["kind"] == "event":
             if merge_event(data, outcome["event"]):
                 changed = True
+    changed = retain_holds(data, decisions) or changed
 
     # A next-round draw must not make the preceding qualifying replays invisible.
     # Stage through the same audit/readiness/chronology gates as manual recovery;
@@ -537,6 +541,20 @@ def main():
             blocked.append({"scope": "archived-replays", "error": str(exc)})
             archived_report = {"status": "blocked", "changed": False, "error": str(exc)}
 
+    # Persisted fixture identities outlive draw promotion. Retry their original
+    # round's source even when the current source can no longer contain them.
+    from retry_match_decisions import retry_archived_holds
+    def capture_retry_source(url):
+        raw = fetch(url)
+        capture = json.loads(SOURCE_CAPTURE.read_text(encoding='utf-8'))
+        capture.setdefault('retried_decisions', []).append({'url': url, 'html': raw})
+        SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+        return raw
+    visited = {round_name, archived_report.get('archived_round'),
+               (archived_report.get('audit') or {}).get('archived_round')}
+    data, retry_report = retry_archived_holds(data, capture_retry_source, live_raw, visited)
+    changed = changed or retry_report['changed']
+
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "archived_replays": archived_report,
@@ -549,6 +567,8 @@ def main():
         "classified_events": sum(1 for item in classified if item["kind"] == "event"),
         "duplicates": sum(1 for item in classified if item["kind"] == "duplicate"),
         "blocked": blocked,
+        "pending_match_decisions": data.get('pending_match_decisions', []),
+        "retried_match_decisions": retry_report,
         "publish": bool(args.publish),
         "competition_changed": bool(changed),
     }
@@ -568,6 +588,10 @@ def main():
     print("Archived replay collection:", archived_report["status"])
     for held in archived_report.get("held", []):
         print("::warning::Archived replay remains unresolved: " + str(held))
+    for held in data.get('pending_match_decisions', []):
+        fixture = held['fixture']
+        print('::warning title=Match decision awaiting evidence::' + fixture['home'] + ' v ' + fixture['away']
+              + ' (' + held['date'] + ') — ' + held['reason'] + '; first held ' + held['first_seen_at'])
 
     if blocked and args.publish:
         raise SystemExit("Publication blocked by chronology conflict(s): " + str(blocked[:5]))

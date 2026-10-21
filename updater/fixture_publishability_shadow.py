@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 
 import auto_round_results as scanner
 from round_state_engine import classify_observation, pair_key
+from match_decisions import classify_batch
 
 REPORT = scanner.ROOT / "updater" / "fixture-publishability-shadow.json"
 
@@ -56,8 +57,14 @@ def main():
     unresolved = []
     quarantined = []
 
-    for item in observations:
-        fixture, observation = item["fixture"], item["observation"]
+    fixture_decisions = {}
+    for decision in classify_batch(observations, history):
+        key = pair_key(decision['fixture'])
+        if key not in fixture_decisions or not fixture_decisions[key].get('held'):
+            fixture_decisions[key] = decision
+    for item in fixture_decisions.values():
+        fixture = item['fixture']
+        observation = item.get('observation') or (item.get('outcome') or {}).get('result') or (item.get('outcome') or {}).get('event')
         observed_pairs.add(pair_key(fixture))
         base = {
             "fixture_id": fixture_id(fixture),
@@ -68,13 +75,13 @@ def main():
             "observation_date": observation.get("date", ""),
             "source_url": observation.get("source_url", ""),
         }
-        try:
-            outcome = classify_observation(fixture, observation, history)
-        except ValueError as exc:
-            row = {**base, "decision": "quarantine", "reason": str(exc)}
-            quarantined.append(row)
+        if item.get('held'):
+            waiting = item['state'] == 'awaiting-decision'
+            row = {**base, 'decision': 'unresolved' if waiting else 'quarantine', 'reason': item['held']}
+            (unresolved if waiting else quarantined).append(row)
             decisions.append(row)
             continue
+        outcome = item['outcome']
 
         kind = outcome["kind"]
         if kind == "result":
@@ -97,8 +104,6 @@ def main():
             }
             publishable.append(row)
             decisions.append(row)
-            history.append(result)
-            history = scanner.unique_history(history)
         elif kind == "duplicate":
             row = {**base, "decision": "already-recorded", "reason": outcome.get("reason", "")}
             already_recorded.append(row)
