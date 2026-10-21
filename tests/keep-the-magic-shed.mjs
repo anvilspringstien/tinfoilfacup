@@ -8,7 +8,7 @@ async function atReturnStart(page){
   if(deck)return document.getElementById('overlay').scrollTop<2;
   const summary=document.getElementById('tffc-results-summary'),field=document.getElementById('clubfinderField');
   const target=summary&&!summary.hidden?summary:field;
-  return target&&Math.abs(target.getBoundingClientRect().top)<2;
+  return target&&Math.abs(target.getBoundingClientRect().top-(parseFloat(getComputedStyle(target).scrollMarginTop)||0))<2;
  });
 }
 const base=process.env.TFFC_PREVIEW_BASE||'http://127.0.0.1:8765';
