@@ -95,3 +95,8 @@ dialog#magic::backdrop{background:#141210}
 
 /* Give the Keep device selector equal breathing room where height allows. */
 @media(min-height:620px){dialog#magic.keeping .platform{margin:8px auto}}
+
+/* Initial dialog focus announces the title without drawing a control box.
+   Interactive controls retain their visible keyboard focus outlines. */
+.heading:focus{outline:none}
+.celebration{font-size:clamp(26px,6.6vw,34px);font-weight:300;line-height:1.15;text-align:center;margin:12px 0 0}
