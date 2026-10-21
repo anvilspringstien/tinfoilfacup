@@ -2,6 +2,15 @@ import { checkInstalledHandover } from './keep-magic-install-browser.mjs';
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(import.meta.url)('playwright');
 import assert from 'node:assert/strict';
+async function atReturnStart(page){
+ await page.waitForFunction(()=>{
+  const deck=document.querySelector('#overlay .deck');
+  if(deck)return document.getElementById('overlay').scrollTop<2;
+  const summary=document.getElementById('tffc-results-summary'),field=document.getElementById('clubfinderField');
+  const target=summary&&!summary.hidden?summary:field;
+  return target&&Math.abs(target.getBoundingClientRect().top)<2;
+ });
+}
 const base=process.env.TFFC_PREVIEW_BASE||'http://127.0.0.1:8765';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{
@@ -143,6 +152,8 @@ try{
  assert.equal(await page.locator('#keep-intro').innerText(),'See. We told you it was easy.');
  assert.equal(await page.locator('#installed-celebration').innerText(),'Congratulations!');
  assert(await page.locator('#installed-celebration').isVisible());
+ assert(await page.locator('#installed-celebration').evaluate(e=>e.nextElementSibling?.id==='share-view'&&e.parentElement.querySelector('.brand').compareDocumentPosition(e)&Node.DOCUMENT_POSITION_FOLLOWING),'Congratulations follows the crest');
+ assert(await page.locator('#kept-message').evaluate(e=>e.firstElementChild.id==='heading'&&e.lastElementChild.id==='keep-intro'),'the existing heading and intro follow Congratulations');
  assert(await page.locator('#install-status').isHidden(),'confirmation is shown once inside the return card');
  assert.equal(await page.locator('#back-card .keep-note').innerText(),'You’re already opening Tin Foil FA Cup as an app.');
  assert(await page.locator('#back-card').evaluate(e=>e.classList.contains('keep-card')));
@@ -226,9 +237,11 @@ try{
   const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
   await share.locator('#copy').waitFor();
   assert.equal(await share.locator('#shareHeading').innerText(),'Share the Magic');
-  await app.evaluate(()=>tffcCloseShare());
-  assert(Math.abs(await app.evaluate(()=>scrollY)-scroll)<2,'close restores Campaign reading position');
+  await share.locator('#close').click();await atReturnStart(app);
   assert(await button.evaluate(e=>e===document.activeElement),'close restores the Share button focus');
+  assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
+  await button.click();await share.locator('.keep-magic').click();await app.waitForURL('**/keep-the-magic-shed.html?**');
+  await app.locator('#close').click();await app.waitForURL('**/beta/clubfinder-journey.html');await atReturnStart(app);
   assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
  }
  // One shared footer beneath all three choices, for both an existing
@@ -251,7 +264,7 @@ try{
   await share.locator('.keep-magic').click();await app.waitForURL('**/keep-the-magic-shed.html?**');
   await app.locator('#back').click();await app.waitForURL('**/beta/clubfinder-journey.html');
   await share.locator('#copy').waitFor();
-  await app.evaluate(()=>tffcCloseShare());
+  await share.locator('#close').click();await atReturnStart(app);
   assert.equal(await app.locator('#results > .result').count(),3,'return preserves the three choices');
   assert.deepEqual(await app.locator('#results > .result h2').allTextContents(),cards);
   assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
@@ -259,9 +272,19 @@ try{
   await share.locator('.keep-magic').click();await app.waitForURL('**/keep-the-magic-shed.html?**');
   await app.locator('#close').click();await app.waitForURL('**/beta/clubfinder-journey.html');
   assert(await app.locator('iframe[title="Share Tin Foil FA Cup"]').isHidden());
+  await atReturnStart(app);
   assert.equal(await app.locator('#results > .result').count(),3,'closing Keep restores the choices directly');
   assert.equal(await app.evaluate(()=>tinFoilCurrentSearchNumber()),searchNumber,'unselected search identity survives Keep');
   if(!selected){await app.locator('.journey-lozenge').first().click();assert.equal(await app.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).searchNumber),searchNumber)}
+ }
+ await app.goto(base+'/beta/challenges-beta.html');
+ for(const viaKeep of [false,true]){
+  const footer=app.locator('#challengeShareLinkFooter');await footer.scrollIntoViewIfNeeded();
+  assert(await app.locator('#overlay').evaluate(e=>e.scrollTop>0),'start below the Deck top');
+  await footer.click();const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+  if(viaKeep){await share.locator('.keep-magic').click();await app.waitForURL('**/keep-the-magic-shed.html?**');await app.locator('#close').click();await app.waitForURL('**/beta/challenges-beta.html')}
+  else await share.locator('#close').click();
+  await atReturnStart(app);
  }
  assert.equal(counterCalls,0,'Share/Keep returns never allocate a new identity');
  assert.deepEqual(appErrors,[]);

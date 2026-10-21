@@ -104,3 +104,7 @@ dialog#magic::backdrop{background:#141210}
 /* The installed confirmation closes with Share's familiar framed action. */
 #keep-view>.back-card{margin:auto auto 0;flex:none;width:100%}
 dialog#magic.keeping.kept .celebration{display:grid;place-items:center;flex:1;min-height:60px;font-size:clamp(32px,11vw,56px);line-height:1.15;margin:0}
+
+/* Swap the two installed text blocks, keeping their accepted type sizes. */
+dialog#magic.keeping.kept>.celebration{flex:none;min-height:0}
+#kept-message{display:flex;flex:1;flex-direction:column;justify-content:center;gap:10px}
