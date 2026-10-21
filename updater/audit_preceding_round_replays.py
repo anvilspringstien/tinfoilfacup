@@ -15,6 +15,7 @@ from pathlib import Path
 
 import auto_round_results as scan
 from round_state_engine import classify_observation, pair_key, base_round, norm
+from match_decisions import classify_batch
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCEPTION_LEDGER = ROOT / "updater" / "exceptional-replay-dispositions.json"
@@ -161,36 +162,31 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
             overlaid.append(replacement)
         history=overlaid
     results, blocked, duplicates, events = [], [], [], []
-    for item in observations:
-        obs = item["observation"]
-        # FWP can encode a penalty decision with a scoreline that disagrees
-        # with the clubs' official match report (Wimborne: 3-2 vs 1-1 AET,
-        # 4-3 penalties). Never silently turn that into a 90/120-minute win.
-        if (str(obs.get("decision") or "").lower() == "penalties"
-                and obs.get("home_score") != obs.get("away_score")):
-            blocked.append({"home": obs["home"], "away": obs["away"],
-                            "date": obs.get("date", ""),
-                            "reason": "penalty decision with non-level source score: independent verification required"})
+    decisions = classify_batch(observations, history)
+    for item in decisions:
+        if item.get('held'):
+            obs = item['observation']
+            blocked.append({'home': obs['home'], 'away': obs['away'], 'date': obs['date'],
+                            'reason': item['held']})
             continue
-        try:
-            outcome = classify_observation(item["fixture"], obs, history)
-        except ValueError as exc:
-            blocked.append({"home": obs["home"], "away": obs["away"],
-                            "date": obs["date"], "reason": str(exc)})
-            continue
+        outcome = item['outcome']
+        obs = outcome.get('result') or outcome.get('event')
         kind = outcome["kind"]
         if kind == "result":
             row = outcome["result"]
             if row.get("round", "").endswith(" Replay"):
                 results.append(row)
-                history.append(row)
             else:
                 blocked.append({"home": obs["home"], "away": obs["away"],
                                 "reason": "new non-replay result in archived round"})
         elif kind == "duplicate":
             duplicates.append(outcome["result"])
         else:
-            events.append(outcome["event"])
+            event = outcome['event']
+            blocked.append({'home': event['home'], 'away': event['away'], 'date': event['date'],
+                            'reason': 'replay awaiting completion: ' + event['status']})
+            item.update(held=blocked[-1]['reason'], state='awaiting-decision', observation=event)
+            item.pop('outcome', None)
     # Scheduled preceding-round replays are an independent completeness set.
     # A source count alone cannot prove that the source included every tie.
     observed_pairs = {pair_key(item["observation"]) for item in observations}
@@ -235,11 +231,12 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
         })
 
     return {"active_round": current, "archived_round": preceding,
-            "archived_ties": len(known), "observations": len(observations),
+            "archived_ties": len(known), "observations": len(decisions),
             "source_observations": source_observation_count,
             "penalty_refinements": refinements,
             "replay_candidates": results, "already_recorded": len(duplicates),
             "blocked": blocked, "events": len(events),
+            "fixture_decisions": decisions,
             "scheduled_replay_gaps": scheduled_replay_gaps,
             "production_mutation": False}
 
@@ -267,8 +264,9 @@ def main():
         parser.error("provide --fetch or --source-html")
     result = audit(data, raw, live, url)
     print(json.dumps(result, indent=2, ensure_ascii=False))
-    if result["blocked"]:
-        raise SystemExit("PRECEDING REPLAY AUDIT: blocked observations; no production changes")
+    if result['blocked']:
+        import sys
+        print('PRECEDING REPLAY AUDIT: fixture-local holds retained; no production changes', file=sys.stderr)
 
 
 if __name__ == "__main__":

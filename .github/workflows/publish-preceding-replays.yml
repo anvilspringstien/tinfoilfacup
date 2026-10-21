@@ -2,6 +2,9 @@ name: Guarded publication of outstanding preceding-round replays
 on:
   pull_request:
     paths:
+      - 'updater/match_decisions.py'
+      - 'updater/retry_match_decisions.py'
+      - 'tests/test_match_decisions.py'
       - 'updater/audit_preceding_round_replays.py'
       - 'updater/stage_preceding_replay_candidates.py'
       - 'updater/patch_clubfinder_replay_progression.py'
@@ -46,6 +49,8 @@ jobs:
           python-version: '3.11'
       - name: Guard manual opt-in publication boundary
         run: python -m unittest discover -s tests -p 'test_archived_replay_publication_boundary.py' -v
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
       - name: Guard dedicated archived replay source selection
         run: python -m unittest discover -s tests -p 'test_archived_replay_source.py' -v
       - name: Guard staging chronology and publication boundary
@@ -150,7 +155,7 @@ jobs:
           expected=len(report['scheduled_replay_gaps'])
           assert report['approved_count']+report['held_count']==expected, report
           assert report['approved_count']>0, report
-          assert report['already_recorded']+report['approved_count']+report['held_count']==report['observations'], report
+          assert report['already_recorded']+report['approved_count']+report['held_count']==report['observations']+report['unobserved_scheduled'], report
           def key(row):
               return '|'.join((row['date'],*sorted((row['home'].casefold(),row['away'].casefold()))))
           held={item['fixture'] for item in report['held']}

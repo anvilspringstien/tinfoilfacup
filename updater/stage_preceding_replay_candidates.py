@@ -136,6 +136,7 @@ def main():
         if len(approved) + len(held) != len(gaps):
             raise SystemExit("Readiness does not account for each unpublished scheduled replay")
         report["replay_candidates"] = approved
+        report['blocked'] = []  # Readiness has accounted for and retained every held fixture.
     if not report["replay_candidates"] and not held and not report.get("scheduled_replay_gaps"):
         print(json.dumps({"status": "already_published",
                           "already_recorded": report["already_recorded"],
@@ -147,6 +148,9 @@ def main():
                        "blocked": report["blocked"], "events": report["events"],
                        "source_url": url, "production_mutation": False}
         print(json.dumps(diagnostics, indent=2))
+        if held:
+            print('No cleared candidates; fixture holds will be retried on the next scan', file=__import__('sys').stderr)
+            return
         raise SystemExit("No replay candidates in current source: inspect observation counts and archived source; publication withheld")
     summary, candidate = stage(data, report)
     if args.readiness:

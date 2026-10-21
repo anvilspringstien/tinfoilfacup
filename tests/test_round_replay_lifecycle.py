@@ -146,26 +146,34 @@ class LifecycleTests(unittest.TestCase):
             self.assertEqual(tuesday['fixtures'][f'Original Away {i:03d}']['home'], f'Original Away {i:03d}')
 
         # The overnight failure: the archive has a level FT score, while the
-        # live page adds the penalty winner. That fixture remains evidence-held;
-        # it must not prevent the other ten decided replays being published.
+        # live page adds the penalty winner. The shared policy now accepts that explicit decision;
+        # all eleven replays must advance without club-specific evidence wiring.
         mixed = source.replace('<td>2</td><td>0</td><td>Original Home 000</td>',
                                '<td>2</td><td>2</td><td>Original Home 000</td>')
         live = ('<h3>Tuesday 20 October 2026</h3><table><tr><td>FT</td>'
                 '<td>Original Away 000</td><td>2</td><td>2</td><td>Original Home 000</td></tr>'
                 '<tr><td>Original Away 000 win on penalties</td></tr></table>')
         partial, report, _ = self.run_results(monday, mixed, live)
-        self.assertEqual(report['archived_replays']['status'], 'partial-ready')
-        self.assertEqual(report['archived_replays']['staged']['staged_count'], 10)
-        self.assertEqual(len(report['archived_replays']['held']), 1)
+        self.assertEqual(report['archived_replays']['status'], 'staged')
+        self.assertEqual(report['archived_replays']['staged']['staged_count'], 11)
+        self.assertEqual(len(report['archived_replays']['held']), 0)
         self.assertEqual(len(report['archived_replays']['audit']['penalty_refinements']), 1)
         self.assertEqual(len(draw.fixture_values(partial['fixtures'])), 40)
         self.assertEqual(partial['round_fixtures'], monday['round_fixtures'])
-        self.assertIn(' or ', partial['fixtures']['Original Away 000']['home'])
+        self.assertEqual(partial['fixtures']['Original Away 000']['home'], 'Original Away 000')
         for i in range(1, 11):
             self.assertEqual(partial['fixtures'][f'Original Away {i:03d}']['home'], f'Original Away {i:03d}')
         repeated, again, _ = self.run_results(partial, mixed, live)
         self.assertEqual(repeated, partial)
-        self.assertEqual(again['archived_replays']['status'], 'evidence-held')
+        self.assertEqual(again['archived_replays']['status'], 'no-outstanding-replays')
+
+        absent = source.replace(source_rows[0], '')
+        partial, report, _ = self.run_results(monday, absent)
+        self.assertEqual(report['archived_replays']['staged']['staged_count'], 10)
+        self.assertEqual(len(partial['pending_match_decisions']), 1)
+        recovered, _, _ = self.run_results(partial, source)
+        self.assertFalse(recovered['pending_match_decisions'])
+        self.assertEqual(recovered['fixtures']['Original Away 000']['home'], 'Original Away 000')
 
     def test_first_proper_rejects_39_and_41_ties_without_mutating_history(self):
         saturday = state('Fourth Round Qualifying')
@@ -186,23 +194,26 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(candidate, before)
         self.assertEqual(monday, before)
 
-    def test_missing_due_replay_and_wrong_round_source_fail_closed(self):
+    def test_missing_due_replay_is_held_and_wrong_round_source_fails_closed(self):
         monday, _ = self.promote(state())
         before = copy.deepcopy(monday)
-        for source in ('<h1>Fixtures/Results, Fourth Qualifying Round Replay, 2026-2027</h1>',
-                       '<h1>Fixtures/Results, Third Qualifying Round Replay, 2026-2027</h1>'):
-            with self.assertRaises((ValueError, SystemExit)):
-                archived.collect(monday, lambda _: source, as_of=datetime(2026,10,22,tzinfo=timezone.utc))
-            self.assertEqual(monday, before)
+        candidate,report,_ = archived.collect(monday, lambda _: '<h1>Fixtures/Results, Fourth Qualifying Round Replay, 2026-2027</h1>',
+                                              as_of=datetime(2026,10,22,tzinfo=timezone.utc))
+        self.assertEqual(report['status'], 'evidence-held')
+        self.assertEqual(len(candidate['pending_match_decisions']),1)
+        self.assertEqual(candidate['result_history'],monday['result_history'])
+        with self.assertRaises((ValueError,SystemExit)):
+            archived.collect(monday,lambda _: '<h1>Fixtures/Results, Third Qualifying Round Replay, 2026-2027</h1>')
+        self.assertEqual(monday,before)
 
-    def test_penalties_keep_independent_evidence_guard(self):
+    def test_clear_penalties_from_accepted_source_advance(self):
         monday, _ = self.promote(state())
         before = copy.deepcopy(monday)
         candidate, report, _ = archived.collect(monday, lambda _: replay_html('Fourth Round Qualifying', '1', '1', 'Beta City win on penalties'),
                                                 as_of=datetime(2026,10,22,tzinfo=timezone.utc))
-        self.assertEqual(report['status'], 'evidence-held')
-        self.assertEqual(len(report['held']), 1)
-        self.assertEqual(candidate, before)
+        self.assertEqual(report['status'], 'staged')
+        self.assertFalse(report['held'])
+        self.assertEqual(candidate['fixtures']['Beta City']['home'], 'Beta City')
         self.assertEqual(monday, before)
 
     def test_reversed_orientation_without_draw_ancestry_cannot_publish(self):
@@ -236,14 +247,14 @@ class LifecycleTests(unittest.TestCase):
         partial, report, _ = archived.collect(monday, lambda _: replay_html('Fourth Round Qualifying'), as_of=early)
         self.assertEqual(report['status'], 'staged')
         self.assertEqual(partial['fixtures']['Beta City']['away'], 'Gamma Town or Delta City')
-        # An uncorroborated penalty decision stays held while a cleared replay advances.
-        penalty_row = '<tr><td>FT</td><td>Delta City</td><td>1</td><td>1</td><td>Gamma Town</td></tr><tr><td>Delta City win on penalties</td></tr>'
+        # A contradictory non-level penalty score stays held while the clear replay advances.
+        penalty_row = '<tr><td>FT</td><td>Delta City</td><td>2</td><td>1</td><td>Gamma Town</td></tr><tr><td>Delta City win on penalties</td></tr>'
         mixed_source = replay_html('Fourth Round Qualifying').replace('</table>', penalty_row + '</table>')
         partial, report, _ = archived.collect(monday, lambda _: mixed_source, as_of=early)
         self.assertEqual(report['status'], 'partial-ready')
         self.assertEqual(len(report['held']), 1)
         self.assertEqual(partial['fixtures']['Beta City']['away'], 'Gamma Town or Delta City')
-        final_source = mixed_source.replace('<td>1</td><td>1</td><td>Gamma Town</td>', '<td>3</td><td>1</td><td>Gamma Town</td>').replace('Delta City win on penalties', '')
+        final_source = mixed_source.replace('<td>2</td><td>1</td><td>Gamma Town</td>', '<td>3</td><td>1</td><td>Gamma Town</td>').replace('Delta City win on penalties', '')
         complete, report, _ = archived.collect(partial, lambda _: final_source, as_of=early)
         self.assertEqual(complete['fixtures']['Beta City']['away'], 'Delta City')
         self.assertNotIn('conditional', complete['fixtures']['Beta City'])

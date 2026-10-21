@@ -130,16 +130,30 @@ expected=EXPECTED_ACTIVE_TIES.get(active_round)
 if expected is not None and active_ties!=expected:critical.append(f'{active_round} fixture coverage is {active_ties}; expected {expected}.')
 if data.get('source_tie_count') is not None and active_ties!=int(data.get('source_tie_count')):critical.append(f'Active fixture coverage {active_ties} does not match source_tie_count {data.get("source_tie_count")}.')
 if active_malformed_conditionals:critical.append(f'{len(active_malformed_conditionals)} active fixture(s) are marked conditional but contain no unresolved alternatives.')
-if overdue and not FIXTURE_LOCAL_HEALTH:critical.append(f'{len(overdue)} played fixtures are overdue a result.')
+pending_decisions=data.get('pending_match_decisions') or []
+def held_fixture(f):
+    return any({norm(f.get('home')),norm(f.get('away'))}=={norm(h['fixture'].get('home')),norm(h['fixture'].get('away'))}
+               and f.get('date')==h.get('date') for h in pending_decisions)
+overdue_unheld=[f for f in overdue if not held_fixture(f)]
+if overdue_unheld and not FIXTURE_LOCAL_HEALTH:critical.append(f'{len(overdue_unheld)} played fixtures are overdue a result without a tracked decision hold.')
 payload={'checked_at':now.isoformat(),'grace_hours':GRACE_HOURS,'coverage':{'preliminary_unique_fixtures':prelim_ties,'preliminary_results_and_replays':prelim_results,'first_qualifying_unique_fixtures':firstq_ties,'active_round':active_round,'active_round_unique_fixtures':active_ties,'active_round_conditional_slots':len(active_unresolved)},'counts':{'known_fixtures':len(fixtures),'complete':len(complete),'awaiting_grace':len(recent),'overdue':len(overdue),'upcoming':len(upcoming),'critical':len(critical)},'critical':critical,'fixture_local_health':FIXTURE_LOCAL_HEALTH,'overdue':overdue,'awaiting_grace':recent,'competition_sync':sync}
+payload['pending_match_decisions']=pending_decisions
+payload['data_state']='pending-decisions' if pending_decisions else 'complete'
 JSON_REPORT.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
 lines=['# Tin Foil FA Cup — Competition Health','',f"Last checked: **{now.strftime('%d/%m/%Y, %H:%M:%S %Z')}**",'','## Chronology coverage','',f'- Preliminary Round ties known: **{prelim_ties}**',f'- Preliminary Round results/replays recorded: **{prelim_results}**',f'- First Qualifying Round ties preserved: **{firstq_ties} / 112**',f'- Active round: **{active_round or "Unknown"}**',f'- Active-round ties: **{active_ties}**',f'- Active-round conditional/replay slots: **{len(active_unresolved)}**','','## Fixture health','',f'- 🟢 Played fixtures with results: **{len(complete)}**',f'- 🟡 Recently played / grace period: **{len(recent)}**',f'- 🔴 Results requiring confirmation: **{len(overdue)}**',f'- ⚪ Upcoming / incomplete-date fixtures: **{len(upcoming)}**','']
 if critical:lines += ['## 🔴 Critical competition-data issues','']+[f'- {x}' for x in critical]
+elif pending_decisions:lines += ['## 🟡 Competition chronology guarded; match decisions pending','',f'{len(pending_decisions)} fixture(s) remain under automatic review. Independently verified results can publish.']
 else:lines += ['## 🟢 Competition chronology healthy','',f'Preliminary and First Qualifying chronology is preserved, the active **{active_round}** draw has canonical coverage, and no played fixture is overdue a result.']
 if active_unresolved:lines += ['','## Conditional active-round slots','',f'{len(active_unresolved)} unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.']
 if overdue:
     lines += ['','## Results requiring confirmation','']
     for f in sorted(overdue,key=lambda x:x.get('scheduled','')):lines.append(f"- **{f.get('home')} v {f.get('away')}** — {f.get('round','Round TBC')} — {f.get('date','Date TBC')} • {f.get('kickoff','15:00')}")
+if pending_decisions:
+    lines += ['', '## Match decisions awaiting evidence', '']
+    for held in pending_decisions:
+        f=held['fixture']
+        lines.append(f"- **{f['home']} v {f['away']}** — {held['date']} — {held['reason']} (first held {held['first_seen_at']})")
+        print('::warning title=Match decision still unresolved::' + f['home'] + ' v ' + f['away'] + ' — ' + held['reason'])
 REPORT.write_text('\n'.join(lines)+'\n',encoding='utf-8')
 print('COMPETITION HEALTH v7.9.25')
 print('Preliminary ties:',prelim_ties);print('Preliminary results/replays:',prelim_results);print('First Qualifying ties preserved:',firstq_ties);print('Active round:',active_round);print('Active ties:',active_ties);print('Unique active conditional/replay slots:',len(active_unresolved));print('RESULTS REQUIRING CONFIRMATION:',len(overdue));print('FIXTURE-LOCAL HEALTH:',FIXTURE_LOCAL_HEALTH);print('CRITICAL:',len(critical))

@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 from reconcile_quarantined_replay_evidence import reconcile
 from round_state_engine import pair_key
+from match_decisions import penalty_observation
 
 
 def readiness(report, evidence_by_fixture=None):
@@ -40,12 +41,13 @@ def readiness(report, evidence_by_fixture=None):
         return row["date"], key
 
     expected = {}
+    missing = set()
     for gap in gaps:
         key = identity(gap)
         if key in expected:
             raise ValueError("duplicate scheduled replay gap")
         if gap.get("source_observed") is not True:
-            raise ValueError("scheduled replay absent from source")
+            missing.add(key)
         expected[key] = gap
 
     archived_round = str(report.get("archived_round") or "")
@@ -58,18 +60,28 @@ def readiness(report, evidence_by_fixture=None):
     approved, held = [], []
     for row in candidates:
         key = identity(row)
-        if key not in expected or key in seen:
+        if key not in expected or key in seen or key in missing:
             raise ValueError("unmatched or duplicate replay candidate")
         seen.add(key)
         if row.get("round") != expected_replay_round or not row.get("winner"):
             raise ValueError("undecided or wrong-round replay candidate")
         if row.get("decision") == "penalties":
+            evidence_key = "|".join((row["date"], *sorted((row["home"].casefold(), row["away"].casefold()))))
+            clear_source = False
+            try:
+                penalty_observation(row)
+                clear_source = True
+            except ValueError:
+                pass  # Contradictory/unattributed legacy evidence needs corroboration.
             fixture = {"home": row["home"], "away": row["away"],
                        "date": row["date"],
                        "reason": "penalty decision with non-level source score: independent verification required"}
             evidence_key = "|".join((row["date"], *sorted((row["home"].casefold(), row["away"].casefold()))))
             verdict = reconcile(fixture, evidence_by_fixture.get(evidence_key, []))
             if verdict["status"] != "independently_verified":
+                if clear_source:
+                    approved.append(row)
+                    continue
                 held.append({"fixture": evidence_key, "reason": "two independent penalty reports required"})
                 continue
             confirmed = verdict["result"]
@@ -80,16 +92,21 @@ def readiness(report, evidence_by_fixture=None):
 
     for row in blocked:
         key = identity(row)
-        if key not in expected or key in seen:
+        if key not in expected or key in seen or key in missing:
             raise ValueError("unmatched or duplicate blocked replay")
         seen.add(key)
         evidence_key = "|".join((row["date"], *sorted((row["home"].casefold(), row["away"].casefold()))))
         held.append({"fixture": evidence_key, "reason": row.get("reason", "blocked by source audit")})
-    if seen != set(expected):
+    if seen != set(expected) - missing:
         raise ValueError("scheduled replay has no source-backed result or quarantine")
+    for key in sorted(missing, key=lambda k: (k[0], sorted(k[1]))):
+        gap = expected[key]
+        evidence_key = '|'.join((gap['date'], *sorted((gap['home'].casefold(), gap['away'].casefold()))))
+        held.append({'fixture': evidence_key, 'reason': 'scheduled replay awaiting source observation'})
     return {"status": "ready" if not held else "partial_ready",
             "approved_count": len(approved), "held_count": len(held),
             "already_recorded": recorded, "observations": observations,
+            "unobserved_scheduled": len(missing),
             "scheduled_replay_gaps": gaps,
             "approved": approved, "held": held, "production_mutation": False}
 
