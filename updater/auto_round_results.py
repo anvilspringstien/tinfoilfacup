@@ -550,7 +550,8 @@ def main():
         capture.setdefault('retried_decisions', []).append({'url': url, 'html': raw})
         SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
         return raw
-    visited = {round_name, (archived_report.get('audit') or {}).get('archived_round')}
+    visited = {round_name, archived_report.get('archived_round'),
+               (archived_report.get('audit') or {}).get('archived_round')}
     data, retry_report = retry_archived_holds(data, capture_retry_source, live_raw, visited)
     changed = changed or retry_report['changed']
 

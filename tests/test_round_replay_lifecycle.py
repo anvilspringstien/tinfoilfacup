@@ -57,7 +57,7 @@ class LifecycleTests(unittest.TestCase):
                     raise
             return json.loads(dp.read_text()), target
 
-    def run_results(self, data, replay_source, live_source=''):
+    def run_results(self, data, replay_source, live_source='', archived_unavailable=False):
         active = data['source_round']
         previous = draw.ROUND_ORDER[draw.ROUND_ORDER.index(active)-1]
         urls = {scan.fwp_round_url(active): f'<h1>Fixtures/Results, {scan.fwp_round_label(active)}, 2026-2027</h1>',
@@ -66,6 +66,8 @@ class LifecycleTests(unittest.TestCase):
         requested = []
         def fetch(url):
             requested.append(url)
+            if archived_unavailable and url.endswith('-replay'):
+                raise OSError('archived source offline')
             return urls[url]
         with tempfile.TemporaryDirectory() as tmp:
             dp, rp, cp = (Path(tmp)/name for name in ('competition.json', 'report.json', 'capture.json'))
@@ -273,6 +275,24 @@ class LifecycleTests(unittest.TestCase):
         monday, _ = self.promote(state())
         with self.assertRaises(SystemExit):
             self.run_results(monday, '<h1>Fixtures/Results, Third Qualifying Round Replay, 2026-2027</h1>')
+
+    def test_archived_source_outage_retains_hold_without_blocking_scan(self):
+        monday,_ = self.promote(state())
+        before = copy.deepcopy(monday)
+        def unavailable(_):
+            raise OSError('archived source offline')
+        candidate,report,_ = archived.collect(monday,unavailable)
+        self.assertEqual(report['status'],'evidence-held')
+        self.assertEqual(len(candidate['pending_match_decisions']),1)
+        self.assertEqual(candidate['result_history'],monday['result_history'])
+        self.assertEqual(candidate['fixtures'],monday['fixtures'])
+        self.assertEqual(monday,before)
+        live = ('<h3>Saturday 7 November 2026</h3><table><tr><td>FT</td>'
+                '<td>Home Club 1</td><td>2</td><td>0</td><td>Away Club 1</td></tr></table>')
+        published,report,_ = self.run_results(monday,'',live,archived_unavailable=True)
+        self.assertEqual(published['results']['Home Club 1']['winner'],'Home Club 1')
+        self.assertEqual(len(published['pending_match_decisions']),1)
+        self.assertFalse(report['blocked'])
 
     def test_generic_abbreviations_preserve_archive_and_source_identity(self):
         saturday = state('Second Round Qualifying')

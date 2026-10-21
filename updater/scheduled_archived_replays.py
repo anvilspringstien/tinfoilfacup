@@ -49,7 +49,24 @@ def collect(data, fetch, live_html="", as_of=None):
     audit_data = copy.deepcopy(data)
     audit_data.setdefault("round_fixtures", {})[preceding] = audit_originals
     url = audit.archived_replay_source(preceding)
-    raw = fetch(url)
+    try:
+        raw = fetch(url)
+    except OSError as exc:
+        # A historical source outage is fixture-local uncertainty. It must not
+        # discard independently verified current-round results in this scan.
+        candidate = copy.deepcopy(data)
+        decisions = []
+        for original in pending:
+            replay = next(r for r in scheduled if r.get('round') == preceding + ' Replay'
+                          and r.get('date', '') > original.get('date', '') and same_pair(r, original))
+            decisions.append({'fixture': original, 'observation': replay,
+                              'held': 'archived replay source unavailable; automatic retry pending',
+                              'state': 'awaiting-decision', 'sources': [url]})
+        changed = retain_holds(candidate, decisions)
+        return candidate, {'status': 'evidence-held', 'changed': changed, 'archived_round': preceding,
+                           'held': [{'fixture': d['fixture']['home'] + ' v ' + d['fixture']['away'],
+                                     'reason': d['held']} for d in decisions],
+                           'source_failure': str(exc)}, None
     audit.validate_archived_replay_page(raw, preceding, url)
     report = audit.audit(audit_data, raw, live_html, url, as_of=as_of)
     gate = readiness(report)
