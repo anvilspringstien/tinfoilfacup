@@ -1342,7 +1342,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
         <div class="trophy-viewer-face front"><img id="trophyViewerFront" alt="" draggable="false" decoding="async"></div>
         <div class="trophy-viewer-face back"><img id="trophyViewerBack" alt="" draggable="false" decoding="async"></div>
       </div>
-    <div id="barrysBitMat" class="barrys-bit-mat" hidden aria-label="Barry’s Bits — Facts on Foil No. 087: The Cup That Never Was"><div class="barrys-bit-masthead"><img src="barry-pigeon-mail-small.webp" alt="Barry the Mail Pigeon" loading="lazy" decoding="async"><div class="barrys-bit-heading">BARRY’S BITS</div></div><div class="barrys-bit-sub">FACTS ON FOIL No. 087</div><div class="barrys-bit-rule"></div><div class="barrys-bit-fact">THE CUP THAT NEVER WAS</div><p class="barrys-bit-story">“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”</p><div class="barrys-bit-footer"><div class="barrys-bit-credit"><em>A Hidden History of The FA Cup</em><span>James Higginbottom</span></div></div></div></div>
+    <div id="barrysBitMat" class="barrys-bit-mat" hidden aria-label="Barry’s Bits — Facts on Foil No. 087: The Cup That Never Was"><div class="barrys-bit-masthead"><img src="barry-pigeon-mail-small.webp" alt="Barry the Mail Pigeon" loading="lazy" decoding="async"><div class="barrys-bit-heading">BARRY’S BITS</div></div><div id="barrysBitNumber" class="barrys-bit-sub">FACTS ON FOIL No. 087</div><div class="barrys-bit-rule"></div><div id="barrysBitTitle" class="barrys-bit-fact">THE CUP THAT NEVER WAS</div><p id="barrysBitStory" class="barrys-bit-story">“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”</p><div class="barrys-bit-footer"><div id="barrysBitCredit" class="barrys-bit-credit"><em>A Hidden History of The FA Cup</em><span>James Higginbottom</span></div></div></div></div>
     <div id="trophyViewerHint" class="trophy-viewer-hint" aria-live="polite">Tap to flip</div>
   </div>
 </div>
@@ -1779,15 +1779,27 @@ function render() {
   }
 }
 
+const BARRY_BITS = {"17": {"number": "087", "title": "THE CUP THAT NEVER WAS", "story": "“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”", "creditTitle": "A Hidden History of The FA Cup", "creditAuthor": "James Higginbottom"}, "19": {"number": "142", "title": "THE ORIGINAL AWAY-DAY", "story": "“The first recorded Tin Foil FA Cup was made by Muriel Braithwaite for her son, Jeremiah Braithwaite, who was famously carried on his dad's shoulders for 280 miles to the 1922 Huddersfield Town vs Preston North End final. It now resides, along with little Jeremiah's calipers, in the National Football Museum, Manchester.”", "creditTitle": "Footie Facts Encyclopedia", "creditAuthor": ""}};
+
 /* Trophy inspection is a separate, transient UI state: no deck index, flips or storage writes. */
 const trophyViewer=$("trophyViewer"), trophyViewerMat=$("trophyViewerMat");
 const trophyViewerCard=$("trophyViewerCard"), trophyViewerHint=$("trophyViewerHint");
-let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null, trophyViewerProclaimer=false, trophyViewerBitShown=false;
+let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null, trophyViewerHasBit=false, trophyViewerBitShown=false;
 function openTrophy(c,origin){
   if(!state.completed[c.id]) return;
   trophyOrigin=origin;
   trophyViewerFlipped=false;
-  trophyViewerProclaimer=(c.id==="17");
+  trophyViewerHasBit=Object.hasOwn(BARRY_BITS,c.id);
+  if(trophyViewerHasBit){
+    const bit=BARRY_BITS[c.id];
+    $("barrysBitNumber").textContent="FACTS ON FOIL No. "+bit.number;
+    $("barrysBitTitle").textContent=bit.title;
+    $("barrysBitStory").textContent=bit.story;
+    $("barrysBitCredit").replaceChildren();
+    const title=document.createElement("em");title.textContent=bit.creditTitle;$("barrysBitCredit").append(title);
+    if(bit.creditAuthor){const author=document.createElement("span");author.textContent=bit.creditAuthor;$("barrysBitCredit").append(author)}
+    $("barrysBitMat").setAttribute("aria-label","Barry’s Bits — Facts on Foil No. "+bit.number+": "+bit.title);
+  }
   trophyViewerBitShown=false;
   $("barrysBitMat").hidden=true;
   $("barrysBitMat").classList.remove("revealed");
@@ -1811,7 +1823,7 @@ function closeTrophy(){
   $("barrysBitMat").hidden=true;
   $("barrysBitMat").classList.remove("revealed");
   trophyViewerBitShown=false;
-  trophyViewerProclaimer=false;
+  trophyViewerHasBit=false;
   const origin=trophyOrigin;
   trophyOrigin=null;
   if(origin && origin.isConnected!==false && typeof origin.focus==="function"){
@@ -1822,7 +1834,7 @@ function advanceTrophy(){
   if(!trophyViewerOpen)return;
   if(trophyViewerBitShown){closeTrophy();return;}
   if(trophyViewerFlipped){
-    if(!trophyViewerProclaimer){closeTrophy();return;}
+    if(!trophyViewerHasBit){closeTrophy();return;}
     trophyViewerBitShown=true;
     const bit=$("barrysBitMat");
     bit.hidden=false;
@@ -1835,8 +1847,8 @@ function advanceTrophy(){
   }
   trophyViewerFlipped=true;
   trophyViewerCard.classList.add("flipped");
-  trophyViewerHint.textContent=trophyViewerProclaimer?"Tap for Barry’s Bit":"Tap to return";
-  trophyViewerMat.setAttribute("aria-label",trophyViewerProclaimer?"Tap to discover Barry’s Bit":"Tap to return to Trophy Cabinet");
+  trophyViewerHint.textContent=trophyViewerHasBit?"Tap for Barry’s Bit":"Tap to return";
+  trophyViewerMat.setAttribute("aria-label",trophyViewerHasBit?"Tap to discover Barry’s Bit":"Tap to return to Trophy Cabinet");
 }
 trophyViewerMat.onclick=advanceTrophy;
 trophyViewerMat.addEventListener("keydown",e=>{
