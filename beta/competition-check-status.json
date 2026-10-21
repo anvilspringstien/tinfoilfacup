@@ -1,22 +1,22 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-21T12:45:59.879049Z",
-  "state": "checked",
-  "last_checked_at": "2026-10-21T10:33:14Z",
+  "monitor_ran_at": "2026-10-21T15:18:33.147751Z",
+  "state": "unverified",
+  "last_checked_at": null,
   "results": "success",
-  "draw": "success",
+  "draw": "unverified",
   "diagnostics": {
     "results": {
       "reason": "verified",
-      "run_id": 39587470188,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39587470188",
-      "event": "push",
+      "run_id": 39623876197,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39623876197",
+      "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-10-21T10:56:00Z"
+      "updated_at": "2026-10-21T15:18:06Z"
     },
     "draw": {
-      "reason": "verified",
+      "reason": "stale",
       "run_id": 39585381174,
       "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39585381174",
       "event": "schedule",
@@ -26,22 +26,22 @@
     }
   },
   "scheduled": {
-    "state": "checked",
-    "last_checked_at": "2026-10-21T10:14:30Z",
+    "state": "unverified",
+    "last_checked_at": null,
     "results": "success",
-    "draw": "success",
+    "draw": "unverified",
     "diagnostics": {
       "results": {
         "reason": "verified",
-        "run_id": 39582384955,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39582384955",
+        "run_id": 39623876197,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39623876197",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-10-21T10:14:30Z"
+        "updated_at": "2026-10-21T15:18:06Z"
       },
       "draw": {
-        "reason": "verified",
+        "reason": "stale",
         "run_id": 39585381174,
         "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39585381174",
         "event": "schedule",
