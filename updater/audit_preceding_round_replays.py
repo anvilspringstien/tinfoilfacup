@@ -191,6 +191,7 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
     # A source count alone cannot prove that the source included every tie.
     observed_pairs = {pair_key(item["observation"]) for item in observations}
     candidate_pairs = {pair_key(row) for row in results + blocked}
+    blocked_pairs = {pair_key(row) for row in blocked}
     recorded_pairs = {pair_key(row) for row in published_history
                       if base_round(row.get("round")) == preceding
                       and str(row.get("round") or "").endswith(" Replay")
@@ -207,7 +208,7 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
             continue
         seen_scheduled.add(pair)
         due = replay_is_due(scheduled, as_of)
-        if pair not in recorded_pairs and (due or pair in candidate_pairs):
+        if (pair not in recorded_pairs or pair in blocked_pairs) and (due or pair in candidate_pairs):
             scheduled_replay_gaps.append({
                 "home": scheduled.get("home"), "away": scheduled.get("away"),
                 "date": scheduled.get("date"),

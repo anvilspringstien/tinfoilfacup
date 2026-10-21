@@ -28,6 +28,31 @@ def fixture_data():
 
 
 class PrecedingReplayAuditTests(unittest.TestCase):
+    def test_conflicting_published_replay_does_not_block_other_clear_result(self):
+        from guard_archived_replay_promotion import readiness
+        data=fixture_data()
+        original=data['result_history']['Weston-super-Mare'][0]
+        recorded=dict(round='Second Round Qualifying Replay',home='Wimborne Town',away='Weston-super-Mare',
+                      date='2026-09-22',home_score=1,away_score=1,winner='Wimborne Town',decision='penalties',
+                      status='FT AET',source_url=scan.FWP_LIVE_URL)
+        data['result_history']['Wimborne Town']=[recorded]
+        other=dict(original,home='Alpha Town',away='Beta City')
+        data['result_history']['Alpha Town']=[other]
+        data['round_fixtures']['Second Round Qualifying']['Alpha Town']=other
+        data['replays']={'Wimborne':dict(recorded),
+                         'Alpha':dict(round='Second Round Qualifying Replay',home='Alpha Town',away='Beta City',date='2026-09-22')}
+        before=copy.deepcopy(data)
+        observations=[dict(fixture=data['round_fixtures']['Second Round Qualifying']['Weston-super-Mare'],
+                           observation=dict(recorded,winner='Weston-super-Mare')),
+                      dict(fixture=other,observation=dict(other,date='2026-09-22',home_score=2,away_score=0,
+                           winner='Alpha Town',decision='',source_url=scan.FWP_LIVE_URL))]
+        with patch.object(scan,'parse_fwp_observations',return_value=observations):
+            report=audit.audit(data,'<html/>')
+        gate=readiness(report)
+        self.assertEqual((gate['approved_count'],gate['held_count']),(1,1))
+        self.assertEqual(gate['approved'][0]['winner'],'Alpha Town')
+        self.assertEqual(data,before)
+
     def test_cross_page_penalty_note_is_one_verified_fixture(self):
         from guard_archived_replay_promotion import readiness
         data = fixture_data()
