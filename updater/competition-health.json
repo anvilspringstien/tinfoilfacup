@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-21T11:10:05.526215+01:00",
+  "checked_at": "2026-10-21T11:42:07.485796+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -10,28 +10,16 @@
     "active_round_conditional_slots": 0
   },
   "counts": {
-    "known_fixtures": 178,
+    "known_fixtures": 177,
     "complete": 137,
     "awaiting_grace": 0,
-    "overdue": 1,
+    "overdue": 0,
     "upcoming": 40,
     "critical": 0
   },
   "critical": [],
   "fixture_local_health": true,
-  "overdue": [
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Cray Wanderers",
-      "away": "Bedford Town",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    }
-  ],
+  "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
@@ -55,5 +43,7 @@
     "kickoffs_enriched": 150,
     "replay_kickoffs_verified": 24,
     "active_round_preserved": "First Round Proper"
-  }
+  },
+  "pending_match_decisions": [],
+  "data_state": "complete"
 }
