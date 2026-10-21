@@ -6,8 +6,8 @@
 
 | File | Bytes | SHA-256 |
 |---|---:|---|
-| `beta/clubfinder-beta.html` | 581,770 | `6b8e7e4956322c71cb9b571d050d5c130e7c76f868b312bc5d94f87bf9be16cb` |
-| `beta/challenges-beta.html` | 96,406 | `3546154e64c15d93c9eb164018e0ea29efda03b4c23e248c0d27e289a15fdb0b` |
+| `beta/clubfinder-beta.html` | 624,077 | `707930c9d4208067f2b129abad1190919acf4d6791a4a8dd087370b72b49106c` |
+| `beta/challenges-beta.html` | 109,403 | `a5df9bd7c0ca8f17fb7fa486e12cb0454e89aacae6e1dd78316f86db1785aa2f` |
 
 The Deck side already contains the Stage A `applyClubfinderCampaignTruth()` reader, Stage B `renderTrophyCabinet()` helper and their regression tests.
 
@@ -15,23 +15,23 @@ The Deck side already contains the Stage A `applyClubfinderCampaignTruth()` read
 
 | Function or expression | First source line | Detected declaration | Source token occurrences |
 |---|---:|---|---:|
-| `openChallenges` | 1668 | function | 3 |
-| `tinFoilChallengeStatsSnapshot` | 1574 | function | 2 |
-| `tinFoilCampaignIdentityForSave` | 1401 | function | 2 |
-| `tinFoilPersistCampaignIdentityBackup` | 1261 | function | 5 |
-| `tinFoilRecoverCampaignIdentity` | 1275 | function | 3 |
-| `tinFoilSavePigeonName` | 1236 | function | 2 |
-| `tinFoilRestoreClubfinderReturnSnapshot` | 1438 | function | 2 |
-| `completedResultVenue` | 513 | reference only | 5 |
-| `tinFoilPigeonMilesForStats` | 1542 | function | 3 |
-| `buildJourney` | 769 | reference only | 4 |
-| `journeyCertificate` | 1689 | function | 7 |
-| `loadSavedJourney` | 1477 | function | 18 |
-| `saveJourney` | 1478 | function | 2 |
-| `tinFoilSavedPigeonName` | 1223 | function | 8 |
-| `tinFoilPigeonNameInputHtml` | 1227 | function | 2 |
+| `openChallenges` | 2069 | function | 2 |
+| `tinFoilChallengeStatsSnapshot` | 1958 | function | 2 |
+| `tinFoilCampaignIdentityForSave` | 1752 | function | 2 |
+| `tinFoilPersistCampaignIdentityBackup` | 1612 | function | 5 |
+| `tinFoilRecoverCampaignIdentity` | 1626 | function | 3 |
+| `tinFoilSavePigeonName` | 1587 | function | 2 |
+| `tinFoilRestoreClubfinderReturnSnapshot` | 1789 | function | 3 |
+| `completedResultVenue` | 833 | reference only | 5 |
+| `tinFoilPigeonMilesForStats` | 1926 | function | 3 |
+| `buildJourney` | 1089 | reference only | 4 |
+| `journeyCertificate` | 2088 | function | 5 |
+| `loadSavedJourney` | 1833 | function | 19 |
+| `saveJourney` | 1834 | function | 2 |
+| `tinFoilSavedPigeonName` | 1574 | function | 8 |
+| `tinFoilPigeonNameInputHtml` | 1578 | function | 2 |
 | `tinFoilPigeonNameBandHtml` | — | not found | 0 |
-| `tinFoilSaveClubfinderReturnSnapshot` | 1423 | function | 2 |
+| `tinFoilSaveClubfinderReturnSnapshot` | 1774 | function | 2 |
 
 The seven required rows form the existing BETA Clubfinder producer/saved-identity/return-snapshot boundary. Optional support names marked as references are not claimed to have a standalone function.
 
@@ -39,59 +39,61 @@ The seven required rows form the existing BETA Clubfinder producer/saved-identit
 
 | Storage key | Source occurrences (excluding offline JSON) | First six source lines |
 |---|---:|---|
-| `tffc.clubfinderCampaign.v1` | 2 | 1197, 1557 |
-| `tffc.clubfinderCampaignIdentity.v1` | 1 | 1196 |
-| `tffc.clubfinderReturnSnapshot.v1` | 1 | 1422 |
-| `tffc.challengeOrigin` | 1 | 1685 |
+| `tffc.clubfinderCampaign.v1` | 2 | 1548, 1941 |
+| `tffc.clubfinderCampaignIdentity.v1` | 2 | 1547, 2307 |
+| `tffc.clubfinderReturnSnapshot.v1` | 1 | 1773 |
+| `tffc.challengeOrigin` | 3 | 2052, 2052, 2079 |
 | `tffc.challengeReturnIndex` | 0 | None |
-| `tffc.openStatsOnReturn` | 2 | 1456, 2004 |
-| `tffc.challengeDeck.v1` | 1 | 1609 |
+| `tffc.openStatsOnReturn` | 2 | 1810, 2445 |
+| `tffc.challengeDeck.v1` | 1 | 1993 |
 
 ### Direct storage operations (filtered to relevant keys/aliases)
 
 | Source line | Operation | Source expression | Resolved literal if simple alias |
 |---|---|---|---|
-| 1265 | `localStorage.setItem` | `TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY` | `tffc.clubfinderCampaignIdentity.v1` |
-| 1299 | `localStorage.removeItem` | `TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY` | `tffc.clubfinderCampaignIdentity.v1` |
-| 1300 | `localStorage.removeItem` | `TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY` | `tffc.clubfinderCampaign.v1` |
-| 1434 | `sessionStorage.setItem` | `TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY` | `tffc.clubfinderReturnSnapshot.v1` |
-| 1440 | `sessionStorage.getItem` | `TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY` | `tffc.clubfinderReturnSnapshot.v1` |
-| 1456 | `sessionStorage.getItem` | `tffc.openStatsOnReturn` | `tffc.openStatsOnReturn` |
-| 1609 | `localStorage.getItem` | `tffc.challengeDeck.v1` | `tffc.challengeDeck.v1` |
-| 1680 | `localStorage.setItem` | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | `tffc.clubfinderCampaign.v1` |
-| 1685 | `sessionStorage.setItem` | `tffc.challengeOrigin` | `tffc.challengeOrigin` |
-| 1799 | `localStorage.getItem` | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | `tffc.clubfinderCampaign.v1` |
-| 2004 | `sessionStorage.removeItem` | `tffc.openStatsOnReturn` | `tffc.openStatsOnReturn` |
+| 1616 | `localStorage.setItem` | `TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY` | `tffc.clubfinderCampaignIdentity.v1` |
+| 1650 | `localStorage.removeItem` | `TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY` | `tffc.clubfinderCampaignIdentity.v1` |
+| 1651 | `localStorage.removeItem` | `TIN_FOIL_CHALLENGE_BRIDGE_IDENTITY_KEY` | `tffc.clubfinderCampaign.v1` |
+| 1785 | `sessionStorage.setItem` | `TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY` | `tffc.clubfinderReturnSnapshot.v1` |
+| 1791 | `sessionStorage.getItem` | `TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY` | `tffc.clubfinderReturnSnapshot.v1` |
+| 1810 | `sessionStorage.getItem` | `tffc.openStatsOnReturn` | `tffc.openStatsOnReturn` |
+| 1993 | `localStorage.getItem` | `tffc.challengeDeck.v1` | `tffc.challengeDeck.v1` |
+| 2052 | `sessionStorage.getItem` | `tffc.challengeOrigin` | `tffc.challengeOrigin` |
+| 2052 | `sessionStorage.removeItem` | `tffc.challengeOrigin` | `tffc.challengeOrigin` |
+| 2074 | `localStorage.setItem` | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | `tffc.clubfinderCampaign.v1` |
+| 2079 | `sessionStorage.setItem` | `tffc.challengeOrigin` | `tffc.challengeOrigin` |
+| 2205 | `localStorage.getItem` | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | `tffc.clubfinderCampaign.v1` |
+| 2445 | `sessionStorage.removeItem` | `tffc.openStatsOnReturn` | `tffc.openStatsOnReturn` |
 
 ## Critical producer evidence
 
 These are **bounded opening excerpts**, not whole function bodies; inspect the file itself before editing any function.
 
-### `openChallenges` — source line 1668
+### `openChallenges` — source line 2069
 
 ~~~js
-async function openChallenges(origin){
+async function openChallenges(origin,prepared=null){
  await tinFoilPaintChallengesPrep();
- const journey=buildJourney(origin),crumbs=journey.breadcrumbs||[],saved=loadSavedJourney();
- let away=0,pathCarrier=origin.name;
- for(const cr of crumbs){const r=cr.result||{};if(norm(r.away||'')===norm(pathCarrier))away++;const hs=Number(r.home_score),as=Number(r.away_score);if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)pathCarrier=hs>as?r.home:r.away;}
- function venueForChallenge(r){return completedResultVenue(r);}
- const pm=await tinFoilPigeonMilesForStats(crumbs,saved&&saved.postcode,venueForChallenge);
- let ri=0;crumbs.forEach(cr=>ri=Math.max(ri,tinFoilChallengeRoundIndex((cr.result||{}).round)));
- const texts=[journey.round,journey.nextRound,journey.fixture&&journey.fixture.round,journey.next&&journey.next.round];texts.forEach(x=>ri=Math.max(ri,tinFoilChallengeRoundIndex(x)));
- const verifiedMiles=Number.isFinite(pm.miles)?pm.miles:0;
- const statsSnapshot=tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,verifiedMiles);
- const truth=tinFoilBuildChallengeBridgeRecord(origin,journey,crumbs,saved,{awayTies:away,pigeonMiles:verifiedMiles,campaignRound:ri},statsSnapshot,new Date().toISOString());
+ let truth;
+ try{truth=await (prepared||tinFoilPrepareChallenges(origin));}
+ catch(_){tinFoilRemoveChallengesPrep();await tinFoilConfirm('We couldn’t prepare your Challenges. Please try again.');return;}
  localStorage.setItem(TIN_FOIL_CHALLENGE_BRIDGE_KEY,JSON.stringify(truth));
  /* Preserve the fully rendered BETA Campaign before leaving Clubfinder.
+    Challenge Stats may replace the current document, but Exit can restore this
+    exact Campaign view without another postcode lookup. */
+ tinFoilSaveClubfinderReturnSnapshot();
+ try{sessionStorage.setItem('tffc.challengeOrigin','clubfinder-beta');}catch(_){}
+ // Leave a clean Clubfinder document for browser Back / page-cache restoration.
+ // The preparation screen has served its purpose once the bridge is ready.
+ tinFoilRemoveChallengesPrep();
 ~~~
 
 Within the first bounded source window (not a parser-grade AST):
 
 | Evidence string | Present in bounded window? |
 |---|---|
-| `completedResultVenue` | Yes |
-| `tinFoilPigeonMilesForStats` | Yes |
+| `completedResultVenue` | Not within window |
+| `tinFoilPigeonMilesForStats` | Not within window |
 | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | Yes |
 | `TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY` | Not within window |
 | `TIN_FOIL_CAMPAIGN_IDENTITY_BACKUP_KEY` | Not within window |
@@ -102,11 +104,11 @@ Within the first bounded source window (not a parser-grade AST):
 | `selectedAt:` | Not within window |
 | `originName:` | Not within window |
 | `statsSnapshot:` | Not within window |
-| `pigeonMiles:` | Yes |
+| `pigeonMiles:` | Not within window |
 | `tiesPlayed:` | Not within window |
 
 
-### `tinFoilChallengeStatsSnapshot` — source line 1574
+### `tinFoilChallengeStatsSnapshot` — source line 1958
 
 ~~~js
 function tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,pigeonMiles){
@@ -126,7 +128,7 @@ function tinFoilChallengeStatsSnapshot(origin,journey,crumbs,saved,pigeonMiles){
 ~~~
 
 
-### `tinFoilCampaignIdentityForSave` — source line 1401
+### `tinFoilCampaignIdentityForSave` — source line 1752
 
 ~~~js
 function tinFoilCampaignIdentityForSave(origin,existing){
@@ -146,7 +148,7 @@ function tinFoilRegisterPendingCampaignIdentity(saved){
 ~~~
 
 
-### `tinFoilPersistCampaignIdentityBackup` — source line 1261
+### `tinFoilPersistCampaignIdentityBackup` — source line 1612
 
 ~~~js
 function tinFoilPersistCampaignIdentityBackup(saved){
@@ -166,7 +168,7 @@ function tinFoilPersistCampaignIdentityBackup(saved){
 ~~~
 
 
-### `tinFoilRecoverCampaignIdentity` — source line 1275
+### `tinFoilRecoverCampaignIdentity` — source line 1626
 
 ~~~js
 function tinFoilRecoverCampaignIdentity(saved){
@@ -186,7 +188,7 @@ function tinFoilRecoverCampaignIdentity(saved){
 ~~~
 
 
-### `tinFoilSavePigeonName` — source line 1236
+### `tinFoilSavePigeonName` — source line 1587
 
 ~~~js
 function tinFoilSavePigeonName(value){
@@ -206,7 +208,7 @@ function tinFoilIdentityStorageSnapshot(key){
 ~~~
 
 
-### `tinFoilRestoreClubfinderReturnSnapshot` — source line 1438
+### `tinFoilRestoreClubfinderReturnSnapshot` — source line 1789
 
 ~~~js
 function tinFoilRestoreClubfinderReturnSnapshot(){
@@ -220,9 +222,9 @@ function tinFoilRestoreClubfinderReturnSnapshot(){
     if(input&&snapshot.postcode)input.value=String(snapshot.postcode).toUpperCase();
     if(status)status.textContent=snapshot.status||'Your Tin Foil FA Cup Campaign. Dates & times may change. Always check before travelling';
     results.innerHTML=snapshot.resultsHtml;
-    results.style.display='block';
-    const gr=document.getElementById('globalResetWrap');if(gr)gr.style.display='block';
-    requestAnimationFrame(()=>{try{window.scrollTo(0,Math.max(0,Number(snapshot.scrollY)||0))}catch(e){}});
+    // Saved identity wins over an older HTML snapshot after a Stats/Challenges edit.
+    // Refresh just the pigeon rows; never re-run a postcode search or counter.
+    tinFoilRefreshCampaignIdentityDisplay();
 ~~~
 
 ## Cross-page contract and safeguards
