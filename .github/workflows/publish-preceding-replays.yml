@@ -140,17 +140,23 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
+          sys.path.insert(0, 'updater')
+          from guard_archived_replay_promotion import readiness
           report=json.load(open('/tmp/replay-promotion-readiness.json'))
+          audit=json.load(open('/tmp/archived-replay-audit.json'))
+          evidence=json.load(open('/tmp/replay-independent-evidence.json'))
+          assert report==readiness(audit,evidence), 'readiness report differs from fresh evidence validation'
           expected=len(report['scheduled_replay_gaps'])
           assert report['approved_count']+report['held_count']==expected, report
           assert report['approved_count']>0, report
           assert report['already_recorded']+report['approved_count']+report['held_count']==report['observations'], report
-          if report['held']:
-              assert all('wimborne town' in item['fixture'] for item in report['held']), report
-              assert all(r.get('winner')!='Wimborne Town' for r in report['approved']), report
-          if any(r.get('decision')=='penalties' for r in report['approved']):
-              evidence=json.load(open('/tmp/replay-independent-evidence.json'))
-              assert any(len(rows)>=2 for rows in evidence.values()), evidence
+          def key(row):
+              return '|'.join((row['date'],*sorted((row['home'].casefold(),row['away'].casefold()))))
+          held={item['fixture'] for item in report['held']}
+          approved={key(row) for row in report['approved']}
+          assert not held.intersection(approved), 'held replay was approved'
+          assert held.union(approved)=={key(row) for row in report['scheduled_replay_gaps']}, report
           print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'new cleared,',report['held_count'],'held,',report['already_recorded'],'previously published')
           PY
       - name: Publish guarded candidate only after all isolated guards pass
