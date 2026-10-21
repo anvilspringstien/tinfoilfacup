@@ -87,6 +87,7 @@ try{
   await page.waitForURL('**/beta/'+host);
   await shareFrame.locator('#copy').waitFor();
   assert.equal(await shareFrame.locator('#shareHeading').innerText(),'Share the Magic');
+  assert(await shareFrame.locator('#shareHeading').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle==='none'),'return focuses the Share title without a box');
   await keepEntry.click();
   await page.waitForURL('**/keep-the-magic-shed.html?**');
   await page.locator('#close').click();
@@ -138,6 +139,24 @@ try{
  await page.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
  await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1');
  await page.locator('#keep').click();assert.match(await page.locator('#install-status').innerText(),/already/);assert(await page.locator('#install').isHidden());
+ assert.equal(await page.locator('#heading').innerText(),'You Kept the Magic!');
+ assert.equal(await page.locator('#keep-intro').innerText(),'See. We told you it was easy.');
+ assert.equal(await page.locator('#installed-celebration').innerText(),'Congratulations!');
+ assert(await page.locator('#installed-celebration').isVisible());
+ assert(await page.locator('#heading').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle==='none'),'installed title has no focus box');
+ for(const [width,height] of [[390,669],[390,560],[1680,889]]){
+  await page.setViewportSize({width,height});await fits();
+  await page.screenshot({path:`/tmp/tffc-installed-magic-${width}x${height}.png`});
+ }
+ await page.setViewportSize({width:390,height:669});
+ await page.keyboard.press('Tab');
+ assert(await page.locator('#back').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle!=='none'),'keyboard focus remains visible');
+ await page.locator('#back').click();
+ assert(await page.locator('#installed-celebration').isHidden());
+ await page.keyboard.press('Shift+Tab');
+ // The title is not a tab stop; keyboard navigation can still reach Close.
+ await page.locator('#close').focus();
+ assert(await page.locator('#close').evaluate(e=>getComputedStyle(e).outlineStyle!=='none'),'Close retains its keyboard outline');
  await page.goto(base+'/beta/keep-the-magic-shed.html');
  await page.waitForURL(base+'/beta/');
  assert.equal(await page.locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
