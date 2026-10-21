@@ -25,7 +25,7 @@ try{
    const geometry=await value.evaluate(e=>{const r=e.getBoundingClientRect(),label=document.querySelector('.campaign-call-sign-label').getBoundingClientRect(),parent=e.parentElement.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e);const lines=[...range.getClientRects()];return {top:r.top,labelBottom:label.bottom,right:lines[0].right,parentRight:parent.right,lines:lines.length}});
    assert(geometry.top>=geometry.labelBottom-1,'Call Sign label has its own line');
    assert.equal(geometry.lines,1,'complete call sign and number stay together');
-   assert(geometry.right<=geometry.parentRight+1,'complete call sign fits inside the phone identity panel');
+   assert(geometry.right<=geometry.parentRight+1,'complete call sign fits inside the phone identity panel '+width+' '+JSON.stringify(geometry));
   }
   const styles=await page.evaluate(()=>{
    const pick=selector=>{const s=getComputedStyle(document.querySelector(selector));return [s.fontSize,s.fontFamily,s.fontWeight,s.lineHeight,s.letterSpacing,s.color]};
