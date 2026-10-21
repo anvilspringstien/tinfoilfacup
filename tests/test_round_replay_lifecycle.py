@@ -57,12 +57,12 @@ class LifecycleTests(unittest.TestCase):
                     raise
             return json.loads(dp.read_text()), target
 
-    def run_results(self, data, replay_source):
+    def run_results(self, data, replay_source, live_source=''):
         active = data['source_round']
         previous = draw.ROUND_ORDER[draw.ROUND_ORDER.index(active)-1]
         urls = {scan.fwp_round_url(active): f'<h1>Fixtures/Results, {scan.fwp_round_label(active)}, 2026-2027</h1>',
                 scan.fwp_round_url(previous) + '-replay': replay_source,
-                scan.FWP_LIVE_URL: '', 'https://www.thefa.com/competitions/thefacup/results': ''}
+                scan.FWP_LIVE_URL: live_source, 'https://www.thefa.com/competitions/thefacup/results': ''}
         requested = []
         def fetch(url):
             requested.append(url)
@@ -144,6 +144,28 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(len(scan.history_rows(tuesday)), 43)
         for i in range(11):
             self.assertEqual(tuesday['fixtures'][f'Original Away {i:03d}']['home'], f'Original Away {i:03d}')
+
+        # The overnight failure: the archive has a level FT score, while the
+        # live page adds the penalty winner. That fixture remains evidence-held;
+        # it must not prevent the other ten decided replays being published.
+        mixed = source.replace('<td>2</td><td>0</td><td>Original Home 000</td>',
+                               '<td>2</td><td>2</td><td>Original Home 000</td>')
+        live = ('<h3>Tuesday 20 October 2026</h3><table><tr><td>FT</td>'
+                '<td>Original Away 000</td><td>2</td><td>2</td><td>Original Home 000</td></tr>'
+                '<tr><td>Original Away 000 win on penalties</td></tr></table>')
+        partial, report, _ = self.run_results(monday, mixed, live)
+        self.assertEqual(report['archived_replays']['status'], 'partial-ready')
+        self.assertEqual(report['archived_replays']['staged']['staged_count'], 10)
+        self.assertEqual(len(report['archived_replays']['held']), 1)
+        self.assertEqual(len(report['archived_replays']['audit']['penalty_refinements']), 1)
+        self.assertEqual(len(draw.fixture_values(partial['fixtures'])), 40)
+        self.assertEqual(partial['round_fixtures'], monday['round_fixtures'])
+        self.assertIn(' or ', partial['fixtures']['Original Away 000']['home'])
+        for i in range(1, 11):
+            self.assertEqual(partial['fixtures'][f'Original Away {i:03d}']['home'], f'Original Away {i:03d}')
+        repeated, again, _ = self.run_results(partial, mixed, live)
+        self.assertEqual(repeated, partial)
+        self.assertEqual(again['archived_replays']['status'], 'evidence-held')
 
     def test_first_proper_rejects_39_and_41_ties_without_mutating_history(self):
         saturday = state('Fourth Round Qualifying')

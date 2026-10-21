@@ -14,7 +14,7 @@ from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import auto_round_results as scan
-from round_state_engine import classify_observation, pair_key, base_round
+from round_state_engine import classify_observation, pair_key, base_round, norm
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCEPTION_LEDGER = ROOT / "updater" / "exceptional-replay-dispositions.json"
@@ -54,6 +54,44 @@ ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifyin
           "First Round Proper"]
 UK_TZ = ZoneInfo("Europe/London")
 REPLAY_COMPLETION_GRACE = timedelta(hours=4)
+
+
+def reconcile_penalty_refinements(observations):
+    """Treat a cross-page winner note as detail of the same level score.
+
+    This only removes an incomplete FT observation when another page supplies
+    one unambiguous penalty winner for the identical dated, oriented score.
+    It is not independent penalty evidence: readiness still quarantines it.
+    Different scores, dates, orientations or named winners remain conflicts.
+    """
+    retained, refinements = [], []
+    for item in observations:
+        obs = item["observation"]
+        detailed = []
+        if (str(obs.get("status") or "").upper().startswith("FT")
+                and not obs.get("winner") and not obs.get("decision")
+                and isinstance(obs.get("home_score"), int)
+                and obs.get("home_score") == obs.get("away_score")
+                and obs.get("date") and obs.get("source_url")):
+            for other in observations:
+                row = other["observation"]
+                if (row.get("source_url") and row["source_url"] != obs["source_url"]
+                        and row.get("date") == obs["date"]
+                        and norm(row.get("home")) == norm(obs.get("home"))
+                        and norm(row.get("away")) == norm(obs.get("away"))
+                        and row.get("home_score") == obs["home_score"]
+                        and row.get("away_score") == obs["away_score"]
+                        and str(row.get("status") or "").upper().startswith("FT")
+                        and row.get("decision") == "penalties"
+                        and norm(row.get("winner")) in pair_key(obs)):
+                    detailed.append(row)
+        if detailed and len({norm(row["winner"]) for row in detailed}) == 1:
+            refinements.append({"home": obs["home"], "away": obs["away"],
+                                "date": obs["date"], "incomplete_source": obs["source_url"],
+                                "winner_sources": sorted({row["source_url"] for row in detailed})})
+        else:
+            retained.append(item)
+    return retained, refinements
 
 
 def replay_is_due(scheduled, as_of):
@@ -97,6 +135,8 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
         scan.parse_fwp_observations(source_html, known, source_url)
         + (scan.parse_fwp_observations(live_html, known, scan.FWP_LIVE_URL) if live_html else [])
     )
+    source_observation_count = len(observations)
+    observations, refinements = reconcile_penalty_refinements(observations)
     history = scan.history_rows(data)
     published_history = list(history)  # Do not mistake in-memory candidates for published results.
     known_pairs={pair_key(f) for f in known}
@@ -196,6 +236,8 @@ def audit(data, source_html, live_html="", source_url="", as_of=None):
 
     return {"active_round": current, "archived_round": preceding,
             "archived_ties": len(known), "observations": len(observations),
+            "source_observations": source_observation_count,
+            "penalty_refinements": refinements,
             "replay_candidates": results, "already_recorded": len(duplicates),
             "blocked": blocked, "events": len(events),
             "scheduled_replay_gaps": scheduled_replay_gaps,
