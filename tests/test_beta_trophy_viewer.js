@@ -131,7 +131,7 @@ assert.equal(nodes.deckCabinet.children.length,27,'Inspection modified Trophy Ca
 // Mileage milestones have separate hidden facts, without writing progress.
 vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="19"),null)',ctx);
 assert.equal(nodes.trophyViewer.hidden,true,'unearned Seeing Double cannot reveal its egg');
-for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142','SHOULDERING THE CUP'],['17','087','THE CUP THAT NEVER WAS']]){
+for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142','THE ORIGINAL AWAY-DAY'],['17','087','THE CUP THAT NEVER WAS']]){
  vm.runInContext('state.completed["'+id+'"]=true;openTrophy(CHALLENGES.find(c=>c.id==="'+id+'"),null);advanceTrophy();advanceTrophy()',ctx);
  assert.equal(nodes.barrysBitMat.hidden,false);
  assert.equal(nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. '+number);
