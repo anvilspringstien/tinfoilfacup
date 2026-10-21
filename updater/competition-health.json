@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-20T21:35:45.781935+01:00",
+  "checked_at": "2026-10-21T10:42:33.672081+01:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -7,53 +7,19 @@
     "first_qualifying_unique_fixtures": 112,
     "active_round": "First Round Proper",
     "active_round_unique_fixtures": 40,
-    "active_round_conditional_slots": 11
+    "active_round_conditional_slots": 0
   },
   "counts": {
-    "known_fixtures": 188,
+    "known_fixtures": 178,
     "complete": 137,
-    "awaiting_grace": 11,
-    "overdue": 0,
+    "awaiting_grace": 0,
+    "overdue": 1,
     "upcoming": 40,
     "critical": 0
   },
   "critical": [],
   "fixture_local_health": true,
-  "overdue": [],
-  "awaiting_grace": [
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Tadley Calleva",
-      "away": "Aldershot Town",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "FC United of Manchester",
-      "away": "Altrincham",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Gloucester City",
-      "away": "Barrow",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
+  "overdue": [
     {
       "round": "Fourth Round Qualifying Replay",
       "home": "Cray Wanderers",
@@ -64,85 +30,9 @@
       "section": "replays",
       "scheduled": "2026-10-20T19:45:00+01:00",
       "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Harrogate Town",
-      "away": "Bury",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Forest Green Rovers",
-      "away": "Chesham United",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Worcester City",
-      "away": "Chorley",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Stafford Rangers",
-      "away": "Gateshead",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Yeovil Town",
-      "away": "Leatherhead",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Anstey Nomads",
-      "away": "Macclesfield",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
-    },
-    {
-      "round": "Fourth Round Qualifying Replay",
-      "home": "Alvechurch",
-      "away": "Spalding United",
-      "date": "2026-10-20",
-      "kickoff": "19:45",
-      "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results",
-      "section": "replays",
-      "scheduled": "2026-10-20T19:45:00+01:00",
-      "deadline": "2026-10-20T22:45:00+01:00"
     }
   ],
+  "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",

@@ -1,6 +1,6 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **20/10/2026, 21:35:45 BST**
+Last checked: **21/10/2026, 10:42:33 BST**
 
 ## Chronology coverage
 
@@ -9,19 +9,19 @@ Last checked: **20/10/2026, 21:35:45 BST**
 - First Qualifying Round ties preserved: **112 / 112**
 - Active round: **First Round Proper**
 - Active-round ties: **40**
-- Active-round conditional/replay slots: **11**
+- Active-round conditional/replay slots: **0**
 
 ## Fixture health
 
 - 🟢 Played fixtures with results: **137**
-- 🟡 Recently played / grace period: **11**
-- 🔴 Results requiring confirmation: **0**
+- 🟡 Recently played / grace period: **0**
+- 🔴 Results requiring confirmation: **1**
 - ⚪ Upcoming / incomplete-date fixtures: **40**
 
 ## 🟢 Competition chronology healthy
 
 Preliminary and First Qualifying chronology is preserved, the active **First Round Proper** draw has canonical coverage, and no played fixture is overdue a result.
 
-## Conditional active-round slots
+## Results requiring confirmation
 
-11 unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.
+- **Cray Wanderers v Bedford Town** — Fourth Round Qualifying Replay — 2026-10-20 • 19:45
