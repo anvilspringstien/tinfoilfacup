@@ -1,22 +1,65 @@
 {
-  "checked_at": "2026-10-19T21:28:07.553562+00:00",
+  "checked_at": "2026-10-21T00:06:37.384938+00:00",
   "official_source": "https://www.thefa.com/competitions/thefacup/fixtures",
   "competition_id": 1,
-  "status": "published",
-  "current_round": "Fourth Round Qualifying",
-  "target_round": "First Round Proper",
-  "target_ties_detected": 40,
+  "status": "active-round-refreshed",
+  "current_round": "First Round Proper",
+  "target_round": "Second Round Proper",
+  "target_ties_detected": 0,
   "pages_checked": 6,
   "pagination_stop": "empty-page",
   "published": true,
-  "active_round_official_ties": 11,
-  "active_round_expected_ties": 32,
-  "active_round_source_complete": false,
-  "target_round_source_complete": true,
-  "replay_phase_verified": true,
-  "active_round_conditional_resolutions": [],
+  "active_round_official_ties": 40,
+  "active_round_expected_ties": 40,
+  "active_round_source_complete": true,
+  "target_round_source_complete": false,
+  "replay_phase_verified": false,
+  "active_round_conditional_resolutions": [
+    {
+      "from": "Mansfield Town v Macclesfield or Anstey N",
+      "to": "Mansfield Town v Macclesfield"
+    },
+    {
+      "from": "Luton Town v Chesham or Forest Grn",
+      "to": "Luton Town v Forest Green Rovers"
+    },
+    {
+      "from": "Barnsley v Aldershot or Tadley Calleva",
+      "to": "Barnsley v Aldershot Town"
+    },
+    {
+      "from": "Chesterfield v Leatherhead or Yeovil Town",
+      "to": "Chesterfield v Yeovil Town"
+    },
+    {
+      "from": "Gillingham v Barrow AFC or Gloucester C",
+      "to": "Gillingham v Barrow AFC"
+    },
+    {
+      "from": "Bury or Harrogate T v AFC Fylde",
+      "to": "Harrogate Town AFC v AFC Fylde"
+    },
+    {
+      "from": "Bedford T or Cray Wands v Stockport County",
+      "to": "Cray Wanderers v Stockport County"
+    },
+    {
+      "from": "Colchester United v Chorley or Worcester",
+      "to": "Colchester United v Worcester City"
+    },
+    {
+      "from": "Plymouth Argyle v Spalding or Alvechurch",
+      "to": "Plymouth Argyle v Alvechurch"
+    },
+    {
+      "from": "Gateshead or Stafford R v Grimsby Town",
+      "to": "Stafford Rangers v Grimsby Town"
+    },
+    {
+      "from": "Altrincham or United v Notts County",
+      "to": "Altrincham v Notts County"
+    }
+  ],
   "active_round_metadata_updates": [],
-  "active_round_unresolved_diagnostics": [],
-  "archived_outgoing_round": "Fourth Round Qualifying",
-  "archived_outgoing_ties": 32
+  "active_round_unresolved_diagnostics": []
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-10-20T20:35:40.724335+00:00",
+  "updated_at": "2026-10-21T00:06:37.333304+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -29126,10 +29126,9 @@
     "Mansfield Town": {
       "round": "First Round Proper",
       "home": "Mansfield Town",
-      "away": "Macclesfield or Anstey N",
+      "away": "Macclesfield",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "One Call Stadium",
         "postcode": "NG18 5DA",
@@ -29140,24 +29139,9 @@
     "Macclesfield": {
       "round": "First Round Proper",
       "home": "Mansfield Town",
-      "away": "Macclesfield or Anstey N",
+      "away": "Macclesfield",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "One Call Stadium",
-        "postcode": "NG18 5DA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Anstey N": {
-      "round": "First Round Proper",
-      "home": "Mansfield Town",
-      "away": "Macclesfield or Anstey N",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "One Call Stadium",
         "postcode": "NG18 5DA",
@@ -29194,10 +29178,9 @@
     "Luton Town": {
       "round": "First Round Proper",
       "home": "Luton Town",
-      "away": "Chesham or Forest Grn",
+      "away": "Forest Green Rovers",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Kenilworth Road Ground",
         "postcode": "LU4 8AW",
@@ -29205,27 +29188,12 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Chesham": {
+    "Forest Green Rovers": {
       "round": "First Round Proper",
       "home": "Luton Town",
-      "away": "Chesham or Forest Grn",
+      "away": "Forest Green Rovers",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "Kenilworth Road Ground",
-        "postcode": "LU4 8AW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Forest Grn": {
-      "round": "First Round Proper",
-      "home": "Luton Town",
-      "away": "Chesham or Forest Grn",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Kenilworth Road Ground",
         "postcode": "LU4 8AW",
@@ -29535,10 +29503,9 @@
     "Barnsley": {
       "round": "First Round Proper",
       "home": "Barnsley",
-      "away": "Aldershot or Tadley Calleva",
+      "away": "Aldershot Town",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Oakwell",
         "postcode": "S71 1ET",
@@ -29546,27 +29513,12 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Aldershot": {
+    "Aldershot Town": {
       "round": "First Round Proper",
       "home": "Barnsley",
-      "away": "Aldershot or Tadley Calleva",
+      "away": "Aldershot Town",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "Oakwell",
-        "postcode": "S71 1ET",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Tadley Calleva": {
-      "round": "First Round Proper",
-      "home": "Barnsley",
-      "away": "Aldershot or Tadley Calleva",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Oakwell",
         "postcode": "S71 1ET",
@@ -29603,24 +29555,9 @@
     "Chesterfield": {
       "round": "First Round Proper",
       "home": "Chesterfield",
-      "away": "Leatherhead or Yeovil Town",
+      "away": "Yeovil Town",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "SMH Group Stadium",
-        "postcode": "S41 8NZ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Leatherhead": {
-      "round": "First Round Proper",
-      "home": "Chesterfield",
-      "away": "Leatherhead or Yeovil Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "SMH Group Stadium",
         "postcode": "S41 8NZ",
@@ -29631,10 +29568,9 @@
     "Yeovil Town": {
       "round": "First Round Proper",
       "home": "Chesterfield",
-      "away": "Leatherhead or Yeovil Town",
+      "away": "Yeovil Town",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "SMH Group Stadium",
         "postcode": "S41 8NZ",
@@ -29645,10 +29581,9 @@
     "Gillingham": {
       "round": "First Round Proper",
       "home": "Gillingham",
-      "away": "Barrow AFC or Gloucester C",
+      "away": "Barrow AFC",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Priestfield Stadium",
         "postcode": "ME7 4DD",
@@ -29659,10 +29594,9 @@
     "Barrow AFC": {
       "round": "First Round Proper",
       "home": "Gillingham",
-      "away": "Barrow AFC or Gloucester C",
+      "away": "Barrow AFC",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Priestfield Stadium",
         "postcode": "ME7 4DD",
@@ -29673,10 +29607,9 @@
     "Barrow": {
       "round": "First Round Proper",
       "home": "Gillingham",
-      "away": "Barrow AFC or Gloucester C",
+      "away": "Barrow AFC",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Priestfield Stadium",
         "postcode": "ME7 4DD",
@@ -29684,43 +29617,26 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Gloucester C": {
+    "Harrogate Town AFC": {
       "round": "First Round Proper",
-      "home": "Gillingham",
-      "away": "Barrow AFC or Gloucester C",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "Priestfield Stadium",
-        "postcode": "ME7 4DD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bury": {
-      "round": "First Round Proper",
-      "home": "Bury or Harrogate T",
+      "home": "Harrogate Town AFC",
       "away": "AFC Fylde",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
-    "Harrogate T": {
+    "Harrogate Town": {
       "round": "First Round Proper",
-      "home": "Bury or Harrogate T",
+      "home": "Harrogate Town AFC",
       "away": "AFC Fylde",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "AFC Fylde": {
       "round": "First Round Proper",
-      "home": "Bury or Harrogate T",
+      "home": "Harrogate Town AFC",
       "away": "AFC Fylde",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Crewe Alexandra": {
       "round": "First Round Proper",
@@ -29800,29 +29716,19 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Bedford T": {
+    "Cray Wanderers": {
       "round": "First Round Proper",
-      "home": "Bedford T or Cray Wands",
+      "home": "Cray Wanderers",
       "away": "Stockport County",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Cray Wands": {
-      "round": "First Round Proper",
-      "home": "Bedford T or Cray Wands",
-      "away": "Stockport County",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Stockport County": {
       "round": "First Round Proper",
-      "home": "Bedford T or Cray Wands",
+      "home": "Cray Wanderers",
       "away": "Stockport County",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Port Vale": {
       "round": "First Round Proper",
@@ -29879,10 +29785,9 @@
     "Colchester United": {
       "round": "First Round Proper",
       "home": "Colchester United",
-      "away": "Chorley or Worcester",
+      "away": "Worcester City",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "JobServe Community Stadium",
         "postcode": "CO4 5UP",
@@ -29890,27 +29795,12 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Chorley": {
+    "Worcester City": {
       "round": "First Round Proper",
       "home": "Colchester United",
-      "away": "Chorley or Worcester",
+      "away": "Worcester City",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "JobServe Community Stadium",
-        "postcode": "CO4 5UP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Worcester": {
-      "round": "First Round Proper",
-      "home": "Colchester United",
-      "away": "Chorley or Worcester",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "JobServe Community Stadium",
         "postcode": "CO4 5UP",
@@ -29999,24 +29889,9 @@
     "Plymouth Argyle": {
       "round": "First Round Proper",
       "home": "Plymouth Argyle",
-      "away": "Spalding or Alvechurch",
+      "away": "Alvechurch",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
-      "venue": {
-        "ground": "Home Park",
-        "postcode": "PL2 3DQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Spalding": {
-      "round": "First Round Proper",
-      "home": "Plymouth Argyle",
-      "away": "Spalding or Alvechurch",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Home Park",
         "postcode": "PL2 3DQ",
@@ -30027,10 +29902,9 @@
     "Alvechurch": {
       "round": "First Round Proper",
       "home": "Plymouth Argyle",
-      "away": "Spalding or Alvechurch",
+      "away": "Alvechurch",
       "date": "2026-11-07",
       "kickoff": "15:00",
-      "conditional": true,
       "venue": {
         "ground": "Home Park",
         "postcode": "PL2 3DQ",
@@ -30103,29 +29977,19 @@
         "verification": "fchd-gazetteer"
       }
     },
-    "Gateshead": {
+    "Stafford Rangers": {
       "round": "First Round Proper",
-      "home": "Gateshead or Stafford R",
+      "home": "Stafford Rangers",
       "away": "Grimsby Town",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "Stafford R": {
-      "round": "First Round Proper",
-      "home": "Gateshead or Stafford R",
-      "away": "Grimsby Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Grimsby Town": {
       "round": "First Round Proper",
-      "home": "Gateshead or Stafford R",
+      "home": "Stafford Rangers",
       "away": "Grimsby Town",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Oxford City": {
       "round": "First Round Proper",
@@ -30207,27 +30071,17 @@
     },
     "Altrincham": {
       "round": "First Round Proper",
-      "home": "Altrincham or United",
+      "home": "Altrincham",
       "away": "Notts County",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
-    },
-    "United": {
-      "round": "First Round Proper",
-      "home": "Altrincham or United",
-      "away": "Notts County",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Notts County": {
       "round": "First Round Proper",
-      "home": "Altrincham or United",
+      "home": "Altrincham",
       "away": "Notts County",
       "date": "2026-11-07",
-      "kickoff": "15:00",
-      "conditional": true
+      "kickoff": "15:00"
     },
     "Boreham Wood": {
       "round": "First Round Proper",
