@@ -28,6 +28,55 @@ def fixture_data():
 
 
 class PrecedingReplayAuditTests(unittest.TestCase):
+    def test_cross_page_penalty_note_is_one_held_fixture(self):
+        from guard_archived_replay_promotion import readiness
+        data = fixture_data()
+        data['replays'] = {'Weston': {
+            'round': 'Second Round Qualifying Replay', 'home': 'Wimborne Town',
+            'away': 'Weston-super-Mare', 'date': '2026-09-22'}}
+        fixture = data['round_fixtures']['Second Round Qualifying']['Weston-super-Mare']
+        plain = {'fixture': fixture, 'observation': {
+            'home': 'Wimborne Town', 'away': 'Weston-super-Mare',
+            'home_score': 1, 'away_score': 1, 'winner': '', 'decision': '',
+            'date': '2026-09-22', 'status': 'FT', 'source_url': 'https://example.test/replays'}}
+        detailed = copy.deepcopy(plain)
+        detailed['observation'].update(winner='Wimborne Town', decision='penalties',
+                                       source_url='https://example.test/live')
+        before = copy.deepcopy(data)
+        with patch.object(scan, 'parse_fwp_observations', side_effect=[[plain], [detailed]]):
+            report = audit.audit(data, '<html/>', '<html/>')
+        self.assertEqual((report['source_observations'], report['observations']), (2, 1))
+        self.assertEqual(len(report['penalty_refinements']), 1)
+        self.assertFalse(report['blocked'])
+        gate = readiness(report)
+        self.assertEqual((gate['approved_count'], gate['held_count']), (0, 1))
+        self.assertEqual(data, before)
+
+    def test_penalty_refinement_never_erases_material_disagreement(self):
+        fixture = fixture_data()['round_fixtures']['Second Round Qualifying']['Weston-super-Mare']
+        plain = {'fixture': fixture, 'observation': {
+            'home': 'Wimborne Town', 'away': 'Weston-super-Mare',
+            'home_score': 1, 'away_score': 1, 'winner': '', 'decision': '',
+            'date': '2026-09-22', 'status': 'FT', 'source_url': 'https://example.test/replays'}}
+        detailed = copy.deepcopy(plain)
+        detailed['observation'].update(winner='Wimborne Town', decision='penalties',
+                                       source_url='https://example.test/live')
+        for change in ({'home_score': 2}, {'date': '2026-09-23'},
+                       {'home': 'Weston-super-Mare', 'away': 'Wimborne Town'},
+                       {'source_url': 'https://example.test/replays'},
+                       {'winner': 'Unrelated Town'}):
+            with self.subTest(change=change):
+                other = copy.deepcopy(detailed)
+                other['observation'].update(change)
+                rows, refinements = audit.reconcile_penalty_refinements([plain, other])
+                self.assertEqual(rows, [plain, other])
+                self.assertFalse(refinements)
+        conflicting = copy.deepcopy(detailed)
+        conflicting['observation'].update(winner='Weston-super-Mare', source_url='https://example.test/third')
+        rows, refinements = audit.reconcile_penalty_refinements([plain, detailed, conflicting])
+        self.assertEqual(len(rows), 3)
+        self.assertFalse(refinements)
+
     def test_wimborne_penalties_progress_only_with_explicit_winner(self):
         data = fixture_data()
         before = copy.deepcopy(data)
