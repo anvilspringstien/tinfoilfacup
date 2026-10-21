@@ -5,7 +5,7 @@
 const fs=require('node:fs'),path=require('node:path');
 const args=process.argv.slice(2);
 function opt(k){const i=args.indexOf(k);return i<0?null:args[i+1]}
-const source=opt('--source'),out=opt('--out');
+const source=opt('--source'),out=opt('--out'),sourceName=opt('--source-name')||path.basename(source||'source.csv');
 if(!source||!out){console.error('Usage: node updater/club_website_bulk_audit.js --source directory.csv --out output-prefix');process.exit(2)}
 function csv(text){
  const rows=[];let row=[],field='',quoted=false;
@@ -37,7 +37,7 @@ if(!directory.length)throw Error('Source CSV has no records');
 if(!('club_name' in directory[0])||!('website' in directory[0]))throw Error('CSV requires Club Name and Website columns');
 const normal=s=>String(s||'').normalize('NFKD').toLowerCase().replace(/&/g,'and').replace(/\b(?:football club|f\.?c\.?)\b/g,'').replace(/[^a-z0-9]/g,'');
 const postcode=s=>String(s||'').toUpperCase().replace(/\s/g,'');
-const safe=url=>{try{const u=new URL(url);return ['http:','https:'].includes(u.protocol)&&!/(^|\.)facebook\.com$|(^|\.)instagram\.com$|(^|\.)x\.com$|(^|\.)twitter\.com$|(^|\.)wikipedia\.org$|(^|\.)pitchero\.com$/i.test(u.hostname)}catch{return false}};
+const safe=url=>{try{const u=new URL(url);return (!/(^|\.)pitchero\.com$/i.test(u.hostname)||/^\/clubs\/[^/]+/.test(u.pathname))&&['http:','https:'].includes(u.protocol)&&!/(^|\.)facebook\.com$|(^|\.)instagram\.com$|(^|\.)x\.com$|(^|\.)twitter\.com$|(^|\.)wikipedia\.org$/i.test(u.hostname)}catch{return false}};
 const index=new Map();
 for(const d of directory){const k=normal(d.club_name);if(!index.has(k))index.set(k,[]);index.get(k).push(d)}
 const result=[],stats={eligible:eligible.length,already_linked:0,high_confidence_candidate:0,needs_review:0,no_candidate:0};
@@ -53,7 +53,7 @@ for(const club of eligible){
   else if(candidates.length>1)reason='Multiple directory candidates: possible club identity collision';
  }
  stats[status]++;
- result.push({club:club.name,status,candidate_url:chosen?.website||'',source_name:chosen?.club_name||'',source_postcode:chosen?.postcode||'',club_postcode:groundPostcode,reason,source:'Non-League Network candidate export; not independently verified'});
+ result.push({club:club.name,status,candidate_url:chosen?.website||'',source_name:chosen?.club_name||'',source_postcode:chosen?.postcode||'',club_postcode:groundPostcode,reason,source:sourceName+'; candidate only, not independently verified'});
 }
 const columns=['club','status','candidate_url','source_name','source_postcode','club_postcode','reason','source'];
 const quote=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
