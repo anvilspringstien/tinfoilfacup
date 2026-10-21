@@ -87,7 +87,7 @@
 .campaign-identity .campaign-call-sign{
  display:block;
  font-size:12px;
- font-weight:400;
+ font-weight:700;
  line-height:1.5;
  overflow-wrap:anywhere;
 }
@@ -95,6 +95,7 @@
  .campaign-identity .campaign-call-sign-label{display:block}
  .campaign-identity .campaign-call-sign-value{display:block;white-space:nowrap;overflow-wrap:normal;font-size:clamp(10px,3.1vw,12px)}
 }
+@media(max-width:360px){.campaign-identity .campaign-call-sign-value{font-size:9px}}
 .campaign-identity .campaign-pigeon-name{
  display:flex;
  align-items:center;
@@ -1312,7 +1313,7 @@ function stateActions(club){
     buttons+='<a class="secondary" href="'+FA_RESULTS_URL+'" target="_blank" rel="noopener noreferrer">Verify Result</a>';
   }
   if(s.next && (s.type==='played'||s.type==='won'||s.type==='replay')){
-    buttons+='<a class="secondary" href="'+s.next.fixturesUrl+'" target="_blank" rel="noopener noreferrer">View Next Round</a>';
+    buttons+='<a class="secondary" href="'+s.next.fixturesUrl+'" target="_blank" rel="noopener noreferrer">Next Round on The FA ↗</a>';
   }
   return buttons;
 }

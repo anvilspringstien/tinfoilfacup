@@ -19,12 +19,13 @@ try{
  for(const [width,height] of [[320,669],[390,669],[768,1024],[1680,889]]){
   await page.setViewportSize({width,height});
   const value=page.locator('.campaign-identity .campaign-call-sign-value');
+  assert.equal(await value.evaluate(e=>getComputedStyle(e).fontWeight),'700','Call Sign is bold');
   assert.equal(await value.innerText(),saved.callSign,'full original call sign including number is preserved');
   if(width<=600){
    const geometry=await value.evaluate(e=>{const r=e.getBoundingClientRect(),label=document.querySelector('.campaign-call-sign-label').getBoundingClientRect(),parent=e.parentElement.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e);const lines=[...range.getClientRects()];return {top:r.top,labelBottom:label.bottom,right:lines[0].right,parentRight:parent.right,lines:lines.length}});
    assert(geometry.top>=geometry.labelBottom-1,'Call Sign label has its own line');
    assert.equal(geometry.lines,1,'complete call sign and number stay together');
-   assert(geometry.right<=geometry.parentRight+1,'complete call sign fits inside the phone identity panel');
+   assert(geometry.right<=geometry.parentRight+1,'complete call sign fits inside the phone identity panel '+width+' '+JSON.stringify(geometry));
   }
   const styles=await page.evaluate(()=>{
    const pick=selector=>{const s=getComputedStyle(document.querySelector(selector));return [s.fontSize,s.fontFamily,s.fontWeight,s.lineHeight,s.letterSpacing,s.color]};
@@ -43,6 +44,7 @@ try{
  for(const [width,height] of [[390,669],[390,560],[1680,889]]){
   await page.setViewportSize({width,height});let first;
   for(const name of ['My Campaign','My Stats','My Challenges']){
+   const priorScroll=await page.evaluate(()=>scrollY);
    await page.getByRole('button',{name,exact:true}).click();
    const intro=page.locator('#tffc-campaign-intro');await intro.waitFor();
    assert.equal(await intro.getByRole('button',{name:'Got It!',exact:true}).count(),1);
@@ -53,6 +55,10 @@ try{
    if(first)assert.deepEqual(geometry,first,'all three popups/buttons have equal dimensions');else first=geometry;
    assert(rect.x>=0&&rect.y>=0&&rect.x+rect.width<=width+1&&rect.y+rect.height<=height+1);
    assert(await intro.evaluate(e=>e.scrollHeight<=e.clientHeight+1),'popup frame fits viewport');
+   assert(await intro.locator('#tffc-intro-title').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle==='none'),'opening focus announces the heading without a box');
+   assert.equal(await page.evaluate(()=>document.body.style.position),'fixed','background is locked while reading');
+   await page.keyboard.press('Tab');
+   assert(await intro.locator('.intro-close').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle!=='none'),'Close retains visible keyboard focus');
    const message=intro.locator('#tffc-intro-message');
    const endings={
     'My Campaign':'Your old pigeon identity and locally saved Challenge progress won’t be recovered.',
@@ -62,11 +68,15 @@ try{
    assert((await message.innerText()).endsWith(endings[name]),'approved final paragraph is present');
    await message.evaluate(e=>e.scrollTop=e.scrollHeight);
    assert(await message.evaluate(e=>e.scrollTop+e.clientHeight>=e.scrollHeight-1),'all introduction copy can be reached');
+   const lockedScroll=await page.evaluate(()=>scrollY);await message.hover();await page.mouse.wheel(0,800);
+   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+   assert.equal(await page.evaluate(()=>scrollY),lockedScroll,'scrolling past the final paragraph cannot move the background');
    assert.deepEqual(await intro.getByRole('button',{name:'Got It!',exact:true}).boundingBox(),button,'reading longer copy does not move confirmation controls');
    await page.screenshot({path:`/tmp/tffc-campaign-intro-${name.replace('My ','').toLowerCase()}-end-${width}x${height}.png`});
    await message.evaluate(e=>e.scrollTop=0);
    await page.screenshot({path:`/tmp/tffc-campaign-intro-${name.replace('My ','').toLowerCase()}-${width}x${height}.png`});
    await intro.getByRole('checkbox').check();await intro.getByRole('button',{name:'Close',exact:true}).click();
+   assert.notEqual(await page.evaluate(()=>document.body.style.position),'fixed','closing releases the background lock');
    assert.equal(page.url(),base+'/beta/clubfinder-journey.html');
   }
  }
