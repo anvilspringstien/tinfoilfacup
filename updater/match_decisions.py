@@ -81,7 +81,25 @@ def classify_batch(items, history):
                 normalized = penalty_observation(row)
                 relevant = [r for r in local_history if pair_key(r) == pair
                             and base_round(r.get('round')) == base_round(fixture.get('round'))]
+                # A source dropping its winner note is an omission, not a
+                # correction of an already verified, identical level result.
+                if (str(normalized.get('status') or '').startswith('FT')
+                        and normalized.get('home_score') == normalized.get('away_score')
+                        and not normalized.get('winner')):
+                    recorded = [r for r in relevant if r.get('date') == normalized.get('date')
+                                and norm(r.get('home')) == norm(normalized.get('home'))
+                                and norm(r.get('away')) == norm(normalized.get('away'))
+                                and r.get('home_score') == normalized.get('home_score')
+                                and r.get('away_score') == normalized.get('away_score') and r.get('winner')]
+                    if len({signature(r) for r in recorded}) == 1:
+                        valid.append(({'kind': 'duplicate', 'result': recorded[0]}, row))
+                        continue
                 outcome = classify_observation(fixture, normalized, relevant)
+                if outcome['kind'] == 'duplicate':
+                    recorded = outcome['result']
+                    if ('home_pens' in normalized and 'home_pens' in recorded
+                            and (normalized['home_pens'], normalized['away_pens']) != (recorded['home_pens'], recorded['away_pens'])):
+                        raise ValueError('shoot-out scores conflict with the verified historical result')
                 # The classifier can recognise a level explicit winner as penalties.
                 if outcome['kind'] == 'result' and outcome['result'].get('decision') == 'penalties':
                     penalty_observation(outcome['result'])

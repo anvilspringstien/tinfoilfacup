@@ -111,6 +111,17 @@ class DecisionPolicyTests(unittest.TestCase):
         self.assertTrue(result[0].get('held'))
         self.assertEqual(existing, before)
 
+    def test_missing_note_cannot_reopen_a_verified_penalty_result(self):
+        existing=dict(observed()['observation'],round='First Round Proper',home_pens=5,away_pens=4)
+        result=classify_batch([observed(winner='',decision='')],[existing])
+        self.assertEqual(result[0]['outcome']['kind'],'duplicate')
+        self.assertNotIn('held',result[0])
+
+    def test_changed_shootout_score_cannot_silently_replace_recorded_score(self):
+        existing=dict(observed()['observation'],round='First Round Proper',home_pens=5,away_pens=4)
+        result=classify_batch([observed(home_pens=4,away_pens=3)],[existing])
+        self.assertIn('verified historical result',result[0]['held'])
+
     def test_parser_retains_named_penalty_scores(self):
         raw = page('First Round Proper', row('Home Town',1,1,'Away City','Home Town win 5–4 on penalties'))
         observations = scan.parse_fwp_observations(raw, [fixture()], SOURCE)
@@ -151,6 +162,8 @@ class AutomaticRecoveryTests(unittest.TestCase):
         self.assertFalse(fixed['pending_match_decisions'])
         self.assertEqual(fixed['results']['Home Town']['winner'],'Home Town')
         again,_ = self.run_results(fixed,detailed)
+        self.assertEqual(again,fixed)
+        again,_ = self.run_results(fixed,source,detailed)
         self.assertEqual(again,fixed)
 
     def test_recovery_survives_actual_draw_promotion(self):
