@@ -143,12 +143,20 @@ try{
  assert.equal(await page.locator('#keep-intro').innerText(),'See. We told you it was easy.');
  assert.equal(await page.locator('#installed-celebration').innerText(),'Congratulations!');
  assert(await page.locator('#installed-celebration').isVisible());
+ assert(await page.locator('#install-status').isHidden(),'confirmation is shown once inside the return card');
+ assert.equal(await page.locator('#back-card .keep-note').innerText(),'You’re already opening Tin Foil FA Cup as an app.');
+ assert(await page.locator('#back-card').evaluate(e=>e.classList.contains('keep-card')));
+ assert(await page.locator('#back').evaluate(e=>getComputedStyle(e).backgroundColor==='rgb(228, 187, 38)'&&!getComputedStyle(e).textDecorationLine.includes('underline')));
  assert(await page.locator('#heading').evaluate(e=>e===document.activeElement&&getComputedStyle(e).outlineStyle==='none'),'installed title has no focus box');
  for(const [width,height] of [[390,669],[390,560],[1680,889]]){
   await page.setViewportSize({width,height});
   await page.goto(base+'/beta/keep-the-magic-shed.html?instructions=1&keep=1');
   await page.screenshot({path:`/tmp/tffc-installed-magic-${width}x${height}.png`});
   assert(await page.locator('#magic').evaluate(d=>d.scrollHeight<=d.clientHeight+1),'installed confirmation fits '+width+'×'+height);
+  const card=await page.locator('#back-card').boundingBox(),frame=await page.locator('#magic').boundingBox();
+  assert(frame.y+frame.height-card.y-card.height<24,'return card anchors at the foot of the frame');
+  assert(await page.locator('#installed-celebration').evaluate(e=>e.scrollWidth<=e.clientWidth),'large congratulations fits its width');
+  assert(await page.locator('#installed-celebration').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=40),'celebration has larger type');
   await fits();
  }
  await page.setViewportSize({width:390,height:669});
