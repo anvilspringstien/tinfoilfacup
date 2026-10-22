@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-22T14:07:17.355102Z",
-  "state": "unverified",
-  "last_checked_at": null,
-  "results": "unverified",
+  "monitor_ran_at": "2026-10-22T16:26:44.047794Z",
+  "state": "checked",
+  "last_checked_at": "2026-10-22T14:06:50Z",
+  "results": "success",
   "draw": "success",
   "diagnostics": {
     "results": {
-      "reason": "stale",
-      "run_id": 39761183548,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39761183548",
+      "reason": "verified",
+      "run_id": 39803295602,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39803295602",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-10-22T10:35:11Z"
+      "updated_at": "2026-10-22T15:20:49Z"
     },
     "draw": {
       "reason": "verified",
@@ -28,26 +28,26 @@
   "scheduled": {
     "state": "unverified",
     "last_checked_at": null,
-    "results": "unverified",
-    "draw": "success",
+    "results": "success",
+    "draw": "unverified",
     "diagnostics": {
       "results": {
-        "reason": "stale",
-        "run_id": 39761183548,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39761183548",
+        "reason": "verified",
+        "run_id": 39803295602,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39803295602",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-10-22T10:35:11Z"
+        "updated_at": "2026-10-22T15:20:49Z"
       },
       "draw": {
-        "reason": "verified",
-        "run_id": 39792510893,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/39792510893",
-        "event": "schedule",
-        "status": "completed",
-        "conclusion": "success",
-        "updated_at": "2026-10-22T14:06:50Z"
+        "reason": "no_trusted_run_on_main",
+        "run_id": null,
+        "url": null,
+        "event": null,
+        "status": null,
+        "conclusion": null,
+        "updated_at": null
       }
     }
   }
