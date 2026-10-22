@@ -266,8 +266,8 @@ try{
   await footer.getByRole('button',{name:'Share',exact:true}).click();
   await share.locator('#keep').click();
   await share.locator('#close').click();
-  assert(await app.locator('iframe[title="Share Tin Foil FA Cup"]').isHidden());
   await atReturnStart(app);
+  assert(await app.locator('iframe[title="Share Tin Foil FA Cup"]').isHidden());
   assert.equal(await app.locator('#results > .result').count(),3,'closing Keep restores the choices directly');
   assert.equal(await app.evaluate(()=>tinFoilCurrentSearchNumber()),searchNumber,'unselected search identity survives Keep');
   if(!selected){await app.locator('.journey-lozenge').first().click();assert.equal(await app.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).searchNumber),searchNumber)}
