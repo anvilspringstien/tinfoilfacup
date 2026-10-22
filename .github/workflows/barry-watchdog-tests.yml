@@ -5,6 +5,9 @@ on:
       - "beta/barry_schedule_watchdog.py"
       - "beta/test_barry_schedule_watchdog.py"
       - ".github/workflows/barry-watchdog-tests.yml"
+      - "beta/barry_live_watch.py"
+      - "beta/test_barry_live_watch.py"
+      - ".github/workflows/barry-live-watch.yml"
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,4 +20,4 @@ jobs:
         with:
           python-version: "3.11"
       - name: Run read-only watchdog regression tests
-        run: python -m unittest discover -s beta -p "test_barry_schedule_watchdog.py" -v
+        run: python -m unittest discover -s beta -p "test_barry*.py" -v
