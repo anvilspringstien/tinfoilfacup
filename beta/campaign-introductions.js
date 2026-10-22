@@ -1,6 +1,10 @@
 // Campaign-scoped introductions. Preparation is read-only until Got It!.
 (function(){
 'use strict';
+// Keep the identity itself prominent while its descriptive label stays light.
+const identityStyle=document.createElement('style');
+identityStyle.textContent='.campaign-identity .campaign-call-sign-label{font-weight:300}';
+document.head.append(identityStyle);
 let active=null;
 const copy={
  campaign:{title:'My Campaign',message:"This is your Tin Foil FA Cup Campaign. There are many like this, but this one is yours.\n\nIt’s saved on this device, in your browser, along with your Pigeon Call Sign & Pigeon Name. Everything will be here when you return from your Campaign travels, and your pigeon, whatever its gender may be, will faithfully record the miles it has flown.\n\nComing Soon! Your pigeon’s unique Call Sign will be used to identify its flight path.\n\nRemember: Your progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there. Entering the same postcode and choosing the same Campaign again will rebuild your competition Stats, but you’ll receive a new Call Sign and pigeon. Your old pigeon identity and locally saved Challenge progress won’t be recovered."},

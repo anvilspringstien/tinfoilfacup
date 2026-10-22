@@ -128,10 +128,10 @@ assert.equal(vm.runInContext('flipped',ctx),initialFlipped,'Inspection changed D
 assert.equal(local['tffc.challengeDeck.v1'],snapshot,'Inspection modified persisted Challenge state');
 assert.equal(location.href,'https://example.test/beta/challenges-beta.html','Inspection navigated unexpectedly');
 assert.equal(nodes.deckCabinet.children.length,27,'Inspection modified Trophy Cabinet contents');
-// Mileage milestones have separate hidden facts, without writing progress.
+// Campaign milestones and the Honour mat have separate hidden facts, without writing progress.
 vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="19"),null)',ctx);
 assert.equal(nodes.trophyViewer.hidden,true,'unearned Seeing Double cannot reveal its egg');
-for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142','THE ORIGINAL AWAY-DAY'],['17','087','THE CUP THAT NEVER WAS']]){
+for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142','THE ORIGINAL AWAY-DAY'],['23','025','A HEAD FOR SURVIVAL'],['17','087','THE CUP THAT NEVER WAS']]){
  vm.runInContext('state.completed["'+id+'"]=true;openTrophy(CHALLENGES.find(c=>c.id==="'+id+'"),null);advanceTrophy();advanceTrophy()',ctx);
  assert.equal(nodes.barrysBitMat.hidden,false);
  assert.equal(nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. '+number);
@@ -140,5 +140,17 @@ for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142
  vm.runInContext('advanceTrophy()',ctx);assert.equal(nodes.trophyViewer.hidden,true);
 }
 assert.equal(local['tffc.challengeDeck.v1'],snapshot,'discovering eggs never writes challenge progress');
+// The new egg is earned through the existing Honour controls, with no mileage milestone.
+const honour=boot('',{'tffc.challengeDeck.v1':JSON.stringify({version:1,accepted:{'01':true},completed:{'01':true},records:{},tiesPlayed:0,awayTies:0,pigeonMiles:0,campaignRound:0,giantKillAchieved:false,campaignStatus:'ACTIVE'})},{});
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="23");openTrophy(CHALLENGES[index],null)',honour.ctx);
+assert(!honour.nodes.trophyViewer.classList.contains('open'),'unearned Honour mat cannot reveal its egg');
+assert.equal(vm.runInContext('CHALLENGES[index].type',honour.ctx),'honour');
+honour.nodes.acceptBtn.onclick();honour.nodes.completeBtn.onclick();
+vm.runInContext('openTrophy(CHALLENGES[index],null);advanceTrophy();advanceTrophy()',honour.ctx);
+assert.equal(honour.nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. 025');
+assert.equal(honour.nodes.barrysBitTitle.textContent,'A HEAD FOR SURVIVAL');
+assert.equal(vm.runInContext('state.pigeonMiles',honour.ctx),0,'Scorcese needs no flown-mile milestone');
+assert.match(honour.nodes.barrysBitStory.textContent,/ocean liner/);
+assert.equal(honour.nodes.barrysBitCredit.children[0].textContent,'This message is kindly sponsored by the RNLI');
 console.log('BETA TROPHY VIEWER: PASS');
 console.log('Three taps, backdrop, Escape, keyboard, focus, persistent state and Deck isolation: PASS');

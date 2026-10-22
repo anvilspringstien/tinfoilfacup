@@ -20,6 +20,7 @@ try{
   await page.setViewportSize({width,height});
   const value=page.locator('.campaign-identity .campaign-call-sign-value');
   assert.equal(await value.evaluate(e=>getComputedStyle(e).fontWeight),'700','Call Sign is bold');
+  assert.equal(await page.locator('.campaign-call-sign-label').evaluate(e=>getComputedStyle(e).fontWeight),'300','only the descriptive Call Sign label uses light type');
   assert.equal(await value.innerText(),saved.callSign,'full original call sign including number is preserved');
   if(width<=600){
    const geometry=await value.evaluate(e=>{const r=e.getBoundingClientRect(),label=document.querySelector('.campaign-call-sign-label').getBoundingClientRect(),parent=e.parentElement.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e);const lines=[...range.getClientRects()];return {top:r.top,labelBottom:label.bottom,right:lines[0].right,parentRight:parent.right,lines:lines.length}});
