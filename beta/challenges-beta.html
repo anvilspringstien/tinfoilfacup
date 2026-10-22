@@ -22,6 +22,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .challenge-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #1c1606}
 .secondary{background:white;border:1px solid #ddd;border-radius:10px;padding:10px 15px;cursor:pointer}
 .statusline{margin:14px 3px 0;font:13px/1.4 Arial,sans-serif;opacity:.75}
+.barry-eggs{display:flex;justify-content:center;gap:12px;margin:0 0 8px;color:#857b68}.barry-egg{display:block;width:14px;height:19px}.barry-egg svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5}.barry-egg.found{color:#d6ae50}.barry-egg.found svg{fill:currentColor}
 .deckcabwrap{width:100%;max-width:330px;margin:8px auto 0}.deckcabhead{display:flex;align-items:center;justify-content:space-between;padding:0 3px 6px;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#bcae95}
 .deckcabinet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding:2px 4px 8px 2px;touch-action:manipulation}
 .trophy-slot{position:relative;min-width:0;width:100%;aspect-ratio:1 / 1;border:1px solid #554b3d;background:#1b1814;border-radius:9px;padding:4px;overflow:hidden;cursor:default}
@@ -1309,6 +1310,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 
 <div class="deckcabwrap">
       <div class="deckcabhead"><span>Trophy Cabinet</span><span id="cabinetCount">0 / 18</span></div>
+      <div id="barryEggs" class="barry-eggs" role="group" aria-label="Hidden discoveries"></div>
       <div class="deckcabinet" id="deckCabinet" aria-label="Challenge Trophy Cabinet, three mats per row; scroll down for more"></div>
     </div>
 
@@ -1463,13 +1465,14 @@ const CLUBFINDER_BRIDGE_KEY = "tffc.clubfinderCampaign.v1";
 const STORE_VERSION = 1;
 
 function blankState() {
-  return {version:STORE_VERSION, campaignKey:"", accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
+  return {version:STORE_VERSION, campaignKey:"", barryBitsFound:[], accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
 }
 function loadState() {
   try {
     const x = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
     if (!x || x.version !== STORE_VERSION || typeof x.accepted !== "object" || typeof x.completed !== "object") return blankState();
     x.records ||= {};
+    x.barryBitsFound = Array.isArray(x.barryBitsFound) ? x.barryBitsFound.filter(id=>typeof id==="string") : [];
     x.campaignKey = typeof x.campaignKey==="string" ? x.campaignKey : "";
     // Backwards-compatible migration from the prototype's old journeyTies counter.
     x.tiesPlayed = Number.isFinite(x.tiesPlayed) ? x.tiesPlayed : (Number.isFinite(x.journeyTies) ? x.journeyTies : 0);
@@ -1781,13 +1784,39 @@ function render() {
 
 const BARRY_BITS = {"17": {"number": "087", "title": "THE CUP THAT NEVER WAS", "story": "“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”", "creditTitle": "A Hidden History of The FA Cup", "creditAuthor": "James Higginbottom"}, "19": {"number": "142", "title": "THE ORIGINAL AWAY-DAY", "story": "“The first recorded Tin Foil FA Cup was made by Muriel Braithwaite for her son, Jeremiah Braithwaite, who was famously carried on his dad's shoulders for 280 miles to the 1922 Huddersfield Town vs Preston North End final. It now resides, along with little Jeremiah's calipers, in the National Football Museum, Manchester.”", "creditTitle": "Footie Facts Encyclopedia", "creditAuthor": ""}, "23": {"number": "025", "title": "A HEAD FOR SURVIVAL", "story": "“It's common knowledge that 99.9% of body heat is lost through the head. By carrying your Tin Foil FA Cup with you at all times, you could potentially save a life - maybe even your own! In an emergency, say after falling off an ocean liner, you could recycle your Tin Foil FA Cup into a tactical hat, allowing you to survive until help arrives.”", "creditTitle": "This message is kindly sponsored by the RNLI", "creditAuthor": ""}};
 
-/* Trophy inspection is a separate, transient UI state: no deck index, flips or storage writes. */
+// Discovery slots follow the mats' deck order, never the order in which they are found.
+function renderBarryEggs(){
+  const eggs=$("barryEggs");
+  eggs.replaceChildren();
+  const facts=CHALLENGES.filter(c=>Object.hasOwn(BARRY_BITS,c.id));
+  facts.forEach((c,i)=>{
+    const found=state.barryBitsFound.includes(c.id);
+    const egg=document.createElement("span");
+    egg.className="barry-egg"+(found?" found":"");
+    egg.dataset.challengeId=c.id;
+    egg.setAttribute("role","img");
+    egg.setAttribute("aria-label",`Hidden discovery ${i+1} of ${facts.length}: ${found?"found":"undiscovered"}`);
+    egg.innerHTML='<svg viewBox="0 0 16 22" aria-hidden="true" focusable="false"><path d="M8 1.5C5 1.5 1.5 9 1.5 14a6.5 6.5 0 0 0 13 0C14.5 9 11 1.5 8 1.5Z"/></svg>';
+    eggs.append(egg);
+  });
+}
+function rememberBarryBit(id){
+  if(!id || state.barryBitsFound.includes(id))return;
+  state.barryBitsFound.push(id);
+  // Saving a discovery never awards a trophy or changes Campaign progress.
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(_){}
+  renderBarryEggs();
+}
+
+/* Trophy inspection leaves the underlying Deck untouched; only a revealed fact saves discovery. */
 const trophyViewer=$("trophyViewer"), trophyViewerMat=$("trophyViewerMat");
 const trophyViewerCard=$("trophyViewerCard"), trophyViewerHint=$("trophyViewerHint");
+let trophyViewerBitId=null;
 let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null, trophyViewerHasBit=false, trophyViewerBitShown=false;
 function openTrophy(c,origin){
   if(!state.completed[c.id]) return;
   trophyOrigin=origin;
+  trophyViewerBitId=c.id;
   trophyViewerFlipped=false;
   trophyViewerHasBit=Object.hasOwn(BARRY_BITS,c.id);
   if(trophyViewerHasBit){
@@ -1824,6 +1853,7 @@ function closeTrophy(){
   $("barrysBitMat").classList.remove("revealed");
   trophyViewerBitShown=false;
   trophyViewerHasBit=false;
+  trophyViewerBitId=null;
   const origin=trophyOrigin;
   trophyOrigin=null;
   if(origin && origin.isConnected!==false && typeof origin.focus==="function"){
@@ -1841,6 +1871,7 @@ function advanceTrophy(){
     void bit.offsetWidth; // Ensure reverse face is ready before the flip begins.
     trophyViewerCard.classList.add("barry-flipped");
     bit.classList.add("revealed");
+    rememberBarryBit(trophyViewerBitId);
     trophyViewerHint.textContent="Tap to close";
     trophyViewerMat.setAttribute("aria-label","Barry’s Bits — tap to close Trophy");
     return;
@@ -2176,6 +2207,7 @@ function loadCabinetImage(img){
   img.src=src;
 }
 function renderTrophyCabinet(challengeList,completed) {
+renderBarryEggs();
 const trophyChallenges=challengeList;
 $("cabinetCount").textContent=`${completed.length} / ${trophyChallenges.length}`;
 
