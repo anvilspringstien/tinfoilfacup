@@ -2,6 +2,7 @@
 'use strict';
 const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 if(window.tffcInstalledEntry)return;
+const embedded=parent!==window&&new URLSearchParams(location.search).get('embedded')==='1';
 const URL_TO_SHARE='https://tinfoilfacup.com/';
 const QR_ROWS='111111101110010111000001101111111/100000101010101011100110101000001/101110101010101110100101101011101/101110100000110100110011101011101/101110100010010010100000001011101/100000101111010101000111101000001/111111101010101010101010101111111/000000001000000100011111000000000/001110101001001010100001111100111/100111000011001101000101011000101/001101101011101000111100010101010/011110011001000100110111001001100/010001110110000111101101110001010/001000010011000101001011001100101/101001101010100100100010011001110/010001010010000111111110101100110/001100111001010110100001010111101/101111010111111001011101101100000/010010110110100111100010011100111/010010010010110010010101101101101/011000100000000100000010011111011/101011000101101000101000100000001/100111100110100010101010000111110/101001000100001000011110100011110/100111101010010110101100111110000/000000001100101110010000100011111/111111100000011100101011101011110/100000100110010010011001100011111/101110101111011010001110111111011/101110101001100111000001010011010/101110101101001011011110111000000/100000100001111010010100011101000/111111100011100101111101111000110'.split('/');const ns='http://www.w3.org/2000/svg';const QR_SIZE=QR_ROWS.length;const svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','-4 -4 '+(QR_SIZE+8)+' '+(QR_SIZE+8));svg.setAttribute('role','img');svg.setAttribute('aria-label','QR code for Tin Foil FA Cup homepage');svg.setAttribute('shape-rendering','geometricPrecision');const INK='#084c61',PAPER='#fffff2';function addQrRect(x,y,width,height,fill,radius){const el=document.createElementNS(ns,'rect');el.setAttribute('x',x);el.setAttribute('y',y);el.setAttribute('width',width);el.setAttribute('height',height);el.setAttribute('fill',fill);if(radius)el.setAttribute('rx',radius);svg.append(el);}addQrRect(-4,-4,QR_SIZE+8,QR_SIZE+8,PAPER,0);const finderPositions=[[0,0],[QR_SIZE-7,0],[0,QR_SIZE-7]];function insideFinder(x,y){return finderPositions.some(([fx,fy])=>x>=fx&&x<fx+7&&y>=fy&&y<fy+7)}QR_ROWS.forEach((row,y)=>[...row].forEach((v,x)=>{if(v==='1'&&!insideFinder(x,y))addQrRect(x,y,1,1,INK,.23)}));finderPositions.forEach(([x,y])=>{addQrRect(x,y,7,7,INK,1.05);addQrRect(x+1,y+1,5,5,PAPER,.65);addQrRect(x+2,y+2,3,3,INK,.52)});document.getElementById('qr').append(svg);
 let returnTo=null;
@@ -28,7 +29,7 @@ function updateInstall(){const isInstalled=standalone();
  if(isInstalled&&heading.parentNode!==message){dialog.insertBefore(celebration,heading);message.append(heading,intro)}
  else if(!isInstalled&&heading.parentNode===message){dialog.insertBefore(heading,shareView);keepView.prepend(intro);intro.after(celebration)}
  message.hidden=!isInstalled;dialog.classList.toggle('kept',isInstalled);document.getElementById('back-card').classList.toggle('keep-card',isInstalled);document.getElementById('back').className=isInstalled?'action keep-magic':'secondary back';document.getElementById('app-note').hidden=!isInstalled;installStatus.hidden=isInstalled;if(dialog.classList.contains('keeping'))heading.textContent=isInstalled?'You Kept the Magic!':'Keep the Magic';document.getElementById('keep-intro').textContent=isInstalled?'See. We told you it was easy.':'Adding Tin Foil FA Cup to your Home Screen has never been easier.';document.getElementById('installed-celebration').hidden=!isInstalled;install.hidden=isInstalled||!pendingInstall||!installPrepared;platform.hidden=isInstalled;document.querySelector('label[for="platform"]').hidden=isInstalled;steps.hidden=isInstalled;if(isInstalled)installStatus.textContent='You’re already opening Tin Foil FA Cup as an app.';installStatus.classList.toggle('installed',isInstalled);}
-function showShare(){if(heading.parentNode!==dialog)dialog.insertBefore(heading,shareView);document.getElementById('installed-celebration').hidden=true;dialog.style.removeProperty('--phone-share-crest-size');dialog.classList.remove('keeping');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
+function showShare(){if(heading.parentNode!==dialog)dialog.insertBefore(heading,shareView);document.getElementById('installed-celebration').hidden=true;dialog.style.removeProperty('--phone-share-crest-size');dialog.classList.remove('keeping','kept');heading.textContent='Share the Magic';shareView.hidden=false;keepView.hidden=true;dialog.scrollTop=0;}
 async function prepareInstall(){
  if(standalone())return;
  installPrepared=false;install.disabled=true;installStatus.textContent='Preparing your saved Campaign…';
@@ -42,18 +43,29 @@ function showKeep(){if(!dialog.classList.contains('keeping')&&matchMedia('(max-w
 document.getElementById('close').onclick=()=>dialog.close();
 dialog.addEventListener('click',e=>{const box=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom))dialog.close()});
 dialog.addEventListener('close',()=>{
+ if(embedded){parent.postMessage({type:'tffc-share-close'},location.origin);return;}
  const destination=new URL(returnTo||'./',location.href);
  if(returnTo){destination.searchParams.delete('magicShare');destination.searchParams.set('magicReturn','1')}
  location.replace(destination.href);
 });
-keepButton.onclick=showKeep;document.getElementById('back').onclick=()=>{if(!returnToShare()){showShare();keepButton.focus()}};
+keepButton.onclick=showKeep;document.getElementById('back').onclick=()=>{if(embedded||!returnToShare()){showShare();heading.focus({preventScroll:true})}};
 platform.value=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'apple':/Android/.test(navigator.userAgent)?'android':'computer';
 platform.onchange=renderInstructions;
 document.getElementById('copy').onclick=async()=>{const status=document.getElementById('feedback');try{await navigator.clipboard.writeText(URL_TO_SHARE);status.textContent='Link copied'}catch{status.textContent='Copy unavailable. Our address is tinfoilfacup.com'}};
 document.getElementById('share').onclick=async()=>{const status=document.getElementById('feedback');if(!navigator.share){status.textContent='Sharing unavailable — try Copy Link';return}try{await navigator.share({title:'Tin Foil FA Cup — Start Your Journey Here',url:URL_TO_SHARE})}catch(e){if(e.name!=='AbortError')status.textContent='Sharing unavailable — try Copy Link'}};
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pendingInstall=e;updateInstall()});
+if(embedded){
+ // Native installation belongs to the top-level document. Keep the deferred
+ // event there and invoke it directly from this same-origin button gesture.
+ try{pendingInstall=parent.__tffcMagicInstallPrompt||null;}catch(_){}
+ window.addEventListener('message',e=>{
+  if(e.origin!==location.origin||e.source!==parent)return;
+  if(e.data?.type==='tffc-install-ready'){pendingInstall=parent.__tffcMagicInstallPrompt||null;updateInstall();}
+  if(e.data?.type==='tffc-app-installed'){pendingInstall=null;updateInstall();}
+ });
+}
 window.addEventListener('appinstalled',()=>{pendingInstall=null;updateInstall();installStatus.textContent='Added. Look for Tin Foil FA Cup in your apps.'});
-install.onclick=async()=>{const request=pendingInstall;if(!request)return;pendingInstall=null;install.disabled=true;try{await request.prompt();const choice=await request.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation requested. Try the Tin Foil FA Cup icon once it appears.':'You can add it later using your browser menu.'}catch{installStatus.textContent='Please use your browser menu to add this page.'}finally{install.hidden=true;install.disabled=false}};
-window.addEventListener('DOMContentLoaded',()=>{renderInstructions();showShare();dialog.showModal();heading.focus({preventScroll:true});if(new URLSearchParams(location.search).get('keep')==='1')showKeep()});
+install.onclick=async()=>{const request=pendingInstall;if(!request)return;pendingInstall=null;if(embedded)parent.__tffcMagicInstallPrompt=null;install.disabled=true;try{await request.prompt();const choice=await request.userChoice;installStatus.textContent=choice.outcome==='accepted'?'Installation requested. Try the Tin Foil FA Cup icon once it appears.':'You can add it later using your browser menu.'}catch{installStatus.textContent='Please use your browser menu to add this page.'}finally{install.hidden=true;install.disabled=false}};
+window.addEventListener('DOMContentLoaded',()=>{renderInstructions();showShare();if(embedded)document.getElementById('share').hidden=!navigator.share;dialog.showModal();heading.focus({preventScroll:true});if(new URLSearchParams(location.search).get('keep')==='1')showKeep()});
 
 })();

@@ -19,10 +19,10 @@ export async function checkInstalledHandover(browser,base){
  await sourcePage.waitForFunction(()=>JSON.parse(localStorage.getItem('tffc.challengeDeck.v1')||'null')?.version===1);
  await sourcePage.goto(base+'/beta/clubfinder-journey.html');
  await sourcePage.getByRole('button',{name:'Share the Magic',exact:true}).click();
- await sourcePage.frameLocator('iframe[title="Share Tin Foil FA Cup"]').getByRole('link',{name:'Keep the Magic'}).click();
- await sourcePage.waitForURL('**/keep-the-magic-shed.html?**');
- await sourcePage.waitForFunction(()=>document.cookie.includes('tffc_keep_v1=')&&!document.getElementById('install-status').textContent);
- const beforeInstall=await sourcePage.evaluate(()=>Object.fromEntries(TffcMagicBackup.KEYS.map(k=>[k,localStorage.getItem(k)]).filter(([,v])=>v!==null)));
+ const magic=sourcePage.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+ await magic.locator('#keep').click();
+ await magic.locator('#magic').evaluate(()=>new Promise(resolve=>{const check=()=>document.cookie.includes('tffc_keep_v1=')&&!document.getElementById('install-status').textContent?resolve():setTimeout(check,20);check()}));
+ const beforeInstall=await magic.locator('#magic').evaluate(()=>Object.fromEntries(TffcMagicBackup.KEYS.map(k=>[k,localStorage.getItem(k)]).filter(([,v])=>v!==null)));
  assert.equal(Object.keys(beforeInstall).length,4,'real Campaign/Challenges flow populated all four progress keys');
  const cookieCopy=await sourceContext.cookies(base+'/beta/keep-the-magic-shed.html');
  const installed=await browser.newContext({viewport:{width:390,height:669}});
