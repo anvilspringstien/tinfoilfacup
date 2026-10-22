@@ -128,7 +128,7 @@ assert.equal(vm.runInContext('flipped',ctx),initialFlipped,'Inspection changed D
 assert.equal(local['tffc.challengeDeck.v1'],snapshot,'Inspection modified persisted Challenge state');
 assert.equal(location.href,'https://example.test/beta/challenges-beta.html','Inspection navigated unexpectedly');
 assert.equal(nodes.deckCabinet.children.length,27,'Inspection modified Trophy Cabinet contents');
-// Campaign milestones and the Honour mat have separate hidden facts, without writing progress.
+// Campaign milestones and the Honour mat have separate hidden facts.
 vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="19"),null)',ctx);
 assert.equal(nodes.trophyViewer.hidden,true,'unearned Seeing Double cannot reveal its egg');
 for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142','THE ORIGINAL AWAY-DAY'],['23','025','A HEAD FOR SURVIVAL'],['17','087','THE CUP THAT NEVER WAS']]){
@@ -139,7 +139,29 @@ for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142
  assert(nodes.trophyViewerCard.classList.contains('barry-flipped'));
  vm.runInContext('advanceTrophy()',ctx);assert.equal(nodes.trophyViewer.hidden,true);
 }
-assert.equal(local['tffc.challengeDeck.v1'],snapshot,'discovering eggs never writes challenge progress');
+const discovered=JSON.parse(local['tffc.challengeDeck.v1']);
+assert.deepEqual(discovered.barryBitsFound,['17','19','23'],'reopening must not duplicate discoveries');
+for(const key of ['accepted','completed','records','tiesPlayed','awayTies','pigeonMiles']){
+ // completed was deliberately seeded in memory by the inspection loop above.
+ if(key!=='completed')assert.deepEqual(discovered[key],JSON.parse(snapshot)[key],'discovery must preserve '+key);
+}
+// Finding the first and third leaves a visible gap; mere front/reverse inspection does not count.
+const gapLocal={'tffc.challengeDeck.v1':JSON.stringify({...JSON.parse(snapshot),completed:{'01':true,'17':true,'23':true}})};
+const gap=boot('',gapLocal,{});
+assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.dataset.challengeId),['17','19','23']);
+vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="17"),null);advanceTrophy()',gap.ctx);
+assert(gap.nodes.barryEggs.children.every(e=>e.className==='barry-egg'),'reverse alone never discovers a fact');
+const beforeDiscovery=JSON.parse(vm.runInContext('JSON.stringify(state)',gap.ctx));
+delete beforeDiscovery.barryBitsFound;
+vm.runInContext('advanceTrophy();closeTrophy();openTrophy(CHALLENGES.find(c=>c.id==="23"),null);advanceTrophy();advanceTrophy();closeTrophy()',gap.ctx);
+assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.className),['barry-egg found','barry-egg','barry-egg found']);
+const afterDiscovery=JSON.parse(gapLocal['tffc.challengeDeck.v1']);
+const {barryBitsFound:_,...unchanged}=afterDiscovery;
+assert.deepEqual(unchanged,beforeDiscovery,'discoveries must change no Challenge progress');
+const reloaded=boot('',gapLocal,{});
+assert.deepEqual(reloaded.nodes.barryEggs.children.map(e=>e.className),['barry-egg found','barry-egg','barry-egg found'],'discovery gap survives reopening');
+vm.runInContext('state=blankState();renderStats()',reloaded.ctx);
+assert(reloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg'),'new Challenge campaign starts with undiscovered eggs');
 // The new egg is earned through the existing Honour controls, with no mileage milestone.
 const honour=boot('',{'tffc.challengeDeck.v1':JSON.stringify({version:1,accepted:{'01':true},completed:{'01':true},records:{},tiesPlayed:0,awayTies:0,pigeonMiles:0,campaignRound:0,giantKillAchieved:false,campaignStatus:'ACTIVE'})},{});
 vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="23");openTrophy(CHALLENGES[index],null)',honour.ctx);
