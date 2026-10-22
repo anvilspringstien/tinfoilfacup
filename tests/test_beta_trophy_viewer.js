@@ -145,21 +145,21 @@ for(const key of ['accepted','completed','records','tiesPlayed','awayTies','pige
  // completed was deliberately seeded in memory by the inspection loop above.
  if(key!=='completed')assert.deepEqual(discovered[key],JSON.parse(snapshot)[key],'discovery must preserve '+key);
 }
-// Finding the first and third leaves a visible gap; mere front/reverse inspection does not count.
+// Existing discoveries keep their deck slots when a new earlier egg is added; mere front/reverse inspection does not count.
 const gapLocal={'tffc.challengeDeck.v1':JSON.stringify({...JSON.parse(snapshot),completed:{'01':true,'17':true,'23':true}})};
 const gap=boot('',gapLocal,{});
-assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.dataset.challengeId),['17','19','23']);
+assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.dataset.challengeId),['07','17','19','23']);
 vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="17"),null);advanceTrophy()',gap.ctx);
 assert(gap.nodes.barryEggs.children.every(e=>e.className==='barry-egg'),'reverse alone never discovers a fact');
 const beforeDiscovery=JSON.parse(vm.runInContext('JSON.stringify(state)',gap.ctx));
 delete beforeDiscovery.barryBitsFound;
 vm.runInContext('advanceTrophy();closeTrophy();openTrophy(CHALLENGES.find(c=>c.id==="23"),null);advanceTrophy();advanceTrophy();closeTrophy()',gap.ctx);
-assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.className),['barry-egg found','barry-egg','barry-egg found']);
+assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.className),['barry-egg','barry-egg found','barry-egg','barry-egg found']);
 const afterDiscovery=JSON.parse(gapLocal['tffc.challengeDeck.v1']);
 const {barryBitsFound:_,...unchanged}=afterDiscovery;
 assert.deepEqual(unchanged,beforeDiscovery,'discoveries must change no Challenge progress');
 const reloaded=boot('',gapLocal,{});
-assert.deepEqual(reloaded.nodes.barryEggs.children.map(e=>e.className),['barry-egg found','barry-egg','barry-egg found'],'discovery gap survives reopening');
+assert.deepEqual(reloaded.nodes.barryEggs.children.map(e=>e.className),['barry-egg','barry-egg found','barry-egg','barry-egg found'],'discovery gap survives reopening');
 vm.runInContext('state=blankState();renderStats()',reloaded.ctx);
 assert(reloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg'),'new Challenge campaign starts with undiscovered eggs');
 // The new egg is earned through the existing Honour controls, with no mileage milestone.
@@ -174,5 +174,22 @@ assert.equal(honour.nodes.barrysBitTitle.textContent,'A HEAD FOR SURVIVAL');
 assert.equal(vm.runInContext('state.pigeonMiles',honour.ctx),0,'Scorcese needs no flown-mile milestone');
 assert.match(honour.nodes.barrysBitStory.textContent,/ocean liner/);
 assert.equal(honour.nodes.barrysBitCredit.children[0].textContent,'This message is kindly sponsored by the RNLI');
+// Adding Rockerfeller preserves all three discoveries from an older save.
+const legacyLocal={'tffc.challengeDeck.v1':JSON.stringify({...JSON.parse(snapshot),barryBitsFound:['17','19','23']})};
+const legacy=boot('',legacyLocal,{});
+assert.deepEqual(legacy.nodes.barryEggs.children.map(e=>e.className),['barry-egg','barry-egg found','barry-egg found','barry-egg found']);
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="07");openTrophy(CHALLENGES[index],null)',legacy.ctx);
+assert(!legacy.nodes.trophyViewer.classList.contains('open'),'unearned Rockerfeller hides its fact');
+legacy.nodes.acceptBtn.onclick();legacy.nodes.completeBtn.onclick();
+assert.equal(legacy.nodes.barryEggs.children[0].className,'barry-egg','earning Rockerfeller alone never reveals the fact');
+vm.runInContext('openTrophy(CHALLENGES[index],null);advanceTrophy();advanceTrophy()',legacy.ctx);
+assert.equal(legacy.nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. 178');
+assert.equal(legacy.nodes.barrysBitTitle.textContent,'CARELESS WRAPS COST LIVES');
+assert.match(legacy.nodes.barrysBitStory.textContent,/cucumber and salmon sandwiches/);
+assert.equal(legacy.nodes.barrysBitCredit.children[0].textContent,'History of Foil');
+assert.equal(legacy.nodes.barrysBitCredit.children[1].textContent,'The Shanghai Metal Corporation');
+assert(legacy.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'all four eggs are now discovered');
+const fourReloaded=boot('',legacyLocal,{});
+assert(fourReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'all four discoveries persist');
 console.log('BETA TROPHY VIEWER: PASS');
 console.log('Three taps, backdrop, Escape, keyboard, focus, persistent state and Deck isolation: PASS');
