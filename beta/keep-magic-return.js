@@ -32,3 +32,17 @@ window.addEventListener('load',()=>{
  };
  requestAnimationFrame(()=>requestAnimationFrame(finish));
 });
+
+// Keep installation identity on the app host while Share and Keep use one iframe.
+// The existing installed-entry URL and cookie handover remain unchanged.
+(function(){
+ for(const [selector,tag,attributes] of [
+  ['link[rel="manifest"]','link',{rel:'manifest',href:'keep-the-magic-shed.webmanifest'}],
+  ['link[rel="apple-touch-icon"]','link',{rel:'apple-touch-icon',href:'assets/keep-magic/apple-touch-icon.png'}],
+  ['meta[name="apple-mobile-web-app-capable"]','meta',{name:'apple-mobile-web-app-capable',content:'yes'}],
+  ['meta[name="apple-mobile-web-app-title"]','meta',{name:'apple-mobile-web-app-title',content:'Tin Foil FA Cup'}]
+ ]){if(!document.querySelector(selector)){const node=document.createElement(tag);for(const [key,value] of Object.entries(attributes))node.setAttribute(key,value);document.head.append(node);}}
+ const tellShare=type=>document.querySelector('#tffcShareHost iframe,#tffcChallengeShareHost iframe')?.contentWindow?.postMessage({type},location.origin);
+ window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();window.__tffcMagicInstallPrompt=event;tellShare('tffc-install-ready');});
+ window.addEventListener('appinstalled',()=>{window.__tffcMagicInstallPrompt=null;tellShare('tffc-app-installed');});
+})();

@@ -13,6 +13,7 @@ on:
       - 'beta/clubfinder-beta.html'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
+      - 'tests/dark-journey-handoff.mjs'
       - 'tests/keep-magic-install-regression.js'
       - 'tests/keep-magic-install-browser.mjs'
       - 'tests/campaign-introductions-browser.mjs'
@@ -30,6 +31,7 @@ on:
       - 'beta/clubfinder-beta.html'
       - 'beta/assets/keep-magic/**'
       - 'tests/keep-the-magic-shed.mjs'
+      - 'tests/dark-journey-handoff.mjs'
       - 'tests/keep-magic-install-regression.js'
       - 'tests/keep-magic-install-browser.mjs'
       - 'tests/campaign-introductions-browser.mjs'
@@ -56,8 +58,11 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/keep-magic-server.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
-          node tests/keep-the-magic-shed.mjs
-          node tests/campaign-introductions-browser.mjs
+          browser_status=0
+          node tests/dark-journey-handoff.mjs || browser_status=$?
+          node tests/keep-the-magic-shed.mjs || browser_status=$?
+          node tests/campaign-introductions-browser.mjs || browser_status=$?
+          exit "$browser_status"
       - name: Retain preview screenshots
         if: always()
         uses: actions/upload-artifact@v4
