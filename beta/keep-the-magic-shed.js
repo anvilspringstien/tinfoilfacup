@@ -36,7 +36,7 @@ async function prepareInstall(){
  try{await TffcMagicInstall.prepare();installPrepared=true;installStatus.textContent='';install.disabled=false;updateInstall();}
  catch(_){
   install.hidden=true;installStatus.textContent='Before adding to Home Screen, save a backup of your Campaign and Challenges. ';
-  const link=document.createElement('a');link.href='keep-the-magic.html';link.textContent='Save or restore a backup';installStatus.append(link);
+  const link=document.createElement('a');link.href='keep-the-magic.html';link.target='_top';link.textContent='Save or restore a backup';installStatus.append(link);
  }
 }
 function showKeep(){if(!dialog.classList.contains('keeping')&&matchMedia('(max-width:600px) and (min-height:500px)').matches)dialog.style.setProperty('--phone-share-crest-size',document.querySelector('.brand').getBoundingClientRect().width+'px');dialog.classList.add('keeping');heading.textContent='Keep the Magic';shareView.hidden=true;keepView.hidden=false;renderInstructions();updateInstall();dialog.scrollTop=0;(standalone()?heading:document.getElementById(install.hidden?'platform':'install')).focus();prepareInstall();}

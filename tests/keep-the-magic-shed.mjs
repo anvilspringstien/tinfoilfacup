@@ -92,6 +92,11 @@ try{
    await frame.locator('#keep').click();await frame.locator('#install').waitFor();
    await frame.locator('#install').click();assert.equal(await app.evaluate(()=>window.nativeInstallCalls),1,'deferred top-level prompt works from Keep');
    await frame.locator('#back').click();
+   await frame.locator('#magic').evaluate(()=>{TffcMagicInstall.prepare=()=>Promise.reject(Error('Blocked handover'));});
+   await frame.locator('#keep').click();
+   await frame.locator('#install-status a').waitFor();
+   assert.equal(await frame.locator('#install-status a').getAttribute('target'),'_top','backup fallback opens outside the embedded Share frame');
+   await frame.locator('#back').click();
   }
   await frame.locator('#keep').click();await frame.locator('#close').click();
   await app.waitForFunction(()=>!document.querySelector('iframe[title="Share Tin Foil FA Cup"]')||document.querySelector('iframe[title="Share Tin Foil FA Cup"]').closest('[hidden]'));
