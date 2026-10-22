@@ -231,7 +231,7 @@ try{
   await share.locator('#copy').waitFor();
   assert.equal(await share.locator('#heading').innerText(),'Share the Magic');
   await share.locator('#close').click();await atReturnStart(app);
-  assert(await button.evaluate(e=>e===document.activeElement),'close restores the Share button focus');
+  assert(await button.evaluate(e=>e===document.activeElement),'close restores the Share button focus '+JSON.stringify(await app.evaluate(()=>({active:document.activeElement?.outerHTML?.slice(0,300),share:document.querySelector('.campaign-share')?.outerHTML,hidden:document.getElementById('tffcShareHost')?.hidden}))));
   assert.equal(await app.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),identity);
   await button.click();await share.locator('#keep').click();
   await share.locator('#close').click();await atReturnStart(app);

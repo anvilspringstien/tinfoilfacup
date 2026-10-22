@@ -40,8 +40,13 @@ async function prepareInstall(){
  }
 }
 function showKeep(){if(!dialog.classList.contains('keeping')&&matchMedia('(max-width:600px) and (min-height:500px)').matches)dialog.style.setProperty('--phone-share-crest-size',document.querySelector('.brand').getBoundingClientRect().width+'px');dialog.classList.add('keeping');heading.textContent='Keep the Magic';shareView.hidden=true;keepView.hidden=false;renderInstructions();updateInstall();dialog.scrollTop=0;(standalone()?heading:document.getElementById(install.hidden?'platform':'install')).focus();prepareInstall();}
-document.getElementById('close').onclick=()=>dialog.close();
-dialog.addEventListener('click',e=>{const box=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom))dialog.close()});
+function closeMagic(){
+ if(embedded){parent.postMessage({type:'tffc-share-close'},location.origin);return;}
+ dialog.close();
+}
+document.getElementById('close').onclick=closeMagic;
+dialog.addEventListener('cancel',event=>{if(embedded){event.preventDefault();closeMagic();}});
+dialog.addEventListener('click',e=>{const box=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom))closeMagic()});
 dialog.addEventListener('close',()=>{
  if(embedded){parent.postMessage({type:'tffc-share-close'},location.origin);return;}
  const destination=new URL(returnTo||'./',location.href);
