@@ -227,5 +227,25 @@ assert.equal(fiveReloaded.nodes.barryEggs.children.length,6);
 assert(fiveReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'six discovered facts fill six eggs');
 const sixReloaded=boot('',legacyLocal,{});
 assert(sixReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'all six discoveries survive reopening');
+
+// Rockerfeller's checkout is a plain external link; only the existing Honour action awards it.
+assert.match(html, /id="rockerfellerSupportLink" href="https:\/\/buy\.stripe\.com\/9B64gA5LbelE0CIelD6EU00" target="_blank" rel="noopener noreferrer"/);
+const supportLocal={};
+const support=boot('?payment=success',supportLocal,{});
+assert.equal(support.nodes.rockerfellerSupport.hidden,true,'Support must be hidden on other mats');
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="07");render()',support.ctx);
+assert.equal(support.nodes.rockerfellerSupport.hidden,false,'Rockerfeller must offer checkout before acceptance');
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'A return query must never award a payment challenge');
+const supportSnapshot=supportLocal['tffc.challengeDeck.v1'];
+vm.runInContext('render()',support.ctx);
+assert.equal(supportLocal['tffc.challengeDeck.v1'],supportSnapshot,'Showing checkout must not change Campaign or awards');
+support.nodes.acceptBtn.onclick();
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'Acceptance alone must not award Rockerfeller');
+support.nodes.completeBtn.onclick();
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),true,'Existing Honour completion must still award Rockerfeller');
+assert.equal(vm.runInContext('state.barryBitsFound.includes("07")',support.ctx),false,'Completing support must not reveal its egg');
+vm.runInContext('index=8;render()',support.ctx);
+assert.equal(support.nodes.rockerfellerSupport.hidden,true,'Checkout must disappear when leaving Rockerfeller');
+
 console.log('BETA TROPHY VIEWER: PASS');
 console.log('Three taps, backdrop, Escape, keyboard, focus, persistent state and Deck isolation: PASS');
