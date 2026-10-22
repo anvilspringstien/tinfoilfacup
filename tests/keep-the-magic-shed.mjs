@@ -4,6 +4,8 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 import assert from 'node:assert/strict';
 async function atReturnStart(page){
  await page.waitForFunction(()=>{
+  const share=document.querySelector('#tffcShareHost,#tffcChallengeShareHost');
+  if(share&&!share.hidden)return false;
   const deck=document.querySelector('#overlay .deck');
   if(deck)return document.getElementById('overlay').scrollTop<2;
   if(!document.getElementById('results')?.children.length)return scrollY<2;
