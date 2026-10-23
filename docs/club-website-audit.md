@@ -4,6 +4,36 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 23 October 2026 checkpoint — older existing links
+
+Reviewed all 31 existing mappings awaiting independent verification. Batch 05
+records 27 approvals using club-published homepages, contact pages, stadium
+information or club history. Existing URLs are preserved: this batch adds evidence,
+not new links.
+
+- All 80 current First Round Proper clubs remain verified and linked.
+- Original qualifying-club coverage remains 76 of 651 linked; 575 are missing.
+- Queue records independently verified: 93 -> 120.
+- Existing links awaiting verification: 31 -> 4.
+- The CLI promotion accepts zero new mappings and reproduces the BETA application
+  byte-for-byte. Competition input bytes and all 651 eligible origins are unchanged.
+- The queue was rebuilt against the competition input updated on 23 October.
+
+Evidence and per-club review notes are in
+`updater/club_website_verified_batch_05.json`. Its `held` section is deliberately
+excluded from approved publication and records these follow-ups:
+
+| Club | Finding | Next step |
+| --- | --- | --- |
+| Ashington FC | Club identity is corroborated at Woodhorn Lane, but the homepage contains numerous unrelated gambling/supplement links. | Site-health review before approval; no claim is made about the cause. |
+| Barnoldswick Town FC | Existing custom domain could not be retrieved. The league and the club-managed Pitchero contact page agree on Silentnight Stadium, BB18 5LJ. | Review the differing replacement candidate: https://www.pitchero.com/clubs/barnoldswicktown/ |
+| Carlisle City FC | Existing domain serves a parking/for-sale page. | Confirm an authoritative replacement; do not approve the parked domain. |
+| Kendal Town FC | Homepage and contact page return HTTP 403 to the research reader. | Verify through an accessible club-published source or ordinary browser; no restriction was bypassed. |
+
+These four existing mappings have **not** been replaced, removed or marked
+verified. Their findings remain recorded for explicit review under the existing
+mapping-conflict policy. No email was sent.
+
 ## 21 October 2026 checkpoint
 
 - All 80 current First Round Proper clubs have independently checked official
