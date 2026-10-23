@@ -54,6 +54,7 @@ function boot(search,local,session){
     URL,URLSearchParams,requestAnimationFrame:fn=>fn(),setTimeout:()=>0,clearTimeout(){},
     Image:class{set src(path){this._src=path}},MutationObserver:undefined
   };
+  ctx.opened=[];ctx.open=(...args)=>{ctx.opened.push(args);return null;};
   ctx.window=ctx;ctx.globalThis=ctx;
   vm.createContext(ctx);
   vm.runInContext(scripts,ctx,{filename:'beta/challenges-beta.html',timeout:25000});
@@ -228,24 +229,28 @@ assert(fiveReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg f
 const sixReloaded=boot('',legacyLocal,{});
 assert(sixReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'all six discoveries survive reopening');
 
-// Rockerfeller's checkout is a plain external link; only the existing Honour action awards it.
-assert.match(html, /id="rockerfellerSupportLink" href="https:\/\/buy\.stripe\.com\/9B64gA5LbelE0CIelD6EU00" target="_blank" rel="noopener noreferrer"/);
+// Support stays below the Coming Soon panel, never among the changing mat controls.
+assert(!html.includes('id="rockerfellerSupport"'),'Old mat support controls must be removed');
+assert.match(html, /class="tffc-support-lozenge" href="https:\/\/buy\.stripe\.com\/9B64gA5LbelE0CIelD6EU00" target="_blank" rel="noopener noreferrer"/);
+assert(html.indexOf('class="tffc-support-row"')>html.indexOf('class="deck-sales-tease"'));
+assert(html.indexOf('class="tffc-support-row"')<html.indexOf('class="beta-help deck-footer-help"'));
 const supportLocal={};
 const support=boot('?payment=success',supportLocal,{});
-assert.equal(support.nodes.rockerfellerSupport.hidden,true,'Support must be hidden on other mats');
 vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="07");render()',support.ctx);
-assert.equal(support.nodes.rockerfellerSupport.hidden,false,'Rockerfeller must offer checkout before acceptance');
-assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'A return query must never award a payment challenge');
-const supportSnapshot=supportLocal['tffc.challengeDeck.v1'];
-vm.runInContext('render()',support.ctx);
-assert.equal(supportLocal['tffc.challengeDeck.v1'],supportSnapshot,'Showing checkout must not change Campaign or awards');
+assert.equal(support.ctx.opened.length,0,'Rendering and return URLs must never open or award payment');
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false);
 support.nodes.acceptBtn.onclick();
-assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'Acceptance alone must not award Rockerfeller');
+assert.equal(support.ctx.opened.length,1,'Accept Rockerfeller opens checkout once');
+assert.deepEqual(support.ctx.opened[0],['https://buy.stripe.com/9B64gA5LbelE0CIelD6EU00','_blank','noopener,noreferrer']);
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'Opening checkout must not award a trophy');
+support.nodes.acceptBtn.onclick();
+assert.equal(support.ctx.opened.length,1,'Repeated acceptance must not reopen payment');
 support.nodes.completeBtn.onclick();
-assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),true,'Existing Honour completion must still award Rockerfeller');
-assert.equal(vm.runInContext('state.barryBitsFound.includes("07")',support.ctx),false,'Completing support must not reveal its egg');
-vm.runInContext('index=8;render()',support.ctx);
-assert.equal(support.nodes.rockerfellerSupport.hidden,true,'Checkout must disappear when leaving Rockerfeller');
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),true,'Honour completion still awards the mat');
+assert.equal(vm.runInContext('state.barryBitsFound.includes("07")',support.ctx),false,'Completion alone never discovers an egg');
+vm.runInContext('index=4;render()',support.ctx);
+support.nodes.acceptBtn.onclick();
+assert.equal(support.ctx.opened.length,1,'Other Honour challenges never open checkout');
 
 console.log('BETA TROPHY VIEWER: PASS');
 console.log('Three taps, backdrop, Escape, keyboard, focus, persistent state and Deck isolation: PASS');
