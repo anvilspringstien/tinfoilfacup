@@ -4,6 +4,61 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 23 October 2026 checkpoint — missing-link coverage, batch 06
+
+Reviewed the first 30 missing qualifying-club websites. Batch 06 records 27 new
+approved links with club-published evidence. Abbey Hey, Barking and Barton Town
+remain missing pending an accessible, preferred current destination; individual
+findings are recorded in the ledger's held section.
+
+- Original qualifying-club coverage: 76 -> 103 of 651 linked.
+- Missing links: 575 -> 548. Verified queue records: 120 -> 147.
+- All 80 current clubs remain verified and linked. The four older existing-link
+  holds below remain unresolved and unchanged.
+- Only the website map literal changes in the BETA application. Eligibility,
+  competition data and protected original Clubfinder are unchanged.
+- Club website identity approval does not certify every ground/address claim on
+  that website. Welwyn's first-team page specifies a 2026/27 ground while its
+  homepage still mentions an older one; Totton also retains an older footer
+  address. These are candidates for details checks, not manual competition edits.
+
+## Proposed club-details check within outreach
+
+The desktop presentation and donation flow are now user-accepted. Fold a simple
+details check into the planned club introduction, beginning with current clubs.
+This is a proposal: no messages are sent by this audit or this change.
+
+1. Use the approved front-door crest, a named Anvil Springstien sign-off and the
+   public https://tinfoilfacup.com/ link. Explain the supporter/grassroots purpose.
+2. Include the exact club name, ground, postcode and official website currently
+   shown by Clubfinder. Clearly identify them as our current published details.
+   Ask for a simple all-correct reply or corrections; no account is required.
+3. Invite the recipient to visit the site and enter their ground's postcode.
+   Preflight that actual postcode through the three-choice search before sending:
+   shared grounds and later entrants can mean their club will not appear. For a
+   club without a reliable search route, use the email details panel instead of
+   promising that postcode entry will display them. A dedicated club-view link is
+   a possible later improvement, not an existing feature.
+4. Resolve the recipient from the club's own current public general/secretary
+   contact page and review the personalised message before authorised sending.
+   Maintain a small private contact log: exact club identity, contact source/date,
+   sent date, Gmail thread, response and any fields explicitly confirmed. Keep
+   addresses and correspondence out of the public repository.
+5. Distinguish public-source verification from direct club confirmation. Never
+   label silence as confirmation. A delayed or absent reply does not block a
+   website link already supported by reviewed public evidence.
+6. Review replies against the sender's club role and public evidence, then feed
+   supported corrections through the relevant CLI/data review route. No automatic
+   inbox-to-live updates and no manual competition patches. Record what changed,
+   its source and date; a confirmation only covers the fields actually checked.
+7. Start with a small authorised pilot and review delivery, replies, corrections
+   and workload before expanding. Optionally send one gentle follow-up after
+   10–14 days; this is a proposed cadence, not a promise of a response or a
+   scheduled task. Honour requests for no further contact.
+
+The same invitation can introduce the product and improve its directory. There
+is no new runtime feature, extra page load or club login in this first approach.
+
 ## 23 October 2026 checkpoint — older existing links
 
 Reviewed all 31 existing mappings awaiting independent verification. Batch 05
@@ -85,3 +140,4 @@ This is a persistent work queue and CLI publication process, not an unattended
 web-research service. Routine clear records can be handled under the agreed
 process; only ambiguous evidence or existing-link conflicts need a user decision.
 No email has been sent as part of the website audit.
+
