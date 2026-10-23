@@ -231,7 +231,7 @@ assert(sixReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg fo
 
 // Support stays below the Coming Soon panel, never among the changing mat controls.
 assert(!html.includes('id="rockerfellerSupport"'),'Old mat support controls must be removed');
-assert.match(html, /class="tffc-support-lozenge" href="https:\/\/buy\.stripe\.com\/9B64gA5LbelE0CIelD6EU00" target="_blank" rel="noopener noreferrer"/);
+assert.match(html, /class="tffc-support-lozenge" href="https:\/\/buy\.stripe\.com\/dRm28s2yZdhAgBG4L36EU01" target="_blank" rel="noopener noreferrer"/);
 assert(html.indexOf('class="tffc-support-row"')>html.indexOf('class="deck-sales-tease"'));
 assert(html.indexOf('class="tffc-support-row"')<html.indexOf('class="beta-help deck-footer-help"'));
 const supportLocal={};
@@ -241,7 +241,7 @@ assert.equal(support.ctx.opened.length,0,'Rendering and return URLs must never o
 assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false);
 support.nodes.acceptBtn.onclick();
 assert.equal(support.ctx.opened.length,1,'Accept Rockerfeller opens checkout once');
-assert.deepEqual(support.ctx.opened[0],['https://buy.stripe.com/9B64gA5LbelE0CIelD6EU00','_blank','noopener,noreferrer']);
+assert.deepEqual(support.ctx.opened[0],['https://buy.stripe.com/dRm28s2yZdhAgBG4L36EU01','_blank','noopener,noreferrer']);
 assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'Opening checkout must not award a trophy');
 support.nodes.acceptBtn.onclick();
 assert.equal(support.ctx.opened.length,1,'Repeated acceptance must not reopen payment');
