@@ -88,12 +88,12 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .action[disabled]{background:#3a3732!important;color:#817a70!important;border-color:#504a43!important;box-shadow:none!important;opacity:1;cursor:not-allowed}
 .complete.done-state[disabled]{background:#2d6a4f!important;color:#fff!important;border-color:#3f8a69!important;box-shadow:0 3px 9px rgba(0,0,0,.22)!important;cursor:default}
 .accept.accepted-state[disabled]{background:#8b6927!important;color:#fff8e8!important;border-color:#aa8641!important;opacity:1!important;cursor:default}
-.rockerfeller-support{margin:10px auto 2px;text-align:center;max-width:360px}
-.rockerfeller-support[hidden]{display:none}
-.rockerfeller-support a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;box-sizing:border-box;padding:8px 18px;border:1px solid #638590;border-radius:10px;background:#084C61;color:#FAFAFA;text-decoration:none;font:700 12px/1.3 Arial,sans-serif}
-.rockerfeller-support a:hover{background:#0b6079}
-.rockerfeller-support a:focus-visible{outline:2px solid #ead9ad;outline-offset:3px}
-.rockerfeller-support p{margin:6px 8px 0;color:#cdbfa8;font:11px/1.4 Arial,sans-serif}
+.tffc-support-row{display:flex;justify-content:center;margin:20px 0}
+.tffc-support-lozenge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;box-sizing:border-box;max-width:100%;padding:6px 18px;border:1px solid #d5ad26;border-radius:999px;background:#f0c64f;color:#17110b;font:800 11px/1.3 Arial,sans-serif;text-align:center;text-decoration:none;letter-spacing:.02em;opacity:.88}
+.tffc-support-lozenge:hover{opacity:1;filter:brightness(1.06)}
+.tffc-support-lozenge:focus-visible{outline:2px solid #f0c64f;outline-offset:4px}
+.tffc-support-row + .tffc-beta-help{margin-top:0}
+.tffc-support-row + .deck-footer-help{margin-top:0;padding-top:0;border-top:0}
 .verifyrow{display:flex;justify-content:center;min-height:28px;margin-top:8px}
 .verifybadge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border:1px solid #756753;border-radius:999px;background:#2c271f;color:#ead9ad;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em;cursor:help}
 .verifybadge:focus-visible{outline:2px solid #ead9ad;outline-offset:3px}
@@ -1238,10 +1238,6 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
       </div>
       <button class="nav next" id="next" aria-label="Next Challenge">›</button>
     </div>
-    <div class="rockerfeller-support" id="rockerfellerSupport" hidden>
-      <a id="rockerfellerSupportLink" href="https://buy.stripe.com/9B64gA5LbelE0CIelD6EU00" target="_blank" rel="noopener noreferrer" aria-label="Support TFFAC — £5 (opens Stripe in a new tab)">Support TFFAC — £5</a>
-      <p>Opens Stripe in a new tab. Afterwards, return here and select Completed? on your honour.</p>
-    </div>
     <div class="verifyrow"><button class="verifybadge" id="verifyBadge" type="button" aria-describedby="verifyHelp" aria-expanded="false">Our Foundational Laws</button></div>
     <div class="verifyhelp" id="verifyHelp"></div>
     <div class="campaign-truth" aria-label="Current Campaign standing">
@@ -1329,6 +1325,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
       <p class="deck-sales-copy">Get Your Hands on The Real Thing!</p>
       <button class="deck-sales-coming" type="button" disabled>Coming Soon!</button>
     </div>
+    <div class="tffc-support-row"><a class="tffc-support-lozenge" href="https://buy.stripe.com/9B64gA5LbelE0CIelD6EU00" target="_blank" rel="noopener noreferrer" aria-label="Support Tin Foil FA Cup (opens Stripe in a new tab)">Support Tin Foil FA Cup</a></div>
     <div class="beta-help deck-footer-help" aria-label="BETA tester feedback">
       <div class="beta-help-links">
         <button class="beta-help-link" type="button" id="challengeShareLinkFooter">Share</button>
@@ -1766,8 +1763,6 @@ function render() {
   hideVerificationHelp();
   $("feedback").textContent="";
 
-  $("rockerfellerSupport").hidden=c.id!=="07";
-
   const unlocked=isUnlocked(c);
   const accepted=!!state.accepted[c.id], done=!!state.completed[c.id];
   const automatic=c.type==="campaign";
@@ -1779,6 +1774,7 @@ function render() {
   $("acceptBtn").disabled=noManualActions || !unlocked || accepted || done || (endCampaign && state.campaignStatus==="ENDED");
   $("completeBtn").disabled=noManualActions || endCampaign || !unlocked || !accepted || done;
   $("acceptBtn").textContent=endCampaign ? (done?"It’s Over!":"End it all?") : ((accepted||done)?"Accepted!":"Accept?");
+  $("acceptBtn").setAttribute("aria-label",c.id==="07" && !accepted && !done ? "Accept Rockerfeller and open Stripe in a new tab" : $("acceptBtn").textContent);
   $("acceptBtn").classList.toggle("accepted-state",!endCampaign && (accepted||done));
   $("acceptBtn").classList.toggle("done-state",endCampaign && done);
   $("completeBtn").textContent=done?(automatic?"Achieved!":"Completed!"):"Completed?";
@@ -2128,6 +2124,7 @@ $("acceptBtn").onclick=async ()=>{
   $("completeBtn").disabled=false;
   $("feedback").textContent="Challenge Accepted.";
   save();
+  if(c.id==="07") window.open("https://buy.stripe.com/9B64gA5LbelE0CIelD6EU00","_blank","noopener,noreferrer");
   requestAnimationFrame(()=>renderStats());
 };
 $("completeBtn").onclick=()=>{
