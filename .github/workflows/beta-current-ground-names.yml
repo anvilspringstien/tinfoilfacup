@@ -1,0 +1,20 @@
+name: Guard reviewed current ground names
+on:
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - 'updater/current-ground-name-ledger.json'
+      - 'updater/apply_beta_current_ground_names.py'
+      - 'tests/test_beta_current_ground_names.py'
+      - '.github/workflows/beta-current-ground-names.yml'
+permissions:
+  contents: read
+jobs:
+  current-ground-names:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate name-only publication and fail-closed guards
+        run: |
+          python -m unittest discover -s tests -p 'test_beta_current_ground_names.py' -v
+          python updater/apply_beta_current_ground_names.py --check
