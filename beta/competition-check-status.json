@@ -1,22 +1,22 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-26T08:22:51.932548Z",
-  "state": "checked",
-  "last_checked_at": "2026-10-26T06:19:20Z",
+  "monitor_ran_at": "2026-10-26T13:12:11.769477Z",
+  "state": "unverified",
+  "last_checked_at": null,
   "results": "success",
-  "draw": "success",
+  "draw": "unverified",
   "diagnostics": {
     "results": {
       "reason": "verified",
-      "run_id": 40278600371,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40278600371",
+      "run_id": 40328044490,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40328044490",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-10-26T06:19:20Z"
+      "updated_at": "2026-10-26T13:11:45Z"
     },
     "draw": {
-      "reason": "verified",
+      "reason": "stale",
       "run_id": 40289862625,
       "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40289862625",
       "event": "schedule",
@@ -26,22 +26,22 @@
     }
   },
   "scheduled": {
-    "state": "checked",
-    "last_checked_at": "2026-10-26T06:19:20Z",
+    "state": "unverified",
+    "last_checked_at": null,
     "results": "success",
-    "draw": "success",
+    "draw": "unverified",
     "diagnostics": {
       "results": {
         "reason": "verified",
-        "run_id": 40278600371,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40278600371",
+        "run_id": 40328044490,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40328044490",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-10-26T06:19:20Z"
+        "updated_at": "2026-10-26T13:11:45Z"
       },
       "draw": {
-        "reason": "verified",
+        "reason": "stale",
         "run_id": 40289862625,
         "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40289862625",
         "event": "schedule",
