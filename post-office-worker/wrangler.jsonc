@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "tffc-barry-post-office",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-26",
+  "workers_dev": true,
+  "vars": {
+    "ENABLED": "false",
+    "ALLOWED_ORIGINS": "https://tinfoilfacup.com,https://www.tinfoilfacup.com,https://anvilspringstien.github.io"
+  },
+  "send_email": [{ "name": "POST_MAIL", "destination_address": "tinfoilfacup@gmail.com" }],
+  "durable_objects": { "bindings": [{ "name": "POST_OFFICE", "class_name": "BarryPostOffice" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["BarryPostOffice"] }],
+  "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "178025098", "simple": { "limit": 3, "period": 60 } }]
+}
