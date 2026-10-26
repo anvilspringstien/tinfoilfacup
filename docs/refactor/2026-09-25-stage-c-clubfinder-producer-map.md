@@ -7,7 +7,7 @@
 | File | Bytes | SHA-256 |
 |---|---:|---|
 | `beta/clubfinder-beta.html` | 632,187 | `c47d3c0985a516c87546d5869f8fae8b17e356c8237d3fb2a8fe7c2f73a645ec` |
-| `beta/challenges-beta.html` | 116,456 | `17ad5a685152326adf407e0b26132f30393470c64068184331ffe5017535517d` |
+| `beta/challenges-beta.html` | 116,535 | `f042b1b786b1d9aba7a51deabb1320a6d90608483edc2a39e9a943c50d408b4b` |
 
 The Deck side already contains the Stage A `applyClubfinderCampaignTruth()` reader, Stage B `renderTrophyCabinet()` helper and their regression tests.
 
