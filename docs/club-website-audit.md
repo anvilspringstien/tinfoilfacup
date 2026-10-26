@@ -4,6 +4,21 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 26 October 2026 checkpoint — missing-link coverage, batch 07
+
+Reviewed twelve previously unreviewed missing origins, Bashley through Belper
+Town. Eleven club-published destinations are approved; Beckenham Town stays
+missing because the league-linked site could not be read. Earlier holds remain
+separate and unchanged.
+
+- Original qualifying-club coverage: 103 -> 114 of 651 linked.
+- Missing links: 548 -> 537. Verified queue records: 147 -> 158.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Basildon's expired custom-domain page links its working, current club-managed
+  Pitchero destination. Bedfont FC and Bedfont Sports remain distinct identities.
+- Evidence and the Beckenham hold are recorded in batch 07. Only the BETA website
+  map literal changes; no ground, eligibility or competition data is edited.
+
 ## 23 October 2026 checkpoint — missing-link coverage, batch 06
 
 Reviewed the first 30 missing qualifying-club websites. Batch 06 records 27 new
