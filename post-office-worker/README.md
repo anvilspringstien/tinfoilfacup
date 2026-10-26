@@ -1,6 +1,6 @@
 # Barry’s Post Office — activation checklist
 
-The UI and dedicated Worker are prepared. **Not deployed or wired to the public footer yet.** The preview cannot send mail. Existing Feedback/Report an Issue links continue working.
+The design preview is published and remains non-sending. The dedicated Worker was deployed successfully on 26 October 2026, with the fixed Gmail destination, Durable Object and rate-limit bindings confirmed in its build log. Anvil confirmed that the Production Turnstile secret was stored privately. The service is enabled for an isolated real-delivery test; **the public footer links are not switched yet**.
 
 ## Free delivery
 
@@ -41,4 +41,16 @@ References checked 26 October 2026:
 
 From the repository root: `node --test tests/test_post_office_worker.mjs`.
 
-Cloudflare deployment and real Gmail delivery remain unverified until activation. Keep `ENABLED=false` in the committed config and do not link an unverified service from the main footer.
+Initial Cloudflare deployment is confirmed; real Gmail delivery remains unverified. `ENABLED=true` now permits the isolated live test. Do not connect the main footer until delivery to Gmail is verified.
+
+## Deployment record — 26 October 2026
+
+- Worker: `https://tffc-barry-post-office.anvilspringstien.workers.dev` (observed in successful build log).
+- First build: `06d5bf82`; initial version `f50e1327-e2b3-4139-8c5e-0249a3ac1190`; sending initially disabled.
+- Destination `tinfoilfacup@gmail.com` was shown Verified in Cloudflare.
+- `post.tinfoilfacup.com` was shown Enabled in Email Routing. An incorrectly duplicated subdomain was removed and replaced with this exact name.
+- Managed Turnstile widget created for `tinfoilfacup.com` and `anvilspringstien.github.io`. The apex entry also covers its subdomains under Turnstile hostname rules.
+- Public site key: `0x4AAAAAAFm9afKRjLbSGnx5`. Secret never received or committed; Anvil added it directly as the Production secret `TURNSTILE_SECRET` and confirmed completion.
+- Worker preview URLs disabled; previews do not receive the Production secret.
+- `/beta/post-office-live-test.html` sends real messages. `/beta/post-office-preview.html` stays a non-sending design demo.
+- End-to-end Turnstile validation, sending-provider acceptance and Gmail inbox receipt are **pending**. Local health fetch was not verifiable from this environment (HTTP 403); this is not evidence of application failure. Verify through the user’s browser before testing mail.
