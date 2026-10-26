@@ -1,0 +1,22 @@
+name: Barry Post Office checks
+on:
+  pull_request:
+    paths:
+      - 'post-office-worker/**'
+      - 'beta/post-office*'
+      - 'tests/test_post_office*'
+      - '.github/workflows/post-office.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contact-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check beta/post-office.js
+      - run: node --check beta/post-office-launcher.js
+      - run: node --test tests/test_post_office_worker.mjs
