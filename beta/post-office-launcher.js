@@ -16,7 +16,7 @@
  document.addEventListener('click',function(event){
   if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
   var link=event.target.closest('a[href]');if(!link)return;
-  var config=window.TFFC_POST_OFFICE;
+  var config=window.TFFC_POST_OFFICE||{endpoint:"https://tffc-barry-post-office.anvilspringstien.workers.dev/messages",sitekey:"0x4AAAAAAFm9afKRjLbSGnx5"};
   if(!config||!config.endpoint||!config.sitekey)return;
   var url;try{url=new URL(link.href)}catch(_){return}
   if(url.origin!=='https://mail.google.com'||url.searchParams.get('to')!=='tinfoilfacup@gmail.com')return;
