@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-23T07:33:19.465188+00:00",
+  "competition_updated_at": "2026-10-26T06:14:42.617280+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 103,
+  "eligible_linked": 114,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1700,130 +1700,9 @@
       "evidence": []
     },
     {
-      "club": "Bashley FC",
-      "identities": [
-        "Bashley FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Basildon United FC",
-      "identities": [
-        "Basildon United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Basingstoke Town FC",
-      "identities": [
-        "Basingstoke Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bath City FC",
-      "identities": [
-        "Bath City FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Beaconsfield Town FC",
-      "identities": [
-        "Beaconsfield Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bearsted FC",
-      "identities": [
-        "Bearsted FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Beckenham Town FC",
       "identities": [
         "Beckenham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bedfont FC",
-      "identities": [
-        "Bedfont FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bedfont Sports Club FC",
-      "identities": [
-        "Bedfont Sports Club FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bedford Town FC",
-      "identities": [
-        "Bedford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bedworth United FC",
-      "identities": [
-        "Bedworth United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Belper Town FC",
-      "identities": [
-        "Belper Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -8555,6 +8434,204 @@
           "evidence_url": "https://www.basfordunited.com/",
           "verified_on": "2026-10-12",
           "ledger": "club_website_verified_batch_01.json"
+        }
+      ]
+    },
+    {
+      "club": "Bashley FC",
+      "identities": [
+        "Bashley FC"
+      ],
+      "current_competition": false,
+      "website": "https://bashleyfootballclub.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bashleyfootballclub.co.uk/",
+          "evidence_url": "https://bashleyfootballclub.co.uk/get-in-touch/",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Basildon United FC",
+      "identities": [
+        "Basildon United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/basildonunitedfootballclub4",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/basildonunitedfootballclub4",
+          "evidence_url": "https://www.pitchero.com/clubs/basildonunitedfootballclub4/contact",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Basingstoke Town FC",
+      "identities": [
+        "Basingstoke Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://btfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://btfc.co.uk/",
+          "evidence_url": "https://btfc.co.uk/",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Bath City FC",
+      "identities": [
+        "Bath City FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bathcityfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bathcityfc.com/",
+          "evidence_url": "https://www.bathcityfc.com/information/",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Beaconsfield Town FC",
+      "identities": [
+        "Beaconsfield Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.beaconsfieldtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.beaconsfieldtownfc.co.uk/",
+          "evidence_url": "https://www.beaconsfieldtownfc.co.uk/contact",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Bearsted FC",
+      "identities": [
+        "Bearsted FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bearstedfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bearstedfc.co.uk/",
+          "evidence_url": "https://www.bearstedfc.co.uk/teams/first-team",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Bedfont FC",
+      "identities": [
+        "Bedfont FC"
+      ],
+      "current_competition": false,
+      "website": "https://bedfontfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bedfontfc.com/",
+          "evidence_url": "https://bedfontfc.com/",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Bedfont Sports Club FC",
+      "identities": [
+        "Bedfont Sports Club FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bedfontsportsclub.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bedfontsportsclub.co.uk/",
+          "evidence_url": "https://www.bedfontsportsclub.co.uk/a/club-directory-15677.html",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Bedford Town FC",
+      "identities": [
+        "Bedford Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bedfordtownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bedfordtownfc.com/",
+          "evidence_url": "https://bedfordtownfc.com/more",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Bedworth United FC",
+      "identities": [
+        "Bedworth United FC"
+      ],
+      "current_competition": false,
+      "website": "https://bedworthunitedfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bedworthunitedfc.co.uk/",
+          "evidence_url": "https://bedworthunitedfc.co.uk/?page_id=255",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Belper Town FC",
+      "identities": [
+        "Belper Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.belpertownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.belpertownfc.co.uk/",
+          "evidence_url": "https://www.belpertownfc.co.uk/contact",
+          "verified_on": "2026-10-26",
+          "ledger": "club_website_verified_batch_07.json"
         }
       ]
     },
