@@ -19,4 +19,4 @@ jobs:
           node-version: '22'
       - run: node --check beta/post-office.js
       - run: node --check beta/post-office-launcher.js
-      - run: node --test tests/test_post_office_worker.mjs
+      - run: node --test tests/test_post_office*.mjs

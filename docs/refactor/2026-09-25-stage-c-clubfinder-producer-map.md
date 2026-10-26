@@ -6,7 +6,7 @@
 
 | File | Bytes | SHA-256 |
 |---|---:|---|
-| `beta/clubfinder-beta.html` | 632,052 | `f22e462e22df12e669890eb6d226f05e15b0a699eed9c02abcd2da5eb935d533` |
+| `beta/clubfinder-beta.html` | 632,105 | `7f2ba7c3316830b120ea4e6520487d7a85c0c0efb547ee8ff01b5e615a40e41b` |
 | `beta/challenges-beta.html` | 116,403 | `f067a2590456bee6e53021b39ea638764edf07cb41bb326ec09f675cef320d8e` |
 
 The Deck side already contains the Stage A `applyClubfinderCampaignTruth()` reader, Stage B `renderTrophyCabinet()` helper and their regression tests.
@@ -22,13 +22,13 @@ The Deck side already contains the Stage A `applyClubfinderCampaignTruth()` read
 | `tinFoilRecoverCampaignIdentity` | 1632 | function | 3 |
 | `tinFoilSavePigeonName` | 1593 | function | 2 |
 | `tinFoilRestoreClubfinderReturnSnapshot` | 1795 | function | 3 |
-| `completedResultVenue` | 839 | reference only | 5 |
-| `tinFoilPigeonMilesForStats` | 1932 | function | 3 |
-| `buildJourney` | 1095 | reference only | 4 |
-| `journeyCertificate` | 2094 | function | 5 |
-| `loadSavedJourney` | 1839 | function | 19 |
+| `completedResultVenue` | 839 | reference only | 4 |
+| `tinFoilPigeonMilesForStats` | 1932 | function | 2 |
+| `buildJourney` | 1095 | reference only | 3 |
+| `journeyCertificate` | 2094 | function | 4 |
+| `loadSavedJourney` | 1839 | function | 18 |
 | `saveJourney` | 1840 | function | 2 |
-| `tinFoilSavedPigeonName` | 1580 | function | 8 |
+| `tinFoilSavedPigeonName` | 1580 | function | 7 |
 | `tinFoilPigeonNameInputHtml` | 1584 | function | 2 |
 | `tinFoilPigeonNameBandHtml` | — | not found | 0 |
 | `tinFoilSaveClubfinderReturnSnapshot` | 1780 | function | 2 |

@@ -1,6 +1,6 @@
 # Barry’s Post Office — activation checklist
 
-The design preview is published and remains non-sending. The dedicated Worker was deployed successfully on 26 October 2026, with the fixed Gmail destination, Durable Object and rate-limit bindings confirmed in its build log. Anvil confirmed that the Production Turnstile secret was stored privately. The service is enabled for an isolated real-delivery test; **the public footer links are not switched yet**.
+The design preview is published and remains non-sending. The dedicated Worker was deployed successfully on 26 October 2026, with the fixed Gmail destination, Durable Object and rate-limit bindings confirmed in its build log. Anvil confirmed that the Production Turnstile secret was stored privately. The real delivery route is verified. Public footer connections are being promoted through separate guarded Campaign and Challenges changes.
 
 ## Free delivery
 
@@ -41,7 +41,7 @@ References checked 26 October 2026:
 
 From the repository root: `node --test tests/test_post_office_worker.mjs`.
 
-Initial Cloudflare deployment is confirmed; real Gmail delivery remains unverified. `ENABLED=true` now permits the isolated live test. Do not connect the main footer until delivery to Gmail is verified.
+Initial Cloudflare deployment and the first Gmail delivery are confirmed. `ENABLED=true` now permits the isolated live test. Do not connect the main footer until delivery to Gmail is verified.
 
 ## Deployment record — 26 October 2026
 
@@ -53,4 +53,6 @@ Initial Cloudflare deployment is confirmed; real Gmail delivery remains unverifi
 - Public site key: `0x4AAAAAAFm9afKRjLbSGnx5`. Secret never received or committed; Anvil added it directly as the Production secret `TURNSTILE_SECRET` and confirmed completion.
 - Worker preview URLs disabled; previews do not receive the Production secret.
 - `/beta/post-office-live-test.html` sends real messages. `/beta/post-office-preview.html` stays a non-sending design demo.
-- End-to-end Turnstile validation, sending-provider acceptance and Gmail inbox receipt are **pending**. Local health fetch was not verifiable from this environment (HTTP 403); this is not evidence of application failure. Verify through the user’s browser before testing mail.
+- End-to-end delivery verified on 26 October 2026 at 18:11 GMT: one Issue Report test message arrived in the Gmail inbox with the intended body and correct Reply-To. No duplicate was found in an all-mail search including Spam/Trash. The test was submitted by Anvil through the live form.
+- Native email sending to the verified destination and the real Turnstile path are now evidenced. Long-term delivery and provider availability are not guaranteed by one successful test.
+- Public footer integration uses the lazy launcher with the observed endpoint and public key. The four launcher contract tests exercise the actual Campaign and Challenges links, subject selection, delayed resource loading and modified-click behaviour.
