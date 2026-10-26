@@ -4,8 +4,9 @@
   "main": "worker.mjs",
   "compatibility_date": "2026-10-26",
   "workers_dev": true,
+  "preview_urls": false,
   "vars": {
-    "ENABLED": "false",
+    "ENABLED": "true",
     "ALLOWED_ORIGINS": "https://tinfoilfacup.com,https://www.tinfoilfacup.com,https://anvilspringstien.github.io"
   },
   "send_email": [{ "name": "POST_MAIL", "destination_address": "tinfoilfacup@gmail.com" }],
