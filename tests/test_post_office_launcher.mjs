@@ -4,6 +4,15 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../beta/post-office-launcher.js', import.meta.url), 'utf8');
+test('page integration preserves every existing inline script', () => {
+ for (const file of ['clubfinder-beta.html', 'challenges-beta.html']) {
+  const html = fs.readFileSync(new URL('../beta/' + file, import.meta.url), 'utf8');
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
+   if (/\bsrc\s*=|application\/json/i.test(match[1])) continue;
+   assert.doesNotThrow(() => new vm.Script(match[2], { filename: file }));
+  }
+ }
+});
 function harness() {
  const assets = [], opened = []; let onClick;
  const window = {}, document = { currentScript: { src: 'https://tinfoilfacup.com/beta/post-office-launcher.js' },
