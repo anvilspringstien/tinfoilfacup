@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-10-27T05:51:50.306236Z",
-  "state": "unverified",
-  "last_checked_at": null,
+  "monitor_ran_at": "2026-10-27T06:48:20.975171Z",
+  "state": "checked",
+  "last_checked_at": "2026-10-27T05:09:29Z",
   "results": "success",
-  "draw": "unverified",
+  "draw": "success",
   "diagnostics": {
     "results": {
       "reason": "verified",
@@ -16,20 +16,20 @@
       "updated_at": "2026-10-27T05:09:29Z"
     },
     "draw": {
-      "reason": "stale",
-      "run_id": 40428505528,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40428505528",
+      "reason": "verified",
+      "run_id": 40463214045,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40463214045",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-10-27T00:46:41Z"
+      "updated_at": "2026-10-27T06:47:56Z"
     }
   },
   "scheduled": {
-    "state": "unverified",
-    "last_checked_at": null,
+    "state": "checked",
+    "last_checked_at": "2026-10-27T05:09:29Z",
     "results": "success",
-    "draw": "unverified",
+    "draw": "success",
     "diagnostics": {
       "results": {
         "reason": "verified",
@@ -41,13 +41,13 @@
         "updated_at": "2026-10-27T05:09:29Z"
       },
       "draw": {
-        "reason": "stale",
-        "run_id": 40428505528,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40428505528",
+        "reason": "verified",
+        "run_id": 40463214045,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/40463214045",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-10-27T00:46:41Z"
+        "updated_at": "2026-10-27T06:47:56Z"
       }
     }
   }
