@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T20:43:56.058306+00:00",
+  "checked_at": "2026-10-27T13:32:18.397067+00:00",
   "official_source": "https://www.thefa.com/competitions/thefacup/fixtures",
   "competition_id": 1,
   "status": "active-round-refreshed",
@@ -17,12 +17,17 @@
   "active_round_conditional_resolutions": [],
   "active_round_metadata_updates": [
     {
-      "fixture": "Stafford Rangers v Grimsby Town",
+      "fixture": "Bristol Rovers v Cambridge United",
       "changes": [
         {
           "field": "date",
           "from": "2026-11-07",
-          "to": "2026-11-08"
+          "to": "2026-11-06"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "19:30"
         }
       ]
     }
