@@ -4,6 +4,24 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 27 October 2026 checkpoint — missing-link coverage, batch 08
+
+Reviewed twelve previously unreviewed missing origins, Belper United through
+Binfield. Eleven club-published destinations are approved. Biggleswade Town is
+held pending a reliably accessible preferred senior homepage: its club-managed
+contact page is readable, but its senior homepage returned 503 and the separate
+`.com` destination chiefly presents the Langford Road venue. FC, Town and United
+remain distinct identities. Earlier holds are skipped and unchanged.
+
+- Original qualifying-club coverage: 114 -> 125 of 651 linked.
+- Missing links: 537 -> 526. Verified queue records: 158 -> 169.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Bideford's club-published company details explicitly identify its club-managed
+  Pitchero website. No generic directory or social page is promoted.
+- Evidence, league corroboration and the Town hold are recorded in batch 08.
+  Only the BETA website map literal changes in the application; no competition,
+  location or search-origin data changes. No email is sent.
+
 ## 26 October 2026 checkpoint — missing-link coverage, batch 07
 
 Reviewed twelve previously unreviewed missing origins, Bashley through Belper
