@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-26T06:14:42.617280+00:00",
+  "competition_updated_at": "2026-10-27T05:05:53.687537+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 114,
+  "eligible_linked": 125,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1711,130 +1711,9 @@
       "evidence": []
     },
     {
-      "club": "Belper United FC",
-      "identities": [
-        "Belper United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bemerton Heath Harlequins FC",
-      "identities": [
-        "Bemerton Heath Harlequins FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Benfleet FC",
-      "identities": [
-        "Benfleet FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Beverley Town FC",
-      "identities": [
-        "Beverley Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bexhill United FC",
-      "identities": [
-        "Bexhill United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bideford AFC",
-      "identities": [
-        "Bideford AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Biggleswade FC",
-      "identities": [
-        "Biggleswade FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Biggleswade Town FC",
       "identities": [
         "Biggleswade Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Biggleswade United FC",
-      "identities": [
-        "Biggleswade United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Billericay Town FC",
-      "identities": [
-        "Billericay Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Billingshurst FC",
-      "identities": [
-        "Billingshurst FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Binfield FC",
-      "identities": [
-        "Binfield FC"
       ],
       "current_competition": false,
       "website": null,
@@ -8632,6 +8511,204 @@
           "evidence_url": "https://www.belpertownfc.co.uk/contact",
           "verified_on": "2026-10-26",
           "ledger": "club_website_verified_batch_07.json"
+        }
+      ]
+    },
+    {
+      "club": "Belper United FC",
+      "identities": [
+        "Belper United FC"
+      ],
+      "current_competition": false,
+      "website": "https://belperunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://belperunited.co.uk/",
+          "evidence_url": "https://belperunited.co.uk/",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Bemerton Heath Harlequins FC",
+      "identities": [
+        "Bemerton Heath Harlequins FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bemertonheathharlequinsfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bemertonheathharlequinsfc.co.uk/",
+          "evidence_url": "https://www.bemertonheathharlequinsfc.co.uk/clubinfo/1012",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Benfleet FC",
+      "identities": [
+        "Benfleet FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.benfleetfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.benfleetfc.co.uk/",
+          "evidence_url": "https://www.benfleetfc.co.uk/contact",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Beverley Town FC",
+      "identities": [
+        "Beverley Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.beverleytownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.beverleytownfc.com/",
+          "evidence_url": "https://www.beverleytownfc.com/",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Bexhill United FC",
+      "identities": [
+        "Bexhill United FC"
+      ],
+      "current_competition": false,
+      "website": "https://bexhillunited.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bexhillunited.com/",
+          "evidence_url": "https://bexhillunited.com/",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Bideford AFC",
+      "identities": [
+        "Bideford AFC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/bidefordafc/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/bidefordafc/",
+          "evidence_url": "https://www.pitchero.com/clubs/bidefordafc/contact",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Biggleswade FC",
+      "identities": [
+        "Biggleswade FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.biggleswadefc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.biggleswadefc.co.uk/",
+          "evidence_url": "https://www.biggleswadefc.co.uk/club-info/visiting-biggleswade-fc",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Biggleswade United FC",
+      "identities": [
+        "Biggleswade United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.biggleswadeutd.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.biggleswadeutd.com/",
+          "evidence_url": "https://www.biggleswadeutd.com/",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Billericay Town FC",
+      "identities": [
+        "Billericay Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.billericaytownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.billericaytownfc.co.uk/",
+          "evidence_url": "https://www.billericaytownfc.co.uk/",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Billingshurst FC",
+      "identities": [
+        "Billingshurst FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.billingshurstfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.billingshurstfc.co.uk/",
+          "evidence_url": "https://www.billingshurstfc.co.uk/clubinfo/1047",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
+        }
+      ]
+    },
+    {
+      "club": "Binfield FC",
+      "identities": [
+        "Binfield FC"
+      ],
+      "current_competition": false,
+      "website": "https://binfieldfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://binfieldfc.com/",
+          "evidence_url": "https://binfieldfc.com/contact-us/",
+          "verified_on": "2026-10-27",
+          "ledger": "club_website_verified_batch_08.json"
         }
       ]
     },
