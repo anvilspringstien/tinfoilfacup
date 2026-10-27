@@ -29,8 +29,12 @@ def apply_names(html, ledger):
         raise ValueError('Expected a nonempty reviewed name ledger')
     _, _, eligible = literal(html, 'ELIGIBLE')
     names = {row['name'] for row in eligible}
-    start, end, grounds = literal(html, 'GROUNDS')
-    body = html[start:end]
+    stores = []
+    for name in ('GROUNDS', 'LAW2_ORIGIN_LOCATIONS'):
+        if name != 'GROUNDS' and not re.search(r'\b(?:const|let|var)\s+' + name + r'\s*=', html):
+            continue
+        start, end, rows = literal(html, name)
+        stores.append({'start': start, 'end': end, 'rows': rows, 'body': html[start:end]})
     seen = set()
     changes = []
     for item in ledger['approved']:
@@ -46,21 +50,23 @@ def apply_names(html, ledger):
         before, after, postcode = (item.get(k) for k in ('previous_name', 'current_name', 'postcode'))
         if not all(isinstance(v, str) and v.strip() == v and v for v in (before, after, postcode)) or before == after:
             raise ValueError('Invalid name-only change: ' + club)
-        matches = [row for row in grounds if row.get('name') == club]
+        matches = [(store, row) for store in stores for row in store['rows'] if row.get('name') == club]
         if len(matches) != 1:
             raise ValueError('Expected one exact ground record: ' + club)
-        row = matches[0]
+        store, row = matches[0]
         if row.get('postcode') != postcode or row.get('ground') not in (before, after):
             raise ValueError('Ground identity/postcode drift: ' + club)
         if row['ground'] == after:
             continue
         original = compact(row)
-        if body.count(original) != 1:
+        if store['body'].count(original) != 1:
             raise ValueError('Ground serialization boundary changed: ' + club)
         updated = dict(row, ground=after)
-        body = body.replace(original, compact(updated), 1)
+        store['body'] = store['body'].replace(original, compact(updated), 1)
         changes.append(club)
-    return html[:start] + body + html[end:], changes
+    for store in sorted(stores, key=lambda item: item['start'], reverse=True):
+        html = html[:store['start']] + store['body'] + html[store['end']:]
+    return html, changes
 
 
 def main():
