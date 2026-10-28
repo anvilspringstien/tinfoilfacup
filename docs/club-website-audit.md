@@ -4,6 +4,26 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 28 October 2026 checkpoint — missing-link coverage, batch 09
+
+Reviewed twelve previously unreviewed missing origins, Bishop Auckland through
+Bourne Town. Ten official club destinations are approved. Blackstones remains
+held for a preferred current senior homepage; Boro Rangers remains held because
+its league-linked club site is unavailable. Earlier holds are skipped unchanged.
+
+- Original qualifying-club coverage: 125 -> 135 of 651 linked.
+- Missing links: 526 -> 516. Verified queue records: 169 -> 179.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Boston Town/United, Bishop's Cleeve/Colts and Stortford/Community/Swifts remain
+  separate identities. No directory or social destination is promoted.
+- Club identity/contact evidence and league corroboration are recorded in batch 09.
+  Bishop Auckland and Stortford homepages returned 200 on ordinary HTTP checks
+  after research-reader timeouts. Blyth's public homepage and directions are
+  readable through the research reader, while ordinary CLI retrieval returned 403;
+  no restriction was bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data and all search origins remain unchanged. No email is sent.
+
 ## 27 October 2026 checkpoint — missing-link coverage, batch 08
 
 Reviewed twelve previously unreviewed missing origins, Belper United through
