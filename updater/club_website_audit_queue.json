@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-27T05:05:53.687537+00:00",
+  "competition_updated_at": "2026-10-28T01:22:47.601082+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 125,
+  "eligible_linked": 135,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1722,39 +1722,6 @@
       "evidence": []
     },
     {
-      "club": "Bishop Auckland FC",
-      "identities": [
-        "Bishop Auckland FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bishop's Cleeve FC",
-      "identities": [
-        "Bishop's Cleeve FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bishop's Stortford FC",
-      "identities": [
-        "Bishop's Stortford FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Blackstones AFC",
       "identities": [
         "Blackstones AFC"
@@ -1766,86 +1733,9 @@
       "evidence": []
     },
     {
-      "club": "Blyth Spartans AFC",
-      "identities": [
-        "Blyth Spartans AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bognor Regis Town FC",
-      "identities": [
-        "Bognor Regis Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Boldmere St Michaels FC",
-      "identities": [
-        "Boldmere St Michaels FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Boro Rangers FC",
       "identities": [
         "Boro Rangers FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Boston Town FC",
-      "identities": [
-        "Boston Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Boston United FC",
-      "identities": [
-        "Boston United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bottesford Town FC",
-      "identities": [
-        "Bottesford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bourne Town FC",
-      "identities": [
-        "Bourne Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -8731,6 +8621,78 @@
       ]
     },
     {
+      "club": "Bishop Auckland FC",
+      "identities": [
+        "Bishop Auckland FC"
+      ],
+      "current_competition": false,
+      "website": "https://bishopafc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bishopafc.com/",
+          "evidence_url": "https://bishopafc.com/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Bishop's Cleeve FC",
+      "identities": [
+        "Bishop's Cleeve FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/bishopscleevefc/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/bishopscleevefc/",
+          "evidence_url": "https://www.pitchero.com/clubs/bishopscleevefc/contact",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Bishop's Stortford FC",
+      "identities": [
+        "Bishop's Stortford FC"
+      ],
+      "current_competition": false,
+      "website": "https://bsfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bsfc.co.uk/",
+          "evidence_url": "https://bsfc.co.uk/club-news/league-confirmation-2/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Blyth Spartans AFC",
+      "identities": [
+        "Blyth Spartans AFC"
+      ],
+      "current_competition": false,
+      "website": "https://www.blythspartans.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.blythspartans.com/",
+          "evidence_url": "https://www.blythspartans.com/match-centre/how-to-get-to-croft-park/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
       "club": "Blyth Town FC",
       "identities": [
         "Blyth Town FC"
@@ -8749,6 +8711,42 @@
       ]
     },
     {
+      "club": "Bognor Regis Town FC",
+      "identities": [
+        "Bognor Regis Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bognorregistownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bognorregistownfc.co.uk/",
+          "evidence_url": "https://bognorregistownfc.co.uk/club/club-officials/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Boldmere St Michaels FC",
+      "identities": [
+        "Boldmere St Michaels FC"
+      ],
+      "current_competition": false,
+      "website": "https://boldmerestmichaelsfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://boldmerestmichaelsfc.co.uk/",
+          "evidence_url": "https://boldmerestmichaelsfc.co.uk/contact-us/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
       "club": "Bootle FC",
       "identities": [
         "Bootle FC"
@@ -8763,6 +8761,78 @@
           "evidence_url": "https://www.bootlefc.com/",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_05.json"
+        }
+      ]
+    },
+    {
+      "club": "Boston Town FC",
+      "identities": [
+        "Boston Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bostontownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bostontownfc.co.uk/",
+          "evidence_url": "https://bostontownfc.co.uk/contact/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Boston United FC",
+      "identities": [
+        "Boston United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bostonunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bostonunited.co.uk/",
+          "evidence_url": "https://www.bostonunited.co.uk/contact",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Bottesford Town FC",
+      "identities": [
+        "Bottesford Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bottesfordtown.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bottesfordtown.co.uk/",
+          "evidence_url": "https://bottesfordtown.co.uk/contact-us/",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Bourne Town FC",
+      "identities": [
+        "Bourne Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bournetownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bournetownfc.co.uk/",
+          "evidence_url": "https://www.bournetownfc.co.uk/copy-of-history",
+          "verified_on": "2026-10-28",
+          "ledger": "club_website_verified_batch_09.json"
         }
       ]
     },
