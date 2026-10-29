@@ -52,6 +52,7 @@
    tab.document.open();
    tab.document.write('<!doctype html><html lang="en-GB" data-stats-popup="1"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tin Foil FA Cup Stats</title><link rel="stylesheet" href="'+css+'"><style>html,body{margin:0;height:100svh;overflow:hidden;background:#141210}.phone-shell{position:relative;margin:0 auto;overflow:hidden}#phoneApp{display:block;border:0;position:absolute;left:0;top:0;transform-origin:top left;background:#141210}</style></head><body><main class="phone-shell"><iframe id="phoneApp" title="Tin Foil FA Cup Stats"></iframe></main></body></html>');
    tab.document.close();
+   tab.opener=win;
    // Give the outer tab a refreshable route, rather than leaving about:blank.
    tab.history.replaceState(null,'',new URL('phone-frame-shed.html?view=stats',base).href);
    const reportFrame=tab.document.getElementById('phoneApp');
