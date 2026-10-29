@@ -48,6 +48,8 @@ try{
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
  const stats=await opened;
  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
+ // The report can render before the outer tab's deferred frame script loads.
+ await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});
  assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
  const statsRatio=await stats.locator('#phoneApp').evaluate(f=>{const r=f.getBoundingClientRect();return r.width/r.height});
  assert.ok(Math.abs(statsRatio-9/16)<.001);
