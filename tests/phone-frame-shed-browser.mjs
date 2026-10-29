@@ -117,7 +117,7 @@ try{
  const back=origin+'/beta/phone-frame-shed.html?view=campaign';
  await context.route('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/**',r=>r.fulfill({contentType:'text/html',body:'<a href="'+back+'">My Campaign</a>'}));
  await app.getByRole('button',{name:'Barry Air',exact:true}).click();
- await page.waitForURL('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/?from=tffac-shed');
+ await page.waitForURL('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/?from=tffac-shed').catch(error=>{console.error('Barry navigation diagnostic:',{url:page.url(),frames:page.frames().map(f=>f.url())});throw error;});
  await page.getByRole('link',{name:'My Campaign',exact:true}).click();
  await page.frameLocator('#phoneApp').getByRole('button',{name:'Barry Air',exact:true}).waitFor();
  assert.equal(await page.frameLocator('#phoneApp').getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
