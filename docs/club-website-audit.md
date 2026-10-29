@@ -4,6 +4,27 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 29 October 2026 checkpoint — missing-link coverage, batch 10
+
+Reviewed twelve previously unreviewed missing origins, Bournemouth Poppies through
+Bridlington Town. Ten official destinations are approved. Bovey Tracey remains
+held for unavailable live club evidence (reader 503 / ordinary GET 406), and
+Bridlington Town remains held for restricted retrieval (403). Earlier documented
+holds were skipped unchanged; no restriction was bypassed.
+
+- Original qualifying-club coverage: 135 -> 145 of 651 linked.
+- Missing links: 516 -> 506. Verified queue records: 179 -> 189.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Bournemouth Poppies is distinct from AFC Bournemouth; Bradford Park Avenue,
+  Bradford Town and Bradford City remain separate. No directory/social page is
+  promoted, and venue or postcode differences are not location corrections.
+- Evidence and league/association corroboration are recorded in batch 10.
+  Brentwood's public homepage and contact page are readable through the research
+  reader, while ordinary CLI retrieval returned 403; no restriction was bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins remain unchanged.
+  No email is sent.
+
 ## 28 October 2026 checkpoint — missing-link coverage, batch 09
 
 Reviewed twelve previously unreviewed missing origins, Bishop Auckland through
