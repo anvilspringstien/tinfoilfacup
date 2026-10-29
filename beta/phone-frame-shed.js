@@ -25,7 +25,40 @@
   targetFrame.style.height=canvasHeight+'px';
   targetFrame.style.transform='scale('+visibleWidth*scale/canvasWidth+')';
  }
- function fit(){sizeFrame(frame,shell,document.documentElement.clientWidth,document.body.getBoundingClientRect().height,report)}
+ const watchedDocuments=new WeakSet();
+ function hideDesktopEdgeScrollbar(){
+  let doc;
+  try{doc=frame.contentDocument;}catch(_){return;}
+  if(!doc?.documentElement)return;
+  const root=doc.documentElement;
+  const desktop=matchMedia('(min-width:700px) and (hover:hover) and (pointer:fine)').matches;
+  const hide=desktop&&!report&&!doc.querySelector('.sheet .stats-return');
+  if(hide){
+   root.dataset.phoneFrameScrollbar='hidden';
+   root.style.setProperty('scrollbar-width','none','important');
+   root.style.setProperty('scrollbar-gutter','auto','important');
+   if(doc.head&&!doc.getElementById('phone-frame-scrollbar-style')){
+    const style=doc.createElement('style');
+    style.id='phone-frame-scrollbar-style';
+    style.textContent='html[data-phone-frame-scrollbar="hidden"]::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}';
+    doc.head.append(style);
+   }
+  }else if(root.dataset.phoneFrameScrollbar==='hidden'){
+   delete root.dataset.phoneFrameScrollbar;
+   root.style.removeProperty('scrollbar-width');
+   root.style.removeProperty('scrollbar-gutter');
+  }
+  // The existing journey rewrites its document after fetching BETA. Follow
+  // root replacement before paint, without polling or changing scroll owners.
+  if(!watchedDocuments.has(doc)){
+   watchedDocuments.add(doc);
+   new MutationObserver(hideDesktopEdgeScrollbar).observe(doc,{childList:true});
+  }
+ }
+ function fit(){
+  sizeFrame(frame,shell,document.documentElement.clientWidth,document.body.getBoundingClientRect().height,report);
+  hideDesktopEdgeScrollbar();
+ }
  function prepareDocument(){
   let win,href;
   try{win=frame.contentWindow;href=new URL(win.location.href);}catch(_){return;}

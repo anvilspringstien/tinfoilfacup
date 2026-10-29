@@ -50,3 +50,13 @@ stay in the footer. Keep remains a destination even when already installed; its
 existing installed-state guidance should explain that status.
 
 This proposal is recorded for discussion; existing buttons are unchanged.
+
+## Desktop scrollbar refinement
+
+The proof hides only the application document's edge scrollbar on wide, fine
+pointer screens. Wheel, trackpad, keyboard and programmatic scrolling keep their
+existing owners. The root keeps its full 390px width on both short and long pages,
+so the scrollbar cannot squeeze or shift the composition. Phone and touch tablet
+presentation, nested reading scroll areas and the Stats report are unchanged.
+The browser regression compares Splash/Four Laws position and width, then checks
+the long saved Campaign still responds to wheel scrolling.
