@@ -35,17 +35,24 @@
     core.setAttribute('aria-label','Your Campaign destinations');
     const barry=doc.createElement('button');
     barry.type='button';barry.className='round barry-air-launch';barry.textContent='Barry Air';
-    barry.addEventListener('click',()=>location.assign(barryURL));core.append(barry);
+    core.append(barry);
     const magic=doc.createElement('div');magic.className='campaign-magic-nav';magic.setAttribute('aria-label','Keep and share Tin Foil FA Cup');
     const keep=doc.createElement('button');keep.type='button';keep.className='round campaign-keep';keep.textContent='Keep the Magic';
-    keep.addEventListener('click',()=>{
+    magic.append(keep,share);core.after(magic);
+   }
+   // Return snapshots serialize the decorated HTML, but not JS listeners.
+   // Rebind our actions on every restored node even when its layout is ready.
+   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch')){
+    barry.onclick=()=>location.assign(barryURL);
+   }
+   for(const keep of doc.querySelectorAll('.phone-frame-nav .campaign-keep')){
+    keep.onclick=()=>{
      const win=doc.defaultView;
      if(typeof win.tffcOpenShare!=='function')return;
      win.tffcOpenShare();
      const destination=doc.querySelector('#tffcShareHost iframe');
      if(destination)destination.src=new URL('keep-the-magic-shed.html?instructions=1&embedded=1&keep=1',base).href;
-    });
-    magic.append(keep,share);core.after(magic);
+    };
    }
   }
   decorate();
