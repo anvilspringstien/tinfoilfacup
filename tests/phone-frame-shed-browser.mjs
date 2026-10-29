@@ -49,18 +49,43 @@ try{
  assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
  const nav=app.locator('.phone-frame-nav');
  await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
- assert.deepEqual(await nav.locator('.campaign-primary-nav button').allTextContents(),['My Campaign','My Stats','My Challenges','Barry Air']);
- assert.deepEqual(await nav.locator('.campaign-magic-nav button').allTextContents(),['Keep the Magic','Share the Magic']);
- assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['View Original Campaigns','End My Campaign','Reset','Hard Reset']);
- const buttonBoxes=await nav.locator('.campaign-primary-nav button,.campaign-magic-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}}));
- for(const box of buttonBoxes){assert.ok(Math.abs(box.width-buttonBoxes[0].width)<1);assert.ok(box.height>=44);}
- for(const row of [0,2,4])assert.ok(Math.abs(buttonBoxes[row].y-buttonBoxes[row+1].y)<1);
- assert.ok(buttonBoxes[4].y-buttonBoxes[2].y>buttonBoxes[2].y-buttonBoxes[0].y,'Keep/Share have extra group spacing');
- await nav.getByRole('button',{name:'Keep the Magic',exact:true}).click();
+ assert.deepEqual(await nav.locator('.campaign-primary-nav button').allTextContents(),['My Campaign','My Stats','My Challenges']);
+ assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['Original Campaigns','End Campaign','Reset','Hard Reset']);
+ const primary=await nav.locator('.campaign-primary-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {y:r.y,width:r.width,height:r.height}}));
+ for(const box of primary){assert.ok(Math.abs(box.width-primary[0].width)<1);assert.ok(Math.abs(box.y-primary[0].y)<1);assert.ok(box.height>=44);}
+ await nav.locator('.barry-air-launch img').evaluate(img=>img.decode());
+ assert.equal(await nav.locator('.barry-air-launch img').evaluate(img=>Math.round(img.getBoundingClientRect().width)),160);
+ assert.equal(await nav.locator('.campaign-primary-nav .barry-air-launch').count(),0);
+ assert.equal(await nav.locator('.campaign-magic-nav').count(),0);
+ assert.equal(await nav.locator('.campaign-keep,.campaign-share').count(),0);
+ const navOrder=await nav.evaluate(bar=>Array.from(bar.children).map(n=>n.className));
+ assert.ok(navOrder[0].includes('campaign-primary-nav')&&navOrder[1].includes('campaign-barry-nav')&&navOrder[2].includes('campaign-secondary-nav'));
+ assert.equal(await nav.locator('.campaign-secondary-nav button').first().evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(8, 76, 97)');
+ async function checkMagicFooter(){
+  const footer=app.locator('.tffc-magic-row');
+  await footer.getByRole('button',{name:'Keep the Magic',exact:true}).waitFor();
+  assert.deepEqual(await footer.locator('button').allTextContents(),['Keep the Magic','Share the Magic']);
+  const actual=await footer.evaluate(row=>{
+   const support=row.nextElementSibling;
+   const a=getComputedStyle(row.querySelector('button')),b=getComputedStyle(support.querySelector('a'));
+   return {aboveSupport:support.classList.contains('tffc-support-row'),margin:getComputedStyle(row).margin,referenceMargin:getComputedStyle(support).margin,
+    style:[a.backgroundColor,a.borderRadius,a.padding,a.font],referenceStyle:[b.backgroundColor,b.borderRadius,b.padding,b.font]};
+  });
+  assert.ok(actual.aboveSupport);assert.equal(actual.margin,actual.referenceMargin);assert.deepEqual(actual.style,actual.referenceStyle);
+ }
+ await checkMagicFooter();
+ await app.getByRole('button',{name:'Original Campaigns',exact:true}).click();
+ await app.getByRole('button',{name:'Return to My Campaign',exact:true}).first().waitFor();
+ assert.equal(await app.locator('.journey-lozenge').count(),3);
+ await checkMagicFooter();
+ await app.getByRole('button',{name:'Return to My Campaign',exact:true}).first().click();
+ await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
+ await app.getByRole('button',{name:'Keep the Magic',exact:true}).click();
  const keep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
  await keep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
  await keep.getByRole('button',{name:'Close',exact:true}).click();
- await nav.getByRole('button',{name:'Share the Magic',exact:true}).waitFor();
+ // Closing footer Keep returns to Frame 2 before testing wheel movement.
+ await page.waitForFunction(()=>Math.abs(document.getElementById('phoneApp').contentDocument.getElementById('tffc-results-summary').getBoundingClientRect().top-14)<3);
  // A long Campaign must retain the full phone width, yet still scroll.
  assert.equal(await app.locator('html').evaluate(h=>h.clientWidth),390);
  assert.equal(await app.locator('html').evaluate(h=>getComputedStyle(h).scrollbarWidth),'none');
@@ -102,6 +127,12 @@ try{
  await app.getByRole('button',{name:'My Challenges',exact:true}).click();
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
  await app.getByRole('button',{name:'Exit',exact:true}).waitFor({timeout:30000});
+ await checkMagicFooter();
+ assert.ok(await app.locator('.tffc-magic-row').evaluate(row=>row.previousElementSibling.classList.contains('deck-sales-tease')),'Challenges Keep/Share follow Coming Soon');
+ await app.getByRole('button',{name:'Keep the Magic',exact:true}).click();
+ const challengeKeep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+ await challengeKeep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
+ await challengeKeep.getByRole('button',{name:'Close',exact:true}).click();
  await app.getByRole('button',{name:'Exit',exact:true}).click();
  await app.getByRole('button',{name:'Share the Magic',exact:true}).click();
  const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');

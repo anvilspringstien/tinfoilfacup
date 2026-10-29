@@ -34,22 +34,25 @@ The dedicated PR workflow repeats these journeys on a normal static server,
 checks geometry and preservation of the seeded identity, and asserts zero counter
 calls. No acceptance hashes are updated to accommodate the proof.
 
-## Navigation proposal for review
+## Compact navigation trial
 
-Core destinations, in a stable two-column group:
+Campaign retains its original three-across My Campaign / My Stats / My Challenges
+buttons. The approved transparent Barry Air wings form a centred 160px image
+button below them. Original Campaigns, End/Resume Campaign, Reset and Hard Reset
+retain the original small teal lozenges and original actions.
 
-| | |
-| --- | --- |
-| My Campaign | My Stats |
-| My Challenges | Barry Air |
+Keep the Magic and Share the Magic sit immediately above Support, after all three
+Campaign cards, after the selected Campaign, and after Challenges’ Coming Soon
+panel. They reuse Support's yellow lozenge class, centring and 20px row margins.
+The existing embedded Share and installation instructions own their normal return
+and handover behaviour in each module. Restored HTML snapshots have the new
+buttons’ handlers rebound without duplicating rows.
 
-A matching pair underneath: **Keep the Magic** and **Share the Magic**. Campaign
-housekeeping (View Original Campaigns, End/Resume, Reset and Hard Reset) belongs
-below this group, with quieter visual weight. Support and administrative links
-stay in the footer. Keep remains a destination even when already installed; its
-existing installed-state guidance should explain that status.
-
-This arrangement is now applied only inside the opt-in phone-frame proof. The original Campaign/Stats/Challenges/Share buttons keep their existing actions. Keep opens the existing embedded instructions directly. Barry Air opens its demonstration Site in the same tab with an allowlisted return to this proof’s Campaign entrance; Campaign identity stays on tinfoilfacup.com. Barry’s flight data is still the labelled demonstration.
+The layout applies only inside the opt-in phone-frame proof. Barry Air opens its
+labelled demonstration Site in the same tab and returns to this proof's saved
+Campaign entrance. Identity and progress remain on tinfoilfacup.com; Barry's flight
+data is still the demonstration. The badge asset is a local copy of the approved
+transparent wings, with an accessible button name and keyboard focus outline.
 
 ## Desktop scrollbar refinement
 
