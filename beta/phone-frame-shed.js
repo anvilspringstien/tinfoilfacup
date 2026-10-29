@@ -7,7 +7,8 @@
  const popup=document.documentElement.dataset.statsPopup==='1';
  const base=new URL('.',document.currentScript.src);
  const entries={splash:'index.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html'};
- let report=popup;
+ const entry=new URLSearchParams(location.search).get('view')||'splash';
+ let report=popup||entry==='stats';
  function sizeFrame(targetFrame,targetShell,width,height,isReport){
   const wide=width>=700;
   // A fixed 390 × 693 composition at larger sizes. Phones retain their
@@ -73,7 +74,6 @@
  fit();
  if(popup)prepareDocument();
  else{
-  const entry=new URLSearchParams(location.search).get('view')||'splash';
   frame.src=new URL(entries[entry]||entries.splash,base).href;
  }
 })();

@@ -57,9 +57,18 @@ try{
  await stats.reload();
  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
  await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});
- const closed=stats.waitForEvent('close');
- await stats.frameLocator('#phoneApp').getByRole('button',{name:'Back to My Campaign',exact:true}).click();
- await closed;
+ // Existing Stats returns to its opener when available; after a refresh
+ // without one, it opens Campaign in the same tab. Both must stay usable.
+ const hasOpener=await stats.frameLocator('#phoneApp').locator('body').evaluate(()=>!!window.opener&&!window.opener.closed);
+ if(hasOpener){
+  const closed=stats.waitForEvent('close');
+  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Back to My Campaign',exact:true}).click();
+  await closed;
+ }else{
+  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Back to My Campaign',exact:true}).click();
+  await stats.frameLocator('#phoneApp').getByRole('button',{name:'My Stats',exact:true}).waitFor({timeout:30000});
+  await stats.close();
+ }
  await app.getByRole('button',{name:'My Challenges',exact:true}).click();
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
  await app.getByRole('button',{name:'Exit',exact:true}).waitFor({timeout:30000});
