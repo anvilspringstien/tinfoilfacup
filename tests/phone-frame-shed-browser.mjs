@@ -53,6 +53,10 @@ try{
  assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
  const statsRatio=await stats.locator('#phoneApp').evaluate(f=>{const r=f.getBoundingClientRect();return r.width/r.height});
  assert.ok(Math.abs(statsRatio-9/16)<.001);
+ assert.match(stats.url(),/phone-frame-shed\.html\?view=stats$/);
+ await stats.reload();
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
+ await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});
  const closed=stats.waitForEvent('close');
  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Back to My Campaign',exact:true}).click();
  await closed;

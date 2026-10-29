@@ -32,7 +32,7 @@
   if(href.origin!==location.origin&&href.href!=='about:blank')return;
   report=popup||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
   fit();
-  if(popup){
+  if(report&&window.opener){
    // Stats still opens in its own tab and returns to the original Campaign.
    win.opener=window.opener;
    win.close=()=>window.close();
@@ -54,6 +54,8 @@
    tab.document.open();
    tab.document.write('<!doctype html><html lang="en-GB" data-stats-popup="1"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tin Foil FA Cup Stats</title><link rel="stylesheet" href="'+css+'"><script defer src="'+js+'"><'+'/script></head><body><main class="phone-shell"><iframe id="phoneApp" title="Tin Foil FA Cup Stats"></iframe></main></body></html>');
    tab.document.close();
+   // Give the outer tab a refreshable route, rather than leaving about:blank.
+   tab.history.replaceState(null,'',new URL('phone-frame-shed.html?view=stats',base).href);
    const reportWindow=tab.document.getElementById('phoneApp').contentWindow;
    reportWindow.opener=win;
    reportWindow.close=()=>tab.close();
