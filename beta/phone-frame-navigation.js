@@ -1,65 +1,78 @@
-/* Navigation trial belongs only to the opt-in phone-frame Shed. Reuse the
-   Campaign's existing buttons/actions so identity and return handling stay owned
-   by the application. */
+/* Compact navigation trial, confined to the opt-in phone-frame Shed. */
 (()=>{
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const watched=new WeakSet();
  const barryURL='https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/?from=tffac-shed';
+ const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
- .my-journey-bar.campaign-nav-tiered.phone-frame-nav{gap:12px!important}
- .phone-frame-nav .campaign-primary-nav,.phone-frame-nav .campaign-magic-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;width:100%}
- .my-journey-bar.phone-frame-nav .campaign-primary-nav button.round,.my-journey-bar.phone-frame-nav .campaign-magic-nav button.round{display:flex;align-items:center;justify-content:center;min-width:0;width:100%;min-height:44px;padding:9px 6px;margin:0;border-radius:10px;font:600 13px/1.25 Poppins,Arial,sans-serif;text-align:center;white-space:normal}
- .phone-frame-nav .campaign-magic-nav{margin-top:4px}
- .my-journey-bar.phone-frame-nav .campaign-magic-nav button.round{background:#e4bb26!important;color:#111!important}
- .my-journey-bar.phone-frame-nav .campaign-primary-nav .barry-air-launch{box-shadow:inset 0 0 0 1px #d4b269;color:#f6e7bf}
- .phone-frame-nav .campaign-secondary-nav{gap:6px;padding-top:2px}
- .my-journey-bar.phone-frame-nav .campaign-secondary-nav button.round{background:#eeeeee!important;color:#454545!important;border:1px solid #bbb;min-height:34px;padding:6px 9px;font-size:10px;border-radius:7px}
- .phone-frame-nav button:focus-visible{outline:2px solid #084c61;outline-offset:3px}
+ .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
+ .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:164px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer}
+ .barry-air-launch img{display:block;width:160px;max-width:100%;height:auto;object-fit:contain}
+ .barry-air-launch:hover{filter:brightness(1.1)}
+ .barry-air-launch:focus-visible{outline:2px solid #084c61;outline-offset:3px}
+ .tffc-magic-row{gap:10px;flex-wrap:wrap}
+ .tffc-magic-row button{cursor:pointer}
  `;
  window.tffcInstallPhoneFrameNavigation=function(frame){
   let doc;
   try{doc=frame.contentDocument;}catch(_){return;}
   if(!doc)return;
+  function openMagic(keep){
+   const win=doc.defaultView;
+   if(typeof win.tffcOpenShare==='function')win.tffcOpenShare();
+   else doc.getElementById('challengeShareLinkFooter')?.click();
+   if(keep){
+    const destination=doc.querySelector('#tffcShareHost iframe,#tffcChallengeShareHost iframe');
+    if(destination)destination.src=new URL('keep-the-magic-shed.html?instructions=1&embedded=1&keep=1',base).href;
+   }
+  }
   function decorate(){
    if(!doc.head)return;
-   if(!doc.getElementById('phone-frame-navigation-style')){
-    const style=doc.createElement('style');style.id='phone-frame-navigation-style';style.textContent=css;doc.head.append(style);
-   }
-   for(const bar of doc.querySelectorAll('.campaign-nav-tiered:not(.phone-frame-nav)')){
+   let style=doc.getElementById('phone-frame-navigation-style');
+   if(!style){style=doc.createElement('style');style.id='phone-frame-navigation-style';doc.head.append(style);}
+   if(style.textContent!==css)style.textContent=css;
+   for(const bar of doc.querySelectorAll('.campaign-nav-tiered')){
     const core=bar.querySelector('.campaign-primary-nav');
     const controls=bar.querySelector('.campaign-secondary-nav');
-    const share=controls?.querySelector('.campaign-share');
-    if(!core||!controls||!share)continue;
-    bar.classList.add('phone-frame-nav');
-    core.setAttribute('aria-label','Your Campaign destinations');
-    const barry=doc.createElement('button');
-    barry.type='button';barry.className='round barry-air-launch';barry.textContent='Barry Air';
-    core.append(barry);
-    const magic=doc.createElement('div');magic.className='campaign-magic-nav';magic.setAttribute('aria-label','Keep and share Tin Foil FA Cup');
-    const keep=doc.createElement('button');keep.type='button';keep.className='round campaign-keep';keep.textContent='Keep the Magic';
-    magic.append(keep,share);core.after(magic);
+    if(!core||!controls)continue;
+    if(!bar.classList.contains('phone-frame-nav'))bar.classList.add('phone-frame-nav');
+    if(core.getAttribute('aria-label')!=='Your Campaign destinations')core.setAttribute('aria-label','Your Campaign destinations');
+    let badgeRow=bar.querySelector('.campaign-barry-nav');
+    if(!badgeRow){badgeRow=doc.createElement('div');badgeRow.className='campaign-barry-nav';core.after(badgeRow);}
+    let barry=bar.querySelector('.barry-air-launch');
+    if(!barry){barry=doc.createElement('button');barry.type='button';barry.className='barry-air-launch';}
+    if(barry.parentNode!==badgeRow)badgeRow.append(barry);
+    if(barry.classList.contains('round'))barry.classList.remove('round');
+    if(barry.getAttribute('aria-label')!=='Barry Air')barry.setAttribute('aria-label','Barry Air');
+    if(!barry.querySelector('img')){
+     const image=doc.createElement('img');image.src=badgeURL;image.alt='Barry Air';image.width=160;barry.replaceChildren(image);
+    }
+    // Clean both original markup and snapshots of the previous six-button trial.
+    bar.querySelectorAll('.campaign-share').forEach(button=>button.remove());
+    bar.querySelectorAll('.campaign-magic-nav').forEach(row=>row.remove());
+    const labels={'View Original Campaigns':'Original Campaigns','End My Campaign':'End Campaign','Resume My Campaign':'Resume Campaign'};
+    for(const button of controls.querySelectorAll('button')){
+     const replacement=labels[button.textContent.trim()];
+     if(replacement)button.textContent=replacement;
+    }
    }
-   // Return snapshots serialize the decorated HTML, but not JS listeners.
-   // Rebind our actions on every restored node even when its layout is ready.
-   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch')){
-    barry.onclick=()=>location.assign(barryURL);
+   for(const support of doc.querySelectorAll('.tffc-support-row:not(.tffc-magic-row)')){
+    if(support.previousElementSibling?.classList.contains('tffc-magic-row'))continue;
+    const row=doc.createElement('div');row.className='tffc-support-row tffc-magic-row';row.setAttribute('aria-label','Keep and share Tin Foil FA Cup');
+    for(const [label,kind] of [['Keep the Magic','keep'],['Share the Magic','share']]){
+     const button=doc.createElement('button');button.type='button';button.className='tffc-support-lozenge campaign-'+kind;button.textContent=label;row.append(button);
+    }
+    support.before(row);
    }
-   for(const keep of doc.querySelectorAll('.phone-frame-nav .campaign-keep')){
-    keep.onclick=()=>{
-     const win=doc.defaultView;
-     if(typeof win.tffcOpenShare!=='function')return;
-     win.tffcOpenShare();
-     const destination=doc.querySelector('#tffcShareHost iframe');
-     if(destination)destination.src=new URL('keep-the-magic-shed.html?instructions=1&embedded=1&keep=1',base).href;
-    };
-   }
+   // Campaign return snapshots preserve HTML but not JS handlers.
+   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>location.assign(barryURL);
+   for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
+   for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);
   }
   decorate();
   if(!watched.has(doc)){
    watched.add(doc);
-   // Handles saved Campaign restore, View Originals, End/Resume and the
-   // existing journey's document.write replacement without polling.
    new MutationObserver(decorate).observe(doc,{childList:true,subtree:true});
   }
  };
