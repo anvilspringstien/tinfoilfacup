@@ -37,13 +37,18 @@ calls. No acceptance hashes are updated to accommodate the proof.
 ## Compact navigation trial
 
 Campaign retains its original three-across My Campaign / My Stats / My Challenges
-buttons. The approved transparent Barry Air wings form a centred 160px image
-button below them. Original Campaigns, End/Resume Campaign, Reset and Hard Reset
-retain the original small teal lozenges and original actions.
+buttons. The approved transparent Barry Air wings form a centred 240px image
+button below them, with the original contour drop shadow. Original Campaigns,
+Reset, End/Resume Campaign and Hard Reset
+retain the original small teal lozenges and original actions, with each wrapped
+row centred.
 
 Keep the Magic and Share the Magic sit immediately above Support, after all three
 Campaign cards, after the selected Campaign, and after Challenges’ Coming Soon
-panel. They reuse Support's yellow lozenge class, centring and 20px row margins.
+panel. They retain Support's yellow colour, centring and 20px row margins, with 6px
+rounded square corners. The redundant admin Share link and its separator are
+hidden; Challenges retains its underlying Share handler for the new buttons.
+The disabled Challenges Coming Soon button is red with white text.
 The existing embedded Share and installation instructions own their normal return
 and handover behaviour in each module. Restored HTML snapshots have the new
 buttons’ handlers rebound without duplicating rows.

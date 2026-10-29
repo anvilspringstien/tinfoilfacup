@@ -7,12 +7,17 @@
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
  .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
- .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:164px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer}
- .barry-air-launch img{display:block;width:160px;max-width:100%;height:auto;object-fit:contain}
+ .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer}
+ .barry-air-launch img{display:block;width:240px;max-width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
  .barry-air-launch:hover{filter:brightness(1.1)}
  .barry-air-launch:focus-visible{outline:2px solid #084c61;outline-offset:3px}
  .tffc-magic-row{gap:10px;flex-wrap:wrap}
- .tffc-magic-row button{cursor:pointer}
+ .my-journey-bar .campaign-secondary-nav{justify-content:center}
+ .tffc-magic-row button{cursor:pointer;border-radius:6px}
+ .deck-sales-coming{background:#c90000;color:#fff;border-color:#c90000;opacity:1}
+ .tffc-beta-help button[onclick="tffcOpenShare()"],
+ .tffc-beta-help button[onclick="tffcOpenShare()"] + .tffc-beta-help-sep,
+ #challengeShareLinkFooter,#challengeShareLinkFooter + .beta-help-sep{display:none}
  `;
  window.tffcInstallPhoneFrameNavigation=function(frame){
   let doc;
@@ -46,7 +51,7 @@
     if(barry.classList.contains('round'))barry.classList.remove('round');
     if(barry.getAttribute('aria-label')!=='Barry Air')barry.setAttribute('aria-label','Barry Air');
     if(!barry.querySelector('img')){
-     const image=doc.createElement('img');image.src=badgeURL;image.alt='Barry Air';image.width=160;barry.replaceChildren(image);
+     const image=doc.createElement('img');image.src=badgeURL;image.alt='Barry Air';image.width=240;barry.replaceChildren(image);
     }
     // Clean both original markup and snapshots of the previous six-button trial.
     bar.querySelectorAll('.campaign-share').forEach(button=>button.remove());
@@ -56,6 +61,9 @@
      const replacement=labels[button.textContent.trim()];
      if(replacement)button.textContent=replacement;
     }
+    const reset=Array.from(controls.querySelectorAll('button')).find(button=>button.textContent.trim()==='Reset');
+    const original=Array.from(controls.querySelectorAll('button')).find(button=>button.textContent.trim()==='Original Campaigns');
+    if(reset&&original&&original.nextElementSibling!==reset)original.after(reset);
    }
    for(const support of doc.querySelectorAll('.tffc-support-row:not(.tffc-magic-row)')){
     if(support.previousElementSibling?.classList.contains('tffc-magic-row'))continue;
