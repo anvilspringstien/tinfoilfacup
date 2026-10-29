@@ -23,9 +23,13 @@ try{
   assert.ok(Math.abs(geometry.left-(width-geometry.width)/2)<1);
   if(width>=700)assert.ok(Math.abs(geometry.width/geometry.height-9/16)<.001);
   else assert.ok(Math.abs(geometry.height-height)<1);
+  const splashField=await app.locator('.field').boundingBox();
   await page.screenshot({path:`phone-frame-evidence/splash-${width}x${height}.png`});
   await app.getByRole('link',{name:'Start Campaign',exact:true}).click();
   await app.frameLocator('.tffc-exact-master-frame').getByRole('textbox',{name:'Enter Your Postcode'}).waitFor();
+  const lawsField=await app.frameLocator('.tffc-exact-master-frame').locator('.field').boundingBox();
+  assert.ok(Math.abs(splashField.width-lawsField.width)<1.5,'Splash → Four Laws must not change frame width');
+  assert.ok(Math.abs(splashField.x-lawsField.x)<1.5,'Splash → Four Laws must not shift sideways');
   assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
   await context.close();
  }
@@ -43,6 +47,13 @@ try{
  await app.getByRole('link',{name:'My Campaign',exact:true}).click();
  await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
  assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
+ // A long Campaign must retain the full phone width, yet still scroll.
+ assert.equal(await app.locator('html').evaluate(h=>h.clientWidth),390);
+ assert.equal(await app.locator('html').evaluate(h=>getComputedStyle(h).scrollbarWidth),'none');
+ const beforeWheel=await app.locator('body').evaluate(b=>b.ownerDocument.scrollingElement.scrollTop);
+ await page.locator('#phoneApp').hover();
+ await page.mouse.wheel(0,240);
+ await page.waitForFunction(before=>document.getElementById('phoneApp').contentDocument.scrollingElement.scrollTop>before,beforeWheel);
  await app.getByRole('button',{name:'My Stats',exact:true}).click();
  const opened=context.waitForEvent('page');
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
