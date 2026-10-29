@@ -31,7 +31,9 @@
   try{win=frame.contentWindow;href=new URL(win.location.href);}catch(_){return;}
   if(href.href==='about:blank'){fit();return;}
   if(href.origin!==location.origin)return;
-  report=popup||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
+  // document.write from the Campaign opener can give Stats its opener's
+  // URL. Identify the rendered report as well as canonical Stats routes.
+  report=popup||!!win.document.querySelector('.sheet .stats-return')||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
   fit();
   if(report&&window.opener){
    // Stats still opens in its own tab and returns to the original Campaign.
