@@ -47,6 +47,20 @@ try{
  await app.getByRole('link',{name:'My Campaign',exact:true}).click();
  await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
  assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
+ const nav=app.locator('.phone-frame-nav');
+ await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
+ assert.deepEqual(await nav.locator('.campaign-primary-nav button').allTextContents(),['My Campaign','My Stats','My Challenges','Barry Air']);
+ assert.deepEqual(await nav.locator('.campaign-magic-nav button').allTextContents(),['Keep the Magic','Share the Magic']);
+ assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['View Original Campaigns','End My Campaign','Reset','Hard Reset']);
+ const buttonBoxes=await nav.locator('.campaign-primary-nav button,.campaign-magic-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}}));
+ for(const box of buttonBoxes){assert.ok(Math.abs(box.width-buttonBoxes[0].width)<1);assert.ok(box.height>=44);}
+ for(const row of [0,2,4])assert.ok(Math.abs(buttonBoxes[row].y-buttonBoxes[row+1].y)<1);
+ assert.ok(buttonBoxes[4].y-buttonBoxes[2].y>buttonBoxes[2].y-buttonBoxes[0].y,'Keep/Share have extra group spacing');
+ await nav.getByRole('button',{name:'Keep the Magic',exact:true}).click();
+ const keep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+ await keep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
+ await keep.getByRole('button',{name:'Close',exact:true}).click();
+ await nav.getByRole('button',{name:'Share the Magic',exact:true}).waitFor();
  // A long Campaign must retain the full phone width, yet still scroll.
  assert.equal(await app.locator('html').evaluate(h=>h.clientWidth),390);
  assert.equal(await app.locator('html').evaluate(h=>getComputedStyle(h).scrollbarWidth),'none');
@@ -100,6 +114,14 @@ try{
  const identity=await app.locator('body').evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));
  for(const key of ['originName','searchNumber','callSign','pigeonName'])assert.equal(identity[key],saved[key]);
  assert.equal(counterCalls,0,'saved Campaign and all returns must allocate no counter');
+ const back=origin+'/beta/phone-frame-shed.html?view=campaign';
+ await context.route('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/**',r=>r.fulfill({contentType:'text/html',body:'<a href="'+back+'">My Campaign</a>'}));
+ await app.getByRole('button',{name:'Barry Air',exact:true}).click();
+ await page.waitForURL('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/?from=tffac-shed');
+ await page.getByRole('link',{name:'My Campaign',exact:true}).click();
+ await page.frameLocator('#phoneApp').getByRole('button',{name:'Barry Air',exact:true}).waitFor();
+ assert.equal(await page.frameLocator('#phoneApp').getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
+ assert.equal(counterCalls,0,'Barry return must restore the saved Campaign without allocating a counter');
  await context.close();
  console.log('PASS: shared frame at four viewports; Four Laws, saved Campaign, Stats tab/return, Challenges, Share/Keep, rotation and identity without counter calls');
 }finally{await browser.close()}

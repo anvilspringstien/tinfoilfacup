@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'beta/phone-frame-shed.*'
+      - 'beta/phone-frame-navigation.js'
       - 'tests/phone-frame-shed-browser.mjs'
       - '.github/workflows/phone-frame-shed.yml'
   workflow_dispatch:
@@ -16,6 +17,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check beta/phone-frame-shed.js
+      - run: node --check beta/phone-frame-navigation.js
       - run: node tests/beta-approved-journey-lock.mjs
       - run: node tests/keep-the-magic-regression.js
       - run: node tests/keep-magic-install-regression.js
