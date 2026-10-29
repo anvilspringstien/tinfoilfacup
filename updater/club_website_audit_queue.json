@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-28T01:22:47.601082+00:00",
+  "competition_updated_at": "2026-10-29T07:06:12.432989+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 135,
+  "eligible_linked": 145,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1744,119 +1744,9 @@
       "evidence": []
     },
     {
-      "club": "Bournemouth Poppies FC",
-      "identities": [
-        "Bournemouth Poppies FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Bovey Tracey FC",
       "identities": [
         "Bovey Tracey FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bowers & Pitsea FC",
-      "identities": [
-        "Bowers & Pitsea FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brackley Town FC",
-      "identities": [
-        "Brackley Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bracknell Town FC",
-      "identities": [
-        "Bracknell Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bradford (Park Avenue) FC",
-      "identities": [
-        "Bradford (Park Avenue) FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bradford Town FC",
-      "identities": [
-        "Bradford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Braintree Town FC",
-      "identities": [
-        "Braintree Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brantham Athletic FC",
-      "identities": [
-        "Brantham Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brentwood Town FC",
-      "identities": [
-        "Brentwood Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bridgwater United FC",
-      "identities": [
-        "Bridgwater United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -8833,6 +8723,186 @@
           "evidence_url": "https://www.bournetownfc.co.uk/copy-of-history",
           "verified_on": "2026-10-28",
           "ledger": "club_website_verified_batch_09.json"
+        }
+      ]
+    },
+    {
+      "club": "Bournemouth Poppies FC",
+      "identities": [
+        "Bournemouth Poppies FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bournemouthfc.org.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bournemouthfc.org.uk/",
+          "evidence_url": "https://bournemouthfc.org.uk/teams/mens-first-team",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Bowers & Pitsea FC",
+      "identities": [
+        "Bowers & Pitsea FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bowerspitseafc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bowerspitseafc.co.uk/",
+          "evidence_url": "https://www.bowerspitseafc.co.uk/teams/mens-first-team",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Brackley Town FC",
+      "identities": [
+        "Brackley Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.brackleytownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.brackleytownfc.com/",
+          "evidence_url": "https://www.brackleytownfc.com/contact",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Bracknell Town FC",
+      "identities": [
+        "Bracknell Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bracknelltownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bracknelltownfc.com/",
+          "evidence_url": "https://www.bracknelltownfc.com/contact-us/",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Bradford (Park Avenue) FC",
+      "identities": [
+        "Bradford (Park Avenue) FC"
+      ],
+      "current_competition": false,
+      "website": "https://bpafc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bpafc.com/",
+          "evidence_url": "https://bpafc.com/whos-who/",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Bradford Town FC",
+      "identities": [
+        "Bradford Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bradfordtownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bradfordtownfc.com/",
+          "evidence_url": "https://bradfordtownfc.com/club-information/",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Braintree Town FC",
+      "identities": [
+        "Braintree Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.braintreetownfc.org.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.braintreetownfc.org.uk/",
+          "evidence_url": "https://www.braintreetownfc.org.uk/map.html",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Brantham Athletic FC",
+      "identities": [
+        "Brantham Athletic FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.branthamathletic.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.branthamathletic.com/",
+          "evidence_url": "https://www.branthamathletic.com/teams/brantham-athletic-fc",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Brentwood Town FC",
+      "identities": [
+        "Brentwood Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.brentwoodtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.brentwoodtownfc.co.uk/",
+          "evidence_url": "https://www.brentwoodtownfc.co.uk/contact-us/",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Bridgwater United FC",
+      "identities": [
+        "Bridgwater United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bridgwaterunitedfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bridgwaterunitedfc.com/",
+          "evidence_url": "https://www.bridgwaterunitedfc.com/club/contact-us/",
+          "verified_on": "2026-10-29",
+          "ledger": "club_website_verified_batch_10.json"
         }
       ]
     },
