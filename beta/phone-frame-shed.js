@@ -58,6 +58,7 @@
  function fit(){
   sizeFrame(frame,shell,document.documentElement.clientWidth,document.body.getBoundingClientRect().height,report);
   hideDesktopEdgeScrollbar();
+  window.tffcInstallPhoneFrameNavigation?.(frame);
  }
  function prepareDocument(){
   let win,href;

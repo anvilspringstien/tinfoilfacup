@@ -49,7 +49,7 @@ below this group, with quieter visual weight. Support and administrative links
 stay in the footer. Keep remains a destination even when already installed; its
 existing installed-state guidance should explain that status.
 
-This proposal is recorded for discussion; existing buttons are unchanged.
+This arrangement is now applied only inside the opt-in phone-frame proof. The original Campaign/Stats/Challenges/Share buttons keep their existing actions. Keep opens the existing embedded instructions directly. Barry Air opens its demonstration Site in the same tab with an allowlisted return to this proof’s Campaign entrance; Campaign identity stays on tinfoilfacup.com. Barry’s flight data is still the labelled demonstration.
 
 ## Desktop scrollbar refinement
 
