@@ -29,7 +29,8 @@
  function prepareDocument(){
   let win,href;
   try{win=frame.contentWindow;href=new URL(win.location.href);}catch(_){return;}
-  if(href.origin!==location.origin&&href.href!=='about:blank')return;
+  if(href.href==='about:blank'){fit();return;}
+  if(href.origin!==location.origin)return;
   report=popup||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
   fit();
   if(report&&window.opener){

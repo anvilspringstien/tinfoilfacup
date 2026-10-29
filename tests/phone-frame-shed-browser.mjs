@@ -47,16 +47,21 @@ try{
  const opened=context.waitForEvent('page');
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
  const stats=await opened;
+ stats.on('pageerror',e=>console.error('Stats wrapper error:',String(e)));
+ async function waitForReportFrame(){
+  try{await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});}
+  catch(error){console.error('Stats frame diagnostic:',await stats.locator('html').evaluate(h=>({url:location.href,ready:document.readyState,html:h.outerHTML.slice(0,2000),innerURL:h.querySelector('iframe')?.contentWindow?.location?.href})));throw error;}
+ }
  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
  // The report can render before the outer tab's deferred frame script loads.
- await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});
+ await waitForReportFrame();
  assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
  const statsRatio=await stats.locator('#phoneApp').evaluate(f=>{const r=f.getBoundingClientRect();return r.width/r.height});
  assert.ok(Math.abs(statsRatio-9/16)<.001);
  assert.match(stats.url(),/phone-frame-shed\.html\?view=stats$/);
  await stats.reload();
  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
- await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});
+ await waitForReportFrame();
  // Existing Stats returns to its opener when available; after a refresh
  // without one, it opens Campaign in the same tab. Both must stay usable.
  const hasOpener=await stats.frameLocator('#phoneApp').locator('body').evaluate(()=>!!window.opener&&!window.opener.closed);
