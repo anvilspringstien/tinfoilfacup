@@ -7,6 +7,8 @@
  // Material-only trial: the public and installed entrances keep their finish.
  const enamel=location.pathname.endsWith('/phone-frame-shed.html');
  const css=`
+ .result .actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+ .result .actions a.secondary{margin:0}
  .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
  .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer}
  .barry-air-launch img{display:block;width:240px;max-width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
