@@ -4,6 +4,8 @@
  const base=new URL('.',document.currentScript.src);
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
+ // Material-only trial: the public and installed entrances keep their finish.
+ const enamel=location.pathname.endsWith('/phone-frame-shed.html');
  const css=`
  .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
  .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer}
@@ -28,7 +30,15 @@
  .tffc-beta-help button[onclick="tffcOpenShare()"],
  .tffc-beta-help button[onclick="tffcOpenShare()"] + .tffc-beta-help-sep,
  #challengeShareLinkFooter,#challengeShareLinkFooter + .beta-help-sep{display:none}
- `;
+ `+(enamel?`
+ .my-journey-bar .campaign-primary-nav button.round{
+  background-image:linear-gradient(115deg,transparent 20%,#ffffff14 43%,transparent 66%),linear-gradient(to bottom,#ffffff2b 0%,#ffffff0b 43%,#0000000a 54%,#00000020 100%)!important;
+  box-shadow:inset 0 1px 0 #ffe5a4,inset 0 -1px 0 #785222,inset 0 0 0 1px #bd9650,inset 0 2px 1px #ffffff38,0 2px 3px #0005;
+ }
+ .my-journey-bar .campaign-primary-nav button.round:active{
+  box-shadow:inset 0 1px 2px #0005,inset 0 0 0 1px #b38c48,0 1px 1px #0003;
+ }
+ `:'');
  window.tffcInstallPhoneFrameNavigation=function(frame){
   let doc;
   try{doc=frame.contentDocument;}catch(_){return;}
