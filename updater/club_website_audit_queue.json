@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-29T07:06:12.432989+00:00",
+  "competition_updated_at": "2026-10-30T07:07:07.849338+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 145,
+  "eligible_linked": 156,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1766,130 +1766,9 @@
       "evidence": []
     },
     {
-      "club": "Brightlingsea Regent FC",
-      "identities": [
-        "Brightlingsea Regent FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brislington FC",
-      "identities": [
-        "Brislington FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bristol Manor Farm FC",
-      "identities": [
-        "Bristol Manor Farm FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brixham AFC",
-      "identities": [
-        "Brixham AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Broadbridge Heath FC",
-      "identities": [
-        "Broadbridge Heath FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Broadfields United FC",
-      "identities": [
-        "Broadfields United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brockenhurst FC",
-      "identities": [
-        "Brockenhurst FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Brocton FC",
-      "identities": [
-        "Brocton FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bromsgrove Sporting FC",
-      "identities": [
-        "Bromsgrove Sporting FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Buckhurst Hill FC",
-      "identities": [
-        "Buckhurst Hill FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Buckland Athletic FC",
       "identities": [
         "Buckland Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Burgess Hill Town FC",
-      "identities": [
-        "Burgess Hill Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -8903,6 +8782,204 @@
           "evidence_url": "https://www.bridgwaterunitedfc.com/club/contact-us/",
           "verified_on": "2026-10-29",
           "ledger": "club_website_verified_batch_10.json"
+        }
+      ]
+    },
+    {
+      "club": "Brightlingsea Regent FC",
+      "identities": [
+        "Brightlingsea Regent FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.brightlingsearegentfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.brightlingsearegentfc.com/",
+          "evidence_url": "https://www.brightlingsearegentfc.com/contact",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Brislington FC",
+      "identities": [
+        "Brislington FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.brislingtonfc.net/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.brislingtonfc.net/",
+          "evidence_url": "https://www.brislingtonfc.net/clubinfo",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Bristol Manor Farm FC",
+      "identities": [
+        "Bristol Manor Farm FC"
+      ],
+      "current_competition": false,
+      "website": "https://bristolmanorfarm.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bristolmanorfarm.com/",
+          "evidence_url": "https://bristolmanorfarm.com/contact-us/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Brixham AFC",
+      "identities": [
+        "Brixham AFC"
+      ],
+      "current_competition": false,
+      "website": "https://brixhamafc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://brixhamafc.co.uk/",
+          "evidence_url": "https://brixhamafc.co.uk/club-committee/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Broadbridge Heath FC",
+      "identities": [
+        "Broadbridge Heath FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.broadbridgeheathfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.broadbridgeheathfc.com/",
+          "evidence_url": "https://www.broadbridgeheathfc.com/contact",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Broadfields United FC",
+      "identities": [
+        "Broadfields United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.broadfieldsunitedfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.broadfieldsunitedfc.co.uk/",
+          "evidence_url": "https://www.broadfieldsunitedfc.co.uk/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Brockenhurst FC",
+      "identities": [
+        "Brockenhurst FC"
+      ],
+      "current_competition": false,
+      "website": "https://brockenhurstfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://brockenhurstfc.co.uk/",
+          "evidence_url": "https://brockenhurstfc.co.uk/contact/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Brocton FC",
+      "identities": [
+        "Brocton FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.broctonfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.broctonfc.com/",
+          "evidence_url": "https://www.broctonfc.com/teams/brocton",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Bromsgrove Sporting FC",
+      "identities": [
+        "Bromsgrove Sporting FC"
+      ],
+      "current_competition": false,
+      "website": "https://bromsgrovesporting.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bromsgrovesporting.co.uk/",
+          "evidence_url": "https://bromsgrovesporting.co.uk/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Buckhurst Hill FC",
+      "identities": [
+        "Buckhurst Hill FC"
+      ],
+      "current_competition": false,
+      "website": "https://bhfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bhfc.co.uk/",
+          "evidence_url": "https://bhfc.co.uk/contact/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Burgess Hill Town FC",
+      "identities": [
+        "Burgess Hill Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bhtfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bhtfc.co.uk/",
+          "evidence_url": "https://bhtfc.co.uk/club/contact/",
+          "verified_on": "2026-10-30",
+          "ledger": "club_website_verified_batch_11.json"
         }
       ]
     },
