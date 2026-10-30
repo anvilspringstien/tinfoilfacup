@@ -4,8 +4,6 @@
  const base=new URL('.',document.currentScript.src);
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
- // Material-only trial: the public and installed entrances keep their finish.
- const enamel=location.pathname.endsWith('/phone-frame-shed.html');
  const css=`
  .result .actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
  .result .actions a.secondary{margin:0}
@@ -24,6 +22,7 @@
  .barry-air-teaser .teaser-captain{font:italic 13px/1.5 Georgia,serif;color:#d8cbb4}
  .barry-air-teaser .teaser-close{display:block;margin:-14px -10px 0 auto;width:36px;height:36px;background:transparent;color:inherit;border:0;font:26px Arial;cursor:pointer}
  .barry-air-teaser .teaser-return{margin:8px auto 0;padding:10px 15px;border:1px solid #d5ad26;border-radius:6px;background:#f0c64f;color:#17110b;font:700 12px/1.4 Arial,sans-serif;cursor:pointer}
+ .barry-air-teaser:focus{outline:none}
  .barry-air-teaser button:focus-visible{outline:2px solid #e4c786;outline-offset:3px}
  .tffc-magic-row{gap:10px;flex-wrap:wrap}
  .my-journey-bar .campaign-secondary-nav{justify-content:center}
@@ -32,7 +31,6 @@
  .tffc-beta-help button[onclick="tffcOpenShare()"],
  .tffc-beta-help button[onclick="tffcOpenShare()"] + .tffc-beta-help-sep,
  #challengeShareLinkFooter,#challengeShareLinkFooter + .beta-help-sep{display:none}
- `+(enamel?`
  .my-journey-bar .campaign-primary-nav button.round{
   background-image:linear-gradient(115deg,transparent 20%,#ffffff14 43%,transparent 66%),linear-gradient(to bottom,#ffffff2b 0%,#ffffff0b 43%,#0000000a 54%,#00000020 100%)!important;
   box-shadow:inset 0 1px 0 #ffe5a4,inset 0 -1px 0 #785222,inset 0 0 0 1px #bd9650,inset 0 2px 1px #ffffff38,0 2px 3px #0005;
@@ -40,7 +38,7 @@
  .my-journey-bar .campaign-primary-nav button.round:active{
   box-shadow:inset 0 1px 2px #0005,inset 0 0 0 1px #b38c48,0 1px 1px #0003;
  }
- `:'');
+ `;
  window.tffcInstallPhoneFrameNavigation=function(frame){
   let doc;
   try{doc=frame.contentDocument;}catch(_){return;}
@@ -57,14 +55,14 @@
   function openBarry(trigger){
    let dialog=doc.querySelector('.barry-air-teaser');
    if(!dialog){
-    dialog=doc.createElement('dialog');dialog.className='barry-air-teaser';dialog.setAttribute('aria-labelledby','barry-teaser-title');dialog.setAttribute('aria-describedby','barry-teaser-copy');
+    dialog=doc.createElement('dialog');dialog.className='barry-air-teaser';dialog.tabIndex=-1;dialog.setAttribute('aria-labelledby','barry-teaser-title');dialog.setAttribute('aria-describedby','barry-teaser-copy');
     dialog.innerHTML='<button class="teaser-close" type="button" aria-label="Close Barry Air">×</button><img src="'+badgeURL+'" alt="Barry Air pilot wings" width="260"><p class="teaser-kicker">PREPARING FOR TAKE-OFF</p><h2 id="barry-teaser-title">Barry Air</h2><h3>Coming Soon</h3><p><strong>Your Campaign. In flight.</strong></p><p id="barry-teaser-copy">Captain Barry is preparing Pigeon Control—your pigeon’s own flight board, flight path and occasional announcements from the cockpit.</p><p class="teaser-captain">“Please remain seated. The captain is still arguing with the wind.”</p><button class="teaser-return" type="button">Back to My Campaign</button>';
     doc.body.append(dialog);
     for(const button of dialog.querySelectorAll('button'))button.onclick=()=>dialog.close();
     dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
    }
    dialog.onclose=()=>{if(trigger.isConnected)trigger.focus({preventScroll:true});};
-   if(!dialog.open)dialog.showModal();
+   if(!dialog.open){dialog.showModal();dialog.focus({preventScroll:true});}
   }
   function decorate(){
    if(!doc.head)return;
