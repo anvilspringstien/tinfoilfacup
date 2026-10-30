@@ -11,23 +11,22 @@ try {
   const page=await ctx.newPage();
   const errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
-  /* Public homepage must reproduce the approved BETA Splash's frame before
-     it leads into the very same original-BETA three-frame Clubfinder. */
+  /* Public entry frames the approved source; legacy BETA masters remain exact. */
   const publicPage=await ctx.newPage();
   const publicErrors=[];
   publicPage.on('pageerror',e=>publicErrors.push(String(e)));
   await publicPage.goto(origin+'/',{waitUntil:'domcontentloaded'});
-  await publicPage.locator('.splash-start').waitFor();
+  const publicApp=publicPage.frameLocator('#phoneApp');
+  await publicApp.locator('.splash-start').waitFor();
   await publicPage.evaluate(()=>document.fonts.ready);
-  assert.equal(await publicPage.locator('.splash-start').innerText(),'Start Campaign','new supporters see the original label');
-  const splashGeometry=await publicPage.evaluate(()=>Object.fromEntries(['.field','.crest','.splash-intro','.splash-message','.splash-start','.splash-grassroots'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,width:r.width,height:r.height}]})));
-  const publicSplash=await publicPage.locator('.field').boundingBox();
-  assert.equal(await publicPage.locator('.splash-start').getAttribute('href'),
-   'beta/clubfinder-journey.html','Public Start must open the approved journey');
+  assert.equal(await publicApp.locator('.splash-start').innerText(),'Start Campaign','new supporters see the original label');
+  const publicSplash=await publicApp.locator('.field').boundingBox();
+  assert.equal(await publicApp.locator('.splash-start').getAttribute('href'),
+   'clubfinder-journey.html','Public Start must open the approved journey');
   assert.ok(await publicPage.locator('link[rel=canonical]').getAttribute('href')==='https://tinfoilfacup.com/');
-  await publicPage.locator('.splash-start').click();
-  await publicPage.waitForURL('**/beta/clubfinder-journey.html',{timeout:15000});
-  const publicFour=publicPage.frameLocator('iframe.tffc-exact-master-frame');
+  await publicApp.locator('.splash-start').click();
+
+  const publicFour=publicApp.frameLocator('iframe.tffc-exact-master-frame');
   await publicFour.locator('.field').waitFor({timeout:25000});
   const publicFourBox=await publicFour.locator('.field').boundingBox();
   assert.ok(Math.abs(publicSplash.width-publicFourBox.width)<1.5,
@@ -38,10 +37,12 @@ try {
   await page.goto(origin+'/beta/',{waitUntil:'domcontentloaded'});
   await page.locator('.splash-start').waitFor();
   const before=await page.locator('.field').boundingBox();
-  assert.ok(Math.abs(publicSplash.width-before.width)<1.5,
-   width+'x'+height+' public vs BETA Splash width mismatch');
-  assert.ok(Math.abs(publicSplash.x-before.x)<1.5,
-   width+'x'+height+' public vs BETA Splash horizontal shift');
+  const splashGeometry=await page.evaluate(()=>Object.fromEntries(['.field','.crest','.splash-intro','.splash-message','.splash-start','.splash-grassroots'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,width:r.width,height:r.height}]})));
+
+  if(width<700){
+   assert.ok(Math.abs(publicSplash.width-before.width)<1.5,'phone public/BETA source width');
+   assert.ok(Math.abs(publicSplash.x-before.x)<1.5,'phone public/BETA source alignment');
+  }
   const start=page.locator('.splash-start');
   assert.equal(await start.getAttribute('href'),'clubfinder-journey.html');
   await start.click();

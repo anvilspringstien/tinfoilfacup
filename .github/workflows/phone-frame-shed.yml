@@ -2,6 +2,10 @@ name: Shared phone frame Shed
 on:
   pull_request:
     paths:
+      - 'index.html'
+      - 'beta/phone-frame.html'
+      - 'beta/phone-frame-launch.js'
+      - 'beta/keep-the-magic-shed.html'
       - 'beta/phone-frame-shed.*'
       - 'beta/phone-frame-navigation.js'
       - 'tests/phone-frame-shed-browser.mjs'

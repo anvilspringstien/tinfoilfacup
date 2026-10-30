@@ -3,7 +3,6 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const watched=new WeakSet();
- const barryURL='https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/?from=tffac-shed';
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
  .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
@@ -11,6 +10,17 @@
  .barry-air-launch img{display:block;width:240px;max-width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
  .barry-air-launch:hover{filter:brightness(1.1)}
  .barry-air-launch:focus-visible{outline:2px solid #084c61;outline-offset:3px}
+ .barry-air-teaser{width:min(350px,calc(100vw - 28px));max-height:calc(100svh - 28px);overflow:auto;padding:22px;border:1px solid #ac9569;border-radius:12px;background:#141210;color:#f6f3e8;text-align:center;font:14px/1.55 Poppins,Arial,sans-serif;box-shadow:0 12px 35px #0008}
+ .barry-air-teaser::backdrop{background:#000b}
+ .barry-air-teaser img{display:block;width:260px;max-width:100%;height:auto;margin:4px auto 16px;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
+ .barry-air-teaser .teaser-kicker{font:700 10px/1.4 Arial,sans-serif;letter-spacing:.15em;color:#d8bc7c}
+ .barry-air-teaser h2{margin:8px 0 0;font-size:26px;font-weight:500}
+ .barry-air-teaser h3{margin:2px 0 14px;color:#e4c786;font-size:19px;font-weight:400}
+ .barry-air-teaser p{margin:12px 0}
+ .barry-air-teaser .teaser-captain{font:italic 13px/1.5 Georgia,serif;color:#d8cbb4}
+ .barry-air-teaser .teaser-close{display:block;margin:-14px -10px 0 auto;width:36px;height:36px;background:transparent;color:inherit;border:0;font:26px Arial;cursor:pointer}
+ .barry-air-teaser .teaser-return{margin:8px auto 0;padding:10px 15px;border:1px solid #d5ad26;border-radius:6px;background:#f0c64f;color:#17110b;font:700 12px/1.4 Arial,sans-serif;cursor:pointer}
+ .barry-air-teaser button:focus-visible{outline:2px solid #e4c786;outline-offset:3px}
  .tffc-magic-row{gap:10px;flex-wrap:wrap}
  .my-journey-bar .campaign-secondary-nav{justify-content:center}
  .tffc-magic-row button{cursor:pointer;border-radius:6px}
@@ -31,6 +41,18 @@
     const destination=doc.querySelector('#tffcShareHost iframe,#tffcChallengeShareHost iframe');
     if(destination)destination.src=new URL('keep-the-magic-shed.html?instructions=1&embedded=1&keep=1',base).href;
    }
+  }
+  function openBarry(trigger){
+   let dialog=doc.querySelector('.barry-air-teaser');
+   if(!dialog){
+    dialog=doc.createElement('dialog');dialog.className='barry-air-teaser';dialog.setAttribute('aria-labelledby','barry-teaser-title');dialog.setAttribute('aria-describedby','barry-teaser-copy');
+    dialog.innerHTML='<button class="teaser-close" type="button" aria-label="Close Barry Air">×</button><img src="'+badgeURL+'" alt="Barry Air pilot wings" width="260"><p class="teaser-kicker">PREPARING FOR TAKE-OFF</p><h2 id="barry-teaser-title">Barry Air</h2><h3>Coming Soon</h3><p><strong>Your Campaign. In flight.</strong></p><p id="barry-teaser-copy">Captain Barry is preparing Pigeon Control—your pigeon’s own flight board, flight path and occasional announcements from the cockpit.</p><p class="teaser-captain">“Please remain seated. The captain is still arguing with the wind.”</p><button class="teaser-return" type="button">Back to My Campaign</button>';
+    doc.body.append(dialog);
+    for(const button of dialog.querySelectorAll('button'))button.onclick=()=>dialog.close();
+    dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+   }
+   dialog.onclose=()=>{if(trigger.isConnected)trigger.focus({preventScroll:true});};
+   if(!dialog.open)dialog.showModal();
   }
   function decorate(){
    if(!doc.head)return;
@@ -74,7 +96,7 @@
     support.before(row);
    }
    // Campaign return snapshots preserve HTML but not JS handlers.
-   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>location.assign(barryURL);
+   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>openBarry(barry);
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
    for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);
   }

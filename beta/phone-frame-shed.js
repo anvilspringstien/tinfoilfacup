@@ -92,7 +92,8 @@
    tab.document.close();
    tab.opener=win;
    // Give the outer tab a refreshable route, rather than leaving about:blank.
-   tab.history.replaceState(null,'',new URL('phone-frame-shed.html?view=stats',base).href);
+   const statsRoute=new URL(location.href);statsRoute.search='?view=stats';statsRoute.hash='';
+   tab.history.replaceState(null,'',statsRoute.href);
    const reportFrame=tab.document.getElementById('phoneApp');
    const fitReport=()=>sizeFrame(reportFrame,tab.document.querySelector('.phone-shell'),tab.document.documentElement.clientWidth,tab.document.body.getBoundingClientRect().height,true);
    // Size synchronously: Stats writes into the child immediately, before
