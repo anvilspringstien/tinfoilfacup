@@ -20,6 +20,7 @@ try {
   await publicApp.locator('.splash-start').waitFor();
   await publicPage.evaluate(()=>document.fonts.ready);
   assert.equal(await publicApp.locator('.splash-start').innerText(),'Start Campaign','new supporters see the original label');
+  const publicGeometry=await publicApp.locator('body').evaluate(()=>Object.fromEntries(['.field','.crest','.splash-intro','.splash-message','.splash-start','.splash-grassroots'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,width:r.width,height:r.height}]})));
   const publicSplash=await publicApp.locator('.field').boundingBox();
   assert.equal(await publicApp.locator('.splash-start').getAttribute('href'),
    'clubfinder-journey.html','Public Start must open the approved journey');
@@ -104,22 +105,25 @@ try {
   await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
   for(const splash of ['/', '/beta/']){
    await page.goto(origin+splash);await page.evaluate(()=>document.fonts.ready);
-   const myCampaign=page.getByRole('link',{name:'My Campaign',exact:true});await myCampaign.waitFor();
-   const returningGeometry=await page.evaluate(()=>Object.fromEntries(['.field','.crest','.splash-intro','.splash-message','.splash-start','.splash-grassroots'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,width:r.width,height:r.height}]})));
-   for(const selector of Object.keys(splashGeometry))for(const dimension of ['x','y','width','height'])assert(Math.abs(splashGeometry[selector][dimension]-returningGeometry[selector][dimension])<1.5,`${width}x${height} ${selector} ${dimension} must not move when label changes`);
+   const journey=splash==='/'?await(await page.locator('#phoneApp').elementHandle()).contentFrame():page;
+   const baseline=splash==='/'?publicGeometry:splashGeometry;
+   const myCampaign=journey.getByRole('link',{name:'My Campaign',exact:true});await myCampaign.waitFor();
+   const returningGeometry=await journey.evaluate(()=>Object.fromEntries(['.field','.crest','.splash-intro','.splash-message','.splash-start','.splash-grassroots'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,width:r.width,height:r.height}]})));
+   for(const selector of Object.keys(baseline))for(const dimension of ['x','y','width','height'])assert(Math.abs(baseline[selector][dimension]-returningGeometry[selector][dimension])<1.5,`${width}x${height} ${selector} ${dimension} must not move when label changes`);
    await page.screenshot({path:`/tmp/tffc-saved-entry-splash-${width}x${height}.png`});
    await myCampaign.click();
-   await page.locator('.pigeon-name-input').waitFor({timeout:30000});
-   await page.waitForFunction(()=>Math.abs(document.getElementById('tffc-results-summary').getBoundingClientRect().top-14)<3,null,{timeout:10000});
-   assert.equal(await page.locator('.pigeon-name-input').inputValue(),'Checky');
+   await journey.locator('.pigeon-name-input').waitFor({timeout:30000});
+   await journey.waitForFunction(()=>Math.abs(document.getElementById('tffc-results-summary').getBoundingClientRect().top-14)<3,null,{timeout:10000});
+   assert.equal(await journey.locator('.pigeon-name-input').inputValue(),'Checky');
    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).searchNumber),1755);
    await page.screenshot({path:`/tmp/tffc-saved-entry-${width}x${height}.png`});
   }
   for(const invalid of ['not-json','null',JSON.stringify({originName:'Heaton Stannington FC'}),JSON.stringify({...saved,ended:true})]){
    await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',value),invalid);
    await page.goto(origin+'/');
-   await page.getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
-   assert.equal(await page.locator('.splash-start').getAttribute('href'),'beta/clubfinder-journey.html');
+   const fallback=page.frameLocator('#phoneApp');
+   await fallback.getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
+   assert.equal(await fallback.locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
   }
   const unexpected=errors.filter(x=>!x.includes('Failed to fetch'));
   assert.deepEqual(unexpected,[],width+'x'+height+' browser script errors');

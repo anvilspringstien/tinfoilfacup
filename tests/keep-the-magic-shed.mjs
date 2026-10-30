@@ -182,7 +182,7 @@ try{
  assert(await page.locator('#close').evaluate(e=>getComputedStyle(e).outlineStyle!=='none'),'Close retains its keyboard outline');
  await page.goto(base+'/beta/keep-the-magic-shed.html');
  await page.waitForURL(base+'/beta/phone-frame.html');
- assert.equal(await page.locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
+ assert.equal(await page.frameLocator('#phoneApp').locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
  const saved={originName:'Newton Aycliffe FC',postcode:'DL5 4RQ',ended:false,selectedAt:'2026-10-18T12:00:00.000Z',searchNumber:12345,callSign:'Tango Foxtrot 2 Alpha Charlie [12345]',pigeonName:'Shed Pigeon'};
  await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
  const stored=await context.storageState();
