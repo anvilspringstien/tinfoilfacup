@@ -42,7 +42,7 @@ try{
   assert.equal(await app.locator('#details').isVisible(),false);
   assert.deepEqual(await page.evaluate(()=>[localStorage.getItem('tinFoilFACupJourney_v7'),localStorage.getItem('tffc.challengeDeck.v1')]),['{"originName":"Keep existing","pigeonName":"Checky"}','preserve-cabinet']);
   assert.equal(counter,0,'read-only details never issue an identity');
-  await app.locator('.explore').click();
+  await app.locator('a.explore').click();
   await app.getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
   await context.close();
  }
