@@ -6,7 +6,7 @@
  const shell=document.querySelector('.phone-shell');
  const popup=document.documentElement.dataset.statsPopup==='1';
  const base=new URL('.',document.currentScript.src);
- const entries={splash:'index.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html'};
+ const entries={splash:'index.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html',club:'club-details.html'};
  const entry=new URLSearchParams(location.search).get('view')||'splash';
  let report=popup||entry==='stats';
  function sizeFrame(targetFrame,targetShell,width,height,isReport){
@@ -112,6 +112,8 @@
  fit();
  if(popup)prepareDocument();
  else{
-  frame.src=new URL(entries[entry]||entries.splash,base).href;
+  const destination=new URL(entries[entry]||entries.splash,base);
+  if(entry==='club')destination.searchParams.set('club',new URLSearchParams(location.search).get('club')||'');
+  frame.src=destination.href;
  }
 })();
