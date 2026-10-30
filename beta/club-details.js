@@ -2,8 +2,8 @@ import {clubDetails} from './club-details-model.mjs';
 const $=id=>document.getElementById(id);
 try{
  const read=async url=>{const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('The published details could not be loaded. Please try again, or reply to your email.');return response.json();};
- const [queue,competition]=await Promise.all([read('../updater/club_website_audit_queue.json'),read('../competition.json')]);
- const data=clubDetails(new URLSearchParams(location.search).get('club'),queue,competition);
+ const [queue,competition,reviewed]=await Promise.all([read('../updater/club_website_audit_queue.json'),read('../competition.json'),read('../updater/club_website_verified_batch_04.json')]);
+ const data=clubDetails(new URLSearchParams(location.search).get('club'),queue,competition,reviewed);
  $('club-name').textContent=data.club;$('club-value').textContent=data.club;document.title=data.club+' — Tin Foil FA Cup';
  if(data.website){const link=document.createElement('a');link.href=data.website;link.target='_blank';link.rel='noopener noreferrer';link.textContent=data.website;$('website').append(link);}else $('website').textContent='No verified website is currently published.';
  if(data.fixture){
