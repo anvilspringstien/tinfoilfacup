@@ -10,7 +10,7 @@ try{
  for(const [width,height] of [[1680,889],[1024,768],[768,1024],[390,669]]){
   const context=await browser.newContext({viewport:{width,height}});
   const page=await context.newPage();
-  await page.goto(origin+'/beta/phone-frame-shed.html');
+  await page.goto(origin+'/');
   const app=page.frameLocator('#phoneApp');
   await app.getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
   await app.locator('.crest').evaluate(img=>img.decode());
@@ -33,6 +33,19 @@ try{
   assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
   await context.close();
  }
+ // All supported shell entrances render exactly one app frame, without recursion.
+ for(const path of ['/index.html','/beta/phone-frame.html','/beta/phone-frame-shed.html']){
+  const context=await browser.newContext({viewport:{width:1024,height:768}});
+  const page=await context.newPage();await page.goto(origin+path);
+  await page.frameLocator('#phoneApp').getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
+  assert.equal(await page.frameLocator('#phoneApp').locator('#phoneApp').count(),0);
+  assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
+  await context.close();
+ }
+ const fallback=await browser.newContext({javaScriptEnabled:false});
+ const plain=await fallback.newPage();await plain.goto(origin+'/');
+ assert.equal(await plain.getByRole('link',{name:'Start Campaign',exact:true}).getAttribute('href'),'beta/clubfinder-journey.html');
+ await fallback.close();
  const context=await browser.newContext({viewport:{width:1024,height:768}});
  let counterCalls=0;
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',r=>{counterCalls++;return r.abort()});
@@ -42,7 +55,7 @@ try{
   if(!localStorage.getItem('tinFoilFACupJourney_v7'))localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value));
  },saved);
  const page=await context.newPage();
- await page.goto(origin+'/beta/phone-frame-shed.html');
+ await page.goto(origin+'/');
  const app=page.frameLocator('#phoneApp');
  await app.getByRole('link',{name:'My Campaign',exact:true}).click();
  await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
@@ -111,7 +124,7 @@ try{
  assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
  const statsRatio=await stats.locator('#phoneApp').evaluate(f=>{const r=f.getBoundingClientRect();return r.width/r.height});
  assert.ok(Math.abs(statsRatio-9/16)<.001);
- assert.match(stats.url(),/phone-frame-shed\.html\?view=stats$/);
+ assert.equal(stats.url(),origin+'/?view=stats');
  await stats.reload();
  await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
  await waitForReportFrame();
@@ -150,14 +163,20 @@ try{
  const identity=await app.locator('body').evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));
  for(const key of ['originName','searchNumber','callSign','pigeonName'])assert.equal(identity[key],saved[key]);
  assert.equal(counterCalls,0,'saved Campaign and all returns must allocate no counter');
- const back=origin+'/beta/phone-frame-shed.html?view=campaign';
- await context.route('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/**',r=>r.fulfill({contentType:'text/html',body:'<a href="'+back+'">My Campaign</a>'}));
+ const beforeBarry=page.url();
  await app.getByRole('button',{name:'Barry Air',exact:true}).click();
- await page.waitForURL('https://barrys-air-traffic-control.anvilspringstien.chatgpt.site/?from=tffac-shed').catch(error=>{console.error('Barry navigation diagnostic:',{url:page.url(),frames:page.frames().map(f=>f.url())});throw error;});
- await page.getByRole('link',{name:'My Campaign',exact:true}).click();
- await page.frameLocator('#phoneApp').getByRole('button',{name:'Barry Air',exact:true}).waitFor();
- assert.equal(await page.frameLocator('#phoneApp').getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
- assert.equal(counterCalls,0,'Barry return must restore the saved Campaign without allocating a counter');
+ const teaser=app.getByRole('dialog',{name:'Barry Air',exact:true});
+ await teaser.getByRole('heading',{name:'Coming Soon',exact:true}).waitFor();
+ assert.equal(page.url(),beforeBarry,'Barry teaser must stay within Campaign');
+ assert.equal(await teaser.locator('a').count(),0,'no link to unfinished Barry Air');
+ await teaser.getByRole('button',{name:'Back to My Campaign',exact:true}).click();
+ assert.equal(await teaser.isVisible(),false);
+ assert.ok(await app.getByRole('button',{name:'Barry Air',exact:true}).evaluate(b=>b===document.activeElement));
+ await app.getByRole('button',{name:'Barry Air',exact:true}).click();
+ await teaser.getByRole('button',{name:'Close Barry Air',exact:true}).press('Escape');
+ assert.equal(await teaser.isVisible(),false,'Escape closes Barry');
+ assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
+ assert.equal(counterCalls,0,'Barry teaser must preserve identity without allocating a counter');
  await context.close();
  console.log('PASS: shared frame at four viewports; Four Laws, saved Campaign, Stats tab/return, Challenges, Share/Keep, rotation and identity without counter calls');
 }finally{await browser.close()}

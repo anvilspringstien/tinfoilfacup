@@ -1,9 +1,15 @@
-# Shared phone frame Shed
+# Shared phone frame — public launch
 
-`/beta/phone-frame-shed.html` is a separate, opt-in entrance. The existing
-public and BETA entrances, accepted master hashes, application files, manifest,
-installed entry and competition machinery remain unchanged.
+The shared phone composition is now the public front door at `/` and
+`/index.html`. The root retains the accepted Splash markup and metadata as its
+no-JavaScript fallback; a small launcher mounts the same accepted BETA Splash
+inside the proven frame. `/beta/phone-frame.html` is the installed-app landing
+within the existing manifest scope. The installed entry restores cookies first,
+then opens that frame; its manifest identity and all storage keys stay unchanged.
+The opt-in `/beta/phone-frame-shed.html` remains available for comparison.
 
+Locked visual master hashes, legacy BETA source entrances, competition machinery,
+search eligibility and saved Campaign data remain unchanged.
 Above 700px wide, the existing application renders in a real 390 × 693.333px
 viewport (9:16), scaled uniformly to the available height and centred. Rotation
 changes the scale, not the arrangement. On phones, the viewport follows the
@@ -16,11 +22,11 @@ popup calls, returns the real embedded Window to the original generator, and
 preserves opener and Close behaviour. External websites and donation popups
 continue through the native browser operation.
 
-This is a geometry and navigation proof, not a replacement installed app. Adding
-the existing Keep icon still launches the existing installed entry, not this Shed
-URL. Native Share/install behaviour and physical Safari/Home Screen rotation must
-be accepted on devices before promoting this design. Barry Air remains its
-separate demonstration Site; it has not been wired to saved Campaign data.
+Physical Safari/Home Screen installation and rotation still need device
+acceptance. Browser regressions exercise the cookies-only handover into empty
+installed storage, retained identity, Cabinet and mileage, and zero new counter
+allocations. Barry Air remains a separate demonstration Site, without saved
+Campaign integration; the public badge opens only the local Coming Soon teaser.
 
 ## Validation
 
@@ -34,7 +40,7 @@ The dedicated PR workflow repeats these journeys on a normal static server,
 checks geometry and preservation of the seeded identity, and asserts zero counter
 calls. No acceptance hashes are updated to accommodate the proof.
 
-## Compact navigation trial
+## Compact navigation
 
 Campaign retains its original three-across My Campaign / My Stats / My Challenges
 buttons. The approved transparent Barry Air wings form a centred 240px image
@@ -53,11 +59,13 @@ The existing embedded Share and installation instructions own their normal retur
 and handover behaviour in each module. Restored HTML snapshots have the new
 buttons’ handlers rebound without duplicating rows.
 
-The layout applies only inside the opt-in phone-frame proof. Barry Air opens its
-labelled demonstration Site in the same tab and returns to this proof's saved
-Campaign entrance. Identity and progress remain on tinfoilfacup.com; Barry's flight
-data is still the demonstration. The badge asset is a local copy of the approved
-transparent wings, with an accessible button name and keyboard focus outline.
+The layout applies within the shared public, installed and Shed frames. The badge
+opens an accessible local dialog headed Barry Air / Coming Soon with a Pigeon
+Control teaser. Close, Escape and outside click return to the focused badge
+without changing route or Campaign identity. There is no outward Barry Air link.
+The badge asset remains the approved transparent wings. Stats popups and refreshes
+use the route of their originating shell, so public Stats stays on the public
+entrance and installed Stats stays within its existing scope.
 
 ## Desktop scrollbar refinement
 

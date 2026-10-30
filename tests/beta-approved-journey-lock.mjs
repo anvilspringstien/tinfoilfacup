@@ -64,6 +64,8 @@ assert.equal(afterHead(homepage)
  'Public Splash body must match the approved BETA Splash (except paths)');
 for(const fragment of [
  '<script defer src="beta/splash-campaign-label.js"></script>',
+ '<link rel="stylesheet" href="beta/phone-frame-shed.css">',
+ '<script defer src="beta/phone-frame-launch.js"></script>',
  'href="beta/clubfinder-journey.html"',
  'src="beta/tffc-splash-logo-q80.webp"',
  'href="beta/two-rooms-splash-locked.css"',

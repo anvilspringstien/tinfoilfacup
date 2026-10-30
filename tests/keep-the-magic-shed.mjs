@@ -22,7 +22,7 @@ try{
  // The destination frame follows the actual approved front door at each size.
  for(const [width,height] of [[390,669],[390,645],[390,620],[390,560],[768,1024],[1024,768],[1680,889]]){
   await page.setViewportSize({width,height});
-  await page.goto(base+'/index.html');
+  await page.goto(base+'/beta/index.html');
   const front=await page.locator('.field').boundingBox();
   await page.goto(base+'/beta/share-popup-embed.html');
   const share=await page.locator('#magic').boundingBox();
@@ -181,8 +181,8 @@ try{
  await page.locator('#close').focus();
  assert(await page.locator('#close').evaluate(e=>getComputedStyle(e).outlineStyle!=='none'),'Close retains its keyboard outline');
  await page.goto(base+'/beta/keep-the-magic-shed.html');
- await page.waitForURL(base+'/beta/');
- assert.equal(await page.locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
+ await page.waitForURL(base+'/beta/phone-frame.html');
+ assert.equal(await page.frameLocator('#phoneApp').locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
  const saved={originName:'Newton Aycliffe FC',postcode:'DL5 4RQ',ended:false,selectedAt:'2026-10-18T12:00:00.000Z',searchNumber:12345,callSign:'Tango Foxtrot 2 Alpha Charlie [12345]',pigeonName:'Shed Pigeon'};
  await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
  const stored=await context.storageState();
@@ -201,16 +201,20 @@ try{
  });
  const app=await reopened.newPage();const appErrors=[];app.on('pageerror',e=>appErrors.push(String(e)));
  for(let attempt=0;attempt<2;attempt++){
-  await app.goto(base+'/beta/keep-the-magic-shed.html');await app.waitForURL(base+'/beta/');
-  await app.locator('.splash-start').click();await app.waitForURL('**/beta/clubfinder-journey.html');
-  await app.locator('#results .result').first().waitFor({timeout:30000});
-  assert.match(await app.locator('#results').innerText(),/Newton Aycliffe/);
-  assert.equal(await app.locator('.pigeon-name-input').inputValue(),'Shed Pigeon');
+  await app.goto(base+'/beta/keep-the-magic-shed.html');await app.waitForURL(base+'/beta/phone-frame.html');
+  const framed=app.frameLocator('#phoneApp');
+  await framed.locator('.splash-start').click();
+  await framed.locator('#results .result').first().waitFor({timeout:30000});
+  assert.match(await framed.locator('#results').innerText(),/Newton Aycliffe/);
+  assert.equal(await framed.locator('.pigeon-name-input').inputValue(),'Shed Pigeon');
   const actual=await app.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));
   for(const key of ['originName','postcode','searchNumber','callSign','pigeonName','selectedAt'])assert.equal(actual[key],saved[key],key+' must survive installed entry');
   assert.equal(await app.evaluate(()=>localStorage.getItem('tffc-test-campaign')),'preserve-me');
  }
  assert.equal(counterCalls,0,'restoring an existing identity must never issue a fresh counter');
+ // Preserve separate coverage of the original standalone BETA overlay.
+ await app.goto(base+'/beta/clubfinder-journey.html');
+ await app.locator('.pigeon-name-input').waitFor({timeout:30000});
  // Campaign entry uses the existing overlay and restores the exact reading
  // position/identity, with a smaller yellow fifth secondary control.
  for(const [width,height] of [[390,669],[390,560],[1680,889]]){
@@ -311,15 +315,15 @@ try{
  const launchPage=await launchContext.newPage();
  let releaseSplash;
  const splashGate=new Promise(resolve=>{releaseSplash=resolve});
- await launchPage.route(base+'/beta/',async route=>{await splashGate;await route.continue()});
+ await launchPage.route(base+'/beta/phone-frame.html',async route=>{await splashGate;await route.continue()});
  await launchPage.route('**/keep-the-magic-shed.js',route=>route.abort());
- const destinationRequested=launchPage.waitForRequest(base+'/beta/');
+ const destinationRequested=launchPage.waitForRequest(base+'/beta/phone-frame.html');
  await launchPage.goto(base+'/beta/keep-the-magic-shed.html',{waitUntil:'commit'});
  await destinationRequested;
  const hiddenState=await Promise.race([launchRecorded,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Installed launch was not recorded before navigation')),10000))]);
  assert(hiddenState.hiddenRule&&hiddenState.bodyHidden,'launcher cannot paint while the destination waits');
- releaseSplash();await launchPage.waitForURL(base+'/beta/');
- await launchPage.locator('.splash-start').waitFor();
+ releaseSplash();await launchPage.waitForURL(base+'/beta/phone-frame.html');
+ await launchPage.frameLocator('#phoneApp').locator('.splash-start').waitFor();
  await launchContext.close();
  await checkInstalledHandover(browser,base);
  console.log('KEEP THE MAGIC SHED: PASS — geometry, navigation and cookies-only migration into empty installed storage; Checky, 01755, Challenge awards and miles persist without a new counter. Physical iPhone installation remains the device acceptance check.');

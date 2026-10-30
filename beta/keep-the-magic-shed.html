@@ -12,7 +12,7 @@ if(window.tffcInstalledEntry)document.documentElement.classList.add('tffc-instal
 if(window.tffcInstalledEntry){
  const handover=/\btffc_keep_v1(?:_\d+)?=/.test(document.cookie);
  const ready=window.TffcMagicInstall?TffcMagicInstall.restore():handover?Promise.reject(Error('Installation handover unavailable')):Promise.resolve();
- ready.then(()=>location.replace(new URL('./',location.href).href)).catch(()=>{
+ ready.then(()=>location.replace(new URL('phone-frame.html',location.href).href)).catch(()=>{
   const explain=()=>{
    document.body.replaceChildren();const message=document.createElement('p');
    message.textContent='Your saved Campaign could not be opened. Return to the browser where you chose it and open Keep the Magic again. Your browser Campaign is still safe.';
