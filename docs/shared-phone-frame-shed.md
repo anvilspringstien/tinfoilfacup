@@ -42,11 +42,10 @@ calls. No acceptance hashes are updated to accommodate the proof.
 
 ## Compact navigation
 
-The opt-in `/beta/phone-frame-shed.html` trials an enamel finish on only the
-three primary Campaign buttons: a fine inset brass rim, a static gloss and a
+The three primary Campaign buttons use an enamel finish: a fine inset brass rim, a static gloss and a
 small raised shadow. Their existing base colours, dimensions, type, spacing and
-handlers are preserved. The public and installed entrances retain their flat
-finish pending visual acceptance. The trial adds no assets or animation.
+handlers are preserved. This accepted finish applies to the public, installed
+and Shed entrances. It adds no assets or animation.
 
 Campaign retains its original three-across My Campaign / My Stats / My Challenges
 buttons. The approved transparent Barry Air wings form a centred 240px image
