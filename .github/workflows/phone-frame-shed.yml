@@ -4,6 +4,7 @@ on:
     paths:
       - 'beta/club-details*'
       - 'tests/club-details-*'
+      - 'updater/build_club_campaign_engine.py'
       - 'index.html'
       - 'beta/phone-frame.html'
       - 'beta/phone-frame-launch.js'
@@ -31,6 +32,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: python3 -m http.server 8765 --bind 127.0.0.1 &
       - run: node tests/phone-frame-shed-browser.mjs
+      - run: python3 updater/build_club_campaign_engine.py --check
+      - run: node tests/club-details-campaigns.mjs
       - run: node tests/club-details-model.mjs
       - run: node tests/club-details-browser.mjs
       - uses: actions/upload-artifact@v4
