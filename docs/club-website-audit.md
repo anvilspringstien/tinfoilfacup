@@ -4,6 +4,29 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 30 October 2026 checkpoint — missing-link coverage, batch 11
+
+Reviewed twelve previously unreviewed missing origins, Brightlingsea Regent
+through Burgess Hill Town. Eleven official club destinations are approved.
+Buckland Athletic is held: its own contact page establishes the senior club,
+but the preferred homepage returned 403 on ordinary GET and timed out in the
+public reader. Earlier documented holds were skipped unchanged.
+
+- Original qualifying-club coverage: 145 -> 156 of 651 linked.
+- Missing links: 506 -> 495. Verified queue records: 189 -> 200.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Club-published identity/contact evidence and league/association corroboration
+  are recorded in batch 11. Brockenhurst's published www address redirects to
+  its canonical non-www homepage. Brixham is readable through the public reader,
+  although ordinary retrieval returned 406; no restriction was bypassed.
+- Broadfields United and resident Rayners Lane remain separate; Brocton and
+  Brockenhurst remain separate. No venue, directory, social or youth-only site
+  is substituted for a senior club. Website/address discrepancies are not
+  promoted as location changes.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  The queue and Stage C source report are refreshed. No email is sent.
+
 ## 29 October 2026 checkpoint — missing-link coverage, batch 10
 
 Reviewed twelve previously unreviewed missing origins, Bournemouth Poppies through
