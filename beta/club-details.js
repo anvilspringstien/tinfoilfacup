@@ -1,5 +1,6 @@
 import {clubDetails} from './club-details-model.mjs';
 const $=id=>document.getElementById(id);
+let storyAttempt=0;
 try{
  const read=async url=>{const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('The published details could not be loaded. Please try again, or reply to your email.');return response.json();};
  const [queue,competition,reviewed]=await Promise.all([read('../updater/club_website_audit_queue.json'),read('../competition.json'),read('../updater/club_website_verified_batch_04.json')]);
@@ -15,15 +16,31 @@ try{
  $('updated').textContent=data.updatedAt?'Competition data updated: '+data.updatedAt.replace('T',' ').replace(/\.\d+.*$/,' UTC'):'';
  $('details').hidden=false;$('status').hidden=true;
  showCampaignStory(data,competition);
-}catch(error){$('status').textContent=error.message;}
+}catch(error){$('status').hidden=false;$('status').textContent=error.message;}
 
 function showCampaignStory(data,competition){
- const worker=new Worker(new URL('./club-details-worker.mjs',import.meta.url),{type:'module'});
- const fail=()=>{$('story-status').textContent='The Campaign journey could not be loaded. Your club details are available below.';worker.terminate();};
- worker.onerror=fail;
- worker.onmessage=({data:reply})=>{
-  worker.terminate();if(!reply.ok||!reply.value.journeys.length){fail();return;}
-  const result=reply.value,club=data.club;
+ const attempt=++storyAttempt;
+ let worker=null,settled=false,fallbackRunning=false;
+ $('story-status').hidden=false;$('story-status').textContent='Tracing qualifying Campaigns through the published results…';$('story-retry').hidden=true;
+ const cleanup=()=>{clearTimeout(fallbackTimer);clearTimeout(deadline);worker?.terminate();};
+ const fail=()=>{if(settled)return;settled=true;cleanup();$('story-status').textContent='The Campaign could not be loaded just now. Please try again. Your club details are available below.';$('story-retry').hidden=false;};
+ const fallback=async()=>{
+  if(settled||fallbackRunning)return;fallbackRunning=true;worker?.terminate();
+  try{
+   const {clubCampaigns}=await import('./club-details-campaigns.mjs?v=story-recovery-1&attempt='+attempt);
+   if(settled)return;
+   await new Promise(resolve=>setTimeout(resolve,0));
+   complete(clubCampaigns(data.club,competition));
+  }catch(_){fail();}
+ };
+ const fallbackTimer=setTimeout(fallback,3000),deadline=setTimeout(fail,20000);
+ $('story-retry').onclick=()=>showCampaignStory(data,competition);
+ function complete(result){
+  if(settled)return;
+  if(!result?.journeys?.length){fail();return;}
+  settled=true;cleanup();
+  const club=data.club;
+
   const copy={
    custodian:['Your club is carrying the Cup',club+' is already custodian of '+result.count+' qualifying Campaign'+(result.count===1?'':'s')+'. Each started with an original qualifying club and followed the winners to '+club+'.',club+' is part of the journey','Win, and the Cup stays with '+club+'. Lose, and it travels on with the winning club. The Campaign continues all the way to Wembley.'],
    next:['A Tin Foil Cup is heading your way',result.count+' qualifying Campaign'+(result.count===1?' has':'s have')+' reached a custodian whose next confirmed fixture is against '+club+'.',club+' could be the next custodian','If '+club+' wins this confirmed tie, it takes custody of the Cup shown here. If the current custodian wins, the Cup stays with them.'],
@@ -35,7 +52,7 @@ function showCampaignStory(data,competition){
   }
   $('story-heading').textContent=copy[0];$('story-intro').textContent=copy[1];$('club-role-heading').textContent=copy[2];$('club-role-copy').textContent=copy[3];
   $('example-label').hidden=result.category!=='example';
-  const choice=$('origin-choice');
+  const choice=$('origin-choice');choice.replaceChildren();
   result.journeys.forEach((j,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=j.origin;choice.append(option);});
   choice.hidden=$('origin-label').hidden=result.journeys.length<2;
   function render(j){
@@ -53,6 +70,12 @@ function showCampaignStory(data,competition){
   }
   choice.onchange=()=>render(result.journeys[Number(choice.value)]);render(result.journeys[0]);
   $('story-content').hidden=false;$('story-status').hidden=true;
- };
- worker.postMessage({club:data.club,competition});
+ }
+ try{
+  worker=new Worker(new URL('./club-details-worker.mjs?v=story-recovery-1',import.meta.url),{type:'module'});
+  worker.onerror=fallback;
+  worker.onmessage=({data:reply})=>{if(reply.ok)complete(reply.value);else fallback();};
+  worker.postMessage({club:data.club,competition});
+ }catch(_){fallback();}
 }
+

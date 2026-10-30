@@ -46,5 +46,28 @@ try{
   await app.getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
   await context.close();
  }
- console.log('PASS: public York/away-club details, unknown club, phone/desktop layout, Explore navigation and byte-preserved storage without counter calls.');
+ // Reproduce unsupported and silent background Workers instead of relying on
+ // the successful default browser path that missed the reported loading state.
+ for(const mode of ['throws','silent','network-error']){
+  const context=await browser.newContext({viewport:{width:390,height:768}});
+  await context.addInitScript(mode=>{
+   localStorage.setItem('tinFoilFACupJourney_v7','preserve-my-campaign');
+   if(mode==='silent')window.Worker=class{postMessage(){}terminate(){}};
+   else window.Worker=class{constructor(){throw new Error('Worker unavailable')}};
+  },mode);
+  if(mode==='network-error')await context.route('**/club-details-campaigns.mjs*',r=>r.abort());
+  const page=await context.newPage();await page.goto(origin+'/?view=club&club=York%20City');const app=page.frameLocator('#phoneApp');
+  if(mode==='network-error'){
+   await app.locator('#story-retry').waitFor({state:'visible'});
+   assert.match(await app.locator('#story-status').innerText(),/could not be loaded/);
+   await context.unroute('**/club-details-campaigns.mjs*');
+   await app.locator('#story-retry').click();
+  }
+  await app.locator('#story-content').waitFor({state:'visible',timeout:30000});
+  assert.equal(await app.locator('#campaign-origin').innerText(),'Newton Aycliffe FC');
+  assert.equal(await app.locator('#story-status').isVisible(),false);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),'preserve-my-campaign');
+  await context.close();
+ }
+ console.log('PASS: club stories, phone/desktop layout, saved data, unavailable/silent Workers and recovery from failed module loading.');
 }finally{await browser.close()}

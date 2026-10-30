@@ -46,3 +46,13 @@ Tests compare the shortlist against a full authoritative traversal and simulate 
 later-round draw, live score, unresolved replay and verified custody transfer.
 Browser checks cover York's illustration, a custodian's origin selector, phone
 and desktop geometry, preserved saved data and zero counter requests.
+
+
+### Loading recovery
+
+Module Worker construction errors, worker failures and workers that never reply
+fall back to an in-page calculation after at most three seconds. Both paths use
+the same read-only adapter. A twenty-second loading deadline exposes a retry
+button instead of leaving the loading text indefinitely. Module and stylesheet
+URLs are versioned so a returning visitor cannot combine the new story markup
+with the earlier cached details-page styling and script.
