@@ -172,9 +172,11 @@ try{
  await teaser.getByRole('button',{name:'Back to My Campaign',exact:true}).click();
  assert.equal(await teaser.isVisible(),false);
  assert.ok(await app.getByRole('button',{name:'Barry Air',exact:true}).evaluate(b=>b===document.activeElement));
+ assert.equal(await app.getByRole('button',{name:'Barry Air',exact:true}).evaluate(b=>getComputedStyle(b).outlineStyle),'none','pointer close restores focus without leaving a badge outline');
  await app.getByRole('button',{name:'Barry Air',exact:true}).click();
  await teaser.getByRole('button',{name:'Close Barry Air',exact:true}).press('Escape');
  assert.equal(await teaser.isVisible(),false,'Escape closes Barry');
+ assert.equal(await app.getByRole('button',{name:'Barry Air',exact:true}).evaluate(b=>getComputedStyle(b).outlineStyle),'solid','keyboard close retains a visible focus indicator');
  assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
  assert.equal(counterCalls,0,'Barry teaser must preserve identity without allocating a counter');
  await context.close();
