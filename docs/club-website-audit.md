@@ -4,6 +4,28 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 31 October 2026 checkpoint — missing-link coverage, batch 12
+
+Reviewed twelve previously unreviewed missing origins, Burnham through Chadderton.
+All twelve official senior-club destinations are approved; there are no new holds
+in this batch. Earlier documented held/ambiguous cases were skipped unchanged.
+
+- Original qualifying-club coverage: 156 -> 168 of 651 linked.
+- Missing links: 495 -> 483. Verified queue records: 200 -> 212.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Bury and Bury Town, Cambridge City and United, Derbyshire and Norfolk Buxton,
+  Carshalton Athletic and Carshalton FC, and Chadderton and Chadderton North
+  remain separate identities. No venue, directory, social or youth-only page
+  is promoted as a senior-club destination.
+- Club-published identity/contact evidence and league/association corroboration
+  are recorded in batch 12. Buxton's U19 league directory corroborates the parent
+  club website/address; senior identity is established by its own first-team site.
+  Carlton's homepage/contact are readable through the public reader, despite an
+  ordinary homepage GET returning 403. No access restriction was bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  The queue and Stage C source report are refreshed. No email is sent.
+
 ## 30 October 2026 checkpoint — missing-link coverage, batch 11
 
 Reviewed twelve previously unreviewed missing origins, Brightlingsea Regent
