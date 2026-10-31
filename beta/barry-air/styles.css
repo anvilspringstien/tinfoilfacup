@@ -307,3 +307,6 @@ body{background-attachment:scroll}
 
 /* Give WebKit a definite flex height while allowing unusually long pass details to grow. */
 .landing-frame{height:100%;min-height:min-content}
+
+/* Preserve the approved one-line title when Georgia falls back to another serif. */
+.welcome h1{font-family:Georgia,"Times New Roman",serif;white-space:nowrap}
