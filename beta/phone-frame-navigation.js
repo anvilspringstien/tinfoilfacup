@@ -65,7 +65,7 @@
    }
    dialog.onpointerdown=()=>{pointerReturn=true;};
    dialog.onkeydown=()=>{pointerReturn=false;};
-   trigger.onkeydown=()=>trigger.classList.remove('pointer-focus-return');
+   trigger.onkeydown=trigger.onblur=()=>trigger.classList.remove('pointer-focus-return');
    dialog.onclose=()=>{if(trigger.isConnected){trigger.classList.toggle('pointer-focus-return',pointerReturn);trigger.focus({preventScroll:true});}};
    if(!dialog.open){dialog.showModal();dialog.focus({preventScroll:true});}
   }
