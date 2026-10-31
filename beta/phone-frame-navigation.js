@@ -18,6 +18,10 @@
  .tffc-magic-row{gap:10px;flex-wrap:wrap}
  .my-journey-bar .campaign-secondary-nav{justify-content:center}
  .tffc-magic-row button{cursor:pointer;border-radius:6px}
+ /* Support has its own frame-like finish; Keep and Share retain their gold. */
+ a.tffc-support-lozenge{background:#000;border-color:#818181;color:#fff;opacity:1}
+ a.tffc-support-lozenge:hover{background:#171717;border-color:#bbb}
+ a.tffc-support-lozenge:focus-visible{outline-color:#ddd}
  .deck-sales-coming{background:#c90000;color:#fff;border-color:#c90000;opacity:1}
  .tffc-beta-help button[onclick="tffcOpenShare()"],
  .tffc-beta-help button[onclick="tffcOpenShare()"] + .tffc-beta-help-sep,

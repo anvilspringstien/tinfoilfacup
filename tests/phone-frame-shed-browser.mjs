@@ -84,9 +84,9 @@ try{
    const support=row.nextElementSibling;
    const a=getComputedStyle(row.querySelector('button')),b=getComputedStyle(support.querySelector('a'));
    return {aboveSupport:support.classList.contains('tffc-support-row'),margin:getComputedStyle(row).margin,referenceMargin:getComputedStyle(support).margin,
-    radius:a.borderRadius,style:[a.backgroundColor,a.padding,a.font],referenceStyle:[b.backgroundColor,b.padding,b.font]};
+    radius:a.borderRadius,magicBackground:a.backgroundColor,supportBackground:b.backgroundColor,supportColor:b.color,supportBorder:b.borderTopColor,supportRadius:b.borderRadius,style:[a.padding,a.font],referenceStyle:[b.padding,b.font]};
   });
-  assert.equal(actual.radius,'6px');assert.ok(actual.aboveSupport);assert.equal(actual.margin,actual.referenceMargin);assert.deepEqual(actual.style,actual.referenceStyle);
+  assert.equal(actual.magicBackground,'rgb(240, 198, 79)');assert.equal(actual.supportBackground,'rgb(0, 0, 0)');assert.equal(actual.supportColor,'rgb(255, 255, 255)');assert.equal(actual.supportBorder,'rgb(129, 129, 129)');assert.equal(actual.supportRadius,'999px');assert.equal(actual.radius,'6px');assert.ok(actual.aboveSupport);assert.equal(actual.margin,actual.referenceMargin);assert.deepEqual(actual.style,actual.referenceStyle);
  }
  assert.equal(await app.locator('.tffc-beta-help').getByRole('button',{name:'Share',exact:true}).count(),0);
  await checkMagicFooter();
