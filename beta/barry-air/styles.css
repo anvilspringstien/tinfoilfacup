@@ -249,3 +249,5 @@ html::-webkit-scrollbar{display:none}
 #check-in:disabled{opacity:.5}.boarding-pass #miles{overflow-wrap:anywhere;max-width:140px;display:block}
 
 .boarding-pass #miles.miles-unresolved{font-size:11px}
+
+.data-unavailable .landing-nav{grid-template-columns:1fr}
