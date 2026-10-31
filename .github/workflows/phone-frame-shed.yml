@@ -4,6 +4,7 @@ on:
     paths:
       - 'beta/club-details*'
       - 'beta/barry-air/**'
+      - 'beta/campaign-introductions.js'
       - 'beta/clubfinder-beta.html'
       - 'updater/build_barry_air_adapter.py'
       - 'tests/barry-air-*'

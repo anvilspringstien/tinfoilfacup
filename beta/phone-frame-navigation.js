@@ -85,7 +85,7 @@
     support.before(row);
    }
    // Campaign return snapshots preserve HTML but not JS handlers.
-   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>doc.defaultView.top.location.assign(new URL('barry-air/',base).href);
+   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>{const win=doc.defaultView;if(typeof win.tffcCampaignIntroduction==='function')win.tffcCampaignIntroduction('barry');else win.top.location.assign(new URL('barry-air/',base).href);};
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
    for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);
   }
