@@ -164,7 +164,7 @@ try{
  for(const key of ['originName','searchNumber','callSign','pigeonName'])assert.equal(identity[key],saved[key]);
  assert.equal(counterCalls,0,'saved Campaign and all returns must allocate no counter');
  await app.getByRole('button',{name:'Barry Air',exact:true}).click();
- const barryIntro=app.locator('#tffc-campaign-intro');await barryIntro.waitFor();assert.equal(await barryIntro.getByRole('heading').innerText(),'Barry Air');assert.match(await barryIntro.locator('#tffc-intro-message').innerText(),/boarding pass/);
+ const barryIntro=app.locator('#tffc-campaign-intro');await barryIntro.waitFor();assert.equal(await barryIntro.getByRole('heading').innerText(),'Barry Air');assert.match(await barryIntro.locator('#tffc-intro-message').innerText(),/Tin Foil FA Cup’s partner airline of choice/);assert.match(await barryIntro.locator('#tffc-intro-message').innerText(),/CEO & Founder, Barry Air\.$/);
  assert.equal(await barryIntro.getByRole('checkbox').isChecked(),false);await barryIntro.getByRole('checkbox').check();await barryIntro.getByRole('button',{name:'Close',exact:true}).click();assert.equal(await app.locator('body').evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).introDismissed?.barry),undefined,'closing must not save a dismissal');
  await app.getByRole('button',{name:'Barry Air',exact:true}).click();await barryIntro.waitFor();assert.equal(await barryIntro.getByRole('checkbox').isChecked(),false);await barryIntro.getByRole('checkbox').check();await barryIntro.getByRole('button',{name:'Got It!',exact:true}).click();
  await page.getByRole('heading',{name:'Pigeon Control',exact:true}).waitFor();
