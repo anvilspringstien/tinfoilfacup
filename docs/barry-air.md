@@ -43,3 +43,15 @@ backup. Another tab changing the saved Campaign reloads the flight view.
 Brand artwork is copied from the approved Barry Air design. The static Natural
 Earth SVG retains only its basemap; all markers and flight lines are rendered
 from the current model. There are no external map scripts or paid services.
+
+## Arrival and mobile zoom
+
+Barry Air uses the same Campaign-scoped introduction dialog as My Campaign,
+My Stats and My Challenges. The opt-out is `introDismissed.barry` on the saved
+Campaign; only Got It! saves it. Closing leaves both the Campaign and preference
+unchanged. A subsequent Campaign gets its own introduction.
+
+The welcome and crest remain anchored while flight data loads. Loading status
+is outside the spacing calculation. The visual-viewport resize handler ignores
+native pinch zoom, preserving the scrolling room and tablet composition. The
+page retains browser zoom; its background has no fixed paint layer.

@@ -251,3 +251,13 @@ html::-webkit-scrollbar{display:none}
 .boarding-pass #miles.miles-unresolved{font-size:11px}
 
 .data-unavailable .landing-nav{grid-template-columns:1fr}
+
+/* Keep the wings and welcome anchored while flight data is being prepared. */
+.landing-frame{position:relative;justify-content:flex-start}
+.masthead{flex:none;margin-top:5px}
+.boarding-pass{margin-top:auto}
+.landing-nav{flex:none}
+.data-pending #campaign-status{position:absolute;left:17px;right:17px;top:55%;margin:0}
+@container(max-width:335px){.masthead{margin-top:0}}
+/* Avoid a fixed background paint layer during native mobile pinch zoom. */
+body{background-attachment:scroll}

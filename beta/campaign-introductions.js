@@ -5,9 +5,12 @@
 const identityStyle=document.createElement('style');
 identityStyle.textContent='.campaign-identity .campaign-call-sign-label{font-weight:300}';
 document.head.append(identityStyle);
+const introBase=new URL('.',document.currentScript.src);
+const openBarry=()=>window.top.location.assign(new URL('barry-air/',introBase).href);
 let active=null;
 const copy={
- campaign:{title:'My Campaign',message:"This is your Tin Foil FA Cup Campaign. There are many like this, but this one is yours.\n\nIt’s saved on this device, in your browser, along with your Pigeon Call Sign & Pigeon Name. Everything will be here when you return from your Campaign travels, and your pigeon, whatever its gender may be, will faithfully record the miles it has flown.\n\nComing Soon! Your pigeon’s unique Call Sign will be used to identify its flight path.\n\nRemember: Your progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there. Entering the same postcode and choosing the same Campaign again will rebuild your competition Stats, but you’ll receive a new Call Sign and pigeon. Your old pigeon identity and locally saved Challenge progress won’t be recovered."},
+ barry:{title:'Barry Air',message:"Welcome aboard Barry Air — your Tin Foil FA Cup Campaign, in flight.\n\nYour boarding pass carries your pigeon’s name, Call Sign, Miles Flown and next destination. Tick Check In when you’re ready for the next adventure.\n\nDepartures & Arrivals records the grounds on your journey. Tap a flight, a map marker or a ground button to explore its details. Use + and − to zoom the map, and ⌖ to fit the whole route.\n\nThe map follows your Campaign from ground to ground. Miles Flown counts your pigeon’s journeys from home and back, just as My Stats does.\n\nFlight details update with your Campaign. Check-in is saved on this device for each flight.\n\nPlease remain seated. All Barry Air pigeons are pie-fed pigeons — guaranteed."},
+ campaign:{title:'My Campaign',message:"This is your Tin Foil FA Cup Campaign. There are many like this, but this one is yours.\n\nIt’s saved on this device, in your browser, along with your Pigeon Call Sign & Pigeon Name. Everything will be here when you return from your Campaign travels, and your pigeon, whatever its gender may be, will faithfully record the miles it has flown.\n\nYour pigeon’s unique Call Sign identifies its flight path in Barry Air.\n\nRemember: Your progress is stored locally. Clearing browser data or using another browser or device may mean it isn’t available there. Entering the same postcode and choosing the same Campaign again will rebuild your competition Stats, but you’ll receive a new Call Sign and pigeon. Your old pigeon identity and locally saved Challenge progress won’t be recovered."},
  stats:{title:'My Stats',message:"This is the permanent home of your Campaign’s progress through the FA Cup.\n\nIt can be saved as a .PDF, sent as part of a failed job application, or printed out and framed beautifully on your Mother’s wall.\n\nIt updates automatically as you move from round to round and can tell you pretty much everything there is to know about your Campaign. That’s why it’s called Stats!\n\nSome say that it has been known to predict the future, or the winners in major sporting events. Sadly, none of this is true.\n\nBut it will tell you how many miles your pigeon has flown!"},
  challenges:{title:'My Challenges',message:"This is where the real fun begins.\n\nExplore the Challenge Deck by flipping your way through our Beer Mats - with each mat containing a unique Challenge for you to complete.\n\nSome rely on you being an honourable footie fan, while others are awarded automatically by our Master Computer here at Tin Foil FA Cup Headquarters.\n\nEvery successful Challenge is placed in your Trophy Cabinet so others can look on and merely drool jealously at the size of your glorious achievements.\n\nKeep an eye out for Barry, our Staff Pigeon. He’s absolutely full of it."}
 };
@@ -26,10 +29,10 @@ async function warmDeck(){
  }catch(_){} // Artwork/cache failures must not block the existing Deck route.
 }
 window.tffcCampaignIntroduction=function(kind,origin){
- if(!copy[kind]||!origin||active)return;
+ if(!copy[kind]||(!origin&&kind!=='barry')||active)return;
  const saved=loadSavedJourney();
  if(saved&&saved.introDismissed&&saved.introDismissed[kind]===true){
-  return kind==='campaign'?undefined:kind==='stats'?journeyCertificate(origin):openChallenges(origin);
+  return kind==='barry'?openBarry():kind==='campaign'?undefined:kind==='stats'?journeyCertificate(origin):openChallenges(origin);
  }
  const original=JSON.stringify(saved),previous=document.activeElement;
  const dialog=document.createElement('dialog');dialog.id='tffc-campaign-intro';
@@ -52,7 +55,7 @@ window.tffcCampaignIntroduction=function(kind,origin){
  window.addEventListener('pagehide',cancel);
  // Paint the explanation before calculating mileage, generating Stats or warming Deck assets.
  const work=new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))).then(async()=>{
-  if(kind==='campaign')return null;
+  if(kind==='campaign'||kind==='barry')return null;
   await tinFoilEnsureCompetitionReady();
   if(kind==='stats')return tinFoilPrepareStatsDocument(origin,'clubfinder');
   const [truth]=await Promise.all([tinFoilPrepareChallenges(origin),warmDeck()]);return truth;
@@ -64,6 +67,7 @@ window.tffcCampaignIntroduction=function(kind,origin){
   carry.disabled=true;
   if(dialog.querySelector('input').checked&&saved){try{updateSavedJourney({introDismissed:{...saved.introDismissed,[kind]:true}})}catch(_){}}
   finish();
+  if(kind==='barry'){openBarry();return;}
   if(kind==='campaign')return;
   const prepared=work.then(result=>{if(!result.ok)throw Error('Preparation failed');return result.value});
   // Stats still opens synchronously in this user gesture, avoiding popup blockers.

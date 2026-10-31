@@ -47,14 +47,17 @@ addEventListener('storage',e=>{if(e.key===JOURNEY_KEY)location.reload();});start
 // Preserve the same phone composition on iPad; rotation changes only its scale.
 const tabletFrameQuery=matchMedia('(min-width:700px)');
 function fitTabletFrame(){
+ // Pinch zoom changes the visual viewport, not the page's layout viewport.
+ // Never resize the scrolling room (or tablet composition) during that gesture.
+ const viewport=window.visualViewport;
+ if(viewport&&Math.abs(viewport.scale-1)>.01)return;
  if(tabletFrameQuery.matches){
   document.documentElement.style.removeProperty('--phone-viewport-height');
   const scale=Math.min(document.documentElement.clientWidth/390,document.body.getBoundingClientRect().height/(390*16/9));
   document.documentElement.style.setProperty('--tablet-scale',String(scale));
  }else{
   document.documentElement.style.removeProperty('--tablet-scale');
-  const viewport=window.visualViewport;
-  const height=viewport&&viewport.scale===1?viewport.height:window.innerHeight;
+  const height=viewport?viewport.height:window.innerHeight;
   document.documentElement.style.setProperty('--phone-viewport-height',height+'px');
  }
 }
