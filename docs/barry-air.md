@@ -6,8 +6,10 @@ without an active saved Campaign asks the visitor to choose one.
 
 The approved four-frame design is retained. The boarding pass, split-flap board,
 map and display panel are projections of the published Campaign, not example
-fixtures. The map draws postcode-to-ground round trips. Replays retain separate
-flights. Walkovers have no physical flight or mileage. Miles Flown uses the exact
+fixtures. The map traces the Campaign in match order from home base through
+each ground, with a dashed leg to the next venue. Replays retain separate
+flights and repeat visits follow their chronological place in the route. Missing
+locations break the line rather than inventing a connection. Walkovers have no physical flight or mileage. Miles Flown uses the exact
 public My Stats function, including its fail-closed unknown-location behaviour.
 
 `campaign-adapter.mjs` is generated from the public BETA functions and static
