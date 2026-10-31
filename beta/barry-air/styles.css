@@ -1,0 +1,253 @@
+:root{color-scheme:dark;--cream:#f6f3e8;--ink:#100f0d;--teal:#084c61;--gold:#d4b269;--muted:#aaa79e}*{box-sizing:border-box}html{min-height:100%;background:#141210}body{margin:0;padding:13px;font-family:Arial,Helvetica,sans-serif;color:var(--cream);background:radial-gradient(ellipse at 50% 8%,#27221c 0,#181512 45%,#100f0d 100%);background-attachment:fixed}button,a{touch-action:manipulation}button{font:inherit;cursor:pointer;color:inherit}a{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:4px}[hidden]{display:none!important}.field{max-width:1100px;margin:auto;background:var(--ink);border:1px solid #818181;border-radius:12px;overflow:hidden;box-shadow:0 25px 80px #0004}.utility{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 24px;border-bottom:1px solid #35332d;font-size:10px;letter-spacing:1.8px;color:#b8b4a8}.utility a{text-decoration:none;font-size:12px;letter-spacing:0}.utility a:hover{color:var(--gold)}.utility small{border:1px solid #6a6250;border-radius:4px;padding:4px 7px;white-space:nowrap;font-size:9px;color:var(--gold)}.masthead{display:grid;grid-template-columns:155px 1fr 330px;align-items:center;gap:24px;padding:32px 30px 30px}.crest{width:155px;height:155px;object-fit:contain}.eyebrow,.label{font-size:10px;font-weight:500;letter-spacing:1.9px;margin:0 0 9px;display:block}.eyebrow{color:var(--gold)}h1{font:400 35px/1.05 Georgia,serif;letter-spacing:-1px;margin:0 0 10px}h2{font-weight:400;margin:0}.strapline{font-size:14px;color:#d8d5cc;margin:0}.intro{font-size:12px;line-height:1.65;color:var(--muted);margin:17px 0 0}.airline{background:#f5efdf;border:1px solid #b5a278;border-radius:7px;overflow:hidden;text-align:center;box-shadow:0 4px 20px #0006}.airline img{width:100%;height:auto;display:block}.airline p{font-size:8px;letter-spacing:2px;color:#4f4737;margin:-10px 10px 14px}.identity{display:grid;grid-template-columns:1.1fr 1fr .7fr;margin:0 28px;border:1px solid #387084;border-radius:7px;background:linear-gradient(110deg,#084c61,#073d4c);padding:20px 24px;gap:20px}.identity>div+div{border-left:1px solid #67909b77;padding-left:26px}.identity .label{color:#bed2d6;font-size:9px;letter-spacing:1.6px;margin-bottom:7px}.identity strong,#edit-name{font-size:22px;line-height:1.2;font-weight:400}.call-sign{white-space:nowrap;font-family:monospace;font-size:20px!important;letter-spacing:1px}#edit-name{padding:0;border:0;background:none;text-align:left;overflow-wrap:anywhere;max-width:100%}.edit-mark{font-size:16px;margin-left:10px;color:#b2cbd0}#miles{font-family:monospace;font-size:26px;letter-spacing:1px}.campaign-line{display:flex;justify-content:space-between;gap:12px;margin:17px 29px 22px;font:9px/1.5 monospace;letter-spacing:.8px;color:#aaa79e}.light{display:inline-block;vertical-align:middle;width:5px;height:5px;border-radius:50%;background:#9bbd9b;margin-right:5px}.next-flight{display:flex;align-items:center;gap:17px;margin:0 28px 29px;padding:19px 21px;border:1px solid #7f714e;border-radius:7px;background:#201d16}.next-icon{font-size:31px;color:var(--gold)}.next-main{flex:1;min-width:0}.next-main .label{font-size:9px;color:var(--gold);letter-spacing:1.5px;margin-bottom:7px}.next-main h2{font:400 20px/1.2 Georgia,serif}.next-main em{color:#a9a292;padding:0 3px}.next-main p:last-child{font-size:11px;line-height:1.6;color:#bdb7a9;margin:7px 0 0}.outline-button{border:1px solid #8c805f;border-radius:5px;background:transparent;padding:10px 13px;font-size:11px;white-space:nowrap;min-height:40px}.outline-button:hover{background:#b3975025}.control-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:23px;padding:0 28px}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:center;min-height:58px;padding-bottom:15px}.section-head .eyebrow{font-size:8px;letter-spacing:1.6px;margin-bottom:7px}.section-head h2{font:400 24px/1.1 Georgia,serif}.section-code{font:10px monospace;color:#817c70;letter-spacing:1px}.board{background:#171815;border:1px solid #67685e;border-radius:5px;padding:0 12px;box-shadow:inset 0 0 20px #0009,0 4px 13px #0005;overflow:hidden}.board-top,.board-bottom{display:flex;justify-content:space-between;align-items:center;color:#898d7f;gap:5px;font:7px/1.6 monospace;letter-spacing:1px;padding:12px 0}.board-top{border-bottom:1px solid #35372f}.board-top>span:first-child{color:#d3c694;letter-spacing:2px}.board-columns{display:grid;grid-template-columns:48px 1fr 69px;gap:6px;font:8px monospace;letter-spacing:1px;color:#9d9f91;padding:13px 0 9px}.flight-row{display:grid;grid-template-columns:48px 1fr 69px;align-items:center;gap:6px;width:100%;border:0;border-top:1px solid #41433b;border-bottom:1px solid #060705;padding:12px 0;text-align:left;background:transparent;font:10px/1.4 monospace;color:#eee9d9;position:relative}.flight-row:hover,.flight-row[aria-pressed=true]{background:#bbaa6020}.flight-row[aria-pressed=true]{box-shadow:inset 2px 0 var(--gold);padding-left:6px}.flight-round{color:#a7a99a;font-size:9px}.flight-destination{letter-spacing:.7px;font-weight:600}.flight-status{font-size:7px;letter-spacing:.3px;color:#b7c7ad}.flight-row.next .flight-status,.flight-row.next .flight-destination{color:#e1bf73}.flight-row.next{background:#c6a45512}.board-bottom{padding:12px 0 13px;letter-spacing:.2px}.board-note{font:italic 12px/1.6 Georgia,serif;color:#a9a393;margin:12px 0 0;text-align:center}.map-controls{display:flex;gap:4px}.map-controls button{border:1px solid #605c51;border-radius:4px;background:#201e19;width:29px;height:30px;font-size:17px;line-height:1}.map-controls button:hover{background:#3b362a}.map-wrap{background:#dce5de;position:relative;border:1px solid #8c998c;border-radius:5px;overflow:hidden;min-height:365px}#map-host{min-height:365px}#map-host svg{display:block;width:100%;height:365px}.map-loading{color:#526e66;font:12px monospace;padding:50px;text-align:center}.land{fill:#eeeadd;stroke:#a9b3a1;stroke-width:.5;vector-effect:non-scaling-stroke}.gridline{fill:none;stroke:#5e8577;stroke-width:.5;opacity:.22}.region-label{fill:#597568;opacity:.6;font:10px Arial,sans-serif;letter-spacing:2px;text-anchor:middle}.route-line{fill:none;stroke:#084c61;stroke-width:2.8;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}.future-line{stroke-dasharray:6 6}.map-stop{cursor:pointer}.hit{fill:transparent}.halo{fill:#c0a14c;opacity:0}.point{fill:#084c61;stroke:#f4efdf;stroke-width:1.5}.future-point{fill:#f4efdf;stroke:#084c61}.map-stop[aria-pressed=true] .halo{opacity:.4}.map-stop[aria-pressed=true] .point{fill:#d4b269;stroke:#084c61}.stop-label{font:12px Arial,sans-serif;fill:#202f2b;paint-order:stroke;stroke:#eeeadd;stroke-width:3px;stroke-linejoin:round}.map-key{position:absolute;left:13px;bottom:14px;display:flex;gap:14px;color:#335950;font-size:9px}.map-key span{display:flex;align-items:center;gap:5px}.map-key b{width:18px;border-top:2px solid #084c61}.map-key .dashed{border-top-style:dashed}.map-stamp{position:absolute;right:13px;bottom:11px;text-align:right;font:7px/1.7 monospace;color:#6c8175;letter-spacing:1px}.stop-list{display:flex;flex-wrap:wrap;gap:5px;padding-top:10px}.stop-list button{padding:6px 9px;min-height:30px;border:1px solid #575348;border-radius:4px;font-size:9px;background:transparent;color:#c0bbad}.stop-list button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:#16140f}.ground-detail{margin:24px 28px 0;border:1px solid #706447;border-radius:6px;display:flex;gap:18px;align-items:flex-start;padding:24px;background:#1b1914}.detail-number{font:30px/1 monospace;color:#8d7a4e;border-right:1px solid #65583b;padding:3px 18px 3px 0;margin-top:2px}.detail-copy{flex:1;min-width:0}.detail-copy .eyebrow{font-size:8px;margin-bottom:9px}.detail-copy h2{font:25px/1.2 Georgia,serif}.detail-copy>p:not(.eyebrow){color:#aaa596;font-size:11px;line-height:1.6;margin:5px 0 0}.detail-result{font-size:13px!important;color:#e2ded3!important;margin-top:13px!important}.landed-stamp{font:8px monospace;letter-spacing:2px;border:1px solid #727b5a;color:#c2c9a5;padding:7px 9px;white-space:nowrap}.captains-note{display:flex;gap:15px;align-items:center;padding:22px 29px;color:#c2bba9}.captain-mark{font:22px Georgia,serif;border:1px solid #78653d;border-radius:50%;width:43px;height:43px;display:grid;place-items:center;color:var(--gold);flex:none}.captains-note p{font:italic 13px/1.6 Georgia,serif;margin:0;flex:1}.captains-note p>span{display:block;font:7px Arial,sans-serif;letter-spacing:2px;margin-bottom:6px;color:#8f8876}.captain-signature{font:italic 17px Georgia,serif;color:var(--gold)}footer{border-top:1px solid #35332a;margin:0 28px;padding:17px 0 20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:8px;letter-spacing:1px;color:#969082}footer a{letter-spacing:0;text-decoration:none}footer p{font-size:9px;letter-spacing:0;margin:0;width:100%;color:#756f63}#name-form{display:flex;gap:4px;flex-wrap:wrap}#name-form input{background:#f6f3e8;color:#161410;border:0;border-radius:3px;padding:6px;width:100%;font-size:16px}#name-form button{border:1px solid #94adb1;background:transparent;border-radius:3px;padding:5px 9px;font-size:10px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f6f3e8;color:#14353e;padding:12px 18px;border-radius:5px;font-size:12px;box-shadow:0 4px 25px #0009;max-width:90vw;z-index:10}
+@container(max-width:950px){.masthead{grid-template-columns:125px 1fr 280px;gap:18px;padding:25px}.crest{width:125px;height:125px}h1{font-size:29px}.utility>span{display:none}.control-grid{gap:15px}.flight-row,.board-columns{grid-template-columns:35px 1fr 61px;gap:4px}.flight-destination{font-size:9px}.flight-status{font-size:6px}.identity{padding:18px}.identity>div+div{padding-left:18px}}
+@container(max-width:720px){body{padding:9px}.field{max-width:628px}.utility{padding:13px 17px}.masthead{grid-template-columns:1fr 1.25fr;padding:25px 21px 22px;gap:20px}.crest{width:143px;height:143px;justify-self:center}.welcome h1{font-size:31px}.intro{margin-top:12px;font-size:11px}.airline{grid-column:1/-1;width:min(100%,420px);justify-self:center}.airline img{max-height:180px;object-fit:cover}.airline p{margin:-14px 10px 12px;font-size:7px}.identity{margin:0 17px;padding:17px 15px;gap:12px;grid-template-columns:1fr 1.1fr .7fr}.identity>div+div{padding-left:12px}.identity .label{font-size:7px;letter-spacing:1px}.identity strong,#edit-name{font-size:18px}.call-sign{font-size:15px!important;letter-spacing:0}#miles{font-size:23px}.edit-mark{margin-left:5px;font-size:13px}.campaign-line{margin:13px 18px 20px;font-size:8px;flex-direction:column;gap:4px}.next-flight{margin:0 17px 23px;padding:16px 13px;gap:12px}.next-main h2{font-size:18px}.next-main p:last-child{font-size:10px}.next-main .label{font-size:7px;letter-spacing:1px}.next-icon{font-size:24px}.outline-button{font-size:9px;padding:8px}.control-grid{padding:0 17px;grid-template-columns:1fr;gap:23px}.flight-row,.board-columns{grid-template-columns:53px 1fr 88px;gap:9px}.flight-row{padding:13px 0}.flight-destination{font-size:11px;letter-spacing:.6px}.flight-status{font-size:8px}.flight-round{font-size:10px}.board-columns{font-size:8px}.board-top,.board-bottom{font-size:8px}#map-host svg,#map-host,.map-wrap{height:380px;min-height:380px}.stop-list button{font-size:10px;min-height:35px}.ground-detail{margin:23px 17px 0;padding:18px 14px;gap:12px;position:relative}.detail-number{font-size:24px;padding-right:12px}.detail-copy h2{font-size:23px;padding-right:55px}.landed-stamp{position:absolute;right:12px;top:19px;font-size:6px;letter-spacing:1px;padding:5px}.captains-note{padding:21px 18px;gap:12px}.captain-signature{font-size:14px}.captains-note p{font-size:12px}footer{margin:0 17px;font-size:7px}.section-head h2{font-size:25px}}
+@container(max-width:380px){.masthead{padding-left:14px;padding-right:14px;gap:12px}.crest{width:125px;height:125px}.welcome h1{font-size:27px}.next-icon{display:none}.identity{gap:8px;padding-left:12px;padding-right:12px}.identity>div+div{padding-left:8px}.identity strong,#edit-name{font-size:16px}.call-sign{font-size:13px!important}.flight-destination{font-size:10px}.flight-row,.board-columns{grid-template-columns:41px 1fr 78px;gap:5px}.captain-signature{display:none}}
+
+/* Stationary split-flap faces: no polling or continuous animation. */
+.flight-destination,.flight-status{white-space:nowrap;letter-spacing:0}.flight-destination{font-size:12px}.flight-status{font-size:8px}.flip-cell{display:inline-block;text-align:center;width:.68em;line-height:1.8;margin-right:1px;border-radius:1px;background:linear-gradient(to bottom,#292b25 0%,#292b25 47%,#060705 48%,#060705 53%,#20221c 54%);box-shadow:0 1px 0 #050605;color:inherit}.flight-row{padding-top:10px;padding-bottom:10px}.flight-destination .flip-cell{color:#eeeadd}.flight-row.next .flip-cell{color:#e1bf73}.map-controls button{min-width:32px;min-height:32px}@container(max-width:950px) and (min-width:721px){.flight-destination{font-size:10px}.flight-status{font-size:7px}.flip-cell{margin-right:0}}@container(max-width:380px){.flight-destination{font-size:11px}.flight-status{font-size:7px}}
+
+@container(max-width:720px){.identity .label{white-space:nowrap;font-size:6.5px;letter-spacing:.65px}.map-controls button{min-width:40px;min-height:40px}}
+
+/* Barry Air leads; the family crest introduces the flight room beneath it. */
+.airline{width:min(680px,calc(100% - 56px));margin:30px auto 0;background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible}.airline img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}.airline p{margin:10px 0 0;color:#b6a37d;font-size:8px;letter-spacing:2.8px}.masthead{grid-template-columns:155px minmax(0,1fr);max-width:650px;width:100%;margin:auto;padding:30px 25px;gap:30px}#flight-path{scroll-margin-top:20px;outline:none}.section-head h2{font-size:23px}.captains-note .announcement-copy{flex:1;min-width:0}.announcement-label{display:block;font:7px Arial,sans-serif;letter-spacing:2px;margin-bottom:7px;color:#8f8876}.captains-note #captain-announcement{font:italic 13px/1.65 Georgia,serif;margin:0;max-width:650px}#next-announcement{display:block;border:0;border-bottom:1px solid #75623e;background:transparent;font:9px Arial,sans-serif;color:var(--gold);padding:0 0 3px;margin-top:10px}.captain-signature{white-space:nowrap}
+@container(max-width:720px){.airline{width:calc(100% - 40px);margin-top:25px}.airline p{font-size:6px;letter-spacing:2px;margin-top:10px}.masthead{grid-template-columns:143px minmax(0,1fr);padding:25px 21px;gap:18px}.masthead .crest{width:143px;height:143px}.section-head h2{font-size:23px}.captains-note #captain-announcement{font-size:12px}.captain-signature{font-size:13px}}
+@container(max-width:380px){.masthead{grid-template-columns:125px minmax(0,1fr);gap:14px;padding-left:15px;padding-right:15px}.masthead .crest{width:125px;height:125px}.section-head h2{font-size:21px}}
+
+/* Components respond to the frame width, including a narrow frame on a wide iPad. */
+.field{container-type:inline-size}
+@media(max-width:720px){body{padding:9px}}
+/* One 390 × 693 phone composition, scaled uniformly to fit either tablet orientation. */
+@media(min-width:700px){
+ body{height:100svh;overflow:hidden;padding:13px;display:flex;justify-content:center;align-items:flex-start}
+ .field{width:390px;max-width:none;height:693.333333px;flex:none;margin:0;transform:scale(var(--tablet-scale,1));transform-origin:top center;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#706447 #100f0d}
+}
+
+@container(max-width:850px){.control-grid{grid-template-columns:1fr}}
+@container(min-width:721px) and (max-width:850px){
+ .flight-row,.board-columns{grid-template-columns:60px 1fr 100px;gap:10px}
+ .flight-destination{font-size:12px}.flight-status{font-size:9px}.flight-round{font-size:10px}
+ .map-wrap,#map-host,#map-host svg{height:450px;min-height:450px}
+}
+
+@media(min-width:700px) and (hover:hover) and (pointer:fine){.field{scrollbar-width:none}.field::-webkit-scrollbar{display:none}}
+
+/* Flight-room refinement: legible instruments, boarding pass and cockpit radio. */
+.utility{padding:13px 17px}
+.airline{margin-top:24px}
+.airline p{font-size:7px;letter-spacing:1.6px}
+.identity{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:14px;margin:0 17px;padding:17px 15px 0;border-color:#60808a;box-shadow:inset 0 1px 0 #ffffff14,0 4px 12px #0003}
+.identity>div{min-width:0}
+.identity .label{font-size:8px;letter-spacing:1px}
+.identity strong,#edit-name{font-size:21px}
+.identity .call-sign{font-size:17px!important;letter-spacing:.2px}
+.identity>div+div{padding-left:14px}
+.identity .identity-miles{grid-column:1/-1;border-left:0;border-top:1px dashed #a2b6b26b;padding:11px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.identity-miles .label{margin:0}
+.identity #miles{font-size:22px}
+.campaign-line{font-size:9px;letter-spacing:.2px;gap:5px}
+.next-flight{display:block;position:relative;margin-bottom:18px;padding:17px 16px 0;background:linear-gradient(115deg,#262116,#181713);border-color:#9a814a;box-shadow:inset 0 1px 0 #eed59823,0 4px 12px #0003}
+.next-icon{display:none}
+.next-main .label{font-size:8px;letter-spacing:1px;margin-bottom:10px}
+.next-main h2{font-size:22px;line-height:1.25}
+.next-main p:last-child{font-size:11px;line-height:1.65}
+.boarding-stub{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px;padding:11px 0;border-top:1px dashed #8e794d}
+.boarding-stub>span{font:9px monospace;letter-spacing:1px;color:#beae8d}
+.boarding-stub .outline-button{min-height:40px;font-size:11px;padding:9px 13px;background:linear-gradient(#ffffff12,#0002),#084c61;border:1px solid #b09051;box-shadow:inset 0 1px 0 #e5cb8a66,0 2px 3px #0004}
+.captains-note{margin:0 17px 25px;padding:16px 14px;align-items:flex-start;border:1px solid #514a38;border-radius:6px;background:#171611;gap:12px}
+.captain-mark{width:34px;height:34px;font-size:17px;background:#211d13;box-shadow:inset 0 0 0 2px #171611}
+.announcement-label{font-size:8px;color:#c3ab75;letter-spacing:1.3px}
+.captains-note #captain-announcement{font-size:13px;line-height:1.65;color:#ddd5c3}
+#next-announcement{font-size:10px;min-height:36px;margin-top:6px;padding:8px 0 0;border-bottom:0;text-decoration:underline;text-underline-offset:4px;line-height:1.4}
+.captain-signature{display:none}
+.section-head .eyebrow{font-size:9px;letter-spacing:1.4px}
+.section-code{font-size:9px;white-space:nowrap}
+.flight-row{min-height:44px}
+.flight-round{font-size:10px}
+.flight-row[aria-pressed=true]{padding-left:0;box-shadow:inset 2px 0 #d4b269}
+.flight-row[aria-pressed=true] .flight-round{padding-left:5px;color:#e4cf9b}
+.board-note{font-size:12px}
+.selected-ground-link{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;padding:12px 0 5px;min-height:44px;background:none;border:0;color:#d4b269;text-align:left;font-size:11px}
+.selected-ground-link>span:first-child{color:#ede5d4;overflow-wrap:anywhere}
+.selected-ground-link>span:last-child{white-space:nowrap;text-decoration:underline;text-underline-offset:3px}
+#ground-detail{scroll-margin:16px;outline:none}
+.ground-detail{box-shadow:inset 0 1px 0 #e8ca8120}
+.detail-copy h2{font-size:22px;padding-right:0}
+.detail-copy>p:not(.eyebrow){font-size:12px}
+.landed-stamp{position:static;align-self:flex-start;margin-top:0;font-size:7px;letter-spacing:.4px;padding:6px;max-width:58px;white-space:normal;line-height:1.4;text-align:center}
+.map-key{font-size:10px}
+footer{padding-top:20px}
+footer p{font-size:10px;line-height:1.6}
+@container(max-width:335px){.identity .call-sign{font-size:15px!important}.identity strong,#edit-name{font-size:19px}.next-main h2{font-size:20px}.section-head h2{font-size:21px}.section-code{display:none}.detail-number{font-size:20px;padding-right:9px}.ground-detail{gap:10px;padding-left:12px;padding-right:12px}.detail-copy h2{font-size:20px}}
+
+@container(max-width:335px){.flight-destination{font-size:10px}.flip-cell{margin-right:0}}
+
+@container(max-width:335px){.masthead{grid-template-columns:90px minmax(0,1fr)}.masthead .crest{width:90px;height:90px}.intro{font-size:11px}}
+
+/* Four TFFAC modules, separated by the accepted 14px Campaign-frame gap. */
+.field{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;container-type:normal}
+.module-frame{container-type:inline-size;background:var(--ink);border:1px solid #818181;border-radius:12px;box-shadow:0 8px 24px #0002;min-width:0;scroll-margin-top:14px;outline:none}
+.module-frame+.module-frame{margin-top:14px}
+.landing-frame{padding-bottom:18px;overflow:hidden}
+.airline{width:calc(100% - 40px);margin:32px auto 0}
+.airline p{font-size:6px;letter-spacing:2px;margin:10px 0 0;text-transform:uppercase}
+.masthead{display:grid;grid-template-columns:minmax(0,1fr) 125px;padding:27px 21px;gap:16px}
+.masthead .crest{width:125px;height:125px;justify-self:end}
+.welcome h1{font-size:29px}
+.welcome .eyebrow{font-size:9px;letter-spacing:1.5px}
+.strapline{font-size:13px}
+.intro{font-size:11px;margin-top:12px}
+.identity{margin-left:17px;margin-right:17px}
+.campaign-line{margin:13px 18px 20px;font-size:8px;flex-direction:column;gap:5px}
+.boarding-pass{padding:0;margin:0 17px 18px;background:#f2eddd;color:#1e2c2d;border:1px solid #ddceaa;border-radius:7px;box-shadow:0 4px 12px #0004;overflow:hidden}
+.pass-brand{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;background:#084c61;color:#f2eddd;font:10px/1.4 monospace;letter-spacing:1.3px}
+.pass-brand>span:first-child{font-weight:bold;letter-spacing:2px}
+.pass-body{padding:14px 15px 15px}
+.pass-status{font:8px/1.4 monospace;letter-spacing:1px;color:#36695b;margin:0 0 16px}
+.pass-passenger{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;margin-bottom:20px}
+.pass-passenger>div{min-width:0}
+.boarding-pass .label{font:8px/1.4 monospace;letter-spacing:1px;color:#63706a;margin:0 0 5px}
+.pass-passenger strong{display:block;font:16px/1.3 monospace;overflow-wrap:anywhere}
+.boarding-pass .next-main h2{font:22px/1.2 Georgia,serif;color:#152b30;margin:9px 0}
+.boarding-pass .next-main em{color:#6c766d;font-size:17px}
+.boarding-pass .next-main p:not(.label){font:11px/1.6 monospace;color:#48554e;margin:4px 0 0}
+.boarding-pass .boarding-stub{position:relative;margin:0;padding:13px 15px;border-top:1px dashed #8f9b8b;background:#e9e3d2}
+.boarding-pass .boarding-stub:before,.boarding-pass .boarding-stub:after{content:"";position:absolute;top:-6px;width:10px;height:10px;border-radius:50%;background:#100f0d}
+.boarding-pass .boarding-stub:before{left:-6px}.boarding-pass .boarding-stub:after{right:-6px}
+.boarding-stub strong{font:12px monospace;letter-spacing:.4px}
+.boarding-pass .outline-button{color:#f6f3e8}
+.landing-nav{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin:0 17px}
+.landing-nav a{display:flex;align-items:center;justify-content:center;min-height:40px;padding:9px 5px;border:1px solid #655d47;border-radius:5px;color:#d6c391;font-size:10px;line-height:1.4;text-align:center;text-decoration:none}
+.landing-nav a:hover{background:#d4b26912}
+.landing-nav .return-campaign{color:#c4c1b5;border-color:#49473f}
+.departures-frame,.flight-frame{padding:20px 17px 17px}
+.section-head{min-height:0;padding-bottom:16px}
+.section-head h2{font-size:23px}
+.section-head .eyebrow{font-size:8px;letter-spacing:1.4px}
+.section-code{font-size:8px;letter-spacing:.4px}
+.flight-row,.board-columns{grid-template-columns:41px minmax(0,1fr) 78px;gap:5px}
+.flight-destination{font-size:11px}.flight-status{font-size:7px}
+.map-wrap,#map-host,#map-host svg{height:380px;min-height:380px}
+.map-controls button{min-height:36px;min-width:32px}
+.flight-frame .ground-detail{margin:17px 0 0;padding:17px 12px;gap:10px}
+.detail-number{font-size:23px;padding-right:10px}
+.detail-copy h2{font-size:21px}
+.captains-note{margin:0;padding:21px 17px;border:0;background:none;gap:13px}
+.captain-roundel{width:54px;height:54px;object-fit:contain;flex:none}
+.announcement-label{font:8px/1.5 Arial,sans-serif;letter-spacing:1.4px;color:#c3ab75;margin:0 0 8px}
+.cabin-frame footer{margin:0 17px;padding-top:17px}
+.cabin-frame .captain-roundel{width:104px;height:104px}
+@container(max-width:335px){.cabin-frame .captain-roundel{width:90px;height:90px}}
+@container(max-width:335px){
+ .masthead{grid-template-columns:minmax(0,1fr) 95px;gap:12px;padding:23px 17px}
+ .masthead .crest{width:95px;height:95px}
+ .welcome h1{font-size:26px}
+ .strapline{font-size:12px}
+ .identity .call-sign{font-size:15px!important}
+ .pass-passenger strong{font-size:14px}
+ .boarding-pass .next-main h2{font-size:20px}
+ .landing-nav a{font-size:9px}
+ .section-code{display:none}
+ .section-head h2{font-size:21px}
+ .flight-destination{font-size:10px}.flip-cell{margin-right:0}
+ .captain-roundel{width:43px;height:43px}
+}
+@media(min-width:700px){.field{overflow-y:auto;scroll-padding-top:14px;scrollbar-width:none}.field::-webkit-scrollbar{display:none}}
+.module-frame,#flight-path{scroll-margin-top:14px}
+@media(min-width:700px){.field{scroll-padding-top:0}}
+
+/* Arrival: the identity belongs on the pass, with the whole landing in view. */
+.landing-frame{display:flex;flex-direction:column;justify-content:space-between;min-height:calc(100svh - 18px);padding-bottom:10px}
+.airline{width:min(300px,calc(100% - 36px));margin:16px auto 0;flex:none}
+.airline p{margin-top:5px}
+.masthead{grid-template-columns:minmax(0,1fr) 88px;padding:8px 18px;gap:15px;margin:0;width:100%;max-width:none}
+.masthead .crest{width:88px;height:88px}
+.welcome .eyebrow{font-size:8px;line-height:1.3;margin-bottom:5px}
+.welcome h1{font-size:26px;line-height:1.08;margin-bottom:6px}
+.strapline{font-size:12px;line-height:1.4}
+.intro{font-size:10px;line-height:1.5;margin-top:6px}
+.boarding-pass{margin:4px 17px 10px;flex:none}
+.pass-brand{padding:7px 12px;font-size:9px;line-height:1.4}
+.pass-body{padding:8px 12px}
+.pass-checkin{display:flex;align-items:center;gap:7px;min-height:26px;margin-bottom:5px;color:#376554;font:8px/1.4 monospace;letter-spacing:.4px;cursor:pointer}
+.pass-checkin input{width:15px;height:15px;margin:0;accent-color:#084c61;flex:none}
+.pass-passenger{gap:12px;margin-bottom:8px}
+.boarding-pass .label{font-size:7px;line-height:1.35;margin-bottom:3px}
+.pass-passenger strong,.boarding-pass #edit-name{font:15px/1.2 monospace;color:#1e2c2d}
+.boarding-pass #edit-name{display:block;max-width:100%}
+.boarding-pass .edit-mark{font-size:12px;color:#537065;margin-left:3px}
+.pass-metrics{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+.pass-metrics strong{font:12px/1.2 monospace}
+.pass-metrics>div:last-child{text-align:right}
+.pass-campaign{font:8px/1.4 monospace;color:#526659;margin:7px 0 8px;letter-spacing:.3px}
+.boarding-pass .next-main h2{font-size:20px;line-height:1.15;margin:4px 0 5px}
+.boarding-pass .next-main p:not(.label){font-size:10px;line-height:1.4;margin-top:2px}
+.boarding-pass .boarding-stub{padding:7px 12px;min-height:45px}
+.boarding-pass .outline-button{min-height:34px;font-size:10px;padding:7px 11px}
+.boarding-stub strong{font-size:11px}
+.landing-nav{gap:6px;margin:0 17px}
+.landing-nav a{min-height:34px;padding:7px 4px;font-size:9px}
+.boarding-pass #name-form input{border:1px solid #a7afa3;padding:4px}
+.boarding-pass #name-form button{color:#084c61;border-color:#8c9c8c}
+@media(min-width:700px){.landing-frame{min-height:693.333333px}}
+@container(max-width:335px){.masthead{grid-template-columns:minmax(0,1fr) 76px;gap:12px;padding:8px 15px}.masthead .crest{width:76px;height:76px}.welcome h1{font-size:24px}.pass-passenger strong,.boarding-pass #edit-name{font-size:13px}.boarding-pass .next-main h2{font-size:18px}.pass-campaign{font-size:7px}}
+@media(max-width:699px) and (max-height:650px){.airline{width:min(245px,calc(100% - 36px));margin-top:12px}.masthead{padding-top:5px;padding-bottom:5px}.intro{display:none}.landing-nav a{min-height:32px}.landing-frame{padding-bottom:8px}}
+.boarding-pass{color-scheme:light}
+@media(max-width:699px) and (max-height:600px){.airline{width:min(205px,calc(100% - 36px));margin-top:8px}.masthead{padding-top:2px;padding-bottom:2px}.landing-nav a{min-height:30px;padding-top:5px;padding-bottom:5px}.boarding-pass{margin-bottom:6px}}
+
+/* Three destinations leave room for the pass and Barry's crest. */
+.landing-nav{grid-template-columns:repeat(3,minmax(0,1fr))}
+.landing-nav a{white-space:nowrap;font-size:9px}
+.masthead{grid-template-columns:minmax(0,1fr) 104px}
+.masthead .crest{width:104px;height:104px}
+.pass-body{padding-top:14px;padding-bottom:14px}
+.pass-passenger{margin-bottom:12px}
+.pass-metrics{margin-bottom:4px}
+.boarding-pass .boarding-stub{min-height:50px}
+@container(max-width:335px){.masthead{grid-template-columns:minmax(0,1fr) 90px}.masthead .crest{width:90px;height:90px}.landing-nav a{font-size:8px}}
+
+/* Frame 1: wider protective wings and an inset welcome beneath them. */
+.airline{width:min(340px,calc(100% - 28px))}
+.masthead{padding-left:44px;padding-right:44px}
+@container(max-width:335px){.masthead{padding-left:34px;padding-right:34px}}
+@media(max-width:699px) and (max-height:650px){.airline{width:min(300px,calc(100% - 28px))}}
+@media(max-width:699px) and (max-height:600px){.airline{width:min(280px,calc(100% - 28px))}}
+
+/* Match The Four Laws' canvas and its 1.2%-of-height perimeter gutter. */
+:root{--landing-gutter:clamp(6px,1.2svh,13px)}
+body{padding:var(--landing-gutter)}
+.landing-frame{min-height:calc(100svh - 2 * var(--landing-gutter))}
+/* Follow the visible phone viewport when its browser toolbar retracts. */
+@media(max-width:699px){.landing-frame{min-height:calc(100dvh - 2 * var(--landing-gutter))}}
+.intro{display:block}
+html{scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
+@container(max-width:335px){.welcome h1{font-size:21px}.strapline{font-size:11px}.intro{font-size:9px}}
+@media(max-width:699px) and (max-height:600px){.airline{width:min(260px,calc(100% - 28px));margin-top:4px}.masthead{padding-top:1px;padding-bottom:1px}.landing-frame{padding-bottom:4px}}
+@media(min-width:700px){
+ :root{--landing-gutter:8.32px}
+ body{padding:calc(var(--landing-gutter) * var(--tablet-scale,1)) 0 0}
+ .field{width:calc(390px - 2 * var(--landing-gutter));height:calc(693.333333px - 2 * var(--landing-gutter))}
+ .landing-frame{min-height:calc(693.333333px - 2 * var(--landing-gutter))}
+}
+
+/* Like the main TFFAC shell, the phone viewport owns one scrolling room.
+   Frame 1 fills that room; subsequent modules start outside its clip. */
+@media(max-width:699px){
+ html{height:100%;overflow:hidden}
+ body{height:var(--phone-viewport-height,100dvh);overflow:hidden}
+ .field{height:calc(var(--phone-viewport-height,100dvh) - 2 * var(--landing-gutter));overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+ .field::-webkit-scrollbar{display:none}
+ .landing-frame{min-height:100%}
+}
+
+/* The public page waits for the saved Campaign; it never flashes sample details. */
+#campaign-status{margin:8px 24px;color:#d4b269;font:12px/1.5 Arial,sans-serif;text-align:center}
+#retry-flight{margin:8px auto;padding:9px 16px;border:1px solid #897344;border-radius:5px;background:#201d16}
+.data-pending .boarding-pass,.data-pending #departures,.data-pending #flight-path{visibility:hidden}
+.data-unavailable .boarding-pass,.data-unavailable #departures,.data-unavailable #flight-path,.data-unavailable .landing-nav a:not(.return-campaign){display:none}
+.empty-flight-board{font:12px/1.6 Arial,sans-serif;color:#d0c6ad;padding:18px 0}
+#check-in:disabled{opacity:.5}.boarding-pass #miles{overflow-wrap:anywhere;max-width:140px;display:block}
+
+.boarding-pass #miles.miles-unresolved{font-size:11px}
+
+.data-unavailable .landing-nav{grid-template-columns:1fr}
