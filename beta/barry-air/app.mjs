@@ -19,7 +19,7 @@ function render(m){model=m;text('#pigeon-name',m.name);text('#call-sign',m.digit
  $('#stop-list').replaceChildren();m.stops.forEach((d,i)=>{const b=document.createElement('button');b.type='button';b.textContent=(d.next?'↗ ':i===0?'⌂ ':String(i).padStart(2,'0')+' ')+d.short;b.dataset.stop=i;$('#stop-list').append(b);});
  $('.field').classList.remove('data-pending');$('.field').setAttribute('aria-busy','false');$('#campaign-status').hidden=true;choose(m.lastLanded||m.nextStop||0);
 }
-function paintCheckIn(){text('#check-in-label',!model?.canCheckIn?'AWAITING FLIGHT DETAILS':$('#check-in').checked?'CHECKED IN · HAPPY FLYING':'CHECK IN FOR YOUR FLIGHT');}
+function paintCheckIn(){text('#check-in-label',!model?.canCheckIn?'AWAITING FLIGHT DETAILS':$('#check-in').checked?'CHECKED IN · THANK YOU FOR FLYING BARRY AIR - VERMIN FREE SINCE 2022':'CHECK IN FOR YOUR FLIGHT');}
 $('#check-in').addEventListener('change',()=>{if(!model?.canCheckIn)return;paintCheckIn();try{localStorage.setItem('tffc.barry.check-in.v1:'+model.flightKey,$('#check-in').checked?'1':'0');}catch{}});
 function toast(value){text('#toast',value);$('#toast').hidden=false;setTimeout(()=>$('#toast').hidden=true,2400);}
 $('#edit-name').addEventListener('click',()=>{if(!model)return;$('#name-form').hidden=false;$('#edit-name').hidden=true;$('#name-input').value=readSaved()?.pigeonName||'';$('#name-input').focus();$('#name-input').select();});
