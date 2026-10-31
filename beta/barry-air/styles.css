@@ -261,3 +261,11 @@ html::-webkit-scrollbar{display:none}
 @container(max-width:335px){.masthead{margin-top:0}}
 /* Avoid a fixed background paint layer during native mobile pinch zoom. */
 body{background-attachment:scroll}
+
+/* Native pinch zoom stays available. One-finger dragging pans only the enlarged map. */
+#map-host{touch-action:pan-y pinch-zoom}
+#map-host.map-zoomed{touch-action:pinch-zoom;cursor:grab;user-select:none;-webkit-user-select:none}
+#map-host.map-dragging,#map-host.map-dragging .map-stop{cursor:grabbing}
+#map-host svg:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
+.map-hint{font:10px/1.5 Arial,sans-serif;color:var(--muted);margin:10px 0 0}
+.map-controls button:disabled{opacity:.4;cursor:default}
