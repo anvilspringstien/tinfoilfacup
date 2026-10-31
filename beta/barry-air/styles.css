@@ -317,8 +317,13 @@ body{background-attachment:scroll}
 /* Share taller phone/Home Screen room between the welcome and the ticket.
    The approved 669px browser composition keeps its existing 5px gap. */
 @media(max-width:699px){
- .masthead{margin-top:calc(5px + clamp(0px,calc((var(--phone-viewport-height,100dvh) - 669px) * .5),88px))}
+ .landing-frame{--welcome-gap-extra:clamp(0px,calc((var(--phone-viewport-height,100dvh) - 669px) * .5),20px)}
+ .masthead{margin-top:calc(5px + clamp(0px,calc((var(--phone-viewport-height,100dvh) - 669px) * .5),88px) - var(--welcome-gap-extra))}
+ /* Lift the welcome by the added gap so the ticket keeps its size and position. */
+ .landing-frame .boarding-pass{margin-top:calc(12px + var(--welcome-gap-extra))}
 }
 @media(max-width:699px) and (max-height:669px){
  @container(max-width:335px){.masthead{margin-top:0}}
 }
+
+@media(max-width:699px) and (max-height:600px){.landing-frame .boarding-pass{margin-top:4px}}
