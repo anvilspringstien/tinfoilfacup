@@ -55,3 +55,9 @@ The welcome and crest remain anchored while flight data loads. Loading status
 is outside the spacing calculation. The visual-viewport resize handler ignores
 native pinch zoom, preserving the scrolling room and tablet composition. The
 page retains browser zoom; its background has no fixed paint layer.
+
+The map controls zoom around the selected ground. Selecting another ground while
+zoomed recentres it; subsequent zoom steps preserve a manually panned view. Drag
+the enlarged map with a mouse or one finger, or focus it and use the arrow keys.
+Native browser pinch remains available. Fit whole route resets both zoom and pan.
+The camera uses SVG screen-coordinate conversion, including the iPad frame scale.
