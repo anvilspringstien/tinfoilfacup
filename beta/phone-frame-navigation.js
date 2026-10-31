@@ -8,8 +8,11 @@
  .result .actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
  .result .actions a.secondary{margin:0}
  .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
- .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer}
- .barry-air-launch img{display:block;width:240px;max-width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
+ .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer;overflow:visible;appearance:none;-webkit-appearance:none}
+ /* Transparent filter outsets keep WebKit's scrolling paint layer from
+    cutting the shadow at the tight source-image edges. Margins cancel the
+    outsets so neither the badge nor its navigation row grows. */
+ .barry-air-launch img{display:block;box-sizing:border-box;width:calc(100% + 88px);max-width:none;padding:44px;margin:-44px;height:auto;object-fit:contain;pointer-events:none;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
  .barry-air-launch:hover{filter:brightness(1.1)}
  .barry-air-launch:focus-visible{outline:2px solid #084c61;outline-offset:3px}
  .barry-air-launch.pointer-focus-return:focus{outline:none!important;box-shadow:none!important}
@@ -34,10 +37,10 @@
  #challengeShareLinkFooter,#challengeShareLinkFooter + .beta-help-sep{display:none}
  .my-journey-bar .campaign-primary-nav button.round{
   background-image:linear-gradient(115deg,transparent 20%,#ffffff14 43%,transparent 66%),linear-gradient(to bottom,#ffffff2b 0%,#ffffff0b 43%,#0000000a 54%,#00000020 100%)!important;
-  box-shadow:inset 0 1px 0 #ffe5a4,inset 0 -1px 0 #785222,inset 0 0 0 1px #bd9650,inset 0 2px 1px #ffffff38,0 2px 3px #0005;
+  box-shadow:inset 0 2px 0 #ffe5a4,inset 0 -2px 0 #785222,inset 0 0 0 2px #bd9650,inset 0 3px 1px #ffffff38,0 2px 3px #0005;
  }
  .my-journey-bar .campaign-primary-nav button.round:active{
-  box-shadow:inset 0 1px 2px #0005,inset 0 0 0 1px #b38c48,0 1px 1px #0003;
+  box-shadow:inset 0 1px 2px #0005,inset 0 0 0 2px #b38c48,0 1px 1px #0003;
  }
  `;
  window.tffcInstallPhoneFrameNavigation=function(frame){
