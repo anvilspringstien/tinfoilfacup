@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-30T07:07:07.849338+00:00",
+  "competition_updated_at": "2026-10-31T05:41:52.784355+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 156,
+  "eligible_linked": 168,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1769,138 +1769,6 @@
       "club": "Buckland Athletic FC",
       "identities": [
         "Buckland Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Burnham FC",
-      "identities": [
-        "Burnham FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Burscough FC",
-      "identities": [
-        "Burscough FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bury FC",
-      "identities": [
-        "Bury FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Bury Town FC",
-      "identities": [
-        "Bury Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Buxton FC",
-      "identities": [
-        "Buxton FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Camberley Town FC",
-      "identities": [
-        "Camberley Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cambridge City FC",
-      "identities": [
-        "Cambridge City FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Campion AFC",
-      "identities": [
-        "Campion AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Canvey Island FC",
-      "identities": [
-        "Canvey Island FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Carlton Town FC",
-      "identities": [
-        "Carlton Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Carshalton Athletic FC",
-      "identities": [
-        "Carshalton Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chadderton FC",
-      "identities": [
-        "Chadderton FC"
       ],
       "current_competition": false,
       "website": null,
@@ -8980,6 +8848,222 @@
           "evidence_url": "https://bhtfc.co.uk/club/contact/",
           "verified_on": "2026-10-30",
           "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Burnham FC",
+      "identities": [
+        "Burnham FC"
+      ],
+      "current_competition": false,
+      "website": "https://burnhamfc1878.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://burnhamfc1878.co.uk/",
+          "evidence_url": "https://burnhamfc1878.co.uk/contact/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Burscough FC",
+      "identities": [
+        "Burscough FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.burscoughfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.burscoughfc.com/",
+          "evidence_url": "https://www.burscoughfc.com/pages/contact",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Bury FC",
+      "identities": [
+        "Bury FC"
+      ],
+      "current_competition": false,
+      "website": "https://buryfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://buryfc.co.uk/",
+          "evidence_url": "https://buryfc.co.uk/contact/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Bury Town FC",
+      "identities": [
+        "Bury Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.burytownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.burytownfc.co.uk/",
+          "evidence_url": "https://www.burytownfc.co.uk/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Buxton FC",
+      "identities": [
+        "Buxton FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.buxtonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.buxtonfc.co.uk/",
+          "evidence_url": "https://www.buxtonfc.co.uk/contact-us",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Camberley Town FC",
+      "identities": [
+        "Camberley Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.camberleytownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.camberleytownfc.co.uk/",
+          "evidence_url": "https://www.camberleytownfc.co.uk/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Cambridge City FC",
+      "identities": [
+        "Cambridge City FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.cambridgecityfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.cambridgecityfc.com/",
+          "evidence_url": "https://www.cambridgecityfc.com/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Campion AFC",
+      "identities": [
+        "Campion AFC"
+      ],
+      "current_competition": false,
+      "website": "https://www.campionafc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.campionafc.com/",
+          "evidence_url": "https://www.campionafc.com/contact",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Canvey Island FC",
+      "identities": [
+        "Canvey Island FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.canveyislandfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.canveyislandfc.com/",
+          "evidence_url": "https://www.canveyislandfc.com/contact",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Carlton Town FC",
+      "identities": [
+        "Carlton Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.carltontownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.carltontownfc.co.uk/",
+          "evidence_url": "https://www.carltontownfc.co.uk/contact-us/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Carshalton Athletic FC",
+      "identities": [
+        "Carshalton Athletic FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.carshaltonathletic.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.carshaltonathletic.co.uk/",
+          "evidence_url": "https://www.carshaltonathletic.co.uk/contact-us-2/",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Chadderton FC",
+      "identities": [
+        "Chadderton FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.chaddertonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.chaddertonfc.co.uk/",
+          "evidence_url": "https://www.chaddertonfc.co.uk/teams/team/14997969",
+          "verified_on": "2026-10-31",
+          "ledger": "club_website_verified_batch_12.json"
         }
       ]
     },
