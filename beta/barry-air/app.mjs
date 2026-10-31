@@ -1,3 +1,4 @@
+import './footer.mjs';
 import {buildCampaign,dateLabel,JOURNEY_KEY,identityKey,roundCode} from './campaign-model.mjs';
 const $=s=>document.querySelector(s),svgNS='http://www.w3.org/2000/svg';let model,selected=0,zoom=1,mapPromise;
 let camera={x:300,y:260},cameraStops=new Map(),pan=null,suppressMapClickUntil=0;

@@ -61,3 +61,13 @@ zoomed recentres it; subsequent zoom steps preserve a manually panned view. Drag
 the enlarged map with a mouse or one finger, or focus it and use the arrow keys.
 Native browser pinch remains available. Fit whole route resets both zoom and pan.
 The camera uses SVG screen-coordinate conversion, including the iPad frame scale.
+
+## Shared footer
+
+Frame 4 includes the accepted Keep/Share buttons, Support link and admin bar.
+Share and Keep reuse the existing embedded destination, preserving the saved
+Campaign and returning to the same Barry Air scroll position. Feedback and
+Report an Issue use the existing Post Office launcher. About Us, Privacy, admin
+links and the Support destination are generated from public Clubfinder by
+`updater/build_barry_air_footer.py`; CI checks for drift. No new counting service
+or Like button is introduced by this footer change.
