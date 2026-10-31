@@ -304,3 +304,6 @@ body{background-attachment:scroll}
 .boarding-pass .pass-metrics{margin-bottom:0}
 
 .data-unavailable .landing-frame .boarding-pass{display:none}
+
+/* Give WebKit a definite flex height while allowing unusually long pass details to grow. */
+.landing-frame{height:100%;min-height:min-content}
