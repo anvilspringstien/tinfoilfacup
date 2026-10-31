@@ -269,3 +269,27 @@ body{background-attachment:scroll}
 #map-host svg:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
 .map-hint{font:10px/1.5 Arial,sans-serif;color:var(--muted);margin:10px 0 0}
 .map-controls button:disabled{opacity:.4;cursor:default}
+
+/* The accepted TFFAC footer: square Keep/Share, lozenge Support, compact admin links. */
+#barry-site-footer{margin:0 17px;color:#ddd;letter-spacing:normal}
+#barry-site-footer .tffc-support-row{display:flex;justify-content:center;margin:20px 0}
+#barry-site-footer .tffc-support-lozenge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;box-sizing:border-box;max-width:100%;padding:6px 18px;border:1px solid #d5ad26;border-radius:999px;background:#f0c64f;color:#17110b;font:800 11px/1.3 Arial,sans-serif;text-align:center;text-decoration:none;letter-spacing:.02em;opacity:.88}
+#barry-site-footer .tffc-support-lozenge:hover{opacity:1;filter:brightness(1.06)}
+#barry-site-footer .tffc-support-lozenge:focus-visible{outline:2px solid #f0c64f;outline-offset:4px}
+#barry-site-footer .tffc-magic-row{gap:10px;flex-wrap:wrap}
+#barry-site-footer .tffc-magic-row button{border-radius:6px}
+#barry-site-footer .tffc-support-footer{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+#barry-site-footer .tffc-beta-help{margin:0;text-align:center;font:600 10px/1.8 Arial,sans-serif;color:#ddd}
+#barry-site-footer .tffc-beta-help a,#barry-site-footer .tffc-beta-help button{border:0;background:transparent;padding:0;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+#barry-site-footer .tffc-beta-help-sep{margin:0 6px;color:#aaa}
+.barry-info-dialog{color-scheme:light;width:min(420px,calc(100vw - 40px));max-height:82dvh;padding:18px;border:1px solid #d7d7d7;border-radius:10px;background:white;color:#111;font:400 13px/1.5 Arial,sans-serif;margin:auto;box-shadow:0 12px 36px #0005}
+.barry-info-dialog[open]{display:flex;flex-direction:column}
+.barry-info-dialog::backdrop{background:#0008}
+.barry-info-dialog h2{font:600 16px/1.4 Arial,sans-serif;color:#084c61;margin:0 0 12px;flex:none;outline:none}
+.barry-info-copy{min-height:0;overflow:auto;overscroll-behavior:contain}
+.barry-info-copy p{margin:0 0 12px}
+.barry-info-actions{display:flex;justify-content:flex-end;flex:none;padding-top:12px}
+.barry-info-actions button{min-height:36px;min-width:74px;padding:0 14px;border:2px solid #084c61;border-radius:10px;background:#084c61;color:white;font:400 13px Arial,sans-serif}
+.barry-magic-dialog{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;overflow:hidden}
+.barry-magic-dialog::backdrop{background:#000b}
+.barry-magic-dialog iframe{display:block;width:100%;height:100%;border:0;background:transparent}

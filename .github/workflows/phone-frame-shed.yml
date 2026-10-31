@@ -7,6 +7,7 @@ on:
       - 'beta/campaign-introductions.js'
       - 'beta/clubfinder-beta.html'
       - 'updater/build_barry_air_adapter.py'
+      - 'updater/build_barry_air_footer.py'
       - 'tests/barry-air-*'
       - 'tests/club-details-*'
       - 'updater/build_club_campaign_engine.py'
@@ -37,6 +38,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: python3 -m http.server 8765 --bind 127.0.0.1 &
       - run: python3 updater/build_barry_air_adapter.py --check
+      - run: python3 updater/build_barry_air_footer.py --check
       - run: node tests/barry-air-model.mjs
       - run: node tests/barry-air-browser.mjs
       - run: node tests/phone-frame-shed-browser.mjs
