@@ -12,6 +12,7 @@
  .barry-air-launch img{display:block;width:240px;max-width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
  .barry-air-launch:hover{filter:brightness(1.1)}
  .barry-air-launch:focus-visible{outline:2px solid #084c61;outline-offset:3px}
+ .barry-air-launch.pointer-focus-return:focus{outline:none!important;box-shadow:none!important}
  .barry-air-teaser{width:min(350px,calc(100vw - 28px));max-height:calc(100svh - 28px);overflow:auto;padding:22px;border:1px solid #ac9569;border-radius:12px;background:#141210;color:#f6f3e8;text-align:center;font:14px/1.55 Poppins,Arial,sans-serif;box-shadow:0 12px 35px #0008}
  .barry-air-teaser::backdrop{background:#000b}
  .barry-air-teaser img{display:block;width:260px;max-width:100%;height:auto;margin:4px auto 16px;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
@@ -52,7 +53,8 @@
     if(destination)destination.src=new URL('keep-the-magic-shed.html?instructions=1&embedded=1&keep=1',base).href;
    }
   }
-  function openBarry(trigger){
+  function openBarry(trigger,fromPointer){
+   let pointerReturn=fromPointer;
    let dialog=doc.querySelector('.barry-air-teaser');
    if(!dialog){
     dialog=doc.createElement('dialog');dialog.className='barry-air-teaser';dialog.tabIndex=-1;dialog.setAttribute('aria-labelledby','barry-teaser-title');dialog.setAttribute('aria-describedby','barry-teaser-copy');
@@ -61,7 +63,10 @@
     for(const button of dialog.querySelectorAll('button'))button.onclick=()=>dialog.close();
     dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
    }
-   dialog.onclose=()=>{if(trigger.isConnected)trigger.focus({preventScroll:true});};
+   dialog.onpointerdown=()=>{pointerReturn=true;};
+   dialog.onkeydown=()=>{pointerReturn=false;};
+   trigger.onkeydown=()=>trigger.classList.remove('pointer-focus-return');
+   dialog.onclose=()=>{if(trigger.isConnected){trigger.classList.toggle('pointer-focus-return',pointerReturn);trigger.focus({preventScroll:true});}};
    if(!dialog.open){dialog.showModal();dialog.focus({preventScroll:true});}
   }
   function decorate(){
@@ -106,7 +111,7 @@
     support.before(row);
    }
    // Campaign return snapshots preserve HTML but not JS handlers.
-   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>openBarry(barry);
+   for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=event=>openBarry(barry,event.detail>0);
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
    for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);
   }
