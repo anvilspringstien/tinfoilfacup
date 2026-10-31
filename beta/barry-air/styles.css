@@ -310,3 +310,6 @@ body{background-attachment:scroll}
 
 /* Preserve the approved one-line title when Georgia falls back to another serif. */
 .welcome h1{font-family:Georgia,"Times New Roman",serif;white-space:nowrap}
+
+/* Keep the checked-in airline message on one ticket line at phone widths. */
+.pass-checkin:has(input:checked) #check-in-label{white-space:nowrap;font-size:clamp(6px,2cqi,8px);letter-spacing:0}
