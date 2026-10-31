@@ -67,7 +67,7 @@ try{
  const primary=await nav.locator('.campaign-primary-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {y:r.y,width:r.width,height:r.height}}));
  for(const box of primary){assert.ok(Math.abs(box.width-primary[0].width)<1);assert.ok(Math.abs(box.y-primary[0].y)<1);assert.ok(box.height>=44);}
  await nav.locator('.barry-air-launch img').evaluate(img=>img.decode());
- assert.equal(await nav.locator('.barry-air-launch img').evaluate(img=>Math.round(img.getBoundingClientRect().width)),240);
+ assert.equal(await nav.locator('.barry-air-launch img').evaluate(img=>{const s=getComputedStyle(img);return Math.round(img.getBoundingClientRect().width-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight))}),240,'filter padding must preserve the visible badge width');
  assert.equal(await nav.locator('.campaign-primary-nav .barry-air-launch').count(),0);
  assert.equal(await nav.locator('.campaign-magic-nav').count(),0);
  assert.equal(await nav.locator('.campaign-keep,.campaign-share').count(),0);
