@@ -302,3 +302,5 @@ body{background-attachment:scroll}
 @media(max-width:699px) and (max-height:600px){.landing-frame .boarding-pass{margin-top:4px}}
 
 .boarding-pass .pass-metrics{margin-bottom:0}
+
+.data-unavailable .landing-frame .boarding-pass{display:none}
