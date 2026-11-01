@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-10-31T05:41:52.784355+00:00",
+  "competition_updated_at": "2026-11-01T07:32:37.811833+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 168,
+  "eligible_linked": 180,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1769,138 +1769,6 @@
       "club": "Buckland Athletic FC",
       "identities": [
         "Buckland Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Charnock Richard FC",
-      "identities": [
-        "Charnock Richard FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chasetown FC",
-      "identities": [
-        "Chasetown FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chatham Town FC",
-      "identities": [
-        "Chatham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cheadle Town FC",
-      "identities": [
-        "Cheadle Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chelmsford City FC",
-      "identities": [
-        "Chelmsford City FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chertsey Town FC",
-      "identities": [
-        "Chertsey Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chesham United FC",
-      "identities": [
-        "Chesham United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cheshunt FC",
-      "identities": [
-        "Cheshunt FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chester FC",
-      "identities": [
-        "Chester FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chichester City FC",
-      "identities": [
-        "Chichester City FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chippenham Town FC",
-      "identities": [
-        "Chippenham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chipstead FC",
-      "identities": [
-        "Chipstead FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9064,6 +8932,222 @@
           "evidence_url": "https://www.chaddertonfc.co.uk/teams/team/14997969",
           "verified_on": "2026-10-31",
           "ledger": "club_website_verified_batch_12.json"
+        }
+      ]
+    },
+    {
+      "club": "Charnock Richard FC",
+      "identities": [
+        "Charnock Richard FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.charnockrichardfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.charnockrichardfc.co.uk/",
+          "evidence_url": "https://www.charnockrichardfc.co.uk/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chasetown FC",
+      "identities": [
+        "Chasetown FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.chasetownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.chasetownfc.co.uk/",
+          "evidence_url": "https://www.chasetownfc.co.uk/contact",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chatham Town FC",
+      "identities": [
+        "Chatham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.chathamtownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.chathamtownfc.com/",
+          "evidence_url": "https://www.chathamtownfc.com/contact-us/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Cheadle Town FC",
+      "identities": [
+        "Cheadle Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.cheadletown.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.cheadletown.co.uk/",
+          "evidence_url": "https://www.cheadletown.co.uk/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chelmsford City FC",
+      "identities": [
+        "Chelmsford City FC"
+      ],
+      "current_competition": false,
+      "website": "https://chelmsfordcityfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chelmsfordcityfc.com/",
+          "evidence_url": "https://chelmsfordcityfc.com/contact-us/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chertsey Town FC",
+      "identities": [
+        "Chertsey Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://chertseytownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chertseytownfc.co.uk/",
+          "evidence_url": "https://chertseytownfc.co.uk/contact",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chesham United FC",
+      "identities": [
+        "Chesham United FC"
+      ],
+      "current_competition": false,
+      "website": "https://cheshamunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://cheshamunited.co.uk/",
+          "evidence_url": "https://cheshamunited.co.uk/club/contact-us/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Cheshunt FC",
+      "identities": [
+        "Cheshunt FC"
+      ],
+      "current_competition": false,
+      "website": "https://cheshuntfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://cheshuntfc.com/",
+          "evidence_url": "https://cheshuntfc.com/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chester FC",
+      "identities": [
+        "Chester FC"
+      ],
+      "current_competition": false,
+      "website": "https://chesterfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chesterfc.com/",
+          "evidence_url": "https://chesterfc.com/contactus/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chichester City FC",
+      "identities": [
+        "Chichester City FC"
+      ],
+      "current_competition": false,
+      "website": "https://chichestercityfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chichestercityfc.co.uk/",
+          "evidence_url": "https://chichestercityfc.co.uk/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chippenham Town FC",
+      "identities": [
+        "Chippenham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://chippenhamtown.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chippenhamtown.com/",
+          "evidence_url": "https://chippenhamtown.com/club/contact-us/",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chipstead FC",
+      "identities": [
+        "Chipstead FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.chipsteadfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.chipsteadfc.com/",
+          "evidence_url": "https://www.chipsteadfc.com/contact",
+          "verified_on": "2026-11-01",
+          "ledger": "club_website_verified_batch_13.json"
         }
       ]
     },
