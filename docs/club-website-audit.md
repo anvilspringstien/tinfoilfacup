@@ -4,6 +4,27 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 1 November 2026 checkpoint — missing-link coverage, batch 13
+
+Reviewed twelve previously unreviewed missing origins, Charnock Richard through
+Chipstead. All twelve official senior-club destinations are approved; no new
+holds. Earlier documented held/ambiguous cases are skipped unchanged.
+
+- Original qualifying-club coverage: 168 -> 180 of 651 linked.
+- Missing links: 483 -> 471. Verified queue records: 212 -> 224.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Club-published evidence and league/association corroboration are recorded in
+  [batch 13](../updater/club_website_verified_batch_13.json). Chelmsford's homepage
+  and contact are readable through the public reader despite ordinary GET 403;
+  no access restriction was bypassed. U19 directories corroborate the parent
+  websites, not senior grounds. Historical league records are labelled as such.
+- Cheadle Town and Cheadle Heath Nomads, Surrey and Kent Chipstead, Chesham and
+  Cheshunt remain separate. No youth-only, venue, social or directory destination
+  is promoted. Chertsey's Fanbase booking link is not a replacement homepage.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  The queue and Stage C source report are refreshed. No email is sent.
+
 ## 31 October 2026 checkpoint — missing-link coverage, batch 12
 
 Reviewed twelve previously unreviewed missing origins, Burnham through Chadderton.
