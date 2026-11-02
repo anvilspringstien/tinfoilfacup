@@ -4,6 +4,30 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 2 November 2026 checkpoint — missing-link coverage, batch 14
+
+Reviewed twelve previously unreviewed missing origins, Chislehurst Glebe through
+Cockfosters. Ten official senior-club destinations are approved. Cirencester is
+held for unavailable club evidence; Clay Cross is held for a preferred current
+destination. Earlier documented held/ambiguous cases are skipped unchanged.
+
+- Original qualifying-club coverage: 180 -> 190 of 651 linked.
+- Missing links: 471 -> 461. Verified queue records: 224 -> 234.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Evidence and holds are recorded in
+  [batch 14](../updater/club_website_verified_batch_14.json). Chislehurst's old
+  club-managed site explicitly directs visitors to its new domain. Cleethorpes'
+  own published website link selects its current club-managed Pitchero site;
+  its unavailable custom domain is not promoted. Clevedon's homepage/contact
+  are publicly readable via the reader despite ordinary GET 403. No restriction
+  is bypassed. Historical league corroboration is labelled as such.
+- Clapton and Clapton Community, Clevedon Town and United, football and rugby/
+  cricket clubs remain separate. No youth-only, directory or social destination
+  is promoted, and website ground details are not location corrections.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
 ## 1 November 2026 checkpoint — missing-link coverage, batch 13
 
 Reviewed twelve previously unreviewed missing origins, Charnock Richard through
