@@ -10,7 +10,7 @@
  const uuid=()=>{if(typeof crypto.randomUUID==='function')return crypto.randomUUID();const b=crypto.getRandomValues(new Uint8Array(16));b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;const h=Array.from(b,n=>n.toString(16).padStart(2,'0')).join('');return [h.slice(0,8),h.slice(8,12),h.slice(12,16),h.slice(16,20),h.slice(20)].join('-');};
  const style=document.createElement('link');style.rel='stylesheet';style.href=new URL('like-tffac.css',base);document.head.append(style);
  const text=(node,value)=>{if(node.textContent!==value)node.textContent=value;};
- const update=()=>{for(const row of rows){if(!row.isConnected){rows.delete(row);continue;}const button=row.querySelector('button');button.disabled=busy||!ready;button.setAttribute('aria-pressed',String(liked));button.setAttribute('aria-busy',String(busy));text(button.querySelector('.tffc-like-label'),liked?'Liked — thank you!':'Like TFFAC');text(row.querySelector('.tffc-like-message'),message);}};
+ const update=()=>{for(const row of rows){if(!row.isConnected){rows.delete(row);continue;}const button=row.querySelector('button');button.disabled=busy||!ready;button.setAttribute('aria-pressed',String(liked));button.setAttribute('aria-busy',String(busy));text(row.querySelector('.tffc-like-message'),message);}};
  const request=async(path,body)=>{
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
   try{const r=await fetch(config.endpoint.replace(/\/$/,'')+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),signal:controller.signal,credentials:'omit'});if(!r.ok)throw Error('Unavailable');const v=await r.json();if(typeof v.liked!=='boolean')throw Error('Invalid response');return v;}finally{clearTimeout(timer);}
@@ -32,7 +32,7 @@
    const existing=target.previousElementSibling;
    if(existing?.classList.contains('tffc-like-row')){if(!rows.has(existing)){existing.querySelector('button').addEventListener('click',toggle);rows.add(existing);}continue;}
    const row=document.createElement('div');row.className='tffc-like-row';row.setAttribute('aria-label','Like Tin Foil FA Cup');
-   row.innerHTML='<button type="button" class="tffc-like-button" aria-pressed="false"><svg class="tffc-like-heart" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path d="M12 21 3.5 12.7C-2 7.1 5.8-.9 12 5.3 18.2-.9 26 7.1 20.5 12.7Z"/></svg><span class="tffc-like-label">Like TFFAC</span></button><span class="tffc-like-message" role="status" aria-live="polite"></span>';
+   row.innerHTML='<button type="button" class="tffc-like-button" aria-label="I love TFFAC" aria-pressed="false"><span aria-hidden="true">I</span><svg class="tffc-like-heart" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path d="M12 21 3.5 12.7C-2 7.1 5.8-.9 12 5.3 18.2-.9 26 7.1 20.5 12.7Z"/></svg><span class="tffc-like-label" aria-hidden="true">TFFAC</span></button><span class="tffc-like-message" role="status" aria-live="polite"></span>';
    row.querySelector('button').addEventListener('click',toggle);target.before(row);rows.add(row);
   }
   update();
