@@ -6,6 +6,8 @@
  const shell=document.querySelector('.phone-shell');
  const popup=document.documentElement.dataset.statsPopup==='1';
  const base=new URL('.',document.currentScript.src);
+ // Explicit opt-in follows this tab across the real app frames.
+ if(new URLSearchParams(location.search).get('likePreview')==='1')try{sessionStorage.setItem('tffc.like.shed','1');}catch{}
  const entries={splash:'index.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html',club:'club-details.html'};
  const entry=new URLSearchParams(location.search).get('view')||'splash';
  let report=popup||entry==='stats';
