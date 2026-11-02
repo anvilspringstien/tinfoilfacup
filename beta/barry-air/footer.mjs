@@ -7,10 +7,8 @@ host.querySelector('a.tffc-support-lozenge').href=supportURL;
 const redundantShare=host.querySelector('[onclick="tffcOpenShare()"]');
 redundantShare?.nextElementSibling?.remove();redundantShare?.remove();
 host.querySelector('.tffc-beta-help').setAttribute('aria-label','Tin Foil FA Cup support links');
-// Keep the appreciation preview in the same shared footer position as Campaign.
-let likeShed=new URLSearchParams(location.search).get('likePreview')==='1';
-try{likeShed=likeShed||sessionStorage.getItem('tffc.like.shed')==='1';}catch{}
-if(likeShed){const script=document.createElement('script');script.src=new URL('like-tffac.js',base).href;document.head.append(script);}
+// Shared appreciation control, enabled through like-config.json.
+{const script=document.createElement('script');script.src=new URL('like-tffac.js',base).href;document.head.append(script);}
 
 let active=null;
 function showDialog(dialog){

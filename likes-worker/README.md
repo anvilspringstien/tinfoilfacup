@@ -4,9 +4,11 @@ One site-wide appreciation per browser, independent of Campaign identity. A seco
 
 ## Current state
 
-The frontend is **opt-in only**: visit `beta/likes-shed.html` or append `?likePreview=1`. The flag is remembered for that tab's session across Campaign, Challenges and Barry Air. Normal visitors return before any Like config, stylesheet or service requests. `beta/like-config.json` has no deployed endpoint and remains disabled. A real service response is required before the heart becomes liked; failure preserves the last confirmed state.
+The shared control is publicly enabled in Campaign, Challenges and Barry Air. The independent service is deployed at `https://tffac-likes-shed.anvilspringstien.workers.dev`. The owner confirmed Workers Free, deployed from GitHub, saved the private count token as an encrypted runtime Secret, and verified health, unauthorized count rejection, Like/unlike and refresh persistence from the real site. Automated service probes from the development environment received Cloudflare error 1010; do not mistake that for an application response.
 
-The three footer blocks on the overview are layout samples. Links underneath open the actual app pages with the same Like component. Campaign and Challenges insert their Magic rows dynamically; the component observes those rows and restores handlers after saved HTML snapshots.
+A fresh visit reads any existing browser identifier but creates no identifier, writes no Like storage and makes no Like-service request. Only the first heart tap creates and saves the random identifier. Existing identifiers query the service to restore the saved choice. A real service response is required before the heart becomes liked; failure preserves the last confirmed state. Clearing storage cannot remove a previously counted Like without its identifier.
+
+The three footer blocks on `beta/likes-shed.html` are layout samples. Campaign and Challenges insert their Magic rows dynamically; the shared component observes those rows and restores handlers after saved HTML snapshots. The component supplies the same Privacy wording when existing Campaign, Challenges and Barry Air notices open; their isolated application sources remain unchanged.
 
 ## Storage and free plan
 
@@ -23,19 +25,17 @@ Sources:
 Node 24 is used for built-in SQLite:
 
 ```sh
-node --test tests/likes-worker.test.mjs
+node --test tests/likes-worker.test.mjs tests/likes-client.test.mjs
 node likes-worker/dev-server.mjs
 ```
 
 The local server serves this checkout and `/__likes/{state,reaction}` using a separate database in the OS temporary directory under `tffac-likes-shed/likes.sqlite`. It does not write Campaign data or issue production Campaign numbers. Its `/__shed/count` endpoint is a **development-only diagnostic**, absent from the Cloudflare Worker. This is a real persisted local count, not the public count.
 
-## Deploy separately after review
+## Deployment and rollback
 
-1. Verify Cloudflare account/Free plan and authenticate Wrangler. Deployment access was unavailable when this change was prepared.
-2. From `likes-worker`, use the pinned Wrangler in the check workflow to dry-run; configure `ADMIN_TOKEN` with `wrangler secret put ADMIN_TOKEN`, then deploy the new independent Worker. Never place that secret in frontend config or Git.
-3. Verify health, exact allowed origins, private count authorization and test Like/unlike returning the count to its initial value. No unapproved live mutations by CI.
-4. Set `beta/like-config.json` endpoint to the returned verified Worker URL. Keep `enabled:false` and the opt-in frontend gate until the Shed has been reviewed. Do not invent an endpoint or show a fake success without it.
-5. Before public activation, update the site's Privacy copy to explain the browser token and central reaction hash. Public activation is a separate reviewed change: remove the early opt-in return and switch config only after the Worker is verified. Leave the search counter, competition machinery and protected `clubfinder.html` unchanged.
+Cloudflare Git integration deploys from `main` with repository root `/` and command `npx wrangler@4.156.1 deploy --config likes-worker/wrangler.jsonc`. The Worker is independent of the search counter and competition machinery. `ADMIN_TOKEN` is a runtime Secret, never a build variable, frontend setting or Git file. The owner retains it in their password manager.
+
+For rollback, set `enabled:false` in `beta/like-config.json`; ordinary pages then mount no control and make no Like-service requests. The existing explicit `?likePreview=1` remains available for Shed diagnostics. Do not upgrade plans or change the identity counter when maintaining this service.
 
 ## Service contract
 
