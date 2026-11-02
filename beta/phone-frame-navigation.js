@@ -49,6 +49,9 @@
   }
   function decorate(){
    if(!doc.head)return;
+   // Load the shared appreciation component only in the explicit Like Shed.
+   let likeShed=new URLSearchParams(location.search).get('likePreview')==='1';
+   try{likeShed=likeShed||sessionStorage.getItem('tffc.like.shed')==='1';if(likeShed)doc.defaultView.sessionStorage.setItem('tffc.like.shed','1');}catch{}
    let style=doc.getElementById('phone-frame-navigation-style');
    if(!style){style=doc.createElement('style');style.id='phone-frame-navigation-style';doc.head.append(style);}
    if(style.textContent!==css)style.textContent=css;
@@ -92,6 +95,9 @@
    for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>{const win=doc.defaultView;if(typeof win.tffcCampaignIntroduction==='function')win.tffcCampaignIntroduction('barry');else win.top.location.assign(new URL('barry-air/',base).href);};
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
    for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);
+   if(likeShed&&doc.querySelector('.tffc-magic-row')&&!doc.querySelector('script[data-tffc-like-component]')){
+    const script=doc.createElement('script');script.src=new URL('like-tffac.js',base).href;script.dataset.tffcLikeComponent='1';doc.head.append(script);
+   }
   }
   decorate();
   if(!watched.has(doc)){

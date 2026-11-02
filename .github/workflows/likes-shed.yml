@@ -1,0 +1,24 @@
+name: Like TFFAC Shed
+on:
+  pull_request:
+    paths:
+      - 'likes-worker/**'
+      - 'beta/like-*'
+      - 'beta/likes-shed.html'
+      - 'tests/likes-worker.test.mjs'
+      - '.github/workflows/likes-shed.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  likes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/likes-worker.test.mjs
+      - run: node --check beta/like-tffac.js
+      - name: Bundle independent Worker without deploying
+        run: npx --yes wrangler@4.156.1 deploy --dry-run --config likes-worker/wrangler.jsonc --outdir /tmp/tffac-likes-build
