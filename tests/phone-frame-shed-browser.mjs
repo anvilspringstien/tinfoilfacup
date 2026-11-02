@@ -146,7 +146,8 @@ try{
  await checkMagicFooter();
  assert.equal(await app.locator('#challengeShareLinkFooter').isVisible(),false);
  assert.deepEqual(await app.locator('.deck-sales-coming').evaluate(button=>{const s=getComputedStyle(button);return [s.backgroundColor,s.color,s.opacity]}),['rgb(201, 0, 0)','rgb(255, 255, 255)','1']);
- assert.ok(await app.locator('.tffc-magic-row').evaluate(row=>row.previousElementSibling.classList.contains('deck-sales-tease')),'Challenges Keep/Share follow Coming Soon');
+ await app.locator('.tffc-like-row').waitFor({state:'visible'});
+ assert.ok(await app.locator('.tffc-magic-row').evaluate(row=>{const like=row.previousElementSibling;return like.classList.contains('tffc-like-row')&&like.querySelector('button')?.getAttribute('aria-label')==='I love TFFAC'&&like.previousElementSibling.classList.contains('deck-sales-tease')}),'Challenges footer order: Coming Soon, I heart TFFAC, Keep/Share');
  await app.getByRole('button',{name:'Keep the Magic',exact:true}).click();
  const challengeKeep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
  await challengeKeep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
