@@ -20,7 +20,7 @@ async function page(storage=new Map(),server=new Map(),blocked=false){
   if(path==='/reaction')server.set(body.token,body.liked);
   return {ok:true,json:async()=>({liked:server.get(body.token)||false})};
  };
- vm.runInNewContext(source,{window,localStorage,sessionStorage:{getItem:()=>null},document:{currentScript:{src:'https://site.test/beta/like-tffac.js'},head:{append(){}},body:{},createElement:()=>({}),querySelectorAll:()=>[target]},location:{href:'https://site.test/beta/phone-frame.html',origin:'https://site.test'},MutationObserver:class{observe(){}},crypto:webcrypto,URL,fetch,AbortController,setTimeout,clearTimeout});
+ vm.runInNewContext(source,{window,localStorage,sessionStorage:{getItem:()=>null},document:{currentScript:{src:'https://site.test/beta/like-tffac.js'},head:{append(){}},body:{},createElement:()=>({}),querySelectorAll:selector=>selector==='.tffc-magic-row'?[target]:[]},location:{href:'https://site.test/beta/phone-frame.html',origin:'https://site.test'},MutationObserver:class{observe(){}},crypto:webcrypto,URL,fetch,AbortController,setTimeout,clearTimeout});
  await settle();return {storage,server,calls,writes,events,attrs,button,message,click:async()=>{await handlers.click();await settle();}};
 }
 test('ordinary visit creates no identity, writes no browser state and makes no service call',async()=>{

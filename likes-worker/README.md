@@ -8,7 +8,7 @@ The shared control is publicly enabled in Campaign, Challenges and Barry Air. Th
 
 A fresh visit reads any existing browser identifier but creates no identifier, writes no Like storage and makes no Like-service request. Only the first heart tap creates and saves the random identifier. Existing identifiers query the service to restore the saved choice. A real service response is required before the heart becomes liked; failure preserves the last confirmed state. Clearing storage cannot remove a previously counted Like without its identifier.
 
-The three footer blocks on `beta/likes-shed.html` are layout samples. Campaign and Challenges insert their Magic rows dynamically; the shared component observes those rows and restores handlers after saved HTML snapshots. Privacy wording is shared with Barry Air through the footer generator.
+The three footer blocks on `beta/likes-shed.html` are layout samples. Campaign and Challenges insert their Magic rows dynamically; the shared component observes those rows and restores handlers after saved HTML snapshots. The component supplies the same Privacy wording when existing Campaign, Challenges and Barry Air notices open; their isolated application sources remain unchanged.
 
 ## Storage and free plan
 

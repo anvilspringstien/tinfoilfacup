@@ -29,8 +29,17 @@
   catch{message='Couldn’t save that. Please try again.';}
   finally{busy=false;update();}
  }
+ const privacyHtml="<p>Clubfinder uses your postcode to find nearby clubs. Your Campaign and Challenge progress is stored on your device. See our full Privacy Policy or contact us for details.</p><p><strong>I ♥ TFFAC</strong></p><p>If you use the heart, we save a random identifier in your browser to remember your choice. Our Like service stores a scrambled version of that identifier and the overall Like total. It does not receive your name, email, postcode or Campaign details.</p><p>Tap the heart again to remove your Like. Clearing your browser storage removes its memory of your choice, but does not automatically remove a Like already counted. Different browsers or devices can each register a Like.</p><p>Cloudflare hosts this service and processes connection information, such as your IP address, to deliver and protect it.</p>";
+ function privacy(){
+  for(const node of document.querySelectorAll('#tinFoilPrivacyMessage,#tffcPrivacyMessage,.barry-info-dialog .barry-info-copy')){
+   if(node.classList.contains('barry-info-copy')&&node.closest('dialog')?.querySelector('h2')?.textContent!=='Privacy')continue;
+   if(node.innerHTML!==privacyHtml)node.innerHTML=privacyHtml;
+   if(node.style.maxHeight!=='55vh'){node.style.maxHeight='55vh';node.style.overflowY='auto';node.style.textAlign='left';}
+  }
+ }
  function mount(){
   if(!config||(!config.enabled&&!preview))return;
+  privacy();
   for(const target of document.querySelectorAll('.tffc-magic-row')){
    const existing=target.previousElementSibling;
    if(existing?.classList.contains('tffc-like-row')){if(!rows.has(existing)){existing.querySelector('button').addEventListener('click',toggle);rows.add(existing);}continue;}
