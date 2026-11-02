@@ -929,6 +929,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   .truth-odo{height:26px}
   #truthCallSign{white-space:nowrap}
 }
+#tffcPrivacyMessage{max-height:55vh;overflow-y:auto;text-align:left}
 </style>
 <!-- v0.10.23 — corrected reverse/back artwork mapping for Mats 16, 18, 20–23; no Challenge logic changed -->
 <!-- TFFAC Challenge Deck v0.10.30 | Audit artwork locked | Feedback field between mat and console -->
@@ -1932,7 +1933,7 @@ function tinFoilPrivacyNotice(){
     privacyOverlay.id='tffcPrivacyOverlay';
     privacyOverlay.className='tffc-confirm-overlay';
     privacyOverlay.hidden=true;
-    privacyOverlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcPrivacyTitle" aria-describedby="tffcPrivacyMessage"><div id="tffcPrivacyTitle" class="tffc-confirm-title">Privacy</div><div id="tffcPrivacyMessage" class="tffc-confirm-message">Clubfinder uses your postcode to find nearby clubs. Your Campaign and Challenge progress is stored on your device. See our full Privacy Policy or contact us for details.</div><div class="tffc-privacy-actions"><button id="tffcPrivacyClose" type="button">Close</button></div></div>';
+    privacyOverlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcPrivacyTitle" aria-describedby="tffcPrivacyMessage"><div id="tffcPrivacyTitle" class="tffc-confirm-title">Privacy</div><div id="tffcPrivacyMessage" class="tffc-confirm-message"><p>Clubfinder uses your postcode to find nearby clubs. Your Campaign and Challenge progress is stored on your device. See our full Privacy Policy or contact us for details.</p><p><strong>I ♥ TFFAC</strong></p><p>If you use the heart, we save a random identifier in your browser to remember your choice. Our Like service stores a scrambled version of that identifier and the overall Like total. It does not receive your name, email, postcode or Campaign details.</p><p>Tap the heart again to remove your Like. Clearing your browser storage removes its memory of your choice, but does not automatically remove a Like already counted. Different browsers or devices can each register a Like.</p><p>Cloudflare hosts this service and processes connection information, such as your IP address, to deliver and protect it.</p></div><div class="tffc-privacy-actions"><button id="tffcPrivacyClose" type="button">Close</button></div></div>';
     document.body.appendChild(privacyOverlay);
   }
   const closeButton=document.getElementById('tffcPrivacyClose'),previous=document.activeElement;
