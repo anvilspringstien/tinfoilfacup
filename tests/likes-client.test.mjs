@@ -6,7 +6,7 @@ import {readFile} from 'node:fs/promises';
 const source=await readFile(new URL('../beta/like-tffac.js',import.meta.url),'utf8');
 const key='tffc.like.identity.v1';
 const settle=async()=>{for(let i=0;i<8;i++)await new Promise(resolve=>setImmediate(resolve));};
-async function page(storage=new Map(),server=new Map(),blocked=false){
+async function page(storage=new Map(),server=new Map(),blocked=false,notice=null){
  const calls=[],writes=[],events={},attrs={},handlers={};
  const message={textContent:''};
  const button={disabled:true,setAttribute:(k,v)=>attrs[k]=v,addEventListener:(k,v)=>handlers[k]=v};
@@ -20,7 +20,7 @@ async function page(storage=new Map(),server=new Map(),blocked=false){
   if(path==='/reaction')server.set(body.token,body.liked);
   return {ok:true,json:async()=>({liked:server.get(body.token)||false})};
  };
- vm.runInNewContext(source,{window,localStorage,sessionStorage:{getItem:()=>null},document:{currentScript:{src:'https://site.test/beta/like-tffac.js'},head:{append(){}},body:{},createElement:()=>({}),querySelectorAll:selector=>selector==='.tffc-magic-row'?[target]:[]},location:{href:'https://site.test/beta/phone-frame.html',origin:'https://site.test'},MutationObserver:class{observe(){}},crypto:webcrypto,URL,fetch,AbortController,setTimeout,clearTimeout});
+ vm.runInNewContext(source,{window,localStorage,sessionStorage:{getItem:()=>null},document:{currentScript:{src:'https://site.test/beta/like-tffac.js'},head:{append(){}},body:{},createElement:()=>({}),querySelectorAll:selector=>selector==='.tffc-magic-row'?[target]:(notice?[notice]:[])},location:{href:'https://site.test/beta/phone-frame.html',origin:'https://site.test'},MutationObserver:class{observe(){}},crypto:webcrypto,URL,fetch,AbortController,setTimeout,clearTimeout});
  await settle();return {storage,server,calls,writes,events,attrs,button,message,click:async()=>{await handlers.click();await settle();}};
 }
 test('ordinary visit creates no identity, writes no browser state and makes no service call',async()=>{
@@ -36,4 +36,9 @@ test('another document learns first-tap identity through storage refresh',async(
 });
 test('blocked storage is reported only on interaction and sends no reaction',async()=>{
  const p=await page(new Map(),new Map(),true);assert.equal(p.message.textContent,'');await p.click();assert.match(p.message.textContent,/couldn’t remember/);assert.equal(p.calls.length,0);assert.equal(p.button.disabled,false);
+});
+
+test('shared Privacy copy is scrollable and leaves About Us unchanged',async()=>{
+ const notice={classList:{contains:()=>false},innerHTML:'Old notice',style:{}};await page(new Map(),new Map(),false,notice);assert.match(notice.innerHTML,/random identifier/);assert.match(notice.innerHTML,/does not automatically remove/);assert.equal(notice.style.overflowY,'auto');
+ const about={classList:{contains:()=>true},innerHTML:'Our story',style:{},closest:()=>({querySelector:()=>({textContent:'About Us'})})};await page(new Map(),new Map(),false,about);assert.equal(about.innerHTML,'Our story');assert.deepEqual(about.style,{});
 });
