@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-01T07:32:37.811833+00:00",
+  "competition_updated_at": "2026-11-02T06:03:54.823401+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 180,
+  "eligible_linked": 190,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1777,50 +1777,6 @@
       "evidence": []
     },
     {
-      "club": "Chislehurst Glebe FC",
-      "identities": [
-        "Chislehurst Glebe FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Chorley FC",
-      "identities": [
-        "Chorley FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Christchurch FC",
-      "identities": [
-        "Christchurch FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cinderford Town FC",
-      "identities": [
-        "Cinderford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Cirencester Town FC",
       "identities": [
         "Cirencester Town FC"
@@ -1832,75 +1788,9 @@
       "evidence": []
     },
     {
-      "club": "Clapton Community FC",
-      "identities": [
-        "Clapton Community FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Clay Cross Town FC",
       "identities": [
         "Clay Cross Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cleethorpes Town FC",
-      "identities": [
-        "Cleethorpes Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Clevedon Town FC",
-      "identities": [
-        "Clevedon Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Clitheroe FC",
-      "identities": [
-        "Clitheroe FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cobham FC",
-      "identities": [
-        "Cobham FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cockfosters FC",
-      "identities": [
-        "Cockfosters FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9148,6 +9038,186 @@
           "evidence_url": "https://www.chipsteadfc.com/contact",
           "verified_on": "2026-11-01",
           "ledger": "club_website_verified_batch_13.json"
+        }
+      ]
+    },
+    {
+      "club": "Chislehurst Glebe FC",
+      "identities": [
+        "Chislehurst Glebe FC"
+      ],
+      "current_competition": false,
+      "website": "https://chislehurstglebefc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chislehurstglebefc.com/",
+          "evidence_url": "https://chislehurstglebefc.com/about/",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Chorley FC",
+      "identities": [
+        "Chorley FC"
+      ],
+      "current_competition": false,
+      "website": "https://chorleyfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://chorleyfc.com/",
+          "evidence_url": "https://chorleyfc.com/",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Christchurch FC",
+      "identities": [
+        "Christchurch FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.christchurchfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.christchurchfc.co.uk/",
+          "evidence_url": "https://www.christchurchfc.co.uk/club-info/club-history",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Cinderford Town FC",
+      "identities": [
+        "Cinderford Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.cinderfordtown.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.cinderfordtown.co.uk/",
+          "evidence_url": "https://www.cinderfordtown.co.uk/contact-us/",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Clapton Community FC",
+      "identities": [
+        "Clapton Community FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.claptoncfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.claptoncfc.co.uk/",
+          "evidence_url": "https://www.claptoncfc.co.uk/about-clapton-community-fc/",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Cleethorpes Town FC",
+      "identities": [
+        "Cleethorpes Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/cleethorpestown/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/cleethorpestown/",
+          "evidence_url": "https://www.pitchero.com/clubs/cleethorpestown/contact",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Clevedon Town FC",
+      "identities": [
+        "Clevedon Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.clevedontownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.clevedontownfc.com/",
+          "evidence_url": "https://www.clevedontownfc.com/contact/",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Clitheroe FC",
+      "identities": [
+        "Clitheroe FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.clitheroefc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.clitheroefc.co.uk/",
+          "evidence_url": "https://www.clitheroefc.co.uk/",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Cobham FC",
+      "identities": [
+        "Cobham FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.cobhamfootballclub.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.cobhamfootballclub.com/",
+          "evidence_url": "https://www.cobhamfootballclub.com/contact",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
+        }
+      ]
+    },
+    {
+      "club": "Cockfosters FC",
+      "identities": [
+        "Cockfosters FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/cockfosters/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/cockfosters/",
+          "evidence_url": "https://www.pitchero.com/clubs/cockfosters/contact",
+          "verified_on": "2026-11-02",
+          "ledger": "club_website_verified_batch_14.json"
         }
       ]
     },
