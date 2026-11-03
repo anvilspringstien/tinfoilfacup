@@ -18,3 +18,20 @@ test('returning from background rechecks closure and reconnects once; late old s
 test('back-forward restored pages reconnect and offline pages keep draft disabled',async()=>{const b=browser();await b.settle();b.snapshot(b.sockets[0]);b.$('text').value='Draft';b.windowEvents.pagehide();b.setState({open:false});b.windowEvents.pageshow({persisted:true});await b.settle();assert.equal(b.sockets.length,2);b.snapshot(b.sockets[1]);assert.equal(b.$('text').disabled,true);assert.equal(b.$('text').value,'Draft');b.windowEvents.offline();assert.equal(b.$('send').disabled,true);assert.match(b.$('status').textContent,/Offline/);});
 test('a state request completing after pagehide cannot resurrect the socket',async()=>{const b=browser();await b.settle();b.snapshot(b.sockets[0]);const resolve=b.defer();b.$('connect').onclick();b.windowEvents.pagehide();resolve({open:true,you:{id:'a',name:'Checky'},messages:[]});await b.settle();assert.equal(b.sockets.length,1);assert.equal(b.$('send').disabled,true);});
 test('report receipt is shown beside the message only after confirmed state and survives a fresh view',async()=>{const b=browser();const message={id:'m1',person:'bert',name:'Bert',text:'Test message',at:Date.now(),hearts:0,hearted:false,reported:false};b.setState({messages:[message]});await b.settle();const ws=b.sockets[0];b.snapshot(ws);const row=b.$('messages').children[0],bubble=row.children[1],meta=bubble.children[2],report=meta.children[3];assert.equal(report.textContent,'Report');report.onclick();assert.equal(ws.sent.type,'report');assert.equal(report.textContent,'Sending…');assert.equal(report.disabled,true);b.setState({messages:[{...message,reported:true}]});b.snapshot(ws);const receiptBubble=b.$('messages').children[0].children[1];assert.equal(receiptBubble.children[2].children[3].textContent,'Reported ✓');assert.equal(receiptBubble.children[3].textContent,'Sent privately to the landlord.');});
+test('live closure hides the composer, keeps its draft and restores it when the room reopens',async()=>{
+ const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
+ b.$('text').value='A pie for later';assert.equal(b.$('composer-wrap').hidden,false);
+ b.setState({open:false});b.snapshot(ws);
+ assert.equal(b.$('composer-wrap').hidden,true);assert.equal(b.$('send').disabled,true);
+ assert.equal(b.$('text').value,'A pie for later');assert.match(b.$('doors').textContent,/ROOM CLOSED/);
+ b.setState({open:true});b.snapshot(ws);
+ assert.equal(b.$('composer-wrap').hidden,false);assert.equal(b.$('text').disabled,false);
+ assert.equal(b.$('text').value,'A pie for later');
+});
+test('fresh messages preserve an older reading position in the shared header-and-conversation scroller',async()=>{
+ const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
+ const scroll=b.$('room-scroll');scroll.scrollTop=250;scroll.scrollHeight=2400;scroll.clientHeight=500;
+ b.setState({messages:[{id:'new',person:'bert',name:'Bert',text:'New pie order',at:Date.now(),hearts:0}]});b.snapshot(ws);
+ assert.equal(scroll.scrollTop,250);
+ scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
+});
