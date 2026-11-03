@@ -8,7 +8,7 @@ A separate Cloudflare Worker and SQLite Durable Object for the first invited cha
 - One-use, random 256-bit invitations issued by the landlord, with ten reserved test places maximum. Invitations and sessions are stored as hashes, expire seven days after issue and are never put in URLs. Successful redemption sets a Secure, HttpOnly, SameSite=Strict host cookie. The landlord allocates pigeon names; participants cannot rename themselves or claim another identity in messages. Logout revokes that session; suspension revokes it and closes existing connections.
 - Live WebSocket broadcast, replies, idempotent hearts, private reports, moderator removal and suspension. Messages use textContent, not interpreted HTML. Reporters are visible only to the landlord. Message removal also clears hearts; later replies to removed messages are rejected.
 - Last 200 messages, up to seven days. Daily cleanup alarm removes expired records even without visitors. Cloudflare infrastructure backups can outlast application retention; this is not a promise to erase platform backups immediately. No uploads, private messages, automated Barry/AI, email or external services.
-- Five actions per ten seconds per participant, 2,000 accepted actions/day room-wide, 200 WebSocket joins/day, two connections per participant and twenty total. Limits persist across object restarts. WebSockets use the hibernation API and attachments. No automatic reconnect loop, polling, ping timers or third-party scripts.
+- Five actions per ten seconds per participant, 2,000 accepted actions/day room-wide, 200 WebSocket joins/day, two connections per participant and twenty total. Limits persist across object restarts. WebSockets use the hibernation API and attachments. No automatic reconnect loop, polling, ping timers or third-party scripts. Returning to a visible room or restoring a page performs one fresh state check and reconnect; background/offline/disconnected inputs are disabled, and typing resumes only after a fresh socket snapshot. Draft text survives connection changes.
 - Simple service test UI at `/`, private landlord data behind `/admin` plus Bearer-authenticated API. Admin secret stays only in module memory; Lock/navigation clears it. All forms use same-origin JSON requests, strict CSP, no-store responses and no credentials in query strings. Real browser/device checks remain necessary after deployment.
 
 **Identity boundary:** these are invited Boot Room identities, not verified TFFAC Campaign identities. Call signs and custodians are deliberately not presented as verified. A call sign copied from browser storage is not proof of ownership. Secure Campaign association is a later stage, before integration with the established visual prototype and public button.
@@ -18,7 +18,7 @@ A separate Cloudflare Worker and SQLite Durable Object for the first invited cha
 Node 24:
 
 ```sh
-node --test tests/boot-room.test.mjs
+node --test tests/boot-room.test.mjs tests/boot-room-client.test.mjs
 npx --yes wrangler@4.156.1 deploy --dry-run --config boot-room-worker/wrangler.jsonc --outdir /tmp/tffac-boot-room-build
 ```
 

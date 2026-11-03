@@ -4,11 +4,33 @@ export const script=`const $=id=>document.getElementById(id);let socket,me,reply
 const status=text=>$('status').textContent=text;
 async function api(path,body,admin=false){const r=await fetch(path,{method:body?'POST':'GET',headers:body?{'content-type':'application/json',...(admin?{authorization:'Bearer '+secret}:{})}:{},body:body?JSON.stringify(body):undefined,cache:'no-store',redirect:'error'});const d=await r.json();if(!r.ok)throw Error(d.error||'Request failed');return d;}
 function button(label,fn){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;}
-function send(a){if(socket?.readyState!==WebSocket.OPEN){status('Reconnect before posting.');return false;}socket.send(JSON.stringify(a));return true;}
-function render(d){me=d.you;$('join').hidden=true;$('room').hidden=false;$('doors').textContent=d.open?'ROOM OPEN · closes '+new Date(d.until).toLocaleString():'ROOM CLOSED · '+d.next;$('you').textContent='Posting as '+me.name+' · invited test identity';$('send').disabled=!d.open;$('text').disabled=!d.open;$('messages').replaceChildren();for(const m of d.messages){const a=document.createElement('article');if(m.person===me.id)a.className='own';const who=document.createElement('small');who.textContent=m.name+' · '+new Date(m.at).toLocaleTimeString();a.append(who);if(m.replyTo){const q=document.createElement('small');const parent=d.messages.find(p=>p.id===m.replyTo);q.textContent='Reply to '+(parent?.name||'earlier message');a.append(q);}const text=document.createElement('p');text.textContent=m.text;a.append(text);if(!m.deleted){a.append(button('Reply',()=>{replyTo=m.id;$('reply').textContent='Replying to '+m.name;$('text').focus();}),button((m.hearted?'♥ ':'♡ ')+m.hearts,()=>send({type:'heart',id:m.id,liked:!m.hearted})),button('Report',()=>{send({type:'report',id:m.id});}));} $('messages').append(a);}}
-async function connect(){try{socket?.close();const d=await api('/api/state');render(d);socket=new WebSocket(location.origin.replace(/^http/,'ws')+'/api/socket');socket.onopen=()=>status('Connected to the Boot Room.');socket.onmessage=e=>{const data=JSON.parse(e.data);if(data.type==='snapshot')render(data);else if(data.type==='ack'){if(data.action==='message'&&$('text').value===pendingText){$('text').value='';replyTo=null;$('reply').textContent='';pendingText=null;}status(data.reported?'Report received by the landlord.':'Delivered.');}else status(data.error);};socket.onclose=()=>status('Connection closed. Reconnect when ready.');socket.onerror=()=>status('Connection unavailable. Try reconnecting.');}catch(e){status(e.message);$('room').hidden=true;$('join').hidden=false;}}
+function send(a){if(!socketFresh||socket?.readyState!==WebSocket.OPEN||document.visibilityState==='hidden'){status('Reconnect before posting.');return false;}socket.send(JSON.stringify(a));return true;}
+function render(d){me=d.you;$('join').hidden=true;$('room').hidden=false;$('doors').textContent=d.open?'ROOM OPEN · closes '+new Date(d.until).toLocaleString():'ROOM CLOSED · '+d.next;$('you').textContent='Posting as '+me.name+' · invited test identity';roomOpen=d.open;availability();$('messages').replaceChildren();for(const m of d.messages){const a=document.createElement('article');if(m.person===me.id)a.className='own';const who=document.createElement('small');who.textContent=m.name+' · '+new Date(m.at).toLocaleTimeString();a.append(who);if(m.replyTo){const q=document.createElement('small');const parent=d.messages.find(p=>p.id===m.replyTo);q.textContent='Reply to '+(parent?.name||'earlier message');a.append(q);}const text=document.createElement('p');text.textContent=m.text;a.append(text);if(!m.deleted){a.append(button('Reply',()=>{replyTo=m.id;$('reply').textContent='Replying to '+m.name;$('text').focus();}),button((m.hearted?'♥ ':'♡ ')+m.hearts,()=>send({type:'heart',id:m.id,liked:!m.hearted})),button('Report',()=>{send({type:'report',id:m.id});}));} $('messages').append(a);}}
+let connectionEpoch=0,connecting=false,socketFresh=false,roomOpen=false;
+const isRoom=()=>location.pathname!=='/admin';
+function availability(){const enabled=socketFresh&&socket?.readyState===WebSocket.OPEN&&roomOpen&&document.visibilityState!=='hidden';$('send').disabled=!enabled;$('text').disabled=!enabled;}
+function disconnect(){connectionEpoch++;connecting=false;socketFresh=false;const old=socket;socket=null;old?.close();availability();if(me)$('doors').textContent='CONNECTION PAUSED · room status needs checking';}
+async function connect(){
+ if(!isRoom()||document.visibilityState==='hidden'||connecting)return;
+ disconnect();connecting=true;const epoch=connectionEpoch;status('Checking the room…');
+ try{
+  const d=await api('/api/state');if(epoch!==connectionEpoch)return;render(d);
+  const ws=new WebSocket(location.origin.replace(/^http/,'ws')+'/api/socket');socket=ws;
+  ws.onopen=()=>{if(socket===ws)status('Connected. Checking the latest room status…');};
+  ws.onmessage=e=>{
+   if(socket!==ws||epoch!==connectionEpoch)return;
+   const data=JSON.parse(e.data);
+   if(data.type==='snapshot'){socketFresh=true;render(data);status(data.open?'Connected to the Boot Room.':'Room closed · conversation is available to read.');}
+   else if(data.type==='ack'){if(data.action==='message'&&$('text').value===pendingText){$('text').value='';replyTo=null;$('reply').textContent='';pendingText=null;}status(data.reported?'Report received by the landlord.':'Delivered.');}
+   else status(data.error);
+  };
+  ws.onclose=()=>{if(socket!==ws)return;disconnect();status('Connection closed. Reconnect when ready.');};
+  ws.onerror=()=>{if(socket!==ws)return;disconnect();status('Connection unavailable. Try reconnecting.');};
+ }catch(e){if(epoch!==connectionEpoch)return;status(e.message);if(!me){$('room').hidden=true;$('join').hidden=false;}}
+ finally{if(epoch===connectionEpoch)connecting=false;}
+}
 $('join-form').onsubmit=async e=>{e.preventDefault();try{await api('/api/join',{invite:$('invite').value.trim()});$('invite').value='';await connect();}catch(x){status(x.message);}};
-$('connect').onclick=connect;$('logout').onclick=async()=>{socket?.close();await api('/api/logout',{});$('room').hidden=true;$('join').hidden=false;status('This device has left. Ask the landlord for a new invitation to return.');};
+$('connect').onclick=connect;$('logout').onclick=async()=>{disconnect();me=null;roomOpen=false;await api('/api/logout',{});$('room').hidden=true;$('join').hidden=false;status('This device has left. Ask the landlord for a new invitation to return.');};
 $('composer').onsubmit=e=>{e.preventDefault();pendingText=$('text').value;send({type:'message',text:pendingText,replyTo});};
 $('cancel-reply').onclick=()=>{replyTo=null;$('reply').textContent='';};
 function lock(){generation++;secret='';$('password').value='';$('new-invite').value='';$('admin-controls').hidden=true;$('unlock-form').hidden=false;for(const id of ['people','reports','review','usage'])$(id).replaceChildren();}
@@ -19,5 +41,7 @@ $('unlock-form').onsubmit=async e=>{e.preventDefault();secret=$('password').valu
 $('refresh').onclick=()=>review().catch(e=>status(e.message));$('lock').onclick=lock;
 $('invite-form').onsubmit=async e=>{e.preventDefault();const g=generation;try{const d=await api('/api/invite',{name:$('name').value},true);if(g!==generation)return;$('new-invite').value=d.invite;await review();status('Invitation created. Share privately; it works once.');}catch(x){status(x.message);}};
 $('doors-form').onsubmit=e=>{e.preventDefault();moderate({type:'doors',open:e.submitter.value==='yes',until:Date.now()+Number($('hours').value)*3600000,next:$('next').value});};
-window.addEventListener('pagehide',()=>{socket?.close();lock();});window.addEventListener('pageshow',e=>{if(e.persisted)lock();});
+window.addEventListener('pagehide',()=>{disconnect();lock();});window.addEventListener('pageshow',e=>{if(e.persisted){lock();connect();}});
+document.addEventListener('visibilitychange',()=>{if(!isRoom())return;if(document.visibilityState==='hidden')disconnect();else connect();});
+window.addEventListener('offline',()=>{if(isRoom()){disconnect();status('Offline · your draft is kept here.');}});window.addEventListener('online',()=>connect());
 if(location.pathname==='/admin'){$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else connect();`;
