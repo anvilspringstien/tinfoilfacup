@@ -1,0 +1,34 @@
+name: Boot Room Shed
+on:
+  pull_request:
+    paths:
+      - 'boot-room-worker/**'
+      - 'tests/boot-room*'
+      - '.github/workflows/boot-room-shed.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  boot-room:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/boot-room.test.mjs
+      - name: Check browser script syntax
+        run: node --input-type=module -e "import {script} from './boot-room-worker/ui.mjs'; import vm from 'node:vm'; new vm.Script(script);"
+      - name: Install local runtime test tools outside the repository
+        run: npm install --prefix /tmp/tffac-boot-tools --no-save wrangler@4.156.1 ws@8.21.0
+      - name: Bundle isolated Worker without deploying
+        run: node /tmp/tffac-boot-tools/node_modules/wrangler/bin/wrangler.js deploy --dry-run --config boot-room-worker/wrangler.jsonc --outdir /tmp/tffac-boot-room-build
+      - name: Two-client local WebSocket integration
+        shell: bash
+        run: |
+          node /tmp/tffac-boot-tools/node_modules/wrangler/bin/wrangler.js dev --config boot-room-worker/wrangler.jsonc --ip 127.0.0.1 --port 8789 --var ADMIN_TOKEN:local-test-only > /tmp/boot-room-runtime.log 2>&1 &
+          boot_room_pid=$!
+          trap 'kill "$boot_room_pid" 2>/dev/null || true' EXIT
+          node --input-type=module -e "for(let i=0;i<150;i++){try{if((await fetch('http://127.0.0.1:8789/health')).ok)process.exit(0);}catch{}await new Promise(r=>setTimeout(r,200));}process.exit(1);"
+          node tests/boot-room-live-check.mjs http://127.0.0.1:8789 /tmp/tffac-boot-tools/node_modules/ws
+
