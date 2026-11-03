@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: node --test tests/boot-room.test.mjs
+      - run: node --test tests/boot-room.test.mjs tests/boot-room-client.test.mjs
       - name: Check browser script syntax
         run: node --input-type=module -e "import {script} from './boot-room-worker/ui.mjs'; import vm from 'node:vm'; new vm.Script(script);"
       - name: Install local runtime test tools outside the repository
