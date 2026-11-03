@@ -4,6 +4,30 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 3 November 2026 checkpoint — missing-link coverage, batch 15
+
+Reviewed twelve previously unreviewed missing origins, Coleshill through Coventry
+United. Ten official senior-club destinations are approved. Corsham is held for
+a generic placeholder homepage; Coventry United is held for an accessible preferred
+current destination. Earlier documented held/ambiguous cases stay unchanged.
+
+- Original qualifying-club coverage: 190 -> 200 of 651 linked.
+- Missing links: 461 -> 451. Verified queue records: 234 -> 244.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Sources and holds are recorded in
+  [batch 15](../updater/club_website_verified_batch_15.json). Corinthian links to
+  its dedicated senior football section, supported by its own legal-identity
+  page and SCEFL. The general golf/venue homepage is not substituted. Historical
+  and inactive U19 corroboration is explicitly labelled as such.
+- Corinthian and Corinthian-Casuals, Concord and Concorde Rangers, Colney Heath
+  and London Colney, Coventry Sphinx/United/City remain separate. Old archives,
+  junior-only sites and social/directory destinations are not promoted.
+- Congleton's information-page domain strings and stadium differences are not
+  replacement mappings or location corrections. No access restrictions bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
 ## 2 November 2026 checkpoint — missing-link coverage, batch 14
 
 Reviewed twelve previously unreviewed missing origins, Chislehurst Glebe through
