@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-02T06:03:54.823401+00:00",
+  "competition_updated_at": "2026-11-03T06:48:12.477527+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 190,
+  "eligible_linked": 200,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1799,119 +1799,9 @@
       "evidence": []
     },
     {
-      "club": "Coleshill Town FC",
-      "identities": [
-        "Coleshill Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Colney Heath FC",
-      "identities": [
-        "Colney Heath FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Concord Rangers FC",
-      "identities": [
-        "Concord Rangers FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Congleton Town FC",
-      "identities": [
-        "Congleton Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Corby Town FC",
-      "identities": [
-        "Corby Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Corinthian Casuals FC",
-      "identities": [
-        "Corinthian Casuals FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Corinthian FC",
-      "identities": [
-        "Corinthian FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cornard United FC",
-      "identities": [
-        "Cornard United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Corsham Town FC",
       "identities": [
         "Corsham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Coton Green FC",
-      "identities": [
-        "Coton Green FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Coventry Sphinx FC",
-      "identities": [
-        "Coventry Sphinx FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9222,6 +9112,78 @@
       ]
     },
     {
+      "club": "Coleshill Town FC",
+      "identities": [
+        "Coleshill Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.coleshilltownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.coleshilltownfc.com/",
+          "evidence_url": "https://www.coleshilltownfc.com/contact",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Colney Heath FC",
+      "identities": [
+        "Colney Heath FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.colneyheathfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.colneyheathfc.co.uk/",
+          "evidence_url": "https://www.colneyheathfc.co.uk/club-contacts",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Concord Rangers FC",
+      "identities": [
+        "Concord Rangers FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.concordrangers-fc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.concordrangers-fc.co.uk/",
+          "evidence_url": "https://www.concordrangers-fc.co.uk/contact-us",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Congleton Town FC",
+      "identities": [
+        "Congleton Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://ctfc.club/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://ctfc.club/",
+          "evidence_url": "https://ctfc.club/information/",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
       "club": "Consett AFC",
       "identities": [
         "Consett AFC"
@@ -9236,6 +9198,114 @@
           "evidence_url": "https://consettafc.com/",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_05.json"
+        }
+      ]
+    },
+    {
+      "club": "Corby Town FC",
+      "identities": [
+        "Corby Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.corbytown.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.corbytown.co.uk/",
+          "evidence_url": "https://www.corbytown.co.uk/contact",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Corinthian Casuals FC",
+      "identities": [
+        "Corinthian Casuals FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.corinthian-casuals.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.corinthian-casuals.com/",
+          "evidence_url": "https://www.corinthian-casuals.com/",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Corinthian FC",
+      "identities": [
+        "Corinthian FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.corinthiansportsclub.co.uk/football",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.corinthiansportsclub.co.uk/football",
+          "evidence_url": "https://www.corinthiansportsclub.co.uk/legal-fa-rule-2-13",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Cornard United FC",
+      "identities": [
+        "Cornard United FC"
+      ],
+      "current_competition": false,
+      "website": "https://cornardunitedfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://cornardunitedfc.co.uk/",
+          "evidence_url": "https://cornardunitedfc.co.uk/contact",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Coton Green FC",
+      "identities": [
+        "Coton Green FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.thegreenarmy.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.thegreenarmy.co.uk/",
+          "evidence_url": "https://www.thegreenarmy.co.uk/",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
+        }
+      ]
+    },
+    {
+      "club": "Coventry Sphinx FC",
+      "identities": [
+        "Coventry Sphinx FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/coventrysphinx/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/coventrysphinx/",
+          "evidence_url": "https://www.pitchero.com/clubs/coventrysphinx/contact",
+          "verified_on": "2026-11-03",
+          "ledger": "club_website_verified_batch_15.json"
         }
       ]
     },
