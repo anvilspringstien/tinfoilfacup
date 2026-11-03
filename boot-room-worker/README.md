@@ -60,6 +60,12 @@ References checked 3 November 2026:
 
 The live service now uses the approved Boot Room prototype's dark frame, cream/teal conversation, sender-aligned bubbles, reply excerpts, pinned composer, closed-room next-opening notice, house rules and Barry landlord identity. The two crest images reuse the exact existing optimized public TFFAC assets (no new image downloads or generation in the repository); CSP permits images only from tinfoilfacup.com. The standalone visual Sites prototype remains unchanged.
 
+### Entrance and conversation
+
+`/` is the Boot Room entrance on both desktop and phone: one centred frame with Barry's introduction, opening details, house rules and a link to `/chat`. `/chat` retains the approved scrolling conversation and sticky room status, with a pinned composer only while open. The previous desktop introduction beside the chat is removed. Existing invitation cookies work across both paths; visiting the entrance does not leave the room or consume another invitation. `/admin` remains the landlord view. No public My Campaign button is added by this isolated change.
+
+The public read-only `GET /api/doors` returns only `open`, `until` and the landlord's `next` opening text. Conversation, people, reports, usage and credentials remain protected. The entrance checks on load, foreground restoration, network return or a manual Check doors tap, without opening a WebSocket or polling. Opening state is checked again by the existing authenticated conversation flow on entry. If opening details cannot be checked, the entrance shows that limitation instead of asserting that the room is closed.
+
 Report receipts are personal: snapshots expose only whether the current participant reported a message, never the report list or another reporter's identity. A confirmed report changes its message control to Reported and adds a private receipt beneath it, including after reconnect/reload. Pending transmission is labelled Sending. Closed rooms still allow reports while replies/hearts/typing are disabled. The landlord view has a visible checking state and last successful refresh time.
 
 The public navigation/button, existing invitations/sessions and room opening state are unchanged. Browser design QA uses clearly labelled sample messages on desktop and a390x844 Chrome frame, not live room data or Safari. Live phone verification remains appropriate after deployment.

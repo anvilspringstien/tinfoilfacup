@@ -17,6 +17,7 @@ export class BootRoom extends DurableObject {
  else if(path==='/api/join')result=this.room.redeem(a.invite,a.session);
  else if(path==='/api/logout'){result=this.room.logout(hash);this.broadcast();}
  else if(path==='/api/state')result=this.room.snapshot(hash);
+ else if(path==='/api/doors')result=this.room.doors();
  else if(path==='/internal/admin'){result=this.room.admin(a);if(a.type==='doors')await this.ctx.storage.setAlarm(a.open?a.until:Date.now()+DAY);this.broadcast();}
  else return json({error:'not_found'},404);
  return json(result);
@@ -28,14 +29,15 @@ export class BootRoom extends DurableObject {
  webSocketError(ws){ws.close(1011,'Connection error');}
 }
 export default {async fetch(request,env){try{const u=new URL(request.url),path=u.pathname;
- const assets={'/':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
+ const assets={'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
  if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://tinfoilfacup.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"}});}
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});
- const post=['/api/join','/api/admin','/api/invite','/api/logout'].includes(path);if(!post&&!['/api/state','/api/socket'].includes(path))return json({error:'not_found'},404);
+ const post=['/api/join','/api/admin','/api/invite','/api/logout'].includes(path);if(!post&&!['/api/state','/api/socket','/api/doors'].includes(path))return json({error:'not_found'},404);
  if(request.method!==(post?'POST':'GET'))return json({error:'method_not_allowed'},405);
  if((post||path==='/api/socket')&&request.headers.get('origin')!==u.origin)return json({error:'origin_not_allowed'},403);
  let body={};if(post){if(!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||''))return json({error:'json_required'},415);const raw=await request.text();if(new TextEncoder().encode(raw).length>2048)return json({error:'body_too_large'},413);try{body=JSON.parse(raw);}catch{return json({error:'invalid_json'},400);}if(!body||typeof body!=='object'||Array.isArray(body))return json({error:'invalid_json'},400);}
  const stub=env.BOOT_ROOM.get(env.BOOT_ROOM.idFromName('invited-boot-room-v1'));
+ if(path==='/api/doors')return stub.fetch('https://room.internal/api/doors');
  if(path==='/api/logout'){const old=request.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1)||'';if(/^[a-f0-9]{64}$/.test(old))await stub.fetch('https://room.internal/api/logout',{method:'POST',headers:{'x-room-session':await digest(old)},body:'{}'});return json({ok:true},200,{'set-cookie':cookieName+'=; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'});}
  if(path==='/api/admin'||path==='/api/invite'){
   if(!env.ADMIN_TOKEN||request.headers.get('authorization')!==`Bearer ${env.ADMIN_TOKEN}`)return json({error:'unauthorized'},401);
