@@ -63,3 +63,13 @@ their privately retained token; do not claim a sample QA count is the live total
 - Both require an exact allowed Origin and JSON; bodies are limited to 512 bytes and unexpected fields are rejected.
 - `GET /admin/count` with private Bearer token returns `{total}`.
 - `GET /health` returns only service readiness/contract version.
+
+## Managed Cloudflare branch previews
+
+Use `npx wrangler@4.156.1 preview --config likes-worker/wrangler.jsonc` for both Previews Base and each existing branch Preview's build command. Updating Previews Base only changes newly created Previews; existing branch settings must be updated separately. Keep the production deploy command above unchanged. Do not use `versions upload` for managed branch Previews or rename the production Worker to match a branch.
+
+The `previews` block supplies the `TFFAC_LIKES` binding. Cloudflare automatically creates a separate Durable Object namespace and storage for each managed Preview; class migrations remain at the top level. Preview allowed origins are empty, so public reaction requests are rejected. Do not copy the production `ADMIN_TOKEN` into Previews Base or branch secrets. These previews are isolated service checks, not an alternate public Likes endpoint.
+
+References:
+- https://developers.cloudflare.com/workers/previews/configuration/
+- https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/
