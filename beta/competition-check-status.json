@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-11-03T18:12:14.175348Z",
+  "monitor_ran_at": "2026-11-03T19:47:44.637158Z",
   "state": "unverified",
   "last_checked_at": null,
-  "results": "success",
-  "draw": "unverified",
+  "results": "unverified",
+  "draw": "success",
   "diagnostics": {
     "results": {
-      "reason": "verified",
+      "reason": "stale",
       "run_id": 41660616358,
       "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/41660616358",
       "event": "schedule",
@@ -16,23 +16,23 @@
       "updated_at": "2026-11-03T15:13:33Z"
     },
     "draw": {
-      "reason": "stale",
-      "run_id": 41634593976,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/41634593976",
+      "reason": "verified",
+      "run_id": 41706312913,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/41706312913",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-11-03T12:18:49Z"
+      "updated_at": "2026-11-03T19:46:40Z"
     }
   },
   "scheduled": {
     "state": "unverified",
     "last_checked_at": null,
-    "results": "success",
-    "draw": "unverified",
+    "results": "unverified",
+    "draw": "success",
     "diagnostics": {
       "results": {
-        "reason": "verified",
+        "reason": "stale",
         "run_id": 41660616358,
         "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/41660616358",
         "event": "schedule",
@@ -41,13 +41,13 @@
         "updated_at": "2026-11-03T15:13:33Z"
       },
       "draw": {
-        "reason": "stale",
-        "run_id": 41634593976,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/41634593976",
+        "reason": "verified",
+        "run_id": 41706312913,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/41706312913",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-11-03T12:18:49Z"
+        "updated_at": "2026-11-03T19:46:40Z"
       }
     }
   }
