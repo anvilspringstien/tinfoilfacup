@@ -7,6 +7,7 @@ on:
       - 'beta/likes-shed.html'
       - 'tests/likes-worker.test.mjs'
       - 'tests/likes-client.test.mjs'
+      - 'tests/likes-admin.test.mjs'
       - '.github/workflows/likes-shed.yml'
   workflow_dispatch:
 permissions:
@@ -19,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: node --test tests/likes-worker.test.mjs tests/likes-client.test.mjs
+      - run: node --test tests/likes-worker.test.mjs tests/likes-client.test.mjs tests/likes-admin.test.mjs
       - run: node --check beta/like-tffac.js
       - name: Bundle independent Worker without deploying
         run: npx --yes wrangler@4.156.1 deploy --dry-run --config likes-worker/wrangler.jsonc --outdir /tmp/tffac-likes-build
