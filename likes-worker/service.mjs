@@ -1,11 +1,13 @@
+import {adminPage} from './admin-ui.mjs';
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const json=(body,status=200,headers={})=>Response.json(body,{status,headers:{'cache-control':'no-store',...headers}});
 export async function handleLikes(request,env,call) {
  const url=new URL(request.url),path=url.pathname;
+ const page=adminPage(path,request.method);if(page)return page;
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-likes',contract_version:1});
  if(path==='/admin/count'&&request.method==='GET'){
   if(!env.ADMIN_TOKEN||request.headers.get('authorization')!==`Bearer ${env.ADMIN_TOKEN}`)return json({error:'unauthorized'},401);
-  return json(await call('count'));
+  try{return json(await call('count'));}catch{return json({error:'temporarily_unavailable'},503);}
  }
  if(!['/state','/reaction'].includes(path))return json({error:'not_found'},404);
  const origin=request.headers.get('origin');

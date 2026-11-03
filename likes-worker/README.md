@@ -37,6 +37,25 @@ Cloudflare Git integration deploys from `main` with repository root `/` and comm
 
 For rollback, set `enabled:false` in `beta/like-config.json`; ordinary pages then mount no control and make no Like-service requests. The existing explicit `?likePreview=1` remains available for Shed diagnostics. Do not upgrade plans or change the identity counter when maintaining this service.
 
+## Owner dashboard
+
+`/admin` is a small read-only owner interface on this same Worker: current total,
+Refresh, last successful check time and Lock. Use the existing `ADMIN_TOKEN`
+saved in the owner's password manager. No new account or secret is needed.
+The page itself contains neither a count nor a credential; `/admin/count`
+continues to require the private Bearer token for every read.
+
+The entered token is kept only in the page's module memory, sent in the
+Authorization header to the same-origin count endpoint, and forgotten on Lock,
+navigation or reload. The password field clears immediately after submission.
+It is never put in a URL, cookie, browser storage, source file or console log.
+The browser may offer its ordinary password-manager features. The dashboard
+has no automatic polling, external assets, Like mutation controls or history
+collection. A failed refresh keeps the last successful value and time; an
+initial failure never becomes a displayed zero. It is not publicly linked
+from TFFAC. Live use awaits a successful Cloudflare build and owner check with
+their privately retained token; do not claim a sample QA count is the live total.
+
 ## Service contract
 
 - `POST /state` with `{token}` returns `{liked}`.
