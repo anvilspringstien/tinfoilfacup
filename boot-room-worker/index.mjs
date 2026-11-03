@@ -29,7 +29,7 @@ export class BootRoom extends DurableObject {
 }
 export default {async fetch(request,env){try{const u=new URL(request.url),path=u.pathname;
  const assets={'/':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
- if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"}});}
+ if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://tinfoilfacup.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"}});}
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});
  const post=['/api/join','/api/admin','/api/invite','/api/logout'].includes(path);if(!post&&!['/api/state','/api/socket'].includes(path))return json({error:'not_found'},404);
  if(request.method!==(post?'POST':'GET'))return json({error:'method_not_allowed'},405);
