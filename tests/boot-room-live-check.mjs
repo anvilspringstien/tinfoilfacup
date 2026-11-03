@@ -7,6 +7,9 @@ const require=createRequire(import.meta.url);const WebSocket=require(process.arg
 async function api(path,body,{admin=false,cookie='',origin=base}={}){const r=await fetch(base+path,{method:body?'POST':'GET',headers:{...(body?{'content-type':'application/json',origin}:{}),...(cookie?{cookie}:{}),...(admin?{authorization:'Bearer local-test-only'}:{})},body:body?JSON.stringify(body):undefined});const data=await r.json();return {status:r.status,data,cookie:r.headers.get('set-cookie')?.split(';')[0]};}
 const admin=body=>api('/api/admin',body,{admin:true});
 assert.equal((await admin({type:'doors',open:false,next:'Test opening'})).status,200);
+const publicDoors=await api('/api/doors');assert.equal(publicDoors.status,200);assert.deepEqual(Object.keys(publicDoors.data).sort(),['next','open','until']);assert.equal(publicDoors.data.open,false);assert.equal(publicDoors.data.next,'Test opening');
+assert.equal((await api('/api/state')).status,401);
+for(const path of ['/','/chat']){const r=await fetch(base+path);assert.equal(r.status,200);assert.match(r.headers.get('content-type'),/text\/html/);assert.equal(r.headers.get('cache-control'),'no-store');}
 assert.equal((await api('/api/admin',{type:'status'})).status,401);
 assert.equal((await api('/api/invite',{name:'Wrong origin'},{admin:true,origin:'https://elsewhere.example'})).status,403);
 async function person(name){const invitation=await api('/api/invite',{name},{admin:true});assert.equal(invitation.status,200);const joined=await api('/api/join',{invite:invitation.data.invite});assert.equal(joined.status,200);assert.equal((await api('/api/join',{invite:invitation.data.invite})).status,401);return {...joined,id:invitation.data.id};}
@@ -18,6 +21,7 @@ try{
  const wa=await socket(a),wb=await socket(b);sockets.push(wa,wb);await wait(()=>wa.events.length&&wb.events.length,'initial snapshots');
  assert.equal(wa.events.at(-1).open,false);wa.send(JSON.stringify({type:'message',text:'Closed bypass'}));await wait(()=>wa.events.some(x=>x.type==='error'),'closed rejection');
  await admin({type:'doors',open:true,until:Date.now()+3600000,next:'Later'});await wait(()=>wa.events.at(-1).open,'opening broadcast');
+ assert.equal((await api('/api/doors')).data.open,true);
  wa.send(JSON.stringify({type:'message',text:'Hello from device A'}));await wait(()=>wb.events.at(-1).messages?.some(x=>x.text==='Hello from device A'),'cross-client delivery');const m=wb.events.at(-1).messages.find(x=>x.text==='Hello from device A');
  wb.send(JSON.stringify({type:'message',text:'Reply from B',replyTo:m.id}));await wait(()=>wa.events.at(-1).messages?.some(x=>x.text==='Reply from B'),'reply delivery');
  wb.send(JSON.stringify({type:'heart',id:m.id,liked:true}));await wait(()=>wa.events.at(-1).messages?.find(x=>x.id===m.id)?.hearts===1,'heart delivery');

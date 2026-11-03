@@ -2,12 +2,12 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {script} from '../boot-room-worker/ui.mjs';
-function browser(){
+function browser(pathname='/chat'){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
  const document={visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
- const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname:'/',origin:'https://room.example'},WebSocket,Date,JSON,Error,fetch:async(path)=>{requests.push(path);if(deferred){const p=deferred;deferred=null;return p;}return {ok:true,json:async()=>nextState};}};
+ const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example'},WebSocket,Date,JSON,Error,fetch:async(path)=>{requests.push(path);if(deferred){const p=deferred;deferred=null;return p;}return {ok:true,json:async()=>nextState};}};
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
@@ -34,4 +34,18 @@ test('fresh messages preserve an older reading position in the shared header-and
  b.setState({messages:[{id:'new',person:'bert',name:'Bert',text:'New pie order',at:Date.now(),hearts:0}]});b.snapshot(ws);
  assert.equal(scroll.scrollTop,250);
  scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
+});
+test('entrance checks only public opening details, never conversation or a WebSocket',async()=>{
+ const b=browser('/');await b.settle();assert.deepEqual(b.requests,['/api/doors']);assert.equal(b.sockets.length,0);
+ assert.equal(b.$('entrance').hidden,false);assert.match(b.$('enter-room').textContent,/Enter the Boot Room/);
+ b.setState({open:false,next:'Saturday, before kick-off'});b.$('entrance-refresh').onclick();await b.settle();
+ assert.equal(b.$('entrance-state').textContent,'ROOM CLOSED');assert.equal(b.$('entrance-next').textContent,'Saturday, before kick-off');
+ assert.match(b.$('enter-room').textContent,/Read recent chat/);assert.equal(b.sockets.length,0);
+ b.document.visibilityState='hidden';b.documentEvents.visibilitychange();b.document.visibilityState='visible';b.documentEvents.visibilitychange();await b.settle();
+ assert.deepEqual(b.requests,['/api/doors','/api/doors','/api/doors']);assert.equal(b.sockets.length,0);
+});
+test('a stale entrance check cannot overwrite status after the page goes offline',async()=>{
+ const b=browser('/');await b.settle();const resolve=b.defer();b.$('entrance-refresh').onclick();b.windowEvents.offline();
+ resolve({open:true,until:Date.now()+3600000});await b.settle();assert.match(b.$('entrance-state').textContent,/OFFLINE/);
+ b.setState({open:false,next:'Tomorrow'});b.windowEvents.online();await b.settle();assert.equal(b.$('entrance-state').textContent,'ROOM CLOSED');
 });
