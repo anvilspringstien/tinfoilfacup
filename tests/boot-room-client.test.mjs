@@ -37,9 +37,9 @@ test('fresh messages preserve an older reading position in the shared header-and
 });
 test('entrance checks only public opening details, never conversation or a WebSocket',async()=>{
  const b=browser('/');await b.settle();assert.deepEqual(b.requests,['/api/doors']);assert.equal(b.sockets.length,0);
- assert.equal(b.$('entrance').hidden,false);assert.match(b.$('enter-room').textContent,/Enter the Boot Room/);
+ assert.equal(b.$('entrance').hidden,false);assert.match(b.$('enter-room').textContent,/Invited pigeons: enter/);
  b.setState({open:false,next:'Saturday, before kick-off'});b.$('entrance-refresh').onclick();await b.settle();
- assert.equal(b.$('entrance-state').textContent,'ROOM CLOSED');assert.equal(b.$('entrance-next').textContent,'Saturday, before kick-off');
+ assert.equal(b.$('entrance-state').textContent,'ROOM NOW CLOSED');assert.equal(b.$('entrance-next').textContent,'Saturday, before kick-off');
  assert.match(b.$('enter-room').textContent,/Invited pigeons/);assert.equal(b.sockets.length,0);
  b.document.visibilityState='hidden';b.documentEvents.visibilitychange();b.document.visibilityState='visible';b.documentEvents.visibilitychange();await b.settle();
  assert.deepEqual(b.requests,['/api/doors','/api/doors','/api/doors']);assert.equal(b.sockets.length,0);
@@ -47,7 +47,7 @@ test('entrance checks only public opening details, never conversation or a WebSo
 test('a stale entrance check cannot overwrite status after the page goes offline',async()=>{
  const b=browser('/');await b.settle();const resolve=b.defer();b.$('entrance-refresh').onclick();b.windowEvents.offline();
  resolve({open:true,until:Date.now()+3600000});await b.settle();assert.match(b.$('entrance-state').textContent,/OFFLINE/);
- b.setState({open:false,next:'Tomorrow'});b.windowEvents.online();await b.settle();assert.equal(b.$('entrance-state').textContent,'ROOM CLOSED');
+ b.setState({open:false,next:'Tomorrow'});b.windowEvents.online();await b.settle();assert.equal(b.$('entrance-state').textContent,'ROOM NOW CLOSED');
 });
 
  test('the public sample is read-only fiction with no live-room script, requests or credentials',async()=>{
