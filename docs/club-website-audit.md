@@ -4,6 +4,26 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 4 November 2026 checkpoint — missing-link coverage, batch 16
+
+Reviewed twelve previously unreviewed missing origins, Cowes Sports through Dearne
+& District. Ten official senior-club destinations are approved. Cowes is held for
+a placeholder/unavailable destination; Dearne is held for a disabled candidate
+and unresolved current senior website evidence. Earlier documented holds stay unchanged.
+
+- Original qualifying-club coverage: 200 -> 210 of 651 linked.
+- Missing links: 451 -> 441. Verified queue records: 244 -> 254.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Club-published identity/contact evidence, league corroboration and holds are in
+  [batch 16](../updater/club_website_verified_batch_16.json). National League
+  2024/25 evidence is explicitly historical corroboration, not current membership.
+- Cray Valley and Cray Wanderers, Darlaston and Darlington, Ashton clubs,
+  Dagenham & Redbridge and Redbridge, Daventry Town and United remain separate.
+  Disabled/placeholder, youth-only, social and directory destinations are not promoted.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
 ## 3 November 2026 checkpoint — missing-link coverage, batch 15
 
 Reviewed twelve previously unreviewed missing origins, Coleshill through Coventry
