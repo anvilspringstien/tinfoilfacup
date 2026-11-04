@@ -86,7 +86,7 @@ try{
  assert.match(await nav.locator('.barry-air-launch img').evaluate(img=>getComputedStyle(img).filter),/drop-shadow/);
  assert.equal(await nav.locator('.campaign-secondary-nav').evaluate(row=>getComputedStyle(row).justifyContent),'center');
  const navOrder=await nav.evaluate(bar=>Array.from(bar.children).map(n=>n.className));
- assert.ok(navOrder[0].includes('campaign-primary-nav')&&navOrder[1].includes('campaign-barry-nav')&&navOrder[2].includes('campaign-secondary-nav'));
+ assert.ok(navOrder[0].includes('campaign-primary-nav')&&navOrder[1].includes('campaign-barry-nav')&&navOrder[2].includes('campaign-boot-room-nav')&&navOrder[3].includes('campaign-secondary-nav'));
  assert.equal(await nav.locator('.campaign-secondary-nav button').first().evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(8, 76, 97)');
  async function checkMagicFooter(){
   const footer=app.locator('.tffc-magic-row');

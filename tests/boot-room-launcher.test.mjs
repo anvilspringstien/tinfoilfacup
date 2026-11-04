@@ -35,3 +35,5 @@ test('welcome explains invited chat and a separate destination without editing s
 test('returning to restored Campaign markup restarts status checks after its previous timer expired',async()=>{
  const f=fixture();await f.settle();const n=f.calls.length;f.setVisible(false);f.tick();await f.settle();assert.equal(f.calls.length,n);f.setAnswer({open:true,until:Date.now()+500000});f.setVisible(true);await f.settle();assert.equal(f.label(),'DOORS OPEN');assert.equal(f.calls.length,n+1);
 });
+
+test('client clock ahead of server does not cause a rapid deadline polling loop',async()=>{const f=fixture();await f.settle();f.setAnswer({open:true,until:Date.now()-60000});f.win.online();await f.settle();assert.equal([...f.timers.values()][0].ms,60000);});

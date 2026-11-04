@@ -29,7 +29,7 @@
    const aria='The Boot Room · '+(fresh?(state.open?'doors open':'doors closed'):'status unavailable');if(b.getAttribute('aria-label')!==aria)b.setAttribute('aria-label',aria);
   }
  }
- function schedule(){clearTimeout(timer);if(!paused&&document.visibilityState!=='hidden'&&buttons().length)timer=setTimeout(()=>{timer=null;refresh();},state?.open?Math.max(100,Math.min(60000,state.until-Date.now()+50)):60000);}
+ function schedule(){clearTimeout(timer);if(!paused&&document.visibilityState!=='hidden'&&buttons().length)timer=setTimeout(()=>{timer=null;refresh();},state?.open&&state.until>Date.now()?Math.max(1000,Math.min(60000,state.until-Date.now()+50)):60000);}
  async function refresh(){
   if(paused||document.visibilityState==='hidden'||!buttons().length||controller)return;
   const e=++epoch,request=new AbortController();controller=request;
