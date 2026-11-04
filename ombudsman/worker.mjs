@@ -87,6 +87,9 @@ async function publish(report,env,now=Date.now()) {
   // Always expose the current true observation; notification deferral never
   // labels a stale or unavailable scanner healthy.
   await kv.put('last_report',JSON.stringify({report}));
+  // Persist the unconsumed decision before relay I/O, so a delivery failure
+  // cannot be mistaken for a previously notified legacy incident on retry.
+  await kv.put('notification_state_v2',JSON.stringify(state));
   let delivered=false;
   if(needsAlert) {
     if(env.ALERT_RELAY_URL&&env.ALERT_RELAY_SECRET) {

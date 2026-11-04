@@ -38,7 +38,7 @@ test("unconfirmed relay response does not mark warning delivered",async()=>{
   try {
     await assert.rejects(publish({state:"critical"}, {OMBUDSMAN_KV:kv,ALERT_RELAY_URL:"https://example.invalid/relay",ALERT_RELAY_SECRET:"secret"}),/email_relay_delivery_unconfirmed/);
     assert.equal(JSON.parse(values.get("last_report")).report.state,"critical");
-    assert.equal(values.has("notification_state_v2"),false);
+    assert.equal(JSON.parse(values.get("notification_state_v2")).notified,false);
   } finally {globalThis.fetch=oldFetch}
 });
 test("initial healthy report does not email",async()=>{
@@ -88,3 +88,11 @@ test('new failed run escalates immediately but unchanged failure does not repeat
 test('unresolved problem sends at most one reminder per day',()=>policy(async({env,sent})=>{await publish(warning(),env,now);await publish(warning(),env,now+23*3600000);assert.equal(sent.length,1);await publish(warning(),env,now+24*3600000);await publish(warning(),env,now+25*3600000);assert.equal(sent.length,2);}));
 test('unknown API state waits thirty minutes and never becomes healthy',()=>policy(async({env,sent,values})=>{const r={state:'unknown',reason:'api_unavailable_or_error'};await publish(r,env,now);await publish(r,env,now+29*60000);assert.equal(sent.length,0);await publish(r,env,now+30*60000);assert.equal(sent.length,1);assert.equal(JSON.parse(values.get('last_report')).report.state,'unknown');}));
 test('legacy warning migration avoids duplicate alert and retains recovery',()=>policy(async({env,sent,values})=>{values.set('last_report',JSON.stringify({key:'old',report:warning()}));await publish(warning('results',7),env,now);assert.equal(sent.length,0);await publish({state:'healthy'},env,now+1);assert.equal(sent.length,1);assert.match(sent[0].subject,/HEALTHY/);}));
+
+test('an unconfirmed first warning is retried and cannot seed a false legacy delivered state',()=>policy(async({env,sent,values})=>{
+ const good=globalThis.fetch;globalThis.fetch=async()=>({ok:true,text:async()=>'NOT OK'});
+ await assert.rejects(publish(warning(),env,now),/unconfirmed/);assert.equal(JSON.parse(values.get('notification_state_v2')).notified,false);
+ globalThis.fetch=good;await publish(warning(),env,now+1);assert.equal(sent.length,1);
+ globalThis.fetch=async()=>({ok:true,text:async()=>'NOT OK'});await assert.rejects(publish({state:'healthy'},env,now+2),/unconfirmed/);
+ assert.equal(JSON.parse(values.get('notification_state_v2')).notified,true);globalThis.fetch=good;await publish({state:'healthy'},env,now+3);assert.equal(sent.length,2);
+}));
