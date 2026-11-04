@@ -40,7 +40,7 @@ test('entrance checks only public opening details, never conversation or a WebSo
  assert.equal(b.$('entrance').hidden,false);assert.match(b.$('enter-room').textContent,/Enter the Boot Room/);
  b.setState({open:false,next:'Saturday, before kick-off'});b.$('entrance-refresh').onclick();await b.settle();
  assert.equal(b.$('entrance-state').textContent,'ROOM CLOSED');assert.equal(b.$('entrance-next').textContent,'Saturday, before kick-off');
- assert.match(b.$('enter-room').textContent,/Read recent chat/);assert.equal(b.sockets.length,0);
+ assert.match(b.$('enter-room').textContent,/Invited pigeons/);assert.equal(b.sockets.length,0);
  b.document.visibilityState='hidden';b.documentEvents.visibilitychange();b.document.visibilityState='visible';b.documentEvents.visibilitychange();await b.settle();
  assert.deepEqual(b.requests,['/api/doors','/api/doors','/api/doors']);assert.equal(b.sockets.length,0);
 });
@@ -49,3 +49,10 @@ test('a stale entrance check cannot overwrite status after the page goes offline
  resolve({open:true,until:Date.now()+3600000});await b.settle();assert.match(b.$('entrance-state').textContent,/OFFLINE/);
  b.setState({open:false,next:'Tomorrow'});b.windowEvents.online();await b.settle();assert.equal(b.$('entrance-state').textContent,'ROOM CLOSED');
 });
+
+ test('the public sample is read-only fiction with no live-room script, requests or credentials',async()=>{
+ const {demoPage,sampleMessages}=await import('../boot-room-worker/demo.mjs');
+ assert.equal(sampleMessages.length,25);assert.match(demoPage,/fictional/);assert.match(demoPage,/DEMO 01612/);
+ assert.doesNotMatch(demoPage,/<script|<form|<textarea|<button|\/api\/|localStorage|__Host-bootroom|WebSocket/);
+ assert.equal((demoPage.match(/<article/g)||[]).length,25);
+ });
