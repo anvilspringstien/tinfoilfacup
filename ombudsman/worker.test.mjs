@@ -96,3 +96,5 @@ test('an unconfirmed first warning is retried and cannot seed a false legacy del
  globalThis.fetch=async()=>({ok:true,text:async()=>'NOT OK'});await assert.rejects(publish({state:'healthy'},env,now+2),/unconfirmed/);
  assert.equal(JSON.parse(values.get('notification_state_v2')).notified,true);globalThis.fetch=good;await publish({state:'healthy'},env,now+3);assert.equal(sent.length,2);
 }));
+
+test('migration of a legacy failed run does not send that same failure again',()=>policy(async({env,sent,values})=>{const r={state:'critical',checks:{results:{state:'critical',reason:'scheduled_run_failure',run_id:99}}};values.set('last_report',JSON.stringify({report:r}));await publish(r,env,now);assert.equal(sent.length,0);await publish({...r,checks:{results:{...r.checks.results,run_id:100}}},env,now+1);assert.equal(sent.length,1);}));

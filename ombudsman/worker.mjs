@@ -65,7 +65,9 @@ async function publish(report,env,now=Date.now()) {
     // immediately repeating the warning during migration.
     const old=previous?.report;
     const alerted=old&&['critical','warning','unknown'].includes(old.state);
-    state={since:null,unknownSince:null,notified:!!alerted,lastSent:alerted?now:0,criticalKeys:[]};
+    const legacyCritical=Object.entries(old?.checks||{}).filter(([,c])=>c.state==='critical').map(([name,c])=>name+':'+c.reason+':'+(c.run_id||''));
+    if(old?.state==='critical'&&!legacyCritical.length)legacyCritical.push('overall:'+old.reason);
+    state={since:null,unknownSince:null,notified:!!alerted,lastSent:alerted?now:0,criticalKeys:legacyCritical};
   }
   const checks=Object.entries(report.checks||{});
   const problems=checks.filter(([,c])=>['critical','warning','unknown'].includes(c.state));
