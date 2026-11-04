@@ -91,6 +91,9 @@
    }
    // Campaign return snapshots preserve HTML but not JS handlers.
    for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>{const win=doc.defaultView;if(typeof win.tffcCampaignIntroduction==='function')win.tffcCampaignIntroduction('barry');else win.top.location.assign(new URL('barry-air/',base).href);};
+   if(doc.querySelector('.campaign-barry-nav')&&!doc.querySelector('script[data-tffc-boot-room]')){
+    const script=doc.createElement('script');script.src=new URL('boot-room-launcher.js',base).href;script.dataset.tffcBootRoom='1';doc.head.append(script);
+   }
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
    for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);
    if(doc.querySelector('.tffc-magic-row')&&!doc.querySelector('script[data-tffc-like-component]')){

@@ -54,6 +54,8 @@ try{
   // Seed once, so navigation and returns must preserve subsequent state.
   if(!localStorage.getItem('tinFoilFACupJourney_v7'))localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value));
  },saved);
+ let roomStatus={open:false,until:0};
+ await context.route('https://tffac-boot-room-shed.anvilspringstien.workers.dev/api/doors',r=>r.fulfill({status:roomStatus?200:503,headers:{'access-control-allow-origin':'*'},json:roomStatus||{error:'fixture unavailable'}}));
  const page=await context.newPage();
  await page.goto(origin+'/');
  const app=page.frameLocator('#phoneApp');
@@ -62,6 +64,16 @@ try{
  assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
  const nav=app.locator('.phone-frame-nav');
  await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
+ const boot=nav.locator('.boot-room-launch');await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.equal(await nav.locator('.campaign-barry-nav').evaluate(row=>row.nextElementSibling.className),'campaign-boot-room-nav');
+ const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
+ await boot.click();const welcome=app.locator('#boot-room-welcome');await welcome.waitFor();
+ assert.match(await welcome.innerText(),/invitation-only/);assert.equal(await welcome.getByRole('link',{name:'Have a look'}).getAttribute('href'),'https://tffac-boot-room-shed.anvilspringstien.workers.dev/');
+ await welcome.getByRole('button',{name:'Close Boot Room welcome'}).click();
+ assert.equal(await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),unchanged);
+ roomStatus={open:true,until:Date.now()+3600000};await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('DOORS OPEN',{exact:true}).waitFor();
+ roomStatus=null;await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('CHECK THE DOORS',{exact:true}).waitFor();
+ roomStatus={open:false,until:0};await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
  assert.deepEqual(await nav.locator('.campaign-primary-nav button').allTextContents(),['My Campaign','My Stats','My Challenges']);
  assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['Original Campaigns','Reset','End Campaign','Hard Reset']);
  const primary=await nav.locator('.campaign-primary-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {y:r.y,width:r.width,height:r.height}}));

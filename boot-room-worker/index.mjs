@@ -38,7 +38,12 @@ export default {async fetch(request,env){try{const u=new URL(request.url),path=u
  if((post||path==='/api/socket')&&request.headers.get('origin')!==u.origin)return json({error:'origin_not_allowed'},403);
  let body={};if(post){if(!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||''))return json({error:'json_required'},415);const raw=await request.text();if(new TextEncoder().encode(raw).length>2048)return json({error:'body_too_large'},413);try{body=JSON.parse(raw);}catch{return json({error:'invalid_json'},400);}if(!body||typeof body!=='object'||Array.isArray(body))return json({error:'invalid_json'},400);}
  const stub=env.BOOT_ROOM.get(env.BOOT_ROOM.idFromName('invited-boot-room-v1'));
- if(path==='/api/doors')return stub.fetch('https://room.internal/api/doors');
+ if(path==='/api/doors'){
+  const r=await stub.fetch('https://room.internal/api/doors');const headers=new Headers(r.headers);
+  const origin=request.headers.get('origin');
+  if(['https://tinfoilfacup.com','https://www.tinfoilfacup.com'].includes(origin)){headers.set('access-control-allow-origin',origin);headers.set('vary','Origin');}
+  return new Response(r.body,{status:r.status,headers});
+ }
  if(path==='/api/logout'){const old=request.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1)||'';if(/^[a-f0-9]{64}$/.test(old))await stub.fetch('https://room.internal/api/logout',{method:'POST',headers:{'x-room-session':await digest(old)},body:'{}'});return json({ok:true},200,{'set-cookie':cookieName+'=; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'});}
  if(path==='/api/admin'||path==='/api/invite'){
   if(!env.ADMIN_TOKEN||request.headers.get('authorization')!==`Bearer ${env.ADMIN_TOKEN}`)return json({error:'unauthorized'},401);
