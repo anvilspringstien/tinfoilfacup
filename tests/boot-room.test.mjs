@@ -20,3 +20,13 @@ test('public door details expose no people, credentials, messages, reports or us
  const doors=f.room.doors();assert.deepEqual(Object.keys(doors).sort(),['next','open','until']);assert.equal(doors.open,true);
  f.advance(3600001);assert.equal(f.room.doors().open,false);assert.equal(f.room.snapshot(a).messages.length,1);
 });
+
+// The advertised 09:00–23:45 day must fit one bounded landlord opening.
+test('a full matchday closes exactly at the deadline and openings beyond sixteen hours are rejected',()=>{
+ const f=fixture(),a=join(f),duration=(14*60+45)*60000;
+ f.room.admin({type:'doors',open:true,until:f.now()+duration,next:'Monday draw'});
+ f.advance(duration-1);assert.equal(f.room.doors().open,true);
+ f.advance(1);assert.equal(f.room.doors().open,false);
+ assert.throws(()=>f.room.action(a,{type:'message',text:'Too late'}),/closed/);
+ assert.throws(()=>f.room.admin({type:'doors',open:true,until:f.now()+16*3600000+1,next:'Later'}),/16 hours/);
+});
