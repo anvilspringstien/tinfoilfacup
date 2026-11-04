@@ -33,3 +33,11 @@ Runs on Cloudflare Cron, not GitHub Actions. Reads GitHub Actions workflow run h
 
 ## Git-connected deployment
 Cloudflare Builds is connected to this branch with root directory `/ombudsman` and deploy command `npx wrangler deploy`. The existing KV namespace is declared in `wrangler.toml`; the hourly Cron Trigger remains `20 * * * *`. Relay credentials and health token remain encrypted Cloudflare Worker secrets, never repository variables. Verify the first build and Worker bindings before relying on email alerts.
+
+## Notification policy — 4 November 2026
+
+This branch is already connected to the live `tffc-ombudsman` Worker (successful Cloudflare check on 34d6157). The prototype deployment warnings above describe its original introduction, not its current deployment state. Do not change scanner workflow IDs, health classification, KV namespace, secrets or Cron for this notification-only update.
+
+Raw health still warns after the configured three-hour scheduling window. Email is separate: a schedule-only gap waits until the newest scheduled run is six hours old; missing history waits three hours from first observation; unknown/API status waits thirty minutes. Failures and stuck runs alert immediately. Alternating late scanners and pending launches stay within one incident. A new failed run escalates immediately; an unchanged failure does not repeat. Still-unresolved incidents get at most one reminder per 24 hours. Only a fully healthy observation closes an incident; send one recovery only if an alert was delivered. Brief unnotified gaps therefore produce neither warning nor recovery email. This is not an overnight blanket mute.
+
+`last_report` always records the actual observation. `notification_state_v2` holds incident/delivery state and migrates a legacy warning without repeating it. Delivery still requires the relay's exact `OK`; failed delivery does not consume an alert or recovery. Tests use fake KV/relay/clock and send no real messages. Rollback is the preceding source commit; keep KV and credentials. KV is eventually consistent, so overlapping runs or a crash after relay delivery and before state write can still duplicate an alert; this policy does not promise exactly-once email.

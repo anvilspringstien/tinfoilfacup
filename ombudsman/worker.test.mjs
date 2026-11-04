@@ -37,7 +37,8 @@ test("unconfirmed relay response does not mark warning delivered",async()=>{
   globalThis.fetch=async()=>({ok:true,text:async()=>"Request not processed"});
   try {
     await assert.rejects(publish({state:"critical"}, {OMBUDSMAN_KV:kv,ALERT_RELAY_URL:"https://example.invalid/relay",ALERT_RELAY_SECRET:"secret"}),/email_relay_delivery_unconfirmed/);
-    assert.equal(values.has("last_report"),false);
+    assert.equal(JSON.parse(values.get("last_report")).report.state,"critical");
+    assert.equal(values.has("notification_state_v2"),false);
   } finally {globalThis.fetch=oldFetch}
 });
 test("initial healthy report does not email",async()=>{
@@ -79,3 +80,11 @@ test("test-email endpoint returns failure when relay does not confirm",async()=>
     assert.equal(result.status,502);
   } finally {globalThis.fetch=oldFetch}
 });
+async function policy(fn){const values=new Map(),sent=[],old=globalThis.fetch;const env={OMBUDSMAN_KV:{get:async k=>values.get(k)||null,put:async(k,v)=>values.set(k,v)},ALERT_RELAY_URL:'https://example.invalid/relay',ALERT_RELAY_SECRET:'fixture'};globalThis.fetch=async(_u,o)=>{sent.push(JSON.parse(o.body));return {ok:true,text:async()=>'OK'}};try{await fn({values,sent,env});}finally{globalThis.fetch=old;}}
+const warning=(name='draw',age=6)=>({state:'warning',checks:{[name]:{state:'warning',reason:'no_recent_scheduled_launch',age_hours:age}}});
+test('brief gap and unnotified recovery send no email; raw warning stays visible',()=>policy(async({env,sent,values})=>{await publish(warning('draw',3.2),env,now);assert.equal(JSON.parse(values.get('last_report')).report.state,'warning');await publish(warning('results',4),env,now+600000);await publish({state:'pending'},env,now+1200000);await publish({state:'healthy'},env,now+1800000);assert.equal(sent.length,0);}));
+test('persistent gap emails once across alternating scanners and pending launches; one recovery',()=>policy(async({env,sent})=>{await publish(warning(),env,now);await publish(warning('results',7),env,now+600000);await publish({state:'pending'},env,now+1200000);await publish(warning(),env,now+1800000);assert.equal(sent.length,1);await publish({state:'healthy'},env,now+2400000);await publish({state:'healthy'},env,now+3000000);assert.deepEqual(sent.map(x=>x.subject),['TFFC Ombudsman: WARNING','TFFC Ombudsman: HEALTHY']);}));
+test('new failed run escalates immediately but unchanged failure does not repeat',()=>policy(async({env,sent})=>{await publish(warning(),env,now);const fail=id=>({state:'critical',checks:{results:{state:'critical',reason:'scheduled_run_failure',run_id:id}}});await publish(fail(99),env,now+1);await publish(fail(99),env,now+2);await publish(fail(100),env,now+3);assert.equal(sent.length,3);assert.match(sent[1].subject,/CRITICAL/);}));
+test('unresolved problem sends at most one reminder per day',()=>policy(async({env,sent})=>{await publish(warning(),env,now);await publish(warning(),env,now+23*3600000);assert.equal(sent.length,1);await publish(warning(),env,now+24*3600000);await publish(warning(),env,now+25*3600000);assert.equal(sent.length,2);}));
+test('unknown API state waits thirty minutes and never becomes healthy',()=>policy(async({env,sent,values})=>{const r={state:'unknown',reason:'api_unavailable_or_error'};await publish(r,env,now);await publish(r,env,now+29*60000);assert.equal(sent.length,0);await publish(r,env,now+30*60000);assert.equal(sent.length,1);assert.equal(JSON.parse(values.get('last_report')).report.state,'unknown');}));
+test('legacy warning migration avoids duplicate alert and retains recovery',()=>policy(async({env,sent,values})=>{values.set('last_report',JSON.stringify({key:'old',report:warning()}));await publish(warning('results',7),env,now);assert.equal(sent.length,0);await publish({state:'healthy'},env,now+1);assert.equal(sent.length,1);assert.match(sent[0].subject,/HEALTHY/);}));

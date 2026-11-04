@@ -53,25 +53,55 @@ async function deliverEmail(report,env) {
   // Apps Script ContentService can return HTTP 200 even on a caught error.
   if(!response.ok || (await response.text()).trim()!=="OK") throw new Error("email_relay_delivery_unconfirmed");
 }
-async function publish(report,env) {
-  if(!env.OMBUDSMAN_KV) return {delivered:false,reason:"no_state_store"};
-  const key=JSON.stringify({state:report.state,reason:report.reason,checks:Object.fromEntries(Object.entries(report.checks||{}).map(([k,v])=>[k,{state:v.state,reason:v.reason}]))});
-  const prev=await env.OMBUDSMAN_KV.get("last_report");
-  const old=prev?JSON.parse(prev):null;
-  const changed=!old||old.key!==key;
-  const oldState=old?.report?.state;
-  const needsEmail=changed && (["critical","warning","unknown"].includes(report.state) || (report.state==="healthy" && ["critical","warning","unknown"].includes(oldState)));
-  let delivered=false;
-  if(needsEmail && env.ALERT_RELAY_URL && env.ALERT_RELAY_SECRET) {
-    await deliverEmail(report,env);
-    delivered=true;
-  } else if(changed && env.ALERT_WEBHOOK_URL && !env.ALERT_RELAY_URL) {
-    const response=await fetch(env.ALERT_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:"TFFC Ombudsman: "+report.state+"\\n"+JSON.stringify(report),report})});
-    if(!response.ok) throw new Error("alert_delivery_failed_"+response.status);
-    delivered=true;
+// Notification state is separate from the raw health report. A pending launch is
+// not recovery, and switching which scanner is late is not a new incident.
+async function publish(report,env,now=Date.now()) {
+  if(!env.OMBUDSMAN_KV) return {delivered:false,reason:'no_state_store'};
+  const kv=env.OMBUDSMAN_KV;
+  const previous=JSON.parse((await kv.get('last_report'))||'null');
+  let state=JSON.parse((await kv.get('notification_state_v2'))||'null');
+  if(!state) {
+    // A legacy warning may already have emailed: retain one recovery, without
+    // immediately repeating the warning during migration.
+    const old=previous?.report;
+    const alerted=old&&['critical','warning','unknown'].includes(old.state);
+    state={since:null,unknownSince:null,notified:!!alerted,lastSent:alerted?now:0,criticalKeys:[]};
   }
-  await env.OMBUDSMAN_KV.put("last_report",JSON.stringify({key,report}));
-  return {delivered,changed};
+  const checks=Object.entries(report.checks||{});
+  const problems=checks.filter(([,c])=>['critical','warning','unknown'].includes(c.state));
+  const bad=['critical','warning','unknown'].includes(report.state);
+  const healthy=report.state==='healthy';
+  if(bad&&state.since===null)state.since=now;
+  if(report.state==='unknown'||problems.some(([,c])=>c.state==='unknown'))state.unknownSince??=now;
+  else state.unknownSince=null;
+  const criticalKeys=checks.filter(([,c])=>c.state==='critical').map(([name,c])=>name+':'+c.reason+':'+(c.run_id||''));
+  if(report.state==='critical'&&!criticalKeys.length)criticalKeys.push('overall:'+report.reason);
+  const newCritical=criticalKeys.some(k=>!state.criticalKeys.includes(k));
+  const persistentWarning=problems.some(([,c])=>c.state==='warning'&&
+    (Number.isFinite(c.age_hours)?c.age_hours>=6:now-state.since>=3*HOUR));
+  const persistentUnknown=state.unknownSince!==null&&now-state.unknownSince>=30*60000;
+  const eligible=newCritical||persistentWarning||persistentUnknown;
+  const recovery=healthy&&state.notified;
+  const reminder=state.notified&&bad&&now-state.lastSent>=24*HOUR;
+  const needsAlert=recovery||newCritical||(!state.notified&&eligible)||reminder;
+  // Always expose the current true observation; notification deferral never
+  // labels a stale or unavailable scanner healthy.
+  await kv.put('last_report',JSON.stringify({report}));
+  let delivered=false;
+  if(needsAlert) {
+    if(env.ALERT_RELAY_URL&&env.ALERT_RELAY_SECRET) {
+      await deliverEmail(report,env);delivered=true;
+    } else if(env.ALERT_WEBHOOK_URL&&!env.ALERT_RELAY_URL) {
+      const response=await fetch(env.ALERT_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'TFFC Ombudsman: '+report.state+'\n'+alertText(report),report})});
+      if(!response.ok)throw new Error('alert_delivery_failed_'+response.status);
+      delivered=true;
+    }
+    // Failed or absent delivery must not consume the notification or recovery.
+    if(delivered){state.notified=!recovery;state.lastSent=now;state.criticalKeys=[...new Set([...state.criticalKeys,...criticalKeys])];}
+  }
+  if(healthy&&(!state.notified||delivered))state={since:null,unknownSince:null,notified:false,lastSent:0,criticalKeys:[]};
+  await kv.put('notification_state_v2',JSON.stringify(state));
+  return {delivered,deferred:bad&&!needsAlert};
 }
 async function inspect(env) {
   let report;
