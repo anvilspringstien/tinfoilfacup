@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-03T06:48:12.477527+00:00",
+  "competition_updated_at": "2026-11-04T01:22:03.083684+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 200,
+  "eligible_linked": 210,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1824,116 +1824,6 @@
       "club": "Cowes Sports FC",
       "identities": [
         "Cowes Sports FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Crawley Down Gatwick FC",
-      "identities": [
-        "Crawley Down Gatwick FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cray Valley (PM) FC",
-      "identities": [
-        "Cray Valley (PM) FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Cribbs FC",
-      "identities": [
-        "Cribbs FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Curzon Ashton FC",
-      "identities": [
-        "Curzon Ashton FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Dagenham & Redbridge FC",
-      "identities": [
-        "Dagenham & Redbridge FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Darlaston Town FC",
-      "identities": [
-        "Darlaston Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Darlington FC",
-      "identities": [
-        "Darlington FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Dartford FC",
-      "identities": [
-        "Dartford FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Daventry Town FC",
-      "identities": [
-        "Daventry Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Deal Town FC",
-      "identities": [
-        "Deal Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9310,6 +9200,60 @@
       ]
     },
     {
+      "club": "Crawley Down Gatwick FC",
+      "identities": [
+        "Crawley Down Gatwick FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.crawleydowngatwickfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.crawleydowngatwickfc.co.uk/",
+          "evidence_url": "https://www.crawleydowngatwickfc.co.uk/club_information",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Cray Valley (PM) FC",
+      "identities": [
+        "Cray Valley (PM) FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.crayvalleypmfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.crayvalleypmfc.com/",
+          "evidence_url": "https://www.crayvalleypmfc.com/contact",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Cribbs FC",
+      "identities": [
+        "Cribbs FC"
+      ],
+      "current_competition": false,
+      "website": "https://cribbsfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://cribbsfc.co.uk/",
+          "evidence_url": "https://cribbsfc.co.uk/club-info/committee",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
       "club": "Crook Town AFC",
       "identities": [
         "Crook Town AFC"
@@ -9342,6 +9286,132 @@
           "evidence_url": "https://www.crowboroughathletic.com/",
           "verified_on": "2026-10-12",
           "ledger": "club_website_verified_batch_03.json"
+        }
+      ]
+    },
+    {
+      "club": "Curzon Ashton FC",
+      "identities": [
+        "Curzon Ashton FC"
+      ],
+      "current_competition": false,
+      "website": "https://curzon-ashton.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://curzon-ashton.co.uk/",
+          "evidence_url": "https://curzon-ashton.co.uk/club/contact/",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Dagenham & Redbridge FC",
+      "identities": [
+        "Dagenham & Redbridge FC"
+      ],
+      "current_competition": false,
+      "website": "https://daggers.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://daggers.co.uk/",
+          "evidence_url": "https://daggers.co.uk/contact-us/",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Darlaston Town FC",
+      "identities": [
+        "Darlaston Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.darlastontown1874fc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.darlastontown1874fc.com/",
+          "evidence_url": "https://www.darlastontown1874fc.com/contact",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Darlington FC",
+      "identities": [
+        "Darlington FC"
+      ],
+      "current_competition": false,
+      "website": "https://darlingtonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://darlingtonfc.co.uk/",
+          "evidence_url": "https://darlingtonfc.co.uk/about/contact-us",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Dartford FC",
+      "identities": [
+        "Dartford FC"
+      ],
+      "current_competition": false,
+      "website": "https://dartfordfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://dartfordfc.com/",
+          "evidence_url": "https://dartfordfc.com/home/club/dfc-info-and-contacts/",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Daventry Town FC",
+      "identities": [
+        "Daventry Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://dtfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://dtfc.co.uk/",
+          "evidence_url": "https://dtfc.co.uk/club-info/company-details",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Deal Town FC",
+      "identities": [
+        "Deal Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://dealtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://dealtownfc.co.uk/",
+          "evidence_url": "https://dealtownfc.co.uk/club/",
+          "verified_on": "2026-11-04",
+          "ledger": "club_website_verified_batch_16.json"
         }
       ]
     },
