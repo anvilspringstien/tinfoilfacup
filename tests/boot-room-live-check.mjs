@@ -9,6 +9,12 @@ const admin=body=>api('/api/admin',body,{admin:true});
 assert.equal((await admin({type:'doors',open:false,next:'Test opening'})).status,200);
 const sample=await fetch(base+'/demo');assert.equal(sample.status,200);assert.match(await sample.text(),/25 sample posts/);
 const publicDoors=await api('/api/doors');assert.equal(publicDoors.status,200);assert.deepEqual(Object.keys(publicDoors.data).sort(),['next','open','until']);assert.equal(publicDoors.data.open,false);assert.equal(publicDoors.data.next,'Test opening');
+for(const origin of ['https://tinfoilfacup.com','https://www.tinfoilfacup.com','https://elsewhere.example']){
+ const r=await fetch(base+'/api/doors',{headers:{origin}});
+ assert.equal(r.status,200);assert.equal(r.headers.get('access-control-allow-origin'),origin.includes('elsewhere')?null:origin);
+ assert.equal(r.headers.get('access-control-allow-credentials'),null);
+ assert.deepEqual(Object.keys(await r.json()).sort(),['next','open','until']);
+}
 assert.equal((await api('/api/state')).status,401);
 for(const path of ['/','/chat']){const r=await fetch(base+path);assert.equal(r.status,200);assert.match(r.headers.get('content-type'),/text\/html/);assert.equal(r.headers.get('cache-control'),'no-store');}
 assert.equal((await api('/api/admin',{type:'status'})).status,401);

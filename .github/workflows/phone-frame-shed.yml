@@ -17,6 +17,8 @@ on:
       - 'beta/keep-the-magic-shed.html'
       - 'beta/phone-frame-shed.*'
       - 'beta/phone-frame-navigation.js'
+      - 'beta/boot-room-launcher.js'
+      - 'tests/boot-room-launcher.test.mjs'
       - 'tests/phone-frame-shed-browser.mjs'
       - '.github/workflows/phone-frame-shed.yml'
   workflow_dispatch:
@@ -31,6 +33,8 @@ jobs:
           node-version: '22'
       - run: node --check beta/phone-frame-shed.js
       - run: node --check beta/phone-frame-navigation.js
+      - run: node --check beta/boot-room-launcher.js
+      - run: node --test tests/boot-room-launcher.test.mjs
       - run: node tests/beta-approved-journey-lock.mjs
       - run: node tests/keep-the-magic-regression.js
       - run: node tests/keep-magic-install-regression.js
