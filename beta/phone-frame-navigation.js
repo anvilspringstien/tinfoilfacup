@@ -3,7 +3,7 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
- const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','boot-room-polish-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','all-footers-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
@@ -96,7 +96,7 @@
    if(doc.querySelector('.campaign-barry-nav')&&!doc.querySelector('script[data-tffc-boot-room]')){
     const script=doc.createElement('script');script.src=componentURL('boot-room-launcher.js');script.dataset.tffcBootRoom='1';doc.head.append(script);
    }
-   if(doc.querySelector('.campaign-nav-tiered')&&!doc.querySelector('script[data-tffc-refresh]')){
+   if(doc.querySelector('.tffc-support-footer, .deck-footer-help')&&!doc.querySelector('script[data-tffc-refresh]')){
     const script=doc.createElement('script');script.src=componentURL('refresh-tffac.js');script.dataset.tffcRefresh='1';doc.head.append(script);
    }
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
