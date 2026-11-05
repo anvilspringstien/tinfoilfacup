@@ -7,6 +7,6 @@
  const frame=document.createElement('iframe');frame.id='phoneApp';frame.title='Tin Foil FA Cup — phone composition';frame.allow='web-share';shell.append(frame);
  document.body.replaceChildren(shell);
  for(const file of ['phone-frame-navigation.js','phone-frame-shed.js']){
-  const script=document.createElement('script');const url=new URL(file,base);if(file==='phone-frame-navigation.js')url.searchParams.set('v','refresh-footer-size-20261105');const refresh=new URLSearchParams(location.search).get('tffc-refresh');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);script.src=url.href;script.async=false;document.head.append(script);
+  const script=document.createElement('script');const url=new URL(file,base);if(file==='phone-frame-navigation.js')url.searchParams.set('v','barry-shadow-20261105');const refresh=new URLSearchParams(location.search).get('tffc-refresh');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);script.src=url.href;script.async=false;document.head.append(script);
  }
 })();
