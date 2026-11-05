@@ -5,7 +5,7 @@
  let state=null,checked=0,epoch=0,controller=null,timer=null,dialog=null,paused=false;
  const style=document.createElement('style');
  style.textContent=`
- .campaign-boot-room-nav{display:flex;justify-content:center;margin:13px 0 4px}
+ .campaign-boot-room-nav{display:flex;justify-content:center;margin:4px 0 -4px}
  .my-journey-bar .campaign-boot-room-nav .boot-room-launch{width:270px;max-width:100%;min-height:65px;padding:9px 16px;border:2px solid #b59a5d;border-radius:5px;box-sizing:border-box;background:linear-gradient(145deg,#264639,#142b23);color:#f8f0d9;box-shadow:inset 0 1px 0 #f1d99466,inset 0 -2px 0 #07180f,0 3px 5px #0005;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
  .boot-room-launch .boot-room-label{font:normal 23px/1.1 Georgia,serif;letter-spacing:.2px;white-space:nowrap}
  .boot-room-launch .boot-room-status{font:600 8px/1.4 Arial,sans-serif;letter-spacing:1.35px;color:#d6bc7c;display:flex;align-items:center;gap:6px}
