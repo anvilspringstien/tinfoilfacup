@@ -2,6 +2,8 @@
 (()=>{
  'use strict';
  const base=new URL('.',document.currentScript.src);
+ const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','campaign-buttons-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
@@ -72,7 +74,7 @@
     // Clean both original markup and snapshots of the previous six-button trial.
     bar.querySelectorAll('.campaign-share').forEach(button=>button.remove());
     bar.querySelectorAll('.campaign-magic-nav').forEach(row=>row.remove());
-    const labels={'View Original Campaigns':'Original Campaigns','End My Campaign':'End Campaign','Resume My Campaign':'Resume Campaign'};
+    const labels={'View Original Campaigns':'Original Campaigns','End Campaign':'End My Campaign','Resume My Campaign':'Resume Campaign'};
     for(const button of controls.querySelectorAll('button')){
      const replacement=labels[button.textContent.trim()];
      if(replacement)button.textContent=replacement;
@@ -92,7 +94,10 @@
    // Campaign return snapshots preserve HTML but not JS handlers.
    for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>{const win=doc.defaultView;if(typeof win.tffcCampaignIntroduction==='function')win.tffcCampaignIntroduction('barry');else win.top.location.assign(new URL('barry-air/',base).href);};
    if(doc.querySelector('.campaign-barry-nav')&&!doc.querySelector('script[data-tffc-boot-room]')){
-    const script=doc.createElement('script');script.src=new URL('boot-room-launcher.js',base).href;script.dataset.tffcBootRoom='1';doc.head.append(script);
+    const script=doc.createElement('script');script.src=componentURL('boot-room-launcher.js');script.dataset.tffcBootRoom='1';doc.head.append(script);
+   }
+   if(doc.querySelector('.campaign-nav-tiered')&&!doc.querySelector('script[data-tffc-refresh]')){
+    const script=doc.createElement('script');script.src=componentURL('refresh-tffac.js');script.dataset.tffcRefresh='1';doc.head.append(script);
    }
    for(const keep of doc.querySelectorAll('.tffc-magic-row .campaign-keep'))keep.onclick=()=>openMagic(true);
    for(const share of doc.querySelectorAll('.tffc-magic-row .campaign-share'))share.onclick=()=>openMagic(false);

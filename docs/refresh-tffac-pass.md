@@ -1,0 +1,11 @@
+# Refresh TFFAC — first visual pass
+
+The saved Campaign's shared navigation adds a compact Refresh TFFAC button above the footer links. It performs a genuine user-requested page refresh through the existing saved-Campaign route; it never resets or chooses a Campaign, increments the counter, or rewrites Campaign/Challenge storage. A failed/offline request leaves the working page available. Postcode and unsaved pigeon-name edits, including edits begun during the network wait, prevent navigation.
+
+The destination is same-origin `?view=campaign` with a cache-busting timestamp. The shared launcher forwards that timestamp to its navigation and shell scripts, and navigation forwards it to the Boot Room and refresh components. Normal root/Keep operation and saved identity recovery remain the existing route. The guard verifies a fresh reachable root document before navigation, but is not a guarantee that every server/CDN asset is current.
+
+This is the requested visual/manual control pass. It deliberately says "Refresh for the latest version", never an unverified "Up to date". Periodic competition refresh, safe automatic code updates, a release manifest, release detection and "Update ready" states are still pending. Existing tabs need one initial reload to receive this new control. No offline cache or service worker is introduced.
+
+Campaign button order is primary three → The Boot Room (270px) → Barry Air (244px control, 240px artwork) → secondary controls. Existing "End Campaign" snapshots are relabelled "End My Campaign"; action and confirmation logic are unchanged.
+
+Validation: deterministic refresh tests exercise fresh navigation, offline/error handling, edit protection, stale requests, and restored markup. Shared-frame CI checks the actual refresh return, complete localStorage preservation and no extra counter calls, alongside existing Campaign/Stats/Challenges/Keep/Share/Barry navigation regressions. Existing accepted source masters and competition producers are unchanged.

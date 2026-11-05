@@ -18,6 +18,8 @@ on:
       - 'beta/phone-frame-shed.*'
       - 'beta/phone-frame-navigation.js'
       - 'beta/boot-room-launcher.js'
+      - 'beta/refresh-tffac.js'
+      - 'tests/refresh-tffac.test.mjs'
       - 'tests/boot-room-launcher.test.mjs'
       - 'tests/phone-frame-shed-browser.mjs'
       - '.github/workflows/phone-frame-shed.yml'
@@ -34,7 +36,8 @@ jobs:
       - run: node --check beta/phone-frame-shed.js
       - run: node --check beta/phone-frame-navigation.js
       - run: node --check beta/boot-room-launcher.js
-      - run: node --test tests/boot-room-launcher.test.mjs
+      - run: node --check beta/refresh-tffac.js
+      - run: node --test tests/boot-room-launcher.test.mjs tests/refresh-tffac.test.mjs
       - run: node tests/beta-approved-journey-lock.mjs
       - run: node tests/keep-the-magic-regression.js
       - run: node tests/keep-magic-install-regression.js
