@@ -14,13 +14,13 @@
  const rows=()=>Array.from(document.querySelectorAll('.tffc-refresh-row'));
  function paint(){for(const row of rows()){row.querySelector('button').disabled=busy;const status=row.querySelector('[role=status]');if(status.textContent!==feedback)status.textContent=feedback;}}
  function protectedEdit(){
-  const saved=typeof window.loadSavedJourney==='function'?window.loadSavedJourney():null;
+  let saved=null;try{saved=typeof window.loadSavedJourney==='function'?window.loadSavedJourney():JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')||'null');}catch(_){}
   const pc=document.getElementById('postcode');
   const norm=s=>String(s||'').toUpperCase().replace(/\s/g,'');
-  if(saved?.postcode&&pc&&norm(pc.value)!==norm(saved.postcode))return 'Finish your postcode search before refreshing.';
+  if(pc&&norm(pc.value)!==norm(saved?.postcode))return 'Finish your postcode search before refreshing.';
   const pigeon=document.querySelector('input[aria-label="Pigeon name"]');
   if(saved&&pigeon&&pigeon.value.trim()!==String(saved.pigeonName||'').trim())return 'Finish editing your pigeon name before refreshing.';
-  if(document.querySelector('dialog[open]'))return 'Close the open window before refreshing.';
+  if(document.querySelector('dialog[open]')||Array.from(document.querySelectorAll('[role=dialog]')).some(el=>el.getClientRects().length))return 'Close the open window before refreshing.';
   return '';
  }
  async function refresh(){
@@ -33,13 +33,17 @@
   try{
    // Keep is installed with scope /beta/. Retain its actual shell route.
    let url=new URL(root);
+   const barry=!!document.querySelector('#barry-site-footer');
+   const challenges=!!document.querySelector('.deck-footer-help');
    const current=new URL(window.top.location.href);
    if(current.origin===root.origin&&/^\/beta\/phone-frame(?:-shed)?\.html$/.test(current.pathname))url=new URL(current.pathname,root);
-   url.searchParams.set('view','campaign');url.searchParams.set('tffc-refresh',String(Date.now()));
+   if(barry){url=new URL('beta/barry-air/',root);url.hash=current.hash;}
+   else url.searchParams.set('view',challenges?'challenges':'campaign');
+   url.searchParams.set('tffc-refresh',String(Date.now()));
    // Verify a real current page can be reached before leaving the working one.
    const response=await fetch(url.href,{cache:'no-store',credentials:'same-origin',signal:request.signal});
    if(!response.ok)throw Error('Unavailable');
-   const html=await response.text();if(!html.includes('phone-frame-launch.js')&&!html.includes('phone-frame-shed.js'))throw Error('Invalid page');
+   const html=await response.text();if(barry?!html.includes('app.mjs'):!html.includes('phone-frame-launch.js')&&!html.includes('phone-frame-shed.js'))throw Error('Invalid page');
    if(controller!==request)return;
    // Re-check after the network wait: edits may have started meanwhile.
    const editing=protectedEdit();if(editing){feedback=editing;return;}
@@ -48,10 +52,8 @@
   finally{clearTimeout(timeout);if(controller===request){controller=null;if(!navigating)busy=false;paint();}}
  }
  function install(){
-  const visible=!!document.querySelector('.campaign-nav-tiered');
-  for(const footer of document.querySelectorAll('.tffc-support-footer')){
+  for(const footer of document.querySelectorAll('.tffc-support-footer, .deck-footer-help')){
    let row=footer.previousElementSibling?.classList.contains('tffc-refresh-row')?footer.previousElementSibling:null;
-   if(!visible){row?.remove();continue;}
    if(!row){row=document.createElement('div');row.className='tffc-refresh-row';row.innerHTML='<button type="button" class="tffc-refresh-button">Refresh TFFAC</button><span class="tffc-refresh-feedback" role="status" aria-live="polite"></span>';footer.before(row);}
    row.querySelector('button').onclick=refresh;
   }
