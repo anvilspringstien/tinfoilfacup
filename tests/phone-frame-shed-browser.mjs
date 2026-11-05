@@ -65,7 +65,16 @@ try{
  const nav=app.locator('.phone-frame-nav');
  await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
  const boot=nav.locator('.boot-room-launch');await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
- assert.equal(await nav.locator('.campaign-barry-nav').evaluate(row=>row.nextElementSibling.className),'campaign-boot-room-nav');
+ assert.equal(await nav.locator('.campaign-boot-room-nav').evaluate(row=>row.nextElementSibling.className),'campaign-barry-nav');
+ const refresh=app.getByRole('button',{name:'Refresh TFFAC',exact:true});await refresh.waitFor();
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Refresh for the latest version/);
+ const beforeRefresh=await app.locator('body').evaluate(()=>JSON.stringify({...localStorage}));
+ const beforeCounter=counterCalls;
+ await refresh.click();await page.waitForURL(/tffc-refresh=/);
+ await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
+ await app.locator('.boot-room-status').getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.equal(await app.locator('body').evaluate(()=>JSON.stringify({...localStorage})),beforeRefresh,'Manual refresh must preserve all saved records');
+ assert.equal(counterCalls,beforeCounter,'Manual refresh must not allocate another identity');
  const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
  await boot.click();const welcome=app.locator('#boot-room-welcome');await welcome.waitFor();
  assert.match(await welcome.innerText(),/invitation-only/);assert.equal(await welcome.getByRole('link',{name:'Have a look'}).getAttribute('href'),'https://tffac-boot-room-shed.anvilspringstien.workers.dev/');
@@ -75,7 +84,7 @@ try{
  roomStatus=null;await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('CHECK THE DOORS',{exact:true}).waitFor();
  roomStatus={open:false,until:0};await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
  assert.deepEqual(await nav.locator('.campaign-primary-nav button').allTextContents(),['My Campaign','My Stats','My Challenges']);
- assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['Original Campaigns','Reset','End Campaign','Hard Reset']);
+ assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['Original Campaigns','Reset','End My Campaign','Hard Reset']);
  const primary=await nav.locator('.campaign-primary-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {y:r.y,width:r.width,height:r.height}}));
  for(const box of primary){assert.ok(Math.abs(box.width-primary[0].width)<1);assert.ok(Math.abs(box.y-primary[0].y)<1);assert.ok(box.height>=44);}
  await nav.locator('.barry-air-launch img').evaluate(img=>img.decode());
@@ -86,7 +95,7 @@ try{
  assert.match(await nav.locator('.barry-air-launch img').evaluate(img=>getComputedStyle(img).filter),/drop-shadow/);
  assert.equal(await nav.locator('.campaign-secondary-nav').evaluate(row=>getComputedStyle(row).justifyContent),'center');
  const navOrder=await nav.evaluate(bar=>Array.from(bar.children).map(n=>n.className));
- assert.ok(navOrder[0].includes('campaign-primary-nav')&&navOrder[1].includes('campaign-barry-nav')&&navOrder[2].includes('campaign-boot-room-nav')&&navOrder[3].includes('campaign-secondary-nav'));
+ assert.ok(navOrder[0].includes('campaign-primary-nav')&&navOrder[1].includes('campaign-boot-room-nav')&&navOrder[2].includes('campaign-barry-nav')&&navOrder[3].includes('campaign-secondary-nav'));
  assert.equal(await nav.locator('.campaign-secondary-nav button').first().evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(8, 76, 97)');
  async function checkMagicFooter(){
   const footer=app.locator('.tffc-magic-row');

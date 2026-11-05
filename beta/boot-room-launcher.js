@@ -6,7 +6,7 @@
  const style=document.createElement('style');
  style.textContent=`
  .campaign-boot-room-nav{display:flex;justify-content:center;margin:13px 0 4px}
- .my-journey-bar .campaign-boot-room-nav .boot-room-launch{width:206px;max-width:100%;min-height:65px;padding:9px 16px;border:2px solid #b59a5d;border-radius:5px;box-sizing:border-box;background:linear-gradient(145deg,#264639,#142b23);color:#f8f0d9;box-shadow:inset 0 1px 0 #f1d99466,inset 0 -2px 0 #07180f,0 3px 5px #0005;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+ .my-journey-bar .campaign-boot-room-nav .boot-room-launch{width:270px;max-width:100%;min-height:65px;padding:9px 16px;border:2px solid #b59a5d;border-radius:5px;box-sizing:border-box;background:linear-gradient(145deg,#264639,#142b23);color:#f8f0d9;box-shadow:inset 0 1px 0 #f1d99466,inset 0 -2px 0 #07180f,0 3px 5px #0005;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
  .boot-room-launch .boot-room-label{font:normal 23px/1.1 Georgia,serif;letter-spacing:.2px;white-space:nowrap}
  .boot-room-launch .boot-room-status{font:600 8px/1.4 Arial,sans-serif;letter-spacing:1.35px;color:#d6bc7c;display:flex;align-items:center;gap:6px}
  .boot-room-launch .boot-room-status:before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
@@ -56,10 +56,10 @@
  function install(){
   let added=false;
   for(const barry of document.querySelectorAll('.campaign-nav-tiered .campaign-barry-nav')){
-   const nav=barry.parentNode;if(nav.querySelector('.campaign-boot-room-nav'))continue;
+   const nav=barry.parentNode,existing=nav.querySelector('.campaign-boot-room-nav');if(existing){if(existing.nextElementSibling!==barry)barry.before(existing);continue;}
    const row=document.createElement('div');row.className='campaign-boot-room-nav';
    const button=document.createElement('button');button.type='button';button.className='boot-room-launch';button.dataset.roomState='unknown';
-   button.innerHTML='<span class="boot-room-label">The Boot Room</span><span class="boot-room-status">CHECK THE DOORS</span>';row.append(button);barry.after(row);added=true;
+   button.innerHTML='<span class="boot-room-label">The Boot Room</span><span class="boot-room-status">CHECK THE DOORS</span>';row.append(button);barry.before(row);added=true;
   }
   // Restored Campaign HTML has no handlers: always attach to its current button.
   for(const b of buttons())b.onclick=welcome;
