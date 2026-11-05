@@ -3,18 +3,18 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
- const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','refresh-footer-size-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','barry-shadow-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
  .result .actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
  .result .actions a.secondary{margin:0}
- .campaign-barry-nav{display:flex;justify-content:center;align-items:center}
+ .campaign-barry-nav{display:flex;justify-content:center;align-items:center;margin-top:-4px}
  .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer;overflow:visible;appearance:none;-webkit-appearance:none}
  /* Transparent filter outsets keep WebKit's scrolling paint layer from
     cutting the shadow at the tight source-image edges. Margins cancel the
     outsets so neither the badge nor its navigation row grows. */
- .barry-air-launch img{display:block;box-sizing:border-box;width:calc(100% + 88px);max-width:none;padding:44px;margin:-44px;height:auto;object-fit:contain;pointer-events:none;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 6px 12px #0008)}
+ .barry-air-launch img{display:block;box-sizing:border-box;width:calc(100% + 88px);max-width:none;padding:44px;margin:-44px;height:auto;object-fit:contain;pointer-events:none;filter:drop-shadow(0 0 1px #e4c786aa) drop-shadow(0 3px 5px #0005)}
  .barry-air-launch:hover{filter:brightness(1.1)}
  .barry-air-launch:focus-visible{outline:2px solid #084c61;outline-offset:3px}
  .tffc-magic-row{gap:10px;flex-wrap:wrap}
