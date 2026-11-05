@@ -3,7 +3,11 @@
 (()=>{
  'use strict';
  const root=new URL('../',document.currentScript.src);
- let busy=false,controller=null,feedback='Refresh for the latest version';
+ function idleFeedback(){
+  try{const stamp=Number(new URL(window.top.location.href).searchParams.get('tffc-refresh'));if(stamp>0&&stamp<=Date.now()+60000)return 'Page refreshed · '+new Date(stamp).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch(_){}
+  return 'Tap to refresh this page';
+ }
+ let busy=false,controller=null,feedback=idleFeedback();
  const style=document.createElement('style');
  style.textContent=`.tffc-refresh-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 12px;margin:12px 0 8px;padding:8px 6px;border-top:1px solid #b6a57b55;font:11px/1.5 Arial,sans-serif;color:#77715f}.tffc-refresh-row .tffc-refresh-button{min-height:38px;border:1px solid #ad965f;border-radius:5px;background:#f5edd5;color:#084c61;padding:7px 13px;font:600 12px/1.4 Arial,sans-serif;cursor:pointer;white-space:nowrap}.tffc-refresh-button:hover{background:#eee1b9}.tffc-refresh-button:focus-visible{outline:2px solid #084c61;outline-offset:3px}.tffc-refresh-button:disabled{opacity:.6;cursor:wait}.tffc-refresh-feedback{max-width:250px;text-align:center}`;
  document.head.append(style);
@@ -27,11 +31,15 @@
   const request=new AbortController();controller=request;
   const timeout=setTimeout(()=>request.abort(),8000);let navigating=false;
   try{
-   const url=new URL(root);url.searchParams.set('view','campaign');url.searchParams.set('tffc-refresh',String(Date.now()));
+   // Keep is installed with scope /beta/. Retain its actual shell route.
+   let url=new URL(root);
+   const current=new URL(window.top.location.href);
+   if(current.origin===root.origin&&/^\/beta\/phone-frame(?:-shed)?\.html$/.test(current.pathname))url=new URL(current.pathname,root);
+   url.searchParams.set('view','campaign');url.searchParams.set('tffc-refresh',String(Date.now()));
    // Verify a real current page can be reached before leaving the working one.
    const response=await fetch(url.href,{cache:'no-store',credentials:'same-origin',signal:request.signal});
    if(!response.ok)throw Error('Unavailable');
-   const html=await response.text();if(!html.includes('phone-frame-launch.js'))throw Error('Invalid page');
+   const html=await response.text();if(!html.includes('phone-frame-launch.js')&&!html.includes('phone-frame-shed.js'))throw Error('Invalid page');
    if(controller!==request)return;
    // Re-check after the network wait: edits may have started meanwhile.
    const editing=protectedEdit();if(editing){feedback=editing;return;}
@@ -51,8 +59,8 @@
  }
  new MutationObserver(install).observe(document.body,{childList:true,subtree:true});
  window.addEventListener('pagehide',()=>{controller?.abort();controller=null;busy=false;});
- window.addEventListener('pageshow',()=>{busy=false;feedback='Refresh for the latest version';install();});
+ window.addEventListener('pageshow',()=>{busy=false;feedback=idleFeedback();install();});
  window.addEventListener('offline',()=>{feedback='Offline · reconnect before refreshing';paint();});
- window.addEventListener('online',()=>{feedback='Refresh for the latest version';paint();});
+ window.addEventListener('online',()=>{feedback=idleFeedback();paint();});
  install();
 })();

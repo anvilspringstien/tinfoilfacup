@@ -67,7 +67,7 @@ try{
  const boot=nav.locator('.boot-room-launch');await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
  assert.equal(await nav.locator('.campaign-boot-room-nav').evaluate(row=>row.nextElementSibling.className),'campaign-barry-nav');
  const refresh=app.getByRole('button',{name:'Refresh TFFAC',exact:true});await refresh.waitFor();
- assert.match(await app.locator('.tffc-refresh-row').innerText(),/Refresh for the latest version/);
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Tap to refresh this page/);
  const beforeRefresh=await app.locator('body').evaluate(()=>JSON.stringify({...localStorage}));
  const beforeCounter=counterCalls;
  await refresh.click();await page.waitForURL(/tffc-refresh=/);
@@ -75,6 +75,19 @@ try{
  await app.locator('.boot-room-status').getByText('DOORS CLOSED',{exact:true}).waitFor();
  assert.equal(await app.locator('body').evaluate(()=>JSON.stringify({...localStorage})),beforeRefresh,'Manual refresh must preserve all saved records');
  assert.equal(counterCalls,beforeCounter,'Manual refresh must not allocate another identity');
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Page refreshed/);
+ // The installed Keep launch uses /beta/ scope, not the public root.
+ await page.goto(origin+'/beta/phone-frame.html?view=campaign');
+ await app.getByRole('button',{name:'Refresh TFFAC',exact:true}).waitFor();
+ const keepSaved=await app.locator('body').evaluate(()=>JSON.stringify({...localStorage}));
+ const keepCounter=counterCalls;
+ await app.getByRole('button',{name:'Refresh TFFAC',exact:true}).click();
+ await page.waitForURL(url=>url.pathname==='/beta/phone-frame.html'&&url.searchParams.has('tffc-refresh'));
+ await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
+ await app.locator('.boot-room-status').getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Page refreshed/);
+ assert.equal(await app.locator('body').evaluate(()=>JSON.stringify({...localStorage})),keepSaved);
+ assert.equal(counterCalls,keepCounter);
  const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
  await boot.click();const welcome=app.locator('#boot-room-welcome');await welcome.waitFor();
  assert.match(await welcome.innerText(),/invitation-only/);assert.equal(await welcome.getByRole('link',{name:'Have a look'}).getAttribute('href'),'https://tffac-boot-room-shed.anvilspringstien.workers.dev/');
