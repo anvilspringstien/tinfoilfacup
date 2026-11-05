@@ -3,13 +3,13 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
- const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','barry-shadow-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','boot-room-polish-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
  .result .actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
  .result .actions a.secondary{margin:0}
- .campaign-barry-nav{display:flex;justify-content:center;align-items:center;margin-top:-4px}
+ .campaign-barry-nav{display:flex;justify-content:center;align-items:center;margin-top:-8px}
  .my-journey-bar .campaign-barry-nav .barry-air-launch{display:block;width:244px;max-width:100%;min-height:44px;padding:2px;margin:0;border:0;border-radius:4px;background:transparent;box-shadow:none;cursor:pointer;overflow:visible;appearance:none;-webkit-appearance:none}
  /* Transparent filter outsets keep WebKit's scrolling paint layer from
     cutting the shadow at the tight source-image edges. Margins cancel the

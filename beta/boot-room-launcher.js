@@ -14,6 +14,7 @@
  .boot-room-launch[data-room-state=unknown] .boot-room-status{color:#c8c6b8}
  .boot-room-launch:hover{filter:brightness(1.1)}.boot-room-launch:focus-visible{outline:3px solid #d6bc7c;outline-offset:4px}.boot-room-launch:active{transform:translateY(1px)}
  #boot-room-welcome{box-sizing:border-box;width:min(390px,calc(100vw - 30px));max-height:calc(100svh - 32px);padding:25px 23px;border:1px solid #b59a5d;border-radius:12px;background:#fffbee;color:#20372f;overflow:auto;margin:auto;font:14px/1.65 Arial,sans-serif;box-shadow:0 14px 60px #0005}
+ #boot-room-welcome h2:focus{outline:none;box-shadow:none}#boot-room-welcome h2,#boot-room-welcome button,#boot-room-welcome a{-webkit-tap-highlight-color:transparent}
  #boot-room-welcome::backdrop{background:#0008}#boot-room-welcome .boot-welcome-top{display:flex;align-items:start;gap:12px;justify-content:space-between}#boot-room-welcome h2{font:normal 27px/1.15 Georgia,serif;margin:0;color:#084c61}#boot-room-welcome .boot-welcome-close{font:25px/1 Arial,sans-serif;padding:0 3px;min-width:32px;min-height:32px;border:0;background:none;color:#084c61;cursor:pointer}#boot-room-welcome p{margin:16px 0}#boot-room-welcome .boot-welcome-small{font-size:11px;color:#68685b}#boot-room-welcome .boot-welcome-go{display:block;text-align:center;background:#173c30;color:#fff7df;border:1px solid #b59a5d;border-radius:6px;padding:10px 16px;text-decoration:none;font-weight:bold}#boot-room-welcome a:focus-visible,#boot-room-welcome button:focus-visible{outline:3px solid #bd9650;outline-offset:3px}
  `;
  document.head.append(style);
