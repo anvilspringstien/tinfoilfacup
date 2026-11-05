@@ -35,7 +35,7 @@
    if(controller!==request)return;
    // Re-check after the network wait: edits may have started meanwhile.
    const editing=protectedEdit();if(editing){feedback=editing;return;}
-   navigating=true;window.top.location.assign(url.href);
+   window.top.location.assign(url.href);navigating=true;
   }catch(_){if(controller===request)feedback='Couldn’t refresh · please try again';}
   finally{clearTimeout(timeout);if(controller===request){controller=null;if(!navigating)busy=false;paint();}}
  }
