@@ -68,6 +68,15 @@ try{
  assert.equal(await nav.locator('.campaign-boot-room-nav').evaluate(row=>row.nextElementSibling.className),'campaign-barry-nav');
  const refresh=app.getByRole('button',{name:'Refresh TFFAC',exact:true});await refresh.waitFor();
  assert.match(await app.locator('.tffc-refresh-row').innerText(),/Tap to refresh this page/);
+ const refreshGeometry=await app.locator('.tffc-refresh-row').evaluate(row=>{
+  const button=row.querySelector('button').getBoundingClientRect(),line=row.getBoundingClientRect();
+  const keep=document.querySelector('.campaign-keep').getBoundingClientRect(),share=document.querySelector('.campaign-share').getBoundingClientRect();
+  const support=row.previousElementSibling.getBoundingClientRect(),border=parseFloat(getComputedStyle(row).borderTopWidth);
+  return {refresh:button.height,keep:keep.height,share:share.height,above:line.top-support.bottom,below:button.top-line.top-border};
+ });
+ assert.ok(Math.abs(refreshGeometry.refresh-refreshGeometry.keep)<.6&&Math.abs(refreshGeometry.refresh-refreshGeometry.share)<.6,'Refresh should match Keep/Share height');
+ assert.ok(Math.abs(refreshGeometry.above-refreshGeometry.below)<.6,'Divider should have equal spacing above and below');
+ assert.ok(Math.abs(refreshGeometry.above-20)<.6,'Preserve the existing space below Support');
  const beforeRefresh=await app.locator('body').evaluate(()=>JSON.stringify({...localStorage}));
  const beforeCounter=counterCalls;
  await refresh.click();await page.waitForURL(/tffc-refresh=/);
