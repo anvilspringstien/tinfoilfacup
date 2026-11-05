@@ -3,7 +3,7 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
- const componentURL=file=>{const url=new URL(file,base);if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','campaign-buttons-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
