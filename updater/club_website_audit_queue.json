@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-04T01:22:03.083684+00:00",
+  "competition_updated_at": "2026-11-05T03:30:20.416380+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 210,
+  "eligible_linked": 220,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1843,83 +1843,6 @@
       "evidence": []
     },
     {
-      "club": "Deeping Rangers FC",
-      "identities": [
-        "Deeping Rangers FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Dereham Town FC",
-      "identities": [
-        "Dereham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Desborough Town FC",
-      "identities": [
-        "Desborough Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Devizes Town FC",
-      "identities": [
-        "Devizes Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Didcot Town FC",
-      "identities": [
-        "Didcot Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Dorchester Town FC",
-      "identities": [
-        "Dorchester Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Dorking Wanderers FC",
-      "identities": [
-        "Dorking Wanderers FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Downham Town FC",
       "identities": [
         "Downham Town FC"
@@ -1931,42 +1854,9 @@
       "evidence": []
     },
     {
-      "club": "Downton FC",
-      "identities": [
-        "Downton FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Droitwich Spa FC",
-      "identities": [
-        "Droitwich Spa FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Droylsden FC",
       "identities": [
         "Droylsden FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Dudley Town FC",
-      "identities": [
-        "Dudley Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9412,6 +9302,186 @@
           "evidence_url": "https://dealtownfc.co.uk/club/",
           "verified_on": "2026-11-04",
           "ledger": "club_website_verified_batch_16.json"
+        }
+      ]
+    },
+    {
+      "club": "Deeping Rangers FC",
+      "identities": [
+        "Deeping Rangers FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.deepingrangersfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.deepingrangersfc.co.uk/",
+          "evidence_url": "https://www.deepingrangersfc.co.uk/contact",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Dereham Town FC",
+      "identities": [
+        "Dereham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.derehamtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.derehamtownfc.co.uk/",
+          "evidence_url": "https://www.derehamtownfc.co.uk/club-contacts",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Desborough Town FC",
+      "identities": [
+        "Desborough Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/desboroughtown/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/desboroughtown/",
+          "evidence_url": "https://www.pitchero.com/clubs/desboroughtown/contact",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Devizes Town FC",
+      "identities": [
+        "Devizes Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://devizestownfootball.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://devizestownfootball.co.uk/",
+          "evidence_url": "https://devizestownfootball.co.uk/committee/",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Didcot Town FC",
+      "identities": [
+        "Didcot Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/didcottown/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/didcottown/",
+          "evidence_url": "https://www.pitchero.com/clubs/didcottown/contact",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Dorchester Town FC",
+      "identities": [
+        "Dorchester Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.dorchestertownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.dorchestertownfc.co.uk/",
+          "evidence_url": "https://www.dorchestertownfc.co.uk/legal/companyinfo",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Dorking Wanderers FC",
+      "identities": [
+        "Dorking Wanderers FC"
+      ],
+      "current_competition": false,
+      "website": "https://dwfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://dwfc.co.uk/",
+          "evidence_url": "https://dwfc.co.uk/contact-us/",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Downton FC",
+      "identities": [
+        "Downton FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.downtonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.downtonfc.co.uk/",
+          "evidence_url": "https://www.downtonfc.co.uk/map-directions",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Droitwich Spa FC",
+      "identities": [
+        "Droitwich Spa FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.dsfc.news/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.dsfc.news/",
+          "evidence_url": "https://www.dsfc.news/contact",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Dudley Town FC",
+      "identities": [
+        "Dudley Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.dudleytownfootballclub.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.dudleytownfootballclub.co.uk/",
+          "evidence_url": "https://www.dudleytownfootballclub.co.uk/club-contacts",
+          "verified_on": "2026-11-05",
+          "ledger": "club_website_verified_batch_17.json"
         }
       ]
     },
