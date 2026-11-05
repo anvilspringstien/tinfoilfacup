@@ -8,7 +8,7 @@ const redundantShare=host.querySelector('[onclick="tffcOpenShare()"]');
 redundantShare?.nextElementSibling?.remove();redundantShare?.remove();
 host.querySelector('.tffc-beta-help').setAttribute('aria-label','Tin Foil FA Cup support links');
 // Shared manual refresh, preserving this Barry Air route and Keep scope.
-{const script=document.createElement('script');script.src=new URL('refresh-tffac.js?v=all-footers-20261105',base).href;document.head.append(script);}
+{const script=document.createElement('script');script.src=new URL('refresh-tffac.js?v=challenges-refresh-fix-20261105',base).href;document.head.append(script);}
 // Shared appreciation control, enabled through like-config.json.
 {const script=document.createElement('script');script.src=new URL('like-tffac.js',base).href;document.head.append(script);}
 

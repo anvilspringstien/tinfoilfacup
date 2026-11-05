@@ -20,7 +20,9 @@
   if(pc&&norm(pc.value)!==norm(saved?.postcode))return 'Finish your postcode search before refreshing.';
   const pigeon=document.querySelector('input[aria-label="Pigeon name"]');
   if(saved&&pigeon&&pigeon.value.trim()!==String(saved.pigeonName||'').trim())return 'Finish editing your pigeon name before refreshing.';
-  if(document.querySelector('dialog[open]')||Array.from(document.querySelectorAll('[role=dialog]')).some(el=>el.getClientRects().length))return 'Close the open window before refreshing.';
+  // Challenges' legacy full-page wrapper is a dialog containing this footer.
+  // Only separate visible dialogs should block its refresh button.
+  if(document.querySelector('dialog[open]')||Array.from(document.querySelectorAll('[role=dialog]')).some(el=>!el.contains(document.querySelector('.tffc-refresh-row'))&&el.getClientRects().length))return 'Close the open window before refreshing.';
   return '';
  }
  async function refresh(){
