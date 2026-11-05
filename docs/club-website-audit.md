@@ -4,6 +4,29 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 5 November 2026 checkpoint — missing-link coverage, batch 17
+
+Reviewed twelve previously unreviewed missing origins, Deeping Rangers through
+Dudley Town. Ten official senior-club destinations are approved. Downham Town and
+Droylsden are held for unavailable preferred club-published destinations. Earlier
+documented held/ambiguous cases remain unchanged.
+
+- Original qualifying-club coverage: 210 -> 220 of 651 linked.
+- Missing links: 441 -> 431. Verified queue records: 254 -> 264.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Sources and holds are recorded in
+  [batch 17](../updater/club_website_verified_batch_17.json). Dereham's homepage
+  and Devizes' committee are readable through the public reader despite ordinary
+  timeout/403 respectively. No restriction bypassed. Historical corroboration
+  is labelled; conflicting old league, officer and postcode wording is not a
+  competition or location correction.
+- Dorking clubs, Dudley clubs, senior/youth Devizes and Droitwich, and Droylsden/
+  Droylsden Athletic remain distinct. No social, directory or venue-only site
+  is promoted. Desborough's current club-managed site is separate from its old archive.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
 ## 4 November 2026 checkpoint — missing-link coverage, batch 16
 
 Reviewed twelve previously unreviewed missing origins, Cowes Sports through Dearne
