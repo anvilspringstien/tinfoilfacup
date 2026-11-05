@@ -3,7 +3,7 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
- const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','all-footers-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','challenges-refresh-fix-20261105');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
@@ -24,6 +24,7 @@
  a.tffc-support-lozenge{background:#000;border-color:#818181;color:#fff;opacity:1}
  a.tffc-support-lozenge:hover{background:#171717;border-color:#bbb}
  a.tffc-support-lozenge:focus-visible{outline-color:#ddd}
+ .deck-footer-help .beta-help-link{color:#ddd}.deck-footer-help .beta-help-link:hover{color:#fff}.deck-footer-help .beta-help-sep{color:#aaa}
  .deck-sales-coming{background:#c90000;color:#fff;border-color:#c90000;opacity:1}
  .tffc-beta-help button[onclick="tffcOpenShare()"],
  .tffc-beta-help button[onclick="tffcOpenShare()"] + .tffc-beta-help-sep,
