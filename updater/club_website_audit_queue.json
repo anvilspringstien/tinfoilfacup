@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-05T03:30:20.416380+00:00",
+  "competition_updated_at": "2026-11-06T01:33:44.478844+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 220,
+  "eligible_linked": 230,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1865,17 +1865,6 @@
       "evidence": []
     },
     {
-      "club": "Dulwich Hamlet FC",
-      "identities": [
-        "Dulwich Hamlet FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Dunstable FC",
       "identities": [
         "Dunstable FC"
@@ -1887,108 +1876,9 @@
       "evidence": []
     },
     {
-      "club": "Dunston FC",
-      "identities": [
-        "Dunston FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Easington Colliery FC",
-      "identities": [
-        "Easington Colliery FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Easington Sports FC",
-      "identities": [
-        "Easington Sports FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "East Cowes Victoria Athletic FC",
       "identities": [
         "East Cowes Victoria Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "East Grinstead Town FC",
-      "identities": [
-        "East Grinstead Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Eastbourne United AFC",
-      "identities": [
-        "Eastbourne United AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Eastwood Community FC",
-      "identities": [
-        "Eastwood Community FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Ebbsfleet United FC",
-      "identities": [
-        "Ebbsfleet United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Egham Town FC",
-      "identities": [
-        "Egham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Ely City FC",
-      "identities": [
-        "Ely City FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9486,6 +9376,96 @@
       ]
     },
     {
+      "club": "Dulwich Hamlet FC",
+      "identities": [
+        "Dulwich Hamlet FC"
+      ],
+      "current_competition": false,
+      "website": "https://dulwichhamletfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://dulwichhamletfc.co.uk/",
+          "evidence_url": "https://dulwichhamletfc.co.uk/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Dunston FC",
+      "identities": [
+        "Dunston FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.dunstonutsfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.dunstonutsfc.com/",
+          "evidence_url": "https://www.dunstonutsfc.com/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Easington Colliery FC",
+      "identities": [
+        "Easington Colliery FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/easingtoncollieryafc/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/easingtoncollieryafc/",
+          "evidence_url": "https://www.pitchero.com/clubs/easingtoncollieryafc/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Easington Sports FC",
+      "identities": [
+        "Easington Sports FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.easingtonsportsfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.easingtonsportsfc.com/",
+          "evidence_url": "https://www.easingtonsportsfc.com/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "East Grinstead Town FC",
+      "identities": [
+        "East Grinstead Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.egtfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.egtfc.co.uk/",
+          "evidence_url": "https://www.egtfc.co.uk/contact-us/",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
       "club": "Eastbourne Borough FC",
       "identities": [
         "Eastbourne Borough FC"
@@ -9518,6 +9498,96 @@
           "evidence_url": "https://eastbournetown.com/",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_05.json"
+        }
+      ]
+    },
+    {
+      "club": "Eastbourne United AFC",
+      "identities": [
+        "Eastbourne United AFC"
+      ],
+      "current_competition": false,
+      "website": "https://www.eastbourneunitedafc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.eastbourneunitedafc.com/",
+          "evidence_url": "https://www.eastbourneunitedafc.com/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Eastwood Community FC",
+      "identities": [
+        "Eastwood Community FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.eastwoodcfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.eastwoodcfc.co.uk/",
+          "evidence_url": "https://www.eastwoodcfc.co.uk/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Ebbsfleet United FC",
+      "identities": [
+        "Ebbsfleet United FC"
+      ],
+      "current_competition": false,
+      "website": "https://ebbsfleetunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://ebbsfleetunited.co.uk/",
+          "evidence_url": "https://ebbsfleetunited.co.uk/contact/",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Egham Town FC",
+      "identities": [
+        "Egham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://officialeghamtownfcltd.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://officialeghamtownfcltd.com/",
+          "evidence_url": "https://officialeghamtownfcltd.com/contact-us",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Ely City FC",
+      "identities": [
+        "Ely City FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.elycityfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.elycityfc.co.uk/",
+          "evidence_url": "https://www.elycityfc.co.uk/contact",
+          "verified_on": "2026-11-06",
+          "ledger": "club_website_verified_batch_18.json"
         }
       ]
     },
