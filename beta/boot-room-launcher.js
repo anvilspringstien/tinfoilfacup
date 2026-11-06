@@ -49,13 +49,14 @@
   if(typeof loadSavedJourney!=='function'||typeof tinFoilSavedCallSign!=='function'||typeof candidateClubByName!=='function'||typeof nextRoundInfo!=='function')return null;
   const saved=loadSavedJourney();
   if(!saved||saved.ended)return null;
-  const callSign=/^(?:Tango Foxtrot 2 Alpha Charlie|TF2AC) (\d{5})$/i.exec(tinFoilSavedCallSign(saved));
-  const name=tinFoilSavedPigeonName(saved);
+  const callSign=/^(?:Tango Foxtrot 2 Alpha Charlie|TF2AC) (?:(\d{5})|\[(\d{5})\])$/i.exec(tinFoilSavedCallSign(saved));
   const custodian=document.querySelector('.chosen-campaign-current .custodian-name')?.textContent.trim();
-  const club=custodian&&candidateClubByName(custodian);
+  if(!callSign||!custodian)return null;
+  const digits=callSign[1]||callSign[2];
+  const name=tinFoilSavedPigeonName(saved)||'Pigeon '+digits;
+  const club=candidateClubByName(custodian);
   const fixture=club&&nextRoundInfo(club)?.knownFixture;
-  if(!callSign||!name||!custodian||!fixture?.home||!fixture?.away)return null;
-  const detail={callSign:'TF2AC '+callSign[1],name,custodian,fixture:fixture.home+' v '+fixture.away};
+  const detail={callSign:'TF2AC '+digits,name,custodian,fixture:fixture?.home&&fixture?.away?fixture.home+' v '+fixture.away:'Fixture to be announced'};
   return home+'/chat#campaign='+encodeURIComponent(JSON.stringify(detail));
  }
  function welcome(){

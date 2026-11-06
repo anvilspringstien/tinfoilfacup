@@ -99,7 +99,15 @@ try{
  assert.equal(counterCalls,keepCounter);
  const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
  await boot.click();const welcome=app.locator('#boot-room-welcome');await welcome.waitFor();
- assert.match(await welcome.innerText(),/invitation-only/);assert.equal(await welcome.getByRole('link',{name:'Have a look'}).getAttribute('href'),'https://tffac-boot-room-shed.anvilspringstien.workers.dev/');
+ assert.match(await welcome.innerText(),/experimental opening/);assert.equal(await welcome.getByRole('link',{name:'Have a look'}).getAttribute('href'),'https://tffac-boot-room-shed.anvilspringstien.workers.dev/');
+ const joinURL=new URL(await welcome.getByRole('link',{name:'Join with My Campaign'}).getAttribute('href'));
+ assert.equal(joinURL.pathname,'/chat');
+ const claim=JSON.parse(decodeURIComponent(joinURL.hash.slice('#campaign='.length)));
+ assert.deepEqual(Object.keys(claim).sort(),['callSign','custodian','fixture','name']);
+ assert.equal(claim.callSign,'TF2AC 12345');
+ assert.equal(claim.name,'Shed Pigeon');
+ assert.equal(claim.custodian,await app.locator('.chosen-campaign-current .custodian-name').innerText());
+ assert.ok(claim.fixture.length>0);
  await welcome.getByRole('button',{name:'Close Boot Room welcome'}).click();
  assert.equal(await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),unchanged);
  roomStatus={open:true,until:Date.now()+3600000};await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('DOORS OPEN',{exact:true}).waitFor();
