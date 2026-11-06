@@ -37,10 +37,10 @@ test('fresh messages preserve an older reading position in the shared header-and
 });
 test('entrance checks only public opening details, never conversation or a WebSocket',async()=>{
  const b=browser('/');await b.settle();assert.deepEqual(b.requests,['/api/doors']);assert.equal(b.sockets.length,0);
- assert.equal(b.$('entrance').hidden,false);assert.match(b.$('enter-room').textContent,/Invited pigeons: enter/);
+ assert.equal(b.$('entrance').hidden,false);assert.match(b.$('.entrance-enter').textContent,/Invited pigeons: enter/);
  b.setState({open:false,next:'Saturday, before kick-off'});b.$('entrance-refresh').onclick();await b.settle();
  assert.equal(b.$('entrance-state').textContent,'ROOM NOW CLOSED');assert.equal(b.$('entrance-next').textContent,'Saturday, before kick-off');
- assert.match(b.$('enter-room').textContent,/Invited pigeons/);assert.equal(b.sockets.length,0);
+ assert.match(b.$('.entrance-enter').textContent,/Invited pigeons/);assert.equal(b.sockets.length,0);
  b.document.visibilityState='hidden';b.documentEvents.visibilitychange();b.document.visibilityState='visible';b.documentEvents.visibilitychange();await b.settle();
  assert.deepEqual(b.requests,['/api/doors','/api/doors','/api/doors']);assert.equal(b.sockets.length,0);
 });
