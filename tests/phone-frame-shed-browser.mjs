@@ -55,7 +55,7 @@ try{
   if(!localStorage.getItem('tinFoilFACupJourney_v7'))localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value));
  },saved);
  let roomStatus={open:false,until:0};
- await context.route('https://tffac-boot-room-shed.anvilspringstien.workers.dev/api/doors',r=>r.fulfill({status:roomStatus?200:503,headers:{'access-control-allow-origin':'*'},json:roomStatus||{error:'fixture unavailable'}}));
+ await context.route('https://tinfoilfacup.com/beta/boot-room/api/doors',r=>r.fulfill({status:roomStatus?200:503,headers:{'access-control-allow-origin':'*'},json:roomStatus||{error:'fixture unavailable'}}));
  const page=await context.newPage();
  await page.goto(origin+'/');
  const app=page.frameLocator('#phoneApp');
@@ -99,10 +99,10 @@ try{
  assert.equal(counterCalls,keepCounter);
  const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
  const custodian=await app.locator('.chosen-campaign-current .custodian-name').innerText();
- const entrance='https://tffac-boot-room-shed.anvilspringstien.workers.dev/';
+ const entrance='https://tinfoilfacup.com/beta/boot-room/';
  await context.route(entrance,r=>r.fulfill({contentType:'text/html',body:'<h1>Boot Room chalkboard</h1>'}));
  await boot.click();
- await page.waitForURL(url=>url.origin+'/'===entrance&&url.pathname==='/');
+ await page.waitForURL(url=>url.origin+url.pathname===entrance);
  await page.getByRole('heading',{name:'Boot Room chalkboard'}).waitFor();
  const joinURL=new URL(page.url());
  const claim=JSON.parse(decodeURIComponent(joinURL.hash.slice('#campaign='.length)));

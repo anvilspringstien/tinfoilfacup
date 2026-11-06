@@ -14,7 +14,7 @@ function fixture(){
 }
 test('badge reads only public doors with no credentials or Campaign identity',async()=>{
  const f=fixture();await f.settle();assert.equal(f.label(),'DOORS CLOSED');assert.equal(f.calls.length,1);
- assert.equal(f.calls[0].url,'https://tffac-boot-room-shed.anvilspringstien.workers.dev/api/doors');assert.equal(f.calls[0].options.credentials,'omit');assert.equal(f.calls[0].options.referrerPolicy,'no-referrer');assert.equal(f.calls[0].options.body,undefined);
+ assert.equal(f.calls[0].url,'https://tinfoilfacup.com/beta/boot-room/api/doors');assert.equal(f.calls[0].options.credentials,'omit');assert.equal(f.calls[0].options.referrerPolicy,'no-referrer');assert.equal(f.calls[0].options.body,undefined);
  f.setAnswer({open:true,until:Date.now()+500000});f.win.online();await f.settle();assert.equal(f.label(),'DOORS OPEN');
  f.setAnswer(Error('Unavailable'));f.win.online();await f.settle();assert.equal(f.label(),'CHECK THE DOORS');
 });
@@ -30,7 +30,7 @@ test('one visible refresh timer follows the room deadline, and pagehide stops it
 });
 test('the badge opens the chalkboard directly',async()=>{
  const f=fixture();await f.settle();f.button().onclick();
- assert.equal(f.location.href,'https://tffac-boot-room-shed.anvilspringstien.workers.dev/');
+ assert.equal(f.location.href,'https://tinfoilfacup.com/beta/boot-room/');
 });
 
 test('returning to restored Campaign markup restarts status checks after its previous timer expired',async()=>{
