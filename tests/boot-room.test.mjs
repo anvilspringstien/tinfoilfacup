@@ -84,3 +84,29 @@ test('reinstating a walk-in keeps the old session revoked and allows a fresh joi
  assert.equal(f.room.walkIn(claim,'fresh').id,id);
  assert.equal(f.room.snapshot('fresh').you.campaign.callSign,claim.callSign);
 });
+
+test('undo is private to the reporting pigeon and dismiss keeps the post',()=>{
+ const f=fixture(),a=join(f),b=join(f,'Second','second-invite','second-session');
+ open(f);
+ const {id}=f.room.action(a,{type:'message',text:'Still here'});
+ f.room.action(a,{type:'report',id});
+ f.room.action(b,{type:'report',id});
+ f.room.action(a,{type:'report',id,reported:false});
+ assert.equal(f.room.snapshot(a).messages[0].reported,false);
+ assert.equal(f.room.snapshot(b).messages[0].reported,true);
+ const reviewed=f.room.admin({type:'dismiss-reports',id});
+ assert.equal(reviewed.reports.length,0);
+ assert.equal(reviewed.messages[0].text,'Still here');
+});
+
+test('saving the advertised opening keeps the live doors and timer separate',()=>{
+ const f=fixture();
+ const board={title:'First Round Proper',date:'Saturday 7 November',hours:'11am–11pm',followingTitle:'Monday’s Draw',followingDetails:'Details to follow'};
+ f.room.admin({type:'chalkboard',board});
+ assert.deepEqual(f.room.doors(),{open:false,next:'Opening time to be announced',until:0,chalkboard:board});
+ open(f);
+ const {until}=f.room.doors();
+ f.room.admin({type:'chalkboard',board:{...board,hours:'Noon–11pm'}});
+ assert.equal(f.room.doors().until,until);
+ assert.equal(f.room.doors().open,true);
+});
