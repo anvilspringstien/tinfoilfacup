@@ -1,7 +1,7 @@
 /* Public door checks are anonymous. Campaign details travel only on explicit entry. */
 (()=>{
  'use strict';
- const home='https://tffac-boot-room-shed.anvilspringstien.workers.dev';
+ const home='https://tinfoilfacup.com/beta/boot-room';
  let state=null,checked=0,epoch=0,controller=null,timer=null,paused=false;
  const style=document.createElement('style');
  style.textContent=`
