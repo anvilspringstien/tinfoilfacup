@@ -14,6 +14,24 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
 @media (min-width: 700px) and (pointer: coarse) and (hover: none) {
   #entrance, #chat-shell, .phone-shell.demo-room { width: clamp(320px, 53.94dvh, 374px); }
 }
+
+#entrance, #chat-shell { container-type: inline-size; }
+.entrance-shell .entrance-intro, .entrance-footer > span { white-space: normal; }
+
+@container (max-width: 330px) {
+  .entrance-shell .entrance-content { padding-inline: 12px; }
+  .entrance-shell .entrance-heading h1 { font-size: clamp(22px, 10cqw, 30px); }
+  .entrance-shell .entrance-heading img { width: 42px; height: 42px; }
+  .entrance-door-line .room-sign { font-size: 12px; letter-spacing: 1px; }
+  .entrance-door-line .hours { white-space: nowrap; }
+  #door-chalkboard { padding-inline: 10px; }
+  #door-chalkboard .chalk-round { font-size: 22px; }
+  #door-chalkboard .chalk-opens, #door-chalkboard .chalk-closes { font-size: 15px; }
+  #chat-shell .messages { padding-inline: 7px; }
+  #chat-shell .message-row .bubble { max-width: calc(100% - 24px); min-width: 0; padding-inline: 8px; }
+  #chat-shell .message-row .avatar { width: 18px; height: 18px; flex: 0 0 18px; }
+  #chat-shell .bubble p { font-size: 14px; }
+}
 `;
 export const script=`const $=id=>document.getElementById(id);let socket,me,replyTo=null,secret='',generation=0,pendingText=null,currentView=null,rendered=false,roomButtons=[];
 const reportsInFlight=new Map();
