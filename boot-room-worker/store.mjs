@@ -32,20 +32,45 @@ export class RoomStore {
  });}
  logout(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);p.session=null;return {ok:true};});}
  snapshot(hash){return this.run((s,n)=>this.view(s,this.person(s,hash,n),n));}
- doors(){return this.run((s,n)=>({open:s.open&&s.until>n,next:s.next,until:s.until,...(s.open&&s.walkIn?{walkIn:true}:{})}));}
+ doors(){return this.run((s,n)=>({open:s.open&&s.until>n,next:s.next,until:s.until,...(s.open&&s.walkIn?{walkIn:true}:{}),...(s.chalkboard?{chalkboard:s.chalkboard}:{})}));}
  join(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);if(s.joins>=200)throw new RoomError('Test connection allowance reached for today',429);s.joins++;return {id:p.id,hash};});}
  action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(a?.type!=='report'&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;
  if(a.type==='message'){const text=clean(a.text,500);if(!text)throw new RoomError('Messages must contain 1–500 characters');const parent=a.replyTo?s.messages.find(m=>m.id===a.replyTo&&!m.deleted):null;if(a.replyTo&&!parent)throw new RoomError('Reply target is no longer available');const m={id:crypto.randomUUID(),person:p.id,name:p.name,...identity(p),text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
  else if(a.type==='heart'){const m=s.messages.find(m=>m.id===a.id&&!m.deleted);if(!m||typeof a.liked!=='boolean')throw new RoomError('Message unavailable');m.hearts=m.hearts.filter(id=>id!==p.id);if(a.liked)m.hearts.push(p.id);result={id:m.id};}
- else if(a.type==='report'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable');if(!s.reports.some(r=>r.message===m.id&&r.person===p.id)){s.reports.push({message:m.id,person:p.id,at:n});s.reports=s.reports.slice(-200);}result={reported:true,id:m.id};}
+ else if(a.type==='report'){
+  const m=s.messages.find(m=>m.id===a.id&&!m.deleted);
+  if(!m)throw new RoomError('Message unavailable');
+  const owns=r=>r.message===m.id&&r.person===p.id;
+  if(a.reported===false)s.reports=s.reports.filter(r=>!owns(r));
+  else if(!s.reports.some(owns)){
+   s.reports.push({message:m.id,person:p.id,at:n});
+   s.reports=s.reports.slice(-200);
+  }
+  result={reported:a.reported!==false,id:m.id};
+ }
  else throw new RoomError('Unknown action');p.burst++;s.actions++;return result;});}
  admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||typeof a.next!=='string'||a.next.length>100)throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;s.next=a.next;}
- else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);m.text='Message removed by the landlord';m.deleted=true;m.hearts=[];}
+ else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);m.text='Message removed by the landlord';m.deleted=true;m.hearts=[];s.reports=s.reports.filter(r=>r.message!==m.id);}
+ else if(a.type==='dismiss-reports'){
+  s.reports=s.reports.filter(r=>r.message!==a.id);
+ }
+ else if(a.type==='chalkboard'){
+  const limits={title:80,date:80,hours:80,followingTitle:80,followingDetails:160};
+  const board={};
+  for(const [key,max] of Object.entries(limits)){
+   const raw=a.board?.[key];
+   const value=clean(raw,max);
+   if(!value&&(typeof raw!=='string'||raw.trim()||['title','date','hours'].includes(key)))throw new RoomError('Check the chalkboard fields');
+   board[key]=value||'';
+  }
+  if(board.followingDetails&&!board.followingTitle)throw new RoomError('Give the following opening a title');
+  s.chalkboard=board;
+ }
  else if(a.type==='suspend'){const p=s.people.find(p=>p.id===a.id);if(!p)throw new RoomError('Participant unavailable',404);p.suspended=true;p.session=null;p.invite=null;}
  else if(a.type==='reinstate'){
   const p=s.people.find(p=>p.id===a.id);
   if(!p||!p.walkIn)throw new RoomError('Walk-in participant unavailable',404);
   p.suspended=false;
  }
- else if(a.type!=='status')throw new RoomError('Unknown action');return {open:s.open,next:s.next,until:s.until,people:s.people.map(({id,name,callSign,walkIn,suspended,expires})=>({id,name,callSign,walkIn,suspended,expires})),reports:s.reports,messages:s.messages.map(({id,name,text,at,deleted})=>({id,name,text,at,deleted})),usage:{day:s.day,actions:s.actions,joins:s.joins}};});}
+ else if(a.type!=='status')throw new RoomError('Unknown action');return {open:s.open,next:s.next,until:s.until,walkIn:!!(s.open&&s.walkIn),chalkboard:s.chalkboard||null,people:s.people.map(({id,name,callSign,walkIn,suspended,expires})=>({id,name,callSign,walkIn,suspended,expires})),reports:s.reports.filter(r=>s.messages.some(m=>m.id===r.message&&!m.deleted)),messages:s.messages.map(({id,name,text,at,deleted})=>({id,name,text,at,deleted})),usage:{day:s.day,actions:s.actions,joins:s.joins}};});}
 }
