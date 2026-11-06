@@ -42,5 +42,10 @@ export class RoomStore {
  admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||typeof a.next!=='string'||a.next.length>100)throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;s.next=a.next;}
  else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);m.text='Message removed by the landlord';m.deleted=true;m.hearts=[];}
  else if(a.type==='suspend'){const p=s.people.find(p=>p.id===a.id);if(!p)throw new RoomError('Participant unavailable',404);p.suspended=true;p.session=null;p.invite=null;}
- else if(a.type!=='status')throw new RoomError('Unknown action');return {open:s.open,next:s.next,until:s.until,people:s.people.map(({id,name,suspended,expires})=>({id,name,suspended,expires})),reports:s.reports,messages:s.messages.map(({id,name,text,at,deleted})=>({id,name,text,at,deleted})),usage:{day:s.day,actions:s.actions,joins:s.joins}};});}
+ else if(a.type==='reinstate'){
+  const p=s.people.find(p=>p.id===a.id);
+  if(!p||!p.walkIn)throw new RoomError('Walk-in participant unavailable',404);
+  p.suspended=false;
+ }
+ else if(a.type!=='status')throw new RoomError('Unknown action');return {open:s.open,next:s.next,until:s.until,people:s.people.map(({id,name,callSign,walkIn,suspended,expires})=>({id,name,callSign,walkIn,suspended,expires})),reports:s.reports,messages:s.messages.map(({id,name,text,at,deleted})=>({id,name,text,at,deleted})),usage:{day:s.day,actions:s.actions,joins:s.joins}};});}
 }

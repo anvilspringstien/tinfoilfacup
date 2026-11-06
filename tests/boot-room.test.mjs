@@ -71,3 +71,16 @@ test('walk-in needs an enabled opening, remembers the Campaign and prevents susp
  f.room.admin({type:'doors',open:false,next:'Check back for the next opening'});
  assert.equal(f.room.doors().walkIn,undefined);
 });
+
+test('reinstating a walk-in keeps the old session revoked and allows a fresh join',()=>{
+ const f=fixture();
+ const claim={name:'Test Pigeon',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ const {id}=f.room.walkIn(claim,'old');
+ f.room.admin({type:'suspend',id});
+ const status=f.room.admin({type:'reinstate',id});
+ assert.equal(status.people[0].callSign,claim.callSign);
+ assert.throws(()=>f.room.snapshot('old'),e=>e.status===401);
+ assert.equal(f.room.walkIn(claim,'fresh').id,id);
+ assert.equal(f.room.snapshot('fresh').you.campaign.callSign,claim.callSign);
+});
