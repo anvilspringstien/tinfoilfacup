@@ -2,12 +2,12 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {script} from '../boot-room-worker/ui.mjs';
-function browser(pathname='/chat',campaign=null){
+function browser(pathname='/chat',campaign=null,{search='',responses=[]}={}){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
  const document={querySelectorAll(){return [];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
- const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search:''},history:{replaceState(){}},WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return {ok:true,json:async()=>nextState};}};
+ const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
@@ -76,7 +76,7 @@ test('Campaign visitors see the chalkboard before continuing to chat',async()=>{
  await b.settle();
  assert.deepEqual(b.requests,['/api/doors']);
  assert.equal(b.sockets.length,0);
- assert.equal(b.$('.entrance-enter').href,'/chat#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+ assert.equal(b.$('.entrance-enter').href,'/chat?enter=1#campaign='+encodeURIComponent(JSON.stringify(campaign)));
  assert.equal(b.$('.entrance-enter').textContent,'Continue to the Boot Room →');
 });
 
@@ -85,5 +85,20 @@ test('the Keep chalkboard stays within the Boot Room path when continuing to cha
  const b=browser('/beta/boot-room/',campaign);
  await b.settle();
  assert.deepEqual(b.requests,['/beta/boot-room/api/doors']);
- assert.equal(b.$('.entrance-enter').href,'/beta/boot-room/chat#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+ assert.equal(b.$('.entrance-enter').href,'/beta/boot-room/chat?enter=1#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+});
+
+test('entering from the Keep chalkboard joins an open walk-in once and connects',async()=>{
+ const campaign={callSign:'TF2AC 01921',name:'Flappy'};
+ const response=(data,status=200)=>({ok:status===200,status,json:async()=>data});
+ const b=browser('/beta/boot-room/chat',campaign,{search:'?enter=1',responses:[
+  response({error:'Invitation required'},401),
+  response({open:true,walkIn:true}),
+  response({ok:true}),
+ ]});
+ b.setState({you:{id:'a',name:'Flappy',campaign}});
+ await b.settle();
+ await b.settle();
+ assert.deepEqual(b.posts,[{campaign}]);
+ assert.equal(b.sockets.length,1);
 });
