@@ -1,8 +1,9 @@
 import {DurableObject} from 'cloudflare:workers';
 import {RoomStore,RoomError,digest,token,DAY} from './store.mjs';
 import {page,script,style} from './ui.mjs';
-import {demoPage} from './demo.mjs';
+import {demoPage,scopedDemoPage} from './demo.mjs';
 const json=(data,status=200,extra={})=>Response.json(data,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff',...extra}});
+const roomPrefix='/beta/boot-room';
 const cookieName='__Host-bootroom';
 export class BootRoom extends DurableObject {
  constructor(ctx,env){super(ctx,env);this.room=new RoomStore(ctx.storage);ctx.blockConcurrencyWhile(async()=>{if(await ctx.storage.getAlarm()===null)await ctx.storage.setAlarm(Date.now()+DAY);});}
@@ -30,8 +31,9 @@ export class BootRoom extends DurableObject {
  webSocketClose(ws,code){ws.close([1000,1001,1008,1009,1011].includes(code)?code:1000,'');}
  webSocketError(ws){ws.close(1011,'Connection error');}
 }
-export default {async fetch(request,env){try{const u=new URL(request.url),path=u.pathname;
- const assets={'/demo':[demoPage,'text/html; charset=utf-8'],'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
+export default {async fetch(request,env){try{const u=new URL(request.url),scoped=u.pathname.startsWith(roomPrefix+'/'),path=scoped?u.pathname.slice(roomPrefix.length):u.pathname;
+ if(scoped&&['/admin','/api/admin','/api/invite'].includes(path))return json({error:'not_found'},404);
+ const assets={'/demo':[scoped?scopedDemoPage:demoPage,'text/html; charset=utf-8'],'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
  if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://tinfoilfacup.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"}});}
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});
  const post=['/api/walk-in','/api/join','/api/admin','/api/invite','/api/logout'].includes(path);if(!post&&!['/api/state','/api/socket','/api/doors'].includes(path))return json({error:'not_found'},404);
@@ -60,5 +62,5 @@ export default {async fetch(request,env){try{const u=new URL(request.url),path=u
  if(path==='/api/join'){if(typeof body.invite!=='string'||!/^[a-f0-9]{64}$/.test(body.invite))return json({error:'invalid_invitation'},400);const session=token();const r=await stub.fetch('https://room.internal/api/join',{method:'POST',body:JSON.stringify({invite:await digest(body.invite),session:await digest(session),campaign:body.campaign})});if(!r.ok)return r;return json(await r.json(),200,{'set-cookie':`${cookieName}=${session}; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800`});}
  const session=request.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1)||'';
  if(!/^[a-f0-9]{64}$/.test(session))return json({error:'Invitation required'},401);
- const h=new Headers(request.headers);h.delete('cookie');h.delete('authorization');h.set('x-room-session',await digest(session));return stub.fetch(new Request(request,{headers:h}));
+ const h=new Headers(request.headers);h.delete('cookie');h.delete('authorization');h.set('x-room-session',await digest(session));return stub.fetch(new Request(new URL(path+u.search,u.origin),{method:request.method,headers:h}));
  }catch{return json({error:'Room temporarily unavailable'},503);}}};
