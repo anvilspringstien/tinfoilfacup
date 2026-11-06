@@ -28,8 +28,8 @@ test('one visible refresh timer follows the room deadline, and pagehide stops it
  f.setAnswer({open:true,until:Date.now()+20000});f.win.online();await f.settle();assert.equal(f.timers.size,1);assert.ok([...f.timers.values()][0].ms<=20100);
  f.win.pagehide();assert.equal(f.timers.size,0);assert.equal(f.label(),'CHECK THE DOORS');
 });
-test('welcome explains invited chat and a separate destination without editing saved Campaign',async()=>{
- const f=fixture();await f.settle();f.button().onclick();const box=f.document.body.children[0];assert.equal(box.open,true);assert.match(box.innerHTML,/invitation-only/);assert.match(box.innerHTML,/your Campaign stays saved here/);assert.match(box.innerHTML,/target="_top"/);assert.match(box.innerHTML,/Have a look/);box.querySelector('button').onclick();assert.equal(box.open,false);
+test('welcome explains experimental chat and a separate destination without editing saved Campaign',async()=>{
+ const f=fixture();await f.settle();f.button().onclick();const box=f.document.body.children[0];assert.equal(box.open,true);assert.match(box.innerHTML,/experimental opening/);assert.match(box.innerHTML,/Your Campaign stays saved here/);assert.match(box.innerHTML,/target="_top"/);assert.match(box.innerHTML,/Have a look/);box.querySelector('button').onclick();assert.equal(box.open,false);
 });
 
 test('returning to restored Campaign markup restarts status checks after its previous timer expired',async()=>{

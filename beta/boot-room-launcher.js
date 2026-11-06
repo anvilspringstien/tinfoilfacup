@@ -25,7 +25,7 @@
   for(const b of buttons()){
    if(b.dataset.roomState!==kind)b.dataset.roomState=kind;
    const text=b.querySelector('.boot-room-status');if(text.textContent!==label)text.textContent=label;
-   const title=fresh?'Room status checked '+new Date(checked).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'. Live chat is invitation-only.':'Room status needs checking. You can still visit the entrance.';
+   const title=fresh?'Room status checked '+new Date(checked).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'.':'Room status needs checking. You can still visit the entrance.';
    if(b.title!==title)b.title=title;
    const aria='The Boot Room · '+(fresh?(state.open?'doors open':'doors closed'):'status unavailable');if(b.getAttribute('aria-label')!==aria)b.setAttribute('aria-label',aria);
   }
@@ -62,7 +62,7 @@
   refresh();if(dialog)return;
   const previous=document.activeElement;
   const box=document.createElement('dialog');box.id='boot-room-welcome';box.setAttribute('aria-labelledby','boot-room-welcome-title');
-  box.innerHTML='<div class="boot-welcome-top"><h2 id="boot-room-welcome-title" tabindex="-1">The Boot Room is taking shape.</h2><button type="button" class="boot-welcome-close" aria-label="Close Boot Room welcome">×</button></div><p>Come in and have a peek. Read a sample conversation, or use your invitation to join the chat when Barry opens the doors.</p><p>We’re still moving the furniture about.</p><p class="boot-welcome-small">Live chat is invitation-only while we test. The room opens on its separate test site; your Campaign stays saved here.</p><a class="boot-welcome-go" href="'+home+'/" target="_top" rel="noreferrer">Have a look →</a>';
+  box.innerHTML='<div class="boot-welcome-top"><h2 id="boot-room-welcome-title" tabindex="-1">The Boot Room is taking shape.</h2><button type="button" class="boot-welcome-close" aria-label="Close Boot Room welcome">×</button></div><p>Come in and have a peek. Read a sample conversation, or join with My Campaign when Barry opens the doors.</p><p>We’re still moving the furniture about.</p><p class="boot-welcome-small">This is an experimental opening. If the doors are closed, we’re still working on the room. Check back to try posting at the next opening. Your Campaign stays saved here.</p><a class="boot-welcome-go" href="'+home+'/" target="_top" rel="noreferrer">Have a look →</a>';
   const entry=campaignEntry();
   if(entry){
    const link=document.createElement('a');link.className='boot-welcome-go';

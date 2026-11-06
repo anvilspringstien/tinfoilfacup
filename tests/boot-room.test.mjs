@@ -49,3 +49,25 @@ test('Campaign enrollment matches the invitation, and only the landlord assigns 
  assert.equal(second.moderator,undefined);
  assert.equal(second.campaign,undefined);
 });
+
+test('walk-in needs an enabled opening, remembers the Campaign and prevents suspended rejoining',()=>{
+ const f=fixture();
+ const claim={name:'Lab Pigeon',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United',moderator:true};
+ const walkIn=()=>f.room.walkIn(claim,'session');
+ assert.throws(walkIn,e=>e.status===403);
+ open(f);
+ assert.throws(walkIn,e=>e.status===403);
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Next opening to be announced'});
+ assert.equal(f.room.doors().walkIn,true);
+ const guest=walkIn();
+ const saved=f.room.snapshot('session').you;
+ assert.equal(saved.campaign.callSign,claim.callSign);
+ assert.equal(saved.moderator,false);
+ assert.throws(walkIn,e=>e.status===409);
+ f.room.action('session',{type:'message',text:'Lab reporting in'});
+ f.room.admin({type:'suspend',id:guest.id});
+ assert.throws(()=>f.room.snapshot('session'),e=>e.status===401);
+ assert.throws(walkIn,e=>e.status===403);
+ f.room.admin({type:'doors',open:false,next:'Check back for the next opening'});
+ assert.equal(f.room.doors().walkIn,undefined);
+});
