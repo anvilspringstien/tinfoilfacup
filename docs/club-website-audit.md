@@ -4,6 +4,21 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 6 November 2026 checkpoint — missing-link coverage, batch 18
+
+Reviewed twelve previously unreviewed missing origins, Dulwich Hamlet through
+Ely City. Ten senior-club links are approved. Dunstable is held for an unavailable
+new-club homepage; East Cowes Victoria is held pending a current preferred site.
+
+- Original qualifying-club coverage: 220 -> 230 of 651 linked; 421 missing.
+- Verified queue records: 264 -> 274. All 80 current clubs remain linked and verified.
+- Sources, public reader retrieval limitations and holds are in
+  [batch 18](../updater/club_website_verified_batch_18.json). Similar identities
+  remain separate and previously documented holds are untouched.
+- The BETA website map, queue and Stage C report are refreshed. All 651 search
+  origins, competition and location data, and protected Clubfinder are unchanged.
+  No email is sent.
+
 ## 5 November 2026 checkpoint — missing-link coverage, batch 17
 
 Reviewed twelve previously unreviewed missing origins, Deeping Rangers through
