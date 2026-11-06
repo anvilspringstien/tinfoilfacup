@@ -3,8 +3,7 @@
  'use strict';
  const base=new URL('.',document.currentScript.src);
  const refresh=new URL(document.currentScript.src).searchParams.get('refresh');
- const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','boot-campaign-walk-in-20261106');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
- const shedBootRoom=document.currentScript.hasAttribute('data-boot-room-shed');
+ const componentURL=file=>{const url=new URL(file,base);url.searchParams.set('v','boot-frame-return-20261106');if(refresh&&/^\d{10,16}$/.test(refresh))url.searchParams.set('refresh',refresh);return url.href;};
  const watched=new WeakSet();
  const badgeURL=new URL('assets/barry-air/badge.webp',base).href;
  const css=`
@@ -96,7 +95,7 @@
    // Campaign return snapshots preserve HTML but not JS handlers.
    for(const barry of doc.querySelectorAll('.phone-frame-nav .barry-air-launch'))barry.onclick=()=>{const win=doc.defaultView;if(typeof win.tffcCampaignIntroduction==='function')win.tffcCampaignIntroduction('barry');else win.top.location.assign(new URL('barry-air/',base).href);};
    if(doc.querySelector('.campaign-barry-nav')&&!doc.querySelector('script[data-tffc-boot-room]')){
-    const script=doc.createElement('script');script.src=componentURL(shedBootRoom?'boot-room-launcher-shed.js':'boot-room-launcher.js');script.dataset.tffcBootRoom='1';doc.head.append(script);
+    const script=doc.createElement('script');script.src=componentURL('boot-room-launcher.js');script.dataset.tffcBootRoom='1';doc.head.append(script);
    }
    if(doc.querySelector('.tffc-support-footer, .deck-footer-help')&&!doc.querySelector('script[data-tffc-refresh]')){
     const script=doc.createElement('script');script.src=componentURL('refresh-tffac.js');script.dataset.tffcRefresh='1';doc.head.append(script);
