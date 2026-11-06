@@ -7,7 +7,7 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
 #door-chalkboard .chalk-closes{font-size:18px}
 #door-chalkboard .chalk-next{font-size:13px}
 @media (min-width: 700px) {
-  #entrance, #chat-shell { width: clamp(320px, 53.94dvh, 374px); }
+  #entrance, #chat-shell, .phone-shell.demo-room { width: clamp(320px, 53.94dvh, 374px); }
 }
 `;
 export const script=`const $=id=>document.getElementById(id);let socket,me,replyTo=null,secret='',generation=0,pendingText=null,currentView=null,rendered=false,roomButtons=[];
@@ -82,7 +82,7 @@ async function refreshEntrance(){
  $('enter-room').textContent=d.walkIn?'Campaign holders: enter from My Campaign':d.open?'Invited pigeons: enter →':'Invited pigeons: read →';$('enter-room').href=d.walkIn?'https://tinfoilfacup.com/?view=campaign':'/chat';
  }
  $('entrance-feedback').textContent='';
- }catch(e){if(epoch!==entranceEpoch)return;$('entrance-state').textContent='STATUS UNAVAILABLE';$('entrance-state').className='room-sign closed';$('entrance-next').textContent='Please check the doors again.';$('entrance-feedback').textContent='We couldn’t check the room just now.';$('enter-room').textContent='Go to the Boot Room →';}
+ }catch(e){if(epoch!==entranceEpoch)return;$('entrance-state').textContent='STATUS UNAVAILABLE';$('entrance-state').className='room-sign closed';$('entrance-next').textContent='Please check the doors again.';$('entrance-feedback').textContent='We couldn’t check the room just now.';if(!campaignFragment)$('enter-room').textContent='Go to the Boot Room →';}
  finally{if(epoch===entranceEpoch)$('entrance-refresh').disabled=false;}
 }
 const refreshPage=()=>isEntrance()?refreshEntrance():connect();
@@ -191,7 +191,7 @@ $('about').onclick=()=>info('Boot Room Barry','A little football. A little compa
 $('rules').onclick=()=>info('House rules','Keep it friendly. Football banter is welcome; abuse and personal details are not. Use Report to send a private flag to the landlord. Messages are kept for up to seven days, with the latest 200 retained. This invited opening uses a separate room identity. Your Campaign carries on as before.');
 $('dialog-close').onclick=$('dialog-done').onclick=()=>$('info-dialog').close();
 $('entrance-refresh').onclick=refreshEntrance;$('entrance-rules').onclick=()=>$('rules').onclick();
-if(location.pathname==='/admin'){$('workbench').className+=' landlord-view';$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else if(isEntrance()){$('entrance').hidden=false;if(campaignFragment){$('enter-room').href='/chat'+campaignFragment;$('enter-room').textContent='Continue to the Boot Room →';}$('dialog-done').textContent='Back to the entrance';refreshEntrance();}else{
+if(location.pathname==='/admin'){$('workbench').className+=' landlord-view';$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else if(isEntrance()){$('entrance').hidden=false;if(campaignFragment){const primary=document.querySelector('.entrance-enter');primary.href='/chat'+campaignFragment;primary.textContent='Continue to the Boot Room →';$('enter-room').href='/demo';$('enter-room').textContent='Read the sample conversation →';}$('dialog-done').textContent='Back to the entrance';refreshEntrance();}else{
  $('chat-shell').hidden=false;
  if(campaign&&typeof campaign.name==='string'){
   const detail=document.createElement('p');

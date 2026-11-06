@@ -5,7 +5,7 @@ import {script} from '../boot-room-worker/ui.mjs';
 function browser(pathname='/chat',campaign=null){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
- const document={visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
+ const document={querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
  const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search:''},history:{replaceState(){}},WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return {ok:true,json:async()=>nextState};}};
  vm.createContext(context);vm.runInContext(script,context);
@@ -76,6 +76,6 @@ test('Campaign visitors see the chalkboard before continuing to chat',async()=>{
  await b.settle();
  assert.deepEqual(b.requests,['/api/doors']);
  assert.equal(b.sockets.length,0);
- assert.equal(b.$('enter-room').href,'/chat#campaign='+encodeURIComponent(JSON.stringify(campaign)));
- assert.equal(b.$('enter-room').textContent,'Continue to the Boot Room →');
+ assert.equal(b.$('.entrance-enter').href,'/chat#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+ assert.equal(b.$('.entrance-enter').textContent,'Continue to the Boot Room →');
 });
