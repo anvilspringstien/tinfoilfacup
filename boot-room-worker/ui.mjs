@@ -12,6 +12,9 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
 `;
 export const script=`const $=id=>document.getElementById(id);let socket,me,replyTo=null,secret='',generation=0,pendingText=null,currentView=null,rendered=false,roomButtons=[];
 const reportsInFlight=new Map();
+if(location.hostname==='fix-boot-room-frame-return-20261106-tffac-boot-room-shed.anvilspringstien.workers.dev'){
+ for(const link of document.querySelectorAll('.campaign-home'))link.href='https://tinfoilfacup.com/beta/phone-frame.html?view=campaign';
+}
 let campaign=null;
 let campaignFragment='';
 if((location.pathname==='/'||location.pathname==='/chat')&&location.hash?.startsWith('#campaign=')){
