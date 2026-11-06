@@ -6,6 +6,11 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
 #door-chalkboard .chalk-opens{font-size:19px}
 #door-chalkboard .chalk-closes{font-size:18px}
 #door-chalkboard .chalk-next{font-size:13px}
+/* Match the Campaign's 390 × 693 desktop composition. */
+@media (min-width: 700px) and (pointer: fine) and (hover: hover) {
+  #entrance, #chat-shell, .phone-shell.demo-room { width: min(100%, 56.25svh); }
+}
+
 @media (min-width: 700px) and (pointer: coarse) and (hover: none) {
   #entrance, #chat-shell, .phone-shell.demo-room { width: clamp(320px, 53.94dvh, 374px); }
 }
