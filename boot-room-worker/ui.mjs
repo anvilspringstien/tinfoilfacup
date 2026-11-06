@@ -36,21 +36,21 @@ async function api(path,body,admin=false){const r=await fetch(roomPrefix+path,{m
 function button(label,fn){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;}
 function send(a){if(!socketFresh||socket?.readyState!==WebSocket.OPEN||document.visibilityState==='hidden'){status('Reconnect before posting.');return false;}socket.send(JSON.stringify(a));return true;}
 function render(d){
- me=d.you;currentView=d;$('join').hidden=true;$('room').hidden=false;$('logout').hidden=false;
+ me=d.you;currentView=d;$('join').hidden=true;$('room').hidden=false;$('logout').hidden=!me;
  $('doors').textContent=d.open?'ROOM OPEN · until '+new Date(d.until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'ROOM CLOSED';$('doors').className='room-sign'+(d.open?'':' closed');
- $('closed-notice').hidden=d.open;$('next-opening').textContent=d.next;$('you').textContent='Posting as '+me.name+(me.campaign?' · '+identityText(me):'');roomOpen=d.open;
+ $('closed-notice').hidden=d.open;$('next-opening').textContent=d.next;$('you').textContent=me?'Posting as '+me.name+(me.campaign?' · '+identityText(me):''):'';roomOpen=d.open;
  const list=$('messages'),scroller=$('room-scroll'),oldTop=scroller.scrollTop||0,nearBottom=!rendered||((scroller.scrollHeight||0)-oldTop-(scroller.clientHeight||0)<70);list.replaceChildren();roomButtons=[];
  if(!d.messages.length){const empty=document.createElement('p');empty.className='empty-room';empty.textContent='First in? Pick a good chair.';const note=document.createElement('small');note.textContent='The conversation will appear here.';empty.append(note);list.append(empty);}
  for(const m of d.messages){
-  const row=document.createElement('article');row.className='message-row'+(m.person===me.id?' own':'')+(m.deleted?' removed':'');
-  const avatar=document.createElement('span');avatar.className='avatar'+(m.person===me.id?' blue':'');avatar.textContent=m.name.slice(0,1).toUpperCase();avatar.setAttribute('aria-hidden','true');
+  const row=document.createElement('article');row.className='message-row'+(me&&m.person===me.id?' own':'')+(m.deleted?' removed':'');
+  const avatar=document.createElement('span');avatar.className='avatar'+(me&&m.person===me.id?' blue':'');avatar.textContent=m.name.slice(0,1).toUpperCase();avatar.setAttribute('aria-hidden','true');
   const bubble=document.createElement('div');bubble.className='bubble';const sender=document.createElement('div');sender.className='sender';const name=document.createElement('strong');name.textContent=m.name;sender.append(name);
   if(m.campaign){const details=document.createElement('small');details.textContent=identityText(m);details.className='campaign-ident';sender.append(details);}
   bubble.append(sender);
   if(m.replyTo){const parent=d.messages.find(p=>p.id===m.replyTo),quote=document.createElement('div');quote.className='quote';const who=document.createElement('strong');who.textContent=parent?.name||'Earlier message';const excerpt=document.createElement('span');excerpt.textContent=parent?.text.slice(0,90)||'Earlier message is no longer available';quote.append(who,excerpt);bubble.append(quote);}
   const text=document.createElement('p');text.textContent=m.text;bubble.append(text);const meta=document.createElement('div');meta.className='message-meta';
   const time=document.createElement('time');time.textContent=new Date(m.at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});meta.append(time);
-  if(!m.deleted){
+  if(me&&!m.deleted){
    const reply=button('Reply',()=>{replyTo=m.id;$('reply').textContent='Replying to '+m.name+' · '+m.text.slice(0,70);$('reply-preview').hidden=false;$('text').focus();});
    const heart=button((m.hearted?'♥ ':'♡ ')+m.hearts,()=>send({type:'heart',id:m.id,liked:!m.hearted}));heart.className=m.hearted?'liked':'';heart.setAttribute('aria-label',(m.hearted?'Remove heart from ':'Heart ')+m.name+'’s message');
    if(reportsInFlight.get(m.id)===m.reported)reportsInFlight.delete(m.id);
@@ -92,9 +92,9 @@ async function refreshEntrance(){
 const refreshPage=()=>isEntrance()?refreshEntrance():connect();
 function availability(){$('composer-wrap').hidden=!me||!roomOpen;const live=socketFresh&&socket?.readyState===WebSocket.OPEN&&document.visibilityState!=='hidden',enabled=live&&roomOpen;$('send').disabled=!enabled;$('text').disabled=!enabled;for(const c of roomButtons)c.button.disabled=!live||(c.requiresOpen&&!roomOpen)||!!c.pending;$('closed-composer').hidden=enabled;$('closed-composer').textContent=live?'Room closed · reading is always welcome':'Connection paused · your draft stays here';}
 function disconnect(){connectionEpoch++;connecting=false;socketFresh=false;reportsInFlight.clear();const old=socket;socket=null;old?.close();availability();if(me)$('doors').textContent='CONNECTION PAUSED · room status needs checking';}
-async function connect(){
+async function connect(enterFromChalkboard=false){
  if(!isRoom()||document.visibilityState==='hidden'||connecting)return;
- disconnect();connecting=true;const epoch=connectionEpoch;status('Checking the room…');
+ disconnect();connecting=true;const epoch=connectionEpoch;let joined=false;status('Checking the room…');
  try{
   const d=await api('/api/state');if(epoch!==connectionEpoch)return;
   if(campaign&&d.you.campaign?.callSign!==campaign.callSign){
@@ -122,11 +122,24 @@ async function connect(){
    const doors=await api('/api/doors');
    if(epoch!==connectionEpoch)return;
    $('walk-in-join').disabled=!doors.walkIn;
+   if(enterFromChalkboard===true&&doors.open&&doors.walkIn){
+    $('walk-in-join').disabled=true;
+    try{await api('/api/walk-in',{campaign});joined=true;}
+    finally{if(epoch===connectionEpoch)$('walk-in-join').disabled=false;}
+    return;
+   }
+   if(roomPrefix&&!doors.open){
+    const history=await api('/api/read-closed');
+    if(epoch!==connectionEpoch)return;
+    render(history);
+    status('Room closed · pull up a chair and read the conversation.');
+    return;
+   }
    $('doors').textContent=doors.open?'ROOM OPEN':'ROOM CLOSED';
    status(doors.walkIn?'Walk-ins are open. Join as your Campaign pigeon.':doors.open?'Walk-ins are currently closed.':'The Boot Room is closed. Check the chalkboard for the next opening.');
   }catch(error){if(epoch===connectionEpoch)status(error.message);}
  }
- finally{if(epoch===connectionEpoch)connecting=false;}
+ finally{if(epoch===connectionEpoch){connecting=false;if(joined)await connect();}}
 }
 async function joinWalkIn(){
  const button=$('walk-in-join');button.disabled=true;
@@ -206,7 +219,7 @@ $('about').onclick=()=>info('Boot Room Barry','A little football. A little compa
 $('rules').onclick=()=>info('House rules','Keep it friendly. Football banter is welcome; abuse and personal details are not. Use Report to send a private flag to the landlord. Messages are kept for up to seven days, with the latest 200 retained. This invited opening uses a separate room identity. Your Campaign carries on as before.');
 $('dialog-close').onclick=$('dialog-done').onclick=()=>$('info-dialog').close();
 $('entrance-refresh').onclick=refreshEntrance;$('entrance-rules').onclick=()=>$('rules').onclick();
-if(roomPath==='/admin'){$('workbench').className+=' landlord-view';$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else if(isEntrance()){$('entrance').hidden=false;if(campaignFragment){const primary=document.querySelector('.entrance-enter');primary.href=roomPrefix+'/chat'+campaignFragment;primary.textContent='Continue to the Boot Room →';$('enter-room').href=roomPrefix+'/demo';$('enter-room').textContent='Read the sample conversation →';}$('dialog-done').textContent='Back to the entrance';refreshEntrance();}else{
+if(roomPath==='/admin'){$('workbench').className+=' landlord-view';$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else if(isEntrance()){$('entrance').hidden=false;if(campaignFragment){const primary=document.querySelector('.entrance-enter');primary.href=roomPrefix+'/chat?enter=1'+campaignFragment;primary.textContent='Continue to the Boot Room →';$('enter-room').href=roomPrefix+'/demo';$('enter-room').textContent='Read the sample conversation →';}$('dialog-done').textContent='Back to the entrance';refreshEntrance();}else{
  $('chat-shell').hidden=false;
  if(campaign&&typeof campaign.name==='string'){
   const detail=document.createElement('p');
@@ -214,5 +227,5 @@ if(roomPath==='/admin'){$('workbench').className+=' landlord-view';$('admin').hi
   $('walk-in-entry').hidden=false;
   $('walk-in-entry').prepend(detail);
  }
- connect();
+ connect(roomPrefix!==''&&new URLSearchParams(location.search).get('enter')==='1');
 }`;

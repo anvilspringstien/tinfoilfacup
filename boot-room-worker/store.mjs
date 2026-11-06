@@ -32,6 +32,11 @@ export class RoomStore {
  });}
  logout(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);p.session=null;return {ok:true};});}
  snapshot(hash){return this.run((s,n)=>this.view(s,this.person(s,hash,n),n));}
+ readClosed(){return this.run((s,n)=>{
+  if(s.open&&s.until>n)throw new RoomError('The room is open. Join from My Campaign.',409);
+  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length}));
+  return {open:false,next:s.next,until:s.until,you:null,messages};
+ });}
  doors(){return this.run((s,n)=>({open:s.open&&s.until>n,next:s.next,until:s.until,...(s.open&&s.walkIn?{walkIn:true}:{}),...(s.chalkboard?{chalkboard:s.chalkboard}:{})}));}
  join(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);if(s.joins>=200)throw new RoomError('Test connection allowance reached for today',429);s.joins++;return {id:p.id,hash};});}
  action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(a?.type!=='report'&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;

@@ -110,3 +110,15 @@ test('saving the advertised opening keeps the live doors and timer separate',()=
  assert.equal(f.room.doors().until,until);
  assert.equal(f.room.doors().open,true);
 });
+
+test('closed-room reading excludes removed messages and private member data',()=>{
+ const f=fixture(),a=join(f);
+ open(f);
+ f.room.action(a,{type:'message',text:'See you next time'});
+ assert.throws(()=>f.room.readClosed(),e=>e.status===409);
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ const view=f.room.readClosed();
+ assert.equal(view.you,null);
+ assert.equal(view.messages[0].text,'See you next time');
+ assert.deepEqual(Object.keys(view.messages[0]).sort(),['at','campaign','hearts','id','name','replyTo','text']);
+});
