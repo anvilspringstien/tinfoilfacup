@@ -30,3 +30,22 @@ test('a full matchday closes exactly at the deadline and openings beyond sixteen
  assert.throws(()=>f.room.action(a,{type:'message',text:'Too late'}),/closed/);
  assert.throws(()=>f.room.admin({type:'doors',open:true,until:f.now()+16*3600000+1,next:'Later'}),/16 hours/);
 });
+
+test('Campaign enrollment matches the invitation, and only the landlord assigns the badge',()=>{
+ const f=fixture();
+ const campaign={callSign:'TF2AC 01001',name:'Test Pigeon',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.invite(campaign.name,'campaign-invite',campaign.callSign,true);
+ assert.throws(()=>f.room.redeem('campaign-invite','wrong',{...campaign,callSign:'TF2AC 01002'}),e=>e.status===403);
+ assert.throws(()=>f.room.redeem('campaign-invite','wrong'),e=>e.status===403);
+ f.room.redeem('campaign-invite','campaign-session',campaign);
+ const member=join(f,'Other Pigeon','ordinary-invite','ordinary-session');
+ open(f);
+ f.room.action('campaign-session',{type:'message',text:'Campaign check'});
+ f.room.action(member,{type:'message',text:'Ordinary check',moderator:true,campaign});
+ const [first,second]=f.room.snapshot(member).messages;
+ assert.equal(first.campaign.callSign,campaign.callSign);
+ assert.equal(first.campaign.fixture,campaign.fixture);
+ assert.equal(first.moderator,true);
+ assert.equal(second.moderator,undefined);
+ assert.equal(second.campaign,undefined);
+});

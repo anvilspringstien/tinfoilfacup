@@ -14,8 +14,8 @@ export class BootRoom extends DurableObject {
   const pair=new WebSocketPair(),client=pair[0],server=pair[1];this.ctx.acceptWebSocket(server,[p.id]);server.serializeAttachment({hash});server.send(JSON.stringify({type:'snapshot',...this.room.snapshot(hash)}));return new Response(null,{status:101,webSocket:client});
  }
  const a=request.method==='POST'?await request.json():{};let result;
- if(path==='/internal/invite')result=this.room.invite(a.name,a.hash);
- else if(path==='/api/join')result=this.room.redeem(a.invite,a.session);
+ if(path==='/internal/invite')result=this.room.invite(a.name,a.hash,a.callSign,a.moderator);
+ else if(path==='/api/join')result=this.room.redeem(a.invite,a.session,a.campaign);
  else if(path==='/api/logout'){result=this.room.logout(hash);this.broadcast();}
  else if(path==='/api/state')result=this.room.snapshot(hash);
  else if(path==='/api/doors')result=this.room.doors();
@@ -47,10 +47,10 @@ export default {async fetch(request,env){try{const u=new URL(request.url),path=u
  if(path==='/api/logout'){const old=request.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1)||'';if(/^[a-f0-9]{64}$/.test(old))await stub.fetch('https://room.internal/api/logout',{method:'POST',headers:{'x-room-session':await digest(old)},body:'{}'});return json({ok:true},200,{'set-cookie':cookieName+'=; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'});}
  if(path==='/api/admin'||path==='/api/invite'){
   if(!env.ADMIN_TOKEN||request.headers.get('authorization')!==`Bearer ${env.ADMIN_TOKEN}`)return json({error:'unauthorized'},401);
-  if(path==='/api/invite'){const invite=token();const r=await stub.fetch('https://room.internal/internal/invite',{method:'POST',body:JSON.stringify({name:body.name,hash:await digest(invite)})});if(!r.ok)return r;return json({...await r.json(),invite});}
+  if(path==='/api/invite'){const invite=token();const r=await stub.fetch('https://room.internal/internal/invite',{method:'POST',body:JSON.stringify({name:body.name,callSign:body.callSign,moderator:body.moderator,hash:await digest(invite)})});if(!r.ok)return r;return json({...await r.json(),invite});}
   return stub.fetch('https://room.internal/internal/admin',{method:'POST',body:JSON.stringify(body)});
  }
- if(path==='/api/join'){if(typeof body.invite!=='string'||!/^[a-f0-9]{64}$/.test(body.invite))return json({error:'invalid_invitation'},400);const session=token();const r=await stub.fetch('https://room.internal/api/join',{method:'POST',body:JSON.stringify({invite:await digest(body.invite),session:await digest(session)})});if(!r.ok)return r;return json(await r.json(),200,{'set-cookie':`${cookieName}=${session}; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800`});}
+ if(path==='/api/join'){if(typeof body.invite!=='string'||!/^[a-f0-9]{64}$/.test(body.invite))return json({error:'invalid_invitation'},400);const session=token();const r=await stub.fetch('https://room.internal/api/join',{method:'POST',body:JSON.stringify({invite:await digest(body.invite),session:await digest(session),campaign:body.campaign})});if(!r.ok)return r;return json(await r.json(),200,{'set-cookie':`${cookieName}=${session}; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800`});}
  const session=request.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(cookieName+'='))?.slice(cookieName.length+1)||'';
  if(!/^[a-f0-9]{64}$/.test(session))return json({error:'Invitation required'},401);
  const h=new Headers(request.headers);h.delete('cookie');h.delete('authorization');h.set('x-room-session',await digest(session));return stub.fetch(new Request(request,{headers:h}));

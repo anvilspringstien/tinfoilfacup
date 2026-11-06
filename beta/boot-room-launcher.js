@@ -1,4 +1,4 @@
-/* Public room status and a destination preview. No Campaign identity is sent. */
+/* Public door checks are anonymous. Campaign details travel only on explicit entry. */
 (()=>{
  'use strict';
  const home='https://tffac-boot-room-shed.anvilspringstien.workers.dev';
@@ -45,11 +45,30 @@
  }
  function pause(){paused=true;epoch++;controller?.abort();controller=null;clearTimeout(timer);state=null;paint();}
  function resume(){paused=false;paint();refresh();}
+ function campaignEntry(){
+  if(typeof loadSavedJourney!=='function'||typeof tinFoilSavedCallSign!=='function'||typeof candidateClubByName!=='function'||typeof nextRoundInfo!=='function')return null;
+  const saved=loadSavedJourney();
+  if(!saved||saved.ended)return null;
+  const callSign=/^(?:Tango Foxtrot 2 Alpha Charlie|TF2AC) (\d{5})$/i.exec(tinFoilSavedCallSign(saved));
+  const name=tinFoilSavedPigeonName(saved);
+  const custodian=document.querySelector('.chosen-campaign-current .custodian-name')?.textContent.trim();
+  const club=custodian&&candidateClubByName(custodian);
+  const fixture=club&&nextRoundInfo(club)?.knownFixture;
+  if(!callSign||!name||!custodian||!fixture?.home||!fixture?.away)return null;
+  const detail={callSign:'TF2AC '+callSign[1],name,custodian,fixture:fixture.home+' v '+fixture.away};
+  return home+'/chat#campaign='+encodeURIComponent(JSON.stringify(detail));
+ }
  function welcome(){
   refresh();if(dialog)return;
   const previous=document.activeElement;
   const box=document.createElement('dialog');box.id='boot-room-welcome';box.setAttribute('aria-labelledby','boot-room-welcome-title');
   box.innerHTML='<div class="boot-welcome-top"><h2 id="boot-room-welcome-title" tabindex="-1">The Boot Room is taking shape.</h2><button type="button" class="boot-welcome-close" aria-label="Close Boot Room welcome">×</button></div><p>Come in and have a peek. Read a sample conversation, or use your invitation to join the chat when Barry opens the doors.</p><p>We’re still moving the furniture about.</p><p class="boot-welcome-small">Live chat is invitation-only while we test. The room opens on its separate test site; your Campaign stays saved here.</p><a class="boot-welcome-go" href="'+home+'/" target="_top" rel="noreferrer">Have a look →</a>';
+  const entry=campaignEntry();
+  if(entry){
+   const link=document.createElement('a');link.className='boot-welcome-go';
+   link.href=entry;link.target='_top';link.rel='noreferrer';
+   link.textContent='Join with My Campaign →';box.append(link);
+  }
   dialog=box;document.body.append(box);box.showModal();box.querySelector('h2').focus({preventScroll:true});
   const close=()=>{if(dialog!==box)return;dialog=null;box.close();box.remove();if(previous?.isConnected)previous.focus({preventScroll:true});};
   box.querySelector('button').onclick=close;box.addEventListener('cancel',e=>{e.preventDefault();close();});
