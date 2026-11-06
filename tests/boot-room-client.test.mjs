@@ -68,3 +68,14 @@ test('the Campaign entry sends a walk-in request from the Join button',async()=>
  assert.deepEqual(b.posts,[{campaign}]);
  assert.match(b.$('you').textContent,/Posting as Lab Pigeon · TF2AC 01001/);
 });
+
+test('Campaign visitors see the chalkboard before continuing to chat',async()=>{
+ const campaign={callSign:'TF2AC 01938',name:'Flappy Gilmore'};
+ const b=browser('/',campaign);
+ b.setState({walkIn:true});
+ await b.settle();
+ assert.deepEqual(b.requests,['/api/doors']);
+ assert.equal(b.sockets.length,0);
+ assert.equal(b.$('enter-room').href,'/chat#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+ assert.equal(b.$('enter-room').textContent,'Continue to the Boot Room →');
+});
