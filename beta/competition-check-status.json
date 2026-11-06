@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-11-06T19:48:50.298893Z",
+  "monitor_ran_at": "2026-11-06T21:02:22.649590Z",
   "state": "unverified",
   "last_checked_at": null,
-  "results": "success",
+  "results": "unverified",
   "draw": "unverified",
   "diagnostics": {
     "results": {
-      "reason": "verified",
+      "reason": "stale",
       "run_id": 42262130581,
       "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42262130581",
       "event": "schedule",
@@ -16,23 +16,23 @@
       "updated_at": "2026-11-06T17:32:41Z"
     },
     "draw": {
-      "reason": "stale",
-      "run_id": 42242261574,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42242261574",
+      "reason": "not_successful",
+      "run_id": 42293277530,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42293277530",
       "event": "schedule",
       "status": "completed",
-      "conclusion": "success",
-      "updated_at": "2026-11-06T15:21:40Z"
+      "conclusion": "failure",
+      "updated_at": "2026-11-06T21:01:58Z"
     }
   },
   "scheduled": {
     "state": "unverified",
     "last_checked_at": null,
-    "results": "success",
+    "results": "unverified",
     "draw": "unverified",
     "diagnostics": {
       "results": {
-        "reason": "verified",
+        "reason": "stale",
         "run_id": 42262130581,
         "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42262130581",
         "event": "schedule",
@@ -41,13 +41,13 @@
         "updated_at": "2026-11-06T17:32:41Z"
       },
       "draw": {
-        "reason": "stale",
-        "run_id": 42242261574,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42242261574",
+        "reason": "not_successful",
+        "run_id": 42293277530,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42293277530",
         "event": "schedule",
         "status": "completed",
-        "conclusion": "success",
-        "updated_at": "2026-11-06T15:21:40Z"
+        "conclusion": "failure",
+        "updated_at": "2026-11-06T21:01:58Z"
       }
     }
   }
