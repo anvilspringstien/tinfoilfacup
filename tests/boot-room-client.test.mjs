@@ -2,16 +2,16 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {script} from '../boot-room-worker/ui.mjs';
-function browser(pathname='/chat'){
- const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
+function browser(pathname='/chat',campaign=null){
+ const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
  const document={visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
- const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example'},WebSocket,Date,JSON,Error,fetch:async(path)=>{requests.push(path);if(deferred){const p=deferred;deferred=null;return p;}return {ok:true,json:async()=>nextState};}};
+ const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search:''},history:{replaceState(){}},WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return {ok:true,json:async()=>nextState};}};
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
- return {document,windowEvents,documentEvents,sockets,requests,$:id=>document.getElementById(id),settle,snapshot,setState:s=>nextState={...nextState,...s},defer(){let resolve;deferred=new Promise(r=>resolve=r);return state=>resolve({ok:true,json:async()=>state});}};
+ return {document,windowEvents,documentEvents,sockets,requests,posts,$:id=>document.getElementById(id),settle,snapshot,setState:s=>nextState={...nextState,...s},defer(){let resolve;deferred=new Promise(r=>resolve=r);return state=>resolve({ok:true,json:async()=>state});}};
 }
 test('composer waits for fresh socket state and disables immediately on connection loss without losing draft',async()=>{const b=browser();await b.settle();assert.equal(b.$('text').disabled,true);b.sockets[0].open();assert.equal(b.$('text').disabled,true);b.snapshot(b.sockets[0]);assert.equal(b.$('text').disabled,false);b.$('text').value='My unfinished pie order';b.sockets[0].close();assert.equal(b.$('text').disabled,true);assert.equal(b.$('send').disabled,true);assert.equal(b.$('text').value,'My unfinished pie order');assert.match(b.$('doors').textContent,/PAUSED/);});
 test('returning from background rechecks closure and reconnects once; late old snapshots cannot reopen input',async()=>{const b=browser();await b.settle();const old=b.sockets[0];b.snapshot(old);b.document.visibilityState='hidden';b.documentEvents.visibilitychange();assert.equal(b.$('text').disabled,true);b.setState({open:false});b.document.visibilityState='visible';b.documentEvents.visibilitychange();b.documentEvents.visibilitychange();await b.settle();assert.equal(b.sockets.length,2);assert.match(b.$('doors').textContent,/ROOM CLOSED/);old.message({type:'snapshot',open:true,you:{id:'a',name:'Checky'},messages:[]});assert.equal(b.$('text').disabled,true);b.snapshot(b.sockets[1]);assert.match(b.$('doors').textContent,/ROOM CLOSED/);assert.equal(b.$('send').disabled,true);});
@@ -56,3 +56,15 @@ test('a stale entrance check cannot overwrite status after the page goes offline
  assert.doesNotMatch(demoPage,/<script|<form|<textarea|<button|\/api\/|localStorage|__Host-bootroom|WebSocket/);
  assert.equal((demoPage.match(/<article/g)||[]).length,25);
  });
+
+test('the Campaign entry sends a walk-in request from the Join button',async()=>{
+ const campaign={name:'Lab Pigeon',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ const b=browser('/chat',campaign);
+ await b.settle();
+ assert.equal(b.$('walk-in-entry').hidden,false);
+ b.setState({you:{id:'lab',name:campaign.name,campaign}});
+ await b.$('walk-in-join').onclick();
+ assert.deepEqual(b.requests,['/api/state','/api/walk-in','/api/state']);
+ assert.deepEqual(b.posts,[{campaign}]);
+ assert.match(b.$('you').textContent,/Posting as Lab Pigeon · TF2AC 01001/);
+});
