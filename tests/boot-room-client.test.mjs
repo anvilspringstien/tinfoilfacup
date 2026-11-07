@@ -102,3 +102,10 @@ test('entering from the Keep chalkboard joins an open walk-in once and connects'
  assert.deepEqual(b.posts,[{campaign}]);
  assert.equal(b.sockets.length,1);
 });
+
+test('the Shed chalkboard keeps the shared frame when continuing to chat',async()=>{
+ const campaign={callSign:'TF2AC 01938',name:'Flappy Gilmore'};
+ const b=browser('/beta/boot-room/',campaign,{search:'?frame=shed'});
+ await b.settle();
+ assert.equal(b.$('.entrance-enter').href,'/beta/boot-room/chat?enter=1&frame=shed#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+});
