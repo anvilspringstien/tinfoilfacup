@@ -20,8 +20,8 @@ import time
 from pathlib import Path
 
 TRANSIENT_PATTERNS = [
-    r"HTTP Error (?:403|408|425|429|500|502|503|504)\b",
-    r"<HTTPError .*?: (?:403|408|425|429|500|502|503|504)\b",
+    r"HTTP Error (?:403|408|425|429|500|502|503|504|522|525)\b",
+    r"<HTTPError .*?: (?:403|408|425|429|500|502|503|504|522|525)\b",
     r"URLError",
     r"urlopen error",
     r"timed out",
