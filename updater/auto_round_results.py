@@ -14,6 +14,7 @@ import argparse
 import csv
 import html as H
 import json
+import os
 import re
 import urllib.request
 from urllib.error import HTTPError, URLError
@@ -486,12 +487,16 @@ def main():
     if not round_name or not known:
         raise SystemExit("Active-round scanner health failure: no canonical active draw available.")
 
-    source_log = REPORT.with_name("results-source-observations.csv")
+    source_log_path = os.environ.get("TFFC_RESULTS_SOURCE_LOG")
+    source_log = Path(source_log_path) if source_log_path else None
     fields = ("checked_at", "round", "source_url", "event", "detail", "fixture_date", "home", "away")
-    with source_log.open("w", encoding="utf-8", newline="") as stream:
-        csv.writer(stream).writerow(fields)
+    if source_log is not None and not source_log.exists():
+        with source_log.open("w", encoding="utf-8", newline="") as stream:
+            csv.writer(stream).writerow(fields)
 
     def record(source_url, event, detail="", fixture_date="", home="", away=""):
+        if source_log is None:
+            return
         with source_log.open("a", encoding="utf-8", newline="") as stream:
             csv.writer(stream).writerow((
                 datetime.now(timezone.utc).isoformat(), round_name, source_url,
