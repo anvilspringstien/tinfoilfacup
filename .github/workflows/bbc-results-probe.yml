@@ -31,58 +31,37 @@ jobs:
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing
         run: python updater/round_source_regression.py
-      - name: Fetch public BBC FA Cup scores
+      - name: Stage Results scanner candidate with a simulated source timeout
         run: |
-          set -eu
-          curl --fail --silent --show-error --location --max-time 30 \
-            'https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/2026-11' \
-            --output "$RUNNER_TEMP/bbc-scores.html"
-          python3 - <<'PY'
-          from html import unescape
-          from pathlib import Path
-          import os
-          import re
-          from urllib.request import urlopen
-          import sys
+          PYTHONPATH=updater python - <<'PY'
           import json
-          sys.path.insert(0, 'updater')
-          from auto_round_results import DATA, active_fixtures, history_rows, match_fixture, merge_result
-          from match_decisions import classify_batch
-          from bbc_results import full_time_observations
+          import sys
+          from unittest.mock import patch
 
-          page = (Path(os.environ["RUNNER_TEMP"]) / "bbc-scores.html").read_text()
-          result = re.search(r"Harrogate Town\s+(\d+)\s*,\s*Fylde\s+(\d+)\s+at Full time", unescape(page), re.I)
-          if not result:
-              raise SystemExit("BBC fetched, but expected full-time match row was absent")
-          data = json.loads(DATA.read_text())
-          round_name, fixtures = active_fixtures(data)
-          fixture = match_fixture(fixtures, "Harrogate Town", "AFC Fylde")
-          if not fixture or str(fixture.get("date", ""))[:10] != "2026-11-07":
-              raise SystemExit("Expected canonical fixture was not found on 7 November")
-          home_score, away_score = map(int, result.groups())
-          date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/2026-11-07"
-          with urlopen(date_url, timeout=20) as response:
-              if response.geturl() != date_url:
-                  raise SystemExit("BBC dated page redirected unexpectedly")
-              dated_page = response.read().decode("utf-8", "replace")
-          observations = full_time_observations(
-              page, [fixture], "2026-11-07",
-              "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/2026-11",
-              match_fixture, dated_page,
-          )
-          if len(observations) != 1:
-              raise SystemExit("BBC adapter did not return exactly one fixture observation")
-          decisions = classify_batch(observations, history_rows(data))
-          print(json.dumps(decisions, indent=2))
-          if len(decisions) != 1 or decisions[0].get("held"):
-              raise SystemExit("Results watcher did not accept the BBC observation")
-          if decisions[0]["outcome"]["kind"] not in {"result", "duplicate"}:
-              raise SystemExit("BBC observation did not resolve to a completed result")
-          outcome = decisions[0]["outcome"]
-          if outcome["kind"] == "result":
-              merge_result(data, outcome["result"])
-              DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
-          print("Dry run accepted:", round_name, fixture["home"], home_score, away_score, fixture["away"])
+          import auto_round_results as scanner
+
+          timeout_url = "https://www.thefa.com/competitions/thefacup/results"
+          fetch = scanner.fetch
+
+          def fail_primary_source(url):
+              if url == timeout_url:
+                  raise TimeoutError("Shed simulated primary-source timeout")
+              return fetch(url)
+
+          with patch.object(scanner, "fetch", fail_primary_source):
+              with patch.object(sys, "argv", ["auto_round_results.py", "--url", timeout_url, "--publish"]):
+                  scanner.main()
+
+          data = json.loads(scanner.DATA.read_text())
+          results = scanner.history_rows(data)
+          if not any(
+              scanner.compatible(row.get("home"), "Harrogate Town")
+              and scanner.compatible(row.get("away"), "AFC Fylde")
+              and row.get("date") == "2026-11-07"
+              and (row.get("home_score"), row.get("away_score")) == (1, 4)
+              for row in results
+          ):
+              raise SystemExit("Results candidate did not contain the BBC Harrogate–Fylde score")
           PY
       - name: Reconcile replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py
