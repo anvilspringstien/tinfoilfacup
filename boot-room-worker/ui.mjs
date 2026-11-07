@@ -39,6 +39,21 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
 @media (max-width: 700px) {
   #entrance { max-height: calc(100svh - 16px); }
 }
+
+@media (max-height: 620px) {
+  #entrance .entrance-content { flex: 0 0 auto; padding: 8px 12px 0; }
+  #entrance .entrance-heading h1 { font-size: 23px; }
+  #entrance .entrance-heading img { width: 36px; height: 36px; }
+  #entrance .entrance-intro { font-size: 10px; margin: 5px 0; }
+  #entrance .entrance-opening { padding-block: 5px; }
+  #entrance .entrance-door-line .room-sign { font-size: 11px; }
+  #door-chalkboard { flex: 0 0 auto; padding: 8px; margin-bottom: 8px; }
+  #door-chalkboard .chalk-label, #door-chalkboard .chalk-zone { font-size: 8px; }
+  #door-chalkboard .chalk-round { font-size: 19px; }
+  #door-chalkboard .chalk-opens, #door-chalkboard .chalk-closes { font-size: 13px; }
+  #door-chalkboard .chalk-next { font-size: 10px; padding-top: 5px; }
+  #entrance .entrance-footer { padding-top: 6px; }
+}
 `;
 export const script=`const $=id=>document.getElementById(id);let socket,me,replyTo=null,secret='',generation=0,pendingText=null,currentView=null,rendered=false,roomButtons=[];
 const reportsInFlight=new Map();
