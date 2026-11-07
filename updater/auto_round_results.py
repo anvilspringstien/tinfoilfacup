@@ -37,6 +37,9 @@ DATA = ROOT / "competition.json"
 REPORT = ROOT / "updater" / "results-pilot-report.json"
 SOURCE_CAPTURE = ROOT / "updater" / "results-source-capture.json"
 FWP_FIXTURES_BASE = "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+BBC_COMPETITION_SOURCES = {
+    "fa-cup": "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/",
+}
 FWP_LIVE_URL = "https://www.footballwebpages.co.uk/fa-cup"
 FWP_ROUND_SLUGS = {
     "Extra Preliminary Round": "extra-preliminary-round",
@@ -477,6 +480,7 @@ def merge_event(data, event):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="https://www.thefa.com/competitions/thefacup/results")
+    parser.add_argument("--competition", choices=BBC_COMPETITION_SOURCES, default="fa-cup")
     parser.add_argument("--publish", action="store_true")
     args = parser.parse_args()
 
@@ -504,9 +508,7 @@ def main():
             "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
         }
     except (URLError, TimeoutError) as exc:
-        if round_name != "First Round Proper" or (
-            isinstance(exc, HTTPError) and not 500 <= exc.code < 600
-        ):
+        if isinstance(exc, HTTPError) and not 500 <= exc.code < 600:
             raise
         from bbc_results import full_time_observations
 
@@ -519,7 +521,7 @@ def main():
                 continue
             if date > datetime.now(timezone.utc).date().isoformat():
                 continue
-            month_url = "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/" + date[:7]
+            month_url = BBC_COMPETITION_SOURCES[args.competition] + date[:7]
             date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/" + date
             for url in (month_url, date_url):
                 if url not in captures:
