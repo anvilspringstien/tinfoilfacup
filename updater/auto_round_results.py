@@ -15,6 +15,7 @@ import html as H
 import json
 import re
 import urllib.request
+from urllib.error import HTTPError, URLError
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -485,22 +486,54 @@ def main():
         raise SystemExit("Active-round scanner health failure: no canonical active draw available.")
 
     fwp_round_source = fwp_round_url(round_name)
-    primary_raw = fetch(args.url)
-    fixtures_raw = fetch(fwp_round_source)
-    live_raw = fetch(FWP_LIVE_URL)
-    SOURCE_CAPTURE.write_text(json.dumps({
-        "checked_at": datetime.now(timezone.utc).isoformat(),
-        "primary": {"url": args.url, "html": primary_raw},
-        "fixtures": {"url": fwp_round_source, "html": fixtures_raw},
-        "live": {"url": FWP_LIVE_URL, "html": live_raw},
-    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
+    try:
+        primary_raw = fetch(args.url)
+        fixtures_raw = fetch(fwp_round_source)
+        live_raw = fetch(FWP_LIVE_URL)
+        SOURCE_CAPTURE.write_text(json.dumps({
+            "checked_at": datetime.now(timezone.utc).isoformat(),
+            "primary": {"url": args.url, "html": primary_raw},
+            "fixtures": {"url": fwp_round_source, "html": fixtures_raw},
+            "live": {"url": FWP_LIVE_URL, "html": live_raw},
+        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
 
-    by_source = {
-        "primary_awards": parse_primary_awards(primary_raw, known, args.url),
-        "fwp_fixtures": parse_fwp_observations(fixtures_raw, known, fwp_round_source),
-        "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
-    }
+        by_source = {
+            "primary_awards": parse_primary_awards(primary_raw, known, args.url),
+            "fwp_fixtures": parse_fwp_observations(fixtures_raw, known, fwp_round_source),
+            "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
+        }
+    except (URLError, TimeoutError) as exc:
+        if round_name != "First Round Proper" or (
+            isinstance(exc, HTTPError) and not 500 <= exc.code < 600
+        ):
+            raise
+        from bbc_results import full_time_observations
+
+        print("Primary result source unavailable, checking BBC Sport:", exc)
+        live_raw = ""
+        captures = {}
+        bbc_observations = []
+        for date in sorted({str(f.get("date", ""))[:10] for f in known}):
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+                continue
+            if date > datetime.now(timezone.utc).date().isoformat():
+                continue
+            month_url = "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/" + date[:7]
+            date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/" + date
+            for url in (month_url, date_url):
+                if url not in captures:
+                    captures[url] = fetch(url)
+            bbc_observations.extend(full_time_observations(
+                captures[month_url], known, date, month_url, match_fixture, captures[date_url],
+            ))
+        if not bbc_observations:
+            raise SystemExit("BBC fallback returned no dated canonical full-time results.") from exc
+        SOURCE_CAPTURE.write_text(json.dumps({
+            "checked_at": datetime.now(timezone.utc).isoformat(),
+            "bbc": [{"url": url, "html": raw} for url, raw in captures.items()],
+        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        by_source = {"primary_awards": [], "fwp_fixtures": [], "fwp_live": [], "bbc": bbc_observations}
     observations = dedupe_observations(sum(by_source.values(), []))
     history = history_rows(data)
     classified = []
