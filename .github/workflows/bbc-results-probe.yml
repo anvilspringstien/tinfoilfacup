@@ -1,0 +1,29 @@
+name: BBC Sport results probe
+on:
+  push:
+    branches: [shed/bbc-results-probe]
+  workflow_dispatch:
+permissions: {}
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Fetch public BBC FA Cup scores
+        run: |
+          set -eu
+          curl --fail --silent --show-error --location --max-time 30 \
+            'https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/2026-11' \
+            --output "$RUNNER_TEMP/bbc-scores.html"
+          python3 - <<'PY'
+          from html import unescape
+          from pathlib import Path
+          import os
+          import re
+
+          page = unescape((Path(os.environ["RUNNER_TEMP"]) / "bbc-scores.html").read_text())
+          result = re.search(r"Harrogate Town\s+1\s*,\s*Fylde\s+4\s+at Full time", page, re.I)
+          if not result:
+              raise SystemExit("BBC fetched, but expected full-time match row was absent")
+          print("BBC verified from runner:", result.group())
+          PY
