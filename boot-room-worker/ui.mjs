@@ -45,10 +45,17 @@ html[data-frame="shed"], html[data-frame="shed"] body {
   height: 100%; overflow: hidden;
 }
 [data-frame="shed"] #workbench {
+  --campaign-gutter: clamp(6px, 1.2vh, 13px);
   width: 100%; height: 100%; min-height: 0; padding: 0;
 }
 [data-frame="shed"] #entrance, [data-frame="shed"] #chat-shell {
-  width: 100%; height: 100%; min-height: 0; max-height: none;
+  width: calc(100% - 2 * var(--campaign-gutter));
+  height: calc(100% - 2 * var(--campaign-gutter));
+  min-height: 0; max-height: none; max-width: 628px;
+  border: 1px solid #818181; border-radius: 12px;
+}
+@media (min-width: 700px) {
+  [data-frame="shed"] #entrance, [data-frame="shed"] #chat-shell { max-width: 550px; }
 }
 [data-frame="shed"] #entrance { overflow: auto; scrollbar-width: none; }
 [data-frame="shed"] #chat-shell { display: flex; flex-direction: column; }
