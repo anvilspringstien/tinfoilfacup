@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-06T17:30:21.982580+00:00",
+  "checked_at": "2026-11-07T08:35:39.440362+00:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -11,21 +11,21 @@
   },
   "counts": {
     "known_fixtures": 177,
-    "complete": 137,
+    "complete": 139,
     "awaiting_grace": 0,
     "overdue": 0,
-    "upcoming": 40,
+    "upcoming": 38,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": true,
+  "fixture_local_health": false,
   "overdue": [],
   "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-11-06T15:01:43.719367+00:00",
+    "synced_at": "2026-11-07T08:35:17.864593+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
