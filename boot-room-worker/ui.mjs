@@ -32,6 +32,13 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
   #chat-shell .message-row .avatar { width: 18px; height: 18px; flex: 0 0 18px; }
   #chat-shell .bubble p { font-size: 14px; }
 }
+
+/* Keep the frame inside short browser windows, including desktop zoom. */
+#entrance { min-height: 0; max-height: calc(100svh - 40px); overflow-y: auto; }
+#entrance .entrance-content { flex-shrink: 0; }
+@media (max-width: 700px) {
+  #entrance { max-height: calc(100svh - 16px); }
+}
 `;
 export const script=`const $=id=>document.getElementById(id);let socket,me,replyTo=null,secret='',generation=0,pendingText=null,currentView=null,rendered=false,roomButtons=[];
 const reportsInFlight=new Map();
