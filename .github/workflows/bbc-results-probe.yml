@@ -65,6 +65,19 @@ jobs:
               match_fixture,
           )
           if len(observations) != 1:
+              from bbc_results import ScoreLinks
+              from urllib.request import urlopen
+
+              links = ScoreLinks()
+              links.feed(page)
+              print("Parsed Harrogate labels:", [label for label in sorted(links.labels) if "Harrogate" in label])
+              print("Canonical fixture date:", repr(fixture.get("date")))
+              for match in list(re.finditer(r"cw4g13j470eqt|Harrogate Town\\s+1", page, re.I))[:6]:
+                  print("BBC row excerpt:", page[max(0, match.start() - 130):match.end() + 180])
+              date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/2026-11-07"
+              with urlopen(date_url, timeout=20) as response:
+                  dated_page = response.read().decode("utf-8", "replace")
+                  print("BBC dated page:", response.geturl(), "contains match ID:", "cw4g13j470eqt" in dated_page)
               raise SystemExit("BBC adapter did not return exactly one fixture observation")
           decisions = classify_batch(observations, history_rows(data))
           print(json.dumps(decisions, indent=2))
