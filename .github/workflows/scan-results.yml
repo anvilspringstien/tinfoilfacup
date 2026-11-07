@@ -273,6 +273,7 @@ jobs:
             competition.json
             clubfinder.html
             updater/results-source-capture.json
+            updater/results-source-observations.csv
             updater/kickoff-venue-enrichment-report.json
             updater/active-replay-fixture-sync-report.json
       - name: Commit validated competition data and Clubfinder
