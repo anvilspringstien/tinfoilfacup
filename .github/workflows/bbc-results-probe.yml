@@ -8,11 +8,29 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 15
+    env:
+      TFFC_ALLOW_ACTIVE_RESULT_ADVANCE: '1'
     steps:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
+      - name: Guard publication serialization and stale candidate rejection
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+
+      - name: Record candidate input revision
+        run: git rev-parse HEAD > "$RUNNER_TEMP/competition-build-base"
+
+      - name: Preserve exact Results input for diagnostics
+        run: cp competition.json updater/results-input-competition.json
+      - name: Guard complete draw and preceding replay lifecycle
+        run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
+      - name: Guard universal round-state chronology
+        run: python updater/round_state_regression.py
+      - name: Guard round-source disposition parsing
+        run: python updater/round_source_regression.py
       - name: Fetch public BBC FA Cup scores
         run: |
           set -eu
@@ -27,7 +45,7 @@ jobs:
           import sys
           import json
           sys.path.insert(0, 'updater')
-          from auto_round_results import DATA, active_fixtures, history_rows, match_fixture
+          from auto_round_results import DATA, active_fixtures, history_rows, match_fixture, merge_result
           from match_decisions import classify_batch
 
           page = unescape((Path(os.environ["RUNNER_TEMP"]) / "bbc-scores.html").read_text())
@@ -56,5 +74,107 @@ jobs:
               raise SystemExit("Results watcher did not accept the BBC observation")
           if decisions[0]["outcome"]["kind"] not in {"result", "duplicate"}:
               raise SystemExit("BBC observation did not resolve to a completed result")
+          outcome = decisions[0]["outcome"]
+          if outcome["kind"] == "result":
+              merge_result(data, outcome["result"])
+              DATA.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
           print("Dry run accepted:", round_name, fixture["home"], home_score, away_score, fixture["away"])
           PY
+      - name: Reconcile replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py
+      - name: Guard replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py --check
+      - name: Guard complete First Qualifying replay coverage
+        run: python updater/replay_completion_guard.py
+      - name: Enrich later-round fixture venues
+        run: |
+          python -m unittest discover -s tests -p 'test_conditional_fixture_venues.py' -v
+          python updater/enrich_later_round_venues.py
+      - name: Enrich replay kick-offs and active fixture venues
+        run: python updater/enrich_replay_kickoffs_and_active_venues.py
+      - name: Propagate verified venues across active fixture copies
+        run: python updater/propagate_active_fixture_venues.py
+      - name: Propagate verified historical match venues
+        run: python updater/propagate_historical_match_venues.py
+      - name: Guard enriched replay kick-offs and active venues
+        run: python updater/kickoff_venue_regression.py
+      # Diagnostic only: neither the shadow producer nor this step can write
+      # canonical competition data or approve a publication.
+      - name: Guard canonical replay shadow producer
+        run: python updater/shadow_replay_advancement_regression.py
+      - name: Assess replay advancement shadow (non-publishing)
+        continue-on-error: true
+        run: |
+          python updater/shadow_replay_advancement.py \
+            --competition competition.json \
+            --report updater/replay-advancement-shadow-report.json
+      - name: Audit repaired competition chronology
+        env:
+          TFFC_FIXTURE_LOCAL_HEALTH: "1"
+        run: python updater/competition_health.py
+      - name: Rebuild Clubfinder competition presentation
+        run: |
+          python updater/patch_clubfinder_competition_logic.py
+          python updater/patch_clubfinder_replay_progression.py
+          python updater/patch_clubfinder_journey_integrity.py
+          python updater/patch_clubfinder_result_status.py
+          python updater/patch_clubfinder_stats_integrity.py
+          python updater/patch_clubfinder_pigeon_miles_stats.py
+          python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_law2_origins.py
+          python updater/promote_verified_law2_locations.py
+          python updater/patch_gloucester_current_identity.py
+          python updater/audit_law2_location_verification.py
+          python updater/patch_clubfinder_historical_venues.py
+          python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
+          python updater/refresh_clubfinder_embedded_snapshot.py
+      - name: Re-check replay-participant result-history aliases
+        run: python updater/reconcile_result_history_aliases.py --check
+      - name: Run competition regression guard
+        env:
+          TFFC_ALLOW_ACTIVE_RESULT_ADVANCE: "1"
+        run: python updater/competition_regression_guard.py
+      - name: Run rendered Clubfinder regression
+        run: node updater/clubfinder_render_regression.js
+      - name: Run rendered HP7 Amersham card regression
+        run: node updater/amersham_card_render_regression.js
+      - name: Run HP7 Amersham Stats and Pigeon Miles regression
+        run: node updater/amersham_stats_regression.js
+      - name: Run rendered EX8 venue regression
+        run: node updater/ex8_venue_render_regression.js
+      - name: Run rendered KT21 venue regression
+        run: node updater/kt21_venue_render_regression.js
+      - name: Run Law 2 origin regression
+        run: node updater/law2_origin_regression.js
+      - name: Run systemic replay progression regression
+        run: node updater/replay_progression_regression.js
+      - name: Run KT21 replay regression
+        run: python updater/kt21_replay_regression.py
+      - name: Guard embedded fallback freshness
+        run: python updater/embedded_snapshot_regression.py
+      - name: Guard exceptional replay and Gloucester identity
+        run: python updater/unicorn_replay_regression.py
+      - name: Run Clubfinder Stats regression
+        run: node updater/clubfinder_stats_regression.js
+      - name: Run all-club journey integrity regression
+        run: node updater/journey_integrity_regression.js
+      - name: Run historical Campaign regression
+        run: node updater/historical_journey_regression.js
+      - name: Run generic historical venue regression
+        run: node updater/historical_venue_regression.js
+      - name: Run protected production UI regression
+        run: node updater/production_ui_regression.js
+      - name: Guard production presentation patch idempotency
+        run: |
+          python updater/patch_clubfinder_branding.py
+          python updater/patch_clubfinder_production_ui.py
+          python updater/patch_clubfinder_campaign_identity.py
+          node updater/production_ui_regression.js
+      - name: Upload disposable Clubfinder candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbc-shed-candidate
+          path: |
+            competition.json
+            clubfinder.html
