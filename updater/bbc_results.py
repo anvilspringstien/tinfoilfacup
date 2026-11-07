@@ -2,19 +2,23 @@
 
 import re
 from html.parser import HTMLParser
+from urllib.parse import urlsplit
 
 
 class ScoreLinks(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.labels = []
+        self.labels = set()
 
     def handle_starttag(self, tag, attrs):
         if tag != "a":
             return
         attrs = dict(attrs)
-        if attrs.get("href", "").startswith("/sport/football/live/"):
-            self.labels.append(attrs.get("aria-label", ""))
+        href = urlsplit(attrs.get("href", ""))
+        if href.path.startswith("/sport/football/live/") and href.netloc in {
+            "", "www.bbc.co.uk", "www.bbc.com",
+        }:
+            self.labels.add(attrs.get("aria-label", ""))
 
 
 FULL_TIME = re.compile(
@@ -26,11 +30,11 @@ BBC_ALIASES = {"fylde": "AFC Fylde"}
 
 def full_time_observations(raw, fixtures, match_date, source_url, match_fixture):
     """Accept decisive full-time rows from a single dated FA Cup source."""
-    dated = [fixture for fixture in fixtures if fixture.get("date") == match_date]
+    dated = [fixture for fixture in fixtures if str(fixture.get("date", ""))[:10] == match_date]
     links = ScoreLinks()
     links.feed(raw)
     observations = []
-    for label in links.labels:
+    for label in sorted(links.labels):
         match = FULL_TIME.match(label)
         if not match:
             continue
