@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-11-07T17:51:23.237172Z",
+  "monitor_ran_at": "2026-11-07T17:53:45.419952Z",
   "state": "unverified",
   "last_checked_at": null,
   "results": "unverified",
@@ -13,7 +13,7 @@
       "event": "schedule",
       "status": "completed",
       "conclusion": "failure",
-      "updated_at": "2026-11-07T17:51:00Z"
+      "updated_at": "2026-11-07T17:53:22Z"
     },
     "draw": {
       "reason": "not_successful",
@@ -38,7 +38,7 @@
         "event": "schedule",
         "status": "completed",
         "conclusion": "failure",
-        "updated_at": "2026-11-07T17:51:00Z"
+        "updated_at": "2026-11-07T17:53:22Z"
       },
       "draw": {
         "reason": "not_successful",
