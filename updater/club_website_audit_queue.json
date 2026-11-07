@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-06T01:33:44.478844+00:00",
+  "competition_updated_at": "2026-11-07T08:40:17.684117+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 230,
+  "eligible_linked": 240,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1887,17 +1887,6 @@
       "evidence": []
     },
     {
-      "club": "Emley AFC",
-      "identities": [
-        "Emley AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Enfield FC",
       "identities": [
         "Enfield FC"
@@ -1909,108 +1898,9 @@
       "evidence": []
     },
     {
-      "club": "Enfield Town FC",
-      "identities": [
-        "Enfield Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Epsom & Ewell FC",
       "identities": [
         "Epsom & Ewell FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Erith & Belvedere FC",
-      "identities": [
-        "Erith & Belvedere FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Erith Town FC",
-      "identities": [
-        "Erith Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Euxton Villa FC",
-      "identities": [
-        "Euxton Villa FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Everett Rovers FC",
-      "identities": [
-        "Everett Rovers FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Eversley & California FC",
-      "identities": [
-        "Eversley & California FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Evesham United FC",
-      "identities": [
-        "Evesham United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Exmouth Town FC",
-      "identities": [
-        "Exmouth Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Eynesbury Rovers FC",
-      "identities": [
-        "Eynesbury Rovers FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9588,6 +9478,186 @@
           "evidence_url": "https://www.elycityfc.co.uk/contact",
           "verified_on": "2026-11-06",
           "ledger": "club_website_verified_batch_18.json"
+        }
+      ]
+    },
+    {
+      "club": "Emley AFC",
+      "identities": [
+        "Emley AFC"
+      ],
+      "current_competition": false,
+      "website": "https://www.emleyafc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.emleyafc.co.uk/",
+          "evidence_url": "https://www.emleyafc.co.uk/contact",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Enfield Town FC",
+      "identities": [
+        "Enfield Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://etfc.london/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://etfc.london/",
+          "evidence_url": "https://etfc.london/information/whoswho/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Erith & Belvedere FC",
+      "identities": [
+        "Erith & Belvedere FC"
+      ],
+      "current_competition": false,
+      "website": "https://thederesfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://thederesfc.co.uk/",
+          "evidence_url": "https://thederesfc.co.uk/club-contacts",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Erith Town FC",
+      "identities": [
+        "Erith Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://erithtown.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://erithtown.com/",
+          "evidence_url": "https://erithtown.com/about/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Euxton Villa FC",
+      "identities": [
+        "Euxton Villa FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.euxtonvillafc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.euxtonvillafc.com/",
+          "evidence_url": "https://www.euxtonvillafc.com/teams/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Everett Rovers FC",
+      "identities": [
+        "Everett Rovers FC"
+      ],
+      "current_competition": false,
+      "website": "https://everettroversfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://everettroversfc.co.uk/",
+          "evidence_url": "https://everettroversfc.co.uk/about-us/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Eversley & California FC",
+      "identities": [
+        "Eversley & California FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/californiafc/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/californiafc/",
+          "evidence_url": "https://www.pitchero.com/clubs/californiafc/contact",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Evesham United FC",
+      "identities": [
+        "Evesham United FC"
+      ],
+      "current_competition": false,
+      "website": "https://eveshamunitedfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://eveshamunitedfc.com/",
+          "evidence_url": "https://eveshamunitedfc.com/contact-admission/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Exmouth Town FC",
+      "identities": [
+        "Exmouth Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://exmouth-townfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://exmouth-townfc.co.uk/",
+          "evidence_url": "https://exmouth-townfc.co.uk/first-team-fixtures/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Eynesbury Rovers FC",
+      "identities": [
+        "Eynesbury Rovers FC"
+      ],
+      "current_competition": false,
+      "website": "https://eynesburyrovers.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://eynesburyrovers.com/",
+          "evidence_url": "https://eynesburyrovers.com/",
+          "verified_on": "2026-11-07",
+          "ledger": "club_website_verified_batch_19.json"
         }
       ]
     },
