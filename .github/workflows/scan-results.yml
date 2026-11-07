@@ -150,6 +150,7 @@ jobs:
         run: python updater/apply_exceptional_replay_dispositions.py
       - name: Scan active round and validate dispositions
         env:
+          TFFC_RESULTS_SOURCE_LOG: updater/results-source-observations.csv
           EVENT_NAME: ${{ github.event_name }}
           INPUT_SOURCE_URL: ${{ inputs.source_url }}
           INPUT_PUBLISH: ${{ inputs.publish }}
