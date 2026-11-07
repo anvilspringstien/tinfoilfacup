@@ -8,7 +8,7 @@ function fixture(){
  const element=()=>({dataset:{},textContent:'',title:'',isConnected:true,children:[],attrs:{},append(child){this.children.push(child);},setAttribute(k,v){this.attrs[k]=v;},getAttribute(k){return this.attrs[k];},querySelector(selector){return (this.nodes??={})[selector]??=element();},showModal(){this.open=true;},close(){this.open=false;},remove(){this.isConnected=false;},addEventListener(k,v){this[k]=v;},focus(){}});
  const nav={querySelector:()=>row};const barry={parentNode:nav,before(r){row=r;row.nextElementSibling=this;}};
  const document={head:element(),body:element(),activeElement:element(),visibilityState:'visible',createElement:element,querySelectorAll(selector){if(!visible)return [];return selector==='.boot-room-launch'?(row?row.children:[]):selector.includes('campaign-barry-nav')?[barry]:[];},addEventListener:(k,v)=>events[k]=v};
- const location={};const context={document,window:{top:{location},addEventListener:(k,v)=>win[k]=v},Date,AbortController,MutationObserver:class{constructor(fn){observe=fn;}observe(){}},setTimeout(fn,ms){const id=++next;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},fetch:async(url,options)=>{calls.push({url,options});if(pending){const p=pending;pending=null;return p;}if(answer instanceof Error)throw answer;return {ok:true,json:async()=>answer};},localStorage:{setItem(){throw Error('Campaign must not change');},getItem(){throw Error('Identity must not be read');}}};
+ const location={};const context={document,URL,URLSearchParams,window:{top:{location},addEventListener:(k,v)=>win[k]=v},Date,AbortController,MutationObserver:class{constructor(fn){observe=fn;}observe(){}},setTimeout(fn,ms){const id=++next;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},fetch:async(url,options)=>{calls.push({url,options});if(pending){const p=pending;pending=null;return p;}if(answer instanceof Error)throw answer;return {ok:true,json:async()=>answer};},localStorage:{setItem(){throw Error('Campaign must not change');},getItem(){throw Error('Identity must not be read');}}};
  vm.runInNewContext(source,context);const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  return {location,document,events,win,calls,timers,settle,setVisible(v){visible=v;observe();},tick(){const [id,t]=timers.entries().next().value;timers.delete(id);t.fn();},button:()=>row.children[0],label:()=>row.children[0].querySelector('.boot-room-status').textContent,setAnswer:a=>answer=a,defer(){let resolve;pending=new Promise(r=>resolve=r);return data=>resolve({ok:true,json:async()=>data});}};
 }
@@ -38,3 +38,10 @@ test('returning to restored Campaign markup restarts status checks after its pre
 });
 
 test('client clock ahead of server does not cause a rapid deadline polling loop',async()=>{const f=fixture();await f.settle();f.setAnswer({open:true,until:Date.now()-60000});f.win.online();await f.settle();assert.equal([...f.timers.values()][0].ms,60000);});
+
+test('opt-in Shed Campaign opens the Boot Room in the shared frame',()=>{
+ const f=fixture();
+ Object.assign(f.location,{pathname:'/beta/phone-frame-shed.html',search:'?view=campaign&bootRoomFrame=1'});
+ f.button().onclick();
+ assert.equal(f.location.href,'/beta/phone-frame-shed.html?view=boot-room&bootRoomFrame=1');
+});

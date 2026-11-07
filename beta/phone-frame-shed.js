@@ -9,7 +9,9 @@
  // Explicit opt-in follows this tab across the real app frames.
  if(new URLSearchParams(location.search).get('likePreview')==='1')try{sessionStorage.setItem('tffc.like.shed','1');}catch{}
  const entries={splash:'index.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html',club:'club-details.html'};
- const entry=new URLSearchParams(location.search).get('view')||'splash';
+ const params=new URLSearchParams(location.search);
+ const entry=params.get('view')||'splash';
+ const shedRoom=location.pathname.endsWith('/phone-frame-shed.html')&&params.get('bootRoomFrame')==='1'&&entry==='boot-room';
  let report=popup||entry==='stats';
  function sizeFrame(targetFrame,targetShell,width,height,isReport){
   const wide=width>=700;
@@ -60,7 +62,7 @@
  function fit(){
   sizeFrame(frame,shell,document.documentElement.clientWidth,document.body.getBoundingClientRect().height,report);
   hideDesktopEdgeScrollbar();
-  window.tffcInstallPhoneFrameNavigation?.(frame);
+  if(!shedRoom)window.tffcInstallPhoneFrameNavigation?.(frame);
  }
  function prepareDocument(){
   let win,href;
@@ -114,7 +116,8 @@
  fit();
  if(popup)prepareDocument();
  else{
-  const destination=new URL(entries[entry]||entries.splash,base);
+  const destination=new URL(shedRoom?'boot-room/?frame=shed':entries[entry]||entries.splash,base);
+  if(shedRoom)destination.hash=location.hash;
   if(entry==='club')destination.searchParams.set('club',new URLSearchParams(location.search).get('club')||'');
   frame.src=destination.href;
  }

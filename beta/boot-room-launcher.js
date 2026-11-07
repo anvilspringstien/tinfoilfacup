@@ -57,7 +57,13 @@
   return home+'/#campaign='+encodeURIComponent(JSON.stringify(detail));
  }
  function openEntrance(){
-  window.top.location.href=campaignEntry()||home+'/';
+  const entrance=campaignEntry()||home+'/';
+  const outer=window.top.location;
+  if(outer.pathname?.endsWith('/phone-frame-shed.html')&&new URLSearchParams(outer.search).get('bootRoomFrame')==='1'){
+   outer.href='/beta/phone-frame-shed.html?view=boot-room&bootRoomFrame=1'+new URL(entrance).hash;
+   return;
+  }
+  outer.href=entrance;
  }
  function install(){
   let added=false;
