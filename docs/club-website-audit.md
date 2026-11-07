@@ -4,6 +4,18 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 7 November 2026 checkpoint — missing-link coverage, batch 19
+
+Reviewed twelve previously unreviewed missing origins, Emley through Eynesbury.
+Ten senior sites are approved. Enfield FC is held for an unavailable destination;
+Epsom & Ewell is held because its domain serves a hosting placeholder.
+
+- Original qualifying-club coverage: 230 -> 240 of 651 linked; 411 missing.
+- All 80 current clubs remain linked and verified. Sources and access limitations
+  are recorded in [batch 19](../updater/club_website_verified_batch_19.json).
+- Only the BETA website map changes in the application. The queue and Stage C
+  report are refreshed; all 651 search origins and protected data are unchanged.
+
 ## 6 November 2026 checkpoint — missing-link coverage, batch 18
 
 Reviewed twelve previously unreviewed missing origins, Dulwich Hamlet through
