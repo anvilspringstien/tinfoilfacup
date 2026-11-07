@@ -31,6 +31,20 @@ jobs:
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing
         run: python updater/round_source_regression.py
+      - name: Verify retained historical chronology after a simulated HTTP 522
+        run: |
+          cp competition.json "$RUNNER_TEMP/before-historical-refresh.json"
+          PYTHONPATH=updater python updater/run_source_resilient.py \
+            --label "Extra Preliminary chronology sync" --base-delay 0 -- python -c '
+          from unittest.mock import patch
+          from urllib.error import HTTPError
+          import sync_extra_preliminary_chronology as historical
+
+          with patch.object(historical, "fetch", side_effect=HTTPError(historical.BASE, 522, "Shed simulated timeout", None, None)):
+              historical.main()
+          '
+          cmp "$RUNNER_TEMP/before-historical-refresh.json" competition.json
+          python updater/extra_preliminary_replay_regression.py
       - name: Stage Results scanner candidate with a simulated source timeout
         run: |
           PYTHONPATH=updater python - <<'PY'
