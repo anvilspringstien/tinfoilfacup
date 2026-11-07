@@ -212,6 +212,9 @@ class AutomaticRecoveryTests(unittest.TestCase):
         data=json.loads((root/'competition.json').read_text())
         data['replays']={}  # Isolate this hold from unrelated live replay schedules.
         fixtures=draw.fixture_values(data['fixtures'])
+        # Preserve catalogue coverage without making other fixtures overdue.
+        for fixture in fixtures:
+            fixture['date']='2099-01-01'
         held_fixture=fixtures[0]
         held_fixture['date']='2020-01-01'
         data['fixtures']=draw.fixture_map(fixtures)
