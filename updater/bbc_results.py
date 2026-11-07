@@ -1,4 +1,4 @@
-"""Convert dated BBC FA Cup score rows to Results observations."""
+"""Convert dated BBC competition score rows to Results observations."""
 
 import re
 from html.parser import HTMLParser
@@ -41,14 +41,14 @@ class ScoreLinks(HTMLParser):
 
 
 FULL_TIME = re.compile(
-    r"^(.+?)\s+(\d+)\s*,\s*(.+?)\s+(\d+)\s+at Full time(?:\s|$)",
+    r"^(.+?)\s+(\d+)\s*,\s*(.+?)\s+(\d+)\s+(at Full time|After extra time)(?:\s|$)",
     re.IGNORECASE,
 )
 BBC_ALIASES = {"fylde": "AFC Fylde"}
 
 
 def full_time_observations(raw, fixtures, match_date, source_url, match_fixture, dated_raw):
-    """Accept decisive full-time rows from a single dated FA Cup source."""
+    """Accept decisive full-time rows from a single dated competition source."""
     dated = [fixture for fixture in fixtures if str(fixture.get("date", ""))[:10] == match_date]
     links = ScoreLinks()
     links.feed(raw)
@@ -61,7 +61,7 @@ def full_time_observations(raw, fixtures, match_date, source_url, match_fixture,
         match = FULL_TIME.match(label)
         if not match:
             continue
-        home, home_score, away, away_score = match.groups()
+        home, home_score, away, away_score, status = match.groups()
         home = BBC_ALIASES.get(home.casefold(), home)
         away = BBC_ALIASES.get(away.casefold(), away)
         home_score, away_score = int(home_score), int(away_score)
@@ -77,7 +77,7 @@ def full_time_observations(raw, fixtures, match_date, source_url, match_fixture,
                 "away": away,
                 "home_score": home_score,
                 "away_score": away_score,
-                "status": "FT",
+                "status": "FT AET" if status.casefold() == "after extra time" else "FT",
                 "winner": "",
                 "decision": "",
                 "date": match_date,
