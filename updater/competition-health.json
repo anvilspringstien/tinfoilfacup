@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-07T14:00:34.363634+00:00",
+  "checked_at": "2026-11-07T20:31:54.995310+00:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -11,16 +11,33 @@
   },
   "counts": {
     "known_fixtures": 177,
-    "complete": 139,
-    "awaiting_grace": 0,
+    "complete": 171,
+    "awaiting_grace": 1,
     "overdue": 0,
-    "upcoming": 38,
+    "upcoming": 5,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": false,
+  "fixture_local_health": true,
   "overdue": [],
-  "awaiting_grace": [],
+  "awaiting_grace": [
+    {
+      "round": "First Round Proper",
+      "home": "Peterborough United",
+      "away": "Reading",
+      "date": "2026-11-07",
+      "kickoff": "20:00",
+      "venue": {
+        "ground": "Weston Homes Stadium",
+        "postcode": "PE2 8AL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      },
+      "section": "fixtures",
+      "scheduled": "2026-11-07T20:00:00+00:00",
+      "deadline": "2026-11-07T23:00:00+00:00"
+    }
+  ],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
