@@ -19,7 +19,7 @@ const platform=document.getElementById('platform'),steps=document.getElementById
 const install=document.getElementById('install'),installStatus=document.getElementById('install-status');
 let pendingInstall=null,installPrepared=false;
 const instructions={
- apple:['In Safari, see the little square icon with the arrow pointing up? It’s on that bar at the bottom of your screen. Tap that.','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
+ apple:['In Safari or Chrome, tap your browser’s Share icon (the square with the arrow pointing up).','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
  android:['In Chrome, tap the three dots by the address bar.','Look for ‘Install and create shortcut’, ‘Install app’ or ‘Add to Home screen’. Tap it and follow the prompts.','Look for the Tin Foil FA Cup icon. Tap it whenever you’re ready for more Cup magic!'],
  computer:['Open your browser’s menu — usually the three dots at the top right.','In Chrome, try ‘Cast, save, and share’. In Edge, look under ‘More tools’, then ‘Apps’.','Choose ‘Install page as app’ or ‘Install this site as an app’, then confirm. You’re done!']
 };
