@@ -19,6 +19,7 @@ on:
       - "tests/test_competition_publication.py"
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/bbc_results.py"
       - "updater/match_decisions.py"
       - "updater/retry_match_decisions.py"
       - "tests/test_match_decisions.py"
