@@ -30,7 +30,7 @@ test('one visible refresh timer follows the room deadline, and pagehide stops it
 });
 test('the badge opens the chalkboard directly',async()=>{
  const f=fixture();await f.settle();f.button().onclick();
- assert.equal(f.location.href,'https://tinfoilfacup.com/beta/boot-room/');
+ assert.equal(f.location.href,'/beta/phone-frame.html?view=boot-room');
 });
 
 test('returning to restored Campaign markup restarts status checks after its previous timer expired',async()=>{
