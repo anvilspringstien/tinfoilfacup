@@ -3,12 +3,16 @@ on:
   push:
     branches: [shed/bbc-results-probe]
   workflow_dispatch:
-permissions: {}
+permissions:
+  contents: read
 jobs:
   probe:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - name: Fetch public BBC FA Cup scores
         run: |
           set -eu
@@ -20,10 +24,37 @@ jobs:
           from pathlib import Path
           import os
           import re
+          import sys
+          import json
+          sys.path.insert(0, 'updater')
+          from auto_round_results import DATA, active_fixtures, history_rows, match_fixture
+          from match_decisions import classify_batch
 
           page = unescape((Path(os.environ["RUNNER_TEMP"]) / "bbc-scores.html").read_text())
-          result = re.search(r"Harrogate Town\s+1\s*,\s*Fylde\s+4\s+at Full time", page, re.I)
+          result = re.search(r"Harrogate Town\s+(\d+)\s*,\s*Fylde\s+(\d+)\s+at Full time", page, re.I)
           if not result:
               raise SystemExit("BBC fetched, but expected full-time match row was absent")
-          print("BBC verified from runner:", result.group())
+          data = json.loads(DATA.read_text())
+          round_name, fixtures = active_fixtures(data)
+          fixture = match_fixture(fixtures, "Harrogate Town", "AFC Fylde")
+          if not fixture or str(fixture.get("date", ""))[:10] != "2026-11-07":
+              raise SystemExit("Expected canonical fixture was not found on 7 November")
+          home_score, away_score = map(int, result.groups())
+          observation = {
+              "fixture": fixture,
+              "observation": {
+                  "home": "Harrogate Town", "away": "AFC Fylde",
+                  "home_score": home_score, "away_score": away_score,
+                  "status": "FT", "winner": "", "decision": "",
+                  "date": "2026-11-07",
+                  "source_url": "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/2026-11",
+              },
+          }
+          decisions = classify_batch([observation], history_rows(data))
+          print(json.dumps(decisions, indent=2))
+          if len(decisions) != 1 or decisions[0].get("held"):
+              raise SystemExit("Results watcher did not accept the BBC observation")
+          if decisions[0]["outcome"]["kind"] not in {"result", "duplicate"}:
+              raise SystemExit("BBC observation did not resolve to a completed result")
+          print("Dry run accepted:", round_name, fixture["home"], home_score, away_score, fixture["away"])
           PY
