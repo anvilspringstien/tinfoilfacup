@@ -63,7 +63,7 @@
    outer.href='/beta/phone-frame-shed.html?view=boot-room&bootRoomFrame=1'+new URL(entrance).hash;
    return;
   }
-  outer.href=entrance;
+  outer.href='/beta/phone-frame.html?view=boot-room'+new URL(entrance).hash;
  }
  function install(){
   let added=false;

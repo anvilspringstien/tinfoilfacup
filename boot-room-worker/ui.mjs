@@ -69,10 +69,11 @@ if(location.hostname==='fix-boot-room-frame-return-20261106-tffac-boot-room-shed
 }
 const roomPrefix=location.pathname.startsWith('/beta/boot-room/')?'/beta/boot-room':'';
 const roomPath=location.pathname.slice(roomPrefix.length);
-const shedFrame=roomPrefix!==''&&new URLSearchParams(location.search).get('frame')==='shed';
-const campaignHome=shedFrame?'/beta/phone-frame-shed.html?view=campaign&bootRoomFrame=1':roomPrefix?'/beta/phone-frame.html?view=campaign':'https://tinfoilfacup.com/?view=campaign';
+const frameMode=roomPrefix?new URLSearchParams(location.search).get('frame'):null;
+const frameQuery=['shed','campaign'].includes(frameMode)?'frame='+frameMode:'';
+const campaignHome=frameMode==='shed'?'/beta/phone-frame-shed.html?view=campaign&bootRoomFrame=1':roomPrefix?'/beta/phone-frame.html?view=campaign':'https://tinfoilfacup.com/?view=campaign';
 if(roomPrefix)for(const link of document.querySelectorAll('.campaign-home'))link.href=campaignHome;
-if(shedFrame)for(const link of document.querySelectorAll('.entrance-back'))link.href=roomPrefix+'/?frame=shed';
+if(frameQuery)for(const link of document.querySelectorAll('.entrance-back'))link.href=roomPrefix+'/?'+frameQuery;
 let campaign=null;
 let campaignFragment='';
 if((roomPath==='/'||roomPath==='/chat')&&location.hash?.startsWith('#campaign=')){
@@ -137,7 +138,7 @@ async function refreshEntrance(){
  $('entrance-state').textContent=d.open?'ROOM NOW OPEN':'ROOM NOW CLOSED';$('entrance-state').className='room-sign'+(d.open?'':' closed');
  $('entrance-next').textContent=d.open?'Open until '+new Date(d.until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · Pull up a chair.':(d.next==='Opening time to be announced'?'':d.next);
  if(!campaignFragment){
- document.querySelector('.entrance-enter').textContent=d.walkIn?'Campaign holders: enter from My Campaign':d.open?'Invited pigeons: enter →':'Invited pigeons: read →';document.querySelector('.entrance-enter').href=d.walkIn?campaignHome:roomPrefix+'/chat'+(shedFrame?'?frame=shed':'');
+ document.querySelector('.entrance-enter').textContent=d.walkIn?'Campaign holders: enter from My Campaign':d.open?'Invited pigeons: enter →':'Invited pigeons: read →';document.querySelector('.entrance-enter').href=d.walkIn?campaignHome:roomPrefix+'/chat'+(frameQuery?'?'+frameQuery:'');
  }
  $('entrance-feedback').textContent='';
  }catch(e){if(epoch!==entranceEpoch)return;$('entrance-state').textContent='STATUS UNAVAILABLE';$('entrance-state').className='room-sign closed';$('entrance-next').textContent='Please check the doors again.';$('entrance-feedback').textContent='We couldn’t check the room just now.';if(!campaignFragment)document.querySelector('.entrance-enter').textContent='Go to the Boot Room →';}
@@ -281,7 +282,7 @@ $('about').onclick=()=>info('Boot Room Barry','A little football. A little compa
 $('rules').onclick=()=>info('House rules','Keep it friendly. Football banter is welcome; abuse and personal details are not. Use Report to send a private flag to the landlord. Messages are kept for up to seven days, with the latest 200 retained.');
 $('dialog-close').onclick=$('dialog-done').onclick=()=>$('info-dialog').close();
 $('entrance-refresh').onclick=refreshEntrance;$('entrance-rules').onclick=()=>$('rules').onclick();
-if(roomPath==='/admin'){$('workbench').className+=' landlord-view';$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else if(isEntrance()){$('entrance').hidden=false;if(campaignFragment){const primary=document.querySelector('.entrance-enter');primary.href=roomPrefix+'/chat?enter=1'+(shedFrame?'&frame=shed':'')+campaignFragment;primary.textContent='Continue to the Boot Room →';}$('dialog-done').textContent='Back to the entrance';refreshEntrance();}else{
+if(roomPath==='/admin'){$('workbench').className+=' landlord-view';$('admin').hidden=false;$('join').hidden=true;status('Unlock the landlord’s controls.');}else if(isEntrance()){$('entrance').hidden=false;if(campaignFragment){const primary=document.querySelector('.entrance-enter');primary.href=roomPrefix+'/chat?enter=1'+(frameQuery?'&'+frameQuery:'')+campaignFragment;primary.textContent='Continue to the Boot Room →';}$('dialog-done').textContent='Back to the entrance';refreshEntrance();}else{
  $('chat-shell').hidden=false;
  if(campaign&&typeof campaign.name==='string'){
   const detail=document.createElement('p');

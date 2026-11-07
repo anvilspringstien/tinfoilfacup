@@ -12,6 +12,7 @@
  const params=new URLSearchParams(location.search);
  const entry=params.get('view')||'splash';
  const shedRoom=location.pathname.endsWith('/phone-frame-shed.html')&&params.get('bootRoomFrame')==='1'&&entry==='boot-room';
+ const framedRoom=shedRoom||(location.pathname.endsWith('/phone-frame.html')&&entry==='boot-room');
  let report=popup||entry==='stats';
  function sizeFrame(targetFrame,targetShell,width,height,isReport){
   const wide=width>=700;
@@ -62,7 +63,7 @@
  function fit(){
   sizeFrame(frame,shell,document.documentElement.clientWidth,document.body.getBoundingClientRect().height,report);
   hideDesktopEdgeScrollbar();
-  if(!shedRoom)window.tffcInstallPhoneFrameNavigation?.(frame);
+  if(!framedRoom)window.tffcInstallPhoneFrameNavigation?.(frame);
  }
  function prepareDocument(){
   let win,href;
@@ -116,8 +117,8 @@
  fit();
  if(popup)prepareDocument();
  else{
-  const destination=new URL(shedRoom?'boot-room/?frame=shed':entries[entry]||entries.splash,base);
-  if(shedRoom)destination.hash=location.hash;
+  const destination=new URL(framedRoom?'boot-room/?frame='+(shedRoom?'shed':'campaign'):entries[entry]||entries.splash,base);
+  if(framedRoom)destination.hash=location.hash;
   if(entry==='club')destination.searchParams.set('club',new URLSearchParams(location.search).get('club')||'');
   frame.src=destination.href;
  }

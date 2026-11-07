@@ -34,7 +34,7 @@ export class BootRoom extends DurableObject {
 }
 export default {async fetch(request,env){try{const u=new URL(request.url),scoped=u.pathname.startsWith(roomPrefix+'/'),path=scoped?u.pathname.slice(roomPrefix.length):u.pathname;
  if(scoped&&['/admin','/api/admin','/api/invite'].includes(path))return json({error:'not_found'},404);
- const framed=scoped&&['/','/chat'].includes(path)&&u.searchParams.get('frame')==='shed';
+ const framed=scoped&&['/','/chat'].includes(path)&&['shed','campaign'].includes(u.searchParams.get('frame'));
  const assets={'/demo':[scoped?scopedDemoPage:demoPage,'text/html; charset=utf-8'],'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
  if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:framed?page.replace('<html lang=', '<html data-frame="shed" lang='):assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://tinfoilfacup.com; connect-src 'self'; frame-ancestors "+(framed?"'self'":"'none'")+"; base-uri 'none'; form-action 'none'"}});}
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});

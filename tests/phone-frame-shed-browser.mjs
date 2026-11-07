@@ -99,11 +99,11 @@ try{
  assert.equal(counterCalls,keepCounter);
  const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
  const custodian=await app.locator('.chosen-campaign-current .custodian-name').innerText();
- const entrance='https://tinfoilfacup.com/beta/boot-room/';
+ const entrance=origin+'/beta/boot-room/?frame=campaign';
  await context.route(entrance,r=>r.fulfill({contentType:'text/html',body:'<h1>Boot Room chalkboard</h1>'}));
  await boot.click();
- await page.waitForURL(url=>url.origin+url.pathname===entrance);
- await page.getByRole('heading',{name:'Boot Room chalkboard'}).waitFor();
+ await page.waitForURL(url=>url.pathname==='/beta/phone-frame.html'&&url.searchParams.get('view')==='boot-room');
+ await app.getByRole('heading',{name:'Boot Room chalkboard'}).waitFor();
  const joinURL=new URL(page.url());
  const claim=JSON.parse(decodeURIComponent(joinURL.hash.slice('#campaign='.length)));
  assert.deepEqual(Object.keys(claim).sort(),['callSign','custodian','fixture','name']);
