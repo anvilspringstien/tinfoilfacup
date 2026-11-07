@@ -19,11 +19,23 @@ const platform=document.getElementById('platform'),steps=document.getElementById
 const install=document.getElementById('install'),installStatus=document.getElementById('install-status');
 let pendingInstall=null,installPrepared=false;
 const instructions={
- apple:['In Safari or Chrome, tap your browser’s Share icon (the square with the arrow pointing up).','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
+ apple:['In Safari or Chrome, tap your browser’s Share icon','Scroll down to ‘Add to Home Screen’ and tap that.','Tap ‘Add’. You’re done!'],
  android:['In Chrome, tap the three dots by the address bar.','Look for ‘Install and create shortcut’, ‘Install app’ or ‘Add to Home screen’. Tap it and follow the prompts.','Look for the Tin Foil FA Cup icon. Tap it whenever you’re ready for more Cup magic!'],
  computer:['Open your browser’s menu — usually the three dots at the top right.','In Chrome, try ‘Cast, save, and share’. In Edge, look under ‘More tools’, then ‘Apps’.','Choose ‘Install page as app’ or ‘Install this site as an app’, then confirm. You’re done!']
 };
-function renderInstructions(){document.getElementById('platform-note').hidden=platform.value==='apple'||standalone();steps.replaceChildren(...instructions[platform.value].map(text=>{const li=document.createElement('li');li.textContent=text;return li}));}
+function renderInstructions(){document.getElementById('platform-note').hidden=platform.value==='apple'||standalone();steps.replaceChildren(...instructions[platform.value].map((text,index)=>{
+ const li=document.createElement('li');
+ li.textContent=text;
+ if(platform.value==='apple'&&index===0){
+  const icon=document.createElementNS(ns,'svg');
+  for(const [name,value] of Object.entries({viewBox:'0 0 24 24',width:'1.25em',height:'1.25em','aria-hidden':'true',style:'vertical-align:-0.22em'}))icon.setAttribute(name,value);
+  const path=document.createElementNS(ns,'path');
+  for(const [name,value] of Object.entries({d:'M12 15V2m-4 4 4-4 4 4M8 9H5v13h14V9h-3',fill:'none',stroke:'currentColor','stroke-width':'1.6','stroke-linecap':'round','stroke-linejoin':'round'}))path.setAttribute(name,value);
+  icon.append(path);
+  li.append(' ',icon,'.');
+ }
+ return li;
+}));}
 function updateInstall(){const isInstalled=standalone();
  const celebration=document.getElementById('installed-celebration'),message=document.getElementById('kept-message'),intro=document.getElementById('keep-intro');
  if(isInstalled&&heading.parentNode!==message){dialog.insertBefore(celebration,heading);message.append(heading,intro)}
