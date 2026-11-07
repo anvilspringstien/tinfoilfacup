@@ -11,6 +11,7 @@ replay. Replay ancestry exists only after an earlier completed draw in a replay-
 eligible qualifying round.
 """
 import argparse
+import csv
 import html as H
 import json
 import re
@@ -485,11 +486,32 @@ def main():
     if not round_name or not known:
         raise SystemExit("Active-round scanner health failure: no canonical active draw available.")
 
+    source_log = REPORT.with_name("results-source-observations.csv")
+    fields = ("checked_at", "round", "source_url", "event", "detail", "fixture_date", "home", "away")
+    with source_log.open("w", encoding="utf-8", newline="") as stream:
+        csv.writer(stream).writerow(fields)
+
+    def record(source_url, event, detail="", fixture_date="", home="", away=""):
+        with source_log.open("a", encoding="utf-8", newline="") as stream:
+            csv.writer(stream).writerow((
+                datetime.now(timezone.utc).isoformat(), round_name, source_url,
+                event, detail, fixture_date, home, away,
+            ))
+
+    def observed_fetch(url):
+        try:
+            raw = fetch(url)
+        except (OSError, ValueError) as exc:
+            record(url, "fetch_error", f"{type(exc).__name__}: {exc}")
+            raise
+        record(url, "fetch_ok")
+        return raw
+
     fwp_round_source = fwp_round_url(round_name)
     try:
-        primary_raw = fetch(args.url)
-        fixtures_raw = fetch(fwp_round_source)
-        live_raw = fetch(FWP_LIVE_URL)
+        primary_raw = observed_fetch(args.url)
+        fixtures_raw = observed_fetch(fwp_round_source)
+        live_raw = observed_fetch(FWP_LIVE_URL)
         SOURCE_CAPTURE.write_text(json.dumps({
             "checked_at": datetime.now(timezone.utc).isoformat(),
             "primary": {"url": args.url, "html": primary_raw},
@@ -523,7 +545,7 @@ def main():
             date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/" + date
             for url in (month_url, date_url):
                 if url not in captures:
-                    captures[url] = fetch(url)
+                    captures[url] = observed_fetch(url)
             bbc_observations.extend(full_time_observations(
                 captures[month_url], known, date, month_url, match_fixture, captures[date_url],
             ))
@@ -534,6 +556,19 @@ def main():
             "bbc": [{"url": url, "html": raw} for url, raw in captures.items()],
         }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         by_source = {"primary_awards": [], "fwp_fixtures": [], "fwp_live": [], "bbc": bbc_observations}
+    for rows in by_source.values():
+        for item in rows:
+            observation = item["observation"]
+            if observation.get("home_score") is None or observation.get("away_score") is None:
+                continue
+            if not str(observation.get("status", "")).upper().startswith("FT"):
+                continue
+            fixture = item["fixture"]
+            record(
+                observation.get("source_url", ""), "final_score",
+                f'{observation["home_score"]}-{observation["away_score"]}',
+                observation.get("date", ""), fixture.get("home", ""), fixture.get("away", ""),
+            )
     observations = dedupe_observations(sum(by_source.values(), []))
     history = history_rows(data)
     classified = []
@@ -563,7 +598,7 @@ def main():
     if not blocked:
         try:
             def capture_archived_source(url):
-                raw = fetch(url)
+                raw = observed_fetch(url)
                 capture = json.loads(SOURCE_CAPTURE.read_text(encoding="utf-8"))
                 capture["archived_replays"] = {"url": url, "html": raw}
                 SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -578,7 +613,7 @@ def main():
     # round's source even when the current source can no longer contain them.
     from retry_match_decisions import retry_archived_holds
     def capture_retry_source(url):
-        raw = fetch(url)
+        raw = observed_fetch(url)
         capture = json.loads(SOURCE_CAPTURE.read_text(encoding='utf-8'))
         capture.setdefault('retried_decisions', []).append({'url': url, 'html': raw})
         SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
