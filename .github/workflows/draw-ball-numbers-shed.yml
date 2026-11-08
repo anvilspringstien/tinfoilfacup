@@ -42,3 +42,26 @@ jobs:
           }
           print("Verified staged draw preview and unchanged canonical competition fields")
           PY
+
+      - name: Check My Campaign draw preview rendering
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          import vm from 'node:vm';
+
+          const page = readFileSync('beta/clubfinder-beta.html', 'utf8');
+          const source = (start, end) => page.slice(page.indexOf(start), page.indexOf(end, page.indexOf(start)));
+          const {draw_preview: preview} = JSON.parse(readFileSync('competition.json', 'utf8'));
+          const render = vm.runInNewContext(
+            source('function canonicalClubKey(', '/* TIN_FOIL_BETA_HOLMESDALE') +
+            source('function nextProgressHtml(', 'function stateHtml(') +
+            'nextProgressHtml',
+            {esc: String},
+          );
+          const card = (drawClub) => render({}, {name: preview.target_round, drawClub, drawPreview: preview});
+          assert.match(card('AFC Fylde'), /Second Round Proper/);
+          assert.match(card('AFC Fylde'), /Monday 9 November.*approximately 6\.45pm GMT.*ball 19.*Opponent TBC/);
+          assert.match(card('Salisbury FC'), /ball 40/);
+          assert.doesNotMatch(card('Eastleigh'), /ball 27/);
+          JS
