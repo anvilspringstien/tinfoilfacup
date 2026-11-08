@@ -8,7 +8,7 @@ const identity=p=>p.campaign?{campaign:p.campaign,moderator:p.moderator===true}:
 export class RoomStore {
  constructor(storage,clock=Date.now){this.storage=storage;this.clock=clock;storage.sql.exec('CREATE TABLE IF NOT EXISTS room (id INTEGER PRIMARY KEY CHECK(id=1), data TEXT NOT NULL)');storage.sql.exec('INSERT OR IGNORE INTO room VALUES (1,?)',JSON.stringify({open:false,next:'Opening time to be announced',until:0,people:[],messages:[],reports:[],day:'',actions:0,joins:0}));}
  run(change){return this.storage.transactionSync(()=>{const s=JSON.parse(this.storage.sql.exec('SELECT data FROM room WHERE id=1').toArray()[0].data);const n=this.clock();s.messages=s.messages.filter(m=>m.at>n-7*DAY);s.reports=s.reports.filter(r=>r.at>n-7*DAY);s.people=s.people.filter(p=>p.expires>n);if(s.until<=n)s.open=false;const day=new Date(n).toISOString().slice(0,10);if(s.day!==day){s.day=day;s.actions=0;s.joins=0;}const result=change(s,n);this.storage.sql.exec('UPDATE room SET data=? WHERE id=1',JSON.stringify(s));return result;});}
- person(s,hash,n){const p=s.people.find(p=>p.session===hash&&p.expires>n&&!p.suspended);if(!p)throw new RoomError('Invitation or session expired',401);return p;}
+ person(s,hash,n){const p=s.people.find(p=>p.session===hash&&p.expires>n&&!p.suspended);if(!p||(p.callSign&&s.people.some(other=>other.callSign===p.callSign&&other.suspended)))throw new RoomError('Invitation or session expired',401);return p;}
  view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p)},messages:s.messages.map(m=>({...m,hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
  invite(name,hash,callSign,moderator=false){if(callSign&&!validCallSign(callSign))throw new RoomError('Use a Call Sign like TF2AC 01922');if(moderator===true&&!callSign)throw new RoomError('A moderator invitation needs a Call Sign');if(!(name=clean(name,40)))throw new RoomError('Use a pigeon name of 1–40 characters');return this.run((s,n)=>{if(callSign&&s.people.some(p=>p.callSign===callSign))throw new RoomError('That Call Sign already has a place',409);if(s.people.filter(p=>!p.walkIn).length>=10)throw new RoomError('Ten test places are already reserved',409);const p={id:crypto.randomUUID(),name,callSign:callSign||null,moderator:moderator===true,invite:hash,session:null,expires:n+7*DAY,suspended:false,last:0,burst:0};s.people.push(p);return {id:p.id,name,expires:p.expires};});}
  redeem(invite,session,claim){return this.run((s,n)=>{const p=s.people.find(p=>p.invite===invite&&!p.suspended&&p.expires>n);if(!p)throw new RoomError('Invitation is invalid, used or expired',401);if(p.callSign){
@@ -17,14 +17,15 @@ export class RoomStore {
    p.campaign={callSign:p.callSign,custodian,fixture};
   }else if(claim)throw new RoomError('Use an invitation issued for this Campaign',403);
   p.invite=null;p.session=session;return {id:p.id,name:p.name};});}
- walkIn(claim,session){return this.run((s,n)=>{
+ walkIn(claim,session,publicEntry=false){return this.run((s,n)=>{
   if(!s.open||!s.walkIn||s.until<=n)throw new RoomError('The Boot Room is still taking shape. Check the door for the next opening.',403);
   const name=clean(claim?.name,20),custodian=clean(claim?.custodian,100),fixture=clean(claim?.fixture,200),callSign=claim?.callSign;
   if(!name||!custodian||!fixture||!validCallSign(callSign))throw new RoomError('Open the Boot Room from your saved Campaign');
-  const existing=s.people.find(p=>p.callSign===callSign);
-  if(existing?.suspended)throw new RoomError('This Campaign is suspended from the Boot Room',403);
-  if(existing&&(existing.session||!existing.walkIn))throw new RoomError('This Call Sign already has a place. Reopen the room in the browser that joined.',409);
-  if(!existing&&s.people.filter(p=>p.walkIn).length>=10)throw new RoomError('The first opening is full. Please check back for another opening.',409);
+  const matches=s.people.filter(p=>p.callSign===callSign);
+  const existing=publicEntry?matches.find(p=>p.walkIn&&(!p.session||p.session===session)):matches[0];
+  if(matches.some(p=>p.suspended))throw new RoomError('This Campaign is suspended from the Boot Room',403);
+  if(!publicEntry&&existing&&(existing.session||!existing.walkIn))throw new RoomError('This Call Sign already has a place. Reopen the room in the browser that joined.',409);
+  if(!publicEntry&&!existing&&s.people.filter(p=>p.walkIn).length>=10)throw new RoomError('The first opening is full. Please check back for another opening.',409);
   const p=existing||{id:crypto.randomUUID(),walkIn:true,callSign,suspended:false,last:0,burst:0,expires:n+7*DAY};
   Object.assign(p,{name,campaign:{callSign,custodian,fixture},session,moderator:false});
   if(!existing)s.people.push(p);
