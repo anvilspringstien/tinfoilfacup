@@ -219,6 +219,10 @@ def discover_article_urls(fetch, saved_url=None):
         except (URLError, TimeoutError) as error:
             print(f"FA index unavailable: {index}: {error}")
             continue
+        draw_links = re.findall(r"/news/\d{4}/[a-z]{3}/\d{2}/[a-z0-9-]*draw[a-z0-9-]*", html, re.I)
+        for link in draw_links:
+            urls.add(urljoin(index, link))
+        print(f"FA discovery index {index}: {len(draw_links)} draw article references")
         for href in re.findall(r"""\bhref\s*=\s*["']([^"']+)["']""", html, re.I):
             url = urljoin(index, unescape(href))
             parts = urlsplit(url)
