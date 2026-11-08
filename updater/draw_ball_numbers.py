@@ -4,7 +4,8 @@ import re
 from datetime import date
 from html import unescape
 from html.parser import HTMLParser
-from urllib.parse import urlsplit
+from urllib.error import URLError
+from urllib.parse import urljoin, urlsplit
 
 
 class BallLists(HTMLParser):
@@ -199,6 +200,43 @@ def classify_ball_slots(matched, fixtures, history, normalize):
     return verified, withheld
 
 
+FA_NEWS_INDEXES = (
+    "https://www.thefa.com/competitions/thefacup",
+    "https://www.thefa.com/",
+)
+
+
+def official_fa_url(url):
+    parsed = urlsplit(url)
+    return parsed.scheme == "https" and parsed.netloc in {"thefa.com", "www.thefa.com"}
+
+
+def discover_article_urls(fetch, saved_url=None):
+    urls = set()
+    for index in FA_NEWS_INDEXES:
+        try:
+            html = fetch(index)
+        except (URLError, TimeoutError) as error:
+            print(f"FA index unavailable: {index}: {error}")
+            continue
+        for href in re.findall(r"""\bhref\s*=\s*["']([^"']+)["']""", html, re.I):
+            url = urljoin(index, unescape(href))
+            parts = urlsplit(url)
+            if official_fa_url(url) and re.fullmatch(r"/news/\d{4}/[a-z]{3}/\d{2}/[^/]*draw[^/]*", parts.path, re.I):
+                urls.add(urljoin("https://www.thefa.com/", parts.path))
+    def publication_date(url):
+        from datetime import datetime
+
+        try:
+            return datetime.strptime(urlsplit(url).path[6:17], "%Y/%b/%d")
+        except ValueError:
+            return datetime.min
+    ordered = sorted(urls, key=lambda url: (publication_date(url), url), reverse=True)
+    if saved_url and official_fa_url(saved_url) and saved_url not in ordered[:8]:
+        ordered.insert(0, saved_url)
+    return ordered[:8]
+
+
 def main():
     import argparse
     import json
@@ -206,40 +244,51 @@ def main():
     from auto_draw import DATA, EXPECTED_ROUND_TIES, ROUND_ORDER, compatible, fetch, fixture_values, norm
 
     cli = argparse.ArgumentParser(description="Check an official FA ball list against the active round")
-    cli.add_argument("source_url")
-    cli.add_argument("--round", required=True, choices=ROUND_ORDER)
+    cli.add_argument("source_url", nargs="?", help="Official article URL for a diagnostic run")
+    cli.add_argument("--round", choices=ROUND_ORDER)
     cli.add_argument("--stage", action="store_true", help="Stage validated metadata in the local competition candidate")
     args = cli.parse_args()
-    source = urlsplit(args.source_url)
-    if source.scheme != "https" or source.netloc not in {"thefa.com", "www.thefa.com"}:
+    if args.source_url and not official_fa_url(args.source_url):
         cli.error("Ball numbers require an official FA source")
     data = json.loads(DATA.read_text(encoding="utf-8"))
     current = data.get("source_round")
-    if current not in ROUND_ORDER[:-1] or ROUND_ORDER[ROUND_ORDER.index(current) + 1] != args.round:
+    if current not in ROUND_ORDER[:-1]:
+        cli.error("No next canonical round")
+    target = ROUND_ORDER[ROUND_ORDER.index(current) + 1]
+    if args.round and args.round != target:
         cli.error("The requested draw is not the next canonical round")
-    expected_ties = EXPECTED_ROUND_TIES.get(args.round)
+    expected_ties = EXPECTED_ROUND_TIES.get(target)
     if expected_ties is None:
         cli.error("No expected slot count for the requested round")
     fixtures = [fixture for fixture in fixture_values(data.get("fixtures") or {})
                 if fixture.get("round") == current]
-    article = fetch(args.source_url)
-    try:
-        ball_list = parse_ball_numbers(article, args.source_url, expected_ties * 2)
-    except ValueError:
-        for anchor in ("ball numbers are listed below", "AFC Fylde", "Salisbury"):
-            match = re.search(re.escape(anchor), article, re.IGNORECASE)
-            if match:
-                print(f"FA markup near {anchor!r}: {article[max(0, match.start()-160):match.end()+650]!r}")
-        raise
-    matched = validate_ball_slots(ball_list, fixtures, compatible, norm)
-    season = verify_article_context(article, args.source_url, args.round, fixtures)
-    history = [row for rows in (data.get('result_history') or {}).values() for row in rows]
-    verified, withheld = classify_ball_slots(matched, fixtures, history, norm)
-    preview = {
-        "season": season, "outgoing_round": current, "target_round": args.round,
-        "source_url": args.source_url, "draw_schedule": draw_schedule(article),
-        "entries": verified,
-    }
+    history = [row for rows in (data.get("result_history") or {}).values() for row in rows]
+    saved = data.get("draw_preview") or {}
+    urls = [args.source_url] if args.source_url else discover_article_urls(
+        fetch, saved.get("source_url") if saved.get("target_round") == target else None,
+    )
+    for url in urls:
+        try:
+            article = fetch(url)
+            season = verify_article_context(article, url, target, fixtures)
+            ball_list = parse_ball_numbers(article, url, expected_ties * 2)
+            matched = validate_ball_slots(ball_list, fixtures, compatible, norm)
+            verified, withheld = classify_ball_slots(matched, fixtures, history, norm)
+            if not verified:
+                raise ValueError("No verified ball numbers")
+        except (ValueError, URLError, TimeoutError) as error:
+            print(f"FA draw article rejected: {url}: {error}")
+            if args.source_url:
+                raise
+            continue
+        preview = {
+            "season": season, "outgoing_round": current, "target_round": target,
+            "source_url": url, "draw_schedule": draw_schedule(article),
+            "entries": verified,
+        }
+        break
+    else:
+        cli.error(f"No verified official FA draw article found for {target}")
     if args.stage:
         if not verified:
             cli.error("No verified ball numbers to stage")
