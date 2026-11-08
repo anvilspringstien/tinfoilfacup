@@ -296,6 +296,10 @@ function nextRoundInfo(club,preserveConditional){
   else if(progressionRound==='Second Round Qualifying')nextName='Third Round Qualifying';
   else if(progressionRound==='Third Round Qualifying')nextName='Fourth Round Qualifying';
   else if(progressionRound==='Fourth Round Qualifying')nextName='First Round Proper';
+  const preview=LIVE_COMPETITION_DATA?.draw_preview;
+  const drawPreview=cr&&preview?.outgoing_round===progressionRound&&
+    LIVE_COMPETITION_DATA?.source_round===progressionRound?preview:null;
+  if(drawPreview)nextName=drawPreview.target_round;
   const meta=ROUND_META[nextName]||{date:'TBC',drawDate:'TBC'};
   let nf=liveLookup('fixtures',club.name);
   if(!nf)nf=liveConditionalFixtureForClub(club.name);
@@ -318,8 +322,9 @@ function nextRoundInfo(club,preserveConditional){
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }
+  if(drawPreview&&nf?.round!==nextName)nf=null;
   const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club,!!preserveConditional);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;
-  return {name:nextName,date:meta.date,drawDate:meta.drawDate,drawAnnouncement:(LIVE_COMPETITION_DATA?.draw_announcements||{})[nextName]||null,drawClub:club.name,knownFixture,fixturesUrl:FA_FIXTURES_URL};
+  return {name:nextName,date:meta.date,drawDate:meta.drawDate,drawAnnouncement:(LIVE_COMPETITION_DATA?.draw_announcements||{})[nextName]||null,drawClub:club.name,drawPreview,knownFixture,fixturesUrl:FA_FIXTURES_URL};
 }
 function norm(s){return(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(fc|afc|cfc)\b/g,' ').replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim()}
 function parseKickoff(f){
