@@ -47,6 +47,8 @@ jobs:
         run: python updater/active_conditional_refresh_regression.py
 
       - name: Detect and validate official FA draw state
+        id: fixture_scan
+        continue-on-error: true
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_PUBLISH: ${{ inputs.publish }}
@@ -60,6 +62,10 @@ jobs:
             python updater/auto_draw.py
           fi
 
+      - name: Discard candidate fixture changes after a failed scan
+        if: steps.fixture_scan.outcome == 'failure'
+        run: git restore --source=HEAD -- competition.json
+
       - name: Stage verified pre-draw announcement
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -72,6 +78,23 @@ jobs:
           if ! python updater/draw_ball_numbers.py "${stage[@]}"; then
             echo "::warning::Pre-draw announcement could not be verified. No preview update was staged."
           fi
+
+      - name: Guard preview-only publication after a failed fixture scan
+        if: steps.fixture_scan.outcome == 'failure'
+        run: |
+          git show HEAD:competition.json > "$RUNNER_TEMP/draw-preview-base.json"
+          python - "$RUNNER_TEMP/draw-preview-base.json" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          before = json.loads(Path(sys.argv[1]).read_text())
+          candidate = json.loads(Path("competition.json").read_text())
+          before.pop("draw_preview", None)
+          candidate.pop("draw_preview", None)
+          if before != candidate:
+              raise SystemExit("Failed fixture scan may publish only draw_preview metadata")
+          PY
 
       - name: Validate canonical JSON
         run: python -m json.tool competition.json >/dev/null
@@ -90,7 +113,10 @@ jobs:
           echo "published=false" >> "$GITHUB_OUTPUT"
           git config user.name "Tin Foil FA Cup Draw Watcher"
           git config user.email "actions@users.noreply.github.com"
-          git add competition.json updater/draw-watch-report.json
+          git add competition.json
+          if [ "${{ steps.fixture_scan.outcome }}" = "success" ]; then
+            git add updater/draw-watch-report.json
+          fi
           if git diff --cached --quiet; then
             echo "No new official draw to publish."
           else
@@ -120,3 +146,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run competition-health.yml --ref main
+
+      - name: Preserve failed fixture scan status
+        if: steps.fixture_scan.outcome == 'failure'
+        run: |
+          echo "::error::Official fixture scan failed. Only independently verified preview metadata was eligible for publication."
+          exit 1
