@@ -1,0 +1,19 @@
+name: Draw ball numbers Shed proof
+on:
+  push:
+    branches: [shed/official-draw-ball-numbers]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Validate the published Second Round Proper ball list
+        run: >
+          python updater/draw_ball_numbers.py
+          --round "Second Round Proper"
+          https://www.thefa.com/news/2026/nov/06/emirates-fa-cup-second-round-draw-to-be-broadcast-on-tnt-sports-20260611
