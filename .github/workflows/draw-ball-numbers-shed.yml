@@ -15,8 +15,30 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
+      - run: cp competition.json "$RUNNER_TEMP/competition-before.json"
       - name: Validate the published Second Round Proper ball list
         run: >
           python updater/draw_ball_numbers.py
-          --round "Second Round Proper"
+          --stage --round "Second Round Proper"
           https://www.thefa.com/news/2026/nov/06/emirates-fa-cup-second-round-draw-to-be-broadcast-on-tnt-sports-20260611
+      - name: Verify the staged preview leaves canonical draw and results intact
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          before = json.loads((Path(os.environ["RUNNER_TEMP"]) / "competition-before.json").read_text())
+          after = json.loads(Path("competition.json").read_text())
+          preview = after.pop("draw_preview")
+          before.pop("draw_preview", None)
+          assert after == before, "Staging modified canonical competition fields"
+          numbers = {entry["number"]: entry["clubs"] for entry in preview["entries"]}
+          assert numbers[19] == ["AFC Fylde"]
+          assert numbers[40] == ["Salisbury"]
+          assert 27 not in numbers
+          assert preview["draw_schedule"] == {
+              "date_text": "Monday 9 November", "time_text": "approximately 6.45pm GMT",
+          }
+          print("Verified staged draw preview and unchanged canonical competition fields")
+          PY
