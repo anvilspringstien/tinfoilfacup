@@ -142,6 +142,36 @@ def verify_article_context(html, source_url, target, fixtures):
     return f"{season}-{str(season + 1)[-2:]}"
 
 
+def draw_schedule(html):
+    """Read explicit draw schedule wording from the official announcement."""
+    paragraphs = [
+        " ".join(unescape(re.sub(r"<[^>]+>", "", paragraph)).split())
+        for paragraph in re.findall(r"<p\b[^>]*>(.*?)</p>", html, re.I | re.S)
+    ]
+    dates = {
+        match.group(1)
+        for paragraph in paragraphs
+        if (match := re.search(
+            r"\bdraw will be (?:made|held|conducted).*?\bon "
+            r"((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday) "
+            r"\d{1,2} [A-Za-z]+)\b", paragraph, re.I,
+        ))
+    }
+    times = {
+        match.group(1)
+        for paragraph in paragraphs
+        if (match := re.search(
+            r"\bdraw will (?:take place|be made|be held).*?\bat "
+            r"((?:approximately |around )?\d{1,2}(?:[.:]\d{2})?\s*(?:am|pm)\s+(?:GMT|BST))\b",
+            paragraph, re.I,
+        ))
+    }
+    return {
+        "date_text": next(iter(dates)) if len(dates) == 1 else None,
+        "time_text": next(iter(times)) if len(times) == 1 else None,
+    }
+
+
 def classify_ball_slots(matched, fixtures, history, normalize):
     verified, withheld = [], []
     for index, entry in matched.items():
@@ -206,7 +236,8 @@ def main():
     verified, withheld = classify_ball_slots(matched, fixtures, history, norm)
     print(json.dumps({
         "season": season, "outgoing_round": current, "target_round": args.round,
-        "source_url": args.source_url, "entries": verified, "withheld": withheld,
+        "source_url": args.source_url, "draw_schedule": draw_schedule(article),
+        "entries": verified, "withheld": withheld,
     }, indent=2))
 
 
