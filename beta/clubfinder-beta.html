@@ -756,6 +756,10 @@ function nextRoundInfo(club,preserveConditional){
   else if(progressionRound==='Second Round Qualifying')nextName='Third Round Qualifying';
   else if(progressionRound==='Third Round Qualifying')nextName='Fourth Round Qualifying';
   else if(progressionRound==='Fourth Round Qualifying')nextName='First Round Proper';
+  const preview=LIVE_COMPETITION_DATA?.draw_preview;
+  const drawPreview=cr&&preview?.outgoing_round===progressionRound&&
+    LIVE_COMPETITION_DATA?.source_round===progressionRound?preview:null;
+  if(drawPreview)nextName=drawPreview.target_round;
   const meta=ROUND_META[nextName]||{date:'TBC',drawDate:'TBC'};
   let nf=liveLookup('fixtures',club.name);
   if(!nf)nf=liveConditionalFixtureForClub(club.name);
@@ -778,8 +782,9 @@ function nextRoundInfo(club,preserveConditional){
   if(!nf&&nextName==='Preliminary Round'){
     nf=PRELIM_FIXTURES_BY_CLUB[club.name]||PRELIM_FIXTURES_BY_CLUB[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||NEXT_FIXTURE_OVERRIDES[club.name]||NEXT_FIXTURE_OVERRIDES[String(club.name||'').replace(/\s+(FC|AFC|CFC)$/,'')]||null;
   }
+  if(drawPreview&&nf?.round!==nextName)nf=null;
   const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club,!!preserveConditional);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;
-  return {name:nextName,date:meta.date,drawDate:meta.drawDate,drawAnnouncement:(LIVE_COMPETITION_DATA?.draw_announcements||{})[nextName]||null,drawClub:club.name,knownFixture,fixturesUrl:FA_FIXTURES_URL};
+  return {name:nextName,date:meta.date,drawDate:meta.drawDate,drawAnnouncement:(LIVE_COMPETITION_DATA?.draw_announcements||{})[nextName]||null,drawClub:club.name,drawPreview,knownFixture,fixturesUrl:FA_FIXTURES_URL};
 }
 
 function canonicalClubKey(name){
@@ -1269,7 +1274,12 @@ function nextProgressHtml(club,next){
   }
 
   let drawLine='';
-  if(next.knownFixture){ drawLine=''; } else if(next.drawAnnouncement?.at){
+  if(next.drawPreview){
+    const {draw_schedule:schedule,entries}=next.drawPreview;
+    const when=[schedule?.date_text,schedule?.time_text].filter(Boolean).join(' • ');
+    const entry=entries.find(({clubs})=>clubs.some(name=>canonicalClubKey(name)===canonicalClubKey(next.drawClub)));
+    drawLine='Draw: '+(when||'TBC')+(entry?' • '+next.drawClub+': ball '+entry.number:'')+' • Opponent TBC';
+  } else if(next.drawAnnouncement?.at){
     const announcement=next.drawAnnouncement;
     const when=new Date(announcement.at);
     const date=when.toLocaleDateString('en-GB',{timeZone:'Europe/London',weekday:'long',day:'numeric',month:'long',year:'numeric'});

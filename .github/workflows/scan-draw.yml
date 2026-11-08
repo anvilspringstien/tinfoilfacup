@@ -15,6 +15,7 @@ on:
       - "updater/guard_publication_base.py"
       - "tests/test_competition_publication.py"
       - "updater/auto_draw.py"
+      - "updater/draw_ball_numbers.py"
       - "updater/active_conditional_refresh_regression.py"
       - ".github/workflows/scan-draw.yml"
 
@@ -57,6 +58,19 @@ jobs:
             python updater/auto_draw.py --publish
           else
             python updater/auto_draw.py
+          fi
+
+      - name: Stage verified pre-draw announcement
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_PUBLISH: ${{ inputs.publish }}
+        run: |
+          stage=()
+          if [ "$EVENT_NAME" = "schedule" ] || [ "$EVENT_NAME" = "push" ] || [ "$INPUT_PUBLISH" = "true" ]; then
+            stage=(--stage)
+          fi
+          if ! python updater/draw_ball_numbers.py "${stage[@]}"; then
+            echo "::warning::Pre-draw announcement could not be verified. No preview update was staged."
           fi
 
       - name: Validate canonical JSON
