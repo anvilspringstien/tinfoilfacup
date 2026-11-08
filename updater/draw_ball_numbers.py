@@ -115,7 +115,15 @@ def main():
         cli.error("No expected slot count for the requested round")
     fixtures = [fixture for fixture in fixture_values(data.get("fixtures") or {})
                 if fixture.get("round") == current]
-    ball_list = parse_ball_numbers(fetch(args.source_url), args.source_url, expected_ties * 2)
+    article = fetch(args.source_url)
+    try:
+        ball_list = parse_ball_numbers(article, args.source_url, expected_ties * 2)
+    except ValueError:
+        for anchor in ("ball numbers are listed below", "AFC Fylde", "Salisbury"):
+            match = re.search(re.escape(anchor), article, re.IGNORECASE)
+            if match:
+                print(f"FA markup near {anchor!r}: {article[max(0, match.start()-160):match.end()+650]!r}")
+        raise
     validate_ball_slots(ball_list, fixtures, compatible)
     print(json.dumps({"outgoing_round": current, "target_round": args.round, **ball_list}, indent=2))
 
