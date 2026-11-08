@@ -39,7 +39,10 @@ assert.equal(permanentEngine,referenceEngine
  "try{sessionStorage.setItem('tffc.beta.approved-journey','1')}catch(_){}\n  const response=await fetch('clubfinder-beta.html',{cache:'no-store'});")
  .replace('two-rooms-iframe-engine.css','clubfinder-journey.css')
  .replace("const html=await response.text();","// Apply the dark canvas before fonts, stylesheets or body content can paint.\n  const html=(await response.text()).replace('<head>','<head><style>html{background:#141210!important;color-scheme:dark}body{background:#141210}</style>');")
- .replace("frame.setAttribute('loading','eager');","frame.setAttribute('loading','eager');\\n frame.style.background='#141210';\\n frame.style.colorScheme='dark';"),
+ .replace("frame.setAttribute('loading','eager');","frame.setAttribute('loading','eager');\\n frame.style.background='#141210';\\n frame.style.colorScheme='dark';")
+ .replace('</head>','<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">\n'
+  + '<link rel="icon" type="image/png" sizes="192x192" href="/tffac-icon-192.png">\n'
+  + '<link rel="manifest" href="/tffac.webmanifest">\n</head>'),
  'BETA engine bridge must match the approved integration exactly');
 assert.equal(read('beta/clubfinder-journey.css'),read('beta/two-rooms-iframe-engine.css'),
  'BETA CSS must match approved three-frame CSS');
