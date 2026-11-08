@@ -1,11 +1,14 @@
 name: Draw ball numbers Shed proof
 on:
-  push:
-    branches: [shed/official-draw-ball-numbers]
+  pull_request:
+    paths:
+      - updater/draw_ball_numbers.py
+      - .github/workflows/draw-ball-numbers-shed.yml
 permissions:
   contents: read
 jobs:
   validate:
+    if: github.head_ref == 'shed/official-draw-ball-numbers'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
