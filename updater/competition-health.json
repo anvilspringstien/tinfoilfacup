@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-08T14:17:32.053998+00:00",
+  "checked_at": "2026-11-08T15:13:21.127755+00:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -11,14 +11,14 @@
   },
   "counts": {
     "known_fixtures": 177,
-    "complete": 172,
+    "complete": 173,
     "awaiting_grace": 2,
     "overdue": 0,
-    "upcoming": 3,
+    "upcoming": 2,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": false,
+  "fixture_local_health": true,
   "overdue": [],
   "awaiting_grace": [
     {
@@ -39,19 +39,19 @@
     },
     {
       "round": "First Round Proper",
-      "home": "Stafford Rangers",
-      "away": "Grimsby Town",
+      "home": "Wimborne Town",
+      "away": "Crawley Town",
       "date": "2026-11-08",
-      "kickoff": "12:00",
+      "kickoff": "15:00",
       "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
+        "ground": "Wyatt Homes Stadium",
+        "postcode": "BH21 2FU",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
       },
       "section": "fixtures",
-      "scheduled": "2026-11-08T12:00:00+00:00",
-      "deadline": "2026-11-08T15:00:00+00:00"
+      "scheduled": "2026-11-08T15:00:00+00:00",
+      "deadline": "2026-11-08T18:00:00+00:00"
     }
   ],
   "competition_sync": {
