@@ -101,7 +101,11 @@ def validate_ball_slots(ball_list, fixtures, compatible):
             if matches:
                 candidates.append(index)
         if len(candidates) != 1 or candidates[0] in matched:
-            raise ValueError(f'Ball {entry["number"]} does not identify a distinct canonical tie')
+            ties = [(fixtures[index]["home"], fixtures[index]["away"]) for index in candidates]
+            raise ValueError(
+                f'Ball {entry["number"]} {clubs!r} does not identify a distinct canonical tie '
+                f'(matching ties: {ties!r}; already assigned: {any(index in matched for index in candidates)})'
+            )
         matched.add(candidates[0])
     if len(matched) != len(fixtures):
         raise ValueError("Draw ball list does not cover the complete outgoing round")
