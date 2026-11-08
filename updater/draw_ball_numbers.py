@@ -1,6 +1,7 @@
 """Parse a published FA Cup ball list separately from the draw pairings."""
 
 import re
+from html import unescape
 from html.parser import HTMLParser
 from urllib.parse import urlsplit
 
@@ -49,6 +50,19 @@ def parse_ball_numbers(html, source_url, expected_slots):
     parser = BallLists()
     parser.feed(html)
     expected = [str(number) for number in range(1, expected_slots + 1)]
+    paragraphs = re.findall(
+        r"<p\b[^>]*>\s*The ball numbers are listed below:\s*</p>\s*<p\b[^>]*>(.*?)</p>",
+        html, re.IGNORECASE | re.DOTALL,
+    )
+    for paragraph in paragraphs:
+        rows = []
+        for line in re.split(r"<br\s*/?>", paragraph, flags=re.IGNORECASE):
+            label = " ".join(unescape(re.sub(r"<[^>]+>", "", line)).split())
+            if not label:
+                continue
+            match = re.fullmatch(r"(\d+)\.\s+(.+)", label)
+            rows.append(match.groups() if match else (None, label))
+        parser.lists.append(rows)
     candidates = [rows for rows in parser.lists if [n for n, _ in rows] == expected]
     if len(candidates) != 1:
         raise ValueError("Expected exactly one complete numbered draw list")
