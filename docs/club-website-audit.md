@@ -4,6 +4,17 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 8 November 2026 checkpoint — missing-link coverage, batch 20
+
+Reviewed twelve previously unreviewed missing origins, Fairford Town through
+Felixstowe & Walton United. All twelve senior sites are approved; none are held.
+
+- Original qualifying-club coverage: 240 -> 252 of 651 linked; 399 missing.
+- All 80 current clubs remain linked and verified. Sources and access limitations
+  are recorded in [batch 20](../updater/club_website_verified_batch_20.json).
+- Only the BETA website map changes in the application. The queue and Stage C
+  report are refreshed; all 651 search origins and protected data are unchanged.
+
 ## 7 November 2026 checkpoint — missing-link coverage, batch 19
 
 Reviewed twelve previously unreviewed missing origins, Emley through Eynesbury.
