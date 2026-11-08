@@ -122,3 +122,21 @@ test('closed-room reading excludes removed messages and private member data',()=
  assert.equal(view.messages[0].text,'See you next time');
  assert.deepEqual(Object.keys(view.messages[0]).sort(),['at','campaign','hearts','id','name','replyTo','text']);
 });
+
+test('public walk-ins accept fresh browsers and more than ten guests during an opening',()=>{
+ const f=fixture();
+ const claim={name:'Lab Pigeon',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ const first=f.room.walkIn(claim,'browser',true);
+ const kept=f.room.walkIn(claim,'home-screen',true);
+ assert.notEqual(first.id,kept.id);
+ assert.equal(f.room.snapshot('browser').you.id,first.id);
+ assert.equal(f.room.snapshot('home-screen').you.moderator,false);
+ for(let i=2;i<=12;i++)f.room.walkIn({...claim,callSign:'TF2AC '+String(1000+i).padStart(5,'0')},'guest-'+i,true);
+ f.room.action('home-screen',{type:'message',text:'Home Screen reporting in'});
+ f.room.admin({type:'suspend',id:first.id});
+ assert.throws(()=>f.room.snapshot('home-screen'),e=>e.status===401);
+ assert.throws(()=>f.room.walkIn(claim,'another-browser',true),e=>e.status===403);
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ assert.throws(()=>f.room.walkIn({...claim,callSign:'TF2AC 01099'},'closed',true),e=>e.status===403);
+});
