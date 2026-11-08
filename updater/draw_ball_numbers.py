@@ -1,6 +1,7 @@
 """Parse a published FA Cup ball list separately from the draw pairings."""
 
 import re
+from datetime import date
 from html import unescape
 from html.parser import HTMLParser
 from urllib.parse import urlsplit
@@ -81,7 +82,8 @@ def parse_ball_numbers(html, source_url, expected_slots):
 
 def validate_ball_slots(ball_list, fixtures, compatible, normalize=str.casefold):
     """Require every published slot to identify one distinct outgoing tie."""
-    matched = set()
+    matched = {}
+
     for entry in ball_list["entries"]:
         clubs = entry["clubs"]
         if len(clubs) > 2:
@@ -111,9 +113,55 @@ def validate_ball_slots(ball_list, fixtures, compatible, normalize=str.casefold)
                 f'Ball {entry["number"]} {clubs!r} does not identify a distinct canonical tie '
                 f'(matching ties: {ties!r}; already assigned: {any(index in matched for index in candidates)})'
             )
-        matched.add(candidates[0])
+        matched[candidates[0]] = entry
     if len(matched) != len(fixtures):
         raise ValueError("Draw ball list does not cover the complete outgoing round")
+    return matched
+
+
+def verify_article_context(html, source_url, target, fixtures):
+    path = urlsplit(source_url).path
+    stamp = re.match(r"/news/(\d{4})/([a-z]{3})/(\d{2})/", path, re.I)
+    if not stamp:
+        raise ValueError("Official article has no dated FA news path")
+    from datetime import datetime
+
+    published = datetime.strptime("-".join(stamp.groups()), "%Y-%b-%d").date()
+
+    def season_start(day):
+        return day.year - (day.month < 7)
+
+    season = season_start(published)
+    if any(season_start(date.fromisoformat(fixture["date"])) != season for fixture in fixtures):
+        raise ValueError("Official article and outgoing fixtures are in different seasons")
+    headings = re.findall(r"<h1\b[^>]*>(.*?)</h1>", html, re.I | re.S)
+    title = " ".join(unescape(re.sub(r"<[^>]+>", "", heading)) for heading in headings)
+    round_label = re.escape(target.removesuffix(" Proper"))
+    if not re.search(rf"\bFA Cup\b.*\b{round_label}\b(?:\s+proper)?\s+draw\b", title, re.I):
+        raise ValueError("Official article heading does not identify the target FA Cup draw")
+    return f"{season}-{str(season + 1)[-2:]}"
+
+
+def verify_named_winners(matched, fixtures, history, normalize):
+    for index, entry in matched.items():
+        if len(entry["clubs"]) != 1:
+            continue
+        fixture = fixtures[index]
+        sides = {normalize(fixture["home"]), normalize(fixture["away"])}
+        winners = {
+            normalize(result["winner"])
+            for result in history
+            if result.get("source_url") and result.get("winner")
+            and str(result.get("status", "")).startswith("FT")
+            and (
+                (result.get("round") == fixture["round"] and result.get("date") == fixture["date"])
+                or (result.get("round") == fixture["round"] + " Replay"
+                    and result.get("date", "") > fixture["date"])
+            )
+            and {normalize(result.get("home")), normalize(result.get("away"))} == sides
+        }
+        if winners != {normalize(entry["clubs"][0])}:
+            raise ValueError(f'Ball {entry["number"]} {entry["clubs"]!r} has no matching verified winner')
 
 
 def main():
@@ -147,8 +195,11 @@ def main():
             if match:
                 print(f"FA markup near {anchor!r}: {article[max(0, match.start()-160):match.end()+650]!r}")
         raise
-    validate_ball_slots(ball_list, fixtures, compatible, norm)
-    print(json.dumps({"outgoing_round": current, "target_round": args.round, **ball_list}, indent=2))
+    matched = validate_ball_slots(ball_list, fixtures, compatible, norm)
+    season = verify_article_context(article, args.source_url, args.round, fixtures)
+    history = [row for rows in (data.get('result_history') or {}).values() for row in rows]
+    verify_named_winners(matched, fixtures, history, norm)
+    print(json.dumps({"season": season, "outgoing_round": current, "target_round": args.round, **ball_list}, indent=2))
 
 
 if __name__ == "__main__":
