@@ -142,9 +142,11 @@ def verify_article_context(html, source_url, target, fixtures):
     return f"{season}-{str(season + 1)[-2:]}"
 
 
-def verify_named_winners(matched, fixtures, history, normalize):
+def classify_ball_slots(matched, fixtures, history, normalize):
+    verified, withheld = [], []
     for index, entry in matched.items():
         if len(entry["clubs"]) != 1:
+            withheld.append({**entry, "reason": "unresolved_tie"})
             continue
         fixture = fixtures[index]
         sides = {normalize(fixture["home"]), normalize(fixture["away"])}
@@ -160,8 +162,11 @@ def verify_named_winners(matched, fixtures, history, normalize):
             )
             and {normalize(result.get("home")), normalize(result.get("away"))} == sides
         }
-        if winners != {normalize(entry["clubs"][0])}:
-            raise ValueError(f'Ball {entry["number"]} {entry["clubs"]!r} has no matching verified winner')
+        if winners == {normalize(entry["clubs"][0])}:
+            verified.append(entry)
+        else:
+            withheld.append({**entry, "reason": "winner_unverified", "canonical_winners": sorted(winners)})
+    return verified, withheld
 
 
 def main():
@@ -198,8 +203,11 @@ def main():
     matched = validate_ball_slots(ball_list, fixtures, compatible, norm)
     season = verify_article_context(article, args.source_url, args.round, fixtures)
     history = [row for rows in (data.get('result_history') or {}).values() for row in rows]
-    verify_named_winners(matched, fixtures, history, norm)
-    print(json.dumps({"season": season, "outgoing_round": current, "target_round": args.round, **ball_list}, indent=2))
+    verified, withheld = classify_ball_slots(matched, fixtures, history, norm)
+    print(json.dumps({
+        "season": season, "outgoing_round": current, "target_round": args.round,
+        "source_url": args.source_url, "entries": verified, "withheld": withheld,
+    }, indent=2))
 
 
 if __name__ == "__main__":
