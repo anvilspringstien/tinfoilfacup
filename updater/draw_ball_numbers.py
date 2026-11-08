@@ -208,6 +208,7 @@ def main():
     cli = argparse.ArgumentParser(description="Check an official FA ball list against the active round")
     cli.add_argument("source_url")
     cli.add_argument("--round", required=True, choices=ROUND_ORDER)
+    cli.add_argument("--stage", action="store_true", help="Stage validated metadata in the local competition candidate")
     args = cli.parse_args()
     source = urlsplit(args.source_url)
     if source.scheme != "https" or source.netloc not in {"thefa.com", "www.thefa.com"}:
@@ -234,11 +235,20 @@ def main():
     season = verify_article_context(article, args.source_url, args.round, fixtures)
     history = [row for rows in (data.get('result_history') or {}).values() for row in rows]
     verified, withheld = classify_ball_slots(matched, fixtures, history, norm)
-    print(json.dumps({
+    preview = {
         "season": season, "outgoing_round": current, "target_round": args.round,
         "source_url": args.source_url, "draw_schedule": draw_schedule(article),
-        "entries": verified, "withheld": withheld,
-    }, indent=2))
+        "entries": verified,
+    }
+    if args.stage:
+        if not verified:
+            cli.error("No verified ball numbers to stage")
+        if data.get("draw_preview") != preview:
+            data["draw_preview"] = preview
+            temporary = DATA.with_suffix(".json.draw-preview.tmp")
+            temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            temporary.replace(DATA)
+    print(json.dumps({**preview, "withheld": withheld}, indent=2))
 
 
 if __name__ == "__main__":
