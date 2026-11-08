@@ -19,8 +19,7 @@ jobs:
       - name: Validate the published Second Round Proper ball list
         run: >
           python updater/draw_ball_numbers.py
-          --stage --round "Second Round Proper"
-          https://www.thefa.com/news/2026/nov/06/emirates-fa-cup-second-round-draw-to-be-broadcast-on-tnt-sports-20260611
+          --stage
       - name: Verify the staged preview leaves canonical draw and results intact
         run: |
           python - <<'PY'
