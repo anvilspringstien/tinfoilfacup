@@ -91,3 +91,34 @@ def validate_ball_slots(ball_list, fixtures, compatible):
         matched.add(candidates[0])
     if len(matched) != len(fixtures):
         raise ValueError("Draw ball list does not cover the complete outgoing round")
+
+
+def main():
+    import argparse
+    import json
+
+    from auto_draw import DATA, EXPECTED_ROUND_TIES, ROUND_ORDER, compatible, fetch, fixture_values
+
+    cli = argparse.ArgumentParser(description="Check an official FA ball list against the active round")
+    cli.add_argument("source_url")
+    cli.add_argument("--round", required=True, choices=ROUND_ORDER)
+    args = cli.parse_args()
+    source = urlsplit(args.source_url)
+    if source.scheme != "https" or source.netloc not in {"thefa.com", "www.thefa.com"}:
+        cli.error("Ball numbers require an official FA source")
+    data = json.loads(DATA.read_text(encoding="utf-8"))
+    current = data.get("source_round")
+    if current not in ROUND_ORDER[:-1] or ROUND_ORDER[ROUND_ORDER.index(current) + 1] != args.round:
+        cli.error("The requested draw is not the next canonical round")
+    expected_ties = EXPECTED_ROUND_TIES.get(args.round)
+    if expected_ties is None:
+        cli.error("No expected slot count for the requested round")
+    fixtures = [fixture for fixture in fixture_values(data.get("fixtures") or {})
+                if fixture.get("round") == current]
+    ball_list = parse_ball_numbers(fetch(args.source_url), args.source_url, expected_ties * 2)
+    validate_ball_slots(ball_list, fixtures, compatible)
+    print(json.dumps({"outgoing_round": current, "target_round": args.round, **ball_list}, indent=2))
+
+
+if __name__ == "__main__":
+    main()
