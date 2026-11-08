@@ -15,6 +15,7 @@ on:
       - "updater/guard_publication_base.py"
       - "tests/test_competition_publication.py"
       - "updater/auto_draw.py"
+      - "updater/draw_ball_numbers.py"
       - "updater/active_conditional_refresh_regression.py"
       - ".github/workflows/scan-draw.yml"
 
@@ -57,6 +58,31 @@ jobs:
             python updater/auto_draw.py --publish
           else
             python updater/auto_draw.py
+          fi
+
+      - name: Stage verified pre-draw announcement
+        env:
+          ANNOUNCEMENT_URL: ${{ vars.TFFC_DRAW_ANNOUNCEMENT_URL || 'https://www.thefa.com/news/2026/nov/06/emirates-fa-cup-second-round-draw-to-be-broadcast-on-tnt-sports-20260611' }}
+          ANNOUNCEMENT_ROUND: ${{ vars.TFFC_DRAW_ANNOUNCEMENT_ROUND || 'Second Round Proper' }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_PUBLISH: ${{ inputs.publish }}
+        run: |
+          if ! PYTHONPATH=updater python -c '
+          import json, os
+          from auto_draw import DATA, ROUND_ORDER
+          current = json.loads(DATA.read_text()).get("source_round")
+          target = os.environ["ANNOUNCEMENT_ROUND"]
+          raise SystemExit(0 if current in ROUND_ORDER[:-1] and ROUND_ORDER[ROUND_ORDER.index(current) + 1] == target else 1)
+          '; then
+            echo "Configured announcement is for a different round."
+            exit 0
+          fi
+          stage=()
+          if [ "$EVENT_NAME" = "schedule" ] || [ "$EVENT_NAME" = "push" ] || [ "$INPUT_PUBLISH" = "true" ]; then
+            stage=(--stage)
+          fi
+          if ! python updater/draw_ball_numbers.py "$ANNOUNCEMENT_URL" --round "$ANNOUNCEMENT_ROUND" "${stage[@]}"; then
+            echo "::warning::Pre-draw announcement could not be verified. No preview update was staged."
           fi
 
       - name: Validate canonical JSON
