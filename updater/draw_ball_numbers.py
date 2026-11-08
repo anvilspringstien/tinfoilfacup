@@ -63,3 +63,31 @@ def parse_ball_numbers(html, source_url, expected_slots):
         seen.update(keys)
         entries.append({"number": int(number), "clubs": clubs})
     return {"source_url": source_url, "entries": entries}
+
+
+def validate_ball_slots(ball_list, fixtures, compatible):
+    """Require every published slot to identify one distinct outgoing tie."""
+    matched = set()
+    for entry in ball_list["entries"]:
+        clubs = entry["clubs"]
+        if len(clubs) > 2:
+            raise ValueError(f'Ball {entry["number"]} has too many alternatives')
+        candidates = []
+        for index, fixture in enumerate(fixtures):
+            home, away = fixture["home"], fixture["away"]
+            if len(clubs) == 1:
+                matches = compatible(clubs[0], home) or compatible(clubs[0], away)
+            else:
+                first, second = clubs
+                matches = (
+                    compatible(first, home) and compatible(second, away)
+                ) or (
+                    compatible(first, away) and compatible(second, home)
+                )
+            if matches:
+                candidates.append(index)
+        if len(candidates) != 1 or candidates[0] in matched:
+            raise ValueError(f'Ball {entry["number"]} does not identify a distinct canonical tie')
+        matched.add(candidates[0])
+    if len(matched) != len(fixtures):
+        raise ValueError("Draw ball list does not cover the complete outgoing round")
