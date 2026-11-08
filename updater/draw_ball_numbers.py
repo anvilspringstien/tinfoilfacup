@@ -79,7 +79,7 @@ def parse_ball_numbers(html, source_url, expected_slots):
     return {"source_url": source_url, "entries": entries}
 
 
-def validate_ball_slots(ball_list, fixtures, compatible):
+def validate_ball_slots(ball_list, fixtures, compatible, normalize=str.casefold):
     """Require every published slot to identify one distinct outgoing tie."""
     matched = set()
     for entry in ball_list["entries"]:
@@ -87,6 +87,7 @@ def validate_ball_slots(ball_list, fixtures, compatible):
         if len(clubs) > 2:
             raise ValueError(f'Ball {entry["number"]} has too many alternatives')
         candidates = []
+        exact = []
         for index, fixture in enumerate(fixtures):
             home, away = fixture["home"], fixture["away"]
             if len(clubs) == 1:
@@ -100,6 +101,10 @@ def validate_ball_slots(ball_list, fixtures, compatible):
                 )
             if matches:
                 candidates.append(index)
+                sides = {normalize(home), normalize(away)}
+                if {normalize(club) for club in clubs} <= sides:
+                    exact.append(index)
+        candidates = exact or candidates
         if len(candidates) != 1 or candidates[0] in matched:
             ties = [(fixtures[index]["home"], fixtures[index]["away"]) for index in candidates]
             raise ValueError(
@@ -115,7 +120,7 @@ def main():
     import argparse
     import json
 
-    from auto_draw import DATA, EXPECTED_ROUND_TIES, ROUND_ORDER, compatible, fetch, fixture_values
+    from auto_draw import DATA, EXPECTED_ROUND_TIES, ROUND_ORDER, compatible, fetch, fixture_values, norm
 
     cli = argparse.ArgumentParser(description="Check an official FA ball list against the active round")
     cli.add_argument("source_url")
@@ -142,7 +147,7 @@ def main():
             if match:
                 print(f"FA markup near {anchor!r}: {article[max(0, match.start()-160):match.end()+650]!r}")
         raise
-    validate_ball_slots(ball_list, fixtures, compatible)
+    validate_ball_slots(ball_list, fixtures, compatible, norm)
     print(json.dumps({"outgoing_round": current, "target_round": args.round, **ball_list}, indent=2))
 
 
