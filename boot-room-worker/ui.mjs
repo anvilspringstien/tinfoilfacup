@@ -211,7 +211,7 @@ async function joinWalkIn(){
  finally{button.disabled=false;}
 }
 $('walk-in-join').onclick=joinWalkIn;
-$('join-form').onsubmit=async e=>{e.preventDefault();try{await api('/api/join',{invite:$('invite').value.trim(),campaign});$('invite').value='';await connect();}catch(x){status(x.message);}};
+if($('join-form'))$('join-form').onsubmit=async e=>{e.preventDefault();try{await api('/api/join',{invite:$('invite').value.trim(),campaign});$('invite').value='';await connect();}catch(x){status(x.message);}};
 $('connect').onclick=connect;$('logout').onclick=async()=>{disconnect();me=null;roomOpen=false;await api('/api/logout',{});$('room').hidden=true;$('join').hidden=false;$('logout').hidden=true;$('composer-wrap').hidden=true;status('This device has left. You can join again from My Campaign when walk-ins are open.');};
 $('composer').onsubmit=e=>{e.preventDefault();pendingText=$('text').value;send({type:'message',text:pendingText,replyTo});};
 $('cancel-reply').onclick=()=>{replyTo=null;$('reply').textContent='';$('reply-preview').hidden=true;};
