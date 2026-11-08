@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-08T07:21:15.773296+00:00",
+  "checked_at": "2026-11-08T14:17:32.053998+00:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
@@ -12,20 +12,53 @@
   "counts": {
     "known_fixtures": 177,
     "complete": 172,
-    "awaiting_grace": 0,
+    "awaiting_grace": 2,
     "overdue": 0,
-    "upcoming": 5,
+    "upcoming": 3,
     "critical": 0
   },
   "critical": [],
-  "fixture_local_health": true,
+  "fixture_local_health": false,
   "overdue": [],
-  "awaiting_grace": [],
+  "awaiting_grace": [
+    {
+      "round": "First Round Proper",
+      "home": "Cray Wanderers",
+      "away": "Stockport County",
+      "date": "2026-11-08",
+      "kickoff": "14:15",
+      "venue": {
+        "ground": "Flamingo Park",
+        "postcode": "BR7 6HL",
+        "source": "https://fchd.info/maps/GAZ.htm",
+        "verification": "fchd-gazetteer"
+      },
+      "section": "fixtures",
+      "scheduled": "2026-11-08T14:15:00+00:00",
+      "deadline": "2026-11-08T17:15:00+00:00"
+    },
+    {
+      "round": "First Round Proper",
+      "home": "Stafford Rangers",
+      "away": "Grimsby Town",
+      "date": "2026-11-08",
+      "kickoff": "12:00",
+      "venue": {
+        "ground": "Stan Robinson Stadium",
+        "postcode": "ST16 3BX",
+        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+        "verification": "clubfinder-canonical"
+      },
+      "section": "fixtures",
+      "scheduled": "2026-11-08T12:00:00+00:00",
+      "deadline": "2026-11-08T15:00:00+00:00"
+    }
+  ],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-11-07T22:43:37.303052+00:00",
+    "synced_at": "2026-11-08T14:17:16.907972+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
