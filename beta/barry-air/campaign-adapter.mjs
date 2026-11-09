@@ -284,18 +284,25 @@ function liveLookup(section,name){
 function nextRoundInfo(club,preserveConditional){
   const cr=resultFor(club),current=(cr&&cr.round)?cr.round:(club.entry_round||'');
   const progressionRound=String(current||'').replace(/\s+Replay$/i,'');
-  let nextName='Next Round';
-  /* C13 BETA ENTRY-ROUND FIX:
-     A club with no completed result has not progressed beyond its entry round.
-     Its entry-round fixture is the next/current tie; only completed results
-     advance the Campaign to the following round. */
+  const rounds=[
+    'Extra Preliminary Round',
+    'Preliminary Round',
+    'First Round Qualifying',
+    'Second Round Qualifying',
+    'Third Round Qualifying',
+    'Fourth Round Qualifying',
+    'First Round Proper',
+    'Second Round Proper',
+    'Third Round Proper',
+    'Fourth Round Proper',
+    'Fifth Round Proper',
+    'Quarter Final',
+    'Semi Final',
+    'Final',
+  ];
+  const roundIndex=rounds.indexOf(progressionRound);
+  let nextName=roundIndex>=0?(rounds[roundIndex+1]||'Next Round'):'Next Round';
   if(!cr&&progressionRound)nextName=progressionRound;
-  else if(progressionRound==='Extra Preliminary Round')nextName='Preliminary Round';
-  else if(progressionRound==='Preliminary Round')nextName='First Round Qualifying';
-  else if(progressionRound==='First Round Qualifying')nextName='Second Round Qualifying';
-  else if(progressionRound==='Second Round Qualifying')nextName='Third Round Qualifying';
-  else if(progressionRound==='Third Round Qualifying')nextName='Fourth Round Qualifying';
-  else if(progressionRound==='Fourth Round Qualifying')nextName='First Round Proper';
   const preview=LIVE_COMPETITION_DATA?.draw_preview;
   const drawPreview=cr&&preview?.outgoing_round===progressionRound&&
     LIVE_COMPETITION_DATA?.source_round===progressionRound?preview:null;

@@ -23,5 +23,27 @@ for(const path of (process.argv.length>2?process.argv.slice(2):['clubfinder.html
  assert.doesNotMatch(shown,/ball 64|awaiting confirmed draw/);
  delete next.knownFixture;delete next.drawAnnouncement;
  assert.match(ctx.nextProgressHtml({},next),/Draw: TBC/);
+ if(path==='beta/clubfinder-beta.html'){
+  const start=html.indexOf('function nextRoundInfo(');
+  const end=html.indexOf('\nfunction canonicalClubKey(',start);
+  const guard=html.slice(html.indexOf('/* TIN_FOIL_NEXT_ROUND_INTEGRITY_BEGIN */'),html.indexOf('/* TIN_FOIL_NEXT_ROUND_INTEGRITY_END */'));
+  const club={name:'AFC Fylde'};
+  let result,fixture;
+  Object.assign(ctx,{resultFor:()=>result,liveLookup:()=>fixture,liveConditionalFixtureForClub:()=>null,
+   resolveLiveFixtureForCarrier:f=>f,ROUND_META:{},LIVE_COMPETITION_DATA:{},FA_FIXTURES_URL:'',
+   tinFoilVerifiedThameNextFixture:()=>null,tinFoilBetaVerifiedThameNextFixture:()=>null});
+  vm.runInContext(html.slice(start,end)+guard,ctx);
+  const proper=['First Round Proper','Second Round Proper','Third Round Proper','Fourth Round Proper',
+   'Fifth Round Proper','Quarter Final','Semi Final','Final'];
+  for(let i=0;i<proper.length-1;i++){
+   result={round:proper[i]};
+   fixture={home:'AFC Fylde',away:'Luton Town',round:proper[i+1],date:'2026-12-05'};
+   const progress=ctx.nextRoundInfo(club);
+   assert.equal(progress.name,proper[i+1]);
+   assert.match(ctx.nextProgressHtml(club,progress),/AFC Fylde v Luton Town/);
+   fixture={...fixture,round:proper[i]};
+   assert.equal(ctx.nextRoundInfo(club).knownFixture,null);
+  }
+ }
  console.log(path+': announcement, London time, ball alias, elapsed draw and fixture precedence PASS');
 }
