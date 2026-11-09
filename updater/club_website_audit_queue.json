@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-07T08:40:17.684117+00:00",
+  "competition_updated_at": "2026-11-08T07:21:08.235125+00:00",
   "eligible": 651,
   "current_clubs": 80,
   "current_verified": 80,
   "current_linked": 80,
-  "eligible_linked": 240,
+  "eligible_linked": 252,
   "rows": [
     {
       "club": "Accrington Stanley",
@@ -1901,138 +1901,6 @@
       "club": "Epsom & Ewell FC",
       "identities": [
         "Epsom & Ewell FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Fairford Town FC",
-      "identities": [
-        "Fairford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Fakenham Town FC",
-      "identities": [
-        "Fakenham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Falmouth Town AFC",
-      "identities": [
-        "Falmouth Town AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Fareham Town FC",
-      "identities": [
-        "Fareham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Farnborough FC",
-      "identities": [
-        "Farnborough FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Farnham Town FC",
-      "identities": [
-        "Farnham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Faversham Strike Force FC",
-      "identities": [
-        "Faversham Strike Force FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Faversham Town FC",
-      "identities": [
-        "Faversham Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "FC Peterborough",
-      "identities": [
-        "FC Peterborough"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "FC St Helens",
-      "identities": [
-        "FC St Helens"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "FC United of Manchester",
-      "identities": [
-        "FC United of Manchester"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Felixstowe & Walton United FC",
-      "identities": [
-        "Felixstowe & Walton United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9658,6 +9526,222 @@
           "evidence_url": "https://eynesburyrovers.com/",
           "verified_on": "2026-11-07",
           "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Fairford Town FC",
+      "identities": [
+        "Fairford Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://fairfordtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://fairfordtownfc.co.uk/",
+          "evidence_url": "https://fairfordtownfc.co.uk/club-contacts",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Fakenham Town FC",
+      "identities": [
+        "Fakenham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://fakenhamtownfc.org/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://fakenhamtownfc.org/",
+          "evidence_url": "https://fakenhamtownfc.org/contact/",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Falmouth Town AFC",
+      "identities": [
+        "Falmouth Town AFC"
+      ],
+      "current_competition": false,
+      "website": "https://www.falmouthtownafc.co.uk/index.php",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.falmouthtownafc.co.uk/index.php",
+          "evidence_url": "https://www.falmouthtownafc.co.uk/teams.php",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Fareham Town FC",
+      "identities": [
+        "Fareham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://farehamtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://farehamtownfc.co.uk/",
+          "evidence_url": "https://farehamtownfc.co.uk/fixtures/first-team/",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Farnborough FC",
+      "identities": [
+        "Farnborough FC"
+      ],
+      "current_competition": false,
+      "website": "https://farnboroughfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://farnboroughfc.co.uk/",
+          "evidence_url": "https://farnboroughfc.co.uk/contact/",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Farnham Town FC",
+      "identities": [
+        "Farnham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://farnhamtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://farnhamtownfc.co.uk/",
+          "evidence_url": "https://farnhamtownfc.co.uk/contact-us/",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Faversham Strike Force FC",
+      "identities": [
+        "Faversham Strike Force FC"
+      ],
+      "current_competition": false,
+      "website": "https://favershamstrikeforce.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://favershamstrikeforce.co.uk/",
+          "evidence_url": "https://favershamstrikeforce.co.uk/whats-on",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Faversham Town FC",
+      "identities": [
+        "Faversham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://favershamtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://favershamtownfc.co.uk/",
+          "evidence_url": "https://www.favershamtownfc.co.uk/club-contacts",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "FC Peterborough",
+      "identities": [
+        "FC Peterborough"
+      ],
+      "current_competition": false,
+      "website": "https://www.fcpeterborough.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.fcpeterborough.co.uk/",
+          "evidence_url": "https://www.fcpeterborough.co.uk/contact",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "FC St Helens",
+      "identities": [
+        "FC St Helens"
+      ],
+      "current_competition": false,
+      "website": "https://www.fcsthelens.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.fcsthelens.co.uk/",
+          "evidence_url": "https://fcsthelens.co.uk/i/contact-us/9",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "FC United of Manchester",
+      "identities": [
+        "FC United of Manchester"
+      ],
+      "current_competition": false,
+      "website": "https://fc-utd.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://fc-utd.co.uk/",
+          "evidence_url": "https://fc-utd.co.uk/files/contact",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
+        }
+      ]
+    },
+    {
+      "club": "Felixstowe & Walton United FC",
+      "identities": [
+        "Felixstowe & Walton United FC"
+      ],
+      "current_competition": false,
+      "website": "https://felixstowefootball.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://felixstowefootball.co.uk/",
+          "evidence_url": "https://felixstowefootball.co.uk/club-officials/",
+          "verified_on": "2026-11-08",
+          "ledger": "club_website_verified_batch_20.json"
         }
       ]
     },
