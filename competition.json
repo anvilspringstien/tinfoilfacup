@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "season": "2026-27",
-  "updated_at": "2026-11-09T17:33:56.420880+00:00",
+  "updated_at": "2026-11-09T20:01:26.638285+00:00",
   "round_dates": {
     "First Round Qualifying": "2026-09-05",
     "Second Round Qualifying": "2026-09-19",
@@ -31220,1141 +31220,342 @@
   },
   "replays": {},
   "fixtures": {
-    "Dover Athletic": {
-      "round": "First Round Proper",
-      "home": "Dover Athletic",
-      "away": "Wealdstone",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Crabble Athletic Ground",
-        "postcode": "CT17 0JB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Wealdstone": {
-      "round": "First Round Proper",
-      "home": "Dover Athletic",
-      "away": "Wealdstone",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Crabble Athletic Ground",
-        "postcode": "CT17 0JB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Mansfield Town": {
-      "round": "First Round Proper",
-      "home": "Mansfield Town",
-      "away": "Macclesfield",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "One Call Stadium",
-        "postcode": "NG18 5DA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Macclesfield": {
-      "round": "First Round Proper",
-      "home": "Mansfield Town",
-      "away": "Macclesfield",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "One Call Stadium",
-        "postcode": "NG18 5DA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Huddersfield Town": {
-      "round": "First Round Proper",
-      "home": "Huddersfield Town",
-      "away": "Exeter City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Kirklees Stadium",
-        "postcode": "HD1 6PG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Exeter City": {
-      "round": "First Round Proper",
-      "home": "Huddersfield Town",
-      "away": "Exeter City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Kirklees Stadium",
-        "postcode": "HD1 6PG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Luton Town": {
-      "round": "First Round Proper",
-      "home": "Luton Town",
-      "away": "Forest Green Rovers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Kenilworth Road Ground",
-        "postcode": "LU4 8AW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Forest Green Rovers": {
-      "round": "First Round Proper",
-      "home": "Luton Town",
-      "away": "Forest Green Rovers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Kenilworth Road Ground",
-        "postcode": "LU4 8AW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bristol Rovers": {
-      "round": "First Round Proper",
-      "home": "Bristol Rovers",
-      "away": "Cambridge United",
-      "date": "2026-11-06",
-      "kickoff": "19:30",
-      "venue": {
-        "ground": "Memorial Stadium",
-        "postcode": "BS7 0BF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Cambridge United": {
-      "round": "First Round Proper",
-      "home": "Bristol Rovers",
-      "away": "Cambridge United",
-      "date": "2026-11-06",
-      "kickoff": "19:30",
-      "venue": {
-        "ground": "Memorial Stadium",
-        "postcode": "BS7 0BF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Oldham Athletic AFC": {
-      "round": "First Round Proper",
-      "home": "Oldham Athletic AFC",
-      "away": "Sheffield Wednesday",
-      "date": "2026-11-08",
-      "kickoff": "17:15",
-      "venue": {
-        "ground": "Boundary Park",
-        "postcode": "OL1 2PA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Oldham Athletic": {
-      "round": "First Round Proper",
-      "home": "Oldham Athletic AFC",
-      "away": "Sheffield Wednesday",
-      "date": "2026-11-08",
-      "kickoff": "17:15",
-      "venue": {
-        "ground": "Boundary Park",
-        "postcode": "OL1 2PA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Sheffield Wednesday": {
-      "round": "First Round Proper",
-      "home": "Oldham Athletic AFC",
-      "away": "Sheffield Wednesday",
-      "date": "2026-11-08",
-      "kickoff": "17:15",
-      "venue": {
-        "ground": "Boundary Park",
-        "postcode": "OL1 2PA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Kidderminster Harriers": {
-      "round": "First Round Proper",
-      "home": "Kidderminster Harriers",
-      "away": "Doncaster Rovers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Aggborough Stadium",
-        "postcode": "DY10 1NB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Doncaster Rovers": {
-      "round": "First Round Proper",
-      "home": "Kidderminster Harriers",
-      "away": "Doncaster Rovers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Aggborough Stadium",
-        "postcode": "DY10 1NB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Leyton Orient": {
-      "round": "First Round Proper",
-      "home": "Leyton Orient",
-      "away": "Harborough Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Gaughan Group Stadium",
-        "postcode": "E10 5NF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Harborough Town": {
-      "round": "First Round Proper",
-      "home": "Leyton Orient",
-      "away": "Harborough Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Gaughan Group Stadium",
-        "postcode": "E10 5NF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Accrington Stanley": {
-      "round": "First Round Proper",
-      "home": "Accrington Stanley",
-      "away": "Wycombe Wanderers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Crown Ground",
-        "postcode": "BB5 5BX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Wycombe Wanderers": {
-      "round": "First Round Proper",
-      "home": "Accrington Stanley",
-      "away": "Wycombe Wanderers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Crown Ground",
-        "postcode": "BB5 5BX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Milton Keynes Dons": {
-      "round": "First Round Proper",
-      "home": "Milton Keynes Dons",
-      "away": "Swindon Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Stadium MK",
-        "postcode": "MK1 1ST",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Swindon Town": {
-      "round": "First Round Proper",
-      "home": "Milton Keynes Dons",
-      "away": "Swindon Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Stadium MK",
-        "postcode": "MK1 1ST",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Newport County AFC": {
-      "round": "First Round Proper",
-      "home": "Newport County AFC",
-      "away": "Walsall",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Rodney Parade",
-        "postcode": "NP19 0UU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Newport County": {
-      "round": "First Round Proper",
-      "home": "Newport County AFC",
-      "away": "Walsall",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Rodney Parade",
-        "postcode": "NP19 0UU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Walsall": {
-      "round": "First Round Proper",
-      "home": "Newport County AFC",
-      "away": "Walsall",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Rodney Parade",
-        "postcode": "NP19 0UU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bromley": {
-      "round": "First Round Proper",
-      "home": "Bromley",
-      "away": "Rotherham United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Hayes Lane",
-        "postcode": "BR2 9EF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Rotherham United": {
-      "round": "First Round Proper",
-      "home": "Bromley",
-      "away": "Rotherham United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Hayes Lane",
-        "postcode": "BR2 9EF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Barnet": {
-      "round": "First Round Proper",
-      "home": "Barnet",
-      "away": "Tranmere Rovers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Hive Stadium",
-        "postcode": "HA8 6AG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Tranmere Rovers": {
-      "round": "First Round Proper",
-      "home": "Barnet",
-      "away": "Tranmere Rovers",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Hive Stadium",
-        "postcode": "HA8 6AG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Fleetwood Town": {
-      "round": "First Round Proper",
-      "home": "Fleetwood Town",
-      "away": "Rochdale AFC",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Highbury Stadium",
-        "postcode": "FY7 6TX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Rochdale AFC": {
-      "round": "First Round Proper",
-      "home": "Fleetwood Town",
-      "away": "Rochdale AFC",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Highbury Stadium",
-        "postcode": "FY7 6TX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Rochdale": {
-      "round": "First Round Proper",
-      "home": "Fleetwood Town",
-      "away": "Rochdale AFC",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Highbury Stadium",
-        "postcode": "FY7 6TX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Barnsley": {
-      "round": "First Round Proper",
-      "home": "Barnsley",
-      "away": "Aldershot Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Oakwell",
-        "postcode": "S71 1ET",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Aldershot Town": {
-      "round": "First Round Proper",
-      "home": "Barnsley",
-      "away": "Aldershot Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Oakwell",
-        "postcode": "S71 1ET",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Plymouth Parkway": {
-      "round": "First Round Proper",
-      "home": "Plymouth Parkway",
-      "away": "Berkhamsted",
-      "date": "2026-11-09",
-      "kickoff": "19:30",
-      "venue": {
-        "ground": "Bolitho Park",
-        "postcode": "PL5 3JG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Berkhamsted": {
-      "round": "First Round Proper",
-      "home": "Plymouth Parkway",
-      "away": "Berkhamsted",
-      "date": "2026-11-09",
-      "kickoff": "19:30",
-      "venue": {
-        "ground": "Bolitho Park",
-        "postcode": "PL5 3JG",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
     "Chesterfield": {
-      "round": "First Round Proper",
+      "round": "Second Round Proper",
       "home": "Chesterfield",
-      "away": "Yeovil Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "SMH Group Stadium",
-        "postcode": "S41 8NZ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Yeovil Town": {
-      "round": "First Round Proper",
-      "home": "Chesterfield",
-      "away": "Yeovil Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "SMH Group Stadium",
-        "postcode": "S41 8NZ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Gillingham": {
-      "round": "First Round Proper",
-      "home": "Gillingham",
-      "away": "Barrow AFC",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Priestfield Stadium",
-        "postcode": "ME7 4DD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Barrow AFC": {
-      "round": "First Round Proper",
-      "home": "Gillingham",
-      "away": "Barrow AFC",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Priestfield Stadium",
-        "postcode": "ME7 4DD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Barrow": {
-      "round": "First Round Proper",
-      "home": "Gillingham",
-      "away": "Barrow AFC",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Priestfield Stadium",
-        "postcode": "ME7 4DD",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Harrogate Town AFC": {
-      "round": "First Round Proper",
-      "home": "Harrogate Town AFC",
-      "away": "AFC Fylde",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Exercise Stadium",
-        "postcode": "HG2 7SA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Harrogate Town": {
-      "round": "First Round Proper",
-      "home": "Harrogate Town AFC",
-      "away": "AFC Fylde",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Exercise Stadium",
-        "postcode": "HG2 7SA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Fylde": {
-      "round": "First Round Proper",
-      "home": "Harrogate Town AFC",
-      "away": "AFC Fylde",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Exercise Stadium",
-        "postcode": "HG2 7SA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Crewe Alexandra": {
-      "round": "First Round Proper",
-      "home": "Crewe Alexandra",
-      "away": "AFC Wimbledon",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Mornflake Stadium",
-        "postcode": "CW2 6EB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Wimbledon": {
-      "round": "First Round Proper",
-      "home": "Crewe Alexandra",
-      "away": "AFC Wimbledon",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Mornflake Stadium",
-        "postcode": "CW2 6EB",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Oxford United": {
-      "round": "First Round Proper",
-      "home": "Oxford United",
-      "away": "Stevenage",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Kassam Stadium",
-        "postcode": "OX4 4XP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Stevenage": {
-      "round": "First Round Proper",
-      "home": "Oxford United",
-      "away": "Stevenage",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Kassam Stadium",
-        "postcode": "OX4 4XP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Burton Albion": {
-      "round": "First Round Proper",
-      "home": "Burton Albion",
-      "away": "AFC Rushden & Diamonds",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Pirelli Stadium",
-        "postcode": "DE13 0AR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "AFC Rushden & Diamonds": {
-      "round": "First Round Proper",
-      "home": "Burton Albion",
-      "away": "AFC Rushden & Diamonds",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Pirelli Stadium",
-        "postcode": "DE13 0AR",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Cray Wanderers": {
-      "round": "First Round Proper",
-      "home": "Cray Wanderers",
-      "away": "Stockport County",
-      "date": "2026-11-08",
-      "kickoff": "14:15",
-      "venue": {
-        "ground": "Flamingo Park",
-        "postcode": "BR7 6HL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Stockport County": {
-      "round": "First Round Proper",
-      "home": "Cray Wanderers",
-      "away": "Stockport County",
-      "date": "2026-11-08",
-      "kickoff": "14:15",
-      "venue": {
-        "ground": "Flamingo Park",
-        "postcode": "BR7 6HL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Port Vale": {
-      "round": "First Round Proper",
-      "home": "Port Vale",
-      "away": "Scunthorpe United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Vale Park",
-        "postcode": "ST6 1AW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Scunthorpe United": {
-      "round": "First Round Proper",
-      "home": "Port Vale",
-      "away": "Scunthorpe United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Vale Park",
-        "postcode": "ST6 1AW",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Cheltenham Town",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Cheltenham Town": {
-      "round": "First Round Proper",
-      "home": "Cheltenham Town",
-      "away": "FC Halifax Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Completely Suzuki Stadium",
-        "postcode": "GL52 5NA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "FC Halifax Town": {
-      "round": "First Round Proper",
-      "home": "Cheltenham Town",
-      "away": "FC Halifax Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Completely Suzuki Stadium",
-        "postcode": "GL52 5NA",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Colchester United": {
-      "round": "First Round Proper",
-      "home": "Colchester United",
-      "away": "Worcester City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "JobServe Community Stadium",
-        "postcode": "CO4 5UP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Worcester City": {
-      "round": "First Round Proper",
-      "home": "Colchester United",
-      "away": "Worcester City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "JobServe Community Stadium",
-        "postcode": "CO4 5UP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Eastleigh": {
-      "round": "First Round Proper",
-      "home": "Eastleigh",
-      "away": "Shrewsbury Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Silverlake Stadium",
-        "postcode": "SO50 9HT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Shrewsbury Town": {
-      "round": "First Round Proper",
-      "home": "Eastleigh",
-      "away": "Shrewsbury Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Silverlake Stadium",
-        "postcode": "SO50 9HT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Peterborough United": {
-      "round": "First Round Proper",
-      "home": "Peterborough United",
-      "away": "Reading",
-      "date": "2026-11-07",
-      "kickoff": "20:00",
-      "venue": {
-        "ground": "Weston Homes Stadium",
-        "postcode": "PE2 8AL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Reading": {
-      "round": "First Round Proper",
-      "home": "Peterborough United",
-      "away": "Reading",
-      "date": "2026-11-07",
-      "kickoff": "20:00",
-      "venue": {
-        "ground": "Weston Homes Stadium",
-        "postcode": "PE2 8AL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Wimborne Town": {
-      "round": "First Round Proper",
-      "home": "Wimborne Town",
-      "away": "Crawley Town",
-      "date": "2026-11-08",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Wyatt Homes Stadium",
-        "postcode": "BH21 2FU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Crawley Town": {
-      "round": "First Round Proper",
-      "home": "Wimborne Town",
-      "away": "Crawley Town",
-      "date": "2026-11-08",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Wyatt Homes Stadium",
-        "postcode": "BH21 2FU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Plymouth Argyle": {
-      "round": "First Round Proper",
-      "home": "Plymouth Argyle",
-      "away": "Alvechurch",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Home Park",
-        "postcode": "PL2 3DQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Alvechurch": {
-      "round": "First Round Proper",
-      "home": "Plymouth Argyle",
-      "away": "Alvechurch",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Home Park",
-        "postcode": "PL2 3DQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Hornchurch": {
-      "round": "First Round Proper",
-      "home": "Hornchurch",
-      "away": "Blackpool",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Stadium",
-        "postcode": "RM14 2LX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Blackpool": {
-      "round": "First Round Proper",
-      "home": "Hornchurch",
-      "away": "Blackpool",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "The Stadium",
-        "postcode": "RM14 2LX",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Second Round Proper",
+      "home": "Chesterfield",
+      "away": "Cheltenham Town",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Guiseley AFC": {
-      "round": "First Round Proper",
+      "round": "Second Round Proper",
       "home": "Guiseley AFC",
-      "away": "Sutton United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Nethermoor Park",
-        "postcode": "LS20 8BT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Notts County",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Guiseley": {
-      "round": "First Round Proper",
+      "round": "Second Round Proper",
       "home": "Guiseley AFC",
-      "away": "Sutton United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Nethermoor Park",
-        "postcode": "LS20 8BT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Sutton United": {
-      "round": "First Round Proper",
-      "home": "Guiseley AFC",
-      "away": "Sutton United",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Nethermoor Park",
-        "postcode": "LS20 8BT",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Stafford Rangers": {
-      "round": "First Round Proper",
-      "home": "Stafford Rangers",
-      "away": "Grimsby Town",
-      "date": "2026-11-08",
-      "kickoff": "12:00",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Grimsby Town": {
-      "round": "First Round Proper",
-      "home": "Stafford Rangers",
-      "away": "Grimsby Town",
-      "date": "2026-11-08",
-      "kickoff": "12:00",
-      "venue": {
-        "ground": "Stan Robinson Stadium",
-        "postcode": "ST16 3BX",
-        "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
-        "verification": "clubfinder-canonical"
-      }
-    },
-    "Oxford City": {
-      "round": "First Round Proper",
-      "home": "Oxford City",
-      "away": "Leicester City",
-      "date": "2026-11-06",
-      "kickoff": "19:45",
-      "venue": {
-        "ground": "RAW Charging Stadium",
-        "postcode": "OX3 0NQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Leicester City": {
-      "round": "First Round Proper",
-      "home": "Oxford City",
-      "away": "Leicester City",
-      "date": "2026-11-06",
-      "kickoff": "19:45",
-      "venue": {
-        "ground": "RAW Charging Stadium",
-        "postcode": "OX3 0NQ",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Bradford City": {
-      "round": "First Round Proper",
-      "home": "Bradford City",
-      "away": "Marine",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "University of Bradford Stadium",
-        "postcode": "BD8 7DY",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Marine": {
-      "round": "First Round Proper",
-      "home": "Bradford City",
-      "away": "Marine",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "University of Bradford Stadium",
-        "postcode": "BD8 7DY",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "York City": {
-      "round": "First Round Proper",
-      "home": "York City",
-      "away": "Northampton Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "York LNER Community Stadium",
-        "postcode": "YO32 9AF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Northampton Town": {
-      "round": "First Round Proper",
-      "home": "York City",
-      "away": "Northampton Town",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "York LNER Community Stadium",
-        "postcode": "YO32 9AF",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Altrincham": {
-      "round": "First Round Proper",
-      "home": "Altrincham",
       "away": "Notts County",
-      "date": "2026-11-07",
-      "kickoff": "17:30",
-      "venue": {
-        "ground": "J Davidson Stadium",
-        "postcode": "WA15 8AP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Notts County": {
-      "round": "First Round Proper",
-      "home": "Altrincham",
+      "round": "Second Round Proper",
+      "home": "Guiseley AFC",
       "away": "Notts County",
-      "date": "2026-11-07",
-      "kickoff": "17:30",
-      "venue": {
-        "ground": "J Davidson Stadium",
-        "postcode": "WA15 8AP",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
-    },
-    "Boreham Wood": {
-      "round": "First Round Proper",
-      "home": "Boreham Wood",
-      "away": "Wigan Athletic",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Meadow Park",
-        "postcode": "WD6 5AL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Wigan Athletic": {
-      "round": "First Round Proper",
-      "home": "Boreham Wood",
-      "away": "Wigan Athletic",
-      "date": "2026-11-07",
+      "round": "Second Round Proper",
+      "home": "Wigan Athletic",
+      "away": "Barnsley",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Barnsley": {
+      "round": "Second Round Proper",
+      "home": "Wigan Athletic",
+      "away": "Barnsley",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Exeter City": {
+      "round": "Second Round Proper",
+      "home": "Exeter City",
+      "away": "Stevenage",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Stevenage": {
+      "round": "Second Round Proper",
+      "home": "Exeter City",
+      "away": "Stevenage",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Plymouth Parkway": {
+      "round": "Second Round Proper",
+      "home": "Plymouth Parkway or Berkhamsted",
+      "away": "Barnet",
+      "date": "2026-12-05",
       "kickoff": "15:00",
-      "venue": {
-        "ground": "Meadow Park",
-        "postcode": "WD6 5AL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "conditional": true
+    },
+    "Berkhamsted": {
+      "round": "Second Round Proper",
+      "home": "Plymouth Parkway or Berkhamsted",
+      "away": "Barnet",
+      "date": "2026-12-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "Barnet": {
+      "round": "Second Round Proper",
+      "home": "Plymouth Parkway or Berkhamsted",
+      "away": "Barnet",
+      "date": "2026-12-05",
+      "kickoff": "15:00",
+      "conditional": true
+    },
+    "York City": {
+      "round": "Second Round Proper",
+      "home": "York City",
+      "away": "Carlisle United AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Carlisle United AFC": {
-      "round": "First Round Proper",
-      "home": "Carlisle United AFC",
-      "away": "Salford City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Brunton Park",
-        "postcode": "CA1 1LL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Second Round Proper",
+      "home": "York City",
+      "away": "Carlisle United AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Carlisle United": {
-      "round": "First Round Proper",
-      "home": "Carlisle United AFC",
-      "away": "Salford City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Brunton Park",
-        "postcode": "CA1 1LL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "round": "Second Round Proper",
+      "home": "York City",
+      "away": "Carlisle United AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
-    "Salford City": {
-      "round": "First Round Proper",
-      "home": "Carlisle United AFC",
-      "away": "Salford City",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Brunton Park",
-        "postcode": "CA1 1LL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+    "Crewe Alexandra": {
+      "round": "Second Round Proper",
+      "home": "Crewe Alexandra",
+      "away": "Plymouth Argyle",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Plymouth Argyle": {
+      "round": "Second Round Proper",
+      "home": "Crewe Alexandra",
+      "away": "Plymouth Argyle",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "AFC Fylde": {
+      "round": "Second Round Proper",
+      "home": "AFC Fylde",
+      "away": "Luton Town",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Luton Town": {
+      "round": "Second Round Proper",
+      "home": "AFC Fylde",
+      "away": "Luton Town",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Barrow AFC": {
+      "round": "Second Round Proper",
+      "home": "Barrow AFC",
+      "away": "Kidderminster Harriers",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Barrow": {
+      "round": "Second Round Proper",
+      "home": "Barrow AFC",
+      "away": "Kidderminster Harriers",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Kidderminster Harriers": {
+      "round": "Second Round Proper",
+      "home": "Barrow AFC",
+      "away": "Kidderminster Harriers",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Colchester United": {
+      "round": "Second Round Proper",
+      "home": "Colchester United",
+      "away": "Mansfield Town",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Mansfield Town": {
+      "round": "Second Round Proper",
+      "home": "Colchester United",
+      "away": "Mansfield Town",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Rochdale AFC": {
+      "round": "Second Round Proper",
+      "home": "Rochdale AFC",
+      "away": "Newport County AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Rochdale": {
+      "round": "Second Round Proper",
+      "home": "Rochdale AFC",
+      "away": "Newport County AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Newport County AFC": {
+      "round": "Second Round Proper",
+      "home": "Rochdale AFC",
+      "away": "Newport County AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Newport County": {
+      "round": "Second Round Proper",
+      "home": "Rochdale AFC",
+      "away": "Newport County AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Dover Athletic": {
+      "round": "Second Round Proper",
+      "home": "Dover Athletic",
+      "away": "Leicester City",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Leicester City": {
+      "round": "Second Round Proper",
+      "home": "Dover Athletic",
+      "away": "Leicester City",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Port Vale": {
+      "round": "Second Round Proper",
+      "home": "Port Vale",
+      "away": "Leyton Orient",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Leyton Orient": {
+      "round": "Second Round Proper",
+      "home": "Port Vale",
+      "away": "Leyton Orient",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Grimsby Town": {
+      "round": "Second Round Proper",
+      "home": "Grimsby Town",
+      "away": "Oldham Athletic AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Oldham Athletic AFC": {
+      "round": "Second Round Proper",
+      "home": "Grimsby Town",
+      "away": "Oldham Athletic AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Oldham Athletic": {
+      "round": "Second Round Proper",
+      "home": "Grimsby Town",
+      "away": "Oldham Athletic AFC",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Shrewsbury Town": {
+      "round": "Second Round Proper",
+      "home": "Shrewsbury Town",
+      "away": "Burton Albion",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Burton Albion": {
+      "round": "Second Round Proper",
+      "home": "Shrewsbury Town",
+      "away": "Burton Albion",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
     "Salisbury": {
-      "round": "First Round Proper",
+      "round": "Second Round Proper",
       "home": "Salisbury",
-      "away": "Sholing",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Raymond McEnhill Stadium",
-        "postcode": "SP4 6PU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Blackpool",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     },
-    "Sholing": {
-      "round": "First Round Proper",
+    "Blackpool": {
+      "round": "Second Round Proper",
       "home": "Salisbury",
-      "away": "Sholing",
-      "date": "2026-11-07",
-      "kickoff": "15:00",
-      "venue": {
-        "ground": "Raymond McEnhill Stadium",
-        "postcode": "SP4 6PU",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      }
+      "away": "Blackpool",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Wimborne Town": {
+      "round": "Second Round Proper",
+      "home": "Wimborne Town",
+      "away": "Bradford City",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Bradford City": {
+      "round": "Second Round Proper",
+      "home": "Wimborne Town",
+      "away": "Bradford City",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Rotherham United": {
+      "round": "Second Round Proper",
+      "home": "Rotherham United",
+      "away": "Bristol Rovers",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Bristol Rovers": {
+      "round": "Second Round Proper",
+      "home": "Rotherham United",
+      "away": "Bristol Rovers",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Reading": {
+      "round": "Second Round Proper",
+      "home": "Reading",
+      "away": "Stockport County",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Stockport County": {
+      "round": "Second Round Proper",
+      "home": "Reading",
+      "away": "Stockport County",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Wycombe Wanderers": {
+      "round": "Second Round Proper",
+      "home": "Wycombe Wanderers",
+      "away": "Milton Keynes Dons",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
+    },
+    "Milton Keynes Dons": {
+      "round": "Second Round Proper",
+      "home": "Wycombe Wanderers",
+      "away": "Milton Keynes Dons",
+      "date": "2026-12-05",
+      "kickoff": "15:00"
     }
   },
   "source_url": "https://www.thefa.com/competitions/thefacup/fixtures",
-  "source_round": "First Round Proper",
-  "source_tie_count": 40,
+  "source_round": "Second Round Proper",
+  "source_tie_count": 20,
   "last_result_source_url": "https://www.thefa.com/competitions/thefacup/results",
   "last_result_round": "Preliminary Round Replay",
   "last_result": {
@@ -116256,6 +115457,528 @@
         "venue": {
           "ground": "Crabble Athletic Ground",
           "postcode": "CT17 0JB",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      }
+    ],
+    "First Round Proper": [
+      {
+        "round": "First Round Proper",
+        "home": "Dover Athletic",
+        "away": "Wealdstone",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Crabble Athletic Ground",
+          "postcode": "CT17 0JB",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Mansfield Town",
+        "away": "Macclesfield",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "One Call Stadium",
+          "postcode": "NG18 5DA",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Huddersfield Town",
+        "away": "Exeter City",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Kirklees Stadium",
+          "postcode": "HD1 6PG",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Luton Town",
+        "away": "Forest Green Rovers",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Kenilworth Road Ground",
+          "postcode": "LU4 8AW",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Bristol Rovers",
+        "away": "Cambridge United",
+        "date": "2026-11-06",
+        "kickoff": "19:30",
+        "venue": {
+          "ground": "Memorial Stadium",
+          "postcode": "BS7 0BF",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Oldham Athletic AFC",
+        "away": "Sheffield Wednesday",
+        "date": "2026-11-08",
+        "kickoff": "17:15",
+        "venue": {
+          "ground": "Boundary Park",
+          "postcode": "OL1 2PA",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Kidderminster Harriers",
+        "away": "Doncaster Rovers",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Aggborough Stadium",
+          "postcode": "DY10 1NB",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Leyton Orient",
+        "away": "Harborough Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Gaughan Group Stadium",
+          "postcode": "E10 5NF",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Accrington Stanley",
+        "away": "Wycombe Wanderers",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Crown Ground",
+          "postcode": "BB5 5BX",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Milton Keynes Dons",
+        "away": "Swindon Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Stadium MK",
+          "postcode": "MK1 1ST",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Newport County AFC",
+        "away": "Walsall",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Rodney Parade",
+          "postcode": "NP19 0UU",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Bromley",
+        "away": "Rotherham United",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Hayes Lane",
+          "postcode": "BR2 9EF",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Barnet",
+        "away": "Tranmere Rovers",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Hive Stadium",
+          "postcode": "HA8 6AG",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Fleetwood Town",
+        "away": "Rochdale AFC",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Highbury Stadium",
+          "postcode": "FY7 6TX",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Barnsley",
+        "away": "Aldershot Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Oakwell",
+          "postcode": "S71 1ET",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Plymouth Parkway",
+        "away": "Berkhamsted",
+        "date": "2026-11-09",
+        "kickoff": "19:30",
+        "venue": {
+          "ground": "Bolitho Park",
+          "postcode": "PL5 3JG",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Chesterfield",
+        "away": "Yeovil Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "SMH Group Stadium",
+          "postcode": "S41 8NZ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Gillingham",
+        "away": "Barrow AFC",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Priestfield Stadium",
+          "postcode": "ME7 4DD",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Harrogate Town AFC",
+        "away": "AFC Fylde",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Exercise Stadium",
+          "postcode": "HG2 7SA",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Crewe Alexandra",
+        "away": "AFC Wimbledon",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Mornflake Stadium",
+          "postcode": "CW2 6EB",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Oxford United",
+        "away": "Stevenage",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Kassam Stadium",
+          "postcode": "OX4 4XP",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Burton Albion",
+        "away": "AFC Rushden & Diamonds",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Pirelli Stadium",
+          "postcode": "DE13 0AR",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Cray Wanderers",
+        "away": "Stockport County",
+        "date": "2026-11-08",
+        "kickoff": "14:15",
+        "venue": {
+          "ground": "Flamingo Park",
+          "postcode": "BR7 6HL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Port Vale",
+        "away": "Scunthorpe United",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Vale Park",
+          "postcode": "ST6 1AW",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Cheltenham Town",
+        "away": "FC Halifax Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Completely Suzuki Stadium",
+          "postcode": "GL52 5NA",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Colchester United",
+        "away": "Worcester City",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "JobServe Community Stadium",
+          "postcode": "CO4 5UP",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Eastleigh",
+        "away": "Shrewsbury Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Silverlake Stadium",
+          "postcode": "SO50 9HT",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Peterborough United",
+        "away": "Reading",
+        "date": "2026-11-07",
+        "kickoff": "20:00",
+        "venue": {
+          "ground": "Weston Homes Stadium",
+          "postcode": "PE2 8AL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Wimborne Town",
+        "away": "Crawley Town",
+        "date": "2026-11-08",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Wyatt Homes Stadium",
+          "postcode": "BH21 2FU",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Plymouth Argyle",
+        "away": "Alvechurch",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Home Park",
+          "postcode": "PL2 3DQ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Hornchurch",
+        "away": "Blackpool",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "The Stadium",
+          "postcode": "RM14 2LX",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Guiseley AFC",
+        "away": "Sutton United",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Nethermoor Park",
+          "postcode": "LS20 8BT",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Stafford Rangers",
+        "away": "Grimsby Town",
+        "date": "2026-11-08",
+        "kickoff": "12:00",
+        "venue": {
+          "ground": "Stan Robinson Stadium",
+          "postcode": "ST16 3BX",
+          "source": "FCHD 2025-26 Gazetteer; independently postcode/location validated via Postcodes.io",
+          "verification": "clubfinder-canonical"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Oxford City",
+        "away": "Leicester City",
+        "date": "2026-11-06",
+        "kickoff": "19:45",
+        "venue": {
+          "ground": "RAW Charging Stadium",
+          "postcode": "OX3 0NQ",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Bradford City",
+        "away": "Marine",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "University of Bradford Stadium",
+          "postcode": "BD8 7DY",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "York City",
+        "away": "Northampton Town",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "York LNER Community Stadium",
+          "postcode": "YO32 9AF",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Altrincham",
+        "away": "Notts County",
+        "date": "2026-11-07",
+        "kickoff": "17:30",
+        "venue": {
+          "ground": "J Davidson Stadium",
+          "postcode": "WA15 8AP",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Boreham Wood",
+        "away": "Wigan Athletic",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Meadow Park",
+          "postcode": "WD6 5AL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Carlisle United AFC",
+        "away": "Salford City",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Brunton Park",
+          "postcode": "CA1 1LL",
+          "source": "https://fchd.info/maps/GAZ.htm",
+          "verification": "fchd-gazetteer"
+        }
+      },
+      {
+        "round": "First Round Proper",
+        "home": "Salisbury",
+        "away": "Sholing",
+        "date": "2026-11-07",
+        "kickoff": "15:00",
+        "venue": {
+          "ground": "Raymond McEnhill Stadium",
+          "postcode": "SP4 6PU",
           "source": "https://fchd.info/maps/GAZ.htm",
           "verification": "fchd-gazetteer"
         }

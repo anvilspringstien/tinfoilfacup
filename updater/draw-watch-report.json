@@ -1,36 +1,22 @@
 {
-  "checked_at": "2026-10-27T13:32:18.397067+00:00",
+  "checked_at": "2026-11-09T20:01:26.637416+00:00",
   "official_source": "https://www.thefa.com/competitions/thefacup/fixtures",
   "competition_id": 1,
-  "status": "active-round-refreshed",
+  "status": "published",
   "current_round": "First Round Proper",
   "target_round": "Second Round Proper",
-  "target_ties_detected": 0,
+  "target_ties_detected": 20,
   "pages_checked": 6,
   "pagination_stop": "empty-page",
   "published": true,
-  "active_round_official_ties": 40,
+  "active_round_official_ties": 0,
   "active_round_expected_ties": 40,
-  "active_round_source_complete": true,
-  "target_round_source_complete": false,
+  "active_round_source_complete": false,
+  "target_round_source_complete": true,
   "replay_phase_verified": false,
   "active_round_conditional_resolutions": [],
-  "active_round_metadata_updates": [
-    {
-      "fixture": "Bristol Rovers v Cambridge United",
-      "changes": [
-        {
-          "field": "date",
-          "from": "2026-11-07",
-          "to": "2026-11-06"
-        },
-        {
-          "field": "kickoff",
-          "from": "15:00",
-          "to": "19:30"
-        }
-      ]
-    }
-  ],
-  "active_round_unresolved_diagnostics": []
+  "active_round_metadata_updates": [],
+  "active_round_unresolved_diagnostics": [],
+  "archived_outgoing_round": "First Round Proper",
+  "archived_outgoing_ties": 40
 }
