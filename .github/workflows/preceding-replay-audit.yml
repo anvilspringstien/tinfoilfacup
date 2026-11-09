@@ -35,7 +35,15 @@ jobs:
         run: node tests/test_beta_conditional_draw_alias.js
       - name: Audit actual preceding-round source without publication
         run: |
-          python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.json || test -s /tmp/preceding-replay-audit.json
+          round="$(python -c 'import json; print(json.load(open("competition.json"))["source_round"])')"
+          case "$round" in
+            'Second Round Proper'|'Third Round Proper'|'Fourth Round Proper'|'Fifth Round Proper'|'Quarter Final'|'Semi Final'|'Final')
+              echo "Preceding qualifying-round source audit is outside its season window: $round"
+              exit 0
+              ;;
+          esac
+          python updater/audit_preceding_round_replays.py --fetch > /tmp/preceding-replay-audit.pending
+          mv /tmp/preceding-replay-audit.pending /tmp/preceding-replay-audit.json
           python - <<'PY'
           import json
           with open('/tmp/preceding-replay-audit.json') as f:
