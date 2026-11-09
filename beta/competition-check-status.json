@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-11-08T21:21:19.023719Z",
+  "monitor_ran_at": "2026-11-09T01:12:00.643378Z",
   "state": "unverified",
   "last_checked_at": null,
   "results": "success",
@@ -8,21 +8,21 @@
   "diagnostics": {
     "results": {
       "reason": "verified",
-      "run_id": 42516328903,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42516328903",
+      "run_id": 42536483002,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42536483002",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-11-08T19:47:44Z"
+      "updated_at": "2026-11-08T23:46:23Z"
     },
     "draw": {
       "reason": "not_successful",
-      "run_id": 42524720233,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42524720233",
+      "run_id": 42544207639,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42544207639",
       "event": "schedule",
       "status": "completed",
       "conclusion": "failure",
-      "updated_at": "2026-11-08T21:20:58Z"
+      "updated_at": "2026-11-09T01:11:39Z"
     }
   },
   "scheduled": {
@@ -33,21 +33,21 @@
     "diagnostics": {
       "results": {
         "reason": "verified",
-        "run_id": 42516328903,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42516328903",
+        "run_id": 42536483002,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42536483002",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-11-08T19:47:44Z"
+        "updated_at": "2026-11-08T23:46:23Z"
       },
       "draw": {
         "reason": "not_successful",
-        "run_id": 42524720233,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42524720233",
+        "run_id": 42544207639,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/42544207639",
         "event": "schedule",
         "status": "completed",
         "conclusion": "failure",
-        "updated_at": "2026-11-08T21:20:58Z"
+        "updated_at": "2026-11-09T01:11:39Z"
       }
     }
   }
