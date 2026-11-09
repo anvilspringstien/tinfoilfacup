@@ -1,23 +1,27 @@
 # Tin Foil FA Cup — Competition Health
 
-Last checked: **09/11/2026, 17:34:04 GMT**
+Last checked: **09/11/2026, 20:02:15 GMT**
 
 ## Chronology coverage
 
 - Preliminary Round ties known: **137**
 - Preliminary Round results/replays recorded: **162**
 - First Qualifying Round ties preserved: **112 / 112**
-- Active round: **First Round Proper**
-- Active-round ties: **40**
-- Active-round conditional/replay slots: **0**
+- Active round: **Second Round Proper**
+- Active-round ties: **20**
+- Active-round conditional/replay slots: **1**
 
 ## Fixture health
 
-- 🟢 Played fixtures with results: **176**
+- 🟢 Played fixtures with results: **137**
 - 🟡 Recently played / grace period: **0**
 - 🔴 Results requiring confirmation: **0**
-- ⚪ Upcoming / incomplete-date fixtures: **1**
+- ⚪ Upcoming / incomplete-date fixtures: **20**
 
 ## 🟢 Competition chronology healthy
 
-Preliminary and First Qualifying chronology is preserved, the active **First Round Proper** draw has canonical coverage, and no played fixture is overdue a result.
+Preliminary and First Qualifying chronology is preserved, the active **Second Round Proper** draw has canonical coverage, and no played fixture is overdue a result.
+
+## Conditional active-round slots
+
+1 unique active tie(s) still depend on unresolved earlier ties/replays. These are draw placeholders, not confirmed results.
