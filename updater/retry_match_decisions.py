@@ -1,5 +1,7 @@
-"""Retry durable fixture holds after the active draw has advanced."""
+"""Recover unfinished fixtures and durable holds after the draw has advanced."""
 import copy
+from collections import defaultdict
+from datetime import datetime, timezone
 
 from match_decisions import classify_batch, retain_holds
 from round_state_engine import base_round, pair_key, is_draw
@@ -59,6 +61,71 @@ def retry_archived_holds(data, fetch, live_html='', visited_rounds=()):
                        'recovered': len(recovered), 'source_failures': failures}
 
 
+def scan_unfinished_archived_ties(data, fetch, live_html=''):
+    """Check due originals absent from chronology, including ties never held."""
+    import auto_round_results as scan
+    import auto_draw as draw
+
+    today = datetime.now(timezone.utc).date().isoformat()
+    current = base_round(data.get('source_round'))
+    history_by_day = defaultdict(list)
+    for result in scan.history_rows(data):
+        history_by_day[(result.get('round'), result.get('date'))].append(result)
+    completed = {(*key, pair_key(row)) for key, rows in history_by_day.items() for row in rows}
+    holds_by_day = defaultdict(list)
+    for hold in data.get('pending_match_decisions', []):
+        fixture = hold['fixture']
+        holds_by_day[(fixture.get('round'), hold['date'])].append(fixture)
+
+    candidate = copy.deepcopy(data)
+    failures, recovered = [], []
+    checked = 0
+    current_index = draw.ROUND_ORDER.index(current)
+    for rnd in draw.ROUND_ORDER[:current_index]:
+        pending = []
+        for fixture in draw.fixture_values((data.get('round_fixtures') or {}).get(rnd) or {}):
+            day = fixture.get('date')
+            if (not day or day > today or fixture.get('round') != rnd
+                    or draw.is_conditional_fixture(fixture)):
+                continue
+            key = (rnd, day)
+            if (*key, pair_key(fixture)) in completed or any(
+                   scan.match_fixture([fixture], row['home'], row['away'])
+                   for row in history_by_day[key] + holds_by_day[key]):
+                continue
+            pending.append(fixture)
+        if not pending:
+            continue
+        checked += len(pending)
+        url = scan.fwp_round_url(rnd)
+        try:
+            raw = fetch(url)
+            scan.validate_fwp_round_page(raw, rnd, url)
+            observations = scan.dedupe_observations(
+                scan.parse_fwp_observations(raw, pending, url)
+                + scan.parse_fwp_observations(live_html, pending, scan.FWP_LIVE_URL))
+        except (OSError, ValueError, SystemExit) as exc:
+            failures.append({'round': rnd, 'url': url, 'reason': str(exc)})
+            continue
+        observations = [item for item in observations
+                        if item['observation'].get('date') == item['fixture']['date']]
+        decisions = classify_batch(observations, scan.history_rows(candidate))
+        for decision in decisions:
+            outcome = decision.get('outcome') or {}
+            if outcome.get('kind') == 'result':
+                result = outcome['result']
+                if scan.merge_result(candidate, result):
+                    recovered.append(result)
+            elif outcome.get('kind') == 'event':
+                scan.merge_event(candidate, outcome['event'])
+        retain_holds(candidate, decisions)
+
+    candidate = resolve_verified_slots(candidate, recovered)
+    return candidate, {'changed': candidate != data, 'checked': checked,
+                       'recovered': len(recovered), 'source_failures': failures}
+
+
+
 def resolve_verified_slots(data, results):
     """Resolve only the immediate next round and a unique two-club slot."""
     import auto_draw as draw
@@ -86,7 +153,7 @@ def resolve_verified_slots(data, results):
             fixture, side, options = matches[0]
             winners = [o for o in options if draw.compatible(o, result['winner'])]
             if len(winners) != 1:
-                raise ValueError('recovered penalty winner is ambiguous in current slot')
+                raise ValueError('recovered winner is ambiguous in current slot')
             fixture[side] = winners[0]
             if not draw.is_conditional_fixture(fixture):
                 fixture.pop('conditional', None)
