@@ -6,7 +6,13 @@ const {literalRange}=require('./club_website_bulk_promote');
 const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'beta/clubfinder-beta.html'),'utf8');
 const eligible=literalRange(html,'ELIGIBLE','[',']').value,websites=literalRange(html,'CLUB_WEBSITES','{','}').value;
 const competition=JSON.parse(fs.readFileSync(path.join(root,'competition.json'),'utf8'));
-const active=new Set();for(const f of Object.values(competition.fixtures||{}))for(const n of [f.home,f.away])if(typeof n==='string'&&!/\s\/\s|\b(tbc|tbd|winner)\b/i.test(n))active.add(n);
+const active=new Set();
+for(const fixture of Object.values(competition.fixtures||{})){
+ for(const side of [fixture.home,fixture.away]){
+  if(typeof side!=='string'||/\s\/\s|\b(tbc|tbd|winner)\b/i.test(side))continue;
+  for(const club of side.split(/\s+or\s+/i).map(name=>name.trim()).filter(Boolean))active.add(club);
+ }
+}
 const evidence=new Map(),reviewedAliases=[];for(const file of fs.readdirSync(__dirname).filter(n=>/^club_website_verified_batch_.*\.json$/.test(n))){
  const ledger=JSON.parse(fs.readFileSync(path.join(__dirname,file),'utf8'));for(const row of ledger.verified||[])if(row.status==='verified_official_club_site')reviewedAliases.push([row.club,...(row.aliases||[])]);for(const row of ledger.verified||[])for(const name of [row.club,...(row.aliases||[])])if(row.status==='verified_official_club_site')evidence.set(name,{url:row.url,evidence_url:row.evidence_url,verified_on:row.verified_on||ledger.verified_on,ledger:file});
 }
