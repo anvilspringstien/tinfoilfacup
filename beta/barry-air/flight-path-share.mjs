@@ -2,7 +2,7 @@
 // recover the precise Home position from the exported image.
 export function publicFlightStops(stops) {
   return stops.map(({lat, lon, short, next}, index) => index === 0
-    ? {lat: Math.round(lat * 2) / 2, lon: Math.round(lon * 2) / 2, short: 'Home area', approximate: true}
+    ? {lat: Number.isFinite(lat) ? Math.round(lat * 2) / 2 : lat, lon: Number.isFinite(lon) ? Math.round(lon * 2) / 2 : lon, short: 'Home area', approximate: true}
     : {lat, lon, short, next});
 }
 
@@ -75,4 +75,41 @@ export async function flightPathImage(svg) {
   } finally {
     URL.revokeObjectURL(url);
   }
+}
+
+const svgNS='http://www.w3.org/2000/svg';
+function node(tag,attrs={},text){const e=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,String(v));if(text!==undefined)e.textContent=text;return e;}
+function projected(d){const k=(377.1-233.4)/(-1.557261+2.736535),merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))*180/Math.PI;return {x:377.1+(d.lon+1.557261)*k,y:175.6-(merc(d.lat)-merc(54.617311))*k};}
+export function drawRoute(svg,stops,flights){
+ svg.querySelectorAll('.route-line,[data-stop]').forEach(e=>e.remove());const outer=svg.querySelector('.map-content');const fit=node('g');while(outer.firstChild)fit.append(outer.firstChild);outer.append(fit);
+ const located=stops.map((d,i)=>({...d,i})).filter(d=>Number.isFinite(d.lat)&&Number.isFinite(d.lon));if(!located.length)throw Error('Awaiting ground locations');const points=located.map(d=>({...d,...projected(d)}));const base=points.find(d=>d.i===0);let xs=points.map(p=>p.x),ys=points.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;const scale=Math.min(440/Math.max(60,Math.max(...xs)-Math.min(...xs)),340/Math.max(60,Math.max(...ys)-Math.min(...ys)));fit.setAttribute('transform',`translate(${300-cx*scale} ${250-cy*scale}) scale(${scale})`);const stopsByIndex=new Map(points.map(p=>[p.i,{x:300+(p.x-cx)*scale,y:250+(p.y-cy)*scale}]));svg.setAttribute('tabindex','0');svg.setAttribute('aria-describedby','map-hint');
+ // Trace the Campaign from ground to ground; mileage still counts home round trips.
+ let previous=base;for(const flight of flights){const destination=points.find(p=>p.i===flight.stop);if(previous&&destination&&previous.i!==destination.i){fit.append(node('path',{class:'route-line'+(flight.status==='NEXT FLIGHT'?' future-line':''),'data-from':previous.i,'data-to':destination.i,d:`M${previous.x},${previous.y}L${destination.x},${destination.y}`}));}previous=destination;}
+ for(const p of points){const g=node('g',{'data-stop':p.i,class:'map-stop',tabindex:0,role:'button','aria-label':p.short,transform:`translate(${p.x} ${p.y})`});g.append(node('circle',{class:'hit',r:22/scale}),node('circle',{class:'halo',r:15/scale}));
+  g.append(node('circle',p.approximate?{class:'home-area',r:30/scale}:{class:'point'+(p.next?' future-point':''),r:6/scale}));const label=node('text',{class:'stop-label',x:(p.x>cx?-12:12)/scale,y:(p.i%2?-12:18)/scale,'text-anchor':p.x>cx?'end':'start','font-size':12/scale},p.short);if(p.i===0&&!p.approximate&&points.some(q=>q.i!==0&&Math.hypot(q.x-p.x,q.y-p.y)*scale<28))label.setAttribute('visibility','hidden');label.style.fontSize=12/scale+'px';label.style.strokeWidth=3/scale+'px';g.append(label);fit.append(g);}
+ return {located,stopsByIndex};
+}
+
+export function saveBootRoomFlightPath(model) {
+  const stops=publicFlightStops(model.stops).map(stop=>
+    Number.isFinite(stop.lat)&&Number.isFinite(stop.lon) ? stop : null
+  );
+  const flights=model.flights.map(({stop,status})=>({stop,status}));
+  const key='tffc.barry.boot-flight.v1';
+  if(!flights.some(flight=>stops[flight.stop])){
+    localStorage.removeItem(key);
+    return;
+  }
+  localStorage.setItem(key,JSON.stringify({
+    identity:model.identity, callSign:'TF2AC '+model.digits, route:{stops,flights}
+  }));
+}
+
+export async function bootRoomFlightImage({stops,flights}) {
+  const response=await fetch(new URL('assets/route-map.svg',import.meta.url));
+  if(!response.ok)throw new Error('Map unavailable');
+  const svg=new DOMParser().parseFromString(await response.text(),'image/svg+xml').documentElement;
+  if(svg.localName!=='svg')throw new Error('Map unavailable');
+  drawRoute(svg,stops,flights);
+  return flightPathImage(svg);
 }

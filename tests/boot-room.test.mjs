@@ -140,3 +140,60 @@ test('public walk-ins accept fresh browsers and more than ten guests during an o
  f.room.admin({type:'doors',open:false,next:'Tomorrow'});
  assert.throws(()=>f.room.walkIn({...claim,callSign:'TF2AC 01099'},'closed',true),e=>e.status===403);
 });
+
+test('Flight Paths are optional per post, rounded at Home, and follow room visibility and removal',()=>{
+ const f=fixture();
+ const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ f.room.walkIn(claim,'session');
+ const flightPath={stops:[
+  {lat:51.6332,lon:-.5559,short:'Private Home',postcode:'HP7 0EJ'},
+  {lat:52.4,lon:-1.3,short:'Example Town',next:true}
+ ],flights:[{stop:1,status:'NEXT FLIGHT'}]};
+ const plain=f.room.action('session',{type:'message',text:'Ordinary post'});
+ assert.throws(()=>f.room.action('session',{type:'message',text:'Bad attachment',
+  flightPath:{...flightPath,stops:[flightPath.stops[0],{...flightPath.stops[1],short:'CV12 8NN'}]}
+ }),/unavailable/);
+ const attached=f.room.action('session',{type:'message',text:'Look at this route',flightPath});
+ const [first,second]=f.room.snapshot('session').messages;
+ assert.equal(first.hasFlightPath,undefined);
+ assert.equal(second.hasFlightPath,true);
+ assert.equal(second.flightPath,undefined);
+ assert.throws(()=>f.room.flightPath(attached.id,'',true),{status:401});
+ assert.throws(()=>f.room.flightPath(plain.id,'session',true),{status:404});
+ const saved=f.room.flightPath(attached.id,'session',true);
+ assert.deepEqual(saved.stops[0],{lat:51.5,lon:-.5,short:'Home area',approximate:true});
+ assert.deepEqual(saved.stops[1],flightPath.stops[1]);
+ assert.equal(JSON.stringify(saved).includes('HP7 0EJ'),false);
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ assert.equal(f.room.readClosed().messages[1].hasFlightPath,true);
+ assert.deepEqual(f.room.flightPath(attached.id,'',true),saved);
+ f.room.admin({type:'delete',id:attached.id});
+ assert.equal(f.room.snapshot('session').messages[1].hasFlightPath,undefined);
+ assert.throws(()=>f.room.flightPath(attached.id,'',true),{status:404});
+});
+
+test('only the author can delete their post, even after the room closes',()=>{
+ const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
+ const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ f.room.walkIn(claim,'session');
+ const flightPath={stops:[null,{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ const {id}=f.room.action('session',{type:'message',text:'Changed my mind',flightPath});
+ const {id:reply}=f.room.action(other,{type:'message',text:'Still a reply',replyTo:id});
+ f.room.action(other,{type:'heart',id,liked:true});
+ f.room.action(other,{type:'report',id});
+ assert.throws(()=>f.room.action(other,{type:'delete-own',id}),{status:404});
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ assert.deepEqual(f.room.action('session',{type:'delete-own',id}),{id});
+ assert.deepEqual(f.room.action('session',{type:'delete-own',id}),{id});
+ const [removed,remaining]=f.room.snapshot(other).messages;
+ assert.equal(removed.text,'Message deleted by its author');
+ assert.equal(removed.hearts,0);
+ assert.equal(removed.reported,false);
+ assert.equal(removed.hasFlightPath,undefined);
+ assert.equal(remaining.id,reply);
+ assert.equal(remaining.replyTo,id);
+ assert.deepEqual(f.room.readClosed().messages.map(m=>m.id),[reply]);
+ assert.throws(()=>f.room.flightPath(id,other,true),{status:404});
+});
