@@ -578,7 +578,7 @@ def main():
 
     # Persisted fixture identities outlive draw promotion. Retry their original
     # round's source even when the current source can no longer contain them.
-    from retry_match_decisions import retry_archived_holds
+    from retry_match_decisions import retry_archived_holds, scan_unfinished_archived_ties
     def capture_retry_source(url):
         raw = fetch(url)
         capture = json.loads(SOURCE_CAPTURE.read_text(encoding='utf-8'))
@@ -589,6 +589,8 @@ def main():
                (archived_report.get('audit') or {}).get('archived_round')}
     data, retry_report = retry_archived_holds(data, capture_retry_source, live_raw, visited)
     changed = changed or retry_report['changed']
+    data, unfinished_report = scan_unfinished_archived_ties(data, capture_retry_source, live_raw)
+    changed = changed or unfinished_report['changed']
 
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
@@ -604,6 +606,7 @@ def main():
         "blocked": blocked,
         "pending_match_decisions": data.get('pending_match_decisions', []),
         "retried_match_decisions": retry_report,
+        "unfinished_archived_ties": unfinished_report,
         "publish": bool(args.publish),
         "competition_changed": bool(changed),
     }
@@ -621,6 +624,7 @@ def main():
     print("Unresolved events classified:", report["classified_events"])
     print("Blocked chronology conflicts:", len(blocked))
     print("Archived replay collection:", archived_report["status"])
+    print("Unfinished archived ties:", unfinished_report)
     for held in archived_report.get("held", []):
         print("::warning::Archived replay remains unresolved: " + str(held))
     for held in data.get('pending_match_decisions', []):
