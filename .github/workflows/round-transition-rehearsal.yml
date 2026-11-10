@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        state: [qualifying, proper-conditional, proper-resolved, proper-resolved-away, second-proper, third-proper]
+        state: [qualifying, proper-conditional, proper-resolved, proper-resolved-away, second-proper, third-proper, final-completed]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
