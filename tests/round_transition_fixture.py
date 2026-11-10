@@ -21,7 +21,7 @@ import auto_round_results as results
 import scheduled_archived_replays as archived
 
 STATES = ('qualifying', 'proper-conditional', 'proper-resolved', 'proper-resolved-away',
-          'second-proper', 'third-proper')
+          'second-proper', 'third-proper', 'final-completed')
 
 
 def frozen(name):
@@ -95,8 +95,8 @@ def resolve_replays(data, home_wins=True):
     return candidate
 
 
-def future_round(data, target, date):
-    """Synthetic decisive results and later draw; never claims future evidence."""
+def complete_round(data):
+    """Record synthetic decisive results in a disposable rehearsal state."""
     data = copy.deepcopy(data)
     winners = []
     for fixture in draw.fixture_values(data['fixtures']):
@@ -105,6 +105,12 @@ def future_round(data, target, date):
                       decision='', source_url='https://example.test/synthetic-results')
         results.merge_result(data, result)
         winners.append(fixture['home'])
+    return data, winners
+
+
+def future_round(data, target, date):
+    """Synthetic decisive results and later draw; never claims future evidence."""
+    data, winners = complete_round(data)
     count = draw.EXPECTED_ROUND_TIES[target]
     # Third Proper introduces new clubs; synthetic entrants are unmistakable.
     winners += [f'Synthetic New Entrant {i:02d}' for i in range(2 * count - len(winners))]
@@ -166,4 +172,19 @@ def states(through):
         return output
     third = future_round(second, 'Third Round Proper', '2027-01-09')
     output['third-proper'] = third
+    if through == 'third-proper':
+        return output
+    state = third
+    for target, date in (
+        ('Fourth Round Proper', '2027-02-13'), ('Fifth Round Proper', '2027-03-06'),
+        ('Quarter Final', '2027-03-20'), ('Semi Final', '2027-04-17'), ('Final', '2027-05-15'),
+    ):
+        state = future_round(state, target, date)
+    finished, winners = complete_round(state)
+    assert len(winners) == 1 and finished['source_round'] == 'Final'
+    final = [row for row in results.history_rows(finished) if row.get('round') == 'Final']
+    assert len(final) == 1 and final[0]['winner'] == winners[0]
+    unchanged, terminal = import_draw(finished, [])
+    assert unchanged == finished and terminal['status'] == 'complete' and not terminal['published']
+    output['final-completed'] = finished
     return output
