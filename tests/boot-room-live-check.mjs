@@ -46,6 +46,9 @@ try{
  await admin({type:'suspend',id:a.id});await wait(()=>wa.readyState===WebSocket.CLOSED,'suspended socket closed');assert.equal((await api('/api/state',undefined,{cookie:a.cookie})).status,401);
  await admin({type:'doors',open:false,next:'Tomorrow'});await wait(()=>wb.events.at(-1).open===false,'closure broadcast');
  const closedMessage=(await api('/api/state',undefined,{cookie:b.cookie})).data.messages.find(x=>x.text==='Reply from B');wb.send(JSON.stringify({type:'report',id:closedMessage.id}));await wait(async()=>((await admin({type:'status'})).data.reports.some(r=>r.message===closedMessage.id)),'closed-room report recorded');assert.equal((await api('/api/state',undefined,{cookie:b.cookie})).data.messages.find(x=>x.id===closedMessage.id).reported,true);
+ wb.send(JSON.stringify({type:'delete-own',id:closedMessage.id}));
+ await wait(()=>wb.events.some(event=>event.type==='ack'&&event.action==='delete-own'),'closed-room author deletion');
+ assert.equal((await api('/api/state',undefined,{cookie:b.cookie})).data.messages.find(x=>x.id===closedMessage.id).deleted,true);
  wb.send(JSON.stringify({type:'message',text:'After closing'}));await wait(()=>wb.events.at(-1).type==='error','post-close denial');assert(!((await api('/api/state',undefined,{cookie:b.cookie})).data.messages.some(x=>x.text==='After closing')));assert.equal((await api('/api/logout',{},{cookie:b.cookie})).status,200);assert.equal((await api('/api/state',undefined,{cookie:b.cookie})).status,401);
  console.log('PASS: two separate WebSocket clients, invitation replay, origin/auth boundaries, messages, replies, hearts, reload persistence, removal, suspension and closing.');
 }finally{for(const s of sockets)s.close();await admin({type:'doors',open:false,next:'Opening time to be announced'});}
