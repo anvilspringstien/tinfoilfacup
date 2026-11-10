@@ -48,6 +48,9 @@ export async function flightPathImage(svg) {
     ctx.fillStyle = '#dce5de';
     ctx.fillRect(0, 46, 600, 520);
     ctx.drawImage(map, 0, 46, 600, 520);
+    ctx.fillStyle = '#084c61';
+    ctx.font = 'bold 18px Arial, sans-serif';
+    ctx.fillText('tinfoilfacup.com', 18, 548);
     ctx.fillStyle = '#f2eddd';
     ctx.fillRect(0, 566, 600, 54);
     ctx.fillStyle = '#335950';
@@ -62,9 +65,10 @@ export async function flightPathImage(svg) {
       ctx.stroke();
       ctx.fillText(label, x + 29, 591);
     }
-    ctx.fillText('Home area is approximate', 211, 591);
-    ctx.font = '10px Arial, sans-serif';
-    ctx.fillText('tinfoilfacup.com · Map: Natural Earth', 18, 609);
+    ctx.font = '12px Arial, sans-serif';
+    ctx.fillText('Map: Natural Earth', 18, 609);
+    ctx.textAlign = 'right';
+    ctx.fillText('Home area is approximate', 582, 609);
     return await new Promise((resolve, reject) => {
       canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('PNG encoding failed')), 'image/png');
     });
