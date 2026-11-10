@@ -1,5 +1,5 @@
 import './footer.mjs?v=challenges-refresh-fix-20261105';
-import {boardingPassImage} from './boarding-pass-share.mjs';
+import {boardingPassImage} from './boarding-pass-share.mjs?v=ticket2';
 import {buildCampaign,dateLabel,JOURNEY_KEY,identityKey,roundCode} from './campaign-model.mjs';
 const $=s=>document.querySelector(s),svgNS='http://www.w3.org/2000/svg';let model,selected=0,zoom=1,mapPromise;
 let camera={x:300,y:260},cameraStops=new Map(),pan=null,suppressMapClickUntil=0;
@@ -54,12 +54,7 @@ $('#share-boarding-pass').addEventListener('click',async event=>{
  button.disabled=true;
  const campaign=model;
  try{
-  const blob=await boardingPassImage({
-   passenger:$('#pigeon-name').textContent,callSign:$('#call-sign').textContent,
-   miles:campaign.miles.display,campaign:campaign.origin,flight:$('#flight-code').textContent,
-   nextFlight:$('#next-fixture').textContent,date:$('#next-date').textContent,
-   ground:campaign.upcoming?.venue?.ground
-  });
+  const blob=await boardingPassImage($('.boarding-pass'),campaign.upcoming?.venue?.ground);
   if(model!==campaign||identityKey(readSaved()||{})!==campaign.identity)return;
   shareFile=new File([blob],shareFilename,{type:'image/png'});
   shareURL=URL.createObjectURL(blob);
