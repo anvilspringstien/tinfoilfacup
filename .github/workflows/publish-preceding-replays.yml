@@ -59,7 +59,21 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
       - name: Guard partial promotion and independent penalty evidence
         run: python -m unittest discover -s tests -p 'test_guard_archived_replay_promotion.py' -v
+      - name: Check whether the live qualifying replay rehearsal applies
+        id: replay_window
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, sys
+          sys.path.insert(0, 'updater')
+          from auto_draw import ROUND_ORDER
+          from audit_preceding_round_replays import ROUNDS
+          from round_state_engine import base_round
+          current = base_round(json.load(open('competition.json'))['source_round'])
+          outside_window = current in ROUND_ORDER and ROUND_ORDER.index(current) > ROUND_ORDER.index(ROUNDS[-1])
+          print(f"outside_window={str(outside_window).lower()}")
+          PY
       - name: Produce read-only source-backed promotion readiness report
+        if: github.event_name != 'pull_request' || steps.replay_window.outputs.outside_window != 'true'
         run: |
           python updater/audit_preceding_round_replays.py --fetch > /tmp/archived-replay-audit.json
           python - <<'PY'
@@ -90,6 +104,7 @@ jobs:
           python -m json.tool /tmp/replay-promotion-readiness.json
       - name: Stage real preceding-round replay candidates in memory
         id: stage
+        if: github.event_name != 'pull_request' || steps.replay_window.outputs.outside_window != 'true'
         run: |
           set -euo pipefail
           python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
