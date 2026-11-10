@@ -131,10 +131,11 @@ class DecisionPolicyTests(unittest.TestCase):
 
 
 class AutomaticRecoveryTests(unittest.TestCase):
-    def run_results(self, data, raw, live=''):
+    def run_results(self, data, raw, live='', archived=None):
         rnd = data['source_round']
         urls = {scan.fwp_round_url(rnd): raw, scan.FWP_LIVE_URL: live,
                 'https://www.thefa.com/competitions/thefacup/results': ''}
+        urls.update(archived or {})
         with tempfile.TemporaryDirectory() as tmp:
             dp,rp,cp = [Path(tmp)/name for name in ('data.json','report.json','capture.json')]
             dp.write_text(json.dumps(data))
@@ -188,6 +189,35 @@ class AutomaticRecoveryTests(unittest.TestCase):
         self.assertEqual(fixed['fixtures']['Home Town']['home'],'Home Town')
         self.assertEqual(fixed['round_fixtures'],before['round_fixtures'])
         self.assertEqual(promoted,before)
+
+    def test_unfinished_archived_original_recovers_after_next_draw(self):
+        original = dict(fixture(), date='2020-11-09')
+        current = 'Second Round Proper'
+        slot = dict(round=current, home='Home Town or Away City', away='League Club',
+                    date='2020-12-05', kickoff='15:00', conditional=True)
+        state = dict(source_round=current, fixtures=draw.fixture_map([slot]),
+                     round_fixtures={'First Round Proper': [original]}, results={}, result_history={})
+        current_page = page(current, '')
+        aet = row('Home Town', 2, 1, 'Away City').replace('<td>FT</td>', '<td>FT (AET)</td>')
+        for bad_page in (page(current, aet, 'Monday 9 November 2020'),
+                         page('First Round Proper', aet, 'Tuesday 10 November 2020')):
+            with self.subTest(bad_page=bad_page):
+                unchanged, report = self.run_results(state, current_page, archived={SOURCE: bad_page})
+                self.assertEqual(unchanged, state)
+                self.assertEqual(report['unfinished_archived_ties']['recovered'], 0)
+
+        source = page('First Round Proper', aet, 'Monday 9 November 2020')
+        fixed, report = self.run_results(state, current_page, archived={SOURCE: source})
+        self.assertEqual(report['unfinished_archived_ties']['recovered'], 1)
+        self.assertEqual(fixed['results']['Home Town']['decision'], 'extra-time')
+        self.assertEqual(fixed['results']['Away City']['winner'], 'Home Town')
+        self.assertEqual(fixed['fixtures']['Home Town'], {
+            **{k: v for k, v in slot.items() if k != 'conditional'}, 'home': 'Home Town'})
+        self.assertEqual(fixed['round_fixtures'], state['round_fixtures'])
+        self.assertEqual(fixed['source_round'], current)
+        again, report = self.run_results(fixed, current_page)
+        self.assertEqual(again, fixed)
+        self.assertEqual(report['unfinished_archived_ties']['checked'], 0)
 
     def test_archived_source_failure_preserves_hold(self):
         source = page('First Round Proper',row('Home Town',1,1,'Away City'))
