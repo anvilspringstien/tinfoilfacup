@@ -89,6 +89,16 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     assert.equal(route.futureLegs,futureLegs,'sharing must preserve upcoming legs, including a return to the same ground');
     assert.notEqual(route.home,exactHome,'export must use rounded coordinates before fitting the map');
     assert.notEqual(route.camera,camera,'export must show the whole route independently of live zoom');
+    const bootRoomImage=await p.evaluate(async()=>{
+      const {route}=JSON.parse(localStorage.getItem('tffc.barry.boot-flight.v1'));
+      const {bootRoomFlightImage}=await import('/beta/barry-air/flight-path-share.mjs?v=3');
+      const image=await bootRoomFlightImage(route);
+      return {type:image.type,bytes:image.size,route};
+    });
+    assert.equal(bootRoomImage.type,'image/png');
+    assert.ok(bootRoomImage.bytes>0);
+    assert.equal(bootRoomImage.route.stops[0].short,'Home area');
+    assert.ok(!JSON.stringify(bootRoomImage.route).includes(saved.postcode));
     assert.ok(!route.text.includes(saved.postcode));
     await preview.locator('form button').click();
     assert.equal(await map.locator('.map-content').getAttribute('transform'),camera);
