@@ -161,3 +161,25 @@ test('a checked-in Flight Path is opt-in for each post and appears beside its pi
  assert.deepEqual(sender(attached),['Checky','View Flight Path']);
  assert.deepEqual(sender(plain),['Checky']);
 });
+
+test('only own posts offer Delete and it requires confirmation, including after closure',async()=>{
+ const b=browser();
+ await b.settle();
+ const ws=b.sockets[0];
+ const own={id:'mine',person:'a',name:'Checky',text:'My post',at:Date.now(),hearts:0};
+ b.setState({open:false,messages:[own,{...own,id:'theirs',person:'b',name:'Bert'}]});
+ b.snapshot(ws);
+ const actions=row=>row.children[1].children.at(-1).children;
+ const [mine,theirs]=b.$('messages').children;
+ const remove=actions(mine).find(node=>node.textContent==='Delete');
+ assert.equal(remove.disabled,false);
+ assert.equal(actions(theirs).some(node=>node.textContent==='Delete'),false);
+ remove.onclick();
+ assert.equal(b.$('delete-own-dialog').open,true);
+ assert.equal(ws.sent,undefined);
+ b.$('delete-own-cancel').onclick();
+ assert.equal(ws.sent,undefined);
+ remove.onclick();
+ b.$('delete-own-confirm').onclick();
+ assert.deepEqual(ws.sent,{type:'delete-own',id:'mine'});
+});
