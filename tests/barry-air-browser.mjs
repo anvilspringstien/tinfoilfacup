@@ -27,16 +27,29 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
         return fillText.call(this,value,...args);
       };
     });
+    const {passWidth,tearY}=await p.locator('.boarding-pass').evaluate(pass=>{
+      const bounds=pass.getBoundingClientRect();
+      const stub=pass.querySelector('.boarding-stub').getBoundingClientRect();
+      return {passWidth:pass.offsetWidth,tearY:Math.round((stub.top-bounds.top)*pass.offsetWidth/bounds.width*3)};
+    });
     await sharePass.click();
     const preview=p.getByRole('dialog',{name:'Share the Magic'});
     await preview.waitFor();
-    assert.equal(await preview.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth;}),960);
+    assert.equal(await preview.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth;}),passWidth*3);
     const save=preview.getByRole('link',{name:'Save image'});
     assert.equal(await save.evaluate(async link=>(await fetch(link.href)).headers.get('content-type')),'image/png');
     const fields=await p.evaluate(()=>window.boardingShareText);
-    assert.ok(fields.includes('Sky Pie'));
+    for(const value of ['BARRY AIR','BOARDING PASS','Sky Pie','DEPARTURE CODE','F0O T1E',"CHECKED IN · YOU'RE FLYING BARRY AIR - VERMIN FREE SINCE 2022"])assert.ok(fields.includes(value),value);
     assert.ok(!fields.join(' ').includes(saved.postcode),'shared PNG must omit the departure postcode');
     assert.equal(await p.locator('#departure-postcode').textContent(),saved.postcode);
+    assert.deepEqual(await preview.locator('img').evaluate((img,tearY)=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=img.naturalWidth;
+      canvas.height=img.naturalHeight;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0);
+      return [[0,0],[50,8],[2,tearY],[canvas.width-3,tearY]].map(([x,y])=>Array.from(ctx.getImageData(x,y,1,1).data));
+    },tearY),[[0,0,0,0],[8,76,97,255],[0,0,0,0],[0,0,0,0]],'PNG must retain the rounded corner, teal header and both tear indents');
     await preview.locator('form button').click();
     await checkIn.uncheck();
     await p.reload();
