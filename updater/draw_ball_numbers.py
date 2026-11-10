@@ -1,11 +1,12 @@
 """Parse a published FA Cup ball list separately from the draw pairings."""
 
 import re
-from datetime import date
+from datetime import date, datetime
 from html import unescape
 from html.parser import HTMLParser
 from urllib.error import URLError
 from urllib.parse import urljoin, urlsplit
+from zoneinfo import ZoneInfo
 
 
 class BallLists(HTMLParser):
@@ -125,7 +126,7 @@ def verify_article_context(html, source_url, target, fixtures):
     stamp = re.match(r"/news/(\d{4})/([a-z]{3})/(\d{2})/", path, re.I)
     if not stamp:
         raise ValueError("Official article has no dated FA news path")
-    from datetime import datetime
+    from datetime import date, datetimetime
 
     published = datetime.strptime("-".join(stamp.groups()), "%Y-%b-%d").date()
 
@@ -171,6 +172,32 @@ def draw_schedule(html):
         "date_text": next(iter(dates)) if len(dates) == 1 else None,
         "time_text": next(iter(times)) if len(times) == 1 else None,
     }
+
+
+def draw_schedule_at(schedule, season):
+    """Normalize an unambiguous official UK date and time for the countdown."""
+    day = schedule.get("date_text")
+    time = schedule.get("time_text")
+    match = re.fullmatch(
+        r"(?:approximately |around )?(\d{1,2})(?:[.:](\d{2}))?\s*(am|pm)\s+(GMT|BST)",
+        time or "", re.I,
+    )
+    if not day or not match or not re.fullmatch(r"20\d{2}-\d{2}", season or ""):
+        return None
+    hour, minute, meridiem, zone = match.groups()
+    try:
+        start_year = int(season[:4])
+        calendar_day = day.split(" ", 1)[1]
+        nominal = datetime.strptime(f"{calendar_day} {start_year}", "%d %B %Y")
+        if nominal.month < 7:
+            nominal = datetime.strptime(f"{calendar_day} {start_year + 1}", "%d %B %Y")
+        if nominal.strftime("%A").casefold() != day.split(" ", 1)[0].casefold():
+            return None
+        clock = datetime.strptime(f"{hour}:{minute or '00'} {meridiem}", "%I:%M %p")
+        uk = nominal.replace(hour=clock.hour, minute=clock.minute, tzinfo=ZoneInfo("Europe/London"))
+    except (IndexError, ValueError):
+        return None
+    return uk.isoformat() if uk.tzname() == zone.upper() else None
 
 
 def classify_ball_slots(matched, fixtures, history, normalize):
@@ -229,7 +256,7 @@ def discover_article_urls(fetch, saved_url=None):
             if official_fa_url(url) and re.fullmatch(r"/news/\d{4}/[a-z]{3}/\d{2}/[^/]*draw[^/]*", parts.path, re.I):
                 urls.add(urljoin("https://www.thefa.com/", parts.path))
     def publication_date(url):
-        from datetime import datetime
+        from datetime import date, datetimetime
 
         try:
             return datetime.strptime(urlsplit(url).path[6:17], "%Y/%b/%d")
@@ -285,9 +312,11 @@ def main():
             if args.source_url:
                 raise
             continue
+        schedule = draw_schedule(article)
         preview = {
             "season": season, "outgoing_round": current, "target_round": target,
-            "source_url": url, "draw_schedule": draw_schedule(article),
+            "source_url": url, "draw_schedule": schedule,
+            "at": draw_schedule_at(schedule, season),
             "entries": verified,
         }
         break
