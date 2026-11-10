@@ -43,5 +43,26 @@ for(const path of (process.argv.length>2?process.argv.slice(2):['clubfinder.html
   fixture={...fixture,round:proper[i]};
   assert.equal(ctx.nextRoundInfo(club).knownFixture,null);
  }
+ if(path==='clubfinder.html'){
+  result={round:'First Round Proper'};
+  fixture=null;
+  const preview={outgoing_round:'First Round Proper',target_round:'Second Round Proper',
+   at:'2026-11-09T18:45:00+00:00',draw_schedule:{date_text:'Monday 9 November',time_text:'approximately 6.45pm GMT'},
+   entries:[{number:19,clubs:['AFC Fylde FC']}]};
+  ctx.LIVE_COMPETITION_DATA={source_round:'First Round Proper',draw_preview:preview};
+  now=Date.parse('2026-11-09T18:40:00Z');
+  assert.match(ctx.nextProgressHtml(club,ctx.nextRoundInfo(club)),/Monday 9 November.*approximately 6.45pm GMT.*ball 19/);
+  assert.doesNotMatch(ctx.nextProgressHtml(club,ctx.nextRoundInfo(club)),/awaiting confirmed draw/);
+  now=Date.parse('2026-11-09T18:45:00Z');
+  assert.match(ctx.nextProgressHtml(club,ctx.nextRoundInfo(club)),/awaiting confirmed draw.*ball 19/);
+  fixture={home:'AFC Fylde',away:'Luton Town',round:'Second Round Proper',date:'2026-12-05'};
+  assert.doesNotMatch(ctx.nextProgressHtml(club,ctx.nextRoundInfo(club)),/ball 19|awaiting confirmed draw/);
+  fixture=null;
+  ctx.LIVE_COMPETITION_DATA.source_round='Second Round Proper';
+  assert.equal(ctx.nextRoundInfo(club).drawPreview,null);
+  ctx.LIVE_COMPETITION_DATA.source_round='First Round Proper';
+  preview.target_round='Third Round Proper';
+  assert.equal(ctx.nextRoundInfo(club).drawPreview,null);
+ }
  console.log(path+': announcement, London time, ball alias, elapsed draw and fixture precedence PASS');
 }
