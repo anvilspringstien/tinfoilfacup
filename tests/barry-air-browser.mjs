@@ -64,6 +64,7 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     const exactHome=await map.locator('[data-stop="0"]').getAttribute('transform');
     await p.getByRole('button',{name:'Zoom map in',exact:true}).click();
     const camera=await map.locator('.map-content').getAttribute('transform');
+    const futureLegs=await map.locator('.route-line.future-line').count();
     await p.evaluate(()=>{
       const create=URL.createObjectURL;
       URL.createObjectURL=function(blob){
@@ -79,10 +80,13 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
       const text=await window.sharedRoute;
       const svg=new DOMParser().parseFromString(text,'image/svg+xml');
       return {text,home:svg.querySelector('[data-stop="0"]').getAttribute('transform'),
-        broad:!!svg.querySelector('[data-stop="0"] .home-area'),future:!!svg.querySelector('.route-line.future-line'),
+        broad:!!svg.querySelector('[data-stop="0"] .home-area'),futureLegs:svg.querySelectorAll('.route-line.future-line').length,
+        nextGround:!!svg.querySelector('.future-point'),
         camera:svg.querySelector('.map-content').getAttribute('transform')};
     });
-    assert.ok(route.broad&&route.future);
+    assert.ok(route.broad,'the shared map must show a broad Home area');
+    assert.ok(route.nextGround,'the shared map must mark the next ground');
+    assert.equal(route.futureLegs,futureLegs,'sharing must preserve upcoming legs, including a return to the same ground');
     assert.notEqual(route.home,exactHome,'export must use rounded coordinates before fitting the map');
     assert.notEqual(route.camera,camera,'export must show the whole route independently of live zoom');
     assert.ok(!route.text.includes(saved.postcode));
