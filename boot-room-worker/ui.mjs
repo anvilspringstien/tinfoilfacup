@@ -73,14 +73,15 @@ const frameMode=roomPrefix?new URLSearchParams(location.search).get('frame'):nul
 const frameQuery=['shed','campaign'].includes(frameMode)?'frame='+frameMode:'';
 const campaignHome=frameMode==='shed'?'/beta/phone-frame-shed.html?view=campaign&bootRoomFrame=1':roomPrefix?'/beta/phone-frame.html?view=campaign':'https://tinfoilfacup.com/?view=campaign';
 if(roomPrefix)for(const link of document.querySelectorAll('.campaign-home'))link.href=campaignHome;
-if(frameQuery)for(const link of document.querySelectorAll('.entrance-back'))link.href=roomPrefix+'/?'+frameQuery;
 let campaign=null;
 let campaignFragment='';
 if((roomPath==='/'||roomPath==='/chat')&&location.hash?.startsWith('#campaign=')){
- const raw=location.hash.slice('#campaign='.length);
+ const fragment=location.hash;
+ const raw=fragment.slice('#campaign='.length);
  if(roomPath==='/chat')history.replaceState(null,'',location.pathname+location.search);
- try{campaign=JSON.parse(decodeURIComponent(raw));if(campaign?.callSign&&roomPath==='/')campaignFragment=location.hash;}catch{}
+ try{campaign=JSON.parse(decodeURIComponent(raw));if(campaign?.callSign)campaignFragment=fragment;}catch{}
 }
+if(frameQuery||campaignFragment)for(const link of document.querySelectorAll('.entrance-back'))link.href=roomPrefix+'/'+(frameQuery?'?'+frameQuery:'')+campaignFragment;
 function identityText(person){
  const c=person.campaign;
  if(!c)return '';
