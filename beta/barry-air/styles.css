@@ -332,7 +332,8 @@ body{background-attachment:scroll}
 
 @media(max-width:699px) and (max-height:600px){.landing-frame .boarding-pass{margin-top:4px}}
 
-.share-image-button{display:grid;place-items:center;min-width:44px;height:36px;margin:-4px 0;padding:0;border:1px solid #8c9c8c;border-radius:6px;background:#f2eddd;color:#084c61;cursor:pointer}
+.share-image-button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:transparent;color:#084c61;cursor:pointer}
+#share-boarding-pass{margin:-8px 0}
 .share-image-button[hidden],#boarding-share-native[hidden]{display:none}
 #boarding-share{position:fixed;background:#fffef6;border-color:#ddceaa;overflow:auto}
 #boarding-share-heading{padding-right:35px}
@@ -342,8 +343,12 @@ body{background-attachment:scroll}
 .boarding-share-actions a{display:inline-grid;place-items:center;min-height:36px;padding:0 14px;border:1px solid #084c61;border-radius:10px;color:#084c61;text-decoration:none}
 #boarding-share-status{margin:8px 0 0}
 
-#share-flight-path{position:absolute;right:5px;bottom:1px;width:44px;height:44px;margin:0;border:0;background:transparent}
+#share-flight-path{position:absolute;right:5px;bottom:1px}
 .map-wrap:has(#share-flight-path:not([hidden])) .map-stamp{right:52px;pointer-events:none}
 @container(max-width:335px){
  .map-wrap:has(#share-flight-path:not([hidden])) .map-key{flex-direction:column;gap:3px;bottom:8px}
 }
+
+.map-attribution{margin-top:12px;color:#aaa79e;font:10px/1.4 monospace}
+.map-attribution a{text-underline-offset:2px}
+.cabin-frame footer{justify-content:center;text-align:center}
