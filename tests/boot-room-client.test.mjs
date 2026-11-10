@@ -5,9 +5,9 @@ import {script} from '../boot-room-worker/ui.mjs';
 function browser(pathname='/chat',campaign=null,{search='',responses=[]}={}){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
- const document={querySelectorAll(){return [];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
+ const document={querySelectorAll(selector){return [this.getElementById(selector)];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
- const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
+ const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){context.location.hash='';}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
@@ -108,4 +108,25 @@ test('the Shed chalkboard keeps the shared frame when continuing to chat',async(
  const b=browser('/beta/boot-room/',campaign,{search:'?frame=shed'});
  await b.settle();
  assert.equal(b.$('.entrance-enter').href,'/beta/boot-room/chat?enter=1&frame=shed#campaign='+encodeURIComponent(JSON.stringify(campaign)));
+});
+
+
+test('Entrance returns Campaign visitors to the same Chalk Board and closed chat',async()=>{
+ const campaign={callSign:'TF2AC 01001',name:'Test Pigeon'};
+ const fragment='#campaign='+encodeURIComponent(JSON.stringify(campaign));
+ for(const search of ['', '?frame=campaign', '?frame=shed']){
+  const prefix='/beta/boot-room';
+  const chatSearch='?enter=1'+(search?'&'+search.slice(1):'');
+  const chat=browser(prefix+'/chat',campaign,{search:chatSearch});
+  chat.setState({open:false,walkIn:false});
+  await chat.settle();
+  assert.equal(chat.$('.entrance-back').href,prefix+'/'+search+fragment);
+  const entrance=browser(prefix+'/',campaign,{search});
+  entrance.setState({open:false,walkIn:false});
+  await entrance.settle();
+  assert.equal(entrance.$('.entrance-enter').textContent,'Continue to the Boot Room →');
+  assert.equal(entrance.$('.entrance-enter').href,prefix+'/chat'+chatSearch+fragment);
+  assert.equal(chat.$('composer-wrap').hidden,true);
+  assert.deepEqual(chat.posts,[]);
+ }
 });
