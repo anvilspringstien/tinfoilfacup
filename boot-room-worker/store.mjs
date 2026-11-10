@@ -1,3 +1,4 @@
+import {validateFlightPath} from './flight-path.mjs';
 export class RoomError extends Error {constructor(message,status=400){super(message);this.status=status;}}
 export const DAY=86400000;
 export const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
@@ -9,7 +10,7 @@ export class RoomStore {
  constructor(storage,clock=Date.now){this.storage=storage;this.clock=clock;storage.sql.exec('CREATE TABLE IF NOT EXISTS room (id INTEGER PRIMARY KEY CHECK(id=1), data TEXT NOT NULL)');storage.sql.exec('INSERT OR IGNORE INTO room VALUES (1,?)',JSON.stringify({open:false,next:'Opening time to be announced',until:0,people:[],messages:[],reports:[],day:'',actions:0,joins:0}));}
  run(change){return this.storage.transactionSync(()=>{const s=JSON.parse(this.storage.sql.exec('SELECT data FROM room WHERE id=1').toArray()[0].data);const n=this.clock();s.messages=s.messages.filter(m=>m.at>n-7*DAY);s.reports=s.reports.filter(r=>r.at>n-7*DAY);s.people=s.people.filter(p=>p.expires>n);if(s.until<=n)s.open=false;const day=new Date(n).toISOString().slice(0,10);if(s.day!==day){s.day=day;s.actions=0;s.joins=0;}const result=change(s,n);this.storage.sql.exec('UPDATE room SET data=? WHERE id=1',JSON.stringify(s));return result;});}
  person(s,hash,n){const p=s.people.find(p=>p.session===hash&&p.expires>n&&!p.suspended);if(!p||(p.callSign&&s.people.some(other=>other.callSign===p.callSign&&other.suspended)))throw new RoomError('Invitation or session expired',401);return p;}
- view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p)},messages:s.messages.map(m=>({...m,hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
+ view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p)},messages:s.messages.map(({flightPath,...m})=>({...m,...(flightPath?{hasFlightPath:true}:{}),hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
  invite(name,hash,callSign,moderator=false){if(callSign&&!validCallSign(callSign))throw new RoomError('Use a Call Sign like TF2AC 01922');if(moderator===true&&!callSign)throw new RoomError('A moderator invitation needs a Call Sign');if(!(name=clean(name,40)))throw new RoomError('Use a pigeon name of 1–40 characters');return this.run((s,n)=>{if(callSign&&s.people.some(p=>p.callSign===callSign))throw new RoomError('That Call Sign already has a place',409);if(s.people.filter(p=>!p.walkIn).length>=10)throw new RoomError('Ten test places are already reserved',409);const p={id:crypto.randomUUID(),name,callSign:callSign||null,moderator:moderator===true,invite:hash,session:null,expires:n+7*DAY,suspended:false,last:0,burst:0};s.people.push(p);return {id:p.id,name,expires:p.expires};});}
  redeem(invite,session,claim){return this.run((s,n)=>{const p=s.people.find(p=>p.invite===invite&&!p.suspended&&p.expires>n);if(!p)throw new RoomError('Invitation is invalid, used or expired',401);if(p.callSign){
    const custodian=clean(claim?.custodian,100),fixture=clean(claim?.fixture,200);
@@ -35,13 +36,24 @@ export class RoomStore {
  snapshot(hash){return this.run((s,n)=>this.view(s,this.person(s,hash,n),n));}
  readClosed(){return this.run((s,n)=>{
   if(s.open&&s.until>n)throw new RoomError('The room is open. Join from My Campaign.',409);
-  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length}));
+  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts,flightPath})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length,...(flightPath?{hasFlightPath:true}:{})}));
   return {open:false,next:s.next,until:s.until,you:null,messages};
+ });}
+ flightPath(id,hash,publicRead){return this.run((s,n)=>{
+  if(s.open||!publicRead)this.person(s,hash,n);
+  const post=s.messages.find(m=>m.id===id&&!m.deleted&&m.flightPath);
+  if(!post)throw new RoomError('This Flight Path is no longer available.',404);
+  return post.flightPath;
  });}
  doors(){return this.run((s,n)=>({open:s.open&&s.until>n,next:s.next,until:s.until,...(s.open&&s.walkIn?{walkIn:true}:{}),...(s.chalkboard?{chalkboard:s.chalkboard}:{})}));}
  join(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);if(s.joins>=200)throw new RoomError('Test connection allowance reached for today',429);s.joins++;return {id:p.id,hash};});}
  action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(a?.type!=='report'&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;
- if(a.type==='message'){const text=clean(a.text,500);if(!text)throw new RoomError('Messages must contain 1–500 characters');const parent=a.replyTo?s.messages.find(m=>m.id===a.replyTo&&!m.deleted):null;if(a.replyTo&&!parent)throw new RoomError('Reply target is no longer available');const m={id:crypto.randomUUID(),person:p.id,name:p.name,...identity(p),text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
+ if(a.type==='message'){const text=clean(a.text,500);if(!text)throw new RoomError('Messages must contain 1–500 characters');const parent=a.replyTo?s.messages.find(m=>m.id===a.replyTo&&!m.deleted):null;if(a.replyTo&&!parent)throw new RoomError('Reply target is no longer available');let flightPath;
+ if(a.flightPath!==undefined){
+  if(!p.campaign)throw new RoomError('Open the Boot Room from your Campaign to attach a Flight Path.');
+  try{flightPath=validateFlightPath(a.flightPath);}catch(error){throw new RoomError(error.message);}
+ }
+ const m={id:crypto.randomUUID(),person:p.id,name:p.name,...identity(p),text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
  else if(a.type==='heart'){const m=s.messages.find(m=>m.id===a.id&&!m.deleted);if(!m||typeof a.liked!=='boolean')throw new RoomError('Message unavailable');m.hearts=m.hearts.filter(id=>id!==p.id);if(a.liked)m.hearts.push(p.id);result={id:m.id};}
  else if(a.type==='report'){
   const m=s.messages.find(m=>m.id===a.id&&!m.deleted);
@@ -56,7 +68,7 @@ export class RoomStore {
  }
  else throw new RoomError('Unknown action');p.burst++;s.actions++;return result;});}
  admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||typeof a.next!=='string'||a.next.length>100)throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;s.next=a.next;}
- else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);m.text='Message removed by the landlord';m.deleted=true;m.hearts=[];s.reports=s.reports.filter(r=>r.message!==m.id);}
+ else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);m.text='Message removed by the landlord';m.deleted=true;delete m.flightPath;m.hearts=[];s.reports=s.reports.filter(r=>r.message!==m.id);}
  else if(a.type==='dismiss-reports'){
   s.reports=s.reports.filter(r=>r.message!==a.id);
  }
