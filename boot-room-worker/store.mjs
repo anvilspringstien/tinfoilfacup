@@ -6,6 +6,13 @@ export async function digest(value){return Array.from(new Uint8Array(await crypt
 const clean=(value,max)=>typeof value==='string'&&value.trim().length>0&&value.trim().length<=max&&!/[\u0000-\u0008\u000b-\u001f\u007f]/.test(value)?value.trim():null;
 const validCallSign=value=>typeof value==='string'&&/^TF2AC [0-9]{5}$/.test(value);
 const identity=p=>p.campaign?{campaign:p.campaign,moderator:p.moderator===true}:{};
+function removeMessage(state,message,text){
+ message.text=text;
+ message.deleted=true;
+ delete message.flightPath;
+ message.hearts=[];
+ state.reports=state.reports.filter(report=>report.message!==message.id);
+}
 export class RoomStore {
  constructor(storage,clock=Date.now){this.storage=storage;this.clock=clock;storage.sql.exec('CREATE TABLE IF NOT EXISTS room (id INTEGER PRIMARY KEY CHECK(id=1), data TEXT NOT NULL)');storage.sql.exec('INSERT OR IGNORE INTO room VALUES (1,?)',JSON.stringify({open:false,next:'Opening time to be announced',until:0,people:[],messages:[],reports:[],day:'',actions:0,joins:0}));}
  run(change){return this.storage.transactionSync(()=>{const s=JSON.parse(this.storage.sql.exec('SELECT data FROM room WHERE id=1').toArray()[0].data);const n=this.clock();s.messages=s.messages.filter(m=>m.at>n-7*DAY);s.reports=s.reports.filter(r=>r.at>n-7*DAY);s.people=s.people.filter(p=>p.expires>n);if(s.until<=n)s.open=false;const day=new Date(n).toISOString().slice(0,10);if(s.day!==day){s.day=day;s.actions=0;s.joins=0;}const result=change(s,n);this.storage.sql.exec('UPDATE room SET data=? WHERE id=1',JSON.stringify(s));return result;});}
@@ -47,7 +54,7 @@ export class RoomStore {
  });}
  doors(){return this.run((s,n)=>({open:s.open&&s.until>n,next:s.next,until:s.until,...(s.open&&s.walkIn?{walkIn:true}:{}),...(s.chalkboard?{chalkboard:s.chalkboard}:{})}));}
  join(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);if(s.joins>=200)throw new RoomError('Test connection allowance reached for today',429);s.joins++;return {id:p.id,hash};});}
- action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(a?.type!=='report'&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;
+ action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(!['report','delete-own'].includes(a?.type)&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;
  if(a.type==='message'){const text=clean(a.text,500);if(!text)throw new RoomError('Messages must contain 1–500 characters');const parent=a.replyTo?s.messages.find(m=>m.id===a.replyTo&&!m.deleted):null;if(a.replyTo&&!parent)throw new RoomError('Reply target is no longer available');let flightPath;
  if(a.flightPath!==undefined){
   if(!p.campaign)throw new RoomError('Open the Boot Room from your Campaign to attach a Flight Path.');
@@ -55,6 +62,12 @@ export class RoomStore {
  }
  const m={id:crypto.randomUUID(),person:p.id,name:p.name,...identity(p),text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
  else if(a.type==='heart'){const m=s.messages.find(m=>m.id===a.id&&!m.deleted);if(!m||typeof a.liked!=='boolean')throw new RoomError('Message unavailable');m.hearts=m.hearts.filter(id=>id!==p.id);if(a.liked)m.hearts.push(p.id);result={id:m.id};}
+ else if(a.type==='delete-own'){
+  const m=s.messages.find(m=>m.id===a.id&&m.person===p.id);
+  if(!m)throw new RoomError('Message unavailable',404);
+  if(!m.deleted)removeMessage(s,m,'Message deleted by its author');
+  result={id:m.id};
+ }
  else if(a.type==='report'){
   const m=s.messages.find(m=>m.id===a.id&&!m.deleted);
   if(!m)throw new RoomError('Message unavailable');
@@ -68,7 +81,7 @@ export class RoomStore {
  }
  else throw new RoomError('Unknown action');p.burst++;s.actions++;return result;});}
  admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||typeof a.next!=='string'||a.next.length>100)throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;s.next=a.next;}
- else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);m.text='Message removed by the landlord';m.deleted=true;delete m.flightPath;m.hearts=[];s.reports=s.reports.filter(r=>r.message!==m.id);}
+ else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);removeMessage(s,m,'Message removed by the landlord');}
  else if(a.type==='dismiss-reports'){
   s.reports=s.reports.filter(r=>r.message!==a.id);
  }
