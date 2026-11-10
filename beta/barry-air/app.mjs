@@ -1,11 +1,10 @@
 import './footer.mjs?v=challenges-refresh-fix-20261105';
-import {flightPathImage,publicFlightStops} from './flight-path-share.mjs?v=2';
+import {drawRoute,flightPathImage,publicFlightStops,saveBootRoomFlightPath} from './flight-path-share.mjs?v=3';
 import {boardingPassImage} from './boarding-pass-share.mjs?v=ticket2';
 import {buildCampaign,dateLabel,JOURNEY_KEY,identityKey,roundCode} from './campaign-model.mjs';
-const $=s=>document.querySelector(s),svgNS='http://www.w3.org/2000/svg';let model,selected=0,zoom=1,mapPromise,mapTemplate;
+const $=s=>document.querySelector(s);let model,selected=0,zoom=1,mapPromise,mapTemplate;
 let camera={x:300,y:260},cameraStops=new Map(),pan=null,suppressMapClickUntil=0;
 async function flightFetch(url,options={}){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);try{return await fetch(url,{...options,signal:controller.signal});}finally{clearTimeout(timer);}}
-function node(tag,attrs={},text){const e=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,String(v));if(text!==undefined)e.textContent=text;return e;}
 function text(selector,value){$(selector).textContent=value;}
 function unavailable(message){$('.field').classList.remove('data-pending');$('.field').classList.add('data-unavailable');$('.field').setAttribute('aria-busy','false');text('#campaign-status',message);$('#campaign-status').hidden=false;$('#retry-flight').hidden=false;}
 function readSaved(){try{return JSON.parse(localStorage.getItem(JOURNEY_KEY)||'null');}catch{return null;}}
@@ -31,7 +30,7 @@ function showShareButtons(show){
 function unlockCampaignShare(){
  shareIdentity=model.identity;
  showShareButtons(true);
- try{localStorage.setItem(sharePrefix+shareIdentity,'1');}catch{}
+ try{localStorage.setItem(sharePrefix+shareIdentity,'1');saveBootRoomFlightPath(model);}catch{}
 }
 function restoreCampaignShare(){
  showShareButtons(false);
@@ -105,7 +104,6 @@ $('#name-form').addEventListener('submit',e=>{e.preventDefault();const saved=rea
 document.addEventListener('click',e=>{const b=e.target.closest('[data-stop]');if(b)choose(Number(b.dataset.stop),b.dataset.flight===undefined?null:model.flights[Number(b.dataset.flight)]);});document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.map-stop')){e.preventDefault();choose(Number(e.target.dataset.stop));}});
 $('#view-ground').addEventListener('click',()=>{const target=$('#ground-detail');target.focus({preventScroll:true});target.scrollIntoView({behavior:'auto',block:'center'});});
 $('.landing-nav a[href="#flight-path"]').addEventListener('click',event=>{event.preventDefault();if(!model)return;choose(model.nextStop??model.lastLanded);const target=$('#flight-path'),frame=target.closest('.field');target.focus({preventScroll:true});if(getComputedStyle(frame).overflowY==='auto'){const scale=frame.getBoundingClientRect().width/frame.offsetWidth;const desired=frame.scrollTop+(target.getBoundingClientRect().top-frame.getBoundingClientRect().top)/scale-21;const shortfall=Math.max(0,desired-(frame.scrollHeight-frame.clientHeight));if(shortfall>0)frame.style.paddingBottom=(parseFloat(getComputedStyle(frame).paddingBottom)+Math.ceil(shortfall))+'px';}target.scrollIntoView({behavior:'auto',block:'start'});});
-function projected(d){const k=(377.1-233.4)/(-1.557261+2.736535),merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))*180/Math.PI;return {x:377.1+(d.lon+1.557261)*k,y:175.6-(merc(d.lat)-merc(54.617311))*k};}
 async function loadMap(){if(!model)return;if(mapPromise)return mapPromise;mapPromise=(async()=>{try{const r=await flightFetch('assets/route-map.svg');if(!r.ok)throw Error('Map unavailable');const doc=new DOMParser().parseFromString(await r.text(),'image/svg+xml'),svg=doc.documentElement;if(svg.tagName.toLowerCase()!=='svg')throw Error('Invalid map');mapTemplate=svg.cloneNode(true);
  svg.setAttribute('aria-label','Your Tin Foil FA Cup flight path');
  const {located,stopsByIndex}=drawRoute(svg,model.stops,model.flights);
@@ -113,15 +111,6 @@ async function loadMap(){if(!model)return;if(mapPromise)return mapPromise;mapPro
  $('#map-host').replaceChildren(document.importNode(svg,true));choose(selected);
  if(located.length<model.stops.length){$('.map-stamp').textContent='Some ground locations await confirmation';}
  }catch{const p=document.createElement('p');p.className='map-loading';p.textContent='The map is awaiting location details. Your flight board and ground details are still here.';$('#map-host').replaceChildren(p);}})();return mapPromise;}
-function drawRoute(svg,stops,flights){
- svg.querySelectorAll('.route-line,[data-stop]').forEach(e=>e.remove());const outer=svg.querySelector('.map-content');const fit=node('g');while(outer.firstChild)fit.append(outer.firstChild);outer.append(fit);
- const located=stops.map((d,i)=>({...d,i})).filter(d=>Number.isFinite(d.lat)&&Number.isFinite(d.lon));if(!located.length)throw Error('Awaiting ground locations');const points=located.map(d=>({...d,...projected(d)}));const base=points.find(d=>d.i===0);let xs=points.map(p=>p.x),ys=points.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;const scale=Math.min(440/Math.max(60,Math.max(...xs)-Math.min(...xs)),340/Math.max(60,Math.max(...ys)-Math.min(...ys)));fit.setAttribute('transform',`translate(${300-cx*scale} ${250-cy*scale}) scale(${scale})`);const stopsByIndex=new Map(points.map(p=>[p.i,{x:300+(p.x-cx)*scale,y:250+(p.y-cy)*scale}]));svg.setAttribute('tabindex','0');svg.setAttribute('aria-describedby','map-hint');
- // Trace the Campaign from ground to ground; mileage still counts home round trips.
- let previous=base;for(const flight of flights){const destination=points.find(p=>p.i===flight.stop);if(previous&&destination&&previous.i!==destination.i){fit.append(node('path',{class:'route-line'+(flight.status==='NEXT FLIGHT'?' future-line':''),'data-from':previous.i,'data-to':destination.i,d:`M${previous.x},${previous.y}L${destination.x},${destination.y}`}));}previous=destination;}
- for(const p of points){const g=node('g',{'data-stop':p.i,class:'map-stop',tabindex:0,role:'button','aria-label':p.short,transform:`translate(${p.x} ${p.y})`});g.append(node('circle',{class:'hit',r:22/scale}),node('circle',{class:'halo',r:15/scale}));
-  g.append(node('circle',p.approximate?{class:'home-area',r:30/scale}:{class:'point'+(p.next?' future-point':''),r:6/scale}));const label=node('text',{class:'stop-label',x:(p.x>cx?-12:12)/scale,y:(p.i%2?-12:18)/scale,'text-anchor':p.x>cx?'end':'start','font-size':12/scale},p.short);if(p.i===0&&!p.approximate&&points.some(q=>q.i!==0&&Math.hypot(q.x-p.x,q.y-p.y)*scale<28))label.setAttribute('visibility','hidden');label.style.fontSize=12/scale+'px';label.style.strokeWidth=3/scale+'px';g.append(label);fit.append(g);}
- return {located,stopsByIndex};
-}
 function paintMapCamera(){
  const layer=$('#map-host .map-content');if(!layer)return;
  camera.x=Math.max(0,Math.min(600,camera.x));camera.y=Math.max(0,Math.min(520,camera.y));
