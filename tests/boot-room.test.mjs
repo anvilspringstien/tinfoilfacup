@@ -172,3 +172,28 @@ test('Flight Paths are optional per post, rounded at Home, and follow room visib
  assert.equal(f.room.snapshot('session').messages[1].hasFlightPath,undefined);
  assert.throws(()=>f.room.flightPath(attached.id,'',true),{status:404});
 });
+
+test('only the author can delete their post, even after the room closes',()=>{
+ const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
+ const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ f.room.walkIn(claim,'session');
+ const flightPath={stops:[null,{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ const {id}=f.room.action('session',{type:'message',text:'Changed my mind',flightPath});
+ const {id:reply}=f.room.action(other,{type:'message',text:'Still a reply',replyTo:id});
+ f.room.action(other,{type:'heart',id,liked:true});
+ f.room.action(other,{type:'report',id});
+ assert.throws(()=>f.room.action(other,{type:'delete-own',id}),{status:404});
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ assert.deepEqual(f.room.action('session',{type:'delete-own',id}),{id});
+ assert.deepEqual(f.room.action('session',{type:'delete-own',id}),{id});
+ const [removed,remaining]=f.room.snapshot(other).messages;
+ assert.equal(removed.text,'Message deleted by its author');
+ assert.equal(removed.hearts,0);
+ assert.equal(removed.reported,false);
+ assert.equal(removed.hasFlightPath,undefined);
+ assert.equal(remaining.id,reply);
+ assert.equal(remaining.replyTo,id);
+ assert.deepEqual(f.room.readClosed().messages.map(m=>m.id),[reply]);
+ assert.throws(()=>f.room.flightPath(id,other,true),{status:404});
+});
