@@ -1,5 +1,5 @@
 import './footer.mjs?v=challenges-refresh-fix-20261105';
-import {flightPathImage,publicFlightStops} from './flight-path-share.mjs';
+import {flightPathImage,publicFlightStops} from './flight-path-share.mjs?v=2';
 import {boardingPassImage} from './boarding-pass-share.mjs?v=ticket2';
 import {buildCampaign,dateLabel,JOURNEY_KEY,identityKey,roundCode} from './campaign-model.mjs';
 const $=s=>document.querySelector(s),svgNS='http://www.w3.org/2000/svg';let model,selected=0,zoom=1,mapPromise,mapTemplate;
