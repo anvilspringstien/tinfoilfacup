@@ -2,12 +2,12 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {script} from '../boot-room-worker/ui.mjs';
-function browser(pathname='/chat',campaign=null,{search='',responses=[]}={}){
+function browser(pathname='/chat',campaign=null,{search='',responses=[],storage={}}={}){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
  const document={querySelectorAll(selector){return [this.getElementById(selector)];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
- const context={document,window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){context.location.hash='';}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
+ const context={document,localStorage:{getItem:key=>storage[key]??null},window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){context.location.hash='';}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
@@ -129,4 +129,35 @@ test('Entrance returns Campaign visitors to the same Chalk Board and closed chat
   assert.equal(chat.$('composer-wrap').hidden,true);
   assert.deepEqual(chat.posts,[]);
  }
+});
+
+test('a checked-in Flight Path is opt-in for each post and appears beside its pigeon',async()=>{
+ const campaign={callSign:'TF2AC 01001',name:'Checky'};
+ const saved={originName:'Example Town',postcode:'HP7 0EJ',searchNumber:1001};
+ const route={stops:[{lat:51.5,lon:-.5,short:'Home area',approximate:true},{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ const storage={
+  tinFoilFACupJourney_v7:JSON.stringify(saved),
+  'tffc.barry.boot-flight.v1':JSON.stringify({callSign:campaign.callSign,identity:'Example Town|HP7 0EJ|1001|',route})
+ };
+ const b=browser('/chat',null,{storage});
+ b.setState({you:{id:'a',name:'Checky',campaign}});
+ await b.settle();
+ const ws=b.sockets[0];b.snapshot(ws);
+ assert.equal(b.$('attach-flight-row').hidden,false);
+ b.$('text').value='Hello';
+ b.$('composer').onsubmit({preventDefault(){}});
+ assert.equal(ws.sent.flightPath,undefined);
+ b.$('attach-flight').checked=true;
+ b.$('composer').onsubmit({preventDefault(){}});
+ assert.deepEqual(ws.sent.flightPath,route);
+ assert.equal(JSON.stringify(ws.sent).includes(saved.postcode),false);
+ ws.message({type:'ack',action:'message'});
+ assert.equal(b.$('attach-flight').checked,false);
+ const message={id:'m1',person:'a',name:'Checky',text:'Hello',at:Date.now(),hearts:0,hasFlightPath:true};
+ b.setState({messages:[message,{...message,id:'m2',hasFlightPath:false}]});
+ b.snapshot(ws);
+ const [attached,plain]=b.$('messages').children;
+ const sender=row=>row.children[1].children[0].children.map(node=>node.textContent);
+ assert.deepEqual(sender(attached),['Checky','View Flight Path']);
+ assert.deepEqual(sender(plain),['Checky']);
 });
