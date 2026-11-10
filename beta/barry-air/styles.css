@@ -332,8 +332,8 @@ body{background-attachment:scroll}
 
 @media(max-width:699px) and (max-height:600px){.landing-frame .boarding-pass{margin-top:4px}}
 
-#share-boarding-pass{display:grid;place-items:center;min-width:44px;height:36px;margin:-4px 0;padding:0;border:1px solid #8c9c8c;border-radius:6px;background:#f2eddd;color:#084c61;cursor:pointer}
-#share-boarding-pass[hidden],#boarding-share-native[hidden]{display:none}
+.share-image-button{display:grid;place-items:center;min-width:44px;height:36px;margin:-4px 0;padding:0;border:1px solid #8c9c8c;border-radius:6px;background:#f2eddd;color:#084c61;cursor:pointer}
+.share-image-button[hidden],#boarding-share-native[hidden]{display:none}
 #boarding-share{position:fixed;background:#fffef6;border-color:#ddceaa;overflow:auto}
 #boarding-share-heading{padding-right:35px}
 .boarding-share-close{position:absolute;top:8px;right:8px;width:36px;height:36px;border:0;background:transparent;color:#084c61;font-size:24px;cursor:pointer}
@@ -341,3 +341,5 @@ body{background-attachment:scroll}
 .boarding-share-actions{gap:8px;flex-wrap:wrap}
 .boarding-share-actions a{display:inline-grid;place-items:center;min-height:36px;padding:0 14px;border:1px solid #084c61;border-radius:10px;color:#084c61;text-decoration:none}
 #boarding-share-status{margin:8px 0 0}
+
+#share-flight-path{margin:10px 0 0 auto}
