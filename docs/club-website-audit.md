@@ -4,6 +4,17 @@ Website coverage is independent of the directory export request. Only reviewed
 club-published evidence is promoted. Missing, conflicting or ambiguous candidates
 stay in the queue; no domain is generated from a club name.
 
+## 11 November 2026 checkpoint — missing-link coverage, batches 21–22
+
+Batch 21 carries forward ten club sites reviewed on 10 November. Batch 22 adds
+twelve senior club websites from Frickley Athletic through Great Yarmouth Town.
+
+- Original qualifying-club coverage: 252 to 274 of 651. There are 377 missing.
+- All 40 clubs in the current Second Round Proper fixtures are linked and verified.
+- Club-published evidence is in [batch 21](../updater/club_website_verified_batch_21.json)
+  and [batch 22](../updater/club_website_verified_batch_22.json). The Gosport website
+  check is separate from the delivery status of its published staff addresses.
+
 ## 8 November 2026 checkpoint — missing-link coverage, batch 20
 
 Reviewed twelve previously unreviewed missing origins, Fairford Town through
