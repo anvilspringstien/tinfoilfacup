@@ -6,20 +6,16 @@ on:
 permissions: {}
 
 jobs:
-  remove-retired-preview:
+  inspect-durable-object-namespaces:
     if: github.ref == 'refs/heads/ops/retired-boot-room-preview-cleanup'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-      - name: Delete the retired mobile reconnect Preview
+      - name: Read Durable Object namespace inventory
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.BOOT_ROOM_PREVIEW_CLEANUP_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          WRANGLER_SEND_METRICS: 'false'
         run: |
           python3 - <<'PY'
           import json
@@ -27,7 +23,7 @@ jobs:
           import re
           import urllib.error
           import urllib.request
-          
+
           saved = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
           token_pattern = r"cfut_[A-Za-z0-9_-]{41,64}"
           if re.fullmatch(token_pattern, saved):
@@ -37,31 +33,46 @@ jobs:
               if len(matches) != 1:
                   raise SystemExit("BOOT_ROOM_PREVIEW_CLEANUP_TOKEN must contain one Cloudflare user API token.")
               token = matches.pop()
-          
+
           account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "").strip()
           if not re.fullmatch(r"[0-9a-f]{32}", account_id):
               raise SystemExit("CLOUDFLARE_ACCOUNT_ID must contain the 32-character account ID.")
-          
+
           print(f"::add-mask::{token}", flush=True)
-          request = urllib.request.Request(
-              "https://api.cloudflare.com/client/v4/user/tokens/verify",
-              headers={"Authorization": f"Bearer {token}"},
+          endpoint = (
+              "https://api.cloudflare.com/client/v4/accounts/"
+              f"{account_id}/workers/durable_objects/namespaces"
           )
-          try:
-              with urllib.request.urlopen(request, timeout=20) as response:
-                  verification = json.load(response)
-          except urllib.error.HTTPError as error:
-              raise SystemExit(f"Cloudflare token verification returned HTTP {error.code}.") from None
-          if not verification.get("success") or verification.get("result", {}).get("status") != "active":
-              raise SystemExit("Cloudflare did not confirm that the cleanup token is active.")
-          
-          print("Cloudflare confirmed the cleanup token is active.", flush=True)
-          os.environ["CLOUDFLARE_API_TOKEN"] = token
-          os.environ["CLOUDFLARE_ACCOUNT_ID"] = account_id
-          os.execvp("npx", [
-              "npx", "--yes", "wrangler@4.156.1", "preview", "delete",
-              "--worker-name", "tffac-boot-room-shed",
-              "--name", "fix/boot-room-mobile-reconnect-20261103",
-              "--skip-confirmation",
-          ])
+          namespaces = []
+          page = 1
+          while True:
+              request = urllib.request.Request(
+                  f"{endpoint}?page={page}&per_page=1000",
+                  headers={"Authorization": f"Bearer {token}"},
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=20) as response:
+                      payload = json.load(response)
+              except urllib.error.HTTPError as error:
+                  raise SystemExit(f"Cloudflare namespace inventory returned HTTP {error.code}.") from None
+              batch = payload.get("result")
+              if not payload.get("success") or not isinstance(batch, list):
+                  raise SystemExit("Cloudflare did not return a namespace inventory.")
+              namespaces.extend(batch)
+              total_pages = (payload.get("result_info") or {}).get("total_pages")
+              if page >= (total_pages or 1):
+                  break
+              page += 1
+
+          retired = "tffac-boot-room-shed_fix-boot-room-mobile-reconnect-20261103_BootRoom"
+          print(f"Account namespace count: {len(namespaces)}")
+          present = any(row.get("name") == retired for row in namespaces)
+          print(f"Retired mobile reconnect namespace present: {'yes' if present else 'no'}")
+          for worker, class_name in (("tffac-boot-room-shed", "BootRoom"), ("tffac-likes-shed", "TffacLikes")):
+              print(f"{worker} namespace names and scripts:")
+              for row in namespaces:
+                  name = row.get("name") or ""
+                  owner = row.get("script") or ""
+                  if name.startswith(worker + "_") or (owner == worker and row.get("class") == class_name):
+                      print("  " + json.dumps({"name": name, "script": owner}, ensure_ascii=True))
           PY
