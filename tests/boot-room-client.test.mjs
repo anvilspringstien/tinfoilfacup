@@ -183,3 +183,15 @@ test('only own posts offer Delete and it requires confirmation, including after 
  b.$('delete-own-confirm').onclick();
  assert.deepEqual(ws.sent,{type:'delete-own',id:'mine'});
 });
+
+
+test('entering chat shows a loading state until the first conversation is ready', async () => {
+ const b=browser();
+ assert.equal(b.$('chat-loading').hidden,false);
+ assert.equal(b.$('chat-shell').hidden,true);
+ b.setState({messages:[{id:'first',name:'Checky',person:'a',text:'Already here',at:Date.now(),hearts:0}]});
+ await b.settle();
+ assert.equal(b.$('chat-loading').hidden,true);
+ assert.equal(b.$('chat-shell').hidden,false);
+ assert.equal(b.$('messages').children.length,1);
+});
