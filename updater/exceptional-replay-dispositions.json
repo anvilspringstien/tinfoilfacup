@@ -43,6 +43,58 @@
       },
       "downstream_source_url": "https://www.mulbartonfc.co.uk/calendar",
       "verification_state": "human-reviewed-exception"
+    },
+    {
+      "id": "2026-08-11-broadfields-united-herne-bay-fa-ordered-second-replay",
+      "round": "Extra Preliminary Round",
+      "drawn_tie": {
+        "date": "2026-08-08",
+        "home": "Herne Bay",
+        "away": "Broadfields United",
+        "home_score": 2,
+        "away_score": 2,
+        "round": "Extra Preliminary Round"
+      },
+      "original": {
+        "date": "2026-08-11",
+        "home": "Broadfields United",
+        "away": "Herne Bay",
+        "home_score": 1,
+        "away_score": 6,
+        "round": "Extra Preliminary Round Replay",
+        "source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/broadfields-united/herne-bay/590388"
+      },
+      "disposition": "voided-replay-ordered",
+      "disposition_source_url": "https://www.hernebayfootballclub.co.uk/news/fa-cup-tie-to-be-replayed-2992347.html",
+      "disposition_note": "Herne Bay confirmed that the FA ordered the replay to be played again following a substitution matter.",
+      "replay_result": {
+        "date": "2026-08-18",
+        "home": "Broadfields United",
+        "away": "Herne Bay",
+        "home_score": 2,
+        "away_score": 1,
+        "winner": "Broadfields United",
+        "status": "FT (AET)",
+        "decision": "extra-time",
+        "round": "Extra Preliminary Round Replay",
+        "kickoff": "19:45",
+        "source_url": "https://www.footballwebpages.co.uk/match/2026-2027/fa-cup/broadfields-united/herne-bay/590840",
+        "venue": {
+          "ground": "Tithe Farm",
+          "postcode": "HA2 0XH",
+          "source": "https://kentishfootball.co.uk/news/broahern180826",
+          "verification": "match-report"
+        }
+      },
+      "downstream": {
+        "date": "2026-08-22",
+        "round": "Preliminary Round",
+        "home": "Broadfields United",
+        "away": "Corinthian",
+        "kickoff": "15:00"
+      },
+      "downstream_source_url": "https://www.footballwebpages.co.uk/match/2026-2027/emirates-fa-cup/broadfields-united/corinthian/591061",
+      "verification_state": "human-reviewed-exception"
     }
   ]
 }
