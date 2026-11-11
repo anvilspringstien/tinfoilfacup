@@ -33,7 +33,7 @@ export async function checkInstalledHandover(browser,base){
  await installed.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>{newNumbers++;return route.abort()});
  await installed.route('https://api.postcodes.io/**',postcodeRoute);
  const installedPage=await installed.newPage();
- await installedPage.goto(base+'/beta/keep-the-magic-shed.html');await installedPage.waitForURL(base+'/beta/phone-frame.html');
+ await installedPage.goto(base+'/beta/keep-the-magic-shed.html');await installedPage.waitForURL(base+'/');
  const afterInstall=await installedPage.evaluate(keys=>Object.fromEntries(keys.map(k=>[k,localStorage.getItem(k)])),Object.keys(beforeInstall));
  assert.deepEqual(afterInstall,beforeInstall,'all Campaign, Pigeon and Challenge bytes transfer before Splash');
  assert.equal((await installed.cookies()).filter(c=>c.name.startsWith('tffc_keep_v1')).length,0,'handover cookies consumed');
@@ -50,7 +50,7 @@ export async function checkInstalledHandover(browser,base){
  const oldChallenge=JSON.parse(beforeInstall['tffc.challengeDeck.v1']);
  assert.deepEqual(challenge.completed,oldChallenge.completed,'Trophy Cabinet awards survive the install');
  assert.equal(challenge.pigeonMiles,oldChallenge.pigeonMiles,'flown mileage survives the install');
- await installedPage.goto(base+'/beta/keep-the-magic-shed.html');await installedPage.waitForURL(base+'/beta/phone-frame.html');
+ await installedPage.goto(base+'/beta/keep-the-magic-shed.html');await installedPage.waitForURL(base+'/');
  assert.equal(await installedPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).pigeonName),'Checky');
  assert.equal(newNumbers,0,'fresh installed storage must not issue 01756');
  await installed.close();await sourceContext.close();

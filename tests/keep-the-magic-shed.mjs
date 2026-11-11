@@ -181,7 +181,7 @@ try{
  await page.locator('#close').focus();
  assert(await page.locator('#close').evaluate(e=>getComputedStyle(e).outlineStyle!=='none'),'Close retains its keyboard outline');
  await page.goto(base+'/beta/keep-the-magic-shed.html');
- await page.waitForURL(base+'/beta/phone-frame.html');
+ await page.waitForURL(base+'/');
  assert.equal(await page.frameLocator('#phoneApp').locator('.splash-start').getAttribute('href'),'clubfinder-journey.html');
  const saved={originName:'Newton Aycliffe FC',postcode:'DL5 4RQ',ended:false,selectedAt:'2026-10-18T12:00:00.000Z',searchNumber:12345,callSign:'Tango Foxtrot 2 Alpha Charlie [12345]',pigeonName:'Shed Pigeon'};
  await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
@@ -201,7 +201,7 @@ try{
  });
  const app=await reopened.newPage();const appErrors=[];app.on('pageerror',e=>appErrors.push(String(e)));
  for(let attempt=0;attempt<2;attempt++){
-  await app.goto(base+'/beta/keep-the-magic-shed.html');await app.waitForURL(base+'/beta/phone-frame.html');
+  await app.goto(base+'/beta/keep-the-magic-shed.html');await app.waitForURL(base+'/');
   const framed=app.frameLocator('#phoneApp');
   await framed.locator('.splash-start').click();
   await framed.locator('#results .result').first().waitFor({timeout:30000});
@@ -315,14 +315,14 @@ try{
  const launchPage=await launchContext.newPage();
  let releaseSplash;
  const splashGate=new Promise(resolve=>{releaseSplash=resolve});
- await launchPage.route(base+'/beta/phone-frame.html',async route=>{await splashGate;await route.continue()});
+ await launchPage.route(base+'/',async route=>{await splashGate;await route.continue()});
  await launchPage.route('**/keep-the-magic-shed.js',route=>route.abort());
- const destinationRequested=launchPage.waitForRequest(base+'/beta/phone-frame.html');
+ const destinationRequested=launchPage.waitForRequest(base+'/');
  await launchPage.goto(base+'/beta/keep-the-magic-shed.html',{waitUntil:'commit'});
  await destinationRequested;
  const hiddenState=await Promise.race([launchRecorded,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Installed launch was not recorded before navigation')),10000))]);
  assert(hiddenState.hiddenRule&&hiddenState.bodyHidden,'launcher cannot paint while the destination waits');
- releaseSplash();await launchPage.waitForURL(base+'/beta/phone-frame.html');
+ releaseSplash();await launchPage.waitForURL(base+'/');
  await launchPage.frameLocator('#phoneApp').locator('.splash-start').waitFor();
  await launchContext.close();
  await checkInstalledHandover(browser,base);
