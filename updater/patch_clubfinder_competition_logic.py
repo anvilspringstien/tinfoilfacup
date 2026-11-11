@@ -154,20 +154,6 @@ journey_pat=re.compile(r'function buildJourney\(origin\)\{.*?\}\s*(?:/\* TIN_FOI
 text,n=journey_pat.subn(lambda m:new_build+' function previousRoundsHtml',text,count=1)
 if n!=1:raise SystemExit(f'ABORT: expected one buildJourney function, replaced {n}')
 
-# Keep a superseded replay visible in history without presenting its score as final.
-result_line_start=text.index('function resultLineFromResult(r){')
-result_line_end=text.index('\nfunction ',result_line_start+1)
-result_line=text[result_line_start:result_line_end]
-void_label="    line+=' • Result voided; replay ordered';"
-if void_label not in result_line:
-    decision_line="  if(r.decision&&r.decision.startsWith('pens ')){"
-    if result_line.count(decision_line)!=1:
-        raise SystemExit('ABORT: historical result display boundary not found')
-    result_line=result_line.replace(decision_line,
-        "  if(String(r.status||'').toUpperCase()==='VOID'||String(r.status||'').toUpperCase()==='VOIDED'||r.decision==='voided-replay-ordered'){\n"
-        +void_label+"\n  }else"+" "+decision_line.lstrip(),1)
-    text=text[:result_line_start]+result_line+text[result_line_end:]
-
 old_known="const knownFixture=nf?resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club):null;"
 new_known="const knownFixture=nf?(()=>{const k=resolveLiveFixtureForCarrier({home:nf.home,away:nf.away,date:nf.date,kickoff:nf.kickoff||'15:00',round:nf.round||nextName,conditional:!!nf.conditional},club);if(nf.venue&&nf.venue.postcode&&!/TBC/i.test(String(nf.venue.postcode)))k.venue={...nf.venue};return k;})():null;"
 if old_known in text:text=text.replace(old_known,new_known,1)
