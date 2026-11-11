@@ -21,9 +21,47 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           WRANGLER_SEND_METRICS: 'false'
         run: |
-          : "${CLOUDFLARE_API_TOKEN:?Set BOOT_ROOM_PREVIEW_CLEANUP_TOKEN in Actions secrets}"
-          : "${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID in Actions secrets}"
-          npx --yes wrangler@4.156.1 preview delete \
-            --worker-name tffac-boot-room-shed \
-            --name 'fix/boot-room-mobile-reconnect-20261103' \
-            --skip-confirmation
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.error
+          import urllib.request
+          
+          saved = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+          token_pattern = r"cfut_[A-Za-z0-9_-]{41,64}"
+          if re.fullmatch(token_pattern, saved):
+              token = saved
+          else:
+              matches = set(re.findall(r"Authorization:\s*Bearer\s+(" + token_pattern + r")(?=[\"'\s]|$)", saved))
+              if len(matches) != 1:
+                  raise SystemExit("BOOT_ROOM_PREVIEW_CLEANUP_TOKEN must contain one Cloudflare user API token.")
+              token = matches.pop()
+          
+          account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "").strip()
+          if not re.fullmatch(r"[0-9a-f]{32}", account_id):
+              raise SystemExit("CLOUDFLARE_ACCOUNT_ID must contain the 32-character account ID.")
+          
+          print(f"::add-mask::{token}", flush=True)
+          request = urllib.request.Request(
+              "https://api.cloudflare.com/client/v4/user/tokens/verify",
+              headers={"Authorization": f"Bearer {token}"},
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  verification = json.load(response)
+          except urllib.error.HTTPError as error:
+              raise SystemExit(f"Cloudflare token verification returned HTTP {error.code}.") from None
+          if not verification.get("success") or verification.get("result", {}).get("status") != "active":
+              raise SystemExit("Cloudflare did not confirm that the cleanup token is active.")
+          
+          print("Cloudflare confirmed the cleanup token is active.", flush=True)
+          os.environ["CLOUDFLARE_API_TOKEN"] = token
+          os.environ["CLOUDFLARE_ACCOUNT_ID"] = account_id
+          os.execvp("npx", [
+              "npx", "--yes", "wrangler@4.156.1", "preview", "delete",
+              "--worker-name", "tffac-boot-room-shed",
+              "--name", "fix/boot-room-mobile-reconnect-20261103",
+              "--skip-confirmation",
+          ])
+          PY
