@@ -6,7 +6,7 @@ export function publicFlightStops(stops) {
     : {lat, lon, short, next});
 }
 
-export async function flightPathImage(svg) {
+export async function flightPathImage(svg, attribution) {
   svg.setAttribute('width', '600');
   svg.setAttribute('height', '520');
   const style = document.createElementNS(svg.namespaceURI, 'style');
@@ -32,7 +32,8 @@ export async function flightPathImage(svg) {
 
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
-    canvas.height = 1240;
+    const attributionHeight = attribution ? 60 : 0;
+    canvas.height = 1240 + attributionHeight * 2;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Image rendering is unavailable');
     ctx.scale(2, 2);
@@ -44,6 +45,21 @@ export async function flightPathImage(svg) {
     ctx.textAlign = 'right';
     ctx.fillText('THE FLIGHT PATH', 582, 29);
     ctx.textAlign = 'left';
+
+    if (attribution) {
+      const {name, callSign, milesFlown} = attribution;
+      ctx.fillStyle = '#f2eddd';
+      ctx.fillRect(0, 46, 600, attributionHeight);
+      ctx.fillStyle = '#084c61';
+      ctx.font = 'bold 21px Arial, sans-serif';
+      ctx.fillText(name, 18, 71, 564);
+      ctx.font = '15px Arial, sans-serif';
+      const mileage = Number.isSafeInteger(milesFlown)
+        ? new Intl.NumberFormat('en-GB').format(milesFlown) + ' miles flown'
+        : 'Miles flown unavailable';
+      ctx.fillText([callSign, mileage].filter(Boolean).join(' · '), 18, 92, 564);
+      ctx.translate(0, attributionHeight);
+    }
 
     ctx.fillStyle = '#dce5de';
     ctx.fillRect(0, 46, 600, 520);
@@ -95,21 +111,22 @@ export function saveBootRoomFlightPath(model) {
     Number.isFinite(stop.lat)&&Number.isFinite(stop.lon) ? stop : null
   );
   const flights=model.flights.map(({stop,status})=>({stop,status}));
+  const miles = model.miles?.miles;
   const key='tffc.barry.boot-flight.v1';
   if(!flights.some(flight=>stops[flight.stop])){
     localStorage.removeItem(key);
     return;
   }
   localStorage.setItem(key,JSON.stringify({
-    identity:model.identity, callSign:'TF2AC '+model.digits, route:{stops,flights}
+    identity:model.identity, callSign:'TF2AC '+model.digits, route:{stops,flights,...(Number.isFinite(miles)?{milesFlown:Math.round(miles)}:{})}
   }));
 }
 
-export async function bootRoomFlightImage({stops,flights}) {
+export async function bootRoomFlightImage({stops,flights,milesFlown}, author) {
   const response=await fetch(new URL('assets/route-map.svg',import.meta.url));
   if(!response.ok)throw new Error('Map unavailable');
   const svg=new DOMParser().parseFromString(await response.text(),'image/svg+xml').documentElement;
   if(svg.localName!=='svg')throw new Error('Map unavailable');
   drawRoute(svg,stops,flights);
-  return flightPathImage(svg);
+  return flightPathImage(svg, author && {...author,milesFlown});
 }

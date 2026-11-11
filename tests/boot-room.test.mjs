@@ -149,7 +149,7 @@ test('Flight Paths are optional per post, rounded at Home, and follow room visib
  const flightPath={stops:[
   {lat:51.6332,lon:-.5559,short:'Private Home',postcode:'HP7 0EJ'},
   {lat:52.4,lon:-1.3,short:'Example Town',next:true}
- ],flights:[{stop:1,status:'NEXT FLIGHT'}]};
+ ],flights:[{stop:1,status:'NEXT FLIGHT'}],milesFlown:1234};
  const plain=f.room.action('session',{type:'message',text:'Ordinary post'});
  assert.throws(()=>f.room.action('session',{type:'message',text:'Bad attachment',
   flightPath:{...flightPath,stops:[flightPath.stops[0],{...flightPath.stops[1],short:'CV12 8NN'}]}
@@ -164,6 +164,11 @@ test('Flight Paths are optional per post, rounded at Home, and follow room visib
  const saved=f.room.flightPath(attached.id,'session',true);
  assert.deepEqual(saved.stops[0],{lat:51.5,lon:-.5,short:'Home area',approximate:true});
  assert.deepEqual(saved.stops[1],flightPath.stops[1]);
+ assert.equal(saved.milesFlown,1234);
+ const legacy=f.room.action('session',{type:'message',text:'Earlier route',flightPath:{...flightPath,milesFlown:undefined}});
+ assert.equal(f.room.flightPath(legacy.id,'session',true).milesFlown,undefined);
+ const invalidMileage=f.room.action('session',{type:'message',text:'Invalid mileage',flightPath:{...flightPath,milesFlown:'HP7 0EJ'}});
+ assert.equal(f.room.flightPath(invalidMileage.id,'session',true).milesFlown,undefined);
  assert.equal(JSON.stringify(saved).includes('HP7 0EJ'),false);
  f.room.admin({type:'doors',open:false,next:'Tomorrow'});
  assert.equal(f.room.readClosed().messages[1].hasFlightPath,true);
