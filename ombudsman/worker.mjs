@@ -1,7 +1,13 @@
-// Independent, read-only GitHub Actions ombudsman. Cloudflare Worker (no GitHub scheduler dependency).
+// Independent GitHub Actions ombudsman. Cloudflare Worker (no GitHub scheduler dependency).
 const REPO = "anvilspringstien/tinfoilfacup";
 const API = "https://api.github.com/repos/" + REPO;
 const HOUR = 3600000;
+const SCANS = {results:"scan-results.yml",draw:"scan-draw.yml"};
+const dispatches = new Set();
+
+function targets(env) {
+  return {results:env.RESULTS_WORKFLOW_ID||SCANS.results,draw:env.DRAW_WORKFLOW_ID||SCANS.draw};
+}
 function classify(runs, now, maxAgeHours = 3) {
   if (!Array.isArray(runs)) return { state: "unknown", reason: "no_run_data" };
   const relevant = runs.filter(r => r.event === "schedule").sort((a,b) => Date.parse(b.created_at)-Date.parse(a.created_at));
@@ -24,10 +30,8 @@ async function github(path, env) {
 }
 async function check(env) {
   const now=Date.now(), maxAge=Math.max(1,Number(env.MAX_AGE_HOURS||3));
-  const targets=[["results",env.RESULTS_WORKFLOW_ID||"scan-results.yml"],["draw",env.DRAW_WORKFLOW_ID||"scan-draw.yml"]];
-  if(targets.some(([,id])=>!id)) return {state:"unknown",reason:"workflow_ids_not_configured"};
   const checks={};
-  for(const [name,id] of targets) {
+  for(const [name,id] of Object.entries(targets(env))) {
     const data=await github("/actions/workflows/"+encodeURIComponent(id)+"/runs?event=schedule&branch=main&per_page=30",env);
     checks[name]=classify(data.workflow_runs,now,maxAge);
   }
@@ -35,10 +39,77 @@ async function check(env) {
   const state=states.includes("critical")?"critical":states.includes("warning")?"warning":states.includes("unknown")?"unknown":states.includes("pending")?"pending":"healthy";
   return {state,checked_at:new Date(now).toISOString(),checks};
 }
+// Recheck the main branch immediately before dispatch. A fresh schedule or an
+// active manual/push/scheduled run makes another scan unnecessary at this tick.
+async function catchUpScan(name, missed, env) {
+  const mode=env.CATCH_UP_MODE;
+  if (missed?.reason!=="no_recent_scheduled_launch"||!Number.isSafeInteger(missed.run_id)) return;
+  if (!env.OMBUDSMAN_KV) return {state:"blocked",reason:"no_state_store"};
+  if (mode==="dispatch"&&!env.CATCH_UP_GITHUB_TOKEN) return {state:"blocked",reason:"no_dispatch_token"};
+
+  const path="/actions/workflows/"+SCANS[name];
+  const key="catch_up_v1:"+name;
+  if (dispatches.has(name)) return {state:"skipped",reason:"dispatch_already_in_progress"};
+  dispatches.add(name);
+  try {
+    const previous=JSON.parse(await env.OMBUDSMAN_KV.get(key)||"null");
+    if (previous?.after_run_id===missed.run_id) return previous;
+    const data=await github(path+"/runs?branch=main&per_page=100",env);
+    if (!Array.isArray(data.workflow_runs)) return {state:"blocked",reason:"no_run_data"};
+    const runs=data.workflow_runs;
+    if (runs.some(run=>run.status!=="completed")) return {state:"skipped",reason:"scan_already_active"};
+    const latestSchedule=runs.find(run=>run.event==="schedule");
+    if (latestSchedule?.id!==missed.run_id) return {state:"skipped",reason:"scheduled_history_changed"};
+    if (mode==="observe") return {state:"eligible",after_run_id:missed.run_id};
+
+    // Persist before POST. A timeout can mean GitHub accepted the dispatch,
+    // so the same missed-launch incident is never automatically retried.
+    const attempt={state:"requested",after_run_id:missed.run_id};
+    await env.OMBUDSMAN_KV.put(key,JSON.stringify(attempt));
+    let outcome;
+    try {
+      const response=await fetch(API+path+"/dispatches",{
+        method:"POST",
+        headers:{
+          "Accept":"application/vnd.github+json",
+          "Authorization":"Bearer "+env.CATCH_UP_GITHUB_TOKEN,
+          "Content-Type":"application/json",
+          "User-Agent":"tffc-independent-ombudsman",
+          "X-GitHub-Api-Version":"2022-11-28"
+        },
+        body:JSON.stringify({ref:"main",inputs:{publish:true}})
+      });
+      outcome=response.ok ? {state:"accepted"} : {state:"failed",reason:"dispatch_http_"+response.status};
+    } catch {
+      outcome={state:"unconfirmed",reason:"dispatch_response_unavailable"};
+    }
+    const result={...attempt,...outcome};
+    await env.OMBUDSMAN_KV.put(key,JSON.stringify(result));
+    return result;
+  } catch {
+    return {state:"blocked",reason:"catch_up_check_or_state_failed"};
+  } finally {
+    dispatches.delete(name);
+  }
+}
+
+async function catchUp(report,env) {
+  if (env.CATCH_UP_MODE!=="observe"&&env.CATCH_UP_MODE!=="dispatch") return;
+  for (const [name,id] of Object.entries(targets(env))) {
+    // Dispatch only the two known guarded workflows, including if the health
+    // monitor has been configured with their numeric IDs.
+    const check=report.checks?.[name];
+    if (id!==SCANS[name]&&!/^\d+$/.test(String(id))) continue;
+    const outcome=await catchUpScan(name,check,env);
+    if (outcome) check.catch_up=outcome;
+  }
+}
+
 function alertText(report) {
   const lines=["TFFC Ombudsman: "+String(report.state||"unknown").toUpperCase(),"Checked: "+(report.checked_at||"unknown")];
   for(const [name,check] of Object.entries(report.checks||{})) {
     lines.push(name+": "+check.state+" ("+check.reason+")"+(check.run_id?" | run "+check.run_id:""));
+    if(check.catch_up) lines.push(name+" catch-up: "+check.catch_up.state+(check.catch_up.reason?" ("+check.catch_up.reason+")":""));
   }
   if(report.reason) lines.push("Reason: "+report.reason);
   return lines.join("\n");
@@ -111,6 +182,7 @@ async function publish(report,env,now=Date.now()) {
 async function inspect(env) {
   let report;
   try {report=await check(env);} catch(e) {report={state:"unknown",reason:"api_unavailable_or_error",detail:String(e.message||e)};}
+  await catchUp(report,env);
   await publish(report,env);
   return report;
 }

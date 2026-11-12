@@ -98,3 +98,61 @@ test('an unconfirmed first warning is retried and cannot seed a false legacy del
 }));
 
 test('migration of a legacy failed run does not send that same failure again',()=>policy(async({env,sent,values})=>{const r={state:'critical',checks:{results:{state:'critical',reason:'scheduled_run_failure',run_id:99}}};values.set('last_report',JSON.stringify({report:r}));await publish(r,env,now);assert.equal(sent.length,0);await publish({...r,checks:{results:{...r.checks.results,run_id:100}}},env,now+1);assert.equal(sent.length,1);}));
+
+test("catch-up observes first, skips active scans and sends one guarded dispatch per gap",async()=>{
+  const {inspect}=await import("./worker.mjs");
+  const values=new Map(), requests=[];
+  const stale=run({created_at:"2026-10-14T07:00:00Z"});
+  const fresh=run({id:999});
+  let latest=[stale], drawn=[stale], dispatchResponse=()=>new Response(null,{status:204});
+  const env={
+    OMBUDSMAN_KV:{get:async key=>values.get(key)??null,put:async(key,value)=>values.set(key,value)},
+    CATCH_UP_GITHUB_TOKEN:"test-dispatch-token"
+  };
+  const previousFetch=globalThis.fetch;
+  const previousNow=Date.now;
+  Date.now=()=>now;
+  globalThis.fetch=async (url,options)=>{
+    if(url.endsWith("/dispatches")) {
+      requests.push({url,options});
+      return dispatchResponse();
+    }
+    if(url.includes("scan-results.yml"))return Response.json({workflow_runs:[fresh]});
+    if(url.includes("event=schedule"))return Response.json({workflow_runs:drawn});
+    return Response.json({workflow_runs:latest});
+  };
+  try {
+    assert.equal((await inspect(env)).checks.draw.catch_up,undefined);
+    env.CATCH_UP_MODE="observe";
+    let report=await inspect(env);
+    assert.equal(report.state,"warning");
+    assert.equal(report.checks.draw.catch_up.state,"eligible");
+    assert.equal(requests.length,0);
+
+    env.CATCH_UP_MODE="dispatch";
+    delete env.CATCH_UP_GITHUB_TOKEN;
+    assert.equal((await inspect(env)).checks.draw.catch_up.reason,"no_dispatch_token");
+    env.CATCH_UP_GITHUB_TOKEN="test-dispatch-token";
+    latest=[run({event:"workflow_dispatch",status:"queued"}),stale];
+    assert.equal((await inspect(env)).checks.draw.catch_up.reason,"scan_already_active");
+    latest=[fresh,stale];
+    assert.equal((await inspect(env)).checks.draw.catch_up.reason,"scheduled_history_changed");
+    latest=[stale];
+    assert.equal((await inspect(env)).checks.draw.catch_up.state,"accepted");
+    assert.equal((await inspect(env)).checks.draw.catch_up.state,"accepted");
+    assert.equal(requests.length,1);
+    assert.match(requests[0].url,/scan-draw\.yml\/dispatches$/);
+    assert.deepEqual(JSON.parse(requests[0].options.body),{ref:"main",inputs:{publish:true}});
+
+    drawn=latest=[run({id:124,created_at:stale.created_at,conclusion:"failure"})];
+    assert.equal((await inspect(env)).checks.draw.catch_up,undefined);
+    drawn=latest=[run({id:125,created_at:stale.created_at})];
+    dispatchResponse=()=>{throw new Error("timed out")};
+    assert.equal((await inspect(env)).checks.draw.catch_up.state,"unconfirmed");
+    assert.equal((await inspect(env)).checks.draw.catch_up.state,"unconfirmed");
+    assert.equal(requests.length,2);
+  } finally {
+    globalThis.fetch=previousFetch;
+    Date.now=previousNow;
+  }
+});
