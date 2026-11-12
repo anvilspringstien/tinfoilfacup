@@ -2,12 +2,13 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {script} from '../boot-room-worker/ui.mjs';
-function browser(pathname='/chat',campaign=null,{search='',responses=[],storage={}}={}){
+function browser(pathname='/chat',campaign=null,{search='',responses=[],storage={},globals={}}={}){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
  const document={querySelectorAll(selector){return [this.getElementById(selector)];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
  const context={document,localStorage:{getItem:key=>storage[key]??null},window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){context.location.hash='';}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
+ Object.assign(context,globals);
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
@@ -247,6 +248,42 @@ test('the Trophy Cabinet is opt-in, belongs to the current Campaign and opens re
  assert.equal(b.$('trophy-preview').open,false);
 });
 
+
+test('Trophy Cabinet shares a prepared PNG and downloads it when file sharing is unavailable',async()=>{
+ const shared=[],downloads=[],revoked=[],drawn=[];
+ const navigator={canShare:()=>true,share:async({files})=>shared.push(files[0])};
+ const b=browser('/beta/boot-room/chat',null,{globals:{navigator,File,URL:{
+  createObjectURL:()=> 'blob:mock-cabinet',revokeObjectURL:url=>revoked.push(url)
+ }}});
+ const create=b.document.createElement;
+ b.document.createElement=tag=>{
+  if(tag==='canvas')return {getContext:()=>({fillRect(){},fillText(...args){drawn.push(args[0]);},strokeRect(){},drawImage(img){drawn.push(img.src);}}),
+   toBlob:(callback,type)=>callback(new Blob(['cabinet'],{type}))};
+  if(tag==='img')return {decode:async()=>{},naturalWidth:160,naturalHeight:160};
+  if(tag==='a')return {click(){downloads.push([this.href,this.download]);}};
+  return create(tag);
+ };
+ await b.settle();
+ b.setState({open:false,you:null,messages:[{id:'m1',name:'Checky',text:'Two mats',at:Date.now(),hearts:0,trophyCabinet:['01','08']}]});
+ b.snapshot(b.sockets[0]);
+ const sender=b.$('messages').children[0].children[1].children[0];
+ await sender.children.find(node=>node.textContent==='View Trophy Cabinet').onclick();
+ const share=b.$('trophy-preview-share');
+ assert.equal(share.disabled,false);
+ assert.deepEqual(drawn,['Checky’s Trophy Cabinet','2 of 27 completed','/beta/boot-room/trophy-mats/01.webp','/beta/boot-room/trophy-mats/08.webp']);
+ await share.onclick();
+ assert.equal(shared[0].name,'tffac-trophy-cabinet.png');
+ assert.equal(shared[0].type,'image/png');
+ navigator.share=async()=>{throw Object.assign(Error('Cancelled'),{name:'AbortError'});};
+ await share.onclick();
+ assert.deepEqual(downloads,[]);
+ navigator.canShare=()=>false;
+ await share.onclick();
+ assert.deepEqual(downloads,[['blob:mock-cabinet','tffac-trophy-cabinet.png']]);
+ const preview=b.$('trophy-preview');
+ preview.close();preview.onclose();
+ assert.deepEqual(revoked,['blob:mock-cabinet']);
+});
 
 test('entering chat shows a loading state until the first conversation is ready', async () => {
  const b=browser();
