@@ -145,7 +145,7 @@ async function viewFlightPath(message){
  flightPreview.showModal();
  try{
   const route=await api('/api/flight-path?post='+encodeURIComponent(message.id));
-  const {bootRoomFlightImage}=await import('/beta/barry-air/flight-path-share.mjs?v=4');
+  const {bootRoomFlightImage}=await import(roomPrefix+'/flight-path-share.mjs?v=4');
   const author={name:message.name,callSign:message.campaign?.callSign};
   const blob=await bootRoomFlightImage(route,author);
   if(epoch!==flightPreviewEpoch||!flightPreview.open)return;
