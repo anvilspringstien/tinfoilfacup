@@ -1,22 +1,131 @@
 {
-  "checked_at": "2026-11-09T20:01:26.637416+00:00",
+  "checked_at": "2026-11-12T21:04:00.318428+00:00",
   "official_source": "https://www.thefa.com/competitions/thefacup/fixtures",
   "competition_id": 1,
-  "status": "published",
-  "current_round": "First Round Proper",
-  "target_round": "Second Round Proper",
-  "target_ties_detected": 20,
+  "status": "active-round-refreshed",
+  "current_round": "Second Round Proper",
+  "target_round": "Third Round Proper",
+  "target_ties_detected": 0,
   "pages_checked": 6,
   "pagination_stop": "empty-page",
   "published": true,
-  "active_round_official_ties": 0,
-  "active_round_expected_ties": 40,
-  "active_round_source_complete": false,
-  "target_round_source_complete": true,
+  "active_round_official_ties": 20,
+  "active_round_expected_ties": 20,
+  "active_round_source_complete": true,
+  "target_round_source_complete": false,
   "replay_phase_verified": false,
   "active_round_conditional_resolutions": [],
-  "active_round_metadata_updates": [],
-  "active_round_unresolved_diagnostics": [],
-  "archived_outgoing_round": "First Round Proper",
-  "archived_outgoing_ties": 40
+  "active_round_metadata_updates": [
+    {
+      "fixture": "Guiseley AFC v Notts County",
+      "changes": [
+        {
+          "field": "date",
+          "from": "2026-12-05",
+          "to": "2026-12-07"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "19:30"
+        }
+      ]
+    },
+    {
+      "fixture": "Plymouth Parkway v Barnet",
+      "changes": [
+        {
+          "field": "date",
+          "from": "2026-12-05",
+          "to": "2026-12-06"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "17:30"
+        }
+      ]
+    },
+    {
+      "fixture": "Crewe Alexandra v Plymouth Argyle",
+      "changes": [
+        {
+          "field": "date",
+          "from": "2026-12-05",
+          "to": "2026-12-06"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "15:15"
+        }
+      ]
+    },
+    {
+      "fixture": "AFC Fylde v Luton Town",
+      "changes": [
+        {
+          "field": "date",
+          "from": "2026-12-05",
+          "to": "2026-12-06"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "14:30"
+        }
+      ]
+    },
+    {
+      "fixture": "Barrow AFC v Kidderminster Harriers",
+      "changes": [
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "20:00"
+        }
+      ]
+    },
+    {
+      "fixture": "Dover Athletic v Leicester City",
+      "changes": [
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "17:15"
+        }
+      ]
+    },
+    {
+      "fixture": "Salisbury v Blackpool",
+      "changes": [
+        {
+          "field": "date",
+          "from": "2026-12-05",
+          "to": "2026-12-06"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "12:15"
+        }
+      ]
+    },
+    {
+      "fixture": "Wimborne Town v Bradford City",
+      "changes": [
+        {
+          "field": "date",
+          "from": "2026-12-05",
+          "to": "2026-12-04"
+        },
+        {
+          "field": "kickoff",
+          "from": "15:00",
+          "to": "19:30"
+        }
+      ]
+    }
+  ],
+  "active_round_unresolved_diagnostics": []
 }
