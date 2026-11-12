@@ -22,7 +22,8 @@ export class RoomStore {
  redeem(invite,session,claim){return this.run((s,n)=>{const p=s.people.find(p=>p.invite===invite&&!p.suspended&&p.expires>n);if(!p)throw new RoomError('Invitation is invalid, used or expired',401);if(p.callSign){
    const custodian=clean(claim?.custodian,100),fixture=clean(claim?.fixture,200);
    if(claim?.callSign!==p.callSign||claim?.name!==p.name||!custodian||!fixture)throw new RoomError('Open the Boot Room from the Campaign named on your invitation',403);
-   p.campaign={callSign:p.callSign,custodian,fixture};
+   const origin=clean(claim?.origin,100);
+   p.campaign={callSign:p.callSign,custodian,fixture,...(origin?{origin}:{})};
   }else if(claim)throw new RoomError('Use an invitation issued for this Campaign',403);
   p.invite=null;p.session=session;return {id:p.id,name:p.name};});}
  walkIn(claim,session,publicEntry=false){return this.run((s,n)=>{
@@ -35,7 +36,8 @@ export class RoomStore {
   if(!publicEntry&&existing&&(existing.session||!existing.walkIn))throw new RoomError('This Call Sign already has a place. Reopen the room in the browser that joined.',409);
   if(!publicEntry&&!existing&&s.people.filter(p=>p.walkIn).length>=10)throw new RoomError('The first opening is full. Please check back for another opening.',409);
   const p=existing||{id:crypto.randomUUID(),walkIn:true,callSign,suspended:false,last:0,burst:0,expires:n+7*DAY};
-  Object.assign(p,{name,campaign:{callSign,custodian,fixture},session,moderator:false});
+  const origin=clean(claim?.origin,100);
+  Object.assign(p,{name,campaign:{callSign,custodian,fixture,...(origin?{origin}:{})},session,moderator:false});
   if(!existing)s.people.push(p);
   return {id:p.id,name};
  });}

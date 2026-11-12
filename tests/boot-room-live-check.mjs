@@ -8,6 +8,16 @@ async function api(path,body,{admin=false,cookie='',origin=base}={}){const r=awa
 const admin=body=>api('/api/admin',body,{admin:true});
 assert.equal((await admin({type:'doors',open:false,next:'Test opening'})).status,200);
 const sample=await fetch(base+'/demo');assert.equal(sample.status,200);assert.match(await sample.text(),/25 sample posts/);
+for(const prefix of ['', '/beta/boot-room']){
+ const renderer=await fetch(base+prefix+'/flight-path-share.mjs?v=4');
+ assert.equal(renderer.status,200);
+ assert.match(renderer.headers.get('content-type'),/javascript/);
+ assert.match(await renderer.text(),/export async function bootRoomFlightImage/);
+ const map=await fetch(base+prefix+'/assets/route-map.svg');
+ assert.equal(map.status,200);
+ assert.match(await map.text(),/<svg\b/);
+}
+assert.equal((await fetch(base+'/boarding-pass-share.mjs')).status,404);
 const publicDoors=await api('/api/doors');assert.equal(publicDoors.status,200);assert.deepEqual(Object.keys(publicDoors.data).sort(),['next','open','until']);assert.equal(publicDoors.data.open,false);assert.equal(publicDoors.data.next,'Test opening');
 for(const origin of ['https://tinfoilfacup.com','https://www.tinfoilfacup.com','https://elsewhere.example']){
  const r=await fetch(base+'/api/doors',{headers:{origin}});
