@@ -106,9 +106,10 @@ try{
  await app.getByRole('heading',{name:'Boot Room chalkboard'}).waitFor();
  const joinURL=new URL(page.url());
  const claim=JSON.parse(decodeURIComponent(joinURL.hash.slice('#campaign='.length)));
- assert.deepEqual(Object.keys(claim).sort(),['callSign','custodian','fixture','name']);
+ assert.deepEqual(Object.keys(claim).sort(),['callSign','custodian','fixture','name','origin']);
  assert.equal(claim.callSign,'TF2AC 12345');
  assert.equal(claim.name,'Shed Pigeon');
+ assert.equal(claim.origin,JSON.parse(unchanged).originName);
  assert.equal(claim.custodian,custodian);
  assert.ok(claim.fixture.length>0);
  await page.goBack();

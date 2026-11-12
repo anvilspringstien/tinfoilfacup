@@ -32,7 +32,11 @@ export async function flightPathImage(svg, attribution) {
 
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
-    const attributionHeight = attribution ? 60 : 0;
+    const campaignLines = [
+      attribution?.origin && 'Campaign · ' + attribution.origin,
+      attribution?.custodian && 'Custodian · ' + attribution.custodian,
+    ].filter(Boolean);
+    const attributionHeight = attribution ? 60 + 20 * campaignLines.length : 0;
     canvas.height = 1240 + attributionHeight * 2;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Image rendering is unavailable');
@@ -58,6 +62,7 @@ export async function flightPathImage(svg, attribution) {
         ? new Intl.NumberFormat('en-GB').format(milesFlown) + ' miles flown'
         : 'Miles flown unavailable';
       ctx.fillText([callSign, mileage].filter(Boolean).join(' · '), 18, 92, 564);
+      campaignLines.forEach((line, index) => ctx.fillText(line, 18, 112 + 20 * index, 564));
       ctx.translate(0, attributionHeight);
     }
 
