@@ -123,7 +123,7 @@ export function saveBootRoomFlightPath(model) {
     return;
   }
   localStorage.setItem(key,JSON.stringify({
-    identity:model.identity, callSign:'TF2AC '+model.digits, route:{stops,flights,...(Number.isFinite(miles)?{milesFlown:Math.round(miles)}:{})}
+    version:2, identity:model.identity, callSign:'TF2AC '+model.digits, route:{stops,flights,...(Number.isFinite(miles)?{milesFlown:Math.round(miles)}:{})}
   }));
 }
 

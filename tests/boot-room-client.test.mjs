@@ -137,7 +137,7 @@ test('a checked-in Flight Path is opt-in for each post and appears beside its pi
  const route={stops:[{lat:51.5,lon:-.5,short:'Home area',approximate:true},{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
  const storage={
   tinFoilFACupJourney_v7:JSON.stringify(saved),
-  'tffc.barry.boot-flight.v1':JSON.stringify({callSign:campaign.callSign,identity:'Example Town|HP7 0EJ|1001|',route})
+  'tffc.barry.boot-flight.v1':JSON.stringify({callSign:campaign.callSign,identity:'Example Town|HP7 0EJ|1001|',version:2,route:{...route,milesFlown:42}})
  };
  const b=browser('/chat',null,{storage});
  b.setState({you:{id:'a',name:'Checky',campaign}});
@@ -149,10 +149,20 @@ test('a checked-in Flight Path is opt-in for each post and appears beside its pi
  assert.equal(ws.sent.flightPath,undefined);
  b.$('attach-flight').checked=true;
  b.$('composer').onsubmit({preventDefault(){}});
- assert.deepEqual(ws.sent.flightPath,route);
+ assert.deepEqual(ws.sent.flightPath,{...route,milesFlown:42});
+ assert.equal(ws.sent.campaignOrigin,saved.originName);
  assert.equal(JSON.stringify(ws.sent).includes(saved.postcode),false);
  ws.message({type:'ack',action:'message'});
  assert.equal(b.$('attach-flight').checked,false);
+ const cacheKey='tffc.barry.boot-flight.v1';
+ const savedCache=JSON.parse(storage[cacheKey]);
+ storage[cacheKey]=JSON.stringify({...savedCache,version:undefined,route});
+ b.snapshot(ws);
+ assert.equal(b.$('attach-flight').disabled,true);
+ assert.match(b.$('attach-flight-label').textContent,/Reopen Barry Air/);
+ storage[cacheKey]=JSON.stringify({...savedCache,route});
+ b.snapshot(ws);
+ assert.equal(b.$('attach-flight').disabled,false);
  const message={id:'m1',person:'a',name:'Checky',text:'Hello',at:Date.now(),hearts:0,hasFlightPath:true};
  b.setState({messages:[message,{...message,id:'m2',hasFlightPath:false}]});
  b.snapshot(ws);
