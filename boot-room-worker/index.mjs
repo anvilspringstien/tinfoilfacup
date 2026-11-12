@@ -5,6 +5,15 @@ import {demoPage,scopedDemoPage} from './demo.mjs';
 const json=(data,status=200,extra={})=>Response.json(data,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff',...extra}});
 const roomPrefix='/beta/boot-room';
 const cookieName='__Host-bootroom';
+const phonePreviewHost='test-boot-room-flight-share-phone-tffac-boot-room-shed.anvilspringstien.workers.dev';
+const phonePreviewPost={
+ id:'79e452df-f48d-44ba-ad72-ac1cb8ae8651',
+ name:'Test Pigeon',
+ campaign:{callSign:'TF2AC 12345'},
+ text:'Sample post for testing Flight Path sharing.',
+ at:Date.UTC(2026,10,12,14),
+ hasFlightPath:true
+};
 export class BootRoom extends DurableObject {
  constructor(ctx,env){super(ctx,env);this.room=new RoomStore(ctx.storage);ctx.blockConcurrencyWhile(async()=>{if(await ctx.storage.getAlarm()===null)await ctx.storage.setAlarm(Date.now()+DAY);});}
  hash(request){return request.headers.get('x-room-session')||'';}
@@ -34,6 +43,25 @@ export class BootRoom extends DurableObject {
  webSocketError(ws){ws.close(1011,'Connection error');}
 }
 export default {async fetch(request,env){try{const u=new URL(request.url),scoped=u.pathname.startsWith(roomPrefix+'/'),path=scoped?u.pathname.slice(roomPrefix.length):u.pathname;
+ if(scoped&&u.hostname===phonePreviewHost&&request.method==='GET'){
+  if(path==='/phone-share-test'){
+   const campaign=encodeURIComponent(JSON.stringify(phonePreviewPost.campaign));
+   return Response.redirect(new URL(roomPrefix+'/chat#campaign='+campaign,u));
+  }
+  if(path==='/api/state')return json({error:'Read-only test room'},401);
+  if(path==='/api/doors')return json({open:false,walkIn:false});
+  if(path==='/api/read-closed')return json({open:false,you:null,messages:[phonePreviewPost]});
+  if(path==='/api/flight-path'&&u.searchParams.get('post')===phonePreviewPost.id){
+   return json({
+    stops:[
+     {lat:54.5,lon:-1.5,short:'Home area',approximate:true},
+     {lat:54.658,lon:-1.68,short:'Sample Ground'}
+    ],
+    flights:[{stop:1,status:'ARRIVED'}],
+    milesFlown:42
+   });
+  }
+ }
  if(scoped&&['/admin','/api/admin','/api/invite','/api/join'].includes(path))return json({error:'not_found'},404);
  const framed=scoped&&['/','/chat'].includes(path)&&['shed','campaign'].includes(u.searchParams.get('frame'));
  const assets={'/demo':[scoped?scopedDemoPage:demoPage,'text/html; charset=utf-8'],'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
