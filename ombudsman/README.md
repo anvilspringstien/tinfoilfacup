@@ -62,3 +62,16 @@ if a scheduled launch or another request races with catch-up.
 The health report and any alerts continue to describe the actual scheduled
 run state and include the catch-up decision separately. Setting the mode
 back to `observe` or removing it disables dispatch.
+
+### Verify observe mode on the live Worker
+
+1. After the catch-up code is deployed, set `CATCH_UP_MODE` to `observe` on
+   `tffc-ombudsman`. Observe mode works without an Actions-write token.
+2. After the next scheduled Ombudsman tick, use the existing authenticated
+   `GET /health` endpoint to check that `checked_at` has advanced.
+3. During a missed-launch gap, inspect `checks.results.catch_up` or
+   `checks.draw.catch_up`. An eligible scan reports `state: eligible` with
+   the stale scheduled run ID in `after_run_id`. An active scan or a changed
+   schedule produces a skip reason.
+4. Compare the affected workflow's GitHub Actions history with the report.
+   An observe-mode decision should create no `workflow_dispatch` run.
