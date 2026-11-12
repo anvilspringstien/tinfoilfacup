@@ -10,7 +10,7 @@ const phonePreviewPost={
  id:'79e452df-f48d-44ba-ad72-ac1cb8ae8651',
  name:'Test Pigeon',
  campaign:{callSign:'TF2AC 12345'},
- text:'Sample post for testing Flight Path sharing.',
+ text:'Sample post. Tap View Flight Path to open the map and try sharing it.',
  at:Date.UTC(2026,10,12,14),
  hasFlightPath:true
 };
