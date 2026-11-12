@@ -70,10 +70,14 @@ jobs:
                   page += 1
 
 
-          audit_previews = (
-              "audit/club-websites-batch16-20261104",
-              "audit/club-websites-batch17-20261105",
-              "audit/club-websites-batch18-20261106",
+          retired_previews = (
+              "audit/club-websites-batch19-20261107",
+              "audit/club-websites-batch20-20261108",
+              "fix/keep-refresh-scope-20261105",
+              "fix/results-health-test-fixture-dates",
+              "shed/keep-home-screen-icons",
+              "ux/centre-refresh-control-20261105",
+              "shed/keep-chrome-instructions",
           )
           targets = [
               (worker, preview, f"{worker}_{preview.replace('/', '-')}_{class_name}")
@@ -81,13 +85,8 @@ jobs:
                   ("tffac-boot-room-shed", "BootRoom"),
                   ("tffac-likes-shed", "TffacLikes"),
               )
-              for preview in audit_previews
+              for preview in retired_previews
           ]
-          targets.append((
-              "tffac-likes-shed",
-              "fix/boot-room-mobile-reconnect-20261103",
-              "tffac-likes-shed_fix-boot-room-mobile-reconnect-20261103_TffacLikes",
-          ))
 
           before = read_namespaces()
           existing = {row.get("name") for row in before}
