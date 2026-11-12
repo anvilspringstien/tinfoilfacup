@@ -141,6 +141,26 @@ test('public walk-ins accept fresh browsers and more than ten guests during an o
  assert.throws(()=>f.room.walkIn({...claim,callSign:'TF2AC 01099'},'closed',true),e=>e.status===403);
 });
 
+test('walk-ins can update their own Campaign name for future Flight Path posts',()=>{
+ const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
+ const claim={name:'Pigeon 03120',callSign:'TF2AC 03120',origin:'Starting Athletic',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ const {id}=f.room.walkIn(claim,'session',true);
+ const flightPath={stops:[null,{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ f.room.action('session',{type:'message',text:'Before updating',flightPath});
+ const nameClaim={callSign:claim.callSign,name:'Renamed Pigeon'};
+ assert.throws(()=>f.room.syncCampaignName(other,nameClaim),{status:403});
+ assert.throws(()=>f.room.syncCampaignName('session',{...nameClaim,callSign:'TF2AC 03121'}),{status:403});
+ assert.throws(()=>f.room.syncCampaignName('session',{...nameClaim,name:'x'.repeat(21)}),{status:400});
+ const updated=f.room.syncCampaignName('session',nameClaim);
+ assert.equal(updated.you.id,id);
+ assert.equal(updated.you.name,'Renamed Pigeon');
+ assert.equal(updated.you.campaign.origin,claim.origin);
+ f.room.action('session',{type:'message',text:'After updating',flightPath});
+ const posts=f.room.snapshot('session').messages;
+ assert.deepEqual(posts.map(post=>[post.name,post.hasFlightPath]),[['Pigeon 03120',true],['Renamed Pigeon',true]]);
+});
+
 test('Flight Paths are optional per post, rounded at Home, and follow room visibility and removal',()=>{
  const f=fixture();
  const claim={name:'Checky',callSign:'TF2AC 01001',origin:'Starting Athletic',custodian:'Example Town',fixture:'Example Town v Example United'};

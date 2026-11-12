@@ -104,6 +104,17 @@ function identityText(person){
 }
 const status=text=>{$('status').hidden=!text;$('status').textContent=text;$('admin-status').textContent=text;};
 async function api(path,body,admin=false){const r=await fetch(roomPrefix+path,{method:body?'POST':'GET',headers:body?{'content-type':'application/json',...(admin?{authorization:'Bearer '+secret}:{})}:{},body:body?JSON.stringify(body):undefined,cache:'no-store',redirect:'error'});const d=await r.json();if(!r.ok)throw Object.assign(Error(d.error||'Request failed'),{status:r.status});return d;}
+function currentCampaignName(callSign){
+ try{
+  const saved=JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')||'null');
+  const number=Number(saved?.searchNumber);
+  if(saved?.originName&&!saved.ended&&Number.isSafeInteger(number)&&number>0&&callSign==='TF2AC '+String(number).padStart(5,'0')&&typeof saved.pigeonName==='string'){
+   return saved.pigeonName.replace(/\\s+/g,' ').trim().slice(0,20)||'Pigeon '+callSign.slice(-5);
+  }
+ }catch{}
+ return campaign?.callSign===callSign?campaign.name:null;
+}
+function joinCampaign(){return {...campaign,name:currentCampaignName(campaign.callSign)};}
 function button(label,fn){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;return b;}
 function send(a){if(!socketFresh||socket?.readyState!==WebSocket.OPEN||document.visibilityState==='hidden'){status('Reconnect before posting.');return false;}socket.send(JSON.stringify(a));return true;}
 function currentFlightCache(){
@@ -249,12 +260,20 @@ async function connect(enterFromChalkboard=false){
  if(!isRoom()||document.visibilityState==='hidden'||connecting)return;
  disconnect();connecting=true;const epoch=connectionEpoch;let joined=false;status('Checking the room…');
  try{
-  const d=await api('/api/state');if(epoch!==connectionEpoch)return;
+  let d=await api('/api/state');if(epoch!==connectionEpoch)return;
   if(campaign&&d.you.campaign?.callSign!==campaign.callSign){
    $('logout').hidden=false;
    showChat();
    status('This browser is already signed into the room. Leave that session to join with this Campaign.');
    return;
+  }
+  if(roomPrefix&&d.you.walkIn){
+   const callSign=d.you.campaign.callSign;
+   const name=currentCampaignName(callSign);
+   if(name&&name!==d.you.name){
+    d=await api('/api/campaign-name',{callSign,name});
+    if(epoch!==connectionEpoch)return;
+   }
   }
   render(d);
   const ws=new WebSocket(location.origin.replace(/^http/,'ws')+roomPrefix+'/api/socket');socket=ws;
@@ -282,7 +301,7 @@ async function connect(enterFromChalkboard=false){
    $('walk-in-join').disabled=!doors.walkIn;
    if(enterFromChalkboard===true&&doors.open&&doors.walkIn){
     $('walk-in-join').disabled=true;
-    try{await api('/api/walk-in',{campaign});joined=true;}
+    try{await api('/api/walk-in',{campaign:joinCampaign()});joined=true;}
     finally{if(epoch===connectionEpoch)$('walk-in-join').disabled=false;}
     return;
    }
@@ -308,7 +327,7 @@ async function connect(enterFromChalkboard=false){
 }
 async function joinWalkIn(){
  const button=$('walk-in-join');button.disabled=true;
- try{await api('/api/walk-in',{campaign});await connect();}
+ try{await api('/api/walk-in',{campaign:joinCampaign()});await connect();}
  catch(e){status(e.message);}
  finally{button.disabled=false;}
 }
