@@ -58,11 +58,14 @@ export class RoomStore {
  join(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);if(s.joins>=200)throw new RoomError('Test connection allowance reached for today',429);s.joins++;return {id:p.id,hash};});}
  action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(!['report','delete-own'].includes(a?.type)&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;
  if(a.type==='message'){const text=clean(a.text,500);if(!text)throw new RoomError('Messages must contain 1–500 characters');const parent=a.replyTo?s.messages.find(m=>m.id===a.replyTo&&!m.deleted):null;if(a.replyTo&&!parent)throw new RoomError('Reply target is no longer available');let flightPath;
+ const author=identity(p);
  if(a.flightPath!==undefined){
   if(!p.campaign)throw new RoomError('Open the Boot Room from your Campaign to attach a Flight Path.');
   try{flightPath=validateFlightPath(a.flightPath);}catch(error){throw new RoomError(error.message);}
+  const origin=clean(a.campaignOrigin,100);
+  if(!author.campaign.origin&&origin)author.campaign={...author.campaign,origin};
  }
- const m={id:crypto.randomUUID(),person:p.id,name:p.name,...identity(p),text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
+ const m={id:crypto.randomUUID(),person:p.id,name:p.name,...author,text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
  else if(a.type==='heart'){const m=s.messages.find(m=>m.id===a.id&&!m.deleted);if(!m||typeof a.liked!=='boolean')throw new RoomError('Message unavailable');m.hearts=m.hearts.filter(id=>id!==p.id);if(a.liked)m.hearts.push(p.id);result={id:m.id};}
  else if(a.type==='delete-own'){
   const m=s.messages.find(m=>m.id===a.id&&m.person===p.id);

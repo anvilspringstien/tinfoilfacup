@@ -112,7 +112,7 @@ function currentFlightCache(){
   const cached=JSON.parse(localStorage.getItem('tffc.barry.boot-flight.v1')||'null');
   if(!saved?.originName||saved.ended||!cached||cached.callSign!==me?.campaign?.callSign)return null;
   const key=[saved.originName,saved.postcode,saved.searchNumber,saved.selectedAt||''].join('|');
-  return cached.identity===key&&cached.route?cached:null;
+  return cached.identity===key&&cached.route?{...cached,origin:saved.originName}:null;
  }catch{return null;}
 }
 function flightCacheNeedsRefresh(cache){
@@ -318,7 +318,11 @@ $('connect').onclick=connect;$('logout').onclick=async()=>{disconnect();me=null;
 $('composer').onsubmit=e=>{e.preventDefault();const cache=$('attach-flight').checked?currentFlightCache():null;
  const flightPath=cache&&!flightCacheNeedsRefresh(cache)?cache.route:null;
  if($('attach-flight').checked&&!flightPath){status('Reopen Barry Air to refresh your Flight Path.');return;}
- const message={type:'message',text:$('text').value,replyTo,...(flightPath?{flightPath}:{})};
+ const message={type:'message',text:$('text').value,replyTo};
+ if(flightPath){
+  message.flightPath=flightPath;
+  if(!me.campaign.origin)message.campaignOrigin=cache.origin;
+ }
  if(flightPath&&JSON.stringify(message).length>4096){status('This Flight Path is too large to attach. You can send the message without it.');return;}
  pendingText=message.text;send(message);};
 $('cancel-reply').onclick=()=>{replyTo=null;$('reply').textContent='';$('reply-preview').hidden=true;};

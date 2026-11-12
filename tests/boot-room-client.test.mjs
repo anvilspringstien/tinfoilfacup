@@ -150,6 +150,7 @@ test('a checked-in Flight Path is opt-in for each post and appears beside its pi
  b.$('attach-flight').checked=true;
  b.$('composer').onsubmit({preventDefault(){}});
  assert.deepEqual(ws.sent.flightPath,{...route,milesFlown:42});
+ assert.equal(ws.sent.campaignOrigin,saved.originName);
  assert.equal(JSON.stringify(ws.sent).includes(saved.postcode),false);
  ws.message({type:'ack',action:'message'});
  assert.equal(b.$('attach-flight').checked,false);
