@@ -207,6 +207,33 @@ test('Flight Paths are optional per post, rounded at Home, and follow room visib
  assert.throws(()=>f.room.flightPath(attached.id,'',true),{status:404});
 });
 
+test('Trophy Cabinet snapshots contain only earned mat IDs and follow their post through closure and removal',()=>{
+ const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
+ const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ f.room.walkIn(claim,'session');
+ assert.throws(()=>f.room.action(other,{type:'message',text:'Test',trophyCabinet:['01']}),/from your Campaign/);
+ for(const invalid of [null,{},['00'],['28'],['03','03'],['https://example.test/01'],[1]]){
+  assert.throws(()=>f.room.action('session',{type:'message',text:'Test',trophyCabinet:invalid}),/Trophy Cabinet is unavailable/);
+ }
+ const matIds=['08','01'];
+ const flightPath={stops:[null,{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ const first=f.room.action('session',{type:'message',text:'Two trophies',trophyCabinet:matIds,flightPath});
+ matIds.push('19');
+ const second=f.room.action('session',{type:'message',text:'Three trophies',trophyCabinet:matIds});
+ f.room.action('session',{type:'message',text:'Empty cabinet',trophyCabinet:[]});
+ const history=f.room.snapshot(other).messages;
+ assert.deepEqual(history.map(m=>m.trophyCabinet),[['01','08'],['01','08','19'],[]]);
+ assert.equal(history[0].hasFlightPath,true);
+ assert.equal(history[0].name,'Checky');
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ assert.deepEqual(f.room.readClosed().messages[0].trophyCabinet,['01','08']);
+ f.room.action('session',{type:'delete-own',id:first.id});
+ f.room.admin({type:'delete',id:second.id});
+ assert.deepEqual(f.room.snapshot(other).messages.map(m=>m.trophyCabinet),[undefined,undefined,[]]);
+ assert.deepEqual(f.room.readClosed().messages.map(m=>m.trophyCabinet),[[]]);
+});
+
 test('only the author can delete their post, even after the room closes',()=>{
  const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
  const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};

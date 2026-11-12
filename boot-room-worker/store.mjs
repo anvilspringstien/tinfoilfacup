@@ -1,4 +1,5 @@
 import {validateFlightPath} from './flight-path.mjs';
+import {validateTrophyCabinet} from './trophy-cabinet.mjs';
 export class RoomError extends Error {constructor(message,status=400){super(message);this.status=status;}}
 export const DAY=86400000;
 export const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
@@ -10,6 +11,7 @@ function removeMessage(state,message,text){
  message.text=text;
  message.deleted=true;
  delete message.flightPath;
+ delete message.trophyCabinet;
  message.hearts=[];
  state.reports=state.reports.filter(report=>report.message!==message.id);
 }
@@ -53,7 +55,7 @@ export class RoomStore {
  });}
  readClosed(){return this.run((s,n)=>{
   if(s.open&&s.until>n)throw new RoomError('The room is open. Join from My Campaign.',409);
-  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts,flightPath})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length,...(flightPath?{hasFlightPath:true}:{})}));
+  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts,flightPath,trophyCabinet})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length,...(flightPath?{hasFlightPath:true}:{}),...(trophyCabinet?{trophyCabinet}:{})}));
   return {open:false,next:s.next,until:s.until,you:null,messages};
  });}
  flightPath(id,hash,publicRead){return this.run((s,n)=>{
@@ -73,7 +75,13 @@ export class RoomStore {
   const origin=clean(a.campaignOrigin,100);
   if(!author.campaign.origin&&origin)author.campaign={...author.campaign,origin};
  }
- const m={id:crypto.randomUUID(),person:p.id,name:p.name,...author,text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
+ let trophyCabinet;
+ if(a.trophyCabinet!==undefined){
+  if(!p.campaign)throw new RoomError('Open the Boot Room from your Campaign to attach a Trophy Cabinet.');
+  trophyCabinet=validateTrophyCabinet(a.trophyCabinet);
+  if(!trophyCabinet)throw new RoomError('This Trophy Cabinet is unavailable.');
+ }
+ const m={id:crypto.randomUUID(),person:p.id,name:p.name,...author,text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{}),...(trophyCabinet?{trophyCabinet}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
  else if(a.type==='heart'){const m=s.messages.find(m=>m.id===a.id&&!m.deleted);if(!m||typeof a.liked!=='boolean')throw new RoomError('Message unavailable');m.hearts=m.hearts.filter(id=>id!==p.id);if(a.liked)m.hearts.push(p.id);result={id:m.id};}
  else if(a.type==='delete-own'){
   const m=s.messages.find(m=>m.id===a.id&&m.person===p.id);
