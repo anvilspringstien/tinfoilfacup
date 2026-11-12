@@ -1,6 +1,7 @@
 import {DurableObject} from 'cloudflare:workers';
 import {RoomStore,RoomError,digest,token,DAY} from './store.mjs';
 import {page,script,style} from './ui.mjs';
+import {trophyMatIds} from './trophy-cabinet.mjs';
 import {demoPage,scopedDemoPage} from './demo.mjs';
 const json=(data,status=200,extra={})=>Response.json(data,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff',...extra}});
 const roomPrefix='/beta/boot-room';
@@ -38,10 +39,17 @@ export default {async fetch(request,env){try{const u=new URL(request.url),scoped
  if(scoped&&['/admin','/api/admin','/api/invite','/api/join'].includes(path))return json({error:'not_found'},404);
  const framed=scoped&&['/','/chat'].includes(path)&&['shed','campaign'].includes(u.searchParams.get('frame'));
  const assets={'/demo':[scoped?scopedDemoPage:demoPage,'text/html; charset=utf-8'],'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
- if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:scoped&&['/','/chat'].includes(path)?(framed?page.replace('<html lang=', '<html data-frame="shed" lang='):page).replace(/<details><summary>Use a private invitation<\/summary>.*?<\/details>/,''):assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://tinfoilfacup.com blob:; connect-src 'self'; frame-ancestors "+(framed?"'self'":"'none'")+"; base-uri 'none'; form-action 'none'"}});}
+ if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:scoped&&['/','/chat'].includes(path)?(framed?page.replace('<html lang=', '<html data-frame="shed" lang='):page).replace(/<details><summary>Use a private invitation<\/summary>.*?<\/details>/,''):assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://tinfoilfacup.com blob:; connect-src 'self'; frame-ancestors "+(framed?"'self'":"'none'")+"; base-uri 'none'; form-action 'none'"}});}
  if(['/flight-path-share.mjs','/assets/route-map.svg'].includes(path)){
   if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);
   return env.FLIGHT_PATH_ASSETS.fetch(new Request(new URL(path,u),{method:request.method}));
+ }
+ const mat=/^\/trophy-mats\/(\d{2})\.webp$/.exec(path)?.[1];
+ if(mat&&trophyMatIds.includes(mat)){
+  if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);
+  const image=await fetch('https://tinfoilfacup.com/beta/assets/challenge-thumbs/mat-'+mat+'-front.webp',{method:request.method});
+  if(!image.ok||image.headers.get('content-type')?.split(';')[0]!=='image/webp')return json({error:'image_unavailable'},502);
+  return new Response(image.body,{headers:{'content-type':'image/webp','cache-control':'public, max-age=3600','x-content-type-options':'nosniff'}});
  }
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});
  const post=['/api/walk-in','/api/join','/api/admin','/api/invite','/api/logout'].includes(path)||(scoped&&path==='/api/campaign-name');if(!post&&!['/api/state','/api/socket','/api/doors','/api/read-closed','/api/flight-path'].includes(path))return json({error:'not_found'},404);
