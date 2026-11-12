@@ -20,6 +20,7 @@ export class BootRoom extends DurableObject {
  else if(path==='/api/join')result=this.room.redeem(a.invite,a.session,a.campaign);
  else if(path==='/api/logout'){result=this.room.logout(hash);this.broadcast();}
  else if(path==='/api/state')result=this.room.snapshot(hash);
+ else if(path==='/api/campaign-name')result=this.room.syncCampaignName(hash,a);
  else if(path==='/api/doors')result=this.room.doors();
  else if(path==='/api/read-closed')result=this.room.readClosed();
  else if(path==='/api/flight-path')result=this.room.flightPath(url.searchParams.get('post'),hash,url.searchParams.get('public')==='1');
@@ -43,7 +44,7 @@ export default {async fetch(request,env){try{const u=new URL(request.url),scoped
   return env.FLIGHT_PATH_ASSETS.fetch(new Request(new URL(path,u),{method:request.method}));
  }
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});
- const post=['/api/walk-in','/api/join','/api/admin','/api/invite','/api/logout'].includes(path);if(!post&&!['/api/state','/api/socket','/api/doors','/api/read-closed','/api/flight-path'].includes(path))return json({error:'not_found'},404);
+ const post=['/api/walk-in','/api/join','/api/admin','/api/invite','/api/logout'].includes(path)||(scoped&&path==='/api/campaign-name');if(!post&&!['/api/state','/api/socket','/api/doors','/api/read-closed','/api/flight-path'].includes(path))return json({error:'not_found'},404);
  if(request.method!==(post?'POST':'GET'))return json({error:'method_not_allowed'},405);
  if((post||path==='/api/socket')&&request.headers.get('origin')!==u.origin)return json({error:'origin_not_allowed'},403);
  let body={};if(post){if(!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||''))return json({error:'json_required'},415);const raw=await request.text();if(new TextEncoder().encode(raw).length>2048)return json({error:'body_too_large'},413);try{body=JSON.parse(raw);}catch{return json({error:'invalid_json'},400);}if(!body||typeof body!=='object'||Array.isArray(body))return json({error:'invalid_json'},400);}
@@ -79,5 +80,6 @@ export default {async fetch(request,env){try{const u=new URL(request.url),scoped
   return stub.fetch(new Request(endpoint,{headers}));
  }
  if(!/^[a-f0-9]{64}$/.test(session))return json({error:'Invitation required'},401);
+ if(path==='/api/campaign-name')return stub.fetch('https://room.internal/api/campaign-name',{method:'POST',headers:{'x-room-session':await digest(session)},body:JSON.stringify(body)});
  const h=new Headers(request.headers);h.delete('cookie');h.delete('authorization');h.set('x-room-session',await digest(session));return stub.fetch(new Request(new URL(path+u.search,u.origin),{method:request.method,headers:h}));
  }catch{return json({error:'Room temporarily unavailable'},503);}}};

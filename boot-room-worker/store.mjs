@@ -17,7 +17,7 @@ export class RoomStore {
  constructor(storage,clock=Date.now){this.storage=storage;this.clock=clock;storage.sql.exec('CREATE TABLE IF NOT EXISTS room (id INTEGER PRIMARY KEY CHECK(id=1), data TEXT NOT NULL)');storage.sql.exec('INSERT OR IGNORE INTO room VALUES (1,?)',JSON.stringify({open:false,next:'Opening time to be announced',until:0,people:[],messages:[],reports:[],day:'',actions:0,joins:0}));}
  run(change){return this.storage.transactionSync(()=>{const s=JSON.parse(this.storage.sql.exec('SELECT data FROM room WHERE id=1').toArray()[0].data);const n=this.clock();s.messages=s.messages.filter(m=>m.at>n-7*DAY);s.reports=s.reports.filter(r=>r.at>n-7*DAY);s.people=s.people.filter(p=>p.expires>n);if(s.until<=n)s.open=false;const day=new Date(n).toISOString().slice(0,10);if(s.day!==day){s.day=day;s.actions=0;s.joins=0;}const result=change(s,n);this.storage.sql.exec('UPDATE room SET data=? WHERE id=1',JSON.stringify(s));return result;});}
  person(s,hash,n){const p=s.people.find(p=>p.session===hash&&p.expires>n&&!p.suspended);if(!p||(p.callSign&&s.people.some(other=>other.callSign===p.callSign&&other.suspended)))throw new RoomError('Invitation or session expired',401);return p;}
- view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p)},messages:s.messages.map(({flightPath,...m})=>({...m,...(flightPath?{hasFlightPath:true}:{}),hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
+ view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p),...(p.walkIn?{walkIn:true}:{})},messages:s.messages.map(({flightPath,...m})=>({...m,...(flightPath?{hasFlightPath:true}:{}),hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
  invite(name,hash,callSign,moderator=false){if(callSign&&!validCallSign(callSign))throw new RoomError('Use a Call Sign like TF2AC 01922');if(moderator===true&&!callSign)throw new RoomError('A moderator invitation needs a Call Sign');if(!(name=clean(name,40)))throw new RoomError('Use a pigeon name of 1–40 characters');return this.run((s,n)=>{if(callSign&&s.people.some(p=>p.callSign===callSign))throw new RoomError('That Call Sign already has a place',409);if(s.people.filter(p=>!p.walkIn).length>=10)throw new RoomError('Ten test places are already reserved',409);const p={id:crypto.randomUUID(),name,callSign:callSign||null,moderator:moderator===true,invite:hash,session:null,expires:n+7*DAY,suspended:false,last:0,burst:0};s.people.push(p);return {id:p.id,name,expires:p.expires};});}
  redeem(invite,session,claim){return this.run((s,n)=>{const p=s.people.find(p=>p.invite===invite&&!p.suspended&&p.expires>n);if(!p)throw new RoomError('Invitation is invalid, used or expired',401);if(p.callSign){
    const custodian=clean(claim?.custodian,100),fixture=clean(claim?.fixture,200);
@@ -43,6 +43,14 @@ export class RoomStore {
  });}
  logout(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);p.session=null;return {ok:true};});}
  snapshot(hash){return this.run((s,n)=>this.view(s,this.person(s,hash,n),n));}
+ syncCampaignName(hash,claim){return this.run((s,n)=>{
+  const p=this.person(s,hash,n);
+  if(!p.walkIn||!p.campaign||p.campaign.callSign!==claim?.callSign)throw new RoomError('Open the Boot Room from your saved Campaign',403);
+  const name=clean(claim.name,20);
+  if(!name)throw new RoomError('Use a pigeon name of 1–20 characters');
+  p.name=name;
+  return this.view(s,p,n);
+ });}
  readClosed(){return this.run((s,n)=>{
   if(s.open&&s.until>n)throw new RoomError('The room is open. Join from My Campaign.',409);
   const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts,flightPath})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length,...(flightPath?{hasFlightPath:true}:{})}));

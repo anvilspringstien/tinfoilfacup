@@ -110,6 +110,22 @@ test('the Shed chalkboard keeps the shared frame when continuing to chat',async(
  assert.equal(b.$('.entrance-enter').href,'/beta/boot-room/chat?enter=1&frame=shed#campaign='+encodeURIComponent(JSON.stringify(campaign)));
 });
 
+test('a saved Campaign name replaces the fallback on an existing public walk-in session',async()=>{
+ const campaign={callSign:'TF2AC 03120',name:'Pigeon 03120'};
+ const saved={originName:'Starting Athletic',searchNumber:3120,pigeonName:'Renamed  Pigeon'};
+ const state={open:true,messages:[],you:{id:'a',name:campaign.name,campaign,walkIn:true}};
+ const updated={...state,you:{...state.you,name:'Renamed Pigeon'}};
+ const b=browser('/beta/boot-room/chat',campaign,{
+  storage:{tinFoilFACupJourney_v7:JSON.stringify(saved)},
+  responses:[state,updated].map(data=>({ok:true,json:async()=>data})),
+ });
+ await b.settle();
+ assert.deepEqual(b.requests,['/beta/boot-room/api/state','/beta/boot-room/api/campaign-name']);
+ assert.deepEqual(b.posts,[{callSign:campaign.callSign,name:'Renamed Pigeon'}]);
+ assert.match(b.$('you').textContent,/Posting as Renamed Pigeon · TF2AC 03120/);
+ assert.equal(b.sockets.length,1);
+});
+
 
 test('Entrance returns Campaign visitors to the same Chalk Board and closed chat',async()=>{
  const campaign={callSign:'TF2AC 01001',name:'Test Pigeon'};
