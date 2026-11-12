@@ -210,6 +210,43 @@ test('only own posts offer Delete and it requires confirmation, including after 
  assert.deepEqual(ws.sent,{type:'delete-own',id:'mine'});
 });
 
+test('the Trophy Cabinet is opt-in, belongs to the current Campaign and opens read-only in closed chat',async()=>{
+ const campaign={callSign:'TF2AC 01001'};
+ const selectedAt='2026-09-25T09:00:00.000Z';
+ const saved={originName:'Example Town',searchNumber:1001,selectedAt};
+ const deck={version:1,campaignKey:'Example Town|'+selectedAt,completed:{'00':true,'01':true,'08':{automatic:true},'09':false,'99':true},accepted:{'03':true}};
+ const deckKey='tffc.challengeDeck.v1';
+ const storage={tinFoilFACupJourney_v7:JSON.stringify(saved),[deckKey]:JSON.stringify(deck)};
+ const b=browser('/beta/boot-room/chat',null,{storage});
+ b.setState({you:{id:'a',name:'Checky',campaign}});
+ await b.settle();
+ const ws=b.sockets[0];b.snapshot(ws);
+ assert.equal(b.$('attach-trophy-row').hidden,false);
+ b.$('text').value='Two Beer Mats earned';
+ b.$('composer').onsubmit({preventDefault(){}});
+ assert.equal(ws.sent.trophyCabinet,undefined);
+ b.$('attach-trophy').checked=true;
+ b.$('composer').onsubmit({preventDefault(){}});
+ assert.deepEqual(ws.sent.trophyCabinet,['01','08']);
+ assert.doesNotMatch(JSON.stringify(ws.sent),/Example Town|selectedAt|automatic/);
+ ws.message({type:'ack',action:'message'});
+ assert.equal(b.$('attach-trophy').checked,false);
+ storage[deckKey]=JSON.stringify({...deck,campaignKey:'Previous Campaign|earlier'});
+ b.snapshot(ws);
+ assert.equal(b.$('attach-trophy-row').hidden,true);
+
+ b.setState({open:false,you:null,messages:[{id:'m1',name:'Checky',text:'Two Beer Mats earned',at:Date.now(),hearts:0,trophyCabinet:['01','08']}]});
+ b.snapshot(ws);
+ const sender=b.$('messages').children[0].children[1].children[0];
+ sender.children.find(node=>node.textContent==='View Trophy Cabinet').onclick();
+ assert.equal(b.$('trophy-preview').open,true);
+ assert.equal(b.$('trophy-preview-title').textContent,'Checky’s Trophy Cabinet');
+ assert.equal(b.$('trophy-preview-count').textContent,'2 of 27 completed');
+ assert.deepEqual(b.$('trophy-preview-mats').children.map(tile=>tile.children[0].alt),['Beer Mat 01','Beer Mat 08']);
+ b.$('trophy-preview-close').onclick();
+ assert.equal(b.$('trophy-preview').open,false);
+});
+
 
 test('entering chat shows a loading state until the first conversation is ready', async () => {
  const b=browser();
