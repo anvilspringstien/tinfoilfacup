@@ -9,7 +9,7 @@ const phonePreviewHost='test-boot-room-flight-share-phone-tffac-boot-room-shed.a
 const phonePreviewPost={
  id:'79e452df-f48d-44ba-ad72-ac1cb8ae8651',
  name:'Test Pigeon',
- campaign:{callSign:'TF2AC 12345'},
+ campaign:{callSign:'TF2AC 12345',origin:'Herne Bay FC',custodian:'Salisbury FC'},
  text:'Sample post. Tap View Flight Path to open the map and try sharing it.',
  at:Date.UTC(2026,10,12,14),
  hasFlightPath:true
