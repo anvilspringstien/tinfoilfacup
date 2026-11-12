@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'updater'))
+import apply_exceptional_replay_dispositions as exceptional
 import auto_round_results as scan
 import enrich_replay_kickoffs_and_active_venues as enrich
 from result_metadata import preserve_result_metadata, retain_metadata
@@ -125,6 +126,43 @@ class ResultsRepair(unittest.TestCase):
         for status in ('HT', 'LIVE', ''):
             with self.subTest(status=status), self.assertRaises(ValueError):
                 scan.classify_observation(row['fixture'], {**row['observation'], 'status': status}, [])
+
+
+class OrderedReplayReplacementTests(unittest.TestCase):
+    def setUp(self):
+        items = json.loads(exceptional.LEDGER.read_text())['dispositions']
+        self.reviewed = next(item for item in items if item.get('drawn_tie'))
+        drawn = {**self.reviewed['drawn_tie'], 'status': 'FT', 'winner': '', 'decision': 'draw-replay'}
+        self.data = {
+            'result_history': {'Herne Bay': [drawn]},
+            'results': {'Herne Bay': copy.deepcopy(drawn)},
+            'preliminary_fixtures': {'Broadfields United': self.reviewed['downstream']},
+        }
+
+    def test_missing_superseded_replay_is_retained_as_void_and_replacement_transfers_custody(self):
+        self.assertTrue(exceptional.apply_one(self.data, self.reviewed)[0])
+        rows = self.data['result_history']['Herne Bay']
+        self.assertEqual([(row['status'], row['winner']) for row in rows],
+                         [('FT', ''), ('VOID', ''), ('FT (AET)', 'Broadfields United')])
+        self.assertEqual(self.data['results']['Herne Bay'], rows[-1])
+        before = copy.deepcopy(self.data)
+        self.assertFalse(exceptional.apply_one(self.data, self.reviewed)[0])
+        self.assertEqual(self.data, before)
+
+    def test_missing_ancestry_missing_downstream_and_conflicting_result_stop_without_mutation(self):
+        for change, message in (
+            ({'result_history': {}}, 'replay ancestry'),
+            ({'preliminary_fixtures': {}}, 'downstream slot'),
+            ({'result_history': {'Herne Bay': [
+                {**self.reviewed['replay_result'], 'home_score': 3},
+            ]}}, 'conflicting replacement'),
+        ):
+            with self.subTest(message=message):
+                candidate = copy.deepcopy({**self.data, **change})
+                before = copy.deepcopy(candidate)
+                with self.assertRaisesRegex(SystemExit, message):
+                    exceptional.apply_one(candidate, self.reviewed)
+                self.assertEqual(candidate, before)
 
 
 if __name__ == '__main__':
