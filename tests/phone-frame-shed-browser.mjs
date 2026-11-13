@@ -198,7 +198,7 @@ try{
  }
  await app.getByRole('button',{name:'My Challenges',exact:true}).click();
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
- await app.getByRole('button',{name:'Exit',exact:true}).waitFor({timeout:30000});
+ await app.getByRole('button',{name:'← My Campaign',exact:true}).waitFor({timeout:30000});
  await checkMagicFooter();
  assert.equal(await app.locator('#challengeShareLinkFooter').isVisible(),false);
  assert.deepEqual(await app.locator('.deck-sales-coming').evaluate(button=>{const s=getComputedStyle(button);return [s.backgroundColor,s.color,s.opacity]}),['rgb(201, 0, 0)','rgb(255, 255, 255)','1']);
@@ -208,7 +208,7 @@ try{
  const challengeKeep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
  await challengeKeep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
  await challengeKeep.getByRole('button',{name:'Close',exact:true}).click();
- await app.getByRole('button',{name:'Exit',exact:true}).click();
+ await app.getByRole('button',{name:'← My Campaign',exact:true}).click();
  await app.getByRole('button',{name:'Share the Magic',exact:true}).click();
  const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
  await share.getByRole('button',{name:'Keep the Magic',exact:true}).click();

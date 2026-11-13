@@ -146,8 +146,8 @@ function completedResultVenue(result){
       return {ground:'Ground name unconfirmed',postcode:home.postcode,
         lat:home.lat,lon:home.lon,verification:'unverified'};
   }
-  const homeClub=candidateClubByName(result.home)||clubByDisplayName(result.home);
-  const hg=groundByClubName(homeClub?homeClub.name:result.home);
+  const homeClub=candidateClubByName(result.home);
+  const hg=groundByClubName(homeClub?.name||clubByDisplayName(result.home)?.name||result.home);
 
   // If a source venue and the verified canonical home ground have the same
   // postcode, prefer the verified Clubfinder name. This updates stale sponsor /
@@ -275,7 +275,7 @@ function liveLookup(section,name){
   // same way (for example "Weston-super-Mare" vs "Weston Super Mare FC").
   // Fall back to the same canonical identity comparison used by the journey
   // engine so healthy live results cannot be hidden by punctuation alone.
-  // Competition aliases leave surveyed ground keys intact.
+  // Explicit 2026–27 merger identity only; never rewrite surveyed ground keys.
   const target=tinFoilBetaCompetitionClubKey(raw);
   if(!target)return null;
   for(const [key,value] of Object.entries(obj)){
