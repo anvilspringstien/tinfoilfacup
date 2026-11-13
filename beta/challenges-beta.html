@@ -97,10 +97,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .deck-footer-help{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 .overlay .deckfoot{padding-bottom:0}
 .verifyrow{display:flex;justify-content:center;min-height:28px;margin-top:8px}
-.verifybadge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border:1px solid #756753;border-radius:999px;background:#2c271f;color:#ead9ad;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em;cursor:help}
-.verifybadge:focus-visible{outline:2px solid #ead9ad;outline-offset:3px}
-.verifyhelp{min-height:18px;text-align:center;margin-top:5px;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#cdbfa8;opacity:0;transition:opacity .16s}
-.verifyhelp.show{opacity:1}
+.verifybadge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border:1px solid #756753;border-radius:999px;background:#2c271f;color:#ead9ad;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.verifyhelp{text-align:center;margin:5px 0 0;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#cdbfa8}
 .feedback{min-height:18px;text-align:center;margin:0;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#dbc89d}
 .deck-feedback{
   width:min(610px,94vw);
@@ -878,7 +876,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .campaign-return:focus-visible{outline:2px solid #ead9ad;outline-offset:2px}
 .campaign-truth{
   box-sizing:border-box;
-  margin:8px auto 22px;
+  margin:14px auto 22px;
   padding:12px 14px;
   border:1px solid rgba(255,255,255,.22);
   border-radius:10px;
@@ -1247,8 +1245,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
       </div>
       <button class="nav next" id="next" aria-label="Next Challenge">›</button>
     </div>
-    <div class="verifyrow"><button class="verifybadge" id="verifyBadge" type="button" aria-describedby="verifyHelp" aria-expanded="false">Our Foundational Laws</button></div>
-    <div class="verifyhelp" id="verifyHelp"></div>
+    <div class="verifyrow"><span class="verifybadge" id="verifyBadge">Our Foundational Laws</span></div>
+    <p class="verifyhelp" id="verifyHelp">Move along now, this isn't a Challenge. it's The Law!</p>
     <div class="campaign-return-row"><button class="campaign-return" id="exitBtn" type="button">← My Campaign</button></div>
     <div class="campaign-truth" aria-label="Current Campaign standing">
       <span class="campaign-truth-line"><span class="label">Call Sign:</span> <strong id="truthCallSign">—</strong></span>
@@ -1634,14 +1632,6 @@ function verificationHelp(c) {
   if (c.type==="external") return "This Challenge takes you beyond Clubfinder.";
   return "We believe every word you say. Honest!";
 }
-function hideVerificationHelp() {
-  $("verifyHelp").classList.remove("show");
-  $("verifyBadge").setAttribute("aria-expanded","false");
-}
-function showVerificationHelp() {
-  $("verifyHelp").classList.add("show");
-  $("verifyBadge").setAttribute("aria-expanded","true");
-}
 function lockedMessage(c) {
   if (c.type==="foundation") return "Foundation mat — no action required.";
   if (c.type==="comingsoon") {
@@ -1770,7 +1760,6 @@ function render() {
   $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
   $("verifyBadge").textContent=verificationLabel(c);
   $("verifyHelp").textContent=verificationHelp(c);
-  hideVerificationHelp();
   $("feedback").textContent="";
 
   const unlocked=isUnlocked(c);
@@ -2059,19 +2048,6 @@ $("exitBtn").onclick=(e)=>{
 overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
 $("prev").onclick=()=>{if(index>0){index--;render()}};
 $("next").onclick=()=>{if(index<CHALLENGES.length-1){index++;render()}};
-const verifyBadge=$("verifyBadge");
-verifyBadge.addEventListener("mouseenter",showVerificationHelp);
-verifyBadge.addEventListener("mouseleave",()=>{ if(document.activeElement!==verifyBadge) hideVerificationHelp(); });
-verifyBadge.addEventListener("focus",showVerificationHelp);
-verifyBadge.addEventListener("blur",hideVerificationHelp);
-verifyBadge.addEventListener("click",e=>{
-  e.stopPropagation();
-  const showing=$("verifyHelp").classList.contains("show");
-  showing ? hideVerificationHelp() : showVerificationHelp();
-});
-document.addEventListener("pointerdown",e=>{
-  if(!verifyBadge.contains(e.target) && !$("verifyHelp").contains(e.target)) hideVerificationHelp();
-});
 function setDeckFlip(next){
   flipped=next;
   flipcard.classList.toggle("flipped",flipped);
