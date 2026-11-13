@@ -78,13 +78,13 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .placeholder h3{font-size:36px;margin:0;color:#7e291f} .placeholder p{font:18px Arial,sans-serif;max-width:420px}
 .cup{width:120px;max-height:190px;object-fit:contain}
 .deckfoot{position:relative;z-index:3;background:#100f0d;padding:16px 12px 12px;flex:0 0 auto;border-radius:0 0 9px 9px}
-.controlrail{display:grid;grid-template-columns:42px 310px 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
-.controls{display:flex;justify-content:center;align-items:center;gap:7px;width:310px}
+.controlrail{display:grid;grid-template-columns:42px auto 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
+.controls{display:flex;justify-content:center;align-items:center;gap:7px}
 .nav{width:42px;height:38px;border-radius:50%;border:1px solid #7b6a52;background:#2a251f;color:#f3e6c7;font-size:25px;cursor:pointer;flex:0 0 auto}
 .nav.prev,.nav.next{margin:0}
 .nav[disabled]{opacity:.28;cursor:not-allowed}
 .action{border:1px solid rgba(255,255,255,.16);border-radius:999px;height:27px;padding:0 12px;font:700 11px/1 Arial,sans-serif;cursor:pointer;width:96px;min-width:96px;box-shadow:0 3px 9px rgba(0,0,0,.22);display:inline-flex;align-items:center;justify-content:center}
-.accept{background:#d59b28;color:#1b1508}.complete{background:#2d6a4f;color:white}.action.exit{background:#141410;color:#c4c1b5;border-color:#49473f;border-radius:5px;font-weight:400;box-shadow:none}
+.accept{background:#d59b28;color:#1b1508}.complete{background:#2d6a4f;color:white}
 .action[disabled]{background:#3a3732!important;color:#817a70!important;border-color:#504a43!important;box-shadow:none!important;opacity:1;cursor:not-allowed}
 .complete.done-state[disabled]{background:#2d6a4f!important;color:#fff!important;border-color:#3f8a69!important;box-shadow:0 3px 9px rgba(0,0,0,.22)!important;cursor:default}
 .accept.accepted-state[disabled]{background:#8b6927!important;color:#fff8e8!important;border-color:#aa8641!important;opacity:1!important;cursor:default}
@@ -134,15 +134,15 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 @media(max-width:680px){
  .app{padding:16px 10px 40px}.overlay{padding:10px}.deck{min-height:99vh;height:auto;border-radius:10px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
  .flipcard{width:min(96vw,610px,calc(99vh - 350px));height:auto;max-height:none;aspect-ratio:1}.face{border-radius:14px}
- .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px 210px 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px;width:210px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
- .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.action.exit{width:78px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:35px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}
+ .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px auto 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
+ .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:35px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}
 }
 /* BETA mobile: the mat determines the Deck height rather than reserving an empty viewport gap. */
 @media(max-width:680px){
  .deckbody{height:auto;min-height:0;padding:4px 4px 8px;overflow:visible}
  .cardstage{height:auto;min-height:0}
 }
-@media(max-width:350px){.controlrail{grid-template-columns:31px 190px 31px;column-gap:3px}.controls{gap:3px;width:190px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.action.exit{width:76px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
+@media(max-width:350px){.controlrail{grid-template-columns:31px auto 31px;column-gap:3px}.controls{gap:3px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
 
 
 
@@ -866,9 +866,17 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 }
 
 
-/* Campaign standing: give live Campaign truth the same visual weight as the BETA controls. */
+/* Campaign standing and the return to My Campaign share the panel’s colours. */
+.campaign-return-row,.campaign-truth{width:min(500px,calc(100% - 28px))}
+.campaign-return-row{margin:8px auto 0}
+.campaign-return{
+  display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;
+  min-height:36px;padding:6px 12px;border:1px solid rgba(255,255,255,.16);border-radius:5px;
+  background:#302a23;color:#fff;font:400 11px/1.4 Arial,sans-serif;cursor:pointer;white-space:nowrap;
+}
+.campaign-return:hover{filter:brightness(1.25)}
+.campaign-return:focus-visible{outline:2px solid #ead9ad;outline-offset:2px}
 .campaign-truth{
-  width:min(500px, calc(100% - 28px));
   box-sizing:border-box;
   margin:8px auto 22px;
   padding:12px 14px;
@@ -912,7 +920,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   border-radius:4px;font:900 16px/1 Georgia,"Times New Roman",serif;box-shadow:inset 0 0 6px rgba(71,52,25,.22)
 }
 @media(max-width:560px){
-  .campaign-truth{width:min(500px,calc(100% - 28px));padding:10px}
+  .campaign-truth{padding:10px}
   .campaign-truth-line{grid-template-columns:142px minmax(0,1fr);gap:6px}
   .campaign-truth-line.two{grid-template-columns:142px minmax(0,3fr) minmax(0,2fr);gap:6px}
   .campaign-truth .label{min-height:32px;padding:5px 5px;font-size:8px;white-space:nowrap}
@@ -920,7 +928,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   .truth-odo{height:24px}
 }
 @media (max-height:500px) and (orientation:landscape){
-  .campaign-truth{width:min(500px,calc(100% - 28px));padding:10px}
+  .campaign-truth{padding:10px}
   .campaign-truth-line{grid-template-columns:150px minmax(0,1fr);gap:6px;min-height:34px}
   .campaign-truth-line.two{grid-template-columns:150px minmax(0,3fr) minmax(0,2fr);gap:6px}
   .campaign-truth .label,.campaign-truth strong,.campaign-truth .name-pigeon-action{min-height:34px;padding:5px 7px}
@@ -1236,12 +1244,12 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
       <div class="controls">
         <button class="action accept" id="acceptBtn">Accept?</button>
         <button class="action complete" id="completeBtn">Completed?</button>
-        <button class="action exit" id="exitBtn">← My Campaign</button>
       </div>
       <button class="nav next" id="next" aria-label="Next Challenge">›</button>
     </div>
     <div class="verifyrow"><button class="verifybadge" id="verifyBadge" type="button" aria-describedby="verifyHelp" aria-expanded="false">Our Foundational Laws</button></div>
     <div class="verifyhelp" id="verifyHelp"></div>
+    <div class="campaign-return-row"><button class="campaign-return" id="exitBtn" type="button">← My Campaign</button></div>
     <div class="campaign-truth" aria-label="Current Campaign standing">
       <span class="campaign-truth-line"><span class="label">Call Sign:</span> <strong id="truthCallSign">—</strong></span>
       <span class="campaign-truth-line two">
