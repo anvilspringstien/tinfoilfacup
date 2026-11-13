@@ -189,7 +189,10 @@ try{
  const hasOpener=await stats.frameLocator('#phoneApp').locator('body').evaluate(()=>!!window.opener&&!window.opener.closed);
  if(hasOpener){
   const closed=stats.waitForEvent('close');
-  await stats.frameLocator('#phoneApp').getByRole('button',{name:'← My Campaign',exact:true}).click();
+  const returnButton=stats.frameLocator('#phoneApp').getByRole('button',{name:'← My Campaign',exact:true});
+  await returnButton.click().catch(error=>{
+   if(!stats.isClosed()||!/Target page, context or browser has been closed/.test(error.message))throw error;
+  });
   await closed;
  }else{
   await stats.frameLocator('#phoneApp').getByRole('button',{name:'← My Campaign',exact:true}).click();
