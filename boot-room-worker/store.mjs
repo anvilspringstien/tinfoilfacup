@@ -102,7 +102,7 @@ export class RoomStore {
  }
  else throw new RoomError('Unknown action');p.burst++;s.actions++;return result;});}
  admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||typeof a.next!=='string'||a.next.length>100)throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;s.next=a.next;}
- else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);removeMessage(s,m,'Message removed by the landlord');}
+ else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);removeMessage(s,m,'Message removed by a moderator');}
  else if(a.type==='dismiss-reports'){
   s.reports=s.reports.filter(r=>r.message!==a.id);
  }
