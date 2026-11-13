@@ -27,7 +27,9 @@ for(const selector of ['#openChallenges','.challenge-launch','.challenges-btn'])
 assert(!retiredLaunchSelectors.test(html),'Obsolete BETA launch-only CSS must not return');
 assert(html.includes('function renderStats()'),'Live Deck progress and Trophy Cabinet renderer must be retained');
 assert(/id="deckCabinet"/.test(html),'Trophy Cabinet must be retained');
-assert(/id="exitBtn"/.test(html),'Explicit Exit button must be retained');
+assert.match(html, /<div class="campaign-return-row"><button class="campaign-return" id="exitBtn" type="button">← My Campaign<\/button><\/div>\s*<div class="campaign-truth"/,
+  'My Campaign must have its own row directly above Campaign standing');
+assert.equal((html.match(/id="exitBtn"/g)||[]).length,1,'Challenges must have exactly one Campaign return button');
 
 assert(/@media\(max-width:680px\)\s*\{\s*\.deckbody\{height:auto;min-height:0;padding:4px 4px 8px;overflow:visible\}\s*\.cardstage\{height:auto;min-height:0\}/.test(html),
   'Phone Deck must follow the actual mat height instead of leaving a fixed viewport gap before feedback');
