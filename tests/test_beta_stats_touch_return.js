@@ -5,11 +5,13 @@ function assert(cond,msg){if(!cond)throw new Error(msg);}
 assert(html.includes('<meta name="viewport" content="width=980">'),
   'Stats report must retain its existing 980px printable/pinchable viewport');
 
-const sticky="@media (hover:none) and (pointer:coarse){.stats-return{position:sticky;top:calc(env(safe-area-inset-top) + 56px);z-index:20}}";
-assert(html.includes(sticky),
-  'Touch Stats return control must remain sticky below browser chrome');
-
-assert(html.includes('<main class="sheet"><div class="stats-return">'),
-  'Stats return control must remain inside the Stats sheet');
+assert(html.includes('.stats-actions{position:fixed;'),
+  'Stats actions must stay fixed while the report scrolls');
+assert(html.includes('frame.getBoundingClientRect().width/frame.offsetWidth'),
+  'The fixed bar must account for the report frame scale');
+assert(html.includes("viewport?.addEventListener('scroll',fitBar)"),
+  'The bar must follow the visual viewport when panning');
+assert(html.includes('padding-bottom:var(--stats-bottom-space,84px)'),
+  'The final report content must be able to scroll above the bar');
 
 console.log('BETA STATS TOUCH RETURN VISIBILITY: PASS');
