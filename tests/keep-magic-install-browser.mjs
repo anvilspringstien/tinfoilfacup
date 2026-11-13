@@ -45,7 +45,7 @@ export async function checkInstalledHandover(browser,base){
  assert.equal(await installedPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).searchNumber),1755);
  assert.match(await app.locator('#results').innerText(),/Heaton Stannington/);
  await app.getByRole('button',{name:'My Challenges',exact:true}).click();
- await app.getByRole('button',{name:'Exit',exact:true}).waitFor({timeout:30000});
+ await app.getByRole('button',{name:'← My Campaign',exact:true}).waitFor({timeout:30000});
  const challenge=await installedPage.evaluate(()=>JSON.parse(localStorage.getItem('tffc.challengeDeck.v1')));
  const oldChallenge=JSON.parse(beforeInstall['tffc.challengeDeck.v1']);
  assert.deepEqual(challenge.completed,oldChallenge.completed,'Trophy Cabinet awards survive the install');

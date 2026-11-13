@@ -116,7 +116,9 @@ function canonicalResultWinner(r){
 function clubByDisplayName(name){
   if(!name)return null;
   const target=canonicalClubKey(name);
-  return ELIGIBLE.find(c=>canonicalClubKey(c.name)===target)||null;
+  const competitionTarget=tinFoilBetaCompetitionClubKey(name);
+  return ELIGIBLE.find(c=>canonicalClubKey(c.name)===target)||
+    ELIGIBLE.find(c=>tinFoilBetaCompetitionClubKey(c.name)===competitionTarget)||null;
 }
 function competitionState(club){
   const f=club.fixture||{},r=resultFor(club),upcoming=!r?nextRoundInfo(club):null,liveFixture=upcoming&&upcoming.knownFixture?upcoming.knownFixture:null,kickoff=parseKickoff(liveFixture||f),now=new Date();
@@ -145,7 +147,7 @@ function completedResultVenue(result){
         lat:home.lat,lon:home.lon,verification:'unverified'};
   }
   const homeClub=candidateClubByName(result.home);
-  const hg=groundByClubName(homeClub?homeClub.name:result.home);
+  const hg=groundByClubName(homeClub?.name||clubByDisplayName(result.home)?.name||result.home);
 
   // If a source venue and the verified canonical home ground have the same
   // postcode, prefer the verified Clubfinder name. This updates stale sponsor /
@@ -414,6 +416,9 @@ function sameSemanticResult(a,b){
 }
 function tinFoilBetaCompetitionClubKey(name){
   const key=canonicalClubKey(name);
+  // The 2026–27 archive also repeats the Barton Town tie as Eastwood Town.
+  if(LIVE_COMPETITION_DATA?.season==='2026-27'&&
+     (key==='eastwood community'||key==='eastwood town'))return 'eastwood';
   return key==='holmesdale'&&tinFoilBetaHolmesdale2026Ready()
     ?'petts wood and holmesdale':key;
 }
