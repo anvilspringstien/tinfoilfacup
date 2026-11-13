@@ -35,10 +35,10 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
   #chat-shell .bubble p { font-size: 14px; }
 }
 
-/* Match the desktop phone frame while keeping the admin route standalone. */
+/* Keep the desktop phone frame’s width and use the available height for admin controls. */
 @media (min-width: 700px) and (pointer: fine) and (hover: hover) {
   .workbench.landlord-view {
-    --admin-frame-height: min(calc(390px * 16 / 9), 100svh);
+    --admin-frame-width: min(390px, 56.25svh);
     --admin-frame-gutter: clamp(6px, 1.2vh, 13px);
     display: flex;
     flex-direction: column;
@@ -47,8 +47,8 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
     padding: var(--admin-frame-gutter) 0;
   }
   .landlord-panel {
-    width: calc(var(--admin-frame-height) * 9 / 16 - 2 * var(--admin-frame-gutter));
-    height: calc(var(--admin-frame-height) - 2 * var(--admin-frame-gutter));
+    width: calc(var(--admin-frame-width) - 2 * var(--admin-frame-gutter));
+    height: calc(100svh - 2 * var(--admin-frame-gutter));
     padding: 20px 16px;
     border-color: #818181;
     border-radius: 12px;
