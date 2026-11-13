@@ -35,11 +35,11 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
   #chat-shell .bubble p { font-size: 14px; }
 }
 
-/* Match the desktop phone frame while keeping the admin route standalone. */
+/* Fit the same 9:16 canvas as My Campaign and scale its 1.2% inset. */
 @media (min-width: 700px) and (pointer: fine) and (hover: hover) {
   .workbench.landlord-view {
-    --admin-frame-height: min(calc(390px * 16 / 9), 100svh);
-    --admin-frame-gutter: clamp(6px, 1.2vh, 13px);
+    --admin-frame-height: min(100svh, calc(100vw * 16 / 9));
+    --admin-frame-gutter: calc(var(--admin-frame-height) * 0.012);
     display: flex;
     flex-direction: column;
     align-items: center;
