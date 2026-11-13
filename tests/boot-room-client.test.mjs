@@ -18,7 +18,7 @@ test('composer waits for fresh socket state and disables immediately on connecti
 test('returning from background rechecks closure and reconnects once; late old snapshots cannot reopen input',async()=>{const b=browser();await b.settle();const old=b.sockets[0];b.snapshot(old);b.document.visibilityState='hidden';b.documentEvents.visibilitychange();assert.equal(b.$('text').disabled,true);b.setState({open:false});b.document.visibilityState='visible';b.documentEvents.visibilitychange();b.documentEvents.visibilitychange();await b.settle();assert.equal(b.sockets.length,2);assert.match(b.$('doors').textContent,/ROOM CLOSED/);old.message({type:'snapshot',open:true,you:{id:'a',name:'Checky'},messages:[]});assert.equal(b.$('text').disabled,true);b.snapshot(b.sockets[1]);assert.match(b.$('doors').textContent,/ROOM CLOSED/);assert.equal(b.$('send').disabled,true);});
 test('back-forward restored pages reconnect and offline pages keep draft disabled',async()=>{const b=browser();await b.settle();b.snapshot(b.sockets[0]);b.$('text').value='Draft';b.windowEvents.pagehide();b.setState({open:false});b.windowEvents.pageshow({persisted:true});await b.settle();assert.equal(b.sockets.length,2);b.snapshot(b.sockets[1]);assert.equal(b.$('text').disabled,true);assert.equal(b.$('text').value,'Draft');b.windowEvents.offline();assert.equal(b.$('send').disabled,true);assert.match(b.$('status').textContent,/Offline/);});
 test('a state request completing after pagehide cannot resurrect the socket',async()=>{const b=browser();await b.settle();b.snapshot(b.sockets[0]);const resolve=b.defer();b.$('connect').onclick();b.windowEvents.pagehide();resolve({open:true,you:{id:'a',name:'Checky'},messages:[]});await b.settle();assert.equal(b.sockets.length,1);assert.equal(b.$('send').disabled,true);});
-test('report receipt is shown beside the message only after confirmed state and survives a fresh view',async()=>{const b=browser();const message={id:'m1',person:'bert',name:'Bert',text:'Test message',at:Date.now(),hearts:0,hearted:false,reported:false};b.setState({messages:[message]});await b.settle();const ws=b.sockets[0];b.snapshot(ws);const row=b.$('messages').children[0],bubble=row.children[1],meta=bubble.children[2],report=meta.children[3];assert.equal(report.textContent,'Report');report.onclick();assert.equal(ws.sent.type,'report');assert.equal(report.textContent,'Sending…');assert.equal(report.disabled,true);b.setState({messages:[{...message,reported:true}]});b.snapshot(ws);const receiptBubble=b.$('messages').children[0].children[1];assert.equal(receiptBubble.children[2].children[3].textContent,'Undo report');receiptBubble.children[2].children[3].onclick();assert.equal(ws.sent.reported,false);assert.equal(receiptBubble.children[3].textContent,'Sent privately to the landlord.');});
+test('report receipt is shown beside the message only after confirmed state and survives a fresh view',async()=>{const b=browser();const message={id:'m1',person:'bert',name:'Bert',text:'Test message',at:Date.now(),hearts:0,hearted:false,reported:false};b.setState({messages:[message]});await b.settle();const ws=b.sockets[0];b.snapshot(ws);const row=b.$('messages').children[0],bubble=row.children[1],meta=bubble.children[2],report=meta.children[3];assert.equal(report.textContent,'Report');report.onclick();assert.equal(ws.sent.type,'report');assert.equal(report.textContent,'Sending…');assert.equal(report.disabled,true);b.setState({messages:[{...message,reported:true}]});b.snapshot(ws);const receiptBubble=b.$('messages').children[0].children[1];assert.equal(receiptBubble.children[2].children[3].textContent,'Undo report');receiptBubble.children[2].children[3].onclick();assert.equal(ws.sent.reported,false);assert.equal(receiptBubble.children[3].textContent,'Sent privately to the moderators.');});
 test('live closure hides the composer, keeps its draft and restores it when the room reopens',async()=>{
  const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
  b.$('text').value='A pie for later';assert.equal(b.$('composer-wrap').hidden,false);
@@ -325,4 +325,28 @@ test('entering chat shows a loading state until the first conversation is ready'
  assert.equal(b.$('chat-loading').hidden,true);
  assert.equal(b.$('chat-shell').hidden,false);
  assert.equal(b.$('messages').children.length,1);
+});
+
+test('Boot Room Admin opens Campaign entry with the room and can close it without a duration',async()=>{
+ const adminPage=page.slice(page.indexOf('<section id="admin"'));
+ assert.doesNotMatch(adminPage,/invite-form|allow-walk-in|landlord/i);
+ assert.match(adminPage,/<button name="open" value="no" class="quiet" formnovalidate>/);
+ const b=browser('/admin');
+ b.setState({open:false,next:'Saturday at noon',people:[],reports:[],usage:{actions:0,joins:0}});
+ await b.$('unlock-form').onsubmit({preventDefault(){}});
+ assert.equal(b.$('next').value,'Saturday at noon');
+ b.$('hours').value='2';
+ await b.$('doors-form').onsubmit({preventDefault(){},submitter:{value:'yes'}});
+ const opening=b.posts.find(post=>post.type==='doors');
+ assert.equal(opening.open,true);
+ assert.equal(opening.walkIn,true);
+ assert.equal(opening.next,'Saturday at noon');
+ assert.ok(opening.until>Date.now()+3600000);
+ b.$('hours').value='';
+ await b.$('doors-form').onsubmit({preventDefault(){},submitter:{value:'no'}});
+ assert.deepEqual(b.posts.filter(post=>post.type==='doors').at(-1),{
+  type:'doors',open:false,until:0,next:'Saturday at noon',walkIn:false
+ });
+ b.$('lock').onclick();
+ assert.equal(b.$('admin-controls').hidden,true);
 });
