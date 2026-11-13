@@ -1,10 +1,10 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
-import {script} from '../boot-room-worker/ui.mjs';
+import {page,script} from '../boot-room-worker/ui.mjs';
 function browser(pathname='/chat',campaign=null,{search='',responses=[],storage={},globals={}}={}){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
- const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
+ const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},removeAttribute(name){delete this[name];},showModal(){this.open=true;},close(){this.open=false;}});
  const document={querySelectorAll(selector){return [this.getElementById(selector)];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
  const context={document,localStorage:{getItem:key=>storage[key]??null},window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){context.location.hash='';}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
@@ -36,12 +36,44 @@ test('fresh messages preserve an older reading position in the shared header-and
  assert.equal(scroll.scrollTop,250);
  scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
 });
+test('the Chat navigation returns as soon as the reader scrolls toward newer posts',async()=>{
+ const b=browser();await b.settle();
+ const scroll=b.$('room-scroll'),nav=b.$('room-navigation');
+ scroll.scrollHeight=2400;scroll.clientHeight=500;scroll.scrollTop=1900;
+ scroll.onscroll();
+ scroll.scrollTop=600;scroll.onscroll();
+ assert.equal(nav['data-revealed'],undefined);
+ scroll.scrollTop=624;scroll.onscroll();
+ assert.equal(nav['data-revealed'],'');
+ b.snapshot(b.sockets[0]);
+ assert.equal(scroll.scrollTop,624);
+ assert.equal(nav['data-revealed'],'');
+ scroll.scrollTop=602;scroll.onscroll();
+ assert.equal(nav['data-revealed'],undefined);
+});
+
+test('a visitor without a Campaign can reach closed history from the public Chalk Board',async()=>{
+ const prefix='/beta/boot-room';
+ const entrance=browser(prefix+'/',null,{search:'?frame=campaign'});
+ await entrance.settle();
+ assert.equal(entrance.$('.entrance-enter').href,prefix+'/chat?frame=campaign');
+ const reply=(data,status=200)=>({ok:status===200,status,json:async()=>data});
+ const chat=browser(prefix+'/chat',null,{responses:[
+  reply({error:'Invitation required'},401),reply({open:false}),reply({open:false,you:null,messages:[]})
+ ]});
+ await chat.settle();
+ assert.deepEqual(chat.requests,[prefix+'/api/state',prefix+'/api/doors',prefix+'/api/read-closed']);
+ assert.equal(chat.$('room').hidden,false);
+ assert.equal(chat.$('composer-wrap').hidden,true);
+ assert.deepEqual(chat.posts,[]);
+});
+
 test('entrance checks only public opening details, never conversation or a WebSocket',async()=>{
  const b=browser('/');await b.settle();assert.deepEqual(b.requests,['/api/doors']);assert.equal(b.sockets.length,0);
- assert.equal(b.$('entrance').hidden,false);assert.match(b.$('.entrance-enter').textContent,/Invited pigeons: enter/);
+ assert.equal(b.$('entrance').hidden,false);assert.equal(b.$('.entrance-enter').href,'/chat');
  b.setState({open:false,next:'Saturday, before kick-off'});b.$('entrance-refresh').onclick();await b.settle();
  assert.equal(b.$('entrance-state').textContent,'ROOM NOW CLOSED');assert.equal(b.$('entrance-next').textContent,'Saturday, before kick-off');
- assert.match(b.$('.entrance-enter').textContent,/Invited pigeons/);assert.equal(b.sockets.length,0);
+ assert.equal(b.$('.entrance-enter').href,'/chat');assert.equal(b.sockets.length,0);
  b.document.visibilityState='hidden';b.documentEvents.visibilitychange();b.document.visibilityState='visible';b.documentEvents.visibilitychange();await b.settle();
  assert.deepEqual(b.requests,['/api/doors','/api/doors','/api/doors']);assert.equal(b.sockets.length,0);
 });
@@ -78,7 +110,7 @@ test('Campaign visitors see the chalkboard before continuing to chat',async()=>{
  assert.deepEqual(b.requests,['/api/doors']);
  assert.equal(b.sockets.length,0);
  assert.equal(b.$('.entrance-enter').href,'/chat?enter=1#campaign='+encodeURIComponent(JSON.stringify(campaign)));
- assert.equal(b.$('.entrance-enter').textContent,'Continue to the Boot Room →');
+ assert.match(page,/class="entrance-enter"[^>]*>The Boot Room <span aria-hidden="true">→/);
 });
 
 test('the Keep chalkboard stays within the Boot Room path when continuing to chat',async()=>{
@@ -141,7 +173,6 @@ test('Entrance returns Campaign visitors to the same Chalk Board and closed chat
   const entrance=browser(prefix+'/',campaign,{search});
   entrance.setState({open:false,walkIn:false});
   await entrance.settle();
-  assert.equal(entrance.$('.entrance-enter').textContent,'Continue to the Boot Room →');
   assert.equal(entrance.$('.entrance-enter').href,prefix+'/chat'+chatSearch+fragment);
   assert.equal(chat.$('composer-wrap').hidden,true);
   assert.deepEqual(chat.posts,[]);
