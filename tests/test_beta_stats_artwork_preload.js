@@ -41,12 +41,11 @@ const reportImages=[...html.matchAll(/assets\/stats-report\/[^"'\\]+\.(?:png|web
 assert(reportImages.length===7&&new Set(reportImages).size===7,
   'Stats renderer must retain exactly seven literal artwork references');
 
-const statsDoc=html.indexOf('<main class="sheet"><div class="stats-return">');
-assert(statsDoc>=0,'Stats return control must be inside the Stats sheet');
-const top=html.indexOf('<section class="top">',statsDoc);
-const ret=html.indexOf('<div class="stats-return">',statsDoc);
-assert(ret>=statsDoc&&ret<top,'Stats return control must precede report header inside sheet');
-assert(!html.includes('</style></head><body><div class="stats-return">'),
-  'Stats return control must not remain outside the sheet');
+const statsDoc=html.indexOf('<main class="sheet">');
+assert(statsDoc>=0,'Stats report sheet must be present');
+const bar=html.indexOf('<nav class="stats-actions"',statsDoc);
+const sheetEnd=html.indexOf('</main>',statsDoc);
+assert(sheetEnd>statsDoc&&bar>sheetEnd,'Stats actions must sit outside the printable report');
+assert(html.indexOf('<span class="stats-return">',bar)>bar,'Campaign return must be in the Stats bar');
 
 console.log('BETA STATS ARTWORK PRELOAD + RETURN CONTROL: PASS');

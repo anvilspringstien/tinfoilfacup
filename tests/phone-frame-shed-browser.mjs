@@ -174,7 +174,7 @@ try{
   try{await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});}
   catch(error){console.error('Stats frame diagnostic:',await stats.locator('html').evaluate(h=>({url:location.href,ready:document.readyState,html:h.outerHTML.slice(0,2000),innerURL:h.querySelector('iframe')?.contentWindow?.location?.href})));throw error;}
  }
- await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Save / Print',exact:true}).waitFor({timeout:30000});
  // The report can render before the outer tab's deferred frame script loads.
  await waitForReportFrame();
  assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
@@ -182,8 +182,31 @@ try{
  assert.ok(Math.abs(statsRatio-9/16)<.001);
  assert.equal(stats.url(),origin+'/beta/phone-frame.html?view=stats','Stats should retain the Keep shell route as well');
  await stats.reload();
- await stats.frameLocator('#phoneApp').getByRole('button',{name:'Print / Save as PDF',exact:true}).waitFor({timeout:30000});
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Save / Print',exact:true}).waitFor({timeout:30000});
  await waitForReportFrame();
+ const statsApp=stats.frameLocator('#phoneApp');
+ const statsBar=statsApp.getByRole('navigation',{name:'Stats actions'});
+ const shareStats=statsBar.getByRole('button',{name:'Share Stats'});
+ const beforeScroll=await shareStats.boundingBox();
+ assert.ok(beforeScroll.height>=43,'The Share control must retain a full-size tap target inside the scaled frame');
+ await statsApp.locator('.sheet').evaluate(sheet=>sheet.ownerDocument.defaultView.scrollTo(0,sheet.ownerDocument.body.scrollHeight));
+ const afterScroll=await shareStats.boundingBox();
+ assert.ok(Math.abs(beforeScroll.y-afterScroll.y)<2,'The Stats bar must stay fixed while scrolling');
+ const motto=await statsApp.locator('.motto').boundingBox();
+ const actions=await statsBar.boundingBox();
+ assert.ok(motto.y+motto.height<=actions.y,'At the end of the report the bar must clear the final row');
+ await stats.emulateMedia({media:'print'});
+ assert.equal(await statsBar.isVisible(),false,'The Stats bar must be hidden when printing');
+ await stats.emulateMedia({media:'screen'});
+ await shareStats.evaluate(button=>{
+  const win=button.ownerDocument.defaultView;
+  Object.defineProperty(win.navigator,'share',{configurable:true,value:async payload=>{win.sharedStats=payload;}});
+ });
+ await shareStats.click();
+ const shared=await shareStats.evaluate(button=>button.ownerDocument.defaultView.sharedStats);
+ assert.match(shared.title,/Tin Foil FA Cup Stats/);
+ assert.match(shared.text,/CURRENT CUSTODIAN/i);
+ assert.equal(shared.url,undefined,'The recipient needs shareable Stats text');
  // Existing Stats returns to its opener when available; after a refresh
  // without one, it opens Campaign in the same tab. Both must stay usable.
  const hasOpener=await stats.frameLocator('#phoneApp').locator('body').evaluate(()=>!!window.opener&&!window.opener.closed);
