@@ -1,6 +1,7 @@
 import {DurableObject} from 'cloudflare:workers';
 import {RoomStore,RoomError,digest,token,DAY} from './store.mjs';
 import {page,script,style} from './ui.mjs';
+import {trophyMatIds} from './trophy-cabinet.mjs';
 import {demoPage,scopedDemoPage} from './demo.mjs';
 const json=(data,status=200,extra={})=>Response.json(data,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff',...extra}});
 const roomPrefix='/beta/boot-room';
@@ -20,6 +21,7 @@ export class BootRoom extends DurableObject {
  else if(path==='/api/join')result=this.room.redeem(a.invite,a.session,a.campaign);
  else if(path==='/api/logout'){result=this.room.logout(hash);this.broadcast();}
  else if(path==='/api/state')result=this.room.snapshot(hash);
+ else if(path==='/api/campaign-name')result=this.room.syncCampaignName(hash,a);
  else if(path==='/api/doors')result=this.room.doors();
  else if(path==='/api/read-closed')result=this.room.readClosed();
  else if(path==='/api/flight-path')result=this.room.flightPath(url.searchParams.get('post'),hash,url.searchParams.get('public')==='1');
@@ -37,9 +39,20 @@ export default {async fetch(request,env){try{const u=new URL(request.url),scoped
  if(scoped&&['/admin','/api/admin','/api/invite','/api/join'].includes(path))return json({error:'not_found'},404);
  const framed=scoped&&['/','/chat'].includes(path)&&['shed','campaign'].includes(u.searchParams.get('frame'));
  const assets={'/demo':[scoped?scopedDemoPage:demoPage,'text/html; charset=utf-8'],'/':[page,'text/html; charset=utf-8'],'/chat':[page,'text/html; charset=utf-8'],'/admin':[page,'text/html; charset=utf-8'],'/room.js':[script,'text/javascript; charset=utf-8'],'/room.css':[style,'text/css; charset=utf-8']};
- if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:scoped&&['/','/chat'].includes(path)?(framed?page.replace('<html lang=', '<html data-frame="shed" lang='):page).replace(/<details><summary>Use a private invitation<\/summary>.*?<\/details>/,''):assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://tinfoilfacup.com blob:; connect-src 'self'; frame-ancestors "+(framed?"'self'":"'none'")+"; base-uri 'none'; form-action 'none'"}});}
+ if(assets[path]){if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);return new Response(request.method==='HEAD'?null:scoped&&['/','/chat'].includes(path)?(framed?page.replace('<html lang=', '<html data-frame="shed" lang='):page).replace(/<details><summary>Use a private invitation<\/summary>.*?<\/details>/,''):assets[path][0],{headers:{'content-type':assets[path][1],'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://tinfoilfacup.com blob:; connect-src 'self'; frame-ancestors "+(framed?"'self'":"'none'")+"; base-uri 'none'; form-action 'none'"}});}
+ if(['/flight-path-share.mjs','/assets/route-map.svg'].includes(path)){
+  if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);
+  return env.FLIGHT_PATH_ASSETS.fetch(new Request(new URL(path,u),{method:request.method}));
+ }
+ const mat=/^\/trophy-mats\/(\d{2})\.webp$/.exec(path)?.[1];
+ if(mat&&trophyMatIds.includes(mat)){
+  if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405);
+  const image=await fetch('https://tinfoilfacup.com/beta/assets/challenge-thumbs/mat-'+mat+'-front.webp',{method:request.method});
+  if(!image.ok||image.headers.get('content-type')?.split(';')[0]!=='image/webp')return json({error:'image_unavailable'},502);
+  return new Response(image.body,{headers:{'content-type':'image/webp','cache-control':'public, max-age=3600','x-content-type-options':'nosniff'}});
+ }
  if(path==='/health'&&request.method==='GET')return json({ok:true,service:'tffac-boot-room',stage:'invited-shed'});
- const post=['/api/walk-in','/api/join','/api/admin','/api/invite','/api/logout'].includes(path);if(!post&&!['/api/state','/api/socket','/api/doors','/api/read-closed','/api/flight-path'].includes(path))return json({error:'not_found'},404);
+ const post=['/api/walk-in','/api/join','/api/admin','/api/invite','/api/logout'].includes(path)||(scoped&&path==='/api/campaign-name');if(!post&&!['/api/state','/api/socket','/api/doors','/api/read-closed','/api/flight-path'].includes(path))return json({error:'not_found'},404);
  if(request.method!==(post?'POST':'GET'))return json({error:'method_not_allowed'},405);
  if((post||path==='/api/socket')&&request.headers.get('origin')!==u.origin)return json({error:'origin_not_allowed'},403);
  let body={};if(post){if(!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||''))return json({error:'json_required'},415);const raw=await request.text();if(new TextEncoder().encode(raw).length>2048)return json({error:'body_too_large'},413);try{body=JSON.parse(raw);}catch{return json({error:'invalid_json'},400);}if(!body||typeof body!=='object'||Array.isArray(body))return json({error:'invalid_json'},400);}
@@ -75,5 +88,6 @@ export default {async fetch(request,env){try{const u=new URL(request.url),scoped
   return stub.fetch(new Request(endpoint,{headers}));
  }
  if(!/^[a-f0-9]{64}$/.test(session))return json({error:'Invitation required'},401);
+ if(path==='/api/campaign-name')return stub.fetch('https://room.internal/api/campaign-name',{method:'POST',headers:{'x-room-session':await digest(session)},body:JSON.stringify(body)});
  const h=new Headers(request.headers);h.delete('cookie');h.delete('authorization');h.set('x-room-session',await digest(session));return stub.fetch(new Request(new URL(path+u.search,u.origin),{method:request.method,headers:h}));
  }catch{return json({error:'Room temporarily unavailable'},503);}}};

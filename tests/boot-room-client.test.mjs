@@ -2,12 +2,13 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {script} from '../boot-room-worker/ui.mjs';
-function browser(pathname='/chat',campaign=null,{search='',responses=[],storage={}}={}){
+function browser(pathname='/chat',campaign=null,{search='',responses=[],storage={},globals={}}={}){
  const elements=new Map(),windowEvents={},documentEvents={},sockets=[],requests=[],posts=[];let nextState={open:true,next:'Tomorrow',until:Date.now()+3600000,you:{id:'a',name:'Checky'},messages:[]},deferred;
  const element=()=>({hidden:false,disabled:false,value:'',textContent:'',children:[],replaceChildren(...c){this.children=c;},append(...c){this.children.push(...c);},prepend(...c){this.children.unshift(...c);},focus(){},style:{},setAttribute(name,value){this[name]=value;},showModal(){this.open=true;},close(){this.open=false;}});
  const document={querySelectorAll(selector){return [this.getElementById(selector)];},querySelector(selector){return this.getElementById(selector);},visibilityState:'visible',getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,createTextNode:text=>({textContent:text}),addEventListener:(e,fn)=>documentEvents[e]=fn};
  class WebSocket{static OPEN=1;constructor(){this.readyState=0;sockets.push(this);}close(){this.readyState=3;this.onclose?.();}send(data){this.sent=JSON.parse(data);}open(){this.readyState=1;this.onopen?.();}message(data){this.onmessage?.({data:JSON.stringify(data)});}}
  const context={document,localStorage:{getItem:key=>storage[key]??null},window:{addEventListener:(e,fn)=>windowEvents[e]=fn},location:{pathname,origin:'https://room.example',hash:campaign?'#campaign='+encodeURIComponent(JSON.stringify(campaign)):'',search},history:{replaceState(){context.location.hash='';}},URLSearchParams,WebSocket,Date,JSON,Error,fetch:async(path,options)=>{requests.push(path);if(options?.body)posts.push(JSON.parse(options.body));if(deferred){const p=deferred;deferred=null;return p;}return responses.shift()??{ok:true,json:async()=>nextState};}};
+ Object.assign(context,globals);
  vm.createContext(context);vm.runInContext(script,context);
  const settle=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
  const snapshot=(ws,data=nextState)=>{ws.open();ws.message({type:'snapshot',...data});};
@@ -110,6 +111,22 @@ test('the Shed chalkboard keeps the shared frame when continuing to chat',async(
  assert.equal(b.$('.entrance-enter').href,'/beta/boot-room/chat?enter=1&frame=shed#campaign='+encodeURIComponent(JSON.stringify(campaign)));
 });
 
+test('a saved Campaign name replaces the fallback on an existing public walk-in session',async()=>{
+ const campaign={callSign:'TF2AC 03120',name:'Pigeon 03120'};
+ const saved={originName:'Starting Athletic',searchNumber:3120,pigeonName:'Renamed  Pigeon'};
+ const state={open:true,messages:[],you:{id:'a',name:campaign.name,campaign,walkIn:true}};
+ const updated={...state,you:{...state.you,name:'Renamed Pigeon'}};
+ const b=browser('/beta/boot-room/chat',campaign,{
+  storage:{tinFoilFACupJourney_v7:JSON.stringify(saved)},
+  responses:[state,updated].map(data=>({ok:true,json:async()=>data})),
+ });
+ await b.settle();
+ assert.deepEqual(b.requests,['/beta/boot-room/api/state','/beta/boot-room/api/campaign-name']);
+ assert.deepEqual(b.posts,[{callSign:campaign.callSign,name:'Renamed Pigeon'}]);
+ assert.match(b.$('you').textContent,/Posting as Renamed Pigeon · TF2AC 03120/);
+ assert.equal(b.sockets.length,1);
+});
+
 
 test('Entrance returns Campaign visitors to the same Chalk Board and closed chat',async()=>{
  const campaign={callSign:'TF2AC 01001',name:'Test Pigeon'};
@@ -137,7 +154,7 @@ test('a checked-in Flight Path is opt-in for each post and appears beside its pi
  const route={stops:[{lat:51.5,lon:-.5,short:'Home area',approximate:true},{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
  const storage={
   tinFoilFACupJourney_v7:JSON.stringify(saved),
-  'tffc.barry.boot-flight.v1':JSON.stringify({callSign:campaign.callSign,identity:'Example Town|HP7 0EJ|1001|',route})
+  'tffc.barry.boot-flight.v1':JSON.stringify({callSign:campaign.callSign,identity:'Example Town|HP7 0EJ|1001|',version:2,route:{...route,milesFlown:42}})
  };
  const b=browser('/chat',null,{storage});
  b.setState({you:{id:'a',name:'Checky',campaign}});
@@ -149,10 +166,20 @@ test('a checked-in Flight Path is opt-in for each post and appears beside its pi
  assert.equal(ws.sent.flightPath,undefined);
  b.$('attach-flight').checked=true;
  b.$('composer').onsubmit({preventDefault(){}});
- assert.deepEqual(ws.sent.flightPath,route);
+ assert.deepEqual(ws.sent.flightPath,{...route,milesFlown:42});
+ assert.equal(ws.sent.campaignOrigin,saved.originName);
  assert.equal(JSON.stringify(ws.sent).includes(saved.postcode),false);
  ws.message({type:'ack',action:'message'});
  assert.equal(b.$('attach-flight').checked,false);
+ const cacheKey='tffc.barry.boot-flight.v1';
+ const savedCache=JSON.parse(storage[cacheKey]);
+ storage[cacheKey]=JSON.stringify({...savedCache,version:undefined,route});
+ b.snapshot(ws);
+ assert.equal(b.$('attach-flight').disabled,true);
+ assert.match(b.$('attach-flight-label').textContent,/Reopen Barry Air/);
+ storage[cacheKey]=JSON.stringify({...savedCache,route});
+ b.snapshot(ws);
+ assert.equal(b.$('attach-flight').disabled,false);
  const message={id:'m1',person:'a',name:'Checky',text:'Hello',at:Date.now(),hearts:0,hasFlightPath:true};
  b.setState({messages:[message,{...message,id:'m2',hasFlightPath:false}]});
  b.snapshot(ws);
@@ -184,6 +211,79 @@ test('only own posts offer Delete and it requires confirmation, including after 
  assert.deepEqual(ws.sent,{type:'delete-own',id:'mine'});
 });
 
+test('the Trophy Cabinet is opt-in, belongs to the current Campaign and opens read-only in closed chat',async()=>{
+ const campaign={callSign:'TF2AC 01001'};
+ const selectedAt='2026-09-25T09:00:00.000Z';
+ const saved={originName:'Example Town',searchNumber:1001,selectedAt};
+ const deck={version:1,campaignKey:'Example Town|'+selectedAt,completed:{'00':true,'01':true,'08':{automatic:true},'09':false,'99':true},accepted:{'03':true}};
+ const deckKey='tffc.challengeDeck.v1';
+ const storage={tinFoilFACupJourney_v7:JSON.stringify(saved),[deckKey]:JSON.stringify(deck)};
+ const b=browser('/beta/boot-room/chat',null,{storage});
+ b.setState({you:{id:'a',name:'Checky',campaign}});
+ await b.settle();
+ const ws=b.sockets[0];b.snapshot(ws);
+ assert.equal(b.$('attach-trophy-row').hidden,false);
+ b.$('text').value='Two Beer Mats earned';
+ b.$('composer').onsubmit({preventDefault(){}});
+ assert.equal(ws.sent.trophyCabinet,undefined);
+ b.$('attach-trophy').checked=true;
+ b.$('composer').onsubmit({preventDefault(){}});
+ assert.deepEqual(ws.sent.trophyCabinet,['01','08']);
+ assert.doesNotMatch(JSON.stringify(ws.sent),/Example Town|selectedAt|automatic/);
+ ws.message({type:'ack',action:'message'});
+ assert.equal(b.$('attach-trophy').checked,false);
+ storage[deckKey]=JSON.stringify({...deck,campaignKey:'Previous Campaign|earlier'});
+ b.snapshot(ws);
+ assert.equal(b.$('attach-trophy-row').hidden,true);
+
+ b.setState({open:false,you:null,messages:[{id:'m1',name:'Checky',text:'Two Beer Mats earned',at:Date.now(),hearts:0,trophyCabinet:['01','08']}]});
+ b.snapshot(ws);
+ const sender=b.$('messages').children[0].children[1].children[0];
+ sender.children.find(node=>node.textContent==='View Trophy Cabinet').onclick();
+ assert.equal(b.$('trophy-preview').open,true);
+ assert.equal(b.$('trophy-preview-title').textContent,'Checky’s Trophy Cabinet');
+ assert.equal(b.$('trophy-preview-count').textContent,'2 of 27 completed');
+ assert.deepEqual(b.$('trophy-preview-mats').children.map(tile=>tile.children[0].alt),['Beer Mat 01','Beer Mat 08']);
+ b.$('trophy-preview-close').onclick();
+ assert.equal(b.$('trophy-preview').open,false);
+});
+
+
+test('Trophy Cabinet shares a prepared PNG and downloads it when file sharing is unavailable',async()=>{
+ const shared=[],downloads=[],revoked=[],drawn=[];
+ const navigator={canShare:()=>true,share:async({files})=>shared.push(files[0])};
+ const b=browser('/beta/boot-room/chat',null,{globals:{navigator,File,URL:{
+  createObjectURL:()=> 'blob:mock-cabinet',revokeObjectURL:url=>revoked.push(url)
+ }}});
+ const create=b.document.createElement;
+ b.document.createElement=tag=>{
+  if(tag==='canvas')return {getContext:()=>({fillRect(){},fillText(...args){drawn.push(args[0]);},strokeRect(){},drawImage(img){drawn.push(img.src);}}),
+   toBlob:(callback,type)=>callback(new Blob(['cabinet'],{type}))};
+  if(tag==='img')return {decode:async()=>{},naturalWidth:160,naturalHeight:160};
+  if(tag==='a')return {click(){downloads.push([this.href,this.download]);}};
+  return create(tag);
+ };
+ await b.settle();
+ b.setState({open:false,you:null,messages:[{id:'m1',name:'Checky',text:'Two mats',at:Date.now(),hearts:0,trophyCabinet:['01','08']}]});
+ b.snapshot(b.sockets[0]);
+ const sender=b.$('messages').children[0].children[1].children[0];
+ await sender.children.find(node=>node.textContent==='View Trophy Cabinet').onclick();
+ const share=b.$('trophy-preview-share');
+ assert.equal(share.disabled,false);
+ assert.deepEqual(drawn,['Checky’s Trophy Cabinet','2 of 27 completed','/beta/boot-room/trophy-mats/01.webp','/beta/boot-room/trophy-mats/08.webp']);
+ await share.onclick();
+ assert.equal(shared[0].name,'tffac-trophy-cabinet.png');
+ assert.equal(shared[0].type,'image/png');
+ navigator.share=async()=>{throw Object.assign(Error('Cancelled'),{name:'AbortError'});};
+ await share.onclick();
+ assert.deepEqual(downloads,[]);
+ navigator.canShare=()=>false;
+ await share.onclick();
+ assert.deepEqual(downloads,[['blob:mock-cabinet','tffac-trophy-cabinet.png']]);
+ const preview=b.$('trophy-preview');
+ preview.close();preview.onclose();
+ assert.deepEqual(revoked,['blob:mock-cabinet']);
+});
 
 test('entering chat shows a loading state until the first conversation is ready', async () => {
  const b=browser();

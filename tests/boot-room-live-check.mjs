@@ -8,6 +8,16 @@ async function api(path,body,{admin=false,cookie='',origin=base}={}){const r=awa
 const admin=body=>api('/api/admin',body,{admin:true});
 assert.equal((await admin({type:'doors',open:false,next:'Test opening'})).status,200);
 const sample=await fetch(base+'/demo');assert.equal(sample.status,200);assert.match(await sample.text(),/25 sample posts/);
+for(const prefix of ['', '/beta/boot-room']){
+ const renderer=await fetch(base+prefix+'/flight-path-share.mjs?v=4');
+ assert.equal(renderer.status,200);
+ assert.match(renderer.headers.get('content-type'),/javascript/);
+ assert.match(await renderer.text(),/export async function bootRoomFlightImage/);
+ const map=await fetch(base+prefix+'/assets/route-map.svg');
+ assert.equal(map.status,200);
+ assert.match(await map.text(),/<svg\b/);
+}
+assert.equal((await fetch(base+'/boarding-pass-share.mjs')).status,404);
 const publicDoors=await api('/api/doors');assert.equal(publicDoors.status,200);assert.deepEqual(Object.keys(publicDoors.data).sort(),['next','open','until']);assert.equal(publicDoors.data.open,false);assert.equal(publicDoors.data.next,'Test opening');
 for(const origin of ['https://tinfoilfacup.com','https://www.tinfoilfacup.com','https://elsewhere.example']){
  const r=await fetch(base+'/api/doors',{headers:{origin}});
@@ -30,9 +40,10 @@ try{
  await admin({type:'doors',open:true,until:Date.now()+3600000,next:'Later'});await wait(()=>wa.events.at(-1).open,'opening broadcast');
  assert.equal((await api('/api/doors')).data.open,true);
  const flightPath={stops:[{lat:51.6332,lon:-.5559,short:'Home'},{lat:52,lon:-1,short:'Example Town',next:true}],flights:[{stop:1,status:'NEXT FLIGHT'}]};
- wa.send(JSON.stringify({type:'message',text:'Hello from device A',flightPath}));await wait(()=>wb.events.at(-1).messages?.some(x=>x.text==='Hello from device A'),'cross-client delivery');const m=wb.events.at(-1).messages.find(x=>x.text==='Hello from device A');
+ wa.send(JSON.stringify({type:'message',text:'Hello from device A',flightPath,trophyCabinet:['01','08']}));await wait(()=>wb.events.at(-1).messages?.some(x=>x.text==='Hello from device A'),'cross-client delivery');const m=wb.events.at(-1).messages.find(x=>x.text==='Hello from device A');
  const mapURL='/beta/boot-room/api/flight-path?post='+m.id;
  assert.equal(m.hasFlightPath,true);assert.equal(m.flightPath,undefined);
+ assert.deepEqual(m.trophyCabinet,['01','08']);
  assert.equal((await api(mapURL)).status,401);
  const shared=await api(mapURL,undefined,{cookie:b.cookie});
  assert.equal(shared.status,200);
@@ -41,6 +52,7 @@ try{
  wb.send(JSON.stringify({type:'heart',id:m.id,liked:true}));await wait(()=>wa.events.at(-1).messages?.find(x=>x.id===m.id)?.hearts===1,'heart delivery');
  wb.send(JSON.stringify({type:'report',id:m.id}));await wait(async()=>((await admin({type:'status'})).data.reports.some(r=>r.message===m.id)),'report submission');
  await admin({type:'delete',id:m.id});await wait(()=>wa.events.at(-1).messages?.find(x=>x.id===m.id)?.deleted,'removal broadcast');
+ assert.equal(wa.events.at(-1).messages.find(x=>x.id===m.id).trophyCabinet,undefined);
  assert.equal((await api(mapURL,undefined,{cookie:b.cookie})).status,404);
  const reloaded=await api('/api/state',undefined,{cookie:b.cookie});assert.equal(reloaded.status,200);assert(reloaded.data.messages.some(x=>x.text==='Reply from B'));
  await admin({type:'suspend',id:a.id});await wait(()=>wa.readyState===WebSocket.CLOSED,'suspended socket closed');assert.equal((await api('/api/state',undefined,{cookie:a.cookie})).status,401);

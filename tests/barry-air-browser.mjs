@@ -91,13 +91,25 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     assert.notEqual(route.camera,camera,'export must show the whole route independently of live zoom');
     const bootRoomImage=await p.evaluate(async()=>{
       const {route}=JSON.parse(localStorage.getItem('tffc.barry.boot-flight.v1'));
-      const {bootRoomFlightImage}=await import('/beta/barry-air/flight-path-share.mjs?v=3');
-      const image=await bootRoomFlightImage(route);
-      return {type:image.type,bytes:image.size,route};
+      const {bootRoomFlightImage}=await import('/beta/barry-air/flight-path-share.mjs?v=4');
+      const labels=[],fillText=CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText=function(text,...args){
+        labels.push(text);
+        return fillText.call(this,text,...args);
+      };
+      try {
+        const image=await bootRoomFlightImage(route,{name:'Guest Pigeon',callSign:'TF2AC 12345'});
+        return {type:image.type,bytes:image.size,route,labels};
+      } finally {CanvasRenderingContext2D.prototype.fillText=fillText;}
     });
     assert.equal(bootRoomImage.type,'image/png');
     assert.ok(bootRoomImage.bytes>0);
     assert.equal(bootRoomImage.route.stops[0].short,'Home area');
+    assert.equal(bootRoomImage.route.milesFlown,Number.isFinite(expected.miles.miles)?Math.round(expected.miles.miles):undefined);
+    assert.ok(bootRoomImage.labels.includes('Guest Pigeon'));
+    const miles=bootRoomImage.route.milesFlown;
+    assert.ok(bootRoomImage.labels.includes('TF2AC 12345 · '+(miles===undefined?'Miles flown unavailable':miles.toLocaleString('en-GB')+' miles flown')));
+    assert.ok(bootRoomImage.labels.every(label=>!label.includes(saved.postcode)));
     assert.ok(!JSON.stringify(bootRoomImage.route).includes(saved.postcode));
     assert.ok(!route.text.includes(saved.postcode));
     await preview.locator('form button').click();

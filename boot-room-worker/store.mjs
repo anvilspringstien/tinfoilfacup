@@ -1,4 +1,5 @@
 import {validateFlightPath} from './flight-path.mjs';
+import {validateTrophyCabinet} from './trophy-cabinet.mjs';
 export class RoomError extends Error {constructor(message,status=400){super(message);this.status=status;}}
 export const DAY=86400000;
 export const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
@@ -10,6 +11,7 @@ function removeMessage(state,message,text){
  message.text=text;
  message.deleted=true;
  delete message.flightPath;
+ delete message.trophyCabinet;
  message.hearts=[];
  state.reports=state.reports.filter(report=>report.message!==message.id);
 }
@@ -17,12 +19,13 @@ export class RoomStore {
  constructor(storage,clock=Date.now){this.storage=storage;this.clock=clock;storage.sql.exec('CREATE TABLE IF NOT EXISTS room (id INTEGER PRIMARY KEY CHECK(id=1), data TEXT NOT NULL)');storage.sql.exec('INSERT OR IGNORE INTO room VALUES (1,?)',JSON.stringify({open:false,next:'Opening time to be announced',until:0,people:[],messages:[],reports:[],day:'',actions:0,joins:0}));}
  run(change){return this.storage.transactionSync(()=>{const s=JSON.parse(this.storage.sql.exec('SELECT data FROM room WHERE id=1').toArray()[0].data);const n=this.clock();s.messages=s.messages.filter(m=>m.at>n-7*DAY);s.reports=s.reports.filter(r=>r.at>n-7*DAY);s.people=s.people.filter(p=>p.expires>n);if(s.until<=n)s.open=false;const day=new Date(n).toISOString().slice(0,10);if(s.day!==day){s.day=day;s.actions=0;s.joins=0;}const result=change(s,n);this.storage.sql.exec('UPDATE room SET data=? WHERE id=1',JSON.stringify(s));return result;});}
  person(s,hash,n){const p=s.people.find(p=>p.session===hash&&p.expires>n&&!p.suspended);if(!p||(p.callSign&&s.people.some(other=>other.callSign===p.callSign&&other.suspended)))throw new RoomError('Invitation or session expired',401);return p;}
- view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p)},messages:s.messages.map(({flightPath,...m})=>({...m,...(flightPath?{hasFlightPath:true}:{}),hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
+ view(s,p,n){const reported=new Set(s.reports.filter(r=>r.person===p.id).map(r=>r.message));return {open:s.open&&s.until>n,next:s.next,until:s.until,you:{id:p.id,name:p.name,...identity(p),...(p.walkIn?{walkIn:true}:{})},messages:s.messages.map(({flightPath,...m})=>({...m,...(flightPath?{hasFlightPath:true}:{}),hearts:m.hearts.length,hearted:m.hearts.includes(p.id),reported:reported.has(m.id)}))};}
  invite(name,hash,callSign,moderator=false){if(callSign&&!validCallSign(callSign))throw new RoomError('Use a Call Sign like TF2AC 01922');if(moderator===true&&!callSign)throw new RoomError('A moderator invitation needs a Call Sign');if(!(name=clean(name,40)))throw new RoomError('Use a pigeon name of 1–40 characters');return this.run((s,n)=>{if(callSign&&s.people.some(p=>p.callSign===callSign))throw new RoomError('That Call Sign already has a place',409);if(s.people.filter(p=>!p.walkIn).length>=10)throw new RoomError('Ten test places are already reserved',409);const p={id:crypto.randomUUID(),name,callSign:callSign||null,moderator:moderator===true,invite:hash,session:null,expires:n+7*DAY,suspended:false,last:0,burst:0};s.people.push(p);return {id:p.id,name,expires:p.expires};});}
  redeem(invite,session,claim){return this.run((s,n)=>{const p=s.people.find(p=>p.invite===invite&&!p.suspended&&p.expires>n);if(!p)throw new RoomError('Invitation is invalid, used or expired',401);if(p.callSign){
    const custodian=clean(claim?.custodian,100),fixture=clean(claim?.fixture,200);
    if(claim?.callSign!==p.callSign||claim?.name!==p.name||!custodian||!fixture)throw new RoomError('Open the Boot Room from the Campaign named on your invitation',403);
-   p.campaign={callSign:p.callSign,custodian,fixture};
+   const origin=clean(claim?.origin,100);
+   p.campaign={callSign:p.callSign,custodian,fixture,...(origin?{origin}:{})};
   }else if(claim)throw new RoomError('Use an invitation issued for this Campaign',403);
   p.invite=null;p.session=session;return {id:p.id,name:p.name};});}
  walkIn(claim,session,publicEntry=false){return this.run((s,n)=>{
@@ -35,15 +38,24 @@ export class RoomStore {
   if(!publicEntry&&existing&&(existing.session||!existing.walkIn))throw new RoomError('This Call Sign already has a place. Reopen the room in the browser that joined.',409);
   if(!publicEntry&&!existing&&s.people.filter(p=>p.walkIn).length>=10)throw new RoomError('The first opening is full. Please check back for another opening.',409);
   const p=existing||{id:crypto.randomUUID(),walkIn:true,callSign,suspended:false,last:0,burst:0,expires:n+7*DAY};
-  Object.assign(p,{name,campaign:{callSign,custodian,fixture},session,moderator:false});
+  const origin=clean(claim?.origin,100);
+  Object.assign(p,{name,campaign:{callSign,custodian,fixture,...(origin?{origin}:{})},session,moderator:false});
   if(!existing)s.people.push(p);
   return {id:p.id,name};
  });}
  logout(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);p.session=null;return {ok:true};});}
  snapshot(hash){return this.run((s,n)=>this.view(s,this.person(s,hash,n),n));}
+ syncCampaignName(hash,claim){return this.run((s,n)=>{
+  const p=this.person(s,hash,n);
+  if(!p.walkIn||!p.campaign||p.campaign.callSign!==claim?.callSign)throw new RoomError('Open the Boot Room from your saved Campaign',403);
+  const name=clean(claim.name,20);
+  if(!name)throw new RoomError('Use a pigeon name of 1–20 characters');
+  p.name=name;
+  return this.view(s,p,n);
+ });}
  readClosed(){return this.run((s,n)=>{
   if(s.open&&s.until>n)throw new RoomError('The room is open. Join from My Campaign.',409);
-  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts,flightPath})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length,...(flightPath?{hasFlightPath:true}:{})}));
+  const messages=s.messages.filter(m=>!m.deleted).map(({id,name,campaign,text,at,replyTo,hearts,flightPath,trophyCabinet})=>({id,name,campaign,text,at,replyTo,hearts:hearts.length,...(flightPath?{hasFlightPath:true}:{}),...(trophyCabinet?{trophyCabinet}:{})}));
   return {open:false,next:s.next,until:s.until,you:null,messages};
  });}
  flightPath(id,hash,publicRead){return this.run((s,n)=>{
@@ -56,11 +68,20 @@ export class RoomStore {
  join(hash){return this.run((s,n)=>{const p=this.person(s,hash,n);if(s.joins>=200)throw new RoomError('Test connection allowance reached for today',429);s.joins++;return {id:p.id,hash};});}
  action(hash,a){return this.run((s,n)=>{const p=this.person(s,hash,n);if(!['report','delete-own'].includes(a?.type)&&(!s.open||s.until<=n))throw new RoomError('Barry has closed the room',403);if(n-p.last>=10000){p.last=n;p.burst=0;}if(p.burst>=5||s.actions>=2000)throw new RoomError('Easy, pigeon. Please pause before trying again.',429);if(!a||typeof a!=='object')throw new RoomError('Invalid action');let result;
  if(a.type==='message'){const text=clean(a.text,500);if(!text)throw new RoomError('Messages must contain 1–500 characters');const parent=a.replyTo?s.messages.find(m=>m.id===a.replyTo&&!m.deleted):null;if(a.replyTo&&!parent)throw new RoomError('Reply target is no longer available');let flightPath;
+ const author=identity(p);
  if(a.flightPath!==undefined){
   if(!p.campaign)throw new RoomError('Open the Boot Room from your Campaign to attach a Flight Path.');
   try{flightPath=validateFlightPath(a.flightPath);}catch(error){throw new RoomError(error.message);}
+  const origin=clean(a.campaignOrigin,100);
+  if(!author.campaign.origin&&origin)author.campaign={...author.campaign,origin};
  }
- const m={id:crypto.randomUUID(),person:p.id,name:p.name,...identity(p),text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
+ let trophyCabinet;
+ if(a.trophyCabinet!==undefined){
+  if(!p.campaign)throw new RoomError('Open the Boot Room from your Campaign to attach a Trophy Cabinet.');
+  trophyCabinet=validateTrophyCabinet(a.trophyCabinet);
+  if(!trophyCabinet)throw new RoomError('This Trophy Cabinet is unavailable.');
+ }
+ const m={id:crypto.randomUUID(),person:p.id,name:p.name,...author,text,at:n,replyTo:parent?.id||null,hearts:[],deleted:false,...(flightPath?{flightPath}:{}),...(trophyCabinet?{trophyCabinet}:{})};s.messages.push(m);s.messages=s.messages.slice(-200);result={id:m.id};}
  else if(a.type==='heart'){const m=s.messages.find(m=>m.id===a.id&&!m.deleted);if(!m||typeof a.liked!=='boolean')throw new RoomError('Message unavailable');m.hearts=m.hearts.filter(id=>id!==p.id);if(a.liked)m.hearts.push(p.id);result={id:m.id};}
  else if(a.type==='delete-own'){
   const m=s.messages.find(m=>m.id===a.id&&m.person===p.id);

@@ -2,7 +2,7 @@ const postcode = /\b(?:GIR\s*0AA|[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/i;
 
 export function validateFlightPath(path) {
   const invalid = () => { throw new Error('This Flight Path is unavailable. Reopen Barry Air to refresh it.'); };
-  const {stops, flights} = path ?? {};
+  const {stops, flights, milesFlown} = path ?? {};
   if (!Array.isArray(stops) || stops.length > 32 || !Array.isArray(flights) ||
       flights.length < 1 || flights.length > 48) return invalid();
   const safeStops = stops.map((stop, index) => {
@@ -25,5 +25,6 @@ export function validateFlightPath(path) {
     return {stop, status};
   });
   if (!safeFlights.some(flight => safeStops[flight.stop])) return invalid();
-  return {stops: safeStops, flights: safeFlights};
+  return {stops: safeStops, flights: safeFlights,
+    ...(Number.isSafeInteger(milesFlown) && milesFlown >= 0 && milesFlown <= 100000 ? {milesFlown} : {})};
 }

@@ -141,36 +141,97 @@ test('public walk-ins accept fresh browsers and more than ten guests during an o
  assert.throws(()=>f.room.walkIn({...claim,callSign:'TF2AC 01099'},'closed',true),e=>e.status===403);
 });
 
+test('walk-ins can update their own Campaign name for future Flight Path posts',()=>{
+ const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
+ const claim={name:'Pigeon 03120',callSign:'TF2AC 03120',origin:'Starting Athletic',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ const {id}=f.room.walkIn(claim,'session',true);
+ const flightPath={stops:[null,{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ f.room.action('session',{type:'message',text:'Before updating',flightPath});
+ const nameClaim={callSign:claim.callSign,name:'Renamed Pigeon'};
+ assert.throws(()=>f.room.syncCampaignName(other,nameClaim),{status:403});
+ assert.throws(()=>f.room.syncCampaignName('session',{...nameClaim,callSign:'TF2AC 03121'}),{status:403});
+ assert.throws(()=>f.room.syncCampaignName('session',{...nameClaim,name:'x'.repeat(21)}),{status:400});
+ const updated=f.room.syncCampaignName('session',nameClaim);
+ assert.equal(updated.you.id,id);
+ assert.equal(updated.you.name,'Renamed Pigeon');
+ assert.equal(updated.you.campaign.origin,claim.origin);
+ f.room.action('session',{type:'message',text:'After updating',flightPath});
+ const posts=f.room.snapshot('session').messages;
+ assert.deepEqual(posts.map(post=>[post.name,post.hasFlightPath]),[['Pigeon 03120',true],['Renamed Pigeon',true]]);
+});
+
 test('Flight Paths are optional per post, rounded at Home, and follow room visibility and removal',()=>{
  const f=fixture();
- const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ const claim={name:'Checky',callSign:'TF2AC 01001',origin:'Starting Athletic',custodian:'Example Town',fixture:'Example Town v Example United'};
  f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
  f.room.walkIn(claim,'session');
  const flightPath={stops:[
   {lat:51.6332,lon:-.5559,short:'Private Home',postcode:'HP7 0EJ'},
   {lat:52.4,lon:-1.3,short:'Example Town',next:true}
- ],flights:[{stop:1,status:'NEXT FLIGHT'}]};
- const plain=f.room.action('session',{type:'message',text:'Ordinary post'});
+ ],flights:[{stop:1,status:'NEXT FLIGHT'}],milesFlown:1234};
+ const plain=f.room.action('session',{type:'message',text:'Ordinary post',campaignOrigin:'Ignored origin'});
  assert.throws(()=>f.room.action('session',{type:'message',text:'Bad attachment',
   flightPath:{...flightPath,stops:[flightPath.stops[0],{...flightPath.stops[1],short:'CV12 8NN'}]}
  }),/unavailable/);
- const attached=f.room.action('session',{type:'message',text:'Look at this route',flightPath});
+ const attached=f.room.action('session',{type:'message',text:'Look at this route',flightPath,campaignOrigin:'Ignored origin'});
  const [first,second]=f.room.snapshot('session').messages;
  assert.equal(first.hasFlightPath,undefined);
+ assert.equal(first.campaign.origin,claim.origin);
  assert.equal(second.hasFlightPath,true);
+ assert.deepEqual(second.campaign,{callSign:claim.callSign,origin:claim.origin,custodian:claim.custodian,fixture:claim.fixture});
  assert.equal(second.flightPath,undefined);
  assert.throws(()=>f.room.flightPath(attached.id,'',true),{status:401});
  assert.throws(()=>f.room.flightPath(plain.id,'session',true),{status:404});
  const saved=f.room.flightPath(attached.id,'session',true);
  assert.deepEqual(saved.stops[0],{lat:51.5,lon:-.5,short:'Home area',approximate:true});
  assert.deepEqual(saved.stops[1],flightPath.stops[1]);
+ assert.equal(saved.milesFlown,1234);
+ const oldClaim={...claim,callSign:'TF2AC 01002',origin:undefined};
+ f.room.walkIn(oldClaim,'old-session');
+ const legacy=f.room.action('old-session',{type:'message',text:'Earlier route',campaignOrigin:claim.origin,flightPath:{...flightPath,milesFlown:undefined}});
+ const oldSession=f.room.snapshot('old-session');
+ assert.equal(oldSession.you.campaign.origin,undefined);
+ assert.equal(oldSession.messages.at(-1).campaign.origin,claim.origin);
+ assert.equal(f.room.flightPath(legacy.id,'session',true).milesFlown,undefined);
+ const invalidMileage=f.room.action('session',{type:'message',text:'Invalid mileage',flightPath:{...flightPath,milesFlown:'HP7 0EJ'}});
+ assert.equal(f.room.flightPath(invalidMileage.id,'session',true).milesFlown,undefined);
  assert.equal(JSON.stringify(saved).includes('HP7 0EJ'),false);
  f.room.admin({type:'doors',open:false,next:'Tomorrow'});
- assert.equal(f.room.readClosed().messages[1].hasFlightPath,true);
+ const closedPost=f.room.readClosed().messages[1];
+ assert.equal(closedPost.hasFlightPath,true);
+ assert.deepEqual(closedPost.campaign,second.campaign);
  assert.deepEqual(f.room.flightPath(attached.id,'',true),saved);
  f.room.admin({type:'delete',id:attached.id});
  assert.equal(f.room.snapshot('session').messages[1].hasFlightPath,undefined);
  assert.throws(()=>f.room.flightPath(attached.id,'',true),{status:404});
+});
+
+test('Trophy Cabinet snapshots contain only earned mat IDs and follow their post through closure and removal',()=>{
+ const f=fixture(),other=join(f,'Another Pigeon','other-invite','other-session');
+ const claim={name:'Checky',callSign:'TF2AC 01001',custodian:'Example Town',fixture:'Example Town v Example United'};
+ f.room.admin({type:'doors',open:true,walkIn:true,until:f.now()+3600000,next:'Tomorrow'});
+ f.room.walkIn(claim,'session');
+ assert.throws(()=>f.room.action(other,{type:'message',text:'Test',trophyCabinet:['01']}),/from your Campaign/);
+ for(const invalid of [null,{},['00'],['28'],['03','03'],['https://example.test/01'],[1]]){
+  assert.throws(()=>f.room.action('session',{type:'message',text:'Test',trophyCabinet:invalid}),/Trophy Cabinet is unavailable/);
+ }
+ const matIds=['08','01'];
+ const flightPath={stops:[null,{lat:52,lon:-1,short:'Example Town'}],flights:[{stop:1,status:'LANDED'}]};
+ const first=f.room.action('session',{type:'message',text:'Two trophies',trophyCabinet:matIds,flightPath});
+ matIds.push('19');
+ const second=f.room.action('session',{type:'message',text:'Three trophies',trophyCabinet:matIds});
+ f.room.action('session',{type:'message',text:'Empty cabinet',trophyCabinet:[]});
+ const history=f.room.snapshot(other).messages;
+ assert.deepEqual(history.map(m=>m.trophyCabinet),[['01','08'],['01','08','19'],[]]);
+ assert.equal(history[0].hasFlightPath,true);
+ assert.equal(history[0].name,'Checky');
+ f.room.admin({type:'doors',open:false,next:'Tomorrow'});
+ assert.deepEqual(f.room.readClosed().messages[0].trophyCabinet,['01','08']);
+ f.room.action('session',{type:'delete-own',id:first.id});
+ f.room.admin({type:'delete',id:second.id});
+ assert.deepEqual(f.room.snapshot(other).messages.map(m=>m.trophyCabinet),[undefined,undefined,[]]);
+ assert.deepEqual(f.room.readClosed().messages.map(m=>m.trophyCabinet),[[]]);
 });
 
 test('only the author can delete their post, even after the room closes',()=>{
