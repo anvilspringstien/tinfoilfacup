@@ -20,8 +20,8 @@ def literal(html, name):
     return start, start + size, value
 
 
-def compact(value):
-    return json.dumps(value, ensure_ascii=False, separators=(',', ':'))
+def compact(value, *, ensure_ascii=False):
+    return json.dumps(value, ensure_ascii=ensure_ascii, separators=(',', ':'))
 
 
 def apply_names(html, ledger):
@@ -58,11 +58,15 @@ def apply_names(html, ledger):
             raise ValueError('Ground identity/postcode drift: ' + club)
         if row['ground'] == after:
             continue
+        ascii_row = compact(row, ensure_ascii=True)
         original = compact(row)
+        ensure_ascii = original != ascii_row and original not in store['body']
+        if ensure_ascii:
+            original = ascii_row
         if store['body'].count(original) != 1:
             raise ValueError('Ground serialization boundary changed: ' + club)
-        updated = dict(row, ground=after)
-        store['body'] = store['body'].replace(original, compact(updated), 1)
+        updated = compact(dict(row, ground=after), ensure_ascii=ensure_ascii)
+        store['body'] = store['body'].replace(original, updated, 1)
         changes.append(club)
     for store in sorted(stores, key=lambda item: item['start'], reverse=True):
         html = html[:store['start']] + store['body'] + html[store['end']:]
