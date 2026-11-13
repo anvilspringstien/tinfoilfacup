@@ -106,9 +106,14 @@ test('saving the advertised opening keeps the live doors and timer separate',()=
  assert.deepEqual(f.room.doors(),{open:false,next:'Opening time to be announced',until:0,chalkboard:board});
  open(f);
  const {until}=f.room.doors();
- f.room.admin({type:'chalkboard',board:{...board,hours:'Noon–11pm'}});
+ f.room.admin({type:'chalkboard',board:{...board,heading:'BARRY’S MATCHDAY',hours:'Noon–11pm'}});
+ assert.equal(f.room.doors().chalkboard.heading,'BARRY’S MATCHDAY');
+ f.room.admin({type:'chalkboard',board});
+ assert.equal(f.room.doors().chalkboard.heading,'BARRY’S MATCHDAY');
  assert.equal(f.room.doors().until,until);
  assert.equal(f.room.doors().open,true);
+ f.room.admin({type:'doors',open:false});
+ assert.equal(f.room.doors().next,'Next matchday');
 });
 
 test('closed-room reading excludes removed messages and private member data',()=>{

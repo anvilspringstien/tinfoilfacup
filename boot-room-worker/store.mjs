@@ -101,18 +101,22 @@ export class RoomStore {
   result={reported:a.reported!==false,id:m.id};
  }
  else throw new RoomError('Unknown action');p.burst++;s.actions++;return result;});}
- admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||typeof a.next!=='string'||a.next.length>100)throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;s.next=a.next;}
+ admin(a){return this.run((s,n)=>{if(a.type==='doors'){if(typeof a.open!=='boolean'||(a.next!==undefined&&(typeof a.next!=='string'||a.next.length>100)))throw new RoomError('Invalid opening details');if(a.open&&(!Number.isSafeInteger(a.until)||a.until<=n||a.until>n+16*3600000))throw new RoomError('Choose a closing time within the next 16 hours');s.open=a.open;s.walkIn=a.open&&a.walkIn===true;s.until=a.open?a.until:0;if(a.next!==undefined)s.next=a.next;}
  else if(a.type==='delete'){const m=s.messages.find(m=>m.id===a.id);if(!m)throw new RoomError('Message unavailable',404);removeMessage(s,m,'Message removed by a moderator');}
  else if(a.type==='dismiss-reports'){
   s.reports=s.reports.filter(r=>r.message!==a.id);
  }
  else if(a.type==='chalkboard'){
-  const limits={title:80,date:80,hours:80,followingTitle:80,followingDetails:160};
+  const limits={heading:80,title:80,date:80,hours:80,followingTitle:80,followingDetails:160};
   const board={};
   for(const [key,max] of Object.entries(limits)){
    const raw=a.board?.[key];
+   if(key==='heading'&&raw===undefined){
+    if(s.chalkboard?.heading)board.heading=s.chalkboard.heading;
+    continue;
+   }
    const value=clean(raw,max);
-   if(!value&&(typeof raw!=='string'||raw.trim()||['title','date','hours'].includes(key)))throw new RoomError('Check the chalkboard fields');
+   if(!value&&(typeof raw!=='string'||raw.trim()||['heading','title','date','hours'].includes(key)))throw new RoomError('Check the chalkboard fields');
    board[key]=value||'';
   }
   if(board.followingDetails&&!board.followingTitle)throw new RoomError('Give the following opening a title');

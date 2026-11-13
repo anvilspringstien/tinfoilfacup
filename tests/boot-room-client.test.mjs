@@ -329,24 +329,43 @@ test('entering chat shows a loading state until the first conversation is ready'
 
 test('Boot Room Admin opens Campaign entry with the room and can close it without a duration',async()=>{
  const adminPage=page.slice(page.indexOf('<section id="admin"'));
- assert.doesNotMatch(adminPage,/invite-form|allow-walk-in|landlord/i);
+ assert.doesNotMatch(adminPage,/invite-form|allow-walk-in|landlord|Next opening message/i);
  assert.match(adminPage,/<button name="open" value="no" class="quiet" formnovalidate>/);
  const b=browser('/admin');
  b.setState({open:false,next:'Saturday at noon',people:[],reports:[],usage:{actions:0,joins:0}});
  await b.$('unlock-form').onsubmit({preventDefault(){}});
- assert.equal(b.$('next').value,'Saturday at noon');
  b.$('hours').value='2';
  await b.$('doors-form').onsubmit({preventDefault(){},submitter:{value:'yes'}});
  const opening=b.posts.find(post=>post.type==='doors');
  assert.equal(opening.open,true);
  assert.equal(opening.walkIn,true);
- assert.equal(opening.next,'Saturday at noon');
+ assert.equal(Object.hasOwn(opening,'next'),false);
  assert.ok(opening.until>Date.now()+3600000);
  b.$('hours').value='';
  await b.$('doors-form').onsubmit({preventDefault(){},submitter:{value:'no'}});
  assert.deepEqual(b.posts.filter(post=>post.type==='doors').at(-1),{
-  type:'doors',open:false,until:0,next:'Saturday at noon',walkIn:false
+  type:'doors',open:false,until:0,walkIn:false
  });
  b.$('lock').onclick();
  assert.equal(b.$('admin-controls').hidden,true);
+});
+
+
+test('the Chalk Board previews and displays an editable heading and the supplied hours verbatim',async()=>{
+ const board={heading:'BARRY’S MATCHDAY',title:'Cup football',date:'Saturday',hours:'11am–11pm',followingTitle:'Monday’s Draw',followingDetails:'Join from noon'};
+ const b=browser('/admin');
+ b.setState({open:false,next:'Old opening message',chalkboard:{...board,heading:undefined},people:[],reports:[],usage:{actions:0,joins:0}});
+ await b.$('unlock-form').onsubmit({preventDefault(){}});
+ assert.equal(b.$('chalk-heading').value,'BARRY’S NEXT OPENING');
+ b.$('chalk-heading').value=board.heading;
+ b.$('chalk-form').oninput();
+ assert.equal(b.$('chalk-preview').children[0].textContent,board.heading);
+ await b.$('chalk-form').onsubmit({preventDefault(){},submitter:{}});
+ assert.deepEqual(b.posts.find(post=>post.type==='chalkboard').board,board);
+ const entrance=browser('/');
+ entrance.setState({open:false,next:'Old opening message',chalkboard:board});
+ await entrance.settle();
+ assert.equal(entrance.$('door-chalkboard').children[0].textContent,board.heading);
+ assert.equal(entrance.$('door-chalkboard').children[3].textContent,board.hours);
+ assert.equal(entrance.$('entrance-next').textContent,'');
 });
