@@ -95,10 +95,13 @@ assert(first.nodes.overlay.classList.contains('open'),'Deck must open immediatel
 assert.equal(vm.runInContext('index',first.ctx),0,'Direct launch must show first mat');
 assert.match(html, /<span class="verifybadge" id="verifyBadge">/, 'The Challenge type is a label');
 assert.match(first.nodes.verifyHelp.textContent,/The Law!/, 'Show the first mat’s help on entry');
+assert.equal(first.nodes.deckPrompt.hidden,false,'Show the deck navigation prompt on the opening mat');
 first.nodes.next.onclick();
+assert.equal(first.nodes.deckPrompt.hidden,true,'Hide the prompt after leaving the opening mat');
 assert.notEqual(first.nodes.verifyHelp.textContent,'');
 assert.doesNotMatch(first.nodes.verifyHelp.textContent,/The Law!/, 'Refresh the visible help when the mat changes');
 first.nodes.prev.onclick();
+assert.equal(first.nodes.deckPrompt.hidden,false,'Restore the prompt on returning to the opening mat');
 
 assert.equal(vm.runInContext('state.completed["01"]',first.ctx),true,'Previously completed trophy lost');
 assert.equal(first.nodes.deckCabinet.children.length,27,'Trophy Cabinet cards lost during navigation change');
