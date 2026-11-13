@@ -41,8 +41,9 @@ export const style=":root{--ink:#171612;--panel:#11110f;--cream:#f5efdd;--gold:#
     --admin-frame-height: min(calc(390px * 16 / 9), 100svh);
     --admin-frame-gutter: clamp(6px, 1.2vh, 13px);
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     padding: var(--admin-frame-gutter) 0;
   }
   .landlord-panel {
