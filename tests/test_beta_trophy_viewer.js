@@ -252,5 +252,19 @@ vm.runInContext('index=4;render()',support.ctx);
 support.nodes.acceptBtn.onclick();
 assert.equal(support.ctx.opened.length,1,'Other Honour challenges never open checkout');
 
+const bootRoomBoy=boot('',{},{});
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="21");render()',bootRoomBoy.ctx);
+assert.equal(bootRoomBoy.nodes.verifyBadge.textContent,'An Honour Challenge');
+assert.equal(bootRoomBoy.nodes.flipcard.classList.contains('coming-soon-mat'),false);
+assert.equal(bootRoomBoy.nodes.acceptBtn.disabled,false);
+assert.equal(bootRoomBoy.nodes.completeBtn.disabled,true);
+bootRoomBoy.nodes.acceptBtn.onclick();
+assert.equal(bootRoomBoy.nodes.completeBtn.disabled,false);
+bootRoomBoy.nodes.completeBtn.onclick();
+assert.equal(vm.runInContext('!!state.completed["21"]',bootRoomBoy.ctx),true);
+assert.ok(bootRoomBoy.nodes.deckCabinet.children.some(slot=>
+  slot.className.includes('completed')&&slot.children[0]?.dataset.src.endsWith('/mat-21-front.webp')),
+  'Completing Boot Room Boy must put Mat 21 in the Trophy Cabinet');
+
 console.log('BETA TROPHY VIEWER: PASS');
 console.log('Three taps, backdrop, Escape, keyboard, focus, persistent state and Deck isolation: PASS');
