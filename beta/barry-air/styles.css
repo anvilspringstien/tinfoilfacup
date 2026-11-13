@@ -352,3 +352,5 @@ body{background-attachment:scroll}
 .map-attribution{margin-top:12px;color:#aaa79e;font:10px/1.4 monospace}
 .map-attribution a{text-underline-offset:2px}
 .cabin-frame footer{justify-content:center;text-align:center}
+
+#boarding-share-native:not([hidden]){display:inline-flex;align-items:center;justify-content:center;gap:6px}
