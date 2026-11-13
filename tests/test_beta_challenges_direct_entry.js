@@ -93,6 +93,13 @@ const local={
 const first=boot('',local,{});
 assert(first.nodes.overlay.classList.contains('open'),'Deck must open immediately, without Splash');
 assert.equal(vm.runInContext('index',first.ctx),0,'Direct launch must show first mat');
+assert.match(html, /<span class="verifybadge" id="verifyBadge">/, 'The Challenge type is a label');
+assert.match(first.nodes.verifyHelp.textContent,/The Law!/, 'Show the first mat’s help on entry');
+first.nodes.next.onclick();
+assert.notEqual(first.nodes.verifyHelp.textContent,'');
+assert.doesNotMatch(first.nodes.verifyHelp.textContent,/The Law!/, 'Refresh the visible help when the mat changes');
+first.nodes.prev.onclick();
+
 assert.equal(vm.runInContext('state.completed["01"]',first.ctx),true,'Previously completed trophy lost');
 assert.equal(first.nodes.deckCabinet.children.length,27,'Trophy Cabinet cards lost during navigation change');
 assert.equal(first.nodes.cabinetCount.textContent,'2 / 27','Verified Third Qualifying progress should award the campaign milestone trophy');
