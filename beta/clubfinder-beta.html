@@ -2369,9 +2369,11 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
       printDoc.close();
       printDoc.title=document.title;
-      const base=printDoc.createElement('base');
-      base.href=document.baseURI;
-      printDoc.head.append(base,...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
+      const assetBase=new URL('/beta/',window.top.location.origin);
+      for(const image of sheet.querySelectorAll('img[src]')){
+        image.src=new URL(image.getAttribute('src'),assetBase).href;
+      }
+      printDoc.head.append(...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
       const style=printDoc.createElement('style');
       style.textContent='.print-guide{max-width:790px;margin:0 auto 16px;padding:14px;background:#fffdf1;text-align:center}.print-guide button{font:inherit;padding:8px 14px;cursor:pointer}@media print{.print-guide{display:none}}';
       printDoc.head.append(style);
