@@ -31,6 +31,8 @@ assert(writeBlock.includes("await Promise.all(assets.map(asset=>new Promise(reso
 assert(writeBlock.includes("if(typeof img.decode==='function')await img.decode()"),
   'Stats preparation must decode artwork before returning');
 assert(writeBlock.includes("img.onerror=finish"),'Artwork failure must fail open');
+assert(writeBlock.includes('const timer=setTimeout(finish,400)'),
+  'Slow or stalled artwork must release Stats preparation');
 assert(writeBlock.indexOf("await Promise.all(assets.map(asset=>new Promise(resolve=>")<writeBlock.indexOf('return doc;'),
   'The prepared document must be returned after artwork is ready');
 const route=html.slice(html.indexOf('async function journeyCertificate('),prepareStart);
