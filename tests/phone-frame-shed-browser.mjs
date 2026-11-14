@@ -207,41 +207,37 @@ try{
  });
  await savePrint.click();
  assert.equal(await statsApp.locator('body').evaluate(()=>window.statsPrintRequested),true,'Desktop prints directly');
- await statsApp.locator('body').evaluate(()=>{
-  Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
+ const iphone=await browser.newContext({
+  viewport:{width:390,height:669},isMobile:true,hasTouch:true,userAgent:'iPhone',
  });
- const previewOpened=context.waitForEvent('page',{timeout:10000});
- await savePrint.click();
- const printPreview=await previewOpened;
- await printPreview.getByRole('button',{name:'Print Stats',exact:true}).waitFor({timeout:10000});
- assert.equal(await printPreview.locator('iframe,.stats-actions').count(),0,'iPhone prints a top-level copy of the report');
- assert.match(await printPreview.locator('.sheet').innerText(),/Newton Aycliffe FC/);
- assert.equal(await printPreview.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
- const crest=printPreview.locator('.top img');
- await printPreview.waitForFunction(()=>document.querySelector('.print-guide button')?.disabled===false,null,{timeout:10000});
- const crestImage=await crest.evaluate(img=>({embedded:img.src.startsWith('data:image/'),width:img.naturalWidth}));
- assert.ok(crestImage.embedded&&crestImage.width>0,'Printable Stats must embed and load the crest: '+JSON.stringify(crestImage));
- await printPreview.evaluate(()=>{window.print=()=>{window.statsPrintRequested=true;};});
- await printPreview.getByRole('button',{name:'Print Stats',exact:true}).click();
- assert.equal(await printPreview.evaluate(()=>window.statsPrintRequested),true);
- for(const viewport of [{width:390,height:669},{width:844,height:390},{width:390,height:669}]){
-  await printPreview.setViewportSize(viewport);
-  const headerFits=await printPreview.locator('.top').evaluate(top=>{
-   const sheet=top.closest('.sheet').getBoundingClientRect();
-   return [...top.children].every(column=>column.getBoundingClientRect().right<=sheet.right);
-  });
-  assert.ok(headerFits,'The crest and heading must stay within the report during rotation');
+ try{
+  await iphone.addInitScript(value=>{
+   localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value));
+   window.print=()=>{window.statsPrintRequests=(window.statsPrintRequests||0)+1;};
+  },saved);
+  const phoneStats=await iphone.newPage();
+  await phoneStats.goto(origin+'/beta/phone-frame.html?view=stats');
+  const phoneApp=phoneStats.frameLocator('#phoneApp');
+  const phonePrint=phoneApp.getByRole('button',{name:'Save / Print',exact:true});
+  await phonePrint.waitFor({timeout:30000});
+  const printCopy=phoneStats.locator('#stats-print-copy');
+  assert.equal(await printCopy.count(),1);
+  assert.equal(await printCopy.isVisible(),false);
+  await phonePrint.click();
+  assert.equal(await phoneStats.evaluate(()=>window.statsPrintRequests),1,'First tap requests top-level printing');
+  assert.equal(iphone.pages().length,1,'Printing keeps the same Stats tab');
+  await phoneStats.emulateMedia({media:'print'});
+  assert.equal(await phoneStats.locator('.phone-shell').isVisible(),false);
+  assert.equal(await printCopy.isVisible(),true);
+  assert.match(await printCopy.innerText(),/Newton Aycliffe FC/);
+  assert.equal(await printCopy.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
+  assert.ok(await printCopy.locator('.top img').evaluate(async img=>{await img.decode();return img.naturalWidth>0;}));
+  assert.equal(await printCopy.locator('.glance').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),6);
+  await phoneStats.emulateMedia({media:'screen'});
+  assert.equal(await phonePrint.isVisible(),true);
+ }finally{
+  await iphone.close();
  }
- await printPreview.emulateMedia({media:'print'});
- assert.equal(await printPreview.locator('.print-guide').isVisible(),false);
- const columns=await printPreview.locator('.glance').evaluate(glance=>getComputedStyle(glance).gridTemplateColumns.split(' ').length);
- assert.ok(columns>2,'Print should retain the compact report grid on a narrow screen');
- await printPreview.emulateMedia({media:'screen'});
- await Promise.all([
-  printPreview.waitForEvent('close',{timeout:10000}),
-  printPreview.getByRole('link',{name:'← Back to Stats'}).click(),
- ]);
- await statsApp.locator('body').evaluate(()=>{delete navigator.userAgent;});
 
  await shareStats.evaluate(button=>{
   const win=button.ownerDocument.defaultView;
