@@ -104,6 +104,7 @@ html[data-frame="shed"], html[data-frame="shed"] body {
 #room-navigation a,#room-navigation button{min-height:32px;font-size:10px}
 #room-navigation button[hidden]{display:none}
 #room-navigation[data-revealed],#room-navigation:focus-within{position:sticky;bottom:0;z-index:3}
+@media(pointer:coarse){#room-navigation:has(#logout:not([hidden])){position:sticky;bottom:0;z-index:3}}
 .entrance-house-rules:focus-visible,.entrance-navigation a:focus-visible,#room-navigation :focus-visible{
  outline:2px solid #d1bd80;outline-offset:2px;
 }

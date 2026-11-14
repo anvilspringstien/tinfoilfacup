@@ -562,8 +562,8 @@ try{
     setItem:(k,v)=>{storage[k]=String(v)},
     removeItem:k=>{delete storage[k]}
   };
-  const ctx={window:page,sessionStorage:session,console,requestAnimationFrame:fn=>fn()};
-  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  const ctx={window:page,sessionStorage:session,console,setTimeout,clearTimeout,requestAnimationFrame:fn=>fn()};
+  await vm.runInNewContext(script,{...ctx,requestAnimationFrame:()=>{}},{filename:'beta/stats-beta.html'});
   if(renders!==1||redirects.length||storage['tffc.stats-fast-open.v1']!=='1')
     throw new Error('BETA lite Stats: first load failed to use available opener');
   await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
