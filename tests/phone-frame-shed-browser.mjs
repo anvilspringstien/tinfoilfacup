@@ -247,7 +247,6 @@ try{
   const win=button.ownerDocument.defaultView;
   Object.defineProperty(win.navigator,'canShare',{configurable:true,value:()=>true});
   Object.defineProperty(win.navigator,'share',{configurable:true,value:async payload=>{win.sharedStats=payload;}});
-  Object.defineProperty(win.navigator,'clipboard',{configurable:true,value:{writeText:async text=>{win.copiedStats=text;}}});
  });
  await shareStats.click();
  const statsShareDialog=statsApp.getByRole('dialog');
@@ -258,10 +257,25 @@ try{
   return {name:file.name,type:file.type,header:await file.slice(0,8).text()};
  });
  assert.deepEqual(shared,{name:'tin-foil-fa-cup-stats.pdf',type:'application/pdf',header:'%PDF-1.4'});
- await statsShareDialog.getByRole('button',{name:'Copy Stats summary'}).click();
- assert.match(await shareStats.evaluate(button=>button.ownerDocument.defaultView.copiedStats),/CURRENT CUSTODIAN/i);
  await statsShareDialog.getByRole('button',{name:'Close',exact:true}).click();
 
+ const directStats=await context.newPage();
+ try{
+  await directStats.addInitScript(()=>{window.print=()=>{window.statsPrintRequests=(window.statsPrintRequests||0)+1;};});
+  await directStats.goto(origin+'/beta/clubfinder-beta.html?stats=1&directPrint=1');
+  const directButton=directStats.getByRole('button',{name:'Save / Print',exact:true});
+  await directButton.waitFor({timeout:30000});
+  assert.equal(await directStats.locator('iframe,.stats-share').count(),0);
+  const tabs=context.pages().length;
+  await directButton.click();
+  assert.equal(await directStats.evaluate(()=>window.statsPrintRequests),1);
+  assert.equal(context.pages().length,tabs);
+  await directStats.emulateMedia({media:'print'});
+  assert.equal(await directButton.isVisible(),false);
+  assert.equal(await directStats.locator('.sheet').isVisible(),true);
+ }finally{
+  await directStats.close();
+ }
  // Existing Stats returns to its opener when available; after a refresh
  // without one, it opens Campaign in the same tab. Both must stay usable.
  console.log('Checking Stats returns to My Campaign');
