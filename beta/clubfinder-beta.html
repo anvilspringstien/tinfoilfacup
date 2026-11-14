@@ -2379,7 +2379,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       const statsURL=new URL('/beta/phone-frame.html?view=stats',window.top.location.origin);
       const printDoc=preview.document;
       printDoc.open();
-      printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
+      printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=980"></head><body></body></html>');
       printDoc.close();
       printDoc.title=document.title;
       printDoc.head.append(...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
@@ -2389,12 +2389,13 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
         .print-guide button,.print-guide a{display:inline-block;font:inherit;padding:8px 12px}
         .print-guide p{margin:6px 0 0;font-size:13px}
         @media screen{
-          body{padding:8px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-          .sheet{min-width:0;min-height:0;padding:clamp(12px,3vw,26px);container-type:inline-size}
-          .top{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
-          .stats-title{font-size:clamp(26px,13cqw,92px);letter-spacing:0}
-          .sub,.club{font-size:clamp(11px,3.4cqw,22px);overflow-wrap:anywhere}
-          .season{font-size:clamp(13px,4cqw,30px)}
+          body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+          .print-guide{padding:16px}
+          .print-guide button,.print-guide a{display:inline-grid;place-items:center;min-height:112px;padding:12px 24px;font-size:38px}
+          .print-guide p{font-size:32px}
+          .print-guide a{color:#084c61;text-underline-offset:.15em}
+          .print-guide button{border:1px solid #d7d2c8;border-radius:16px;background:#084c61;color:#fffdf1}
+          .print-guide button:disabled{opacity:.55}
         }
         @media print{
           .print-guide{display:none}
@@ -2415,7 +2416,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       printButton.type='button';
       printButton.textContent='Print Stats';
       const note=printDoc.createElement('p');
-      note.textContent='To save a PDF, use your browser’s Share menu.';
+      note.textContent='Open Print Stats, then tap Share to send or save the PDF.';
       const back=printDoc.createElement('a');
       back.href=statsURL.href;
       back.textContent='← Back to Stats';
