@@ -245,13 +245,23 @@ try{
 
  await shareStats.evaluate(button=>{
   const win=button.ownerDocument.defaultView;
+  Object.defineProperty(win.navigator,'canShare',{configurable:true,value:()=>true});
   Object.defineProperty(win.navigator,'share',{configurable:true,value:async payload=>{win.sharedStats=payload;}});
+  Object.defineProperty(win.navigator,'clipboard',{configurable:true,value:{writeText:async text=>{win.copiedStats=text;}}});
  });
  await shareStats.click();
- const shared=await shareStats.evaluate(button=>button.ownerDocument.defaultView.sharedStats);
- assert.match(shared.title,/Tin Foil FA Cup Stats/);
- assert.match(shared.text,/CURRENT CUSTODIAN/i);
- assert.equal(shared.url,undefined,'The recipient needs shareable Stats text');
+ const statsShareDialog=statsApp.getByRole('dialog');
+ await statsShareDialog.getByRole('link',{name:'Save PDF'}).waitFor();
+ await statsShareDialog.getByRole('button',{name:'Share PDF'}).click();
+ const shared=await shareStats.evaluate(async button=>{
+  const [file]=button.ownerDocument.defaultView.sharedStats.files;
+  return {name:file.name,type:file.type,header:await file.slice(0,8).text()};
+ });
+ assert.deepEqual(shared,{name:'tin-foil-fa-cup-stats.pdf',type:'application/pdf',header:'%PDF-1.4'});
+ await statsShareDialog.getByRole('button',{name:'Copy Stats summary'}).click();
+ assert.match(await shareStats.evaluate(button=>button.ownerDocument.defaultView.copiedStats),/CURRENT CUSTODIAN/i);
+ await statsShareDialog.getByRole('button',{name:'Close',exact:true}).click();
+
  // Existing Stats returns to its opener when available; after a refresh
  // without one, it opens Campaign in the same tab. Both must stay usable.
  console.log('Checking Stats returns to My Campaign');

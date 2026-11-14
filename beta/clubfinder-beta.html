@@ -2455,17 +2455,62 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       });
     });
 
+    const dialog=document.createElement('dialog');
+    dialog.className='stats-share-dialog';
+    dialog.innerHTML='<form method="dialog"><h2>Share Stats</h2><button type="button" class="stats-share-pdf">Share PDF</button><a class="stats-save-pdf" download hidden>Save PDF</a><button type="button" class="stats-copy-summary">Copy Stats summary</button><button>Close</button><p role="status"></p></form>';
+    document.body.append(dialog);
+    const sharePdf=dialog.querySelector('.stats-share-pdf');
+    const savePdf=dialog.querySelector('.stats-save-pdf');
+    const shareStatus=dialog.querySelector('[role="status"]');
+    let file=null;
+    let fileURL=null;
+    let request=0;
+    function releasePDF(){
+      request++;
+      if(fileURL)URL.revokeObjectURL(fileURL);
+      file=null;
+      fileURL=null;
+      savePdf.removeAttribute('href');
+      savePdf.hidden=true;
+    }
+    dialog.addEventListener('close',releasePDF);
     bar.querySelector('.stats-share').addEventListener('click',async()=>{
-      const status=bar.querySelector('.stats-share-status');
-      status.textContent='';
-      const title=document.title;
-      const text=[title,...Array.from(document.querySelectorAll('.top-left,.glance,.journey-row,.bottom'),
-        section=>section.innerText)].join(String.fromCharCode(10,10));
-      if(navigator.share){
-        try{await navigator.share({title,text});return;}
-        catch(error){if(error.name==='AbortError')return;}
+      if(dialog.open)return;
+      releasePDF();
+      const preparing=request;
+      dialog.showModal();
+      sharePdf.disabled=true;
+      sharePdf.hidden=false;
+      shareStatus.textContent='Preparing your Stats PDF…';
+      try{
+        const {statsSharePdf}=await import(new URL('/beta/stats-share-pdf.mjs',location.origin).href);
+        if(preparing!==request||!dialog.open)return;
+        const result=await statsSharePdf(document.querySelector('.sheet'));
+        if(preparing!==request||!dialog.open)return;
+        file=result;
+        fileURL=URL.createObjectURL(file);
+        savePdf.href=fileURL;
+        savePdf.download=file.name;
+        savePdf.hidden=false;
+        sharePdf.hidden=!(navigator.share&&navigator.canShare?.({files:[file]}));
+        sharePdf.disabled=false;
+        shareStatus.textContent='';
+      }catch(_){
+        if(preparing===request)shareStatus.textContent='Couldn’t prepare the PDF. Close and try again.';
       }
-      try{await navigator.clipboard.writeText(text);status.textContent='Stats summary copied.';return;}
+    });
+    sharePdf.addEventListener('click',async()=>{
+      if(!file)return;
+      sharePdf.disabled=true;
+      try{await navigator.share({files:[file]});}
+      catch(error){
+        if(error.name!=='AbortError')shareStatus.textContent='Sharing is unavailable. You can still save the PDF.';
+      }finally{sharePdf.disabled=false;}
+    });
+    dialog.querySelector('.stats-copy-summary').addEventListener('click',async()=>{
+      const text=[document.title,...Array.from(document.querySelectorAll('.top-left,.glance,.journey-row,.bottom'),
+        section=>section.innerText)].join(String.fromCharCode(10,10));
+      try{await navigator.clipboard.writeText(text);shareStatus.textContent='Stats summary copied.';return;}
       catch(_){}
       const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));
       const download=document.createElement('a');
@@ -2475,7 +2520,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       download.click();
       download.remove();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
-      status.textContent='Stats summary downloaded.';
+      shareStatus.textContent='Stats summary downloaded.';
     });
   }
 
@@ -2493,6 +2538,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
   'body{padding-bottom:var(--stats-bottom-space,84px)}.stats-actions{position:fixed;z-index:20;left:50%;bottom:0;transform:translateX(-50%) scale(var(--stats-bar-scale,1));transform-origin:bottom center;width:min(100%,520px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) 44px;gap:6px;padding:7px 8px calc(7px + env(safe-area-inset-bottom,0px));border:1px solid #49473f;border-radius:8px 8px 0 0;background:#171612;box-shadow:0 -4px 16px #0006}.stats-actions button{min-width:0;min-height:44px;border:1px solid #49473f;border-radius:5px;background:#141410;color:#f4efe3;padding:4px;font:600 13px/1.25 Arial,sans-serif;cursor:pointer;touch-action:manipulation}.stats-actions button:hover{background:#302a23}.stats-actions button:focus-visible{outline:2px solid #d1bd80;outline-offset:1px}.stats-return button{width:100%}.stats-share{display:grid;place-items:center}.stats-share-status{grid-column:1/-1;margin:0;color:#f4efe3;text-align:center;font-size:12px}.stats-share-status:empty{display:none}'+
   '@media screen and (max-width:650px){body{padding:8px}.sheet{padding:20px 14px;min-height:0}.top{grid-template-columns:1.35fr .75fr;gap:10px}.logo{width:140px}.glance{grid-template-columns:repeat(2,1fr)}.g:nth-child(2n){border-right:0}.g:last-child{grid-column:auto}.journey-head{display:none}.journey-row{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.bottom>div+div{border-left:0;border-top:1px solid #d40000}.section-title:before,.section-title:after{width:45px}}'+
   '@media screen and (max-width:650px),screen and (max-device-width:650px){.campaign-identity-band{padding:11px 10px;white-space:normal;overflow-wrap:anywhere}.campaign-identity-label{font-size:8pt}.campaign-identity-value{font-size:9pt;letter-spacing:0;overflow-wrap:anywhere}.campaign-identity-name-row{display:flex;align-items:baseline;flex-wrap:nowrap;gap:0 5px;margin-top:4px;min-width:0}.campaign-identity-name-row .campaign-identity-separator{display:none}.campaign-identity-name-row .campaign-identity-label{flex:0 0 auto;white-space:nowrap}.campaign-identity-name-row .campaign-identity-value{flex:1 1 auto;min-width:0;white-space:normal;overflow-wrap:anywhere}}'+
+  '.stats-share-dialog{width:min(80%,650px);border:2px solid #d7d2c8;border-radius:18px;padding:24px;background:#fffdf1;color:#171612;font-size:clamp(16px,4vw,38px)}.stats-share-dialog::backdrop{background:#0009}.stats-share-dialog form{display:grid;gap:.45em}.stats-share-dialog h2,.stats-share-dialog p{margin:0}.stats-share-dialog p:empty{display:none}.stats-share-dialog button,.stats-save-pdf{font:inherit;padding:.45em;border:1px solid #d7d2c8;border-radius:8px;color:inherit;background:#f4efe3;text-align:center}.stats-share-dialog .stats-share-pdf{color:#fffdf1;background:#084c61}@media print{.stats-share-dialog{display:none!important}}'+
   '.stats-pigeon-editor{border:0;border-bottom:1px dotted #c90000;background:transparent;color:inherit;max-width:200px;min-width:0;padding:1px 2px;outline-offset:2px}.stats-pigeon-editor::placeholder{color:#9b807e}@media print{.stats-pigeon-editor{border:0}}'+
     '@page{size:A4 portrait;margin:8mm}@media print{html,body{width:100%;margin:0;padding:0;background:#fff}.sheet{width:100%;min-height:0;margin:0;border-width:4px;box-shadow:none;padding:7mm 6.5mm 5mm}.stats-actions{display:none!important}.top{break-inside:avoid;page-break-inside:avoid}.section-title{break-after:avoid;page-break-after:avoid}.glance,.challenge-honours,.bottom,.motto{break-inside:avoid;page-break-inside:avoid}.journey-row{break-inside:avoid;page-break-inside:avoid}.bottom{break-before:auto;page-break-before:auto;margin-bottom:4mm}.bottom>div{min-height:0;padding:10px 12px}.bt{font-size:16pt;margin-bottom:7px}.next-round{font-size:12pt;margin-bottom:6px}.next-fixture{font-size:13px}.after-replay{margin-top:8px;padding-top:7px}.after-round{font-size:10.5pt}.after-fixture{font-size:10pt}.after-meta{font-size:9pt}.motto{margin-top:4mm}}'+
   '</style></head><body>'+"<script>(function(){var key=\"tinFoilFACupJourney_v7\";document.addEventListener(\"change\",function(e){var input=e.target;if(!input.matches(\".stats-pigeon-editor\"))return;try{var saved=JSON.parse(localStorage.getItem(key)||\"null\");if(!saved||String(saved.callSign||\"\")!==input.dataset.campaignCallSign)return;var name=input.value.replace(/\\s+/g,\" \").trim().slice(0,20);saved.pigeonName=name;localStorage.setItem(key,JSON.stringify(saved));var bk=\"tffc.clubfinderCampaignIdentity.v1\",backup=JSON.parse(localStorage.getItem(bk)||\"null\");if(backup&&String(backup.originName||\"\")===String(saved.originName||\"\")){backup.pigeonName=name;localStorage.setItem(bk,JSON.stringify(backup));}input.value=name;try{if(window.opener&&!window.opener.closed&&typeof window.opener.tinFoilRefreshCampaignIdentityDisplay===\"function\")window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(_){}}catch(_){}});document.addEventListener(\"keydown\",function(e){if(e.target.matches(\".stats-pigeon-editor\")&&e.key===\"Enter\"){e.preventDefault();e.target.blur();}});})();</scr"+"ipt>"+'<main class="sheet">'+
