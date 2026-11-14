@@ -2349,10 +2349,22 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       });
     }
     fitBar();
+    scheduleFit();
     window.addEventListener('resize',scheduleFit);
+    window.addEventListener('load',scheduleFit,{once:true});
+    window.addEventListener('pageshow',scheduleFit);
     viewport?.addEventListener('resize',scheduleFit);
     viewport?.addEventListener('scroll',scheduleFit);
-    if(frame)window.parent.addEventListener('resize',scheduleFit,{signal:fitLifetime.signal});
+    if(frame){
+      const parent=window.parent;
+      const options={signal:fitLifetime.signal};
+      parent.addEventListener('resize',scheduleFit,options);
+      parent.visualViewport?.addEventListener('resize',scheduleFit,options);
+      // The shell can settle after the report is written, without a window resize.
+      const shellObserver=new parent.ResizeObserver(scheduleFit);
+      shellObserver.observe(frame.parentElement);
+      fitLifetime.signal.addEventListener('abort',()=>shellObserver.disconnect(),{once:true});
+    }
     window.addEventListener('pagehide',event=>{if(!event.persisted)fitLifetime.abort();});
 
     const status=bar.querySelector('.stats-share-status');
