@@ -2344,6 +2344,49 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
     if(frame)window.parent.addEventListener('resize',()=>window.requestAnimationFrame(fitBar));
     new ResizeObserver(fitBar).observe(bar);
 
+    const status=bar.querySelector('.stats-share-status');
+    bar.querySelector('.stats-print').addEventListener('click',()=>{
+      if(!/iPhone|iPod/i.test(navigator.userAgent)){
+        window.print();
+        return;
+      }
+      const preview=window.open('','_blank');
+      if(!preview){
+        status.textContent='Allow pop-ups to open the printable Stats.';
+        return;
+      }
+      status.textContent='';
+      const sheet=document.querySelector('.sheet').cloneNode(true);
+      const pigeonName=sheet.querySelector('.stats-pigeon-editor');
+      if(pigeonName){
+        const name=document.createElement('span');
+        name.className='campaign-identity-value';
+        name.textContent=pigeonName.value;
+        pigeonName.replaceWith(name);
+      }
+      const printDoc=preview.document;
+      printDoc.open();
+      printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
+      printDoc.close();
+      printDoc.title=document.title;
+      const base=printDoc.createElement('base');
+      base.href=document.baseURI;
+      printDoc.head.append(base,...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
+      const style=printDoc.createElement('style');
+      style.textContent='.print-guide{max-width:790px;margin:0 auto 16px;padding:14px;background:#fffdf1;text-align:center}.print-guide button{font:inherit;padding:8px 14px;cursor:pointer}@media print{.print-guide{display:none}}';
+      printDoc.head.append(style);
+      const guide=printDoc.createElement('div');
+      guide.className='print-guide';
+      const printButton=printDoc.createElement('button');
+      printButton.type='button';
+      printButton.textContent='Print Stats';
+      const note=printDoc.createElement('p');
+      note.textContent='To save a PDF, use your browser’s Share menu.';
+      guide.append(printButton,note);
+      printDoc.body.append(guide,sheet);
+      printButton.addEventListener('click',()=>preview.print());
+    });
+
     bar.querySelector('.stats-share').addEventListener('click',async()=>{
       const status=bar.querySelector('.stats-share-status');
       status.textContent='';
@@ -2408,7 +2451,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
   '<div><div class="bt">NOTES</div><div class="notes">Pigeon Miles Flown = twice the straight-line distance from your Campaign start postcode to each tie venue.</div></div></section>'+
 
   '<div class="motto"><span class="motto-star">★</span><span>The Campaign Itself is The Source of Truth</span><span class="motto-star">★</span></div>'+
-  '</main>'+'<nav class="stats-actions" aria-label="Stats actions"><span class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"← Challenges":"← My Campaign")+'</button></span><button type="button" onclick="window.print()">Save / Print</button><button type="button" class="stats-share" aria-label="Share Stats"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M8 10H5v11h14V10h-3"/></svg></button><p class="stats-share-status" role="status"></p></nav>'+
+  '</main>'+'<nav class="stats-actions" aria-label="Stats actions"><span class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"← Challenges":"← My Campaign")+'</button></span><button type="button" class="stats-print">Save / Print</button><button type="button" class="stats-share" aria-label="Share Stats"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M8 10H5v11h14V10h-3"/></svg></button><p class="stats-share-status" role="status"></p></nav>'+
   '<scr'+'ipt>('+statsActions.toString()+')();</scr'+'ipt></body></html>';
 
   try{

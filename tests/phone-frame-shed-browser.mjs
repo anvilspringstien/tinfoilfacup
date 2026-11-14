@@ -198,6 +198,31 @@ try{
  await stats.emulateMedia({media:'print'});
  assert.equal(await statsBar.isVisible(),false,'The Stats bar must be hidden when printing');
  await stats.emulateMedia({media:'screen'});
+ const savePrint=statsBar.getByRole('button',{name:'Save / Print',exact:true});
+ await statsApp.locator('body').evaluate(()=>{
+  window.print=()=>{window.statsPrintRequested=true;};
+ });
+ await savePrint.click();
+ assert.equal(await statsApp.locator('body').evaluate(()=>window.statsPrintRequested),true,'Desktop prints directly');
+ await statsApp.locator('body').evaluate(()=>{
+  Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
+ });
+ const previewOpened=context.waitForEvent('page');
+ await savePrint.click();
+ const printPreview=await previewOpened;
+ await printPreview.getByRole('button',{name:'Print Stats',exact:true}).waitFor();
+ assert.equal(await printPreview.locator('iframe,.stats-actions').count(),0,'iPhone prints a top-level copy of the report');
+ assert.match(await printPreview.locator('.sheet').innerText(),/Newton Aycliffe FC/);
+ assert.equal(await printPreview.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
+ assert.equal(await printPreview.locator('.top img').evaluate(img=>img.decode().then(()=>img.naturalWidth>0)),true);
+ await printPreview.evaluate(()=>{window.print=()=>{window.statsPrintRequested=true;};});
+ await printPreview.getByRole('button',{name:'Print Stats',exact:true}).click();
+ assert.equal(await printPreview.evaluate(()=>window.statsPrintRequested),true);
+ await printPreview.emulateMedia({media:'print'});
+ assert.equal(await printPreview.locator('.print-guide').isVisible(),false);
+ await printPreview.close();
+ await statsApp.locator('body').evaluate(()=>{delete navigator.userAgent;});
+
  await shareStats.evaluate(button=>{
   const win=button.ownerDocument.defaultView;
   Object.defineProperty(win.navigator,'share',{configurable:true,value:async payload=>{win.sharedStats=payload;}});

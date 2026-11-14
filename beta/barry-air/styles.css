@@ -134,7 +134,7 @@ footer p{font-size:10px;line-height:1.6}
 .captains-note{margin:0;padding:21px 17px;border:0;background:none;gap:13px}
 .captain-roundel{width:54px;height:54px;object-fit:contain;flex:none}
 .announcement-label{font:8px/1.5 Arial,sans-serif;letter-spacing:1.4px;color:#c3ab75;margin:0 0 8px}
-.cabin-frame footer{margin:0 17px;padding-top:17px}
+.cabin-motto{margin:0 17px 17px;text-align:center;font-size:8px;letter-spacing:1px;color:#969082}
 .cabin-frame .captain-roundel{width:104px;height:104px}
 @container(max-width:335px){.cabin-frame .captain-roundel{width:90px;height:90px}}
 @container(max-width:335px){
@@ -271,7 +271,7 @@ body{background-attachment:scroll}
 .map-controls button:disabled{opacity:.4;cursor:default}
 
 /* The accepted TFFAC footer: square Keep/Share, lozenge Support, compact admin links. */
-#barry-site-footer{margin:0 17px;color:#ddd;letter-spacing:normal}
+#barry-site-footer{border-top:1px solid #35332a;margin:0 17px;color:#ddd;letter-spacing:normal}
 #barry-site-footer .tffc-support-row{display:flex;justify-content:center;margin:20px 0}
 #barry-site-footer .tffc-support-lozenge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;box-sizing:border-box;max-width:100%;padding:6px 18px;border:1px solid #d5ad26;border-radius:999px;background:#f0c64f;color:#17110b;font:800 11px/1.3 Arial,sans-serif;text-align:center;text-decoration:none;letter-spacing:.02em;opacity:.88}
 #barry-site-footer .tffc-support-lozenge:hover{opacity:1;filter:brightness(1.06)}
@@ -349,8 +349,7 @@ body{background-attachment:scroll}
  .map-wrap:has(#share-flight-path:not([hidden])) .map-key{flex-direction:column;gap:3px;bottom:8px}
 }
 
-.map-attribution{margin-top:12px;color:#aaa79e;font:10px/1.4 monospace}
+.map-attribution{margin-top:12px;color:#aaa79e;font:10px/1.4 monospace;text-align:center}
 .map-attribution a{text-underline-offset:2px}
-.cabin-frame footer{justify-content:center;text-align:center}
 
 #boarding-share-native:not([hidden]){display:inline-flex;align-items:center;justify-content:center;gap:6px}
