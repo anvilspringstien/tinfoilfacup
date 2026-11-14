@@ -2369,10 +2369,6 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
       printDoc.close();
       printDoc.title=document.title;
-      const assetBase=new URL('/beta/',window.top.location.origin);
-      for(const image of sheet.querySelectorAll('img[src]')){
-        image.src=new URL(image.getAttribute('src'),assetBase).href;
-      }
       printDoc.head.append(...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
       const style=printDoc.createElement('style');
       style.textContent='.print-guide{max-width:790px;margin:0 auto 16px;padding:14px;background:#fffdf1;text-align:center}.print-guide button{font:inherit;padding:8px 14px;cursor:pointer}@media print{.print-guide{display:none}}';
@@ -2385,8 +2381,29 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       const note=printDoc.createElement('p');
       note.textContent='To save a PDF, use your browser’s Share menu.';
       guide.append(printButton,note);
+      printButton.disabled=true;
       printDoc.body.append(guide,sheet);
       printButton.addEventListener('click',()=>preview.print());
+      // Embed the report images so the printable tab works independently of its opener.
+      const assetBase=new URL('/beta/',window.top.location.origin);
+      Promise.allSettled(Array.from(sheet.querySelectorAll('img[src]'),async image=>{
+        const url=new URL(image.getAttribute('src'),assetBase);
+        const response=await fetch(url,{signal:AbortSignal.timeout(8000)});
+        if(!response.ok)throw Error('Stats image unavailable');
+        const blob=await response.blob();
+        image.src=await new Promise((resolve,reject)=>{
+          const reader=new FileReader();
+          reader.onload=()=>resolve(reader.result);
+          reader.onerror=()=>reject(reader.error);
+          reader.readAsDataURL(blob);
+        });
+        await image.decode();
+      })).then(results=>{
+        printButton.disabled=false;
+        if(results.some(result=>result.status==='rejected')){
+          note.textContent='Some report images could not be loaded. You can still print Stats.';
+        }
+      });
     });
 
     bar.querySelector('.stats-share').addEventListener('click',async()=>{

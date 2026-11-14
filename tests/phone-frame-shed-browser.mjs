@@ -217,7 +217,10 @@ try{
  assert.equal(await printPreview.locator('iframe,.stats-actions').count(),0,'iPhone prints a top-level copy of the report');
  assert.match(await printPreview.locator('.sheet').innerText(),/Newton Aycliffe FC/);
  assert.equal(await printPreview.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
- await printPreview.waitForFunction(()=>document.querySelector('.top img')?.naturalWidth>0,null,{timeout:10000});
+ const crest=printPreview.locator('.top img');
+ await printPreview.waitForFunction(()=>document.querySelector('.print-guide button')?.disabled===false,null,{timeout:10000});
+ const crestImage=await crest.evaluate(img=>({embedded:img.src.startsWith('data:image/'),width:img.naturalWidth}));
+ assert.ok(crestImage.embedded&&crestImage.width>0,'Printable Stats must embed and load the crest: '+JSON.stringify(crestImage));
  await printPreview.evaluate(()=>{window.print=()=>{window.statsPrintRequested=true;};});
  await printPreview.getByRole('button',{name:'Print Stats',exact:true}).click();
  assert.equal(await printPreview.evaluate(()=>window.statsPrintRequested),true);
