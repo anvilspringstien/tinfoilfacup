@@ -232,6 +232,7 @@ try{
   });
   assert.ok(headerFits,'The crest and heading must stay within the report during rotation');
  }
+ assert.equal(await printPreview.locator('meta[name="viewport"]').getAttribute('content'),'width=980');
  await printPreview.emulateMedia({media:'print'});
  assert.equal(await printPreview.locator('.print-guide').isVisible(),false);
  const columns=await printPreview.locator('.glance').evaluate(glance=>getComputedStyle(glance).gridTemplateColumns.split(' ').length);
