@@ -2140,8 +2140,9 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
       }catch(_){}
       try{w.history.replaceState(null,'','stats-beta.html')}catch(_){} 
       await new Promise(resolve=>{
+        const timer=setTimeout(resolve,150);
         const raf=typeof w.requestAnimationFrame==='function'?w.requestAnimationFrame.bind(w):requestAnimationFrame;
-        raf(()=>raf(resolve));
+        raf(()=>raf(()=>{clearTimeout(timer);resolve();}));
       });
     }catch(_){}
     return journeyCertificate(origin,w,returnMode,prepared);
@@ -2337,14 +2338,25 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       bar.style.bottom=Math.max(0,bottom)+'px';
       document.body.style.setProperty('--stats-bottom-space',Math.ceil(bar.offsetHeight*scale+20)+'px');
     }
+    const fitLifetime=new AbortController();
+    let pendingFit=false;
+    function scheduleFit(){
+      if(pendingFit)return;
+      pendingFit=true;
+      requestAnimationFrame(()=>{
+        pendingFit=false;
+        fitBar();
+      });
+    }
     fitBar();
-    window.addEventListener('resize',fitBar);
-    viewport?.addEventListener('resize',fitBar);
-    viewport?.addEventListener('scroll',fitBar);
-    if(frame)window.parent.addEventListener('resize',()=>window.requestAnimationFrame(fitBar));
-    new ResizeObserver(fitBar).observe(bar);
+    window.addEventListener('resize',scheduleFit);
+    viewport?.addEventListener('resize',scheduleFit);
+    viewport?.addEventListener('scroll',scheduleFit);
+    if(frame)window.parent.addEventListener('resize',scheduleFit,{signal:fitLifetime.signal});
+    window.addEventListener('pagehide',event=>{if(!event.persisted)fitLifetime.abort();});
 
     const status=bar.querySelector('.stats-share-status');
+    new MutationObserver(scheduleFit).observe(status,{childList:true});
     bar.querySelector('.stats-print').addEventListener('click',()=>{
       if(!/iPhone|iPod/i.test(navigator.userAgent)){
         window.print();
@@ -2364,6 +2376,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
         name.textContent=pigeonName.value;
         pigeonName.replaceWith(name);
       }
+      const statsURL=new URL('/beta/phone-frame.html?view=stats',window.top.location.origin);
       const printDoc=preview.document;
       printDoc.open();
       printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
@@ -2371,7 +2384,30 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       printDoc.title=document.title;
       printDoc.head.append(...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
       const style=printDoc.createElement('style');
-      style.textContent='.print-guide{max-width:790px;margin:0 auto 16px;padding:14px;background:#fffdf1;text-align:center}.print-guide button{font:inherit;padding:8px 14px;cursor:pointer}@media print{.print-guide{display:none}}';
+      style.textContent=`
+        .print-guide{max-width:790px;margin:0 auto 16px;padding:10px;background:#fffdf1;text-align:center}
+        .print-guide button,.print-guide a{display:inline-block;font:inherit;padding:8px 12px}
+        .print-guide p{margin:6px 0 0;font-size:13px}
+        @media screen{
+          body{padding:8px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+          .sheet{min-width:0;min-height:0;padding:clamp(12px,3vw,26px);container-type:inline-size}
+          .top{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+          .stats-title{font-size:clamp(26px,13cqw,92px);letter-spacing:0}
+          .sub,.club{font-size:clamp(11px,3.4cqw,22px);overflow-wrap:anywhere}
+          .season{font-size:clamp(13px,4cqw,30px)}
+        }
+        @media print{
+          .print-guide{display:none}
+          html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+          .sheet{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+          .stats-title{font-size:52pt}
+          .logo{width:155px}
+          .glance .g{min-height:0}
+          .glance .icon-circle,.glance .icon-circle img{width:52px;height:52px}
+          .journey-row{padding-block:5px;font-size:10px}
+          .bottom>div{padding:7px 9px}
+          .challenge-honour{padding-block:3px}
+        }`;
       printDoc.head.append(style);
       const guide=printDoc.createElement('div');
       guide.className='print-guide';
@@ -2380,10 +2416,23 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       printButton.textContent='Print Stats';
       const note=printDoc.createElement('p');
       note.textContent='To save a PDF, use your browser’s Share menu.';
-      guide.append(printButton,note);
+      const back=printDoc.createElement('a');
+      back.href=statsURL.href;
+      back.textContent='← Back to Stats';
+      back.addEventListener('click',event=>{
+        if(window.top.closed)return;
+        event.preventDefault();
+        window.top.focus();
+        preview.close();
+        if(!preview.closed)preview.location.replace(statsURL.href);
+      });
+      guide.append(back,printButton,note);
       printButton.disabled=true;
       printDoc.body.append(guide,sheet);
-      printButton.addEventListener('click',()=>preview.print());
+      printButton.addEventListener('click',()=>{
+        note.textContent='If Print doesn’t open, use Share in your browser or open Stats in Safari.';
+        preview.print();
+      });
       // Embed the report images so the printable tab works independently of its opener.
       const assetBase=new URL('/beta/',window.top.location.origin);
       Promise.allSettled(Array.from(sheet.querySelectorAll('img[src]'),async image=>{
@@ -2442,7 +2491,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
   '.bottom{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #d40000;border-radius:12px;margin-top:18px}.bottom>div{padding:14px 16px;min-height:150px}.bottom>div+div{border-left:1px solid #d40000}.bt{font-stretch:condensed;color:#c90000;text-align:center;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:18pt;font-weight:700;letter-spacing:.4px;margin-bottom:10px;text-transform:uppercase;}.list{font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:400;line-height:1.55}.next{text-align:center}.cup{display:block;width:54px;height:54px;object-fit:contain;filter:grayscale(1) contrast(1.15);margin:0 auto 6px}.next-round{font-size:14pt;font-weight:700;text-align:center;margin:2px 0 8px}.next-fixture{font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:15px;font-weight:400;line-height:1.25}.after-replay{margin-top:12px;padding-top:10px;border-top:1px solid #c90000;text-align:center}.after-label{font-size:10pt;font-weight:700;color:#c90000;letter-spacing:.4px}.after-round{font-size:12pt;font-weight:700;margin-top:3px}.after-fixture{font-size:11pt;font-weight:700;line-height:1.3;margin-top:3px}.after-meta{font-size:10pt;line-height:1.35;margin-top:3px}.next-meta{font-size:11px;line-height:1.4;margin-top:4px}.notes{text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:400;line-height:1.45}.crow{color:#c90000;margin-top:8px;display:flex;justify-content:center}'+
   '.motto{font-stretch:condensed;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;font-family:Arial Narrow,Arial,Helvetica,sans-serif;font-size:14pt;font-weight:400;font-style:italic;letter-spacing:1px;margin:22px 0 14pxtext-transform:none;}.motto-star{font-size:28px;color:#c90000}'+
   'body{padding-bottom:var(--stats-bottom-space,84px)}.stats-actions{position:fixed;z-index:20;left:50%;bottom:0;transform:translateX(-50%) scale(var(--stats-bar-scale,1));transform-origin:bottom center;width:min(100%,520px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) 44px;gap:6px;padding:7px 8px calc(7px + env(safe-area-inset-bottom,0px));border:1px solid #49473f;border-radius:8px 8px 0 0;background:#171612;box-shadow:0 -4px 16px #0006}.stats-actions button{min-width:0;min-height:44px;border:1px solid #49473f;border-radius:5px;background:#141410;color:#f4efe3;padding:4px;font:600 13px/1.25 Arial,sans-serif;cursor:pointer;touch-action:manipulation}.stats-actions button:hover{background:#302a23}.stats-actions button:focus-visible{outline:2px solid #d1bd80;outline-offset:1px}.stats-return button{width:100%}.stats-share{display:grid;place-items:center}.stats-share-status{grid-column:1/-1;margin:0;color:#f4efe3;text-align:center;font-size:12px}.stats-share-status:empty{display:none}'+
-  '@media(max-width:650px){body{padding:8px}.sheet{padding:20px 14px;min-height:0}.top{grid-template-columns:1.35fr .75fr;gap:10px}.logo{width:140px}.glance{grid-template-columns:repeat(2,1fr)}.g:nth-child(2n){border-right:0}.g:last-child{grid-column:auto}.journey-head{display:none}.journey-row{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.bottom>div+div{border-left:0;border-top:1px solid #d40000}.section-title:before,.section-title:after{width:45px}}'+
+  '@media screen and (max-width:650px){body{padding:8px}.sheet{padding:20px 14px;min-height:0}.top{grid-template-columns:1.35fr .75fr;gap:10px}.logo{width:140px}.glance{grid-template-columns:repeat(2,1fr)}.g:nth-child(2n){border-right:0}.g:last-child{grid-column:auto}.journey-head{display:none}.journey-row{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.bottom>div+div{border-left:0;border-top:1px solid #d40000}.section-title:before,.section-title:after{width:45px}}'+
   '@media screen and (max-width:650px),screen and (max-device-width:650px){.campaign-identity-band{padding:11px 10px;white-space:normal;overflow-wrap:anywhere}.campaign-identity-label{font-size:8pt}.campaign-identity-value{font-size:9pt;letter-spacing:0;overflow-wrap:anywhere}.campaign-identity-name-row{display:flex;align-items:baseline;flex-wrap:nowrap;gap:0 5px;margin-top:4px;min-width:0}.campaign-identity-name-row .campaign-identity-separator{display:none}.campaign-identity-name-row .campaign-identity-label{flex:0 0 auto;white-space:nowrap}.campaign-identity-name-row .campaign-identity-value{flex:1 1 auto;min-width:0;white-space:normal;overflow-wrap:anywhere}}'+
   '.stats-pigeon-editor{border:0;border-bottom:1px dotted #c90000;background:transparent;color:inherit;max-width:200px;min-width:0;padding:1px 2px;outline-offset:2px}.stats-pigeon-editor::placeholder{color:#9b807e}@media print{.stats-pigeon-editor{border:0}}'+
     '@page{size:A4 portrait;margin:8mm}@media print{html,body{width:100%;margin:0;padding:0;background:#fff}.sheet{width:100%;min-height:0;margin:0;border-width:4px;box-shadow:none;padding:7mm 6.5mm 5mm}.stats-actions{display:none!important}.top{break-inside:avoid;page-break-inside:avoid}.section-title{break-after:avoid;page-break-after:avoid}.glance,.challenge-honours,.bottom,.motto{break-inside:avoid;page-break-inside:avoid}.journey-row{break-inside:avoid;page-break-inside:avoid}.bottom{break-before:auto;page-break-before:auto;margin-bottom:4mm}.bottom>div{min-height:0;padding:10px 12px}.bt{font-size:16pt;margin-bottom:7px}.next-round{font-size:12pt;margin-bottom:6px}.next-fixture{font-size:13px}.after-replay{margin-top:8px;padding-top:7px}.after-round{font-size:10.5pt}.after-fixture{font-size:10pt}.after-meta{font-size:9pt}.motto{margin-top:4mm}}'+
@@ -2473,18 +2522,6 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
   '</main>'+'<nav class="stats-actions" aria-label="Stats actions"><span class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"← Challenges":"← My Campaign")+'</button></span><button type="button" class="stats-print">Save / Print</button><button type="button" class="stats-share" aria-label="Share Stats"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M8 10H5v11h14V10h-3"/></svg></button><p class="stats-share-status" role="status"></p></nav>'+
   '<scr'+'ipt>('+statsActions.toString()+')();</scr'+'ipt></body></html>';
 
-  try{
-      const assets=[...new Set([...doc.matchAll(/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g)].map(m=>m[0]))];
-      await Promise.all(assets.map(asset=>new Promise(resolve=>{
-        const img=new Image();
-        let settled=false;
-        const finish=()=>{if(settled)return;settled=true;resolve();};
-        img.onload=async()=>{try{if(typeof img.decode==='function')await img.decode();}catch(_){}finish();};
-        img.onerror=finish;
-        img.src=asset;
-        if(img.complete)img.onload();
-      })));
-    }catch(_){}
   return doc;
 }
 

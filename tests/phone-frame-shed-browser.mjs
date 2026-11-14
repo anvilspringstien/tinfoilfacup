@@ -224,9 +224,23 @@ try{
  await printPreview.evaluate(()=>{window.print=()=>{window.statsPrintRequested=true;};});
  await printPreview.getByRole('button',{name:'Print Stats',exact:true}).click();
  assert.equal(await printPreview.evaluate(()=>window.statsPrintRequested),true);
+ for(const viewport of [{width:390,height:669},{width:844,height:390},{width:390,height:669}]){
+  await printPreview.setViewportSize(viewport);
+  const headerFits=await printPreview.locator('.top').evaluate(top=>{
+   const sheet=top.closest('.sheet').getBoundingClientRect();
+   return [...top.children].every(column=>column.getBoundingClientRect().right<=sheet.right);
+  });
+  assert.ok(headerFits,'The crest and heading must stay within the report during rotation');
+ }
  await printPreview.emulateMedia({media:'print'});
  assert.equal(await printPreview.locator('.print-guide').isVisible(),false);
- await printPreview.close();
+ const columns=await printPreview.locator('.glance').evaluate(glance=>getComputedStyle(glance).gridTemplateColumns.split(' ').length);
+ assert.ok(columns>2,'Print should retain the compact report grid on a narrow screen');
+ await printPreview.emulateMedia({media:'screen'});
+ await Promise.all([
+  printPreview.waitForEvent('close',{timeout:10000}),
+  printPreview.getByRole('link',{name:'← Back to Stats'}).click(),
+ ]);
  await statsApp.locator('body').evaluate(()=>{delete navigator.userAgent;});
 
  await shareStats.evaluate(button=>{
