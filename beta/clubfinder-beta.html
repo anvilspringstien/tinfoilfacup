@@ -2350,7 +2350,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
         window.print();
         return;
       }
-      const preview=window.open('','_blank');
+      const preview=window.top.open('','_blank');
       if(!preview){
         status.textContent='Allow pop-ups to open the printable Stats.';
         return;

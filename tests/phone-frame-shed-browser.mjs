@@ -207,10 +207,10 @@ try{
  await statsApp.locator('body').evaluate(()=>{
   Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
  });
- const previewOpened=context.waitForEvent('page');
+ const previewOpened=context.waitForEvent('page',{timeout:10000});
  await savePrint.click();
  const printPreview=await previewOpened;
- await printPreview.getByRole('button',{name:'Print Stats',exact:true}).waitFor();
+ await printPreview.getByRole('button',{name:'Print Stats',exact:true}).waitFor({timeout:10000});
  assert.equal(await printPreview.locator('iframe,.stats-actions').count(),0,'iPhone prints a top-level copy of the report');
  assert.match(await printPreview.locator('.sheet').innerText(),/Newton Aycliffe FC/);
  assert.equal(await printPreview.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
