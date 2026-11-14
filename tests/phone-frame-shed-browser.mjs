@@ -47,6 +47,7 @@ try{
  assert.equal(await plain.getByRole('link',{name:'Start Campaign',exact:true}).getAttribute('href'),'beta/clubfinder-journey.html');
  await fallback.close();
  const context=await browser.newContext({viewport:{width:1024,height:768}});
+ context.setDefaultTimeout(20000);
  let counterCalls=0;
  await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',r=>{counterCalls++;return r.abort()});
  await context.route('https://api.postcodes.io/**',r=>r.fulfill({json:{status:200,result:{postcode:'DL5 4RQ',latitude:54.618,longitude:-1.571}}}));
@@ -166,7 +167,8 @@ try{
  await page.mouse.wheel(0,240);
  await page.waitForFunction(before=>document.getElementById('phoneApp').contentDocument.scrollingElement.scrollTop>before,beforeWheel);
  await app.getByRole('button',{name:'My Stats',exact:true}).click();
- const opened=context.waitForEvent('page');
+ console.log('Checking Stats opens from My Campaign');
+ const opened=context.waitForEvent('page',{timeout:20000});
  await app.getByRole('button',{name:'Got It!',exact:true}).click();
  const stats=await opened;
  stats.on('pageerror',e=>console.error('Stats wrapper error:',String(e)));
@@ -198,6 +200,35 @@ try{
  await stats.emulateMedia({media:'print'});
  assert.equal(await statsBar.isVisible(),false,'The Stats bar must be hidden when printing');
  await stats.emulateMedia({media:'screen'});
+ console.log('Checking Stats Save / Print');
+ const savePrint=statsBar.getByRole('button',{name:'Save / Print',exact:true});
+ await statsApp.locator('body').evaluate(()=>{
+  window.print=()=>{window.statsPrintRequested=true;};
+ });
+ await savePrint.click();
+ assert.equal(await statsApp.locator('body').evaluate(()=>window.statsPrintRequested),true,'Desktop prints directly');
+ await statsApp.locator('body').evaluate(()=>{
+  Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
+ });
+ const previewOpened=context.waitForEvent('page',{timeout:10000});
+ await savePrint.click();
+ const printPreview=await previewOpened;
+ await printPreview.getByRole('button',{name:'Print Stats',exact:true}).waitFor({timeout:10000});
+ assert.equal(await printPreview.locator('iframe,.stats-actions').count(),0,'iPhone prints a top-level copy of the report');
+ assert.match(await printPreview.locator('.sheet').innerText(),/Newton Aycliffe FC/);
+ assert.equal(await printPreview.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
+ const crest=printPreview.locator('.top img');
+ await printPreview.waitForFunction(()=>document.querySelector('.print-guide button')?.disabled===false,null,{timeout:10000});
+ const crestImage=await crest.evaluate(img=>({embedded:img.src.startsWith('data:image/'),width:img.naturalWidth}));
+ assert.ok(crestImage.embedded&&crestImage.width>0,'Printable Stats must embed and load the crest: '+JSON.stringify(crestImage));
+ await printPreview.evaluate(()=>{window.print=()=>{window.statsPrintRequested=true;};});
+ await printPreview.getByRole('button',{name:'Print Stats',exact:true}).click();
+ assert.equal(await printPreview.evaluate(()=>window.statsPrintRequested),true);
+ await printPreview.emulateMedia({media:'print'});
+ assert.equal(await printPreview.locator('.print-guide').isVisible(),false);
+ await printPreview.close();
+ await statsApp.locator('body').evaluate(()=>{delete navigator.userAgent;});
+
  await shareStats.evaluate(button=>{
   const win=button.ownerDocument.defaultView;
   Object.defineProperty(win.navigator,'share',{configurable:true,value:async payload=>{win.sharedStats=payload;}});
@@ -209,9 +240,10 @@ try{
  assert.equal(shared.url,undefined,'The recipient needs shareable Stats text');
  // Existing Stats returns to its opener when available; after a refresh
  // without one, it opens Campaign in the same tab. Both must stay usable.
+ console.log('Checking Stats returns to My Campaign');
  const hasOpener=await stats.frameLocator('#phoneApp').locator('body').evaluate(()=>!!window.opener&&!window.opener.closed);
  if(hasOpener){
-  const closed=stats.waitForEvent('close');
+  const closed=stats.waitForEvent('close',{timeout:10000});
   const returnButton=stats.frameLocator('#phoneApp').getByRole('button',{name:'← My Campaign',exact:true});
   await returnButton.click().catch(error=>{
    if(!stats.isClosed()||!/Target page, context or browser has been closed/.test(error.message))throw error;
