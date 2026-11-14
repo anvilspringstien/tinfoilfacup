@@ -6,7 +6,7 @@
 
 | File | Bytes | SHA-256 |
 |---|---:|---|
-| `beta/clubfinder-beta.html` | 650,040 | `411b4a3abc63b40644cecc7997a7aabbc562c8f885b16ed503358223c3f0cc48` |
+| `beta/clubfinder-beta.html` | 650,644 | `994ef51a5b68c9475c70d0aa82470b9a34c6a5cf399505f8512f056720e3fb71` |
 | `beta/challenges-beta.html` | 116,016 | `e331cdd97b3658eee8b2689217db3add112fe0d8062acdc263edddabe7d2d95c` |
 
 The Deck side already contains the Stage A `applyClubfinderCampaignTruth()` reader, Stage B `renderTrophyCabinet()` helper and their regression tests.
@@ -44,7 +44,7 @@ The seven required rows form the existing BETA Clubfinder producer/saved-identit
 | `tffc.clubfinderReturnSnapshot.v1` | 1 | 1804 |
 | `tffc.challengeOrigin` | 3 | 2083, 2083, 2110 |
 | `tffc.challengeReturnIndex` | 0 | None |
-| `tffc.openStatsOnReturn` | 2 | 1841, 2624 |
+| `tffc.openStatsOnReturn` | 2 | 1841, 2637 |
 | `tffc.challengeDeck.v1` | 1 | 2024 |
 
 ### Direct storage operations (filtered to relevant keys/aliases)
@@ -63,7 +63,7 @@ The seven required rows form the existing BETA Clubfinder producer/saved-identit
 | 2105 | `localStorage.setItem` | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | `tffc.clubfinderCampaign.v1` |
 | 2110 | `sessionStorage.setItem` | `tffc.challengeOrigin` | `tffc.challengeOrigin` |
 | 2237 | `localStorage.getItem` | `TIN_FOIL_CHALLENGE_BRIDGE_KEY` | `tffc.clubfinderCampaign.v1` |
-| 2624 | `sessionStorage.removeItem` | `tffc.openStatsOnReturn` | `tffc.openStatsOnReturn` |
+| 2637 | `sessionStorage.removeItem` | `tffc.openStatsOnReturn` | `tffc.openStatsOnReturn` |
 
 ## Critical producer evidence
 

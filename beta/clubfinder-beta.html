@@ -2522,6 +2522,19 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
   '</main>'+'<nav class="stats-actions" aria-label="Stats actions"><span class="stats-return"><button type="button" onclick="'+((returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"← Challenges":"← My Campaign")+'</button></span><button type="button" class="stats-print">Save / Print</button><button type="button" class="stats-share" aria-label="Share Stats"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M8 10H5v11h14V10h-3"/></svg></button><p class="stats-share-status" role="status"></p></nav>'+
   '<scr'+'ipt>('+statsActions.toString()+')();</scr'+'ipt></body></html>';
 
+  try{
+      const assets=[...new Set([...doc.matchAll(/assets\/stats-report\/[^"'\\]+\.(?:png|webp)/g)].map(m=>m[0]))];
+      await Promise.all(assets.map(asset=>new Promise(resolve=>{
+        const img=new Image();
+        let settled=false;
+        const finish=()=>{if(settled)return;settled=true;clearTimeout(timer);resolve();};
+        const timer=setTimeout(finish,400);
+        img.onload=async()=>{try{if(typeof img.decode==='function')await img.decode();}catch(_){}finish();};
+        img.onerror=finish;
+        img.src=asset;
+        if(img.complete)img.onload();
+      })));
+    }catch(_){}
   return doc;
 }
 
