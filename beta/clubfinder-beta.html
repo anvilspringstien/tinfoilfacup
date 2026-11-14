@@ -2349,27 +2349,25 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
       });
     }
     fitBar();
-    scheduleFit();
     window.addEventListener('resize',scheduleFit);
-    window.addEventListener('load',scheduleFit,{once:true});
-    window.addEventListener('pageshow',scheduleFit);
     viewport?.addEventListener('resize',scheduleFit);
     viewport?.addEventListener('scroll',scheduleFit);
-    if(frame){
-      const parent=window.parent;
-      const options={signal:fitLifetime.signal};
-      parent.addEventListener('resize',scheduleFit,options);
-      parent.visualViewport?.addEventListener('resize',scheduleFit,options);
-      // The shell can settle after the report is written, without a window resize.
-      const shellObserver=new parent.ResizeObserver(scheduleFit);
-      shellObserver.observe(frame.parentElement);
-      fitLifetime.signal.addEventListener('abort',()=>shellObserver.disconnect(),{once:true});
-    }
+    if(frame)window.parent.addEventListener('resize',scheduleFit,{signal:fitLifetime.signal});
     window.addEventListener('pagehide',event=>{if(!event.persisted)fitLifetime.abort();});
 
     const status=bar.querySelector('.stats-share-status');
     new MutationObserver(scheduleFit).observe(status,{childList:true});
-    function printableSheet(){
+    bar.querySelector('.stats-print').addEventListener('click',()=>{
+      if(!/iPhone|iPod/i.test(navigator.userAgent)){
+        window.print();
+        return;
+      }
+      const preview=window.top.open('','_blank');
+      if(!preview){
+        status.textContent='Allow pop-ups to open the printable Stats.';
+        return;
+      }
+      status.textContent='';
       const sheet=document.querySelector('.sheet').cloneNode(true);
       const pigeonName=sheet.querySelector('.stats-pigeon-editor');
       if(pigeonName){
@@ -2378,16 +2376,13 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
         name.textContent=pigeonName.value;
         pigeonName.replaceWith(name);
       }
-      return sheet;
-    }
-    const baseStyles=document.querySelectorAll('head style');
-    function installPrintStyles(printDoc,printOnly){
-      const styles=[];
-      for(const source of baseStyles){
-        const copy=source.cloneNode(true);
-        if(printOnly)copy.media='print';
-        styles.push(copy);
-      }
+      const statsURL=new URL('/beta/phone-frame.html?view=stats',window.top.location.origin);
+      const printDoc=preview.document;
+      printDoc.open();
+      printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
+      printDoc.close();
+      printDoc.title=document.title;
+      printDoc.head.append(...Array.from(document.querySelectorAll('head style'),style=>style.cloneNode(true)));
       const style=printDoc.createElement('style');
       style.textContent=`
         .print-guide{max-width:790px;margin:0 auto 16px;padding:10px;background:#fffdf1;text-align:center}
@@ -2413,61 +2408,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder"){
           .bottom>div{padding:7px 9px}
           .challenge-honour{padding-block:3px}
         }`;
-      styles.push(style);
-      printDoc.head.append(...styles);
-      return styles;
-    }
-    const printAction=bar.querySelector('.stats-print');
-    const isIPhone=/iPhone|iPod/i.test(navigator.userAgent);
-    if(isIPhone&&frame?.id==='phoneApp'&&window.parent===window.top){
-      // Put the report at the top level for printing, with the live frame
-      // still in place when the native dialogue is dismissed.
-      const host=window.top;
-      const printDoc=host.document;
-      printDoc.title=document.title;
-      const printStyles=installPrintStyles(printDoc,true);
-      const style=printDoc.createElement('style');
-      style.textContent=`
-        @media screen{#stats-print-copy{display:none}}
-        @media print{body>.phone-shell{display:none!important}}
-      `;
       printDoc.head.append(style);
-      const sheet=printableSheet();
-      sheet.id='stats-print-copy';
-      for(const image of sheet.querySelectorAll('img[src]')){
-        image.src=new URL(image.getAttribute('src'),new URL('/beta/',host.location.origin)).href;
-      }
-      printDoc.body.append(sheet);
-      fitLifetime.signal.addEventListener('abort',()=>{
-        sheet.remove();
-        style.remove();
-        printStyles.forEach(node=>node.remove());
-      },{once:true});
-      printAction.addEventListener('click',()=>{
-        const editor=document.querySelector('.stats-pigeon-editor');
-        if(editor)sheet.querySelector('.campaign-identity-name-row .campaign-identity-value').textContent=editor.value;
-        host.print();
-      });
-    }else printAction.addEventListener('click',()=>{
-      if(!isIPhone){
-        window.print();
-        return;
-      }
-      const preview=window.top.open('','_blank');
-      if(!preview){
-        status.textContent='Allow pop-ups to open the printable Stats.';
-        return;
-      }
-      status.textContent='';
-      const sheet=printableSheet();
-      const statsURL=new URL('/beta/phone-frame.html?view=stats',window.top.location.origin);
-      const printDoc=preview.document;
-      printDoc.open();
-      printDoc.write('<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>');
-      printDoc.close();
-      printDoc.title=document.title;
-      installPrintStyles(printDoc,false);
-
       const guide=printDoc.createElement('div');
       guide.className='print-guide';
       const printButton=printDoc.createElement('button');
