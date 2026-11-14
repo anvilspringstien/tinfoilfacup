@@ -2116,7 +2116,7 @@ async function openChallenges(origin,prepared=null){
  window.location.href='challenges-beta.html';
 }
 
-async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder", prepared=null, directPrint=false){
+async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubfinder", prepared=null){
   // Open an immediate same-origin preparation page while still in the click.
   // This removes the blank-tab delay on cold/private browser sessions. The URL
   // is then labelled as stats-beta.html so refresh still uses the canonical route.
@@ -2149,7 +2149,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   }
   const w=suppliedWindow;
   let doc;
-  try{doc=await (prepared||tinFoilPrepareStatsDocument(origin,returnMode,directPrint));}
+  try{doc=await (prepared||tinFoilPrepareStatsDocument(origin,returnMode));}
   catch(_){if(w&&!w.closed)w.document.body.textContent='We couldn’t prepare your Stats. Close this tab and try My Stats again.';return;}
   if(!w||w.closed)return;
   w.document.open();w.document.write(doc);w.document.close();
@@ -2712,7 +2712,8 @@ async function tinFoilMaybeOpenCanonicalStatsRoute(){
   if(!origin){document.documentElement.classList.remove('tffc-stats-route');return;}
   const returnMode=q.get('return')==='challenges'?'challenges':'clubfinder';
   const directPrint=window.top===window&&q.get('directPrint')==='1';
-  await journeyCertificate(origin,window,returnMode,null,directPrint);
+  const prepared=directPrint?tinFoilPrepareStatsDocument(origin,returnMode,true):null;
+  await journeyCertificate(origin,window,returnMode,prepared);
 }
 if(tinFoilStatsRouteRequested){
   Promise.resolve(tinFoilMaybeOpenCanonicalStatsRoute()).catch(()=>{document.documentElement.classList.remove('tffc-stats-route');});
