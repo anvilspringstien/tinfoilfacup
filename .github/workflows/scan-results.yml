@@ -150,6 +150,7 @@ jobs:
         run: python updater/apply_exceptional_replay_dispositions.py
       - name: Scan active round and validate dispositions
         env:
+          TFFC_RESULTS_SOURCE_LOG: updater/results-source-observations.csv
           EVENT_NAME: ${{ github.event_name }}
           INPUT_SOURCE_URL: ${{ inputs.source_url }}
           INPUT_PUBLISH: ${{ inputs.publish }}
@@ -273,6 +274,7 @@ jobs:
             competition.json
             clubfinder.html
             updater/results-source-capture.json
+            updater/results-source-observations.csv
             updater/kickoff-venue-enrichment-report.json
             updater/active-replay-fixture-sync-report.json
       - name: Commit validated competition data and Clubfinder
