@@ -353,3 +353,5 @@ body{background-attachment:scroll}
 .map-attribution a{text-underline-offset:2px}
 
 #boarding-share-native:not([hidden]){display:inline-flex;align-items:center;justify-content:center;gap:6px}
+
+#pigeon-editor{position:fixed;top:calc(var(--pigeon-editor-top,0px) + 12px);bottom:auto;margin:0 auto;max-height:calc(var(--pigeon-editor-height,100dvh) - 24px);overflow:auto;background:#fffef6}#pigeon-editor button{color:#084c61;min-height:44px;font-size:14px}
