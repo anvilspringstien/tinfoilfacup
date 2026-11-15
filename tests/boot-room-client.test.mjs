@@ -36,20 +36,17 @@ test('fresh messages preserve an older reading position in the shared header-and
  assert.equal(scroll.scrollTop,250);
  scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
 });
-test('the Chat navigation returns as soon as the reader scrolls toward newer posts',async()=>{
- const b=browser();await b.settle();
- const scroll=b.$('room-scroll'),nav=b.$('room-navigation');
- scroll.scrollHeight=2400;scroll.clientHeight=500;scroll.scrollTop=1900;
- scroll.onscroll();
- scroll.scrollTop=600;scroll.onscroll();
- assert.equal(nav['data-revealed'],undefined);
- scroll.scrollTop=624;scroll.onscroll();
- assert.equal(nav['data-revealed'],'');
- b.snapshot(b.sockets[0]);
- assert.equal(scroll.scrollTop,624);
- assert.equal(nav['data-revealed'],'');
- scroll.scrollTop=602;scroll.onscroll();
- assert.equal(nav['data-revealed'],undefined);
+test('the Chat navigation sits outside the conversation scroll and keeps sign-out available after closure',async()=>{
+ assert.match(page,/<div id="room-scroll"[\s\S]*?<section id="room"[\s\S]*?<\/section>\s*<\/div><nav class="room-footer" id="room-navigation"/);
+ const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
+ assert.equal(b.$('logout').hidden,false);
+ b.setState({open:false});b.snapshot(ws);
+ assert.equal(b.$('logout').hidden,false);
+ assert.equal(b.$('composer-wrap').hidden,true);
+ await b.$('logout').onclick();
+ assert.ok(b.requests.includes('/api/logout'));
+ assert.equal(b.$('logout').hidden,true);
+ assert.match(b.$('status').textContent,/signed out of chat/);
 });
 
 test('a visitor without a Campaign can reach closed history from the public Chalk Board',async()=>{
