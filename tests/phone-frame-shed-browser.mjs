@@ -273,6 +273,15 @@ try{
   await directStats.emulateMedia({media:'print'});
   assert.equal(await directButton.isVisible(),false);
   assert.equal(await directStats.locator('.sheet').isVisible(),true);
+  await directStats.setViewportSize({width:680,height:960});
+  const clippedLabels=await directStats.locator('.g-label').evaluateAll(labels=>labels.flatMap(label=>{
+   const cell=label.closest('.g').getBoundingClientRect();
+   const range=label.ownerDocument.createRange();
+   range.selectNodeContents(label);
+   return [...range.getClientRects()].some(rect=>rect.left<cell.left||rect.right>cell.right)
+    ?[label.textContent]:[];
+  }));
+  assert.deepEqual(clippedLabels,[],'Printed At a Glance labels must fit their A4 columns');
  }finally{
   await directStats.close();
  }
