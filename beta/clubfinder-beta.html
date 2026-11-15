@@ -1871,6 +1871,14 @@ async function chooseJourney(name,postcode){
  const e=loadSavedJourney(),replacing=!!(e&&(!sameClubIdentity(e.originName,o.name)||!samePostcode(e.postcode,postcode)));
  if(replacing&&!await tinFoilConfirm('Replace your saved Tin Foil FA Cup Campaign with '+o.name+' starting from '+String(postcode||'').toUpperCase()+'?'))return;
  saveJourney(o,postcode);
+ if(replacing){
+  try{
+   await fetch('/beta/boot-room/api/logout',{
+    method:'POST',headers:{'content-type':'application/json'},body:'{}',
+    signal:AbortSignal.timeout(2000)
+   });
+  }catch(_){} // Campaign replacement still works if the Boot Room is unreachable.
+ }
  const input=document.getElementById('postcode');if(input)input.value=String(postcode||'').toUpperCase();
  window.__showOriginalTinFoilJourneys=false;go(false,true);
 }

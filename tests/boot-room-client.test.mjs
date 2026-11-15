@@ -36,17 +36,24 @@ test('fresh messages preserve an older reading position in the shared header-and
  assert.equal(scroll.scrollTop,250);
  scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
 });
-test('the Chat navigation sits outside the conversation scroll and keeps sign-out available after closure',async()=>{
+test('normal Chat navigation stays visible while sign-out is reserved for Campaign mismatch recovery',async()=>{
  assert.match(page,/<div id="room-scroll"[\s\S]*?<section id="room"[\s\S]*?<\/section>\s*<\/div><nav class="room-footer" id="room-navigation"/);
  const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
- assert.equal(b.$('logout').hidden,false);
- b.setState({open:false});b.snapshot(ws);
- assert.equal(b.$('logout').hidden,false);
- assert.equal(b.$('composer-wrap').hidden,true);
- await b.$('logout').onclick();
- assert.ok(b.requests.includes('/api/logout'));
  assert.equal(b.$('logout').hidden,true);
- assert.match(b.$('status').textContent,/signed out of chat/);
+ b.setState({open:false});b.snapshot(ws);
+ assert.equal(b.$('logout').hidden,true);
+ assert.equal(b.$('composer-wrap').hidden,true);
+ const other={callSign:'TF2AC 01958',name:'New pigeon'};
+ const stale=browser('/beta/boot-room/chat',other,{responses:[
+  {ok:true,json:async()=>({you:{campaign:{callSign:'TF2AC 01957'}}})}
+ ]});
+ await stale.settle();
+ assert.equal(stale.$('logout').hidden,false);
+ assert.match(stale.$('status').textContent,/Tap Sign out of chat/);
+ await stale.$('logout').onclick();
+ assert.ok(stale.requests.includes('/beta/boot-room/api/logout'));
+ assert.equal(stale.$('logout').hidden,true);
+ assert.match(stale.$('status').textContent,/signed out of chat/);
 });
 
 test('a visitor without a Campaign can reach closed history from the public Chalk Board',async()=>{
