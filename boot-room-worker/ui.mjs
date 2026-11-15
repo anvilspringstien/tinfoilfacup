@@ -100,7 +100,8 @@ html[data-frame="shed"], html[data-frame="shed"] body {
 }
 .entrance-navigation a{min-height:42px}
 .entrance-navigation .entrance-enter{background:#084c61;border-color:#054052;color:#f5efdd}
-#room-navigation{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-height:0}
+#room-navigation{flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;min-height:0}
+#room-navigation:has(#logout:not([hidden])){grid-template-columns:repeat(3,minmax(0,1fr))}
 #room-navigation a,#room-navigation button{min-height:32px;font-size:10px}
 #room-navigation button[hidden]{display:none}
 .entrance-house-rules:focus-visible,.entrance-navigation a:focus-visible,#room-navigation :focus-visible{
@@ -351,7 +352,7 @@ function showChat(){
  $('chat-shell').hidden=false;
 }
 function render(d){
- me=d.you;currentView=d;$('join').hidden=true;$('room').hidden=false;$('logout').hidden=!me;
+ me=d.you;currentView=d;$('join').hidden=true;$('room').hidden=false;$('logout').hidden=true;
  $('doors').textContent=d.open?'ROOM OPEN · until '+new Date(d.until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'ROOM CLOSED';$('doors').className='room-sign'+(d.open?'':' closed');
  $('you').textContent=me?'Posting as '+me.name+(me.campaign?' · '+identityText(me):''):'';roomOpen=d.open;
  const list=$('messages'),scroller=$('room-scroll'),oldTop=scroller.scrollTop||0,nearBottom=!rendered||((scroller.scrollHeight||0)-oldTop-(scroller.clientHeight||0)<70);list.replaceChildren();roomButtons=[];
@@ -494,7 +495,17 @@ async function joinWalkIn(){
 }
 $('walk-in-join').onclick=joinWalkIn;
 if($('join-form'))$('join-form').onsubmit=async e=>{e.preventDefault();try{await api('/api/join',{invite:$('invite').value.trim(),campaign});$('invite').value='';await connect();}catch(x){status(x.message);}};
-$('connect').onclick=connect;$('logout').onclick=async()=>{disconnect();me=null;roomOpen=false;await api('/api/logout',{});$('room').hidden=true;$('join').hidden=false;$('logout').hidden=true;$('composer-wrap').hidden=true;status('You’re signed out of chat. You can join again from My Campaign when the Boot Room is open.');};
+$('connect').onclick=connect;$('logout').onclick=async()=>{
+ const button=$('logout');
+ button.disabled=true;
+ try{
+  await api('/api/logout',{});
+  disconnect();me=null;roomOpen=false;
+  $('room').hidden=true;$('join').hidden=false;button.hidden=true;$('composer-wrap').hidden=true;
+  status('You’re signed out of chat. You can join again from My Campaign when the Boot Room is open.');
+ }catch(e){status('Couldn’t sign out of chat. Try again.');}
+ finally{button.disabled=false;}
+};
 $('composer').onsubmit=e=>{e.preventDefault();const cache=$('attach-flight').checked?currentFlightCache():null;
  const flightPath=cache&&!flightCacheNeedsRefresh(cache)?cache.route:null;
  if($('attach-flight').checked&&!flightPath){status('Reopen Barry Air to refresh your Flight Path.');return;}
