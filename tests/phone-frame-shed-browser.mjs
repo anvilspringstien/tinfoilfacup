@@ -176,7 +176,7 @@ try{
   try{await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});}
   catch(error){console.error('Stats frame diagnostic:',await stats.locator('html').evaluate(h=>({url:location.href,ready:document.readyState,html:h.outerHTML.slice(0,2000),innerURL:h.querySelector('iframe')?.contentWindow?.location?.href})));throw error;}
  }
- await stats.frameLocator('#phoneApp').getByRole('button',{name:'Save / Print',exact:true}).waitFor({timeout:30000});
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Share PDF',exact:true}).waitFor({timeout:30000});
  // The report can render before the outer tab's deferred frame script loads.
  await waitForReportFrame();
  assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
@@ -184,11 +184,11 @@ try{
  assert.ok(Math.abs(statsRatio-9/16)<.001);
  assert.equal(stats.url(),origin+'/beta/phone-frame.html?view=stats','Stats should retain the Keep shell route as well');
  await stats.reload();
- await stats.frameLocator('#phoneApp').getByRole('button',{name:'Save / Print',exact:true}).waitFor({timeout:30000});
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Share PDF',exact:true}).waitFor({timeout:30000});
  await waitForReportFrame();
  const statsApp=stats.frameLocator('#phoneApp');
  const statsBar=statsApp.getByRole('navigation',{name:'Stats actions'});
- const shareStats=statsBar.getByRole('button',{name:'Share Stats'});
+ const shareStats=statsBar.getByRole('button',{name:'Share PDF'});
  const beforeScroll=await shareStats.boundingBox();
  assert.ok(beforeScroll.height>=43,'The Share control must retain a full-size tap target inside the scaled frame');
  await statsApp.locator('.sheet').evaluate(sheet=>sheet.ownerDocument.defaultView.scrollTo(0,sheet.ownerDocument.body.scrollHeight));
@@ -200,116 +200,46 @@ try{
  await stats.emulateMedia({media:'print'});
  assert.equal(await statsBar.isVisible(),false,'The Stats bar must be hidden when printing');
  await stats.emulateMedia({media:'screen'});
- console.log('Checking Stats Save / Print');
- const savePrint=statsBar.getByRole('button',{name:'Save / Print',exact:true});
- await statsApp.locator('body').evaluate(()=>{
-  window.print=()=>{window.statsPrintRequested=true;};
- });
- await savePrint.click();
- assert.equal(await statsApp.locator('body').evaluate(()=>window.statsPrintRequested),true,'Desktop prints directly');
- await statsApp.locator('body').evaluate(()=>{
-  Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
- });
- const previewOpened=context.waitForEvent('page',{timeout:10000});
- await savePrint.click();
- const printPreview=await previewOpened;
- await printPreview.getByRole('button',{name:'Print Stats',exact:true}).waitFor({timeout:10000});
- assert.equal(await printPreview.locator('iframe,.stats-actions').count(),0,'iPhone prints a top-level copy of the report');
- assert.match(await printPreview.locator('.sheet').innerText(),/Newton Aycliffe FC/);
- assert.equal(await printPreview.locator('.campaign-identity-name-row .campaign-identity-value').textContent(),'Shed Pigeon');
- const crest=printPreview.locator('.top img');
- await printPreview.waitForFunction(()=>document.querySelector('.print-guide button')?.disabled===false,null,{timeout:10000});
- const crestImage=await crest.evaluate(img=>({embedded:img.src.startsWith('data:image/'),width:img.naturalWidth}));
- assert.ok(crestImage.embedded&&crestImage.width>0,'Printable Stats must embed and load the crest: '+JSON.stringify(crestImage));
- await printPreview.evaluate(()=>{window.print=()=>{window.statsPrintRequested=true;};});
- await printPreview.getByRole('button',{name:'Print Stats',exact:true}).click();
- assert.equal(await printPreview.evaluate(()=>window.statsPrintRequested),true);
- for(const viewport of [{width:390,height:669},{width:844,height:390},{width:390,height:669}]){
-  await printPreview.setViewportSize(viewport);
-  const headerFits=await printPreview.locator('.top').evaluate(top=>{
-   const sheet=top.closest('.sheet').getBoundingClientRect();
-   return [...top.children].every(column=>column.getBoundingClientRect().right<=sheet.right);
-  });
-  assert.ok(headerFits,'The crest and heading must stay within the report during rotation');
- }
- await printPreview.emulateMedia({media:'print'});
- assert.equal(await printPreview.locator('.print-guide').isVisible(),false);
- const columns=await printPreview.locator('.glance').evaluate(glance=>getComputedStyle(glance).gridTemplateColumns.split(' ').length);
- assert.ok(columns>2,'Print should retain the compact report grid on a narrow screen');
- await printPreview.emulateMedia({media:'screen'});
- await Promise.all([
-  printPreview.waitForEvent('close',{timeout:10000}),
-  printPreview.getByRole('link',{name:'← Back to Stats'}).click(),
- ]);
- await statsApp.locator('body').evaluate(()=>{delete navigator.userAgent;});
-
+ console.log('Checking Stats PDF share and download');
+ assert.equal(await shareStats.locator('svg[aria-hidden="true"]').count(),1);
  await shareStats.evaluate(button=>{
   const win=button.ownerDocument.defaultView;
   Object.defineProperty(win.navigator,'canShare',{configurable:true,value:()=>true});
-  Object.defineProperty(win.navigator,'share',{configurable:true,value:async payload=>{win.sharedStats=payload;}});
+  Object.defineProperty(win.navigator,'share',{configurable:true,value:async ({files})=>{win.sharedPdf=files[0];}});
  });
  await shareStats.click();
- const statsShareDialog=statsApp.getByRole('dialog');
- await statsShareDialog.getByRole('link',{name:'Save PDF'}).waitFor();
- await statsShareDialog.getByRole('button',{name:'Share PDF'}).click();
  const shared=await shareStats.evaluate(async button=>{
-  const [file]=button.ownerDocument.defaultView.sharedStats.files;
+  const file=button.ownerDocument.defaultView.sharedPdf;
   return {name:file.name,type:file.type,header:await file.slice(0,8).text()};
  });
  assert.deepEqual(shared,{name:'tin-foil-fa-cup-stats.pdf',type:'application/pdf',header:'%PDF-1.4'});
- await statsShareDialog.getByRole('button',{name:'Close',exact:true}).click();
+ await shareStats.evaluate(button=>{
+  Object.defineProperty(button.ownerDocument.defaultView.navigator,'canShare',{configurable:true,value:()=>false});
+ });
+ const downloadPromise=stats.waitForEvent('download');
+ await shareStats.click();
+ assert.equal((await downloadPromise).suggestedFilename(),'tin-foil-fa-cup-stats.pdf');
 
- const directStats=await context.newPage();
+ const phone=await context.newPage();
  try{
-  assert.equal(await app.getByRole('link',{name:'Stats PDF test',exact:true}).count(),0);
-  await directStats.addInitScript(()=>{
+  await phone.addInitScript(()=>{
+   Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
    Object.defineProperty(navigator,'standalone',{configurable:true,value:true});
-   window.print=()=>{window.statsPrintRequests=(window.statsPrintRequests||0)+1;};
    Object.defineProperty(navigator,'canShare',{value:()=>true,configurable:true});
    Object.defineProperty(navigator,'share',{value:async ({files})=>{window.sharedPdf=files[0];},configurable:true});
   });
-  await directStats.goto(origin+'/beta/phone-frame.html?view=campaign');
-  await directStats.frameLocator('#phoneApp').getByRole('link',{name:'Stats PDF test',exact:true}).click();
-  await directStats.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1&sharePdf=1');
-  await directStats.getByRole('button',{name:'Share PDF',exact:true}).click();
-  assert.equal(await directStats.evaluate(()=>window.sharedPdf?.type),'application/pdf');
-  assert.equal(await directStats.locator('iframe').count(),0);
-  await directStats.goto(origin+'/beta/clubfinder-beta.html?stats=1&directPrint=1');
-  const directButton=directStats.getByRole('button',{name:'Save / Print',exact:true});
-  await directButton.waitFor({timeout:30000});
-  assert.equal(await directStats.locator('iframe,.stats-share').count(),0);
-  const tabs=context.pages().length;
-  await directButton.click();
-  assert.equal(await directStats.evaluate(()=>window.statsPrintRequests),1);
-  assert.equal(context.pages().length,tabs);
-  await directStats.emulateMedia({media:'print'});
-  assert.equal(await directButton.isVisible(),false);
-  assert.equal(await directStats.locator('.sheet').isVisible(),true);
-  await directStats.setViewportSize({width:680,height:960});
-  const clippedLabels=await directStats.locator('.g-label').evaluateAll(labels=>labels.flatMap(label=>{
-   const cell=label.closest('.g').getBoundingClientRect();
-   const range=label.ownerDocument.createRange();
-   range.selectNodeContents(label);
-   return [...range.getClientRects()].some(rect=>rect.left<cell.left||rect.right>cell.right)
-    ?[label.textContent]:[];
-  }));
-  assert.deepEqual(clippedLabels,[],'Printed At a Glance labels must fit their A4 columns');
-  const statsBox=await directStats.locator('.bottom .list').evaluate(list=>{
-   // Exercise a wrapped row before the last statistic.
-   list.insertBefore(list.ownerDocument.createTextNode('Custodian Match Defeats after extra time: 3'),list.firstChild);
-   list.insertBefore(list.ownerDocument.createElement('br'),list.firstChild.nextSibling);
-   const range=list.ownerDocument.createRange();
-   range.selectNodeContents(list);
-   const panel=list.closest('.bottom');
-   const border=panel.getBoundingClientRect().bottom;
-   return {margin:border-range.getBoundingClientRect().bottom,columns:panel.children.length,
-    cellDisplay:getComputedStyle(panel.firstElementChild).display};
-  });
-  assert.equal(statsBox.columns,3);
-  assert.equal(statsBox.cellDisplay,'table-cell');
-  assert.ok(statsBox.margin>=8,'The printed Statistics panel must enclose the final line');
+  await phone.goto(origin+'/beta/phone-frame.html?view=campaign');
+  const phoneApp=phone.frameLocator('#phoneApp');
+  await phoneApp.getByRole('button',{name:'My Stats',exact:true}).click();
+  await phoneApp.getByRole('button',{name:'Got It!',exact:true}).click();
+  await phone.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1');
+  await phone.getByRole('button',{name:'Share PDF',exact:true}).click();
+  assert.equal(await phone.evaluate(()=>window.sharedPdf?.type),'application/pdf');
+  assert.equal(await phone.locator('iframe').count(),0);
+  await phone.getByRole('button',{name:'← My Campaign',exact:true}).click();
+  await phone.frameLocator('#phoneApp').getByRole('button',{name:'My Stats',exact:true}).waitFor();
  }finally{
-  await directStats.close();
+  await phone.close();
  }
  // Existing Stats returns to its opener when available; after a refresh
  // without one, it opens Campaign in the same tab. Both must stay usable.
