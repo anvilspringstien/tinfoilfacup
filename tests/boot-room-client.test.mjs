@@ -36,7 +36,7 @@ test('fresh messages preserve an older reading position in the shared header-and
  assert.equal(scroll.scrollTop,250);
  scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
 });
-test('the Chat navigation sits outside the conversation scroll and keeps Leave available after closure',async()=>{
+test('the Chat navigation sits outside the conversation scroll and keeps sign-out available after closure',async()=>{
  assert.match(page,/<div id="room-scroll"[\s\S]*?<section id="room"[\s\S]*?<\/section>\s*<\/div><nav class="room-footer" id="room-navigation"/);
  const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
  assert.equal(b.$('logout').hidden,false);
@@ -46,6 +46,7 @@ test('the Chat navigation sits outside the conversation scroll and keeps Leave a
  await b.$('logout').onclick();
  assert.ok(b.requests.includes('/api/logout'));
  assert.equal(b.$('logout').hidden,true);
+ assert.match(b.$('status').textContent,/signed out of chat/);
 });
 
 test('a visitor without a Campaign can reach closed history from the public Chalk Board',async()=>{
