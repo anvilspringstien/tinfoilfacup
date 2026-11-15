@@ -60,7 +60,13 @@ flightShareButton.addEventListener('click',()=>openImageShare(
   if(!mapTemplate)throw Error('Map unavailable');
   const svg=mapTemplate.cloneNode(true);
   drawRoute(svg,publicFlightStops(model.stops),model.flights);
-  return flightPathImage(svg);
+  return flightPathImage(svg,{
+   name:readSaved()?.pigeonName||model.name,
+   callSign:model.digits==='00000'?model.callSign:'TF2AC '+model.digits,
+   milesFlown:Number.isFinite(model.miles.miles)?Math.round(model.miles.miles):undefined,
+   origin:model.origin,
+   custodian:model.carrier
+  });
  }
 ));
 async function openImageShare(button,title,makeImage){
@@ -79,6 +85,7 @@ async function openImageShare(button,title,makeImage){
   shareImage.src=shareSave.href=shareURL;
   shareStatus.hidden=true;
   shareNative.hidden=!(navigator.share&&navigator.canShare?.({files:[shareFile]}));
+  button.disabled=false;
   shareDialog.showModal();
  }catch{toast('Your '+title+' image could not be prepared. Try again.');}
  finally{button.disabled=false;preparingShare=false;}

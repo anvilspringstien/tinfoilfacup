@@ -37,6 +37,7 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     await sharePass.click();
     const preview=p.getByRole('dialog',{name:'Share the Magic'});
     await preview.waitFor();
+    assert.equal(await preview.locator('h2:focus').count(),1,'the preview heading receives initial focus');
     assert.equal(await preview.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth;}),passWidth*3);
     const save=preview.getByRole('link',{name:'Save image'});
     assert.equal(await save.evaluate(async link=>(await fetch(link.href)).headers.get('content-type')),'image/png');
@@ -66,6 +67,12 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     const camera=await map.locator('.map-content').getAttribute('transform');
     const futureLegs=await map.locator('.route-line.future-line').count();
     await p.evaluate(()=>{
+      window.flightShareText=[];
+      const fillText=CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText=function(value,...args){
+        window.flightShareText.push(value);
+        return fillText.call(this,value,...args);
+      };
       const create=URL.createObjectURL;
       URL.createObjectURL=function(blob){
         if(blob.type==='image/svg+xml')window.sharedRoute=blob.text();
@@ -76,6 +83,14 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     await preview.waitFor();
     assert.equal(await preview.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth;}),1200);
     assert.equal(await save.getAttribute('download'),'barry-air-flight-path.png');
+    assert.equal(await preview.locator('h2:focus').count(),1);
+    const flightLabels=await p.evaluate(()=>window.flightShareText);
+    const flightMileage=Number.isFinite(expected.miles.miles)
+      ?Math.round(expected.miles.miles).toLocaleString('en-GB')+' miles flown':'Miles flown unavailable';
+    for(const label of [expected.name,'TF2AC 12345 · '+flightMileage,'Campaign · '+expected.origin,'Custodian · '+expected.carrier]){
+      assert.ok(flightLabels.includes(label),label);
+    }
+    assert.ok(flightLabels.every(label=>!label.includes(saved.postcode)),'Flight Path header must omit the departure postcode');
     const route=await p.evaluate(async()=>{
       const text=await window.sharedRoute;
       const svg=new DOMParser().parseFromString(text,'image/svg+xml');
