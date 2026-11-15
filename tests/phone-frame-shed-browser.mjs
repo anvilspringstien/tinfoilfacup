@@ -282,6 +282,20 @@ try{
     ?[label.textContent]:[];
   }));
   assert.deepEqual(clippedLabels,[],'Printed At a Glance labels must fit their A4 columns');
+  const statsBox=await directStats.locator('.bottom .list').evaluate(list=>{
+   // Exercise a wrapped row before the last statistic.
+   list.insertBefore(list.ownerDocument.createTextNode('Custodian Match Defeats after extra time: 3'),list.firstChild);
+   list.insertBefore(list.ownerDocument.createElement('br'),list.firstChild.nextSibling);
+   const range=list.ownerDocument.createRange();
+   range.selectNodeContents(list);
+   const panel=list.closest('.bottom');
+   const border=panel.getBoundingClientRect().bottom;
+   return {margin:border-range.getBoundingClientRect().bottom,columns:panel.children.length,
+    cellDisplay:getComputedStyle(panel.firstElementChild).display};
+  });
+  assert.equal(statsBox.columns,3);
+  assert.equal(statsBox.cellDisplay,'table-cell');
+  assert.ok(statsBox.margin>=8,'The printed Statistics panel must enclose the final line');
  }finally{
   await directStats.close();
  }
