@@ -42,6 +42,43 @@ try{
   assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
   await context.close();
  }
+ {
+  // Start from an existing Campaign in the installed phone frame, then search again.
+  const keep=await browser.newContext({viewport:{width:390,height:669},hasTouch:true});
+  await keep.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
+  await keep.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
+  await keep.route('https://api.postcodes.io/**',route=>{
+   const path=decodeURIComponent(new URL(route.request().url()).pathname).toUpperCase();
+   if(path==='/POSTCODES/DL5 4RQ')return route.fulfill({json:{status:200,result:{postcode:'DL5 4RQ',latitude:54.619,longitude:-1.57}}});
+   if(path==='/POSTCODES/NE6 5NL')return route.fulfill({json:{status:200,result:{postcode:'NE6 5NL',latitude:54.99,longitude:-1.56}}});
+   return route.abort();
+  });
+  const keepPage=await keep.newPage();
+  await keepPage.goto(origin+'/');
+  await keepPage.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
+  await keepPage.goto(origin+'/beta/phone-frame.html?view=campaign');
+  const keepApp=keepPage.frameLocator('#phoneApp');
+  const reset=keepApp.getByRole('button',{name:'Reset',exact:true});
+  await reset.click({timeout:30000});
+  const laws=keepApp.frameLocator('.tffc-exact-master-frame');
+  const postcode=laws.getByRole('textbox',{name:'Enter Your Postcode'});
+  await postcode.fill('NE6 5NL');
+  await laws.getByRole('button',{name:'Find My Club',exact:true}).click();
+  const summary=keepApp.locator('#tffc-results-summary');
+  await summary.waitFor({timeout:30000});
+  assert.match(await summary.innerText(),/3 Tin Foil FA Cup Campaigns found for NE6 5NL/);
+  const choices=keepApp.locator('#results .journey-lozenge');
+  await choices.last().waitFor();
+  assert.equal(await choices.count(),3);
+  assert.doesNotMatch(await laws.locator('#clubfinder-status').innerText(),/Campaigns found/);
+  const campaignFrame=await (await keepPage.locator('#phoneApp').elementHandle()).contentFrame();
+  await campaignFrame.waitForFunction(()=>{
+   const summary=document.getElementById('tffc-results-summary');
+   return !summary.hidden&&Math.abs(summary.getBoundingClientRect().top-(parseFloat(getComputedStyle(summary).scrollMarginTop)||0))<3;
+  });
+  assert.deepEqual(await keepPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7'))),saved);
+  await keep.close();
+ }
  const fallback=await browser.newContext({javaScriptEnabled:false});
  const plain=await fallback.newPage();await plain.goto(origin+'/');
  assert.equal(await plain.getByRole('link',{name:'Start Campaign',exact:true}).getAttribute('href'),'beta/clubfinder-journey.html');
