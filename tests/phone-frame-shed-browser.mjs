@@ -53,6 +53,11 @@ try{
    if(path==='/POSTCODES/NE6 5NL')return route.fulfill({json:{status:200,result:{postcode:'NE6 5NL',latitude:54.99,longitude:-1.56}}});
    return route.abort();
   });
+  const logoutMethods=[];
+  await keep.route('**/beta/boot-room/api/logout',route=>{
+   logoutMethods.push(route.request().method());
+   return route.fulfill({json:{ok:true}});
+  });
   const keepPage=await keep.newPage();
   await keepPage.goto(origin+'/');
   await keepPage.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
@@ -77,6 +82,18 @@ try{
    return !summary.hidden&&Math.abs(summary.getBoundingClientRect().top-(parseFloat(getComputedStyle(summary).scrollMarginTop)||0))<3;
   });
   assert.deepEqual(await keepPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7'))),saved);
+  assert.deepEqual(logoutMethods,[],'ordinary Reset preserves the Boot Room session');
+  await keepPage.reload();
+  const hardReset=keepApp.getByRole('button',{name:'Hard Reset',exact:true});
+  await hardReset.click({timeout:30000});
+  await keepApp.locator('#tinFoilConfirmCancel').click();
+  assert.deepEqual(logoutMethods,[],'cancelling Hard Reset preserves the Boot Room session');
+  assert.deepEqual(await keepPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7'))),saved);
+  await hardReset.click();
+  await keepApp.locator('#tinFoilConfirmOk').click();
+  await hardReset.waitFor({state:'hidden'});
+  assert.deepEqual(logoutMethods,['POST'],'confirming Hard Reset signs out of Boot Room chat');
+  assert.equal(await keepPage.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),null);
   await keep.close();
  }
  const fallback=await browser.newContext({javaScriptEnabled:false});
