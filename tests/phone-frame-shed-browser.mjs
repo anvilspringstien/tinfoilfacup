@@ -261,14 +261,20 @@ try{
 
  const directStats=await context.newPage();
  try{
-  assert.equal(await app.getByRole('link',{name:'Stats print test',exact:true}).count(),0);
+  assert.equal(await app.getByRole('link',{name:'Stats PDF test',exact:true}).count(),0);
   await directStats.addInitScript(()=>{
    Object.defineProperty(navigator,'standalone',{configurable:true,value:true});
    window.print=()=>{window.statsPrintRequests=(window.statsPrintRequests||0)+1;};
+   Object.defineProperty(navigator,'canShare',{value:()=>true,configurable:true});
+   Object.defineProperty(navigator,'share',{value:async ({files})=>{window.sharedPdf=files[0];},configurable:true});
   });
   await directStats.goto(origin+'/beta/phone-frame.html?view=campaign');
-  await directStats.frameLocator('#phoneApp').getByRole('link',{name:'Stats print test',exact:true}).click();
-  await directStats.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1&directPrint=1');
+  await directStats.frameLocator('#phoneApp').getByRole('link',{name:'Stats PDF test',exact:true}).click();
+  await directStats.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1&sharePdf=1');
+  await directStats.getByRole('button',{name:'Share PDF',exact:true}).click();
+  assert.equal(await directStats.evaluate(()=>window.sharedPdf?.type),'application/pdf');
+  assert.equal(await directStats.locator('iframe').count(),0);
+  await directStats.goto(origin+'/beta/clubfinder-beta.html?stats=1&directPrint=1');
   const directButton=directStats.getByRole('button',{name:'Save / Print',exact:true});
   await directButton.waitFor({timeout:30000});
   assert.equal(await directStats.locator('iframe,.stats-share').count(),0);
