@@ -239,6 +239,7 @@ html.tffc-single-frame.tffc-campaign-results:not(.tffc-stats-route) #clubfinderF
  gap:6px;
 }
 .campaign-secondary-nav button.round{margin:0}
+.campaign-secondary-nav .tffc-stats-test{display:inline-grid;place-items:center;min-height:44px;padding:6px 12px;color:#084c61;text-decoration:underline}
 .campaign-secondary-nav .campaign-share{background:#e4bb26!important;color:#111!important}
 .campaign-secondary-nav .campaign-share:hover{filter:brightness(.92)}
 .my-journey-bar .campaign-primary-nav button.round:focus-visible,
@@ -2622,6 +2623,10 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
      // My Campaign returns to the field without another postcode search.
      const statsButton='<button class="round stats-action" type="button" onclick=\'tffcCampaignIntroduction(&quot;stats&quot;,ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Stats</button>';
      const challengesButton='<button class="round challenges-launch" type="button" onclick=\'tffcCampaignIntroduction(&quot;challenges&quot;,ELIGIBLE.find(c=>norm(c.name)===norm('+JSON.stringify(origin.name)+')))\'>My Challenges</button>';
+     const inKeep=navigator.standalone===true||window.top?.matchMedia?.('(display-mode: standalone)')?.matches;
+     const statsTestLink=inKeep
+       ?'<a class="tffc-stats-test" href="/beta/clubfinder-beta.html?stats=1&amp;directPrint=1" target="_top">Stats print test</a>'
+       :'';
      const campaignHousekeeping=saved&&saved.ended
        ?'<button class="round" type="button" onclick="resumeMyJourney()">Resume My Campaign</button>'
        :'<button class="round" type="button" onclick="endMyJourney()">End My Campaign</button>';
@@ -2631,7 +2636,7 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
        +statsButton+challengesButton+'</div>'
        +'<div class="campaign-secondary-nav" aria-label="Campaign controls">'
        +'<button class="round" type="button" onclick="viewOriginalJourneys()">View Original Campaigns</button>'
-       +campaignHousekeeping
+       +campaignHousekeeping+statsTestLink
        +'<button class="round" type="button" onclick="resetFinder()">Reset</button>'
        +'<button class="round" type="button" onclick="hardResetFinder()">Hard Reset</button>'
        +'<button class="round campaign-share" type="button" onclick="tffcOpenShare()">Share the Magic</button>'
