@@ -261,8 +261,14 @@ try{
 
  const directStats=await context.newPage();
  try{
-  await directStats.addInitScript(()=>{window.print=()=>{window.statsPrintRequests=(window.statsPrintRequests||0)+1;};});
-  await directStats.goto(origin+'/beta/clubfinder-beta.html?stats=1&directPrint=1');
+  assert.equal(await app.getByRole('link',{name:'Stats print test',exact:true}).count(),0);
+  await directStats.addInitScript(()=>{
+   Object.defineProperty(navigator,'standalone',{configurable:true,value:true});
+   window.print=()=>{window.statsPrintRequests=(window.statsPrintRequests||0)+1;};
+  });
+  await directStats.goto(origin+'/beta/phone-frame.html?view=campaign');
+  await directStats.frameLocator('#phoneApp').getByRole('link',{name:'Stats print test',exact:true}).click();
+  await directStats.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1&directPrint=1');
   const directButton=directStats.getByRole('button',{name:'Save / Print',exact:true});
   await directButton.waitFor({timeout:30000});
   assert.equal(await directStats.locator('iframe,.stats-share').count(),0);
