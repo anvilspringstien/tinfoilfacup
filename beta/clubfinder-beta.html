@@ -1866,19 +1866,20 @@ function saveJourney(origin,postcode){const existing=loadSavedJourney(),same=exi
 function updateSavedJourney(p){const s=loadSavedJourney();if(!s)return null;const n=Object.assign({},s,p);localStorage.setItem(JOURNEY_STORAGE_KEY,JSON.stringify(n));tinFoilPersistCampaignIdentityBackup(n);return n}
 function savedOrigin(rows,s){return s?rows.find(r=>sameClubIdentity(r.name,s.originName))||null:null}
 function samePostcode(a,b){return String(a||'').toUpperCase().replace(/\s+/g,'')===String(b||'').toUpperCase().replace(/\s+/g,'')}
+async function tinFoilSignOutOfBootRoom(){
+ try{
+  await fetch('/beta/boot-room/api/logout',{
+   method:'POST',headers:{'content-type':'application/json'},body:'{}',
+   signal:AbortSignal.timeout(2000)
+  });
+ }catch(_){} // Campaign changes can continue if the Boot Room is unreachable.
+}
 async function chooseJourney(name,postcode){
  const o=ELIGIBLE.find(c=>norm(c.name)===norm(name));if(!o)return;
  const e=loadSavedJourney(),replacing=!!(e&&(!sameClubIdentity(e.originName,o.name)||!samePostcode(e.postcode,postcode)));
  if(replacing&&!await tinFoilConfirm('Replace your saved Tin Foil FA Cup Campaign with '+o.name+' starting from '+String(postcode||'').toUpperCase()+'?'))return;
  saveJourney(o,postcode);
- if(replacing){
-  try{
-   await fetch('/beta/boot-room/api/logout',{
-    method:'POST',headers:{'content-type':'application/json'},body:'{}',
-    signal:AbortSignal.timeout(2000)
-   });
-  }catch(_){} // Campaign replacement still works if the Boot Room is unreachable.
- }
+ if(replacing)await tinFoilSignOutOfBootRoom();
  const input=document.getElementById('postcode');if(input)input.value=String(postcode||'').toUpperCase();
  window.__showOriginalTinFoilJourneys=false;go(false,true);
 }
@@ -1925,7 +1926,8 @@ function resumeMyJourney(){updateSavedJourney({ended:false,endedAt:null});go()}f
 }
 
 async function hardResetFinder(){
- if(!await tinFoilConfirm('Hard Reset will forget the saved Tin Foil FA Cup Campaign in this browser and return the finder to a first-time-user state. Continue?'))return;
+ if(!await tinFoilConfirm('Hard Reset will forget your saved Tin Foil FA Cup Campaign in this browser and sign you out of Boot Room chat. Continue?'))return;
+ await tinFoilSignOutOfBootRoom();
  localStorage.removeItem(JOURNEY_STORAGE_KEY);
  if(typeof tinFoilClearCampaignIdentityBackup==='function')tinFoilClearCampaignIdentityBackup();
  if(typeof tinFoilClearCurrentSearchIdentity==='function')tinFoilClearCurrentSearchIdentity();
