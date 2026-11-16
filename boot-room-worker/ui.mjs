@@ -426,7 +426,7 @@ async function connect(enterFromChalkboard=false){
   if(campaign&&d.you.campaign?.callSign!==campaign.callSign){
    $('logout').hidden=false;
    showChat();
-   status('This browser is signed into chat as another pigeon. Tap Sign out of chat to join with this Campaign.');
+   status('Oops! This browser still has another pigeon signed in. Tap Sign out of chat below to join with your current pigeon.');
    return;
   }
   if(roomPrefix&&d.you.walkIn){
