@@ -11,8 +11,10 @@ replay. Replay ancestry exists only after an earlier completed draw in a replay-
 eligible qualifying round.
 """
 import argparse
+import csv
 import html as H
 import json
+import os
 import re
 import urllib.request
 from urllib.error import HTTPError, URLError
@@ -489,11 +491,39 @@ def main():
     if not round_name or not known:
         raise SystemExit("Active-round scanner health failure: no canonical active draw available.")
 
+    source_log_path = os.environ.get("TFFC_RESULTS_SOURCE_LOG")
+    source_log = Path(source_log_path) if source_log_path else None
+
+    def record_source(url, event, detail="", fixture_date="", home="", away=""):
+        nonlocal source_log
+        if source_log is None:
+            return
+        try:
+            with source_log.open("a", encoding="utf-8", newline="") as stream:
+                writer = csv.writer(stream)
+                if stream.tell() == 0:
+                    writer.writerow(("checked_at", "scan_round", "source_url", "event",
+                                     "detail", "fixture_date", "home", "away"))
+                writer.writerow((datetime.now(timezone.utc).isoformat(), round_name, url,
+                                 event, detail, fixture_date, home, away))
+        except (OSError, UnicodeError, csv.Error):
+            print("::warning::Could not write the Results source observations CSV. Continuing the scan.")
+            source_log = None
+
+    def observed_fetch(url):
+        try:
+            raw = fetch(url)
+        except (OSError, ValueError) as exc:
+            record_source(url, "fetch_error", f"{type(exc).__name__}: {exc}")
+            raise
+        record_source(url, "fetch_ok")
+        return raw
+
     fwp_round_source = fwp_round_url(round_name)
     try:
-        primary_raw = fetch(args.url)
-        fixtures_raw = fetch(fwp_round_source)
-        live_raw = fetch(FWP_LIVE_URL)
+        primary_raw = observed_fetch(args.url)
+        fixtures_raw = observed_fetch(fwp_round_source)
+        live_raw = observed_fetch(FWP_LIVE_URL)
         SOURCE_CAPTURE.write_text(json.dumps({
             "checked_at": datetime.now(timezone.utc).isoformat(),
             "primary": {"url": args.url, "html": primary_raw},
@@ -525,7 +555,7 @@ def main():
             date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/" + date
             for url in (month_url, date_url):
                 if url not in captures:
-                    captures[url] = fetch(url)
+                    captures[url] = observed_fetch(url)
             bbc_observations.extend(full_time_observations(
                 captures[month_url], known, date, month_url, match_fixture, captures[date_url],
             ))
@@ -536,6 +566,19 @@ def main():
             "bbc": [{"url": url, "html": raw} for url, raw in captures.items()],
         }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         by_source = {"primary_awards": [], "fwp_fixtures": [], "fwp_live": [], "bbc": bbc_observations}
+    if source_log is not None:
+        for rows in by_source.values():
+            for item in rows:
+                observation = item["observation"]
+                if not str(observation.get("status", "")).upper().startswith("FT"):
+                    continue
+                home_score, away_score = observation.get("home_score"), observation.get("away_score")
+                if home_score is None or away_score is None:
+                    continue
+                record_source(
+                    observation.get("source_url", ""), "final_score", f"{home_score}-{away_score}",
+                    observation.get("date", ""), observation["home"], observation["away"],
+                )
     observations = dedupe_observations(sum(by_source.values(), []))
     history = history_rows(data)
     classified = []
@@ -565,7 +608,7 @@ def main():
     if not blocked:
         try:
             def capture_archived_source(url):
-                raw = fetch(url)
+                raw = observed_fetch(url)
                 capture = json.loads(SOURCE_CAPTURE.read_text(encoding="utf-8"))
                 capture["archived_replays"] = {"url": url, "html": raw}
                 SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -580,7 +623,7 @@ def main():
     # round's source even when the current source can no longer contain them.
     from retry_match_decisions import retry_archived_holds, scan_unfinished_archived_ties
     def capture_retry_source(url):
-        raw = fetch(url)
+        raw = observed_fetch(url)
         capture = json.loads(SOURCE_CAPTURE.read_text(encoding='utf-8'))
         capture.setdefault('retried_decisions', []).append({'url': url, 'html': raw})
         SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')

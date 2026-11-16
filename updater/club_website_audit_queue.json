@@ -5,7 +5,7 @@
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 317,
+  "eligible_linked": 316,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -9418,15 +9418,17 @@
         "Heacham FC"
       ],
       "current_competition": false,
-      "website": "https://www.heachamfootballclub.co.uk/",
-      "status": "verified",
+      "website": null,
+      "status": "withdrawn",
       "priority": 3,
       "evidence": [
         {
           "url": "https://www.heachamfootballclub.co.uk/",
-          "evidence_url": "https://www.heachamfootballclub.co.uk/teams/243631",
+          "evidence_url": "https://www.heachamfootballclub.co.uk/contact",
           "verified_on": "2026-11-16",
-          "ledger": "club_website_verified_batch_24.json"
+          "ledger": "club_website_verified_batch_24.json",
+          "status": "club_confirmed_offline",
+          "reason": "The club secretary confirmed by email on 16 November that the club website is no longer running. The former contact page identifies the secretary."
         }
       ]
     },

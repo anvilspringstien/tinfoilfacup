@@ -22,9 +22,12 @@ function registry(eligible,competition){
 function promote(html,competition,ledger){
  const eligible=literalRange(html,'ELIGIBLE','[',']').value,existing=literalRange(html,'CLUB_WEBSITES','{','}').value;
  if(new Set(eligible.map(c=>c.name)).size!==eligible.length)throw Error('Duplicate eligible club identities');
- const names=registry(eligible,competition),approved={...existing},seen=new Set(),accepted=[],errors=[];
+ const names=registry(eligible,competition),approved={...existing},seen=new Set(),accepted=[],removed=[],errors=[];
  if(ledger.schema_version!==1||!Array.isArray(ledger.verified))throw Error('Expected schema_version=1 and verified array');
- for(const item of ledger.verified){
+ const withdrawn=ledger.withdrawn??[];
+ if(!Array.isArray(withdrawn))throw Error('Expected withdrawn array');
+ const reviews=[...ledger.verified.map(item=>[item,false]),...withdrawn.map(item=>[item,true])];
+ for(const [item,remove] of reviews){
   const {club,url,evidence_url,status}=item,verified_on=item.verified_on||ledger.verified_on;
   if(!Array.isArray(item.aliases||[])){errors.push('Invalid aliases: '+club);continue}
   const identities=[club,...(item.aliases||[])];
@@ -32,17 +35,22 @@ function promote(html,competition,ledger){
   if(identities.some(n=>normal(n)!==normal(club))){errors.push('Alias identity mismatch: '+club);continue}
   if(identities.some(n=>seen.has(n))||new Set(identities).size!==identities.length){errors.push('Duplicate approval: '+club);continue}
   identities.forEach(n=>seen.add(n));
-  if(status!=='verified_official_club_site'){errors.push('Not independently verified: '+club);continue}
+  const expectedStatus=remove?'club_confirmed_offline':'verified_official_club_site';
+  if(status!==expectedStatus||(remove&&(typeof item.reason!=='string'||!item.reason.trim()))){errors.push('Not independently verified: '+club);continue}
   if(!/^\d{4}-\d{2}-\d{2}$/.test(verified_on||'')||!evidence_url){errors.push('Missing evidence/date: '+club);continue}
   try{const u=new URL(url),e=new URL(evidence_url);
    if(u.protocol!=='https:'||e.protocol!=='https:'||u.username||u.password||e.username||e.password)throw Error('HTTPS required');
    if(/(^|\.)(facebook\.com|instagram\.com|twitter\.com|x\.com|wikipedia\.org)$/i.test(u.hostname))throw Error('Social/directory URL');
   }catch(err){errors.push('Invalid URL for '+club+': '+err.message);continue}
   if(identities.some(n=>existing[n]&&existing[n]!==url)){errors.push('Existing mapping conflict: '+club);continue}
-  for(const name of identities)if(!existing[name]){approved[name]=url;accepted.push(name)}
+  for(const name of identities){
+   if(remove){
+    if(Object.hasOwn(existing,name)){delete approved[name];removed.push(name)}
+   }else if(!existing[name]){approved[name]=url;accepted.push(name)}
+  }
  }
  if(errors.length)throw Error(errors.join('\n'));
- return {schema_version:1,eligible:eligible.length,known_competition_identities:names.size,accepted,website_count:Object.keys(approved).length,websites:Object.fromEntries(Object.entries(approved).sort(([a],[b])=>a.localeCompare(b,'en-GB')))};
+ return {schema_version:1,eligible:eligible.length,known_competition_identities:names.size,accepted,removed,website_count:Object.keys(approved).length,websites:Object.fromEntries(Object.entries(approved).sort(([a],[b])=>a.localeCompare(b,'en-GB')))};
 }
 function applyMapping(html,websites){const r=literalRange(html,'CLUB_WEBSITES','{','}');return html.slice(0,r.begin)+JSON.stringify(websites)+html.slice(r.end)}
 function main(){
@@ -53,7 +61,7 @@ function main(){
  const html=fs.readFileSync(beta,'utf8'),result=promote(html,JSON.parse(fs.readFileSync(canonical,'utf8')),JSON.parse(fs.readFileSync(ledgerFile,'utf8')));
  fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
  if(args.includes('--apply-beta'))fs.writeFileSync(beta,applyMapping(html,result.websites));
- console.log(JSON.stringify({eligible:result.eligible,known_competition_identities:result.known_competition_identities,accepted:result.accepted.length,website_count:result.website_count,beta_applied:args.includes('--apply-beta')},null,2));
+ console.log(JSON.stringify({eligible:result.eligible,known_competition_identities:result.known_competition_identities,accepted:result.accepted.length,removed:result.removed.length,website_count:result.website_count,beta_applied:args.includes('--apply-beta')},null,2));
 }
 module.exports={literalRange,normal,registry,promote,applyMapping};
 if(require.main===module){try{main()}catch(error){console.error(error.message);process.exitCode=1}}

@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'updater/import_draw_announcement.py'
+      - 'updater/draw_ball_numbers.py'
       - 'competition.json'
       - 'clubfinder.html'
       - 'beta/clubfinder-beta.html'

@@ -27,6 +27,16 @@ assert.equal(applied.slice(0,after.begin),html.slice(0,range.begin));assert.equa
 assert.deepEqual(literalRange(applied,'ELIGIBLE','[',']').value,[{name:'Nearest FC'}]);
 assert.equal(applyMapping(applied,report.websites),applied,'publication is idempotent');
 const second=promote(applied,competition,ledger([row('League Town'),row('Nearest',{aliases:['Nearest FC']})]));assert.deepEqual(second.accepted,[]);
+const withdrawal=row('Nearest',{aliases:['Nearest FC'],status:'club_confirmed_offline',reason:'The club secretary confirmed the site closed.'});
+const withdrawalLedger={...ledger([]),withdrawn:[withdrawal]};
+const retired=promote(applied,competition,withdrawalLedger);
+assert.deepEqual(retired.removed,['Nearest','Nearest FC']);
+assert.equal(retired.websites.Nearest,undefined);
+assert.equal(retired.websites['Nearest FC'],undefined);
+assert.equal(retired.websites['Legacy FC'],'https://legacy.example/');
+assert.deepEqual(promote(applyMapping(applied,retired.websites),competition,withdrawalLedger).removed,[]);
+assert.throws(()=>promote(existing,competition,withdrawalLedger),/Existing mapping conflict/);
+assert.throws(()=>promote(applied,competition,{...ledger([]),withdrawn:[{...withdrawal,reason:''}]}),/Not independently verified/);
 assert(promote(html,competition,ledger([row('Historic Town')])).websites['Historic Town'],'archived canonical identity remains known after draw advancement');
 // Actual reviewed ledger must pass against the real competition and reproduce the BETA map.
 const realHtml=fs.readFileSync('beta/clubfinder-beta.html','utf8'),realCompetition=JSON.parse(fs.readFileSync('competition.json','utf8'));

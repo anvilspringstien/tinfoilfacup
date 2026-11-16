@@ -79,16 +79,6 @@
       ]
     },
     {
-      "club": "Heacham FC",
-      "aliases": [],
-      "url": "https://www.heachamfootballclub.co.uk/",
-      "evidence_url": "https://www.heachamfootballclub.co.uk/teams/243631",
-      "verified_on": "2026-11-16",
-      "status": "verified_official_club_site",
-      "verification_notes": "Public senior club website or club-managed first-team page identifies the club.",
-      "supporting_evidence_urls": []
-    },
-    {
       "club": "Heanor Town FC",
       "aliases": [],
       "url": "https://www.heanortownfc.co.uk/",
@@ -149,6 +139,17 @@
       "status": "verified_official_club_site",
       "verification_notes": "The secretary confirmed the club website by email. The contact page identifies the senior club and secretary. Use the readable club contact page while the homepage redirect is unresolved.",
       "supporting_evidence_urls": []
+    }
+  ],
+  "withdrawn": [
+    {
+      "club": "Heacham FC",
+      "aliases": [],
+      "url": "https://www.heachamfootballclub.co.uk/",
+      "evidence_url": "https://www.heachamfootballclub.co.uk/contact",
+      "verified_on": "2026-11-16",
+      "status": "club_confirmed_offline",
+      "reason": "The club secretary confirmed by email on 16 November that the club website is no longer running. The former contact page identifies the secretary."
     }
   ],
   "held": [
