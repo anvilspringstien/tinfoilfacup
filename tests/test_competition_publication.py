@@ -143,5 +143,17 @@ class PublicationTests(unittest.TestCase):
                 self.assertNotIn('--force', after)
 
 
+    def test_health_audit_must_succeed_before_competition_publication(self):
+        workflow = (ROOT/'.github/workflows/competition-health.yml').read_text()
+        audit, = (step for step in workflow.split('\n      - ') if 'run: python updater/competition_health.py' in step)
+        publish, = (step for step in workflow.split('\n      - ') if 'git push origin' in step)
+        artifact, = (step for step in workflow.split('\n      - ') if 'name: competition-health' in step)
+        self.assertLess(workflow.index(audit), workflow.index(publish))
+        self.assertNotIn('continue-on-error:', audit)
+        self.assertIn("if: ${{ github.ref_name == 'main' }}", publish)
+        self.assertIn('if: always()', artifact)
+        self.assertIn('updater/competition-health.json', artifact)
+
+
 if __name__ == '__main__':
     unittest.main()
