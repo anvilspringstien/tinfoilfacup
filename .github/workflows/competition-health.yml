@@ -8,9 +8,14 @@ on:
     - cron: "17 19 * * *"
   push:
     paths:
+      - "updater/guard_publication_base.py"
+      - "tests/test_competition_publication.py"
       - "competition.json"
       - "clubfinder.html"
       - "journey-club-registry.json"
+      - "updater/match_decisions.py"
+      - "updater/retry_match_decisions.py"
+      - "tests/test_match_decisions.py"
       - "updater/probe_fwp_source.py"
       - "updater/run_source_resilient.py"
       - "updater/sync_competition_chronology_v2.py"
@@ -40,6 +45,7 @@ on:
       - "updater/embedded_snapshot_regression.py"
       - "updater/enrich_later_round_venues.py"
       - "updater/enrich_replay_kickoffs_and_active_venues.py"
+      - "updater/result_metadata.py"
       - "updater/propagate_active_fixture_venues.py"
       - "updater/historical-match-venue-ledger.json"
       - "updater/propagate_historical_match_venues.py"
@@ -72,6 +78,7 @@ permissions:
 concurrency:
   group: competition-state-${{ github.ref_name }}
   cancel-in-progress: false
+  queue: max
 
 jobs:
   health:
@@ -82,6 +89,15 @@ jobs:
           # Scheduled runs can wait behind the shared concurrency lock. Re-resolve the branch
           # head when execution starts so a queued run does not build from a stale event SHA.
           ref: ${{ github.ref_name }}
+
+      - name: Guard publication serialization and stale candidate rejection
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+
+      - name: Record candidate input revision
+        run: git rev-parse HEAD > "$RUNNER_TEMP/competition-build-base"
+
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
 
       - name: Probe public competition source
         run: python updater/run_source_resilient.py --label "Football Web Pages probe" -- python updater/probe_fwp_source.py
@@ -98,6 +114,9 @@ jobs:
       - name: Apply reviewed exceptional replay dispositions
         run: python updater/apply_exceptional_replay_dispositions.py
 
+      - name: Ingest verified active-round results before health audit
+        run: python updater/run_source_resilient.py --label "Health active-round results" -- python updater/auto_round_results.py --publish
+
       - name: Reconcile replay-participant result-history aliases
         run: python updater/reconcile_result_history_aliases.py
 
@@ -111,7 +130,9 @@ jobs:
         run: python updater/replay_completion_guard.py
 
       - name: Enrich later-round fixture venues
-        run: python updater/enrich_later_round_venues.py
+        run: |
+          python -m unittest discover -s tests -p 'test_conditional_fixture_venues.py' -v
+          python updater/enrich_later_round_venues.py
 
       - name: Enrich replay kick-offs and active fixture venues
         run: python updater/enrich_replay_kickoffs_and_active_venues.py
@@ -126,7 +147,6 @@ jobs:
         run: python updater/kickoff_venue_regression.py
 
       - name: Audit full competition chronology
-        id: health_audit
         run: python updater/competition_health.py
 
       - name: Apply guarded Clubfinder competition presentation fixes
@@ -234,7 +254,9 @@ jobs:
           else
             git commit -m "Update canonical competition chronology"
             git pull --rebase origin "${GITHUB_REF_NAME}"
+            python updater/guard_publication_base.py --base "$(cat "$RUNNER_TEMP/competition-build-base")" --upstream "origin/${GITHUB_REF_NAME}"
             echo "Re-running critical publish guards after rebase..."
+            python updater/competition_regression_guard.py
             python updater/reconcile_result_history_aliases.py --check
             python updater/extra_preliminary_replay_regression.py
             node updater/amersham_card_render_regression.js
@@ -259,4 +281,3 @@ jobs:
             updater/second-qualifying-sync-report.json
             updater/kickoff-venue-enrichment-report.json
             updater/venue-copy-consistency-report.json
-

@@ -1,0 +1,423 @@
+# Club website audit
+
+Website coverage is independent of the directory export request. Only reviewed
+club-published evidence is promoted. Missing, conflicting or ambiguous candidates
+stay in the queue; no domain is generated from a club name.
+
+## 11 November 2026 checkpoint — missing-link coverage, batches 21–22
+
+Batch 21 carries forward ten club sites reviewed on 10 November. Batch 22 adds
+twelve senior club websites from Frickley Athletic through Great Yarmouth Town.
+
+- Original qualifying-club coverage: 252 to 274 of 651. There are 377 missing.
+- All 40 clubs in the current Second Round Proper fixtures are linked and verified.
+- Club-published evidence is in [batch 21](../updater/club_website_verified_batch_21.json)
+  and [batch 22](../updater/club_website_verified_batch_22.json). The Gosport website
+  check is separate from the delivery status of its published staff addresses.
+
+## 8 November 2026 checkpoint — missing-link coverage, batch 20
+
+Reviewed twelve previously unreviewed missing origins, Fairford Town through
+Felixstowe & Walton United. All twelve senior sites are approved; none are held.
+
+- Original qualifying-club coverage: 240 -> 252 of 651 linked; 399 missing.
+- All 80 current clubs remain linked and verified. Sources and access limitations
+  are recorded in [batch 20](../updater/club_website_verified_batch_20.json).
+- Only the BETA website map changes in the application. The queue and Stage C
+  report are refreshed; all 651 search origins and protected data are unchanged.
+
+## 7 November 2026 checkpoint — missing-link coverage, batch 19
+
+Reviewed twelve previously unreviewed missing origins, Emley through Eynesbury.
+Ten senior sites are approved. Enfield FC is held for an unavailable destination;
+Epsom & Ewell is held because its domain serves a hosting placeholder.
+
+- Original qualifying-club coverage: 230 -> 240 of 651 linked; 411 missing.
+- All 80 current clubs remain linked and verified. Sources and access limitations
+  are recorded in [batch 19](../updater/club_website_verified_batch_19.json).
+- Only the BETA website map changes in the application. The queue and Stage C
+  report are refreshed; all 651 search origins and protected data are unchanged.
+
+## 6 November 2026 checkpoint — missing-link coverage, batch 18
+
+Reviewed twelve previously unreviewed missing origins, Dulwich Hamlet through
+Ely City. Ten senior-club links are approved. Dunstable is held for an unavailable
+new-club homepage; East Cowes Victoria is held pending a current preferred site.
+
+- Original qualifying-club coverage: 220 -> 230 of 651 linked; 421 missing.
+- Verified queue records: 264 -> 274. All 80 current clubs remain linked and verified.
+- Sources, public reader retrieval limitations and holds are in
+  [batch 18](../updater/club_website_verified_batch_18.json). Similar identities
+  remain separate and previously documented holds are untouched.
+- The BETA website map, queue and Stage C report are refreshed. All 651 search
+  origins, competition and location data, and protected Clubfinder are unchanged.
+  No email is sent.
+
+## 5 November 2026 checkpoint — missing-link coverage, batch 17
+
+Reviewed twelve previously unreviewed missing origins, Deeping Rangers through
+Dudley Town. Ten official senior-club destinations are approved. Downham Town and
+Droylsden are held for unavailable preferred club-published destinations. Earlier
+documented held/ambiguous cases remain unchanged.
+
+- Original qualifying-club coverage: 210 -> 220 of 651 linked.
+- Missing links: 441 -> 431. Verified queue records: 254 -> 264.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Sources and holds are recorded in
+  [batch 17](../updater/club_website_verified_batch_17.json). Dereham's homepage
+  and Devizes' committee are readable through the public reader despite ordinary
+  timeout/403 respectively. No restriction bypassed. Historical corroboration
+  is labelled; conflicting old league, officer and postcode wording is not a
+  competition or location correction.
+- Dorking clubs, Dudley clubs, senior/youth Devizes and Droitwich, and Droylsden/
+  Droylsden Athletic remain distinct. No social, directory or venue-only site
+  is promoted. Desborough's current club-managed site is separate from its old archive.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
+## 4 November 2026 checkpoint — missing-link coverage, batch 16
+
+Reviewed twelve previously unreviewed missing origins, Cowes Sports through Dearne
+& District. Ten official senior-club destinations are approved. Cowes is held for
+a placeholder/unavailable destination; Dearne is held for a disabled candidate
+and unresolved current senior website evidence. Earlier documented holds stay unchanged.
+
+- Original qualifying-club coverage: 200 -> 210 of 651 linked.
+- Missing links: 451 -> 441. Verified queue records: 244 -> 254.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Club-published identity/contact evidence, league corroboration and holds are in
+  [batch 16](../updater/club_website_verified_batch_16.json). National League
+  2024/25 evidence is explicitly historical corroboration, not current membership.
+- Cray Valley and Cray Wanderers, Darlaston and Darlington, Ashton clubs,
+  Dagenham & Redbridge and Redbridge, Daventry Town and United remain separate.
+  Disabled/placeholder, youth-only, social and directory destinations are not promoted.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
+## 3 November 2026 checkpoint — missing-link coverage, batch 15
+
+Reviewed twelve previously unreviewed missing origins, Coleshill through Coventry
+United. Ten official senior-club destinations are approved. Corsham is held for
+a generic placeholder homepage; Coventry United is held for an accessible preferred
+current destination. Earlier documented held/ambiguous cases stay unchanged.
+
+- Original qualifying-club coverage: 190 -> 200 of 651 linked.
+- Missing links: 461 -> 451. Verified queue records: 234 -> 244.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Sources and holds are recorded in
+  [batch 15](../updater/club_website_verified_batch_15.json). Corinthian links to
+  its dedicated senior football section, supported by its own legal-identity
+  page and SCEFL. The general golf/venue homepage is not substituted. Historical
+  and inactive U19 corroboration is explicitly labelled as such.
+- Corinthian and Corinthian-Casuals, Concord and Concorde Rangers, Colney Heath
+  and London Colney, Coventry Sphinx/United/City remain separate. Old archives,
+  junior-only sites and social/directory destinations are not promoted.
+- Congleton's information-page domain strings and stadium differences are not
+  replacement mappings or location corrections. No access restrictions bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
+## 2 November 2026 checkpoint — missing-link coverage, batch 14
+
+Reviewed twelve previously unreviewed missing origins, Chislehurst Glebe through
+Cockfosters. Ten official senior-club destinations are approved. Cirencester is
+held for unavailable club evidence; Clay Cross is held for a preferred current
+destination. Earlier documented held/ambiguous cases are skipped unchanged.
+
+- Original qualifying-club coverage: 180 -> 190 of 651 linked.
+- Missing links: 471 -> 461. Verified queue records: 224 -> 234.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Evidence and holds are recorded in
+  [batch 14](../updater/club_website_verified_batch_14.json). Chislehurst's old
+  club-managed site explicitly directs visitors to its new domain. Cleethorpes'
+  own published website link selects its current club-managed Pitchero site;
+  its unavailable custom domain is not promoted. Clevedon's homepage/contact
+  are publicly readable via the reader despite ordinary GET 403. No restriction
+  is bypassed. Historical league corroboration is labelled as such.
+- Clapton and Clapton Community, Clevedon Town and United, football and rugby/
+  cricket clubs remain separate. No youth-only, directory or social destination
+  is promoted, and website ground details are not location corrections.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  Queue and Stage C source report are refreshed. No email is sent.
+
+## 1 November 2026 checkpoint — missing-link coverage, batch 13
+
+Reviewed twelve previously unreviewed missing origins, Charnock Richard through
+Chipstead. All twelve official senior-club destinations are approved; no new
+holds. Earlier documented held/ambiguous cases are skipped unchanged.
+
+- Original qualifying-club coverage: 168 -> 180 of 651 linked.
+- Missing links: 483 -> 471. Verified queue records: 212 -> 224.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Club-published evidence and league/association corroboration are recorded in
+  [batch 13](../updater/club_website_verified_batch_13.json). Chelmsford's homepage
+  and contact are readable through the public reader despite ordinary GET 403;
+  no access restriction was bypassed. U19 directories corroborate the parent
+  websites, not senior grounds. Historical league records are labelled as such.
+- Cheadle Town and Cheadle Heath Nomads, Surrey and Kent Chipstead, Chesham and
+  Cheshunt remain separate. No youth-only, venue, social or directory destination
+  is promoted. Chertsey's Fanbase booking link is not a replacement homepage.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  The queue and Stage C source report are refreshed. No email is sent.
+
+## 31 October 2026 checkpoint — missing-link coverage, batch 12
+
+Reviewed twelve previously unreviewed missing origins, Burnham through Chadderton.
+All twelve official senior-club destinations are approved; there are no new holds
+in this batch. Earlier documented held/ambiguous cases were skipped unchanged.
+
+- Original qualifying-club coverage: 156 -> 168 of 651 linked.
+- Missing links: 495 -> 483. Verified queue records: 200 -> 212.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Bury and Bury Town, Cambridge City and United, Derbyshire and Norfolk Buxton,
+  Carshalton Athletic and Carshalton FC, and Chadderton and Chadderton North
+  remain separate identities. No venue, directory, social or youth-only page
+  is promoted as a senior-club destination.
+- Club-published identity/contact evidence and league/association corroboration
+  are recorded in batch 12. Buxton's U19 league directory corroborates the parent
+  club website/address; senior identity is established by its own first-team site.
+  Carlton's homepage/contact are readable through the public reader, despite an
+  ordinary homepage GET returning 403. No access restriction was bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  The queue and Stage C source report are refreshed. No email is sent.
+
+## 30 October 2026 checkpoint — missing-link coverage, batch 11
+
+Reviewed twelve previously unreviewed missing origins, Brightlingsea Regent
+through Burgess Hill Town. Eleven official club destinations are approved.
+Buckland Athletic is held: its own contact page establishes the senior club,
+but the preferred homepage returned 403 on ordinary GET and timed out in the
+public reader. Earlier documented holds were skipped unchanged.
+
+- Original qualifying-club coverage: 145 -> 156 of 651 linked.
+- Missing links: 506 -> 495. Verified queue records: 189 -> 200.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Club-published identity/contact evidence and league/association corroboration
+  are recorded in batch 11. Brockenhurst's published www address redirects to
+  its canonical non-www homepage. Brixham is readable through the public reader,
+  although ordinary retrieval returned 406; no restriction was bypassed.
+- Broadfields United and resident Rayners Lane remain separate; Brocton and
+  Brockenhurst remain separate. No venue, directory, social or youth-only site
+  is substituted for a senior club. Website/address discrepancies are not
+  promoted as location changes.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins are unchanged.
+  The queue and Stage C source report are refreshed. No email is sent.
+
+## 29 October 2026 checkpoint — missing-link coverage, batch 10
+
+Reviewed twelve previously unreviewed missing origins, Bournemouth Poppies through
+Bridlington Town. Ten official destinations are approved. Bovey Tracey remains
+held for unavailable live club evidence (reader 503 / ordinary GET 406), and
+Bridlington Town remains held for restricted retrieval (403). Earlier documented
+holds were skipped unchanged; no restriction was bypassed.
+
+- Original qualifying-club coverage: 135 -> 145 of 651 linked.
+- Missing links: 516 -> 506. Verified queue records: 179 -> 189.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Bournemouth Poppies is distinct from AFC Bournemouth; Bradford Park Avenue,
+  Bradford Town and Bradford City remain separate. No directory/social page is
+  promoted, and venue or postcode differences are not location corrections.
+- Evidence and league/association corroboration are recorded in batch 10.
+  Brentwood's public homepage and contact page are readable through the research
+  reader, while ordinary CLI retrieval returned 403; no restriction was bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data, protected Clubfinder and all 651 search origins remain unchanged.
+  No email is sent.
+
+## 28 October 2026 checkpoint — missing-link coverage, batch 09
+
+Reviewed twelve previously unreviewed missing origins, Bishop Auckland through
+Bourne Town. Ten official club destinations are approved. Blackstones remains
+held for a preferred current senior homepage; Boro Rangers remains held because
+its league-linked club site is unavailable. Earlier holds are skipped unchanged.
+
+- Original qualifying-club coverage: 125 -> 135 of 651 linked.
+- Missing links: 526 -> 516. Verified queue records: 169 -> 179.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Boston Town/United, Bishop's Cleeve/Colts and Stortford/Community/Swifts remain
+  separate identities. No directory or social destination is promoted.
+- Club identity/contact evidence and league corroboration are recorded in batch 09.
+  Bishop Auckland and Stortford homepages returned 200 on ordinary HTTP checks
+  after research-reader timeouts. Blyth's public homepage and directions are
+  readable through the research reader, while ordinary CLI retrieval returned 403;
+  no restriction was bypassed.
+- Only the BETA website map literal changes in the application. Competition,
+  location data and all search origins remain unchanged. No email is sent.
+
+## 27 October 2026 checkpoint — missing-link coverage, batch 08
+
+Reviewed twelve previously unreviewed missing origins, Belper United through
+Binfield. Eleven club-published destinations are approved. Biggleswade Town is
+held pending a reliably accessible preferred senior homepage: its club-managed
+contact page is readable, but its senior homepage returned 503 and the separate
+`.com` destination chiefly presents the Langford Road venue. FC, Town and United
+remain distinct identities. Earlier holds are skipped and unchanged.
+
+- Original qualifying-club coverage: 114 -> 125 of 651 linked.
+- Missing links: 537 -> 526. Verified queue records: 158 -> 169.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Bideford's club-published company details explicitly identify its club-managed
+  Pitchero website. No generic directory or social page is promoted.
+- Evidence, league corroboration and the Town hold are recorded in batch 08.
+  Only the BETA website map literal changes in the application; no competition,
+  location or search-origin data changes. No email is sent.
+
+## 26 October 2026 checkpoint — missing-link coverage, batch 07
+
+Reviewed twelve previously unreviewed missing origins, Bashley through Belper
+Town. Eleven club-published destinations are approved; Beckenham Town stays
+missing because the league-linked site could not be read. Earlier holds remain
+separate and unchanged.
+
+- Original qualifying-club coverage: 103 -> 114 of 651 linked.
+- Missing links: 548 -> 537. Verified queue records: 147 -> 158.
+- All 80 current clubs remain verified and linked; four existing-link holds remain.
+- Basildon's expired custom-domain page links its working, current club-managed
+  Pitchero destination. Bedfont FC and Bedfont Sports remain distinct identities.
+- Evidence and the Beckenham hold are recorded in batch 07. Only the BETA website
+  map literal changes; no ground, eligibility or competition data is edited.
+
+## 23 October 2026 checkpoint — missing-link coverage, batch 06
+
+Reviewed the first 30 missing qualifying-club websites. Batch 06 records 27 new
+approved links with club-published evidence. Abbey Hey, Barking and Barton Town
+remain missing pending an accessible, preferred current destination; individual
+findings are recorded in the ledger's held section.
+
+- Original qualifying-club coverage: 76 -> 103 of 651 linked.
+- Missing links: 575 -> 548. Verified queue records: 120 -> 147.
+- All 80 current clubs remain verified and linked. The four older existing-link
+  holds below remain unresolved and unchanged.
+- Only the website map literal changes in the BETA application. Eligibility,
+  competition data and protected original Clubfinder are unchanged.
+- Club website identity approval does not certify every ground/address claim on
+  that website. Welwyn's first-team page specifies a 2026/27 ground while its
+  homepage still mentions an older one; Totton also retains an older footer
+  address. These are candidates for details checks, not manual competition edits.
+
+## Proposed club-details check within outreach
+
+The desktop presentation and donation flow are now user-accepted. Fold a simple
+details check into the planned club introduction, beginning with current clubs.
+This is a proposal: no messages are sent by this audit or this change.
+
+1. Use the approved front-door crest, a named Anvil Springstien sign-off and the
+   public https://tinfoilfacup.com/ link. Explain the supporter/grassroots purpose.
+2. Include the exact club name, ground, postcode and official website currently
+   shown by Clubfinder. Clearly identify them as our current published details.
+   Ask for a simple all-correct reply or corrections; no account is required.
+3. Invite the recipient to visit the site and enter their ground's postcode.
+   Preflight that actual postcode through the three-choice search before sending:
+   shared grounds and later entrants can mean their club will not appear. For a
+   club without a reliable search route, use the email details panel instead of
+   promising that postcode entry will display them. A dedicated club-view link is
+   a possible later improvement, not an existing feature.
+4. Resolve the recipient from the club's own current public general/secretary
+   contact page and review the personalised message before authorised sending.
+   Maintain a small private contact log: exact club identity, contact source/date,
+   sent date, Gmail thread, response and any fields explicitly confirmed. Keep
+   addresses and correspondence out of the public repository.
+5. Distinguish public-source verification from direct club confirmation. Never
+   label silence as confirmation. A delayed or absent reply does not block a
+   website link already supported by reviewed public evidence.
+6. Review replies against the sender's club role and public evidence, then feed
+   supported corrections through the relevant CLI/data review route. No automatic
+   inbox-to-live updates and no manual competition patches. Record what changed,
+   its source and date; a confirmation only covers the fields actually checked.
+7. Start with a small authorised pilot and review delivery, replies, corrections
+   and workload before expanding. Optionally send one gentle follow-up after
+   10–14 days; this is a proposed cadence, not a promise of a response or a
+   scheduled task. Honour requests for no further contact.
+
+The same invitation can introduce the product and improve its directory. There
+is no new runtime feature, extra page load or club login in this first approach.
+
+## 23 October 2026 checkpoint — older existing links
+
+Reviewed all 31 existing mappings awaiting independent verification. Batch 05
+records 27 approvals using club-published homepages, contact pages, stadium
+information or club history. Existing URLs are preserved: this batch adds evidence,
+not new links.
+
+- All 80 current First Round Proper clubs remain verified and linked.
+- Original qualifying-club coverage remains 76 of 651 linked; 575 are missing.
+- Queue records independently verified: 93 -> 120.
+- Existing links awaiting verification: 31 -> 4.
+- The CLI promotion accepts zero new mappings and reproduces the BETA application
+  byte-for-byte. Competition input bytes and all 651 eligible origins are unchanged.
+- The queue was rebuilt against the competition input updated on 23 October.
+
+Evidence and per-club review notes are in
+`updater/club_website_verified_batch_05.json`. Its `held` section is deliberately
+excluded from approved publication and records these follow-ups:
+
+| Club | Finding | Next step |
+| --- | --- | --- |
+| Ashington FC | Club identity is corroborated at Woodhorn Lane, but the homepage contains numerous unrelated gambling/supplement links. | Site-health review before approval; no claim is made about the cause. |
+| Barnoldswick Town FC | Existing custom domain could not be retrieved. The league and the club-managed Pitchero contact page agree on Silentnight Stadium, BB18 5LJ. | Review the differing replacement candidate: https://www.pitchero.com/clubs/barnoldswicktown/ |
+| Carlisle City FC | Existing domain serves a parking/for-sale page. | Confirm an authoritative replacement; do not approve the parked domain. |
+| Kendal Town FC | Homepage and contact page return HTTP 403 to the research reader. | Verify through an accessible club-published source or ordinary browser; no restriction was bypassed. |
+
+These four existing mappings have **not** been replaced, removed or marked
+verified. Their findings remain recorded for explicit review under the existing
+mapping-conflict policy. No email was sent.
+
+## 21 October 2026 checkpoint
+
+- All 80 current First Round Proper clubs have independently checked official
+  website links, including the 48 later entrants outside the original qualifying
+  search list.
+- Original qualifying-club coverage: 46 -> 76 of 651 linked clubs. The nearest-club
+  eligibility list remains exactly 651 clubs.
+- Across those original 651, 575 still need a link and 31 older existing links
+  still need independent verification. A linked club is not automatically a
+  verified club.
+- The current-club ledger records 80 clubs and 25 explicit eligible-name aliases.
+  The resulting website map contains 156 exact identities, including existing
+  aliases; that number is not a club count.
+
+Evidence is in `updater/club_website_verified_batch_04.json`. Source pages are
+club-owned homepages, club information/contact pages, or the club's own published
+links. Fleetwood's own Linktree links the main domain, news, ticket news and TV;
+its main site rejected automated retrieval, so no restriction was bypassed.
+Berkhamsted uses its club-managed Pitchero site, identified by its Broadwater
+address. Doncaster, Sutton, Huddersfield and Oxford lookalikes were rejected.
+
+## Repeatable CLI workflow
+
+1. Run `node updater/club_website_queue.js --out updater/club_website_audit_queue.json`.
+   Current clubs come first, followed by existing links awaiting verification,
+   missing origin-club links, then already-verified records. Only reviewed aliases
+   share evidence; similar names alone do not merge clubs.
+2. Research candidates from public club, league or association sources. Read
+   club-published identity/contact information. Record the exact club, HTTPS URL,
+   evidence URL, verification date and notes in a versioned reviewed ledger.
+   Record known canonical/eligible aliases explicitly. Escalate conflicting
+   mappings and identity ambiguity; continue with other clear records.
+3. Run `node updater/club_website_bulk_promote.js --ledger LEDGER.json --out /tmp/website-map.json`.
+   This validates against qualifying identities plus recognised canonical fixture
+   and archive identities. It rejects unknown clubs, unreviewed rows, unrelated
+   aliases, credentials, insecure URLs, duplicate approvals and replacement of
+   existing links. AFC prefixes remain meaningful (Blackpool is not AFC Blackpool).
+4. Add `--apply-beta` to reproduce the BETA website literal. This CLI can change
+   only that literal; it never writes competition.json, the protected original
+   Clubfinder, or the nearest-club list. Repeating an approved ledger is a no-op.
+5. Refresh the queue and the existing Stage C source report, run the website and
+   identity checks, then use the normal reviewed PR, green-check and Pages route.
+
+`club_website_bulk_audit.js` also accepts `--source-name` for provenance when a
+permitted CSV comes from another source. Candidate matching is never approval.
+A future permitted Non-League Network export can feed this same process.
+
+This is a persistent work queue and CLI publication process, not an unattended
+web-research service. Routine clear records can be handled under the agreed
+process; only ambiguous evidence or existing-link conflicts need a user decision.
+No email has been sent as part of the website audit.
+

@@ -7,19 +7,17 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "beta" / "clubfinder-beta.html"
 
 MOBILE_CSS = """
-/* BETA mobile: put the Call Sign and the full Pigeon Name on separate lines. */
+/* BETA mobile: preserve the two identity rows while allowing the name field to flex safely. */
 @media(max-width:680px){
- .campaign-identity{white-space:normal}
- .campaign-call-sign{display:block;overflow-wrap:anywhere}
- .campaign-identity-separator{display:none}
- .campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;min-width:0;margin-top:4px}
- .campaign-pigeon-label{flex:0 0 auto;white-space:nowrap}
+ .campaign-pigeon-name{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 6px;min-width:0}
+ .campaign-pigeon-label{flex:0 0 auto}
  .campaign-pigeon-name .pigeon-name-input{display:block;flex:1 1 205px;min-width:0;width:auto;max-width:none;padding:0 2px 1px;line-height:1.4}
 }
 """
 
 OLD_JS = "return 'Pigeon Call Sign: '+esc(callSign)+' · Pigeon Name: '+tinFoilPigeonNameInputHtml(saved);"
-NEW_JS = """return '<span class="campaign-call-sign">Pigeon Call Sign: '+esc(callSign)+'</span><span class="campaign-identity-separator" aria-hidden="true"> · </span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';"""
+NEW_JS = """return '<span class="campaign-call-sign">Pigeon Call Sign: '+esc(callSign)+'</span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';"""
+RESPONSIVE_JS = """return '<span class="campaign-call-sign"><span class="campaign-call-sign-label">Pigeon Call Sign:</span> <span class="campaign-call-sign-value">'+esc(callSign)+'</span></span><span class="campaign-pigeon-name"><span class="campaign-pigeon-label">Pigeon Name:</span> '+tinFoilPigeonNameInputHtml(saved)+'</span>';"""
 
 REPLACEMENTS = [
     (
@@ -39,9 +37,13 @@ REPLACEMENTS = [
 def patch(text):
     count = 0
     for before, after, label in REPLACEMENTS:
-        if text.count(after) == 1 and text.count(before) == 0:
+        # The responsive call-sign spans preserve the already-patched identity rows.
+        applied_count = text.count(after)
+        if after == NEW_JS:
+            applied_count += text.count(RESPONSIVE_JS)
+        if applied_count == 1 and text.count(before) == 0:
             continue  # Already patched; safe to run again.
-        if text.count(before) != 1 or text.count(after) != 0:
+        if text.count(before) != 1 or applied_count != 0:
             raise SystemExit(f"ABORT: {label} drifted or patch only partially applied")
         text = text.replace(before, after, 1)
         count += 1

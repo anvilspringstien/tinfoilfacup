@@ -1,0 +1,23 @@
+name: Production draw announcement metadata and display
+on:
+  pull_request:
+    paths:
+      - 'updater/import_draw_announcement.py'
+      - 'competition.json'
+      - 'clubfinder.html'
+      - 'tests/test_draw_announcement*'
+      - 'tests/fixtures/draw-announcement*'
+      - '.github/workflows/production-draw-announcement-tests.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m unittest discover -s tests -p 'test_draw_announcement.py' -v
+      - run: node tests/test_draw_announcement_display.js clubfinder.html
+      - run: python updater/competition_regression_guard.py

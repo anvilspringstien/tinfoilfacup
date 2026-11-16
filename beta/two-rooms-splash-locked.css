@@ -1,0 +1,59 @@
+/* One construction, two rooms. Viewport controls frame; furniture cannot. */
+:root{--cream:#f6f3e8;--field:#100f0d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#141210;color:var(--cream)}
+body{font-family:Poppins,"Helvetica Neue",Arial,sans-serif;font-weight:300;background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);background-attachment:fixed}
+.stage{height:100svh;padding:clamp(6px,1.2vh,13px);display:flex;min-height:0}
+.field{width:100%;max-width:628px;min-width:0;height:100%;margin:0 auto;overflow:hidden;background:var(--field);border:1px solid #818181;border-radius:12px;container-type:inline-size}
+.room{width:100%;max-width:580px;height:100%;min-height:0;margin:auto;display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center}
+.crest-compartment{width:100%;display:grid;place-items:center;padding-top:clamp(6px,5.8cqw,30px);flex:none}
+.crest{display:block;object-fit:contain;width:83.333%;max-width:450px;aspect-ratio:1;height:auto}
+.furniture{min-height:0;overflow:auto;overscroll-behavior:contain;width:100%;padding:12px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.furniture h1{font-weight:300;font-size:clamp(28px,8cqw,48px);line-height:1.08;margin:0}
+.furniture p{font-size:clamp(15px,3.4cqw,20px);line-height:1.3;margin:0}
+.furniture a,.furniture button{font:inherit;color:var(--cream);background:#292724;border:1px solid #818181;border-radius:11px;padding:12px 22px;text-decoration:none;cursor:pointer}
+.furniture label{display:block}
+.furniture input{font:inherit;width:min(100%,330px);padding:12px;border-radius:8px;border:1px solid #818181}
+.furniture .small{font-size:12px}
+@media(max-height:700px){.crest-compartment{padding-top:6px}.crest{width:min(83.333%,43svh)}}
+
+/* Desktop-only calibration from approved Splash geometry.
+   At 1680×889, approved frame is ~550px, rather than the 628px
+   natural CSS maximum. The frame and crest stay shared by both rooms.
+   No furniture-dependent scale or browser zoom. */
+@media(min-width:700px){
+ .field{max-width:550px}
+ .room{max-width:508px}
+ .crest{max-width:394px}
+}
+
+/* Furnishing only: approved frame, room and crest rules above remain frozen. */
+.splash-furniture{gap:0;text-align:left;padding:0 12px 12px;justify-content:flex-start}
+.splash-intro{width:max-content;max-width:100%;align-self:center;margin:clamp(12px,2.2vh,22px) auto 0}
+.splash-furniture .splash-intro h1{font-size:clamp(36px,12.85cqw,65px);font-weight:300;line-height:1.04;letter-spacing:-.035em;white-space:nowrap;margin:0}
+.splash-intro h1 span{display:block;font-size:52.083%;line-height:1.16;letter-spacing:0}
+.splash-furniture .splash-message{align-self:center;width:max-content;max-width:100%;font-size:clamp(16px,4.45cqw,23px);line-height:1.28;text-align:left;margin:clamp(28px,5.4vh,46px) 0 0}
+.splash-message span{display:block;white-space:nowrap}
+.splash-furniture .splash-start{align-self:center;display:block;text-decoration:none;font-size:clamp(16px,4vw,18px);padding:12px 27px;margin:auto 0;box-shadow:0 2px 6px #252525}
+.splash-furniture .splash-grassroots{align-self:center;width:100%;max-width:100%;margin:0;padding-top:10px;text-align:center;font-size:clamp(8px,1.45cqw,10px);line-height:1.3;white-space:nowrap}
+.splash-grassroots .short{display:none}
+@media(max-width:600px){.splash-grassroots .full{display:none}.splash-grassroots .short{display:inline}.splash-furniture .splash-grassroots{font-size:clamp(9px,2.6cqw,12px)}}
+@media(max-height:720px){.splash-intro{margin-top:6px}.splash-furniture .splash-message{margin-top:12px}.splash-furniture .splash-start{margin-top:auto;margin-bottom:auto}}
+
+/* Clubfinder furniture only; no changes to shared frame, crest or Splash. */
+.clubfinder-furniture{--clubfinder-lower-gap:clamp(16px,2.5vh,23px);gap:0;align-items:stretch;text-align:left;padding:clamp(8px,1.5vh,14px) 12px 14px}
+.clubfinder-laws{margin-top:auto;text-align:center;font-size:clamp(15px,4.45cqw,23px);letter-spacing:-.025em;line-height:1.38;padding:0;width:100%}
+.clubfinder-footnote.clubfinder-footnote{font-size:clamp(8px,1.65cqw,10px);line-height:1.3;text-align:center;margin:var(--clubfinder-lower-gap) 0 0;padding-top:0}
+.clubfinder-machine{flex-shrink:0;margin-top:var(--clubfinder-lower-gap);background:#084c61;border-radius:6px;overflow:hidden;width:max-content;max-width:100%;align-self:center}
+.clubfinder-search{display:flex;align-items:center;gap:10px;padding:20px 20px 0;justify-content:center}
+.clubfinder-furniture .clubfinder-search input{min-width:0;flex:0 1 175px;width:175px;background:#f7f7f7;color:#252525;border:0;border-radius:10px;padding:12px 14px;font-size:13px}
+.clubfinder-furniture .clubfinder-search button{flex:none;border:2px solid #f6f3e8;border-radius:10px;background:transparent;color:#f6f3e8;padding:10px 15px;font-size:13px;white-space:nowrap}
+.clubfinder-status{background:transparent;text-align:center;font-size:10px;line-height:1.3;padding:8px 8px 8px}
+.clubfinder-invocation.clubfinder-invocation{font-size:clamp(13px,4.25cqw,22px);line-height:1.3;text-align:center;white-space:nowrap;margin:var(--clubfinder-lower-gap) 0 0;padding-top:0}
+@media(max-width:420px){.clubfinder-search{padding:12px 12px 0;gap:8px}.clubfinder-furniture .clubfinder-search input{padding:10px 8px;font-size:12px}.clubfinder-furniture .clubfinder-search button{padding:8px 9px;font-size:12px}.clubfinder-laws{padding:0 4px}}
+
+/* Keep the long third law on one line on wider screens; allow natural wrapping on phones. */
+@media(min-width:700px){.clubfinder-laws>div{white-space:nowrap}}
+
+/* Title occupies the midpoint of the available crest-to-laws space. */
+.clubfinder-furniture .clubfinder-laws-title{align-self:center;text-align:center;font-size:clamp(36px,12.85cqw,65px);font-weight:300;letter-spacing:-.035em;line-height:1.04;white-space:nowrap;margin:auto 0 0}

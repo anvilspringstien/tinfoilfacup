@@ -1,7 +1,8 @@
 // Guarded, source-backed regression: both sides of conditional draws must resolve.
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const html=fs.readFileSync('clubfinder.html','utf8');
-const data=JSON.parse(fs.readFileSync('competition.json','utf8'));
+// Freeze this historical scenario: the live active round must keep advancing.
+const data=JSON.parse(fs.readFileSync(require('path').join(__dirname,'../tests/fixtures/conditional-draw-resolution.json'),'utf8'));
 function extract(name){
   const start=html.indexOf('function '+name+'(');
   assert(start>=0,'missing '+name);

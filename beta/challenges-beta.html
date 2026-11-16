@@ -22,6 +22,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .challenge-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #1c1606}
 .secondary{background:white;border:1px solid #ddd;border-radius:10px;padding:10px 15px;cursor:pointer}
 .statusline{margin:14px 3px 0;font:13px/1.4 Arial,sans-serif;opacity:.75}
+.barry-eggs{display:flex;justify-content:center;gap:12px;margin:0 0 8px;color:#857b68}.barry-egg{display:block;width:14px;height:19px}.barry-egg svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5}.barry-egg.found{color:#d6ae50}.barry-egg.found svg{fill:currentColor}
 .deckcabwrap{width:100%;max-width:330px;margin:8px auto 0}.deckcabhead{display:flex;align-items:center;justify-content:space-between;padding:0 3px 6px;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#bcae95}
 .deckcabinet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding:2px 4px 8px 2px;touch-action:manipulation}
 .trophy-slot{position:relative;min-width:0;width:100%;aspect-ratio:1 / 1;border:1px solid #554b3d;background:#1b1814;border-radius:9px;padding:4px;overflow:hidden;cursor:default}
@@ -32,11 +33,25 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .trophy-viewer-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%;animation:trophy-view-in .2s ease-out both}
 .trophy-viewer-mat{width:min(610px,96vw,calc(100dvh - 110px));aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
 .trophy-viewer-mat:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px;border-radius:15px}
-.trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1)}
+.trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1),opacity .52s ease}
 .trophy-viewer-card.flipped{transform:rotateX(180deg)}
+.trophy-viewer-card.barry-flipped{transform:rotateX(360deg);opacity:0}
 .trophy-viewer-face{position:absolute;inset:0;overflow:hidden;border:2px solid #3b2c1d;border-radius:18px;background:#d7c49d;backface-visibility:hidden;box-shadow:0 18px 45px rgba(0,0,0,.38)}
 .trophy-viewer-face.back{transform:rotateX(180deg)}
 .trophy-viewer-face img{width:100%;height:100%;object-fit:cover;display:block}
+.barrys-bit-mat[hidden]{display:none!important}
+.barrys-bit-mat.revealed{transform:rotateX(0deg)}
+.barrys-bit-mat{transform:rotateX(-180deg);backface-visibility:hidden;transition:transform .52s cubic-bezier(.2,.75,.25,1);position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(3px,1vw,9px);padding:clamp(26px,5.5vw,48px);border:0;border-radius:18px;background:transparent url("barrys-bits-master-reverse.webp") center/100% 100% no-repeat;color:#34291b;box-shadow:0 18px 45px rgba(0,0,0,.38);font-family:Poppins,Arial,sans-serif;box-sizing:border-box}
+.barrys-bit-masthead{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex-shrink:0}
+.barrys-bit-masthead img{width:clamp(60px,18vw,140px);height:clamp(60px,18vw,140px);object-fit:contain}
+.barrys-bit-heading{font-size:clamp(16px,4.5vw,30px);font-weight:800;letter-spacing:.035em;line-height:1.1;color:#084c61}
+.barrys-bit-sub{font-size:clamp(10px,2.1vw,15px);font-weight:700;letter-spacing:.1em;color:#8d3329}
+.barrys-bit-rule{width:65%;border-top:2px solid #795632}
+.barrys-bit-fact{font-size:clamp(13px,3vw,21px);line-height:1.2;font-weight:700}
+.barrys-bit-story{font-size:clamp(10px,2.25vw,17px);line-height:1.35;margin:0;max-width:490px;overflow:auto;min-height:0}
+.barrys-bit-footer{display:flex;align-items:center;justify-content:center;max-width:100%;flex-shrink:0}
+.barrys-bit-credit{display:flex;flex-direction:column;font-size:clamp(9px,1.85vw,14px);line-height:1.25}
+@media(max-height:580px){.barrys-bit-mat{gap:3px}.barrys-bit-masthead img{width:clamp(52px,15vw,96px);height:clamp(52px,15vw,96px)}.barrys-bit-story{font-size:clamp(9px,2vw,13px)}}
 .trophy-viewer-hint{font:12px/1.3 Arial,sans-serif;letter-spacing:.04em;color:#d5c8b3;text-align:center;pointer-events:none}
 @keyframes trophy-view-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.trophy-viewer-inner{animation:none}.trophy-viewer-card{transition:none}}
@@ -47,8 +62,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .overlay{position:fixed;inset:0;background:rgba(8,9,9,.94);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .overlay::-webkit-scrollbar{display:none;width:0;height:0}
 .overlay.open{display:flex}
-.deck{width:min(1020px,100%);min-height:min(880px,94vh);height:auto;margin:auto;background:#100f0d;border:1px solid #332d26;border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.72);display:block;overflow:visible;user-select:none;-webkit-user-select:none}
-.deckbody{height:min(660px,calc(94vh - 220px));min-height:300px;display:flex;align-items:center;justify-content:center;padding:10px 14px 18px;overflow:hidden;background:#100f0d}
+.deck{width:min(628px,100%);min-height:min(880px,94vh);height:auto;margin:auto;background:#100f0d;border:1px solid transparent;border-radius:10px;box-shadow:0 30px 90px rgba(0,0,0,.72);display:block;overflow:visible;user-select:none;-webkit-user-select:none}
+.deckbody{height:min(660px,calc(94vh - 220px));min-height:300px;display:flex;align-items:center;justify-content:center;padding:10px 14px 18px;overflow:hidden;background:#100f0d;border-radius:9px 9px 0 0}
 .nav{width:52px;height:52px;border-radius:50%;border:2px solid #241e17;background:#f1dfb2;font-size:28px;cursor:pointer;justify-self:center;flex:0 0 auto}
 .nav[disabled]{opacity:.35;cursor:not-allowed}
 .cardstage{height:100%;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;perspective:1500px;touch-action:manipulation}
@@ -62,26 +77,33 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .placeholder{height:100%;display:grid;place-items:center;text-align:center;padding:30px;background:radial-gradient(circle,#f0dfb9,#cfb583)}
 .placeholder h3{font-size:36px;margin:0;color:#7e291f} .placeholder p{font:18px Arial,sans-serif;max-width:420px}
 .cup{width:120px;max-height:190px;object-fit:contain}
-.deckfoot{position:relative;z-index:3;background:#100f0d;padding:16px 12px 12px;flex:0 0 auto}
-.controlrail{display:grid;grid-template-columns:42px 310px 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
-.controls{display:flex;justify-content:center;align-items:center;gap:7px;width:310px}
+.deckfoot{position:relative;z-index:3;background:#100f0d;padding:16px 12px 12px;flex:0 0 auto;border-radius:0 0 9px 9px}
+.controlrail{display:grid;grid-template-columns:42px minmax(0,310px) 42px;align-items:center;justify-content:center;column-gap:7px;max-width:100%;margin:0 auto;white-space:nowrap}
+.controls{display:flex;justify-content:center;align-items:center;gap:7px}
+.deck-prompt{margin:0;color:#cdbfa8;font:11px/1.3 Arial,sans-serif;text-align:center;white-space:normal}
 .nav{width:42px;height:38px;border-radius:50%;border:1px solid #7b6a52;background:#2a251f;color:#f3e6c7;font-size:25px;cursor:pointer;flex:0 0 auto}
 .nav.prev,.nav.next{margin:0}
 .nav[disabled]{opacity:.28;cursor:not-allowed}
 .action{border:1px solid rgba(255,255,255,.16);border-radius:999px;height:27px;padding:0 12px;font:700 11px/1 Arial,sans-serif;cursor:pointer;width:96px;min-width:96px;box-shadow:0 3px 9px rgba(0,0,0,.22);display:inline-flex;align-items:center;justify-content:center}
-.accept{background:#d59b28;color:#1b1508}.complete{background:#2d6a4f;color:white}.exit{background:#302a23;color:#fff}
+.accept{background:#d59b28;color:#1b1508}.complete{background:#2d6a4f;color:white}
 .action[disabled]{background:#3a3732!important;color:#817a70!important;border-color:#504a43!important;box-shadow:none!important;opacity:1;cursor:not-allowed}
 .complete.done-state[disabled]{background:#2d6a4f!important;color:#fff!important;border-color:#3f8a69!important;box-shadow:0 3px 9px rgba(0,0,0,.22)!important;cursor:default}
 .accept.accepted-state[disabled]{background:#8b6927!important;color:#fff8e8!important;border-color:#aa8641!important;opacity:1!important;cursor:default}
+.tffc-support-row{display:flex;justify-content:center;margin:20px 0}
+.tffc-support-lozenge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;box-sizing:border-box;max-width:100%;padding:6px 18px;border:1px solid #d5ad26;border-radius:999px;background:#f0c64f;color:#17110b;font:800 11px/1.3 Arial,sans-serif;text-align:center;text-decoration:none;letter-spacing:.02em;opacity:.88}
+.tffc-support-lozenge:hover{opacity:1;filter:brightness(1.06)}
+.tffc-support-lozenge:focus-visible{outline:2px solid #f0c64f;outline-offset:4px}
+.tffc-support-row + .tffc-beta-help{margin-top:0}
+.tffc-support-row + .deck-footer-help{margin-top:0;padding-top:0;border-top:0}
+.deck-footer-help{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+.overlay .deckfoot{padding-bottom:0}
 .verifyrow{display:flex;justify-content:center;min-height:28px;margin-top:8px}
-.verifybadge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border:1px solid #756753;border-radius:999px;background:#2c271f;color:#ead9ad;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em;cursor:help}
-.verifybadge:focus-visible{outline:2px solid #ead9ad;outline-offset:3px}
-.verifyhelp{min-height:18px;text-align:center;margin-top:5px;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#cdbfa8;opacity:0;transition:opacity .16s}
-.verifyhelp.show{opacity:1}
+.verifybadge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border:1px solid #756753;border-radius:999px;background:#2c271f;color:#ead9ad;font:700 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.verifyhelp{text-align:center;margin:5px 0 0;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#cdbfa8}
 .feedback{min-height:18px;text-align:center;margin:0;padding:0 8px;font:12px/1.35 Arial,sans-serif;color:#dbc89d}
 .deck-feedback{
   width:min(610px,94vw);
-  min-height:24px;
+  min-height:39px;
   margin:2px auto 5px;
   padding:3px 10px;
   box-sizing:border-box;
@@ -99,6 +121,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .test-btn:hover{color:#d9c9ae}
 .test-btn:active{opacity:.7}
 
+/* Shed desktop proof: align the Challenges perimeter with the 550px Campaign field. */
+@media(min-width:1200px){.deck{width:min(550px,100%);box-sizing:border-box}}
 @media(min-width:681px){
  .deckbody{height:auto;min-height:0;padding:18px 14px 20px;overflow:visible}
  .cardstage{height:auto;min-height:0}
@@ -107,17 +131,17 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
  .flipcard{width:clamp(420px,calc(100dvh - 180px),560px);max-width:min(78vw,560px);height:auto;aspect-ratio:1}
 }
 @media(max-width:680px){
- .app{padding:16px 10px 40px}.overlay{padding:4px}.deck{min-height:99vh;height:auto;border-radius:12px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
+ .app{padding:16px 10px 40px}.overlay{padding:10px}.deck{min-height:99vh;height:auto;border-radius:10px}.deckbody{height:min(620px,calc(99vh - 235px));min-height:285px;padding:4px 4px 46px}
  .flipcard{width:min(96vw,610px,calc(99vh - 350px));height:auto;max-height:none;aspect-ratio:1}.face{border-radius:14px}
- .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px 210px 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px;width:210px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
- .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.exit{width:46px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:22px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}
+ .deckfoot{padding:12px 3px 8px}.controlrail{grid-template-columns:34px minmax(0,210px) 34px;column-gap:4px;max-width:100%;padding:0 2px}.controls{gap:4px}.nav{width:34px;height:34px;font-size:20px}.nav.prev,.nav.next{margin:0}
+ .action{min-width:0;height:27px;padding:0 8px;font-size:10.5px;white-space:nowrap}.accept{width:76px}.complete{width:72px}.verifyrow{margin-top:6px}.verifyhelp,.feedback{font-size:11px}.deck-feedback{min-height:35px;margin:1px auto 4px;padding:2px 8px}.tester-tools{gap:4px;margin:8px auto}.tie-field{font-size:9px}.test-sep{font-size:9px}.test-btn{font-size:9px}.deckcabwrap{margin-top:6px;max-width:310px}.deckcabhead{font-size:10px}
 }
 /* BETA mobile: the mat determines the Deck height rather than reserving an empty viewport gap. */
 @media(max-width:680px){
  .deckbody{height:auto;min-height:0;padding:4px 4px 8px;overflow:visible}
  .cardstage{height:auto;min-height:0}
 }
-@media(max-width:350px){.controlrail{grid-template-columns:31px 190px 31px;column-gap:3px}.controls{gap:3px;width:190px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.exit{width:42px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
+@media(max-width:350px){.controlrail{grid-template-columns:31px minmax(0,190px) 31px;column-gap:3px}.controls{gap:3px}.action{height:25px;padding:0 5px;font-size:9.5px}.accept{width:68px}.complete{width:64px}.nav{width:31px;height:31px}.deckcabwrap{max-width:288px}}
 
 
 
@@ -841,11 +865,19 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 }
 
 
-/* Campaign standing: give live Campaign truth the same visual weight as the BETA controls. */
+/* Campaign standing and the return to My Campaign share the panel’s colours. */
+.campaign-return-row,.campaign-truth{width:min(500px,calc(100% - 28px))}
+.campaign-return-row{display:flex;justify-content:center;margin:14px auto 0}
+.campaign-return{
+  display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;
+  min-height:36px;padding:6px 12px;border:1px solid rgba(255,255,255,.16);border-radius:5px;
+  background:#302a23;color:#fff;font:400 11px/1.4 Arial,sans-serif;cursor:pointer;white-space:nowrap;
+}
+.campaign-return:hover{filter:brightness(1.25)}
+.campaign-return:focus-visible{outline:2px solid #ead9ad;outline-offset:2px}
 .campaign-truth{
-  width:min(500px, calc(100% - 28px));
   box-sizing:border-box;
-  margin:8px auto 22px;
+  margin:14px auto 22px;
   padding:12px 14px;
   border:1px solid rgba(255,255,255,.22);
   border-radius:10px;
@@ -866,6 +898,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#17130f;
   font:700 11px/1.2 Arial,sans-serif;letter-spacing:.01em;overflow-wrap:anywhere
 }
+.campaign-truth #challengePigeonNameInput{width:100%;min-width:0;min-height:0;height:100%;box-sizing:border-box;border:0;background:transparent;color:#17130f;font:inherit;outline-offset:2px}
 .campaign-truth .name-pigeon-action{
   width:100%;min-width:0;min-height:36px;padding:6px 9px;box-sizing:border-box;
   border:1px solid #d7d2c8;border-radius:6px;background:#f4efe3;color:#084c61;
@@ -886,7 +919,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   border-radius:4px;font:900 16px/1 Georgia,"Times New Roman",serif;box-shadow:inset 0 0 6px rgba(71,52,25,.22)
 }
 @media(max-width:560px){
-  .campaign-truth{width:min(500px,calc(100% - 28px));padding:10px}
+  .campaign-truth{padding:10px}
   .campaign-truth-line{grid-template-columns:142px minmax(0,1fr);gap:6px}
   .campaign-truth-line.two{grid-template-columns:142px minmax(0,3fr) minmax(0,2fr);gap:6px}
   .campaign-truth .label{min-height:32px;padding:5px 5px;font-size:8px;white-space:nowrap}
@@ -894,7 +927,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   .truth-odo{height:24px}
 }
 @media (max-height:500px) and (orientation:landscape){
-  .campaign-truth{width:min(500px,calc(100% - 28px));padding:10px}
+  .campaign-truth{padding:10px}
   .campaign-truth-line{grid-template-columns:150px minmax(0,1fr);gap:6px;min-height:34px}
   .campaign-truth-line.two{grid-template-columns:150px minmax(0,3fr) minmax(0,2fr);gap:6px}
   .campaign-truth .label,.campaign-truth strong,.campaign-truth .name-pigeon-action{min-height:34px;padding:5px 7px}
@@ -916,7 +949,7 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .beta-sim-panel{
   width:min(500px, calc(100% - 28px));
   margin:0 auto 42px;
-  padding:14px 14px 28px;
+  padding:8px 14px;
   box-sizing:border-box;
   border:1px solid rgba(255,255,255,.22);
   border-radius:10px;
@@ -930,6 +963,19 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
   font:700 12px/1.2 Arial,sans-serif;
   letter-spacing:.035em;
 }
+.beta-sim-toggle{
+  display:block;
+  width:100%;
+  margin:0;
+  padding:3px 0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+.beta-sim-toggle:hover,.beta-sim-toggle:focus-visible{color:#fff0a8}
+.beta-sim-panel:has(.beta-sim-toggle[aria-expanded="true"]){padding-bottom:28px}
+.beta-sim-tools:not([hidden]){margin-top:13px}
+.beta-sim-tools[hidden]{display:none}
 
 .beta-row{
   display:flex;
@@ -1047,7 +1093,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 
 @media(max-width:560px){
   .campaign-truth{margin-bottom:34px !important}
-  .beta-sim-panel{width:calc(100% - 20px);padding:12px 10px 20px;margin-bottom:34px}
+  .beta-sim-panel{width:calc(100% - 20px);padding:8px 10px;margin-bottom:34px}
+  .beta-sim-panel:has(.beta-sim-toggle[aria-expanded="true"]){padding-bottom:20px}
   .beta-row{gap:7px}
   .beta-button{width:78px;flex-basis:78px;height:56px;font-size:10px}
   .beta-odometer-block{width:67px;flex-basis:67px}
@@ -1165,6 +1212,14 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .tffc-confirm-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 #tffcConfirmCancel{background:#fff;color:#084C61}
 #tffcConfirmOk{background:#084C61;color:#FAFAFA}
+.tffc-about-box{width:min(500px,100%);max-height:min(82vh,720px);display:flex;flex-direction:column;box-sizing:border-box}
+.tffc-about-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tffc-about-close,.tffc-share-close{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;background:#084C61;color:#FAFAFA;padding:0 14px;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
+.tffc-about-actions{display:flex;justify-content:flex-end;padding-top:12px;flex-shrink:0}
+.tffc-about-story{overflow-y:auto;overscroll-behavior:contain;min-height:0;padding-right:5px}
+.tffc-about-story p{margin:0 0 12px}.tffc-about-story p:last-child{margin-bottom:0;font-weight:600;color:#084C61}
+.tffc-share-link{display:block;width:100%;box-sizing:border-box;margin:12px 0;padding:10px;border:1px solid #084C61;border-radius:5px;color:#084C61;font:400 13px Poppins,Arial,sans-serif;overflow-wrap:anywhere}
+
 .tffc-privacy-actions{display:flex;justify-content:flex-end}
 .tffc-privacy-actions button{min-width:74px;height:36px;border:2px solid #084C61;border-radius:10px;padding:0 14px;background:#084C61;color:#FAFAFA;font:400 13px Poppins,Arial,sans-serif;cursor:pointer}
 </style>
@@ -1186,18 +1241,19 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
     <div class="controlrail">
       <button class="nav prev" id="prev" aria-label="Previous Challenge">‹</button>
       <div class="controls">
+        <p class="deck-prompt" id="deckPrompt">Tap or Click to move through the Deck <span aria-hidden="true">→</span></p>
         <button class="action accept" id="acceptBtn">Accept?</button>
         <button class="action complete" id="completeBtn">Completed?</button>
-        <button class="action exit" id="exitBtn">Exit</button>
       </div>
       <button class="nav next" id="next" aria-label="Next Challenge">›</button>
     </div>
-    <div class="verifyrow"><button class="verifybadge" id="verifyBadge" type="button" aria-describedby="verifyHelp" aria-expanded="false">Our Foundational Laws</button></div>
-    <div class="verifyhelp" id="verifyHelp"></div>
+    <div class="verifyrow"><span class="verifybadge" id="verifyBadge">Our Foundational Laws</span></div>
+    <p class="verifyhelp" id="verifyHelp">Move along now, this isn't a Challenge. it's The Law!</p>
+    <div class="campaign-return-row"><button class="campaign-return" id="exitBtn" type="button">← My Campaign</button></div>
     <div class="campaign-truth" aria-label="Current Campaign standing">
       <span class="campaign-truth-line"><span class="label">Call Sign:</span> <strong id="truthCallSign">—</strong></span>
       <span class="campaign-truth-line two">
-        <span class="label">Pigeon Name & Miles Flown:</span>
+        <span class="label">Name & Miles Flown:</span>
         <strong id="truthPigeonName">—</strong>
         <strong class="miles-field"><span id="truthPigeonMiles" class="truth-mile-value">0</span><span class="truth-odo" id="truthPigeonMilesOdometer" aria-hidden="true"><span>0</span><span>0</span><span>0</span><span>0</span></span></strong>
       </span>
@@ -1208,7 +1264,8 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 
 
 <div class="beta-panel beta-sim-panel" aria-label="BETA Campaign Progress Simulator">
-  <div class="beta-title">BETA – Campaign Progress Simulator</div>
+  <button class="beta-title beta-sim-toggle" id="betaSimToggle" type="button" aria-expanded="false" aria-controls="betaSimTools">BETA – Campaign Progress Simulator – BETA</button>
+  <div class="beta-sim-tools" id="betaSimTools" hidden>
 
   <div class="beta-row beta-row-ties">
     <button class="beta-button" id="addTie" type="button">Play a<br>Home Tie</button>
@@ -1256,27 +1313,41 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
     <div class="beta-help-links">
       <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a>
       <span class="beta-help-sep" aria-hidden="true">·</span>
-      <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
-      <span class="beta-help-sep" aria-hidden="true">·</span>
-      <button class="beta-help-link" type="button" id="challengePrivacyLink">Privacy</button>
+      <button class="beta-help-link" type="button" id="challengeSimulatorAboutLink">About Simulator</button>
     </div>
   </div>
 
   <!-- Kept only because the established render loop uses campaignStatus internally.
        It is intentionally not shown in the simplified BETA UI. -->
   <div id="campaignStatus" aria-live="polite" hidden>IN PROGRESS</div>
+  </div>
 </div>
 
 
 <div class="deckcabwrap">
       <div class="deckcabhead"><span>Trophy Cabinet</span><span id="cabinetCount">0 / 18</span></div>
       <div class="deckcabinet" id="deckCabinet" aria-label="Challenge Trophy Cabinet, three mats per row; scroll down for more"></div>
+      <div id="barryEggs" class="barry-eggs" role="group" aria-label="Hidden discoveries"></div>
     </div>
 
     <div class="deck-sales-tease" aria-label="Tin Foil FA Cup Challenge Deck coming soon">
       <div class="deck-sales-kicker">Like the Beer Mats?</div>
       <p class="deck-sales-copy">Get Your Hands on The Real Thing!</p>
       <button class="deck-sales-coming" type="button" disabled>Coming Soon!</button>
+    </div>
+    <div class="tffc-support-row"><a class="tffc-support-lozenge" href="https://buy.stripe.com/dRm28s2yZdhAgBG4L36EU01" target="_blank" rel="noopener noreferrer" aria-label="Support Tin Foil FA Cup (opens Stripe in a new tab)">Support Tin Foil FA Cup</a></div>
+    <div class="beta-help deck-footer-help" aria-label="BETA tester feedback">
+      <div class="beta-help-links">
+        <button class="beta-help-link" type="button" id="challengeShareLinkFooter">Share</button>
+        <span class="beta-help-sep" aria-hidden="true">·</span>
+        <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Feedback" target="_blank" rel="noopener" title="Send BETA feedback">Feedback</a>
+        <span class="beta-help-sep" aria-hidden="true">·</span>
+        <a class="beta-help-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tinfoilfacup%40gmail.com&amp;su=Tin%20Foil%20FA%20Cup%20Challenges%20BETA%20%E2%80%94%20Issue%20Report" target="_blank" rel="noopener" title="Report a BETA issue">Report an Issue</a>
+        <span class="beta-help-sep" aria-hidden="true">·</span>
+        <button class="beta-help-link" type="button" id="challengePrivacyLinkFooter">Privacy</button>
+        <span class="beta-help-sep" aria-hidden="true">·</span>
+        <button class="beta-help-link" type="button" id="challengeAboutLinkFooter">About Us</button>
+      </div>
     </div>
   </footer>
  </section>
@@ -1290,13 +1361,13 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
         <div class="trophy-viewer-face front"><img id="trophyViewerFront" alt="" draggable="false" decoding="async"></div>
         <div class="trophy-viewer-face back"><img id="trophyViewerBack" alt="" draggable="false" decoding="async"></div>
       </div>
-    </div>
+    <div id="barrysBitMat" class="barrys-bit-mat" hidden aria-label="Barry’s Bits — Facts on Foil No. 087: The Cup That Never Was"><div class="barrys-bit-masthead"><img src="barry-pigeon-mail-small.webp" alt="Barry the Mail Pigeon" loading="lazy" decoding="async"><div class="barrys-bit-heading">BARRY’S BITS</div></div><div id="barrysBitNumber" class="barrys-bit-sub">FACTS ON FOIL No. 087</div><div class="barrys-bit-rule"></div><div id="barrysBitTitle" class="barrys-bit-fact">THE CUP THAT NEVER WAS</div><p id="barrysBitStory" class="barrys-bit-story">“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”</p><div class="barrys-bit-footer"><div id="barrysBitCredit" class="barrys-bit-credit"><em>A Hidden History of The FA Cup</em><span>James Higginbottom</span></div></div></div></div>
     <div id="trophyViewerHint" class="trophy-viewer-hint" aria-live="polite">Tap to flip</div>
   </div>
 </div>
 
 <script>
-const CHALLENGES = [{"id":"00","title":"The Four Laws","subtitle":"It’s The Law!","type":"foundation","motto":"FOUR LAWS. ONE GLORIOUS CAMPAIGN.","behaviour":"reference"},{"id":"01","title":"The First Law","subtitle":"Get Your Blue Peter Badge","type":"honour","motto":"THE FIRST LAW. ALWAYS AND FOREVER.","behaviour":"prerequisite"},{"id":"02","title":"The Second Law","subtitle":"Get to your first Qualifying Tie","type":"campaign","motto":"GET TO YOUR FIRST QUALIFYING TIE.","behaviour":"first_qualifying_tie"},{"id":"03","title":"The Fourth Law","subtitle":"First Tie. First Pie.","type":"honour","motto":"FIRST TIE. FIRST PIE.","behaviour":"simple"},{"id":"04","title":"The Dogs Bollocks","subtitle":"Tin Foil FA Cup. Dog. Camera.","type":"honour","motto":"EVERY GROUND NEEDS A GOOD DOG.","behaviour":"simple"},{"id":"05","title":"The Graduate","subtitle":"Complete the Qualifying School","type":"campaign","motto":"1ST. 2ND. 3RD. GRADUATE.","behaviour":"three_qualifying"},{"id":"06","title":"The Pie’d Piper","subtitle":"4 ties, 4 pies","type":"honour","motto":"4 TIES. 4 PIES.","behaviour":"four_ties_honour"},{"id":"07","title":"Rockerfeller","subtitle":"Donate £5 to Site Upkeep","type":"honour","motto":"EVERY LITTLE HELPS.","behaviour":"simple"},{"id":"08","title":"Ding Ding Ding","subtitle":"The First Round — And a Right Proper One at that!","type":"campaign","motto":"THE FIRST ROUND PROPER.","behaviour":"first_round_proper"},{"id":"09","title":"Cop That!","subtitle":"Snap a pic with a match-day Copper","type":"honour","motto":"HELLO, HELLO, HELLO!","behaviour":"simple"},{"id":"10","title":"Ad Astra","subtitle":"Do Something Special on Your Campaign","type":"honour","motto":"TO THE STARS!","behaviour":"simple"},{"id":"11","title":"Away Days","subtitle":"Get to Three Away Ties","type":"campaign","motto":"RETURN TICKET TO GLORY.","behaviour":"three_away_ties"},{"id":"12","title":"Graffiti Artista","subtitle":"Purchase TFFC Stickers and be just like Banksy, but without the spray can!","type":"comingsoon","motto":"WE’RE STILL MAKING THE BLOODY STICKERS.","behaviour":"coming_soon"},{"id":"13","title":"The Difficult Second Round","subtitle":"All Downhill From Here!","type":"campaign","motto":"ALL DOWNHILL FROM HERE!","behaviour":"second_round_proper"},{"id":"14","title":"The Third Law","subtitle":"No Tickets? You’re OUT!","type":"honour","motto":"NO TICKETS? YOU’RE OUT!","behaviour":"end_campaign"},{"id":"15","title":"Fashionista","subtitle":"Wear TFFAC Merch at a Tie!","type":"comingsoon","motto":"TIN FOIL. HIGH FASHION.","behaviour":"coming_soon"},{"id":"16","title":"Doing A Richard","subtitle":"Get to the 3rd Round","type":"campaign","motto":"YOU’VE DONE A RICHARD!","behaviour":"third_round_proper"},{"id":"17","title":"A Proclaimer","subtitle":"Travel 500 Pigeon Miles","type":"campaign","motto":"TRAVEL 500 PIGEON MILES.","behaviour":"pigeon_500"},{"id":"18","title":"Giant Killer","subtitle":"Beat a club at least two levels above","type":"campaign","motto":"SMALL CLUBS. BIG STORIES.","behaviour":"giant_killer"},{"id":"19","title":"Seeing Double","subtitle":"Travel 1000 Pigeon Miles","type":"campaign","motto":"TRAVEL 1000 PIGEON MILES.","behaviour":"pigeon_1000"},{"id":"20","title":"The Fourth Be With You","subtitle":"Get to the Fourth Round","type":"campaign","motto":"THE FOURTH BE WITH YOU.","behaviour":"fourth_round_proper"},{"id":"21","title":"Boot Room Boy","subtitle":"Start a New Chat in The Boot Room","type":"comingsoon","motto":"PUT THE KETTLE ON.","behaviour":"coming_soon"},{"id":"22","title":"A Beethoven","subtitle":"Get to the Fifth Round","type":"campaign","motto":"DA DA DA DAAAAA!","behaviour":"fifth_round_proper"},{"id":"23","title":"Scorcese","subtitle":"Upload a video to your socials!","type":"honour","motto":"THAT’S A WRAP!","behaviour":"simple"},{"id":"24","title":"Been There, Done That!","subtitle":"Tin Foil FA Cup Tee Shirt Purchase","type":"comingsoon","motto":"BEEN THERE. DONE THAT. GOT THE TEE SHIRT.","behaviour":"coming_soon"},{"id":"25","title":"Quartermeister!","subtitle":"Get to The Quarter Finals!","type":"campaign","motto":"REPORT TO THE QUARTERMEISTER!","behaviour":"quarter_finals"},{"id":"26","title":"Get A Semi On!","subtitle":"Get to The Semi Finals!","type":"campaign","motto":"GET TO THE SEMI FINALS!","behaviour":"semi_finals"},{"id":"27","title":"Wembley Wizard","subtitle":"The Final!","type":"campaign","motto":"FROM THE FIRST TIE TO THE FINAL.","behaviour":"the_final"}];
+const CHALLENGES = [{"id":"00","title":"The Four Laws","subtitle":"It’s The Law!","type":"foundation","motto":"FOUR LAWS. ONE GLORIOUS CAMPAIGN.","behaviour":"reference"},{"id":"01","title":"The First Law","subtitle":"Get Your Blue Peter Badge","type":"honour","motto":"THE FIRST LAW. ALWAYS AND FOREVER.","behaviour":"prerequisite"},{"id":"02","title":"The Second Law","subtitle":"Get to your first Qualifying Tie","type":"campaign","motto":"GET TO YOUR FIRST QUALIFYING TIE.","behaviour":"first_qualifying_tie"},{"id":"03","title":"The Fourth Law","subtitle":"First Tie. First Pie.","type":"honour","motto":"FIRST TIE. FIRST PIE.","behaviour":"simple"},{"id":"04","title":"The Dogs Bollocks","subtitle":"Tin Foil FA Cup. Dog. Camera.","type":"honour","motto":"EVERY GROUND NEEDS A GOOD DOG.","behaviour":"simple"},{"id":"05","title":"The Graduate","subtitle":"Complete the Qualifying School","type":"campaign","motto":"1ST. 2ND. 3RD. GRADUATE.","behaviour":"three_qualifying"},{"id":"06","title":"The Pie’d Piper","subtitle":"4 ties, 4 pies","type":"honour","motto":"4 TIES. 4 PIES.","behaviour":"four_ties_honour"},{"id":"07","title":"Rockerfeller","subtitle":"Donate £5 to Site Upkeep","type":"honour","motto":"EVERY LITTLE HELPS.","behaviour":"simple"},{"id":"08","title":"Ding Ding Ding","subtitle":"The First Round — And a Right Proper One at that!","type":"campaign","motto":"THE FIRST ROUND PROPER.","behaviour":"first_round_proper"},{"id":"09","title":"Cop That!","subtitle":"Snap a pic with a match-day Copper","type":"honour","motto":"HELLO, HELLO, HELLO!","behaviour":"simple"},{"id":"10","title":"Ad Astra","subtitle":"Do Something Special on Your Campaign","type":"honour","motto":"TO THE STARS!","behaviour":"simple"},{"id":"11","title":"Away Days","subtitle":"Get to Three Away Ties","type":"campaign","motto":"RETURN TICKET TO GLORY.","behaviour":"three_away_ties"},{"id":"12","title":"Graffiti Artista","subtitle":"Purchase TFFC Stickers and be just like Banksy, but without the spray can!","type":"comingsoon","motto":"WE’RE STILL MAKING THE BLOODY STICKERS.","behaviour":"coming_soon"},{"id":"13","title":"The Difficult Second Round","subtitle":"All Downhill From Here!","type":"campaign","motto":"ALL DOWNHILL FROM HERE!","behaviour":"second_round_proper"},{"id":"14","title":"The Third Law","subtitle":"No Tickets? You’re OUT!","type":"honour","motto":"NO TICKETS? YOU’RE OUT!","behaviour":"end_campaign"},{"id":"15","title":"Fashionista","subtitle":"Wear TFFAC Merch at a Tie!","type":"comingsoon","motto":"TIN FOIL. HIGH FASHION.","behaviour":"coming_soon"},{"id":"16","title":"Doing A Richard","subtitle":"Get to the 3rd Round","type":"campaign","motto":"YOU’VE DONE A RICHARD!","behaviour":"third_round_proper"},{"id":"17","title":"A Proclaimer","subtitle":"Travel 500 Pigeon Miles","type":"campaign","motto":"TRAVEL 500 PIGEON MILES.","behaviour":"pigeon_500"},{"id":"18","title":"Giant Killer","subtitle":"Beat a club at least two levels above","type":"campaign","motto":"SMALL CLUBS. BIG STORIES.","behaviour":"giant_killer"},{"id":"19","title":"Seeing Double","subtitle":"Travel 1000 Pigeon Miles","type":"campaign","motto":"TRAVEL 1000 PIGEON MILES.","behaviour":"pigeon_1000"},{"id":"20","title":"The Fourth Be With You","subtitle":"Get to the Fourth Round","type":"campaign","motto":"THE FOURTH BE WITH YOU.","behaviour":"fourth_round_proper"},{"id":"21","title":"Boot Room Boy","subtitle":"Start a New Chat in The Boot Room","type":"honour","motto":"PUT THE KETTLE ON.","behaviour":"simple"},{"id":"22","title":"A Beethoven","subtitle":"Get to the Fifth Round","type":"campaign","motto":"DA DA DA DAAAAA!","behaviour":"fifth_round_proper"},{"id":"23","title":"Scorcese","subtitle":"Upload a video to your socials!","type":"honour","motto":"THAT’S A WRAP!","behaviour":"simple"},{"id":"24","title":"Been There, Done That!","subtitle":"Tin Foil FA Cup Tee Shirt Purchase","type":"comingsoon","motto":"BEEN THERE. DONE THAT. GOT THE TEE SHIRT.","behaviour":"coming_soon"},{"id":"25","title":"Quartermeister!","subtitle":"Get to The Quarter Finals!","type":"campaign","motto":"REPORT TO THE QUARTERMEISTER!","behaviour":"quarter_finals"},{"id":"26","title":"Get A Semi On!","subtitle":"Get to The Semi Finals!","type":"campaign","motto":"GET TO THE SEMI FINALS!","behaviour":"semi_finals"},{"id":"27","title":"Wembley Wizard","subtitle":"The Final!","type":"campaign","motto":"FROM THE FIRST TIE TO THE FINAL.","behaviour":"the_final"}];
 const ART = {"00":{"front":"assets/challenge-mats/mat-00-front.webp","back":"assets/challenge-mats/mat-00-back.webp"},"01":{"front":"assets/challenge-mats/mat-01-front.webp","back":"assets/challenge-mats/mat-01-back.webp"},"02":{"front":"assets/challenge-mats/mat-02-front.webp","back":"assets/challenge-mats/mat-02-back.webp"},"03":{"front":"assets/challenge-mats/mat-03-front.webp","back":"assets/challenge-mats/mat-03-back.webp"},"04":{"front":"assets/challenge-mats/mat-04-front.webp","back":"assets/challenge-mats/mat-04-back.webp"},"05":{"front":"assets/challenge-mats/mat-05-front.webp","back":"assets/challenge-mats/mat-05-back.webp"},"06":{"front":"assets/challenge-mats/mat-06-front.webp","back":"assets/challenge-mats/mat-06-back.webp"},"07":{"front":"assets/challenge-mats/mat-07-front.webp","back":"assets/challenge-mats/mat-07-back.webp"},"08":{"front":"assets/challenge-mats/mat-08-front.webp","back":"assets/challenge-mats/mat-08-back.webp"},"09":{"front":"assets/challenge-mats/mat-09-front.webp","back":"assets/challenge-mats/mat-09-back.webp"},"10":{"front":"assets/challenge-mats/mat-10-front.webp","back":"assets/challenge-mats/mat-10-back.webp"},"11":{"front":"assets/challenge-mats/mat-11-front.webp","back":"assets/challenge-mats/mat-11-back.webp"},"12":{"front":"assets/challenge-mats/mat-12-front.webp","back":"assets/challenge-mats/mat-12-back.webp"},"13":{"front":"assets/challenge-mats/mat-13-front.webp","back":"assets/challenge-mats/mat-13-back.webp"},"14":{"front":"assets/challenge-mats/mat-14-front.webp","back":"assets/challenge-mats/mat-14-back.webp"},"15":{"front":"assets/challenge-mats/mat-15-front.webp","back":"assets/challenge-mats/mat-15-back.webp"},"16":{"front":"assets/challenge-mats/mat-16-front.webp","back":"assets/challenge-mats/mat-16-back.webp"},"17":{"front":"assets/challenge-mats/mat-17-front.webp","back":"assets/challenge-mats/mat-17-back.webp"},"18":{"front":"assets/challenge-mats/mat-18-front.webp","back":"assets/challenge-mats/mat-18-back.webp"},"19":{"front":"assets/challenge-mats/mat-19-front.webp","back":"assets/challenge-mats/mat-19-back.webp"},"20":{"front":"assets/challenge-mats/mat-20-front.webp","back":"assets/challenge-mats/mat-20-back.webp"},"21":{"front":"assets/challenge-mats/mat-21-front.webp","back":"assets/challenge-mats/mat-21-back.webp"},"22":{"front":"assets/challenge-mats/mat-22-front.webp","back":"assets/challenge-mats/mat-22-back.webp"},"23":{"front":"assets/challenge-mats/mat-23-front.webp","back":"assets/challenge-mats/mat-23-back.webp"},"24":{"front":"assets/challenge-mats/mat-24-front.webp","back":"assets/challenge-mats/mat-24-back.webp"},"25":{"front":"assets/challenge-mats/mat-25-front.webp","back":"assets/challenge-mats/mat-25-back.webp"},"26":{"front":"assets/challenge-mats/mat-26-front.webp","back":"assets/challenge-mats/mat-26-back.webp"},"27":{"front":"assets/challenge-mats/mat-27-front.webp","back":"assets/challenge-mats/mat-27-back.webp"}};
 
 const CABINET_THUMB=id=>`assets/challenge-thumbs/mat-${id}-front.webp`;
@@ -1411,13 +1482,14 @@ const CLUBFINDER_BRIDGE_KEY = "tffc.clubfinderCampaign.v1";
 const STORE_VERSION = 1;
 
 function blankState() {
-  return {version:STORE_VERSION, campaignKey:"", accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
+  return {version:STORE_VERSION, campaignKey:"", barryBitsFound:[], accepted:{}, completed:{}, records:{}, tiesPlayed:0, awayTies:0, pigeonMiles:0, campaignRound:0, giantKillAchieved:false, campaignStatus:"ACTIVE"};
 }
 function loadState() {
   try {
     const x = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
     if (!x || x.version !== STORE_VERSION || typeof x.accepted !== "object" || typeof x.completed !== "object") return blankState();
     x.records ||= {};
+    x.barryBitsFound = Array.isArray(x.barryBitsFound) ? x.barryBitsFound.filter(id=>typeof id==="string") : [];
     x.campaignKey = typeof x.campaignKey==="string" ? x.campaignKey : "";
     // Backwards-compatible migration from the prototype's old journeyTies counter.
     x.tiesPlayed = Number.isFinite(x.tiesPlayed) ? x.tiesPlayed : (Number.isFinite(x.journeyTies) ? x.journeyTies : 0);
@@ -1562,19 +1634,10 @@ function verificationHelp(c) {
   if (c.type==="external") return "This Challenge takes you beyond Clubfinder.";
   return "We believe every word you say. Honest!";
 }
-function hideVerificationHelp() {
-  $("verifyHelp").classList.remove("show");
-  $("verifyBadge").setAttribute("aria-expanded","false");
-}
-function showVerificationHelp() {
-  $("verifyHelp").classList.add("show");
-  $("verifyBadge").setAttribute("aria-expanded","true");
-}
 function lockedMessage(c) {
   if (c.type==="foundation") return "Foundation mat — no action required.";
   if (c.type==="comingsoon") {
     if (c.id==="15") return "Coming Soon! — We haven’t made the bloody clothes yet.";
-    if (c.id==="21") return "Coming Soon! — The Boot Room isn’t open yet. Put the kettle on.";
     if (c.id==="24") return "Coming Soon! — Tin Foil FA Cup tee shirts aren’t on sale yet.";
     return "Coming Soon! — We’re still making the bloody stickers.";
   }
@@ -1696,9 +1759,9 @@ function render() {
   }
   requestAnimationFrame(()=>flipcard.classList.remove("instant-reset"));
   $("prev").disabled=index===0; $("next").disabled=index===CHALLENGES.length-1;
+  $("deckPrompt").hidden=index!==0;
   $("verifyBadge").textContent=verificationLabel(c);
   $("verifyHelp").textContent=verificationHelp(c);
-  hideVerificationHelp();
   $("feedback").textContent="";
 
   const unlocked=isUnlocked(c);
@@ -1712,6 +1775,7 @@ function render() {
   $("acceptBtn").disabled=noManualActions || !unlocked || accepted || done || (endCampaign && state.campaignStatus==="ENDED");
   $("completeBtn").disabled=noManualActions || endCampaign || !unlocked || !accepted || done;
   $("acceptBtn").textContent=endCampaign ? (done?"It’s Over!":"End it all?") : ((accepted||done)?"Accepted!":"Accept?");
+  $("acceptBtn").setAttribute("aria-label",c.id==="07" && !accepted && !done ? "Accept Rockerfeller and open Stripe in a new tab" : $("acceptBtn").textContent);
   $("acceptBtn").classList.toggle("accepted-state",!endCampaign && (accepted||done));
   $("acceptBtn").classList.toggle("done-state",endCampaign && done);
   $("completeBtn").textContent=done?(automatic?"Achieved!":"Completed!"):"Completed?";
@@ -1727,18 +1791,60 @@ function render() {
   }
 }
 
-/* Trophy inspection is a separate, transient UI state: no deck index, flips or storage writes. */
+const BARRY_BITS = {"17": {"number": "087", "title": "THE CUP THAT NEVER WAS", "story": "“During the 1965 final, the FA Cup was misplaced when a cleaner mistook the famous trophy for a bucket. Short of a trophy to present to winning captain, Ron Yeats, his opposite number, Billy Bremner, always a gentleman, jumped into the crowd, wrestling a Tin Foil FA Cup from an upset Boy Scout. This was the actual Cup presented to Yeats. A closely guarded secret for over fifty years.”", "creditTitle": "A Hidden History of The FA Cup", "creditAuthor": "James Higginbottom"}, "19": {"number": "142", "title": "THE ORIGINAL AWAY-DAY", "story": "“The first recorded Tin Foil FA Cup was made by Muriel Braithwaite for her son, Jeremiah Braithwaite, who was famously carried on his dad's shoulders for 280 miles to the 1922 Huddersfield Town vs Preston North End final. It now resides, along with little Jeremiah's calipers, in the National Football Museum, Manchester.”", "creditTitle": "Footie Facts Encyclopedia", "creditAuthor": ""}, "23": {"number": "025", "title": "A HEAD FOR SURVIVAL", "story": "“It's common knowledge that 99.9% of body heat is lost through the head. By carrying your Tin Foil FA Cup with you at all times, you could potentially save a life - maybe even your own! In an emergency, say after falling off an ocean liner, you could recycle your Tin Foil FA Cup into a tactical hat, allowing you to survive until help arrives.”", "creditTitle": "This message is kindly sponsored by the RNLI", "creditAuthor": ""}, "07": {"number": "178", "title": "CARELESS WRAPS COST LIVES", "story": "“The question most asked about tin foil is, 'Why is there a shiny side and a dull side?' The answer is intriguing. During World War 1, British soldiers often gave away their positions when sunlight was reflected from the tin foil wrappings of their cucumber and salmon sandwiches. Churchill, then a lowly Major, insisted on a dull side to save lives.”", "creditTitle": "History of Foil", "creditAuthor": "The Shanghai Metal Corporation"}, "03": {"number": "69", "title": "CRISP PEACOCK", "story": "“Contrary to popular belief, ‘tin foil’ is not made from tin but from an aluminium alloy. The name is a hangover from pre-industrial times when specialist English blacksmiths would begin hammering ingots of Cornish tin in early February. By December they would have achieved the ‘foil like’ consistency required by the English aristocracy to cook their Christmas peacocks.”", "creditTitle": "The Foil Museum. Sidney", "creditAuthor": "Allied Metals of Australia"}, "10": {"number": "98b", "title": "A GIANT LEAP FOR MANKIND", "story": "During the Apollo moonshots of the late sixties tin foil was the chosen material to provide protection against solar radiation for all foodstuffs carried to the moon. Buzz Aldrin famously left the foil covering on his meal whilst using the then newly invented microwave. He didn’t know it back then but this accidental amalgamation of foil, turkey, and peanut butter was to become the basis of Velcro, Teflon and the World Wide Web.", "creditTitle": "How Going to The Moon Changed The World", "creditAuthor": "Carl Sagan"}};
+
+// Discovery slots follow the mats' deck order, never the order in which they are found.
+function renderBarryEggs(){
+  const eggs=$("barryEggs");
+  eggs.replaceChildren();
+  const facts=CHALLENGES.filter(c=>Object.hasOwn(BARRY_BITS,c.id));
+  facts.forEach((c,i)=>{
+    const found=state.barryBitsFound.includes(c.id);
+    const egg=document.createElement("span");
+    egg.className="barry-egg"+(found?" found":"");
+    egg.dataset.challengeId=c.id;
+    egg.setAttribute("role","img");
+    egg.setAttribute("aria-label",`Hidden discovery ${i+1} of ${facts.length}: ${found?"found":"undiscovered"}`);
+    egg.innerHTML='<svg viewBox="0 0 16 22" aria-hidden="true" focusable="false"><path d="M8 1.5C5 1.5 1.5 9 1.5 14a6.5 6.5 0 0 0 13 0C14.5 9 11 1.5 8 1.5Z"/></svg>';
+    eggs.append(egg);
+  });
+}
+function rememberBarryBit(id){
+  if(!id || state.barryBitsFound.includes(id))return;
+  state.barryBitsFound.push(id);
+  // Saving a discovery never awards a trophy or changes Campaign progress.
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(_){}
+  renderBarryEggs();
+}
+
+/* Trophy inspection leaves the underlying Deck untouched; only a revealed fact saves discovery. */
 const trophyViewer=$("trophyViewer"), trophyViewerMat=$("trophyViewerMat");
 const trophyViewerCard=$("trophyViewerCard"), trophyViewerHint=$("trophyViewerHint");
-let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null;
+let trophyViewerBitId=null;
+let trophyViewerOpen=false, trophyViewerFlipped=false, trophyOrigin=null, trophyViewerHasBit=false, trophyViewerBitShown=false;
 function openTrophy(c,origin){
   if(!state.completed[c.id]) return;
   trophyOrigin=origin;
+  trophyViewerBitId=c.id;
   trophyViewerFlipped=false;
+  trophyViewerHasBit=Object.hasOwn(BARRY_BITS,c.id);
+  if(trophyViewerHasBit){
+    const bit=BARRY_BITS[c.id];
+    $("barrysBitNumber").textContent="FACTS ON FOIL No. "+bit.number;
+    $("barrysBitTitle").textContent=bit.title;
+    $("barrysBitStory").textContent=bit.story;
+    $("barrysBitCredit").replaceChildren();
+    const title=document.createElement("em");title.textContent=bit.creditTitle;$("barrysBitCredit").append(title);
+    if(bit.creditAuthor){const author=document.createElement("span");author.textContent=bit.creditAuthor;$("barrysBitCredit").append(author)}
+    $("barrysBitMat").setAttribute("aria-label","Barry’s Bits — Facts on Foil No. "+bit.number+": "+bit.title);
+  }
+  trophyViewerBitShown=false;
+  $("barrysBitMat").hidden=true;
+  $("barrysBitMat").classList.remove("revealed");
   $("trophyViewerFront").src=ART[c.id]?.front || CANONICAL_CUP || "";
   $("trophyViewerBack").src=ART[c.id]?.back || CANONICAL_CUP || "";
   trophyViewer.setAttribute("aria-label",c.title+" — achieved trophy");
-  trophyViewerCard.classList.remove("flipped");
+  trophyViewerCard.classList.remove("flipped","barry-flipped");
   trophyViewerHint.textContent="Tap to flip";
   trophyViewerMat.setAttribute("aria-label",c.title+" — tap to flip");
   trophyViewerOpen=true;
@@ -1751,7 +1857,12 @@ function closeTrophy(){
   trophyViewerOpen=false;
   trophyViewer.classList.remove("open");
   trophyViewer.hidden=true;
-  trophyViewerCard.classList.remove("flipped");
+  trophyViewerCard.classList.remove("flipped","barry-flipped");
+  $("barrysBitMat").hidden=true;
+  $("barrysBitMat").classList.remove("revealed");
+  trophyViewerBitShown=false;
+  trophyViewerHasBit=false;
+  trophyViewerBitId=null;
   const origin=trophyOrigin;
   trophyOrigin=null;
   if(origin && origin.isConnected!==false && typeof origin.focus==="function"){
@@ -1760,11 +1871,24 @@ function closeTrophy(){
 }
 function advanceTrophy(){
   if(!trophyViewerOpen)return;
-  if(trophyViewerFlipped){closeTrophy();return;}
+  if(trophyViewerBitShown){closeTrophy();return;}
+  if(trophyViewerFlipped){
+    if(!trophyViewerHasBit){closeTrophy();return;}
+    trophyViewerBitShown=true;
+    const bit=$("barrysBitMat");
+    bit.hidden=false;
+    void bit.offsetWidth; // Ensure reverse face is ready before the flip begins.
+    trophyViewerCard.classList.add("barry-flipped");
+    bit.classList.add("revealed");
+    rememberBarryBit(trophyViewerBitId);
+    trophyViewerHint.textContent="Tap to close";
+    trophyViewerMat.setAttribute("aria-label","Barry’s Bits — tap to close Trophy");
+    return;
+  }
   trophyViewerFlipped=true;
   trophyViewerCard.classList.add("flipped");
-  trophyViewerHint.textContent="Tap to return";
-  trophyViewerMat.setAttribute("aria-label","Tap to return to Trophy Cabinet");
+  trophyViewerHint.textContent=trophyViewerHasBit?"Tap for Barry’s Bit":"Tap to return";
+  trophyViewerMat.setAttribute("aria-label",trophyViewerHasBit?"Tap to discover Barry’s Bit":"Tap to return to Trophy Cabinet");
 }
 trophyViewerMat.onclick=advanceTrophy;
 trophyViewerMat.addEventListener("keydown",e=>{
@@ -1778,6 +1902,27 @@ function openAt(i=0, showBack=false) {
 }
 function close() { tinFoilReturnToClubfinder(); }
 
+
+function tffcChallengesAboutUs(){
+  let overlay=document.getElementById('tffcAboutOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='tffcAboutOverlay';
+    overlay.className='tffc-confirm-overlay';
+    overlay.hidden=true;
+    overlay.innerHTML="<div class=\"tffc-confirm-box tffc-about-box\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"tffcAboutTitle\"><div class=\"tffc-about-head\"><div id=\"tffcAboutTitle\" class=\"tffc-confirm-title\">About Us</div></div><div class=\"tffc-about-story\"><p>We went the footie. On the bus. Heaton Stan’ vs Tow Law in the extra preliminary round of the FA Cup. Made a Tin Foil FA Cup. There were pies & we won. Then to Hebburn Town. Beat them, too. ‘C’mon you Stan!’ Then the ‘away bus’ to Tadcaster – a footie ground in a brewery, what more could you want?</p><p>The magic of the Cup and the stuff broken dreams are made of. Beaten 2-1.</p><p>“Ah well, always next year, eh?<br>Well, unless we just keep going?<br>What? Follow the winner? All the way to Wembley?<br>Well, at least till we can’t get tickets!”</p><p>And that was that. We wrote The Four Laws on the bus on the way home.</p><p>That first year we got to the 4th Round. Some years we get close, others it’s an early bath. Last year we travelled 4,751 miles and got to the Semi’s!</p><p>What a run! What an adventure! What pies!</p><p>Time to do it all again?<br>You bet.</p><p>At Tin Foil FA Cup you can do it, too!</p></div><div class=\"tffc-about-actions\"><button type=\"button\" class=\"tffc-about-close\" aria-label=\"Close About Us\">Close</button></div></div>";
+    document.body.appendChild(overlay);
+  }
+  const previous=document.activeElement;
+  const close=overlay.querySelector('.tffc-about-close');
+  overlay.hidden=false;
+  function finish(){document.removeEventListener('keydown',onKey);overlay.hidden=true;overlay.onclick=null;close.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus()}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
+  close.onclick=finish;
+  overlay.onclick=e=>{if(e.target===overlay)finish()};
+  document.addEventListener('keydown',onKey);
+  close.focus();
+}
 
 function tinFoilPrivacyNotice(){
   let privacyOverlay=document.getElementById('tffcPrivacyOverlay');
@@ -1794,6 +1939,25 @@ function tinFoilPrivacyNotice(){
   function finish(){document.removeEventListener('keydown',onKey);privacyOverlay.hidden=true;closeButton.onclick=null;privacyOverlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus()}
   function onKey(e){if(e.key==='Escape'){e.preventDefault();finish()}}
   closeButton.onclick=finish;privacyOverlay.onclick=e=>{if(e.target===privacyOverlay)finish()};document.addEventListener('keydown',onKey);closeButton.focus();
+}
+
+function tinFoilSimulatorAboutNotice(){
+  let overlay=document.getElementById('tffcSimulatorAboutOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='tffcSimulatorAboutOverlay';
+    overlay.className='tffc-confirm-overlay';
+    overlay.hidden=true;
+    overlay.innerHTML='<div class="tffc-confirm-box" role="dialog" aria-modal="true" aria-labelledby="tffcSimulatorAboutTitle" aria-describedby="tffcSimulatorAboutMessage"><div id="tffcSimulatorAboutTitle" class="tffc-confirm-title">About the Simulator</div><div id="tffcSimulatorAboutMessage" class="tffc-confirm-message"></div><div class="tffc-privacy-actions"><button id="tffcSimulatorAboutClose" type="button">Close</button></div></div>';
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('tffcSimulatorAboutMessage').textContent='The Simulator lets us test how Challenges are earned, completed and displayed without waiting for real FA Cup results.\n\nWe\'ve kept it available so you can explore how the Challenge Deck works and have a little fun with Barry the Pigeon.\n\nSimulated progress is separate from your real Tin Foil FA Cup Campaign. Playing with it can\'t break anything and hitting the big reset button will bring you back to real life.';
+  const close=document.getElementById('tffcSimulatorAboutClose'),previous=document.activeElement;
+  overlay.hidden=false;
+  function finish(){document.removeEventListener('keydown',onKey);overlay.hidden=true;close.onclick=null;overlay.onclick=null;if(previous&&typeof previous.focus==='function')previous.focus();}
+  function onKey(e){if(e.key==='Escape'){e.preventDefault();finish();}}
+  close.onclick=finish;overlay.onclick=e=>{if(e.target===overlay)finish();};
+  document.addEventListener('keydown',onKey);close.focus();
 }
 
 function tinFoilConfirm(message){
@@ -1820,17 +1984,62 @@ function tinFoilReturnToClubfinder(){
   try{origin=sessionStorage.getItem('tffc.challengeOrigin')||'';}catch(_){}
   const fromStatsReturn=new URLSearchParams(location.search||'').get('from')==='stats-return-v2';
   try{sessionStorage.removeItem('tffc.challengeOrigin');}catch(_){}
-  if(origin==='clubfinder-beta'&&!fromStatsReturn&&history&&typeof history.back==='function'){
-    history.back();
-    return;
-  }
+  /* All exits use the same deterministic Campaign snapshot and Frame 2 landing. */
   /* Direct/legacy entry, or a Stats-return path, has no guaranteed Clubfinder
      history entry immediately behind it. Keep the deterministic fallback. */
+  /* The approved BETA journey is opt-in. Preserve the original return for
+     direct/legacy Clubfinder users and restore the three-frame Campaign view
+     only when that BETA journey set its same-tab session marker. */
+  try{
+    if(sessionStorage.getItem('tffc.beta.approved-journey')==='1'){
+      window.location.replace('clubfinder-journey.html?from=challenges-exit-v3');
+      return;
+    }
+  }catch(_){}
   window.location.replace('clubfinder-beta.html?from=challenges-exit-v3');
 }
 
 const challengePrivacyLink=$("challengePrivacyLink");
+const challengeAboutLinkFooter=$("challengeAboutLinkFooter");
+if(challengeAboutLinkFooter)challengeAboutLinkFooter.onclick=(e)=>{e.preventDefault();e.stopPropagation();tffcChallengesAboutUs();};
+const challengeShareLinkFooter=$("challengeShareLinkFooter");
+if(challengeShareLinkFooter)challengeShareLinkFooter.onclick=(e)=>{
+ e.preventDefault();e.stopPropagation();
+ let host=document.getElementById('tffcChallengeShareHost');
+ if(!host){
+  host=document.createElement('div');host.id='tffcChallengeShareHost';
+  host.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.76);display:flex;align-items:center;justify-content:center';
+  const frame=document.createElement('iframe');
+  frame.title='Share Tin Foil FA Cup';frame.setAttribute('aria-label','Share Tin Foil FA Cup');
+  frame.setAttribute('allow','clipboard-write');
+  frame.style.cssText='display:block;border:0;width:100%;height:100%;background:transparent';
+  host.appendChild(frame);document.body.appendChild(host);
+  host.addEventListener('click',ev=>{if(ev.target===host)closeChallengeShare()});
+ }
+ const priorFocus=document.activeElement;
+ const priorOverflow=document.body.style.overflow;
+ function closeChallengeShare(){
+  if(!host.isConnected)return;
+  host.remove();document.body.style.overflow=priorOverflow;
+  window.removeEventListener('message',onMessage);
+  document.removeEventListener('keydown',onKey);
+  if(priorFocus&&priorFocus.isConnected)priorFocus.focus({preventScroll:true});
+ }
+ function onMessage(ev){
+  if(ev.origin===location.origin&&ev.source===host.querySelector('iframe')?.contentWindow&&ev.data?.type==='tffc-share-close')closeChallengeShare();
+ }
+ function onKey(ev){if(ev.key==='Escape')closeChallengeShare();}
+ window.addEventListener('message',onMessage);
+ document.addEventListener('keydown',onKey);
+ document.body.style.overflow='hidden';
+ host.querySelector('iframe').src='share-popup-embed.html';
+ host.querySelector('iframe').focus();
+};
+const challengePrivacyLinkFooter=$("challengePrivacyLinkFooter");
 if(challengePrivacyLink)challengePrivacyLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
+if(challengePrivacyLinkFooter)challengePrivacyLinkFooter.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilPrivacyNotice();};
+const simulatorAboutLink=$("challengeSimulatorAboutLink");
+if(simulatorAboutLink)simulatorAboutLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilSimulatorAboutNotice();};
 
 $("exitBtn").onclick=(e)=>{
   e.preventDefault();
@@ -1841,19 +2050,6 @@ $("exitBtn").onclick=(e)=>{
 overlay.addEventListener("click",e=>{ if(e.target===overlay) close(); });
 $("prev").onclick=()=>{if(index>0){index--;render()}};
 $("next").onclick=()=>{if(index<CHALLENGES.length-1){index++;render()}};
-const verifyBadge=$("verifyBadge");
-verifyBadge.addEventListener("mouseenter",showVerificationHelp);
-verifyBadge.addEventListener("mouseleave",()=>{ if(document.activeElement!==verifyBadge) hideVerificationHelp(); });
-verifyBadge.addEventListener("focus",showVerificationHelp);
-verifyBadge.addEventListener("blur",hideVerificationHelp);
-verifyBadge.addEventListener("click",e=>{
-  e.stopPropagation();
-  const showing=$("verifyHelp").classList.contains("show");
-  showing ? hideVerificationHelp() : showVerificationHelp();
-});
-document.addEventListener("pointerdown",e=>{
-  if(!verifyBadge.contains(e.target) && !$("verifyHelp").contains(e.target)) hideVerificationHelp();
-});
 function setDeckFlip(next){
   flipped=next;
   flipcard.classList.toggle("flipped",flipped);
@@ -1916,6 +2112,7 @@ $("acceptBtn").onclick=async ()=>{
   $("completeBtn").disabled=false;
   $("feedback").textContent="Challenge Accepted.";
   save();
+  if(c.id==="07") window.open("https://buy.stripe.com/dRm28s2yZdhAgBG4L36EU01","_blank","noopener,noreferrer");
   requestAnimationFrame(()=>renderStats());
 };
 $("completeBtn").onclick=()=>{
@@ -1951,13 +2148,36 @@ function renderCampaignTruthFrame() {
 $("campaignRound").value=String(state.campaignRound);
 $("truthCallSign").textContent=campaignIdentity.callSign||"—";
 const pigeonNameField=$("truthPigeonName");
-if(campaignIdentity.pigeonName){
-  pigeonNameField.textContent=campaignIdentity.pigeonName;
-}else{
-  pigeonNameField.innerHTML='<button type="button" class="name-pigeon-action" id="namePigeonInClubfinder">Name Your Pigeon in Clubfinder</button>';
-  const nameButton=$("namePigeonInClubfinder");
-  if(nameButton)nameButton.onclick=(e)=>{e.preventDefault();e.stopPropagation();tinFoilReturnToClubfinder();};
+// Edit the existing Clubfinder Campaign identity; never create a parallel name.
+const storedCampaign=readChallengeStorageJSON("tinFoilFACupJourney_v7");
+if(storedCampaign && campaignIdentity.callSign &&
+   String(storedCampaign.callSign||"").trim()===campaignIdentity.callSign && Object.prototype.hasOwnProperty.call(storedCampaign,"pigeonName")){
+  campaignIdentity.pigeonName=String(storedCampaign.pigeonName||"").replace(/\s+/g," ").trim().slice(0,20);
 }
+pigeonNameField.innerHTML='<input id="challengePigeonNameInput" type="text" maxlength="20" autocomplete="off" aria-label="Pigeon name" placeholder="Name your pigeon">';
+const pigeonInput=$("challengePigeonNameInput");
+pigeonInput.value=campaignIdentity.pigeonName;
+pigeonInput.onchange=()=>{
+  const saved=readChallengeStorageJSON("tinFoilFACupJourney_v7");
+  if(!saved || !campaignIdentity.callSign ||
+     String(saved.callSign||"").trim()!==campaignIdentity.callSign)return;
+  const name=pigeonInput.value.replace(/\s+/g," ").trim().slice(0,20);
+  saved.pigeonName=name;
+  localStorage.setItem("tinFoilFACupJourney_v7",JSON.stringify(saved));
+  const backup=readChallengeStorageJSON("tffc.clubfinderCampaignIdentity.v1");
+  if(backup && String(backup.originName||"")===String(saved.originName||"")){
+    backup.pigeonName=name;
+    localStorage.setItem("tffc.clubfinderCampaignIdentity.v1",JSON.stringify(backup));
+  }
+  const bridge=readChallengeStorageJSON(CLUBFINDER_BRIDGE_KEY);
+  if(bridge && String(bridge.callSign||"")===campaignIdentity.callSign){
+    bridge.pigeonName=name;
+    localStorage.setItem(CLUBFINDER_BRIDGE_KEY,JSON.stringify(bridge));
+  }
+  campaignIdentity.pigeonName=name;
+  pigeonInput.value=name;
+};
+pigeonInput.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();pigeonInput.blur();}};
 const truthMiles=Math.max(0,Math.round(state.pigeonMiles));
 $("truthPigeonMiles").textContent=truthMiles.toLocaleString("en-GB");
 $("truthPigeonMilesOdometer").innerHTML=String(Math.min(9999,truthMiles)).padStart(4,"0").split("").map(n=>`<span>${n}</span>`).join("");
@@ -1984,6 +2204,7 @@ function loadCabinetImage(img){
   img.src=src;
 }
 function renderTrophyCabinet(challengeList,completed) {
+renderBarryEggs();
 const trophyChallenges=challengeList;
 $("cabinetCount").textContent=`${completed.length} / ${trophyChallenges.length}`;
 
@@ -2044,6 +2265,15 @@ function applySimulationChange(message) {
     else if (newlyCompleted.length) $("feedback").textContent="Challenge Completed – This Beer Mat added to Your Trophy Cabinet";
     else $("feedback").textContent=message;
   }
+}
+const betaSimToggle=$("betaSimToggle");
+const betaSimTools=$("betaSimTools");
+if(betaSimToggle&&betaSimTools){
+  betaSimToggle.onclick=()=>{
+    const opening=betaSimTools.hidden;
+    betaSimTools.hidden=!opening;
+    betaSimToggle.setAttribute("aria-expanded",String(opening));
+  };
 }
 $("addTie").onclick=()=>{
   if (state.campaignStatus==="ENDED") { applySimulationChange(""); return; }
@@ -2121,5 +2351,5 @@ if(tinFoilChallengeRoute.get('from')==='stats-return-v2'){
 openAt(launchIndex);
 </script>
 
-</body>
+<script src="keep-magic-return.js"></script><script defer src="post-office-launcher.js"></script></body>
 </html>

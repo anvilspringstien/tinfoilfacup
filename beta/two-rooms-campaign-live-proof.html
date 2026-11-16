@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Campaign doorway — live BETA engine proof</title><link rel="stylesheet" href="two-rooms.css">
+<style>
+/* Doorway proof ONLY. No changes to the approved Two Rooms stylesheet. */
+/* Results mode releases the viewport frame and makes the DOCUMENT scroll. */
+html.doorway-campaign-results .stage{height:auto;min-height:100svh}
+html.doorway-campaign-results .field{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));overflow:visible}
+html.doorway-campaign-results .room{height:auto;min-height:calc(100svh - 2 * clamp(6px,1.2vh,13px));grid-template-rows:auto auto}
+html.doorway-campaign-results .furniture{overflow:visible;min-height:0}
+html.doorway-campaign-results .clubfinder-laws{margin-top:24px}
+html.doorway-campaign-results .clubfinder-laws-title{margin:24px 0 0}
+
+.doorway-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px auto}
+.doorway-actions button{font-size:13px;padding:9px 12px}
+.doorway-results{display:none;width:100%;padding:12px 8px 20px;color:var(--cream);text-align:left}
+.doorway-results.open{display:block}
+.doorway-results h2{font-size:18px;font-weight:400;margin:4px 0 12px;text-align:center}
+.doorway-choice{border:1px solid #818181;border-radius:9px;padding:12px;margin:8px 0}
+.doorway-choice strong{display:block;font-size:16px;font-weight:400}
+.doorway-choice p{font-size:12px;margin:7px 0}
+.doorway-choice button{font-size:13px;padding:9px 12px}
+.doorway-note{font-size:11px;line-height:1.5;text-align:center}
+.doorway-results button:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+</style></head><body>
+<main class="stage"><section class="field"><div class="room">
+<div class="crest-compartment"><img class="crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div>
+<div class="furniture clubfinder-furniture">
+<h1 class="clubfinder-laws-title">The Four Laws</h1>
+<div class="clubfinder-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can't Get Tickets</div><div>4. Eat Pies</div></div>
+<div class="clubfinder-machine" id="clubfinderField"><div class="clubfinder-search"><input id="postcode" aria-label="Enter Your Postcode" placeholder="Enter Your Postcode" autocomplete="postal-code"><button id="findBtn" type="button">Find My Club</button></div><div class="clubfinder-status" id="clubfinder-status" role="status">Isolated transition demonstration</div></div>
+<p class="clubfinder-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p>
+<p class="clubfinder-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p>
+<section id="doorway-results" class="doorway-results" aria-label="Live BETA Campaign results">
+<h2>Your Tin Foil FA Cup Campaigns</h2>
+<p class="doorway-note">Experimental Shed bridge: the existing BETA Clubfinder runs the real postcode lookup, Campaign selection and identity machinery in a same-origin embedded document.</p>
+<iframe id="campaign-engine" title="Real BETA Clubfinder Campaign results" style="display:block;width:100%;height:300px;border:0;background:#fff;border-radius:8px" loading="eager"></iframe>
+<div class="doorway-actions"><button id="hide-results" type="button">Return to Clubfinder</button></div>
+</section>
+</div></div></section></main>
+<script>
+'use strict';
+const input=document.getElementById('postcode'),results=document.getElementById('doorway-results'),status=document.getElementById('clubfinder-status'),frame=document.getElementById('campaign-engine');
+let engineReady=false,engineBusy=false;
+function resizeEngine(){
+ try{const d=frame.contentDocument;if(!d)return;
+ const target=d.getElementById('results'),field=d.getElementById('clubfinderField');
+ if(!target||!field)return;
+ frame.style.height=Math.max(300,Math.ceil(field.getBoundingClientRect().bottom-field.getBoundingClientRect().top)+35)+'px';
+ }catch(_){}
+}
+async function runEngine(pc){
+ if(engineBusy)return;engineBusy=true;
+ try{
+  if(!engineReady){
+   status.textContent='Loading the existing BETA Campaign engine…';
+   await new Promise((resolve,reject)=>{
+    frame.onload=resolve;frame.onerror=()=>reject(Error('BETA engine failed to load'));
+    frame.src='clubfinder-beta.html';
+   });
+   const w=frame.contentWindow,d=frame.contentDocument;
+   if(!w||!d||typeof w.go!=='function')throw Error('BETA search engine is unavailable');
+   const style=d.createElement('style');
+   style.textContent='html,body{background:#fff!important;min-height:0!important;zoom:1!important}#tffcFourLaws,#searchPanel,#liveDataTools{display:none!important}#clubfinderField{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;transform:none!important;zoom:1!important}#results{width:100%!important;max-width:none!important}';
+   d.head.appendChild(style);
+   if(typeof w.MutationObserver==='function'){
+    const obs=new w.MutationObserver(resizeEngine);
+    obs.observe(d.getElementById('results'),{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
+   }
+   engineReady=true;
+  }
+  const w=frame.contentWindow,d=frame.contentDocument;
+  d.getElementById('postcode').value=pc;
+  await w.go(true,false);
+  resizeEngine();
+  status.textContent=d.getElementById('status').textContent||'BETA Campaign search completed';
+ }catch(e){status.textContent='Search could not be completed: '+(e.message||e)}
+ finally{engineBusy=false}
+}
+function showDoorway(){
+ const pc=input.value.trim().toUpperCase();
+ if(!pc){status.textContent='Please enter a postcode.';input.focus();return}
+ input.value=pc;input.blur();
+ results.classList.add('open');
+ document.documentElement.classList.add('doorway-campaign-results');
+ requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById('clubfinderField').scrollIntoView({behavior:'instant',block:'start'})));
+ runEngine(pc);
+}
+document.getElementById('findBtn').addEventListener('click',showDoorway);
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();showDoorway()}});
+document.getElementById('hide-results').addEventListener('click',()=>{
+ results.classList.remove('open');document.documentElement.classList.remove('doorway-campaign-results');
+ status.textContent='Existing BETA engine retained for this session';
+ requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'instant'})));
+});
+</script></body></html>

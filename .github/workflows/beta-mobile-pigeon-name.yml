@@ -7,6 +7,7 @@ on:
     paths:
       - 'beta/clubfinder-beta.html'
       - 'updater/patch_beta_mobile_pigeon_name.py'
+      - 'tests/test_beta_campaign_pigeon_identity_visual.js'
       - 'updater/beta_campaign_identity_regression.js'
       - '.github/workflows/beta-mobile-pigeon-name.yml'
 
@@ -32,6 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_campaign_pigeon_identity_visual.js
           node tests/test_beta_petts_wood_display_identity.js
           node tests/test_beta_exmouth_full_index.js
           node tests/test_beta_weston_replay_stats.js
@@ -58,4 +60,5 @@ jobs:
           git pull --rebase origin ux/beta-mobile-pigeon-name-20260925
           python updater/patch_beta_mobile_pigeon_name.py --check
           node updater/beta_campaign_identity_regression.js
+          node tests/test_beta_campaign_pigeon_identity_visual.js
           git push origin HEAD:ux/beta-mobile-pigeon-name-20260925

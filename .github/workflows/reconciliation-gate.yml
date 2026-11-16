@@ -1,0 +1,94 @@
+name: Reconciliation Gate (read-only)
+on:
+  push:
+    branches:
+      - main
+      - beta/reconciliation-gate-v1
+    paths:
+      - updater/reconciliation_gate.py
+      - updater/reconciliation_gate_regression.py
+      - updater/build_reconciliation_candidate.py
+      - updater/build_reconciliation_candidate_regression.py
+      - updater/clubfinder_render_regression.js
+      - updater/clubfinder_stats_regression.js
+      - updater/competition_health.py
+      - updater/shadow_replay_advancement.py
+      - updater/shadow_replay_advancement_regression.py
+      - .github/workflows/reconciliation-gate.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - updater/reconciliation_gate.py
+      - updater/reconciliation_gate_regression.py
+      - updater/build_reconciliation_candidate.py
+      - updater/build_reconciliation_candidate_regression.py
+      - updater/clubfinder_render_regression.js
+      - updater/clubfinder_stats_regression.js
+      - updater/competition_health.py
+      - updater/shadow_replay_advancement.py
+      - updater/shadow_replay_advancement_regression.py
+      - .github/workflows/reconciliation-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconciliation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Synthetic reconciliation regression
+        run: python updater/reconciliation_gate_regression.py
+      - name: Production-first candidate regression
+        run: python updater/build_reconciliation_candidate_regression.py
+      - name: Guard canonical draw shadow producer (synthetic only)
+        run: python updater/shadow_replay_advancement_regression.py
+      - name: Build reconciled candidate from canonical fixtures
+        run: |
+          python updater/build_reconciliation_candidate.py \
+            --production competition.json \
+            --evidence beta/competition-fallback.json \
+            --output reconciliation-candidate.json
+          python updater/reconciliation_gate.py \
+            --production competition.json \
+            --candidate reconciliation-candidate.json > reconciliation-candidate-audit.json
+          cat reconciliation-candidate-audit.json
+      - name: Clubfinder and Stats regression against reconciled candidate
+        run: |
+          cp competition.json competition-original.json
+          cp clubfinder.html clubfinder-original.html
+          trap 'mv competition-original.json competition.json; mv clubfinder-original.html clubfinder.html' EXIT
+          cp reconciliation-candidate.json competition.json
+          # Reconciliation only imports preceding replay evidence. Build current
+          # results through the real guarded importer before auditing freshness.
+          python updater/run_source_resilient.py --label "Reconciliation active-round results" -- python updater/auto_round_results.py --publish
+          python updater/enrich_replay_kickoffs_and_active_venues.py
+          python updater/reconcile_result_history_aliases.py --check
+          python updater/competition_regression_guard.py
+          python updater/refresh_clubfinder_embedded_snapshot.py
+          node updater/clubfinder_render_regression.js
+          node updater/clubfinder_stats_regression.js
+          python updater/competition_health.py
+          python -c 'import json; d=json.load(open("updater/competition-health.json")); assert d["counts"]["overdue"]==0, d["overdue"]; print("RECONCILED COMPETITION HEALTH: no overdue fixtures")'
+      - name: Audit current branch data (expected to fail closed if divergent)
+        shell: bash
+        run: |
+          set +e
+          python updater/reconciliation_gate.py \
+            --production competition.json \
+            --candidate beta/competition-fallback.json > reconciliation-audit.json
+          code=$?
+          cat reconciliation-audit.json
+          echo "Audit exit code: $code (diagnostic only; conflicts require review)"
+          exit 0
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: reconciliation-audit
+          path: |
+            reconciliation-audit.json
+            reconciliation-candidate-audit.json

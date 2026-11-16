@@ -54,6 +54,7 @@ function boot(search,local,session){
     URL,URLSearchParams,requestAnimationFrame:fn=>fn(),setTimeout:()=>0,clearTimeout(){},
     Image:class{set src(path){this._src=path}},MutationObserver:undefined
   };
+  ctx.opened=[];ctx.open=(...args)=>{ctx.opened.push(args);return null;};
   ctx.window=ctx;ctx.globalThis=ctx;
   vm.createContext(ctx);
   vm.runInContext(scripts,ctx,{filename:'beta/challenges-beta.html',timeout:25000});
@@ -128,5 +129,142 @@ assert.equal(vm.runInContext('flipped',ctx),initialFlipped,'Inspection changed D
 assert.equal(local['tffc.challengeDeck.v1'],snapshot,'Inspection modified persisted Challenge state');
 assert.equal(location.href,'https://example.test/beta/challenges-beta.html','Inspection navigated unexpectedly');
 assert.equal(nodes.deckCabinet.children.length,27,'Inspection modified Trophy Cabinet contents');
+// Campaign milestones and the Honour mat have separate hidden facts.
+vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="19"),null)',ctx);
+assert.equal(nodes.trophyViewer.hidden,true,'unearned Seeing Double cannot reveal its egg');
+for(const [id,number,title] of [['17','087','THE CUP THAT NEVER WAS'],['19','142','THE ORIGINAL AWAY-DAY'],['23','025','A HEAD FOR SURVIVAL'],['17','087','THE CUP THAT NEVER WAS']]){
+ vm.runInContext('state.completed["'+id+'"]=true;openTrophy(CHALLENGES.find(c=>c.id==="'+id+'"),null);advanceTrophy();advanceTrophy()',ctx);
+ assert.equal(nodes.barrysBitMat.hidden,false);
+ assert.equal(nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. '+number);
+ assert.equal(nodes.barrysBitTitle.textContent,title,'reopening restores the correct milestone fact');
+ assert(nodes.trophyViewerCard.classList.contains('barry-flipped'));
+ vm.runInContext('advanceTrophy()',ctx);assert.equal(nodes.trophyViewer.hidden,true);
+}
+const discovered=JSON.parse(local['tffc.challengeDeck.v1']);
+assert.deepEqual(discovered.barryBitsFound,['17','19','23'],'reopening must not duplicate discoveries');
+for(const key of ['accepted','completed','records','tiesPlayed','awayTies','pigeonMiles']){
+ // completed was deliberately seeded in memory by the inspection loop above.
+ if(key!=='completed')assert.deepEqual(discovered[key],JSON.parse(snapshot)[key],'discovery must preserve '+key);
+}
+// Existing discoveries keep their deck slots when a new earlier egg is added; mere front/reverse inspection does not count.
+const gapLocal={'tffc.challengeDeck.v1':JSON.stringify({...JSON.parse(snapshot),completed:{'01':true,'17':true,'23':true}})};
+const gap=boot('',gapLocal,{});
+assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.dataset.challengeId),['03','07','10','17','19','23']);
+vm.runInContext('openTrophy(CHALLENGES.find(c=>c.id==="17"),null);advanceTrophy()',gap.ctx);
+assert(gap.nodes.barryEggs.children.every(e=>e.className==='barry-egg'),'reverse alone never discovers a fact');
+const beforeDiscovery=JSON.parse(vm.runInContext('JSON.stringify(state)',gap.ctx));
+delete beforeDiscovery.barryBitsFound;
+vm.runInContext('advanceTrophy();closeTrophy();openTrophy(CHALLENGES.find(c=>c.id==="23"),null);advanceTrophy();advanceTrophy();closeTrophy()',gap.ctx);
+assert.deepEqual(gap.nodes.barryEggs.children.map(e=>e.className),['barry-egg','barry-egg','barry-egg','barry-egg found','barry-egg','barry-egg found']);
+const afterDiscovery=JSON.parse(gapLocal['tffc.challengeDeck.v1']);
+const {barryBitsFound:_,...unchanged}=afterDiscovery;
+assert.deepEqual(unchanged,beforeDiscovery,'discoveries must change no Challenge progress');
+const reloaded=boot('',gapLocal,{});
+assert.deepEqual(reloaded.nodes.barryEggs.children.map(e=>e.className),['barry-egg','barry-egg','barry-egg','barry-egg found','barry-egg','barry-egg found'],'discovery gap survives reopening');
+vm.runInContext('state=blankState();renderStats()',reloaded.ctx);
+assert(reloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg'),'new Challenge campaign starts with undiscovered eggs');
+// The new egg is earned through the existing Honour controls, with no mileage milestone.
+const honour=boot('',{'tffc.challengeDeck.v1':JSON.stringify({version:1,accepted:{'01':true},completed:{'01':true},records:{},tiesPlayed:0,awayTies:0,pigeonMiles:0,campaignRound:0,giantKillAchieved:false,campaignStatus:'ACTIVE'})},{});
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="23");openTrophy(CHALLENGES[index],null)',honour.ctx);
+assert(!honour.nodes.trophyViewer.classList.contains('open'),'unearned Honour mat cannot reveal its egg');
+assert.equal(vm.runInContext('CHALLENGES[index].type',honour.ctx),'honour');
+honour.nodes.acceptBtn.onclick();honour.nodes.completeBtn.onclick();
+vm.runInContext('openTrophy(CHALLENGES[index],null);advanceTrophy();advanceTrophy()',honour.ctx);
+assert.equal(honour.nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. 025');
+assert.equal(honour.nodes.barrysBitTitle.textContent,'A HEAD FOR SURVIVAL');
+assert.equal(vm.runInContext('state.pigeonMiles',honour.ctx),0,'Scorcese needs no flown-mile milestone');
+assert.match(honour.nodes.barrysBitStory.textContent,/ocean liner/);
+assert.equal(honour.nodes.barrysBitCredit.children[0].textContent,'This message is kindly sponsored by the RNLI');
+// Adding Rockerfeller preserves all three discoveries from an older save.
+const legacyLocal={'tffc.challengeDeck.v1':JSON.stringify({...JSON.parse(snapshot),barryBitsFound:['17','19','23']})};
+const legacy=boot('',legacyLocal,{});
+assert.deepEqual(legacy.nodes.barryEggs.children.map(e=>e.className),['barry-egg','barry-egg','barry-egg','barry-egg found','barry-egg found','barry-egg found']);
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="07");openTrophy(CHALLENGES[index],null)',legacy.ctx);
+assert(!legacy.nodes.trophyViewer.classList.contains('open'),'unearned Rockerfeller hides its fact');
+legacy.nodes.acceptBtn.onclick();legacy.nodes.completeBtn.onclick();
+assert.equal(legacy.nodes.barryEggs.children[1].className,'barry-egg','earning Rockerfeller alone never reveals the fact');
+vm.runInContext('openTrophy(CHALLENGES[index],null);advanceTrophy();advanceTrophy()',legacy.ctx);
+assert.equal(legacy.nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. 178');
+assert.equal(legacy.nodes.barrysBitTitle.textContent,'CARELESS WRAPS COST LIVES');
+assert.match(legacy.nodes.barrysBitStory.textContent,/cucumber and salmon sandwiches/);
+assert.equal(legacy.nodes.barrysBitCredit.children[0].textContent,'History of Foil');
+assert.equal(legacy.nodes.barrysBitCredit.children[1].textContent,'The Shanghai Metal Corporation');
+assert(legacy.nodes.barryEggs.children.filter(e=>['07','17','19','23'].includes(e.dataset.challengeId)).every(e=>e.className==='barry-egg found'),'all four eggs are now discovered');
+const fourReloaded=boot('',legacyLocal,{});
+assert(fourReloaded.nodes.barryEggs.children.filter(e=>['07','17','19','23'].includes(e.dataset.challengeId)).every(e=>e.className==='barry-egg found'),'all four discoveries persist');
+// Crisp Peacock adds an undiscovered first slot without disturbing the four saved gold eggs.
+assert.equal(fourReloaded.nodes.barryEggs.children[0].className,'barry-egg');
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="03");openTrophy(CHALLENGES[index],null)',fourReloaded.ctx);
+assert(!fourReloaded.nodes.trophyViewer.classList.contains('open'),'unearned Fourth Law hides its fact');
+fourReloaded.nodes.acceptBtn.onclick();fourReloaded.nodes.completeBtn.onclick();
+assert.equal(vm.runInContext('!!state.completed["03"]',fourReloaded.ctx),false,'Fourth Law retains its qualifying-tie prerequisite');
+vm.runInContext('state.campaignRound=2;awardCampaignChallenges()',fourReloaded.ctx);
+fourReloaded.nodes.acceptBtn.onclick();fourReloaded.nodes.completeBtn.onclick();
+assert.equal(fourReloaded.nodes.barryEggs.children[0].className,'barry-egg','First Tie, First Pie completion alone does not discover the egg');
+vm.runInContext('openTrophy(CHALLENGES[index],null);advanceTrophy();advanceTrophy()',fourReloaded.ctx);
+assert.equal(fourReloaded.nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. 69');
+assert.equal(fourReloaded.nodes.barrysBitTitle.textContent,'CRISP PEACOCK');
+assert.match(fourReloaded.nodes.barrysBitStory.textContent,/Christmas peacocks/);
+assert.equal(fourReloaded.nodes.barrysBitCredit.children[0].textContent,'The Foil Museum. Sidney');
+assert.equal(fourReloaded.nodes.barrysBitCredit.children[1].textContent,'Allied Metals of Australia');
+assert(fourReloaded.nodes.barryEggs.children.filter(e=>e.dataset.challengeId!=='10').every(e=>e.className==='barry-egg found'),'five discovered facts fill five eggs');
+const fiveReloaded=boot('',legacyLocal,{});
+assert(fiveReloaded.nodes.barryEggs.children.filter(e=>e.dataset.challengeId!=='10').every(e=>e.className==='barry-egg found'),'all five discoveries survive reopening');
+// Ad Astra adds a sixth slot in deck order without disturbing five existing gold discoveries.
+assert.equal(fiveReloaded.nodes.barryEggs.children[2].dataset.challengeId,'10');
+assert.equal(fiveReloaded.nodes.barryEggs.children[2].className,'barry-egg');
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="10");openTrophy(CHALLENGES[index],null)',fiveReloaded.ctx);
+assert(!fiveReloaded.nodes.trophyViewer.classList.contains('open'),'unearned Ad Astra hides its fact');
+fiveReloaded.nodes.acceptBtn.onclick();fiveReloaded.nodes.completeBtn.onclick();
+assert.equal(fiveReloaded.nodes.barryEggs.children[2].className,'barry-egg','Ad Astra completion alone never discovers the egg');
+vm.runInContext('openTrophy(CHALLENGES[index],null);advanceTrophy();advanceTrophy()',fiveReloaded.ctx);
+assert.equal(fiveReloaded.nodes.barrysBitNumber.textContent,'FACTS ON FOIL No. 98b');
+assert.equal(fiveReloaded.nodes.barrysBitTitle.textContent,'A GIANT LEAP FOR MANKIND');
+assert.match(fiveReloaded.nodes.barrysBitStory.textContent,/foil, turkey, and peanut butter/);
+assert.match(fiveReloaded.nodes.barrysBitStory.textContent,/Velcro, Teflon and the World Wide Web/);
+assert.equal(fiveReloaded.nodes.barrysBitCredit.children[0].textContent,'How Going to The Moon Changed The World');
+assert.equal(fiveReloaded.nodes.barrysBitCredit.children[1].textContent,'Carl Sagan');
+assert.equal(fiveReloaded.nodes.barryEggs.children.length,6);
+assert(fiveReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'six discovered facts fill six eggs');
+const sixReloaded=boot('',legacyLocal,{});
+assert(sixReloaded.nodes.barryEggs.children.every(e=>e.className==='barry-egg found'),'all six discoveries survive reopening');
+
+// Support stays below the Coming Soon panel, never among the changing mat controls.
+assert(!html.includes('id="rockerfellerSupport"'),'Old mat support controls must be removed');
+assert.match(html, /class="tffc-support-lozenge" href="https:\/\/buy\.stripe\.com\/dRm28s2yZdhAgBG4L36EU01" target="_blank" rel="noopener noreferrer"/);
+assert(html.indexOf('class="tffc-support-row"')>html.indexOf('class="deck-sales-tease"'));
+assert(html.indexOf('class="tffc-support-row"')<html.indexOf('class="beta-help deck-footer-help"'));
+const supportLocal={};
+const support=boot('?payment=success',supportLocal,{});
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="07");render()',support.ctx);
+assert.equal(support.ctx.opened.length,0,'Rendering and return URLs must never open or award payment');
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false);
+support.nodes.acceptBtn.onclick();
+assert.equal(support.ctx.opened.length,1,'Accept Rockerfeller opens checkout once');
+assert.deepEqual(support.ctx.opened[0],['https://buy.stripe.com/dRm28s2yZdhAgBG4L36EU01','_blank','noopener,noreferrer']);
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),false,'Opening checkout must not award a trophy');
+support.nodes.acceptBtn.onclick();
+assert.equal(support.ctx.opened.length,1,'Repeated acceptance must not reopen payment');
+support.nodes.completeBtn.onclick();
+assert.equal(vm.runInContext('!!state.completed["07"]',support.ctx),true,'Honour completion still awards the mat');
+assert.equal(vm.runInContext('state.barryBitsFound.includes("07")',support.ctx),false,'Completion alone never discovers an egg');
+vm.runInContext('index=4;render()',support.ctx);
+support.nodes.acceptBtn.onclick();
+assert.equal(support.ctx.opened.length,1,'Other Honour challenges never open checkout');
+
+const bootRoomBoy=boot('',{},{});
+vm.runInContext('index=CHALLENGES.findIndex(c=>c.id==="21");render()',bootRoomBoy.ctx);
+assert.equal(bootRoomBoy.nodes.verifyBadge.textContent,'An Honour Challenge');
+assert.equal(bootRoomBoy.nodes.flipcard.classList.contains('coming-soon-mat'),false);
+assert.equal(bootRoomBoy.nodes.acceptBtn.disabled,false);
+assert.equal(bootRoomBoy.nodes.completeBtn.disabled,true);
+bootRoomBoy.nodes.acceptBtn.onclick();
+assert.equal(bootRoomBoy.nodes.completeBtn.disabled,false);
+bootRoomBoy.nodes.completeBtn.onclick();
+assert.equal(vm.runInContext('!!state.completed["21"]',bootRoomBoy.ctx),true);
+assert.ok(bootRoomBoy.nodes.deckCabinet.children.some(slot=>
+  slot.className.includes('completed')&&slot.children[0]?.dataset.src.endsWith('/mat-21-front.webp')),
+  'Completing Boot Room Boy must put Mat 21 in the Trophy Cabinet');
+
 console.log('BETA TROPHY VIEWER: PASS');
 console.log('Three taps, backdrop, Escape, keyboard, focus, persistent state and Deck isolation: PASS');

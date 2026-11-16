@@ -12,6 +12,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from result_metadata import preserve_result_metadata
 from round_state_engine import REPLAY_ROUNDS, base_round, compatible, norm
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -299,10 +300,11 @@ def resolve(data, source_fixtures):
 
 def main():
     data = json.loads(DATA.read_text(encoding="utf-8"))
+    metadata_changes = preserve_result_metadata(data)
     draws = unresolved_draws(data)
     source = parse_source_fixtures(fetch(SOURCE_URL)) if draws else []
     replay_map, details = resolve(data, source)
-    changed = (data.get("replays") or {}) != replay_map
+    changed = bool(metadata_changes) or (data.get("replays") or {}) != replay_map
     if changed:
         data["replays"] = replay_map
         data["updated_at"] = datetime.now(timezone.utc).isoformat()

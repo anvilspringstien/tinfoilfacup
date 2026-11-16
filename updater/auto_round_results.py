@@ -11,12 +11,18 @@ replay. Replay ancestry exists only after an earlier completed draw in a replay-
 eligible qualifying round.
 """
 import argparse
+import csv
 import html as H
 import json
+import os
 import re
 import urllib.request
+from urllib.error import HTTPError, URLError
 from datetime import datetime, timezone
 from pathlib import Path
+
+from result_metadata import metadata_candidates, retain_metadata
+from match_decisions import classify_batch, retain_holds
 
 from round_state_engine import (
     base_round,
@@ -31,7 +37,11 @@ from round_state_engine import (
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "competition.json"
 REPORT = ROOT / "updater" / "results-pilot-report.json"
+SOURCE_CAPTURE = ROOT / "updater" / "results-source-capture.json"
 FWP_FIXTURES_BASE = "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+BBC_COMPETITION_SOURCES = {
+    "fa-cup": "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/",
+}
 FWP_LIVE_URL = "https://www.footballwebpages.co.uk/fa-cup"
 FWP_ROUND_SLUGS = {
     "Extra Preliminary Round": "extra-preliminary-round",
@@ -246,7 +256,7 @@ def parse_fwp_observations(raw, known, source_url):
             if index + 1 < len(tokens) and tokens[index + 1].group(1).lower() == "tr":
                 note = clean(tokens[index + 1].group(0))
             winner, decision = note_winner(note, home, away)
-            observations.append({
+            item = {
                 "fixture": fixture,
                 "observation": {
                     "home": home,
@@ -259,7 +269,13 @@ def parse_fwp_observations(raw, known, source_url):
                     "date": current_date or fixture.get("date", ""),
                     "source_url": source_url,
                 },
-            })
+            }
+            penalties = re.search(r'\b(?:win|wins|won)(?:\s+on\s+penalties)?\s+(\d+)\s*[-–]\s*(\d+)', note, re.I)
+            if decision == 'penalties' and winner and penalties:
+                winning, losing = map(int, penalties.groups())
+                hp, ap = (winning, losing) if norm(winner) == norm(home) else (losing, winning)
+                item['observation'].update(home_pens=hp, away_pens=ap)
+            observations.append(item)
             continue
 
         for i in range(1, len(c) - 2):
@@ -426,6 +442,7 @@ def aliases(name):
 
 
 def merge_result(data, result):
+    result = retain_metadata(result, metadata_candidates(data))
     changed = False
     for club in aliases(result["home"]) | aliases(result["away"]):
         arr = data.setdefault("result_history", {}).setdefault(club, [])
@@ -465,6 +482,7 @@ def merge_event(data, event):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="https://www.thefa.com/competitions/thefacup/results")
+    parser.add_argument("--competition", choices=BBC_COMPETITION_SOURCES, default="fa-cup")
     parser.add_argument("--publish", action="store_true")
     args = parser.parse_args()
 
@@ -473,43 +491,153 @@ def main():
     if not round_name or not known:
         raise SystemExit("Active-round scanner health failure: no canonical active draw available.")
 
-    fwp_round_source = fwp_round_url(round_name)
-    primary_raw = fetch(args.url)
-    fixtures_raw = fetch(fwp_round_source)
-    validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
-    live_raw = fetch(FWP_LIVE_URL)
+    source_log_path = os.environ.get("TFFC_RESULTS_SOURCE_LOG")
+    source_log = Path(source_log_path) if source_log_path else None
 
-    by_source = {
-        "primary_awards": parse_primary_awards(primary_raw, known, args.url),
-        "fwp_fixtures": parse_fwp_observations(fixtures_raw, known, fwp_round_source),
-        "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
-    }
+    def record_source(url, event, detail="", fixture_date="", home="", away=""):
+        nonlocal source_log
+        if source_log is None:
+            return
+        try:
+            with source_log.open("a", encoding="utf-8", newline="") as stream:
+                writer = csv.writer(stream)
+                if stream.tell() == 0:
+                    writer.writerow(("checked_at", "scan_round", "source_url", "event",
+                                     "detail", "fixture_date", "home", "away"))
+                writer.writerow((datetime.now(timezone.utc).isoformat(), round_name, url,
+                                 event, detail, fixture_date, home, away))
+        except (OSError, UnicodeError, csv.Error):
+            print("::warning::Could not write the Results source observations CSV. Continuing the scan.")
+            source_log = None
+
+    def observed_fetch(url):
+        try:
+            raw = fetch(url)
+        except (OSError, ValueError) as exc:
+            record_source(url, "fetch_error", f"{type(exc).__name__}: {exc}")
+            raise
+        record_source(url, "fetch_ok")
+        return raw
+
+    fwp_round_source = fwp_round_url(round_name)
+    try:
+        primary_raw = observed_fetch(args.url)
+        fixtures_raw = observed_fetch(fwp_round_source)
+        live_raw = observed_fetch(FWP_LIVE_URL)
+        SOURCE_CAPTURE.write_text(json.dumps({
+            "checked_at": datetime.now(timezone.utc).isoformat(),
+            "primary": {"url": args.url, "html": primary_raw},
+            "fixtures": {"url": fwp_round_source, "html": fixtures_raw},
+            "live": {"url": FWP_LIVE_URL, "html": live_raw},
+        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        validate_fwp_round_page(fixtures_raw, round_name, fwp_round_source)
+
+        by_source = {
+            "primary_awards": parse_primary_awards(primary_raw, known, args.url),
+            "fwp_fixtures": parse_fwp_observations(fixtures_raw, known, fwp_round_source),
+            "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
+        }
+    except (URLError, TimeoutError) as exc:
+        if isinstance(exc, HTTPError) and not 500 <= exc.code < 600:
+            raise
+        from bbc_results import full_time_observations
+
+        print("Primary result source unavailable, checking BBC Sport:", exc)
+        live_raw = ""
+        captures = {}
+        bbc_observations = []
+        for date in sorted({str(f.get("date", ""))[:10] for f in known}):
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+                continue
+            if date > datetime.now(timezone.utc).date().isoformat():
+                continue
+            month_url = BBC_COMPETITION_SOURCES[args.competition] + date[:7]
+            date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/" + date
+            for url in (month_url, date_url):
+                if url not in captures:
+                    captures[url] = observed_fetch(url)
+            bbc_observations.extend(full_time_observations(
+                captures[month_url], known, date, month_url, match_fixture, captures[date_url],
+            ))
+        if not bbc_observations:
+            raise SystemExit("BBC fallback returned no dated canonical full-time results.") from exc
+        SOURCE_CAPTURE.write_text(json.dumps({
+            "checked_at": datetime.now(timezone.utc).isoformat(),
+            "bbc": [{"url": url, "html": raw} for url, raw in captures.items()],
+        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        by_source = {"primary_awards": [], "fwp_fixtures": [], "fwp_live": [], "bbc": bbc_observations}
+    if source_log is not None:
+        for rows in by_source.values():
+            for item in rows:
+                observation = item["observation"]
+                if not str(observation.get("status", "")).upper().startswith("FT"):
+                    continue
+                home_score, away_score = observation.get("home_score"), observation.get("away_score")
+                if home_score is None or away_score is None:
+                    continue
+                record_source(
+                    observation.get("source_url", ""), "final_score", f"{home_score}-{away_score}",
+                    observation.get("date", ""), observation["home"], observation["away"],
+                )
     observations = dedupe_observations(sum(by_source.values(), []))
     history = history_rows(data)
     classified = []
     blocked = []
     changed = False
 
-    for item in observations:
-        fixture, observation = item["fixture"], item["observation"]
-        try:
-            outcome = classify_observation(fixture, observation, history)
-        except ValueError as exc:
-            blocked.append({"fixture": f'{fixture.get("home")} v {fixture.get("away")}', "date": observation.get("date", ""), "error": str(exc)})
+    decisions = classify_batch(observations, history)
+    for item in decisions:
+        if item.get('held'):
             continue
+        outcome = item['outcome']
         classified.append(outcome)
         if outcome["kind"] == "result":
             result = outcome["result"]
             if merge_result(data, result):
                 changed = True
-                history.append(result)
-                history = unique_history(history)
         elif outcome["kind"] == "event":
             if merge_event(data, outcome["event"]):
                 changed = True
+    changed = retain_holds(data, decisions) or changed
+
+    # A next-round draw must not make the preceding qualifying replays invisible.
+    # Stage through the same audit/readiness/chronology gates as manual recovery;
+    # the surrounding Results workflow still runs all publication/render guards.
+    from scheduled_archived_replays import collect
+    archived_report = {"status": "blocked-by-active-chronology", "changed": False}
+    if not blocked:
+        try:
+            def capture_archived_source(url):
+                raw = observed_fetch(url)
+                capture = json.loads(SOURCE_CAPTURE.read_text(encoding="utf-8"))
+                capture["archived_replays"] = {"url": url, "html": raw}
+                SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+                return raw
+            data, archived_report, _ = collect(data, capture_archived_source, live_raw)
+            changed = changed or archived_report["changed"]
+        except (ValueError, SystemExit) as exc:
+            blocked.append({"scope": "archived-replays", "error": str(exc)})
+            archived_report = {"status": "blocked", "changed": False, "error": str(exc)}
+
+    # Persisted fixture identities outlive draw promotion. Retry their original
+    # round's source even when the current source can no longer contain them.
+    from retry_match_decisions import retry_archived_holds, scan_unfinished_archived_ties
+    def capture_retry_source(url):
+        raw = observed_fetch(url)
+        capture = json.loads(SOURCE_CAPTURE.read_text(encoding='utf-8'))
+        capture.setdefault('retried_decisions', []).append({'url': url, 'html': raw})
+        SOURCE_CAPTURE.write_text(json.dumps(capture, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+        return raw
+    visited = {round_name, archived_report.get('archived_round'),
+               (archived_report.get('audit') or {}).get('archived_round')}
+    data, retry_report = retry_archived_holds(data, capture_retry_source, live_raw, visited)
+    changed = changed or retry_report['changed']
+    data, unfinished_report = scan_unfinished_archived_ties(data, capture_retry_source, live_raw)
+    changed = changed or unfinished_report['changed']
 
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
+        "archived_replays": archived_report,
         "scan_round": round_name,
         "known_ties": len(known),
         "fwp_round_source_url": fwp_round_source,
@@ -519,6 +647,9 @@ def main():
         "classified_events": sum(1 for item in classified if item["kind"] == "event"),
         "duplicates": sum(1 for item in classified if item["kind"] == "duplicate"),
         "blocked": blocked,
+        "pending_match_decisions": data.get('pending_match_decisions', []),
+        "retried_match_decisions": retry_report,
+        "unfinished_archived_ties": unfinished_report,
         "publish": bool(args.publish),
         "competition_changed": bool(changed),
     }
@@ -535,6 +666,14 @@ def main():
     print("Results classified:", report["classified_results"])
     print("Unresolved events classified:", report["classified_events"])
     print("Blocked chronology conflicts:", len(blocked))
+    print("Archived replay collection:", archived_report["status"])
+    print("Unfinished archived ties:", unfinished_report)
+    for held in archived_report.get("held", []):
+        print("::warning::Archived replay remains unresolved: " + str(held))
+    for held in data.get('pending_match_decisions', []):
+        fixture = held['fixture']
+        print('::warning title=Match decision awaiting evidence::' + fixture['home'] + ' v ' + fixture['away']
+              + ' (' + held['date'] + ') — ' + held['reason'] + '; first held ' + held['first_seen_at'])
 
     if blocked and args.publish:
         raise SystemExit("Publication blocked by chronology conflict(s): " + str(blocked[:5]))

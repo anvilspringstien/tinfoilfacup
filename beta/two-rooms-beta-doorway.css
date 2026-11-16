@@ -1,0 +1,27 @@
+/* Isolated doorway proof. The entire BETA Campaign engine and styles remain in place. */
+html.tffc-new-doorway:not(.tffc-stats-route) body{padding:0!important}
+html.tffc-new-doorway:not(.tffc-stats-route) #tffcFourLaws{height:100svh;min-height:0;padding:clamp(6px,1.2vh,13px);display:flex;justify-content:center;max-width:none;zoom:1!important}
+html.tffc-new-doorway:not(.tffc-stats-route) #tffcFourLaws .tffcOuter{width:100%;max-width:628px;height:100%;min-height:0;margin:0 auto;overflow:hidden;background:#100f0d;border:1px solid #818181;border-radius:12px;container-type:inline-size;display:block}
+html.tffc-new-doorway #tffcFourLaws .doorway-room{max-width:580px;height:100%;min-height:0;margin:auto;display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center}
+html.tffc-new-doorway #tffcFourLaws .doorway-crest-compartment{width:100%;display:grid;place-items:center;padding-top:clamp(6px,5.8cqw,30px)}
+html.tffc-new-doorway #tffcFourLaws .doorway-crest{display:block;width:83.333%;max-width:450px;aspect-ratio:1;height:auto;object-fit:contain}
+html.tffc-new-doorway #tffcFourLaws .doorway-furniture{min-height:0;overflow:auto;width:100%;padding:clamp(8px,1.5vh,14px) 12px 14px;display:flex;flex-direction:column;align-items:stretch;text-align:left}
+html.tffc-new-doorway #tffcFourLaws .doorway-title{align-self:center;text-align:center;font-size:clamp(36px,12.85cqw,65px);font-weight:300;letter-spacing:-.035em;line-height:1.04;white-space:nowrap;margin:auto 0 0}
+html.tffc-new-doorway #tffcFourLaws .doorway-laws{margin-top:auto;text-align:center;font-size:clamp(15px,4.45cqw,23px);letter-spacing:-.025em;line-height:1.38}
+html.tffc-new-doorway #tffcFourLaws .doorway-machine{flex-shrink:0;margin:clamp(16px,2.5vh,23px) auto 0;background:#084c61;border-radius:6px;overflow:hidden;width:max-content;max-width:100%;color:#f6f3e8}
+html.tffc-new-doorway #tffcFourLaws #searchPanel{display:flex;align-items:center;justify-content:center;gap:10px;padding:20px 20px 0;margin:0!important;width:auto!important;max-width:100%;background:transparent!important;position:static!important;border:0!important;box-shadow:none!important}
+html.tffc-new-doorway #tffcFourLaws #postcode{flex:0 1 175px;width:175px;min-width:0;height:auto;padding:12px 14px;border:0;border-radius:10px;background:#f7f7f7;color:#252525;font-size:13px;transform:none!important}
+html.tffc-new-doorway #tffcFourLaws #findBtn{flex:none;width:auto;height:auto;padding:10px 15px;border:2px solid #f6f3e8;border-radius:10px;background:transparent;color:#f6f3e8;font-size:13px;white-space:nowrap;transform:none!important}
+html.tffc-new-doorway #tffcFourLaws #liveDataTools{display:flex;justify-content:center;margin:0!important;padding:8px 8px 0!important;font-size:10px!important;background:transparent}
+html.tffc-new-doorway #tffcFourLaws #status{margin:0!important;padding:0 8px 8px!important;font-size:10px!important;line-height:1.3;text-align:center;color:#f6f3e8}
+html.tffc-new-doorway #tffcFourLaws .doorway-invocation{font-size:clamp(13px,4.25cqw,22px);line-height:1.3;text-align:center;white-space:nowrap;margin:clamp(16px,2.5vh,23px) 0 0}
+html.tffc-new-doorway #tffcFourLaws .doorway-footnote{font-size:clamp(8px,1.65cqw,10px);line-height:1.3;text-align:center;margin:clamp(16px,2.5vh,23px) 0 0}
+html.tffc-new-doorway #clubfinderField{max-width:628px;margin:0 auto;min-width:0}
+html.tffc-new-doorway:not(.tffc-campaign-results) #clubfinderField{display:none!important}
+html.tffc-new-doorway.tffc-campaign-results #tffcFourLaws{height:auto;min-height:0}
+html.tffc-new-doorway.tffc-campaign-results #tffcFourLaws .tffcOuter{height:auto;overflow:visible}
+html.tffc-new-doorway.tffc-campaign-results #tffcFourLaws .doorway-room{height:auto;grid-template-rows:auto auto}
+html.tffc-new-doorway.tffc-campaign-results #tffcFourLaws .doorway-furniture{overflow:visible}
+@media(max-height:700px){html.tffc-new-doorway #tffcFourLaws .doorway-crest-compartment{padding-top:6px}html.tffc-new-doorway #tffcFourLaws .doorway-crest{width:min(83.333%,43svh)}}
+@media(min-width:700px){html.tffc-new-doorway #tffcFourLaws .tffcOuter{max-width:550px}html.tffc-new-doorway #tffcFourLaws .doorway-room{max-width:508px}html.tffc-new-doorway #tffcFourLaws .doorway-crest{max-width:394px}html.tffc-new-doorway #tffcFourLaws .doorway-laws>div{white-space:nowrap}}
+@media(max-width:420px){html.tffc-new-doorway #tffcFourLaws #searchPanel{padding:12px 12px 0;gap:8px}html.tffc-new-doorway #tffcFourLaws #postcode{padding:10px 8px;font-size:12px}html.tffc-new-doorway #tffcFourLaws #findBtn{padding:8px 9px;font-size:12px}}

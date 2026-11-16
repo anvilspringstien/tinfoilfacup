@@ -4,13 +4,15 @@ const vm=require('vm');
 const path=require('path');
 
 const ROOT=path.resolve(__dirname,'..');
+const introSource=fs.readFileSync(path.join(ROOT,'beta/campaign-introductions.js'),'utf8');
 const html=fs.readFileSync(path.join(ROOT,'beta','clubfinder-beta.html'),'utf8');
-const reportImages=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.]png/g)].map(m=>m[0]);
+const reportImages=[...html.matchAll(/assets\/stats-report\/[a-z0-9-]+[.](?:png|webp)/g)].map(m=>m[0]);
 if(reportImages.length!==7||new Set(reportImages).size!==7)throw new Error('BETA Stats: report assets missing from renderer');
 for(const url of reportImages){
   const bytes=fs.readFileSync(path.join(ROOT,'beta',url));
-  if(!bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))
-    throw new Error('BETA Stats: missing or invalid report image '+url);
+  const png=bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]));
+  const webp=bytes.subarray(0,4).toString()==='RIFF'&&bytes.subarray(8,12).toString()==='WEBP';
+  if(!png&&!webp)throw new Error('BETA Stats: missing or invalid report image '+url);
 }
 const competition=JSON.parse(fs.readFileSync(path.join(ROOT,'competition.json'),'utf8'));
 const liteRoute=fs.readFileSync(path.join(ROOT,'beta','stats-beta.html'),'utf8');
@@ -51,7 +53,7 @@ function nodeStub(){
   return {
     value:'',textContent:'',innerHTML:'',hidden:false,dataset:{},style:{},disabled:false,
     children:[],parentElement:null,
-    addEventListener(){},focus(){},setAttribute(){},removeAttribute(){},appendChild(){},remove(){},insertAdjacentElement(){},
+    addEventListener(){},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},appendChild(){},remove(){},insertAdjacentElement(){},
     querySelectorAll(){return []},classList:{add(){},remove(){}}
   };
 }
@@ -105,9 +107,14 @@ function postcodeFromUrl(url){
   const m=s.match(/\/postcodes\/([^?/#]+)/i);
   return m?String(m[1]).replace(/\s+/g,'').toUpperCase():'';
 }
-const locationStub={href:'https://anvilspringstien.github.io/tinfoilfacup/beta/clubfinder-beta.html'};
+const locationHistory=['https://anvilspringstien.github.io/tinfoilfacup/beta/clubfinder-beta.html'];
+const locationStub={
+  href:locationHistory[0],
+  replace(url){this.href=String(url);locationHistory[locationHistory.length-1]=this.href;},
+  setHref(url){this.href=String(url);locationHistory.push(this.href);}
+};
 const sandbox={
-  console,process,html,document:documentStub,MutationObserver:undefined,
+  console,process,html,introSource,document:documentStub,MutationObserver:undefined,
   localStorage:{
     getItem:k=>localStore[k]??null,
     setItem:(k,v)=>{localStore[k]=String(v)},
@@ -129,6 +136,7 @@ const sandbox={
   getCounterIncrementCalls:()=>counterIncrementCalls,
   getLocalStoreSnapshot:()=>JSON.stringify(localStore),
   getSessionStoreSnapshot:()=>JSON.stringify(sessionStore),
+  getLocationHistory:()=>JSON.stringify(locationHistory),
   fetch:async(url)=>{
     const s=String(url);
     if(s.includes('counter-config.json'))return {ok:true,status:200,json:async()=>({increment_url:'https://counter.test/increment'})};
@@ -177,9 +185,11 @@ const assertions=`
   }
   const snapshotSource=String(tinFoilChallengeStatsSnapshot);
   if(!snapshotSource.includes('const v=completedResultVenue(r);'))throw new Error('BETA parity regression: Challenge Stats venue resolver bypasses completedResultVenue');
-  const challengeSource=String(openChallenges);
+  const challengeSource=String(tinFoilPrepareChallenges);
+  if(!String(openChallenges).includes("prepared||tinFoilPrepareChallenges(origin)"))throw new Error("Challenges must use the canonical preparation helper");
   if(!challengeSource.includes('function venueForChallenge(r){return completedResultVenue(r);}'))throw new Error('BETA parity regression: Challenges Pigeon Miles resolver bypasses completedResultVenue');
-  const certSource=String(journeyCertificate).replace(/\\s+/g,' ');
+  if(!String(journeyCertificate).includes('prepared||tinFoilPrepareStatsDocument(origin,returnMode)'))throw new Error('Stats must use the canonical preparation helper');
+  const certSource=String(tinFoilPrepareStatsDocument).replace(/\\s+/g,' ');
   if(!certSource.includes('function venueForResult(r){ const v=completedResultVenue(r);'))throw new Error('BETA parity regression: Stats venue resolver bypasses completedResultVenue');
   if(!certSource.includes('const pigeonStats=await tinFoilPigeonMilesForStats(crumbs,savedJourneyForStats&&savedJourneyForStats.postcode,venueForResult);'))throw new Error('BETA parity regression: Stats does not recalculate canonical Pigeon Miles');
   if(certSource.includes('bridgeMatches')||certSource.includes('cachedMiles'))throw new Error('BETA parity regression: stale Challenges mileage cache can still override Stats');
@@ -214,7 +224,43 @@ const assertions=`
   // the Pigeon Call Sign before we test browser refresh.
   await go(false);
   const rendered=String(document.getElementById('results').innerHTML||'');
-  if(!rendered.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: Pigeon Call Sign did not render');
+  // Campaign UI hierarchy: larger choices first, then three primary
+  // destinations above secondary housekeeping in the chosen Campaign.
+  if(!html.includes('.journey-choice .journey-lozenge .round{')||
+     !html.includes('.campaign-primary-nav{')||
+     !html.includes('grid-template-columns:repeat(3,minmax(0,1fr))')||
+     !html.includes('min-height:44px')||
+     !html.includes('Choose Tin Foil FA Cup Campaign ' + String.fromCharCode(36) + '{jn}')||
+     !html.includes('class="hover-label">Make This My Tin Foil FA Cup Campaign'))
+    throw new Error('BETA UX: 44px Campaign choice button or desktop hover contract drifted');
+  if(!rendered.includes('class="campaign-primary-nav"')||
+     !rendered.includes('class="campaign-secondary-nav"'))
+    throw new Error('BETA UX: chosen Campaign must separate primary navigation and secondary controls');
+  const primaryNav=rendered.split('<div class="campaign-primary-nav"')[1]?.split('</div>')[0]||'';
+  const secondaryNav=rendered.split('<div class="campaign-secondary-nav"')[1]?.split('</div>')[0]||'';
+  if(!primaryNav.includes('My Campaign</button>')||
+     !primaryNav.includes('My Stats</button>')||
+     !primaryNav.includes('My Challenges</button>')||
+     !primaryNav.includes('onclick="tffcMyCampaignInfo()"')||
+     !html.includes('function tffcMyCampaignInfo()')||
+     !html.includes('tffcScrollToFinder();')||
+     !introSource.includes('This is your Tin Foil FA Cup Campaign. There are many like this, but this one is yours.')||
+     !primaryNav.includes('tffcCampaignIntroduction(&quot;stats&quot;,' )||
+     !primaryNav.includes('tffcCampaignIntroduction(&quot;challenges&quot;,' )||
+     (primaryNav.match(/<button /g)||[]).length!==3||
+     /Reset|End My Campaign|View Original Campaigns/.test(primaryNav))
+    throw new Error('BETA UX: primary Campaign navigation or action wiring drifted');
+  if(!secondaryNav.includes('View Original Campaigns')||
+     !secondaryNav.includes('End My Campaign')||
+     !secondaryNav.includes('Reset')||
+     !secondaryNav.includes('Hard Reset')||
+     !secondaryNav.includes('viewOriginalJourneys()')||
+     !secondaryNav.includes('endMyJourney()'))
+    throw new Error('BETA UX: Campaign housekeeping handlers changed');
+  if(getCounterIncrementCalls()!==1)
+    throw new Error('BETA UX: navigation render caused a new counter request');
+  console.log('BETA 44px CAMPAIGN CHOICE + THREE-TIER NAVIGATION: PASS');
+  if(!rendered.replace(/<[^>]*>/g,'').includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: Pigeon Call Sign did not render');
   if(!rendered.includes('placeholder="Name your pigeon"'))throw new Error('BETA identity regression: inline pigeon-name field did not render');
   if(/Save(?: My)? Pigeon/i.test(rendered))throw new Error('BETA identity regression: pigeon naming unexpectedly requires a Save control');
 
@@ -255,7 +301,7 @@ const assertions=`
   if(tinFoilCurrentSearchNumber()!==9842)throw new Error('BETA identity regression: refresh did not restore #09842');
   if(document.getElementById('postcode').value!=='HP7 0EJ')throw new Error('BETA identity regression: refresh did not restore saved postcode');
   const refreshed=String(document.getElementById('results').innerHTML||'');
-  if(!refreshed.includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: refresh did not redraw Pigeon Call Sign');
+  if(!refreshed.replace(/<[^>]*>/g,'').includes('Pigeon Call Sign: Tango Foxtrot 2 Alpha Charlie 09842'))throw new Error('BETA identity regression: refresh did not redraw Pigeon Call Sign');
   if(!refreshed.includes('value="Pigeon McPigeonface"'))throw new Error('BETA identity regression: refresh did not preserve full pigeon name');
   if(loadSavedJourney().pigeonName!=='Pigeon McPigeonface')throw new Error('BETA identity regression: long pigeon name changed across refresh');
   if(!refreshed.includes('Amersham Town'))throw new Error('BETA identity regression: refresh returned a blank Clubfinder');
@@ -275,6 +321,19 @@ const assertions=`
      openedHistory.length!==1||openedHistory[0]!=='stats-beta.html')
     throw new Error('BETA Stats fast-open: did not open and label the tiny same-origin route: '+JSON.stringify({openedUrls,openedHistory}));
   const firstOpenPage=getCertificateHtml();
+  // Stats' actual emitted editor script must save through the shared Campaign
+  // and refresh the original Clubfinder tab; Back must sync before closing.
+  const editorTagStart=firstOpenPage.indexOf('<script>(function(){var key=');
+  const editorTagEnd=firstOpenPage.indexOf('</script>',editorTagStart);
+  if(editorTagStart<0||editorTagEnd<0)
+    throw new Error('BETA Stats: generated pigeon-name editor script not found');
+  const editorJs=firstOpenPage.slice(editorTagStart+'<script>'.length,editorTagEnd);
+  try{new Function(editorJs)}
+  catch(e){throw new Error('BETA Stats: generated pigeon-name editor JavaScript invalid: '+e.message)}
+  if(!editorJs.includes('window.opener.tinFoilRefreshCampaignIdentityDisplay()'))
+    throw new Error('BETA Stats: save no longer tells original Clubfinder to redraw its identity');
+  if(!firstOpenPage.includes('try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}'))
+    throw new Error('BETA Stats: Back no longer synchronises the Clubfinder name before focus');
   if(!firstOpenPage.includes('YOUR TIN FOIL FA CUP CAMPAIGN')||
      firstOpenPage.includes('Preparing Your Stats…'))
     throw new Error('BETA Stats fast-open: prepared tab did not finish with the campaign certificate');
@@ -282,7 +341,7 @@ const assertions=`
     throw new Error('BETA Stats fast-open: ready Clubfinder did not render the pop-up');
   const instantPage=getCertificateHtml();
   function checkStatsImages(page){
-    const urls=[...page.matchAll(new RegExp('<img[^>]+src="(assets/stats-report/[a-z0-9-]+[.]png)"','g'))].map(m=>m[1]);
+    const urls=[...page.matchAll(new RegExp('<img[^>]+src="(assets/stats-report/[a-z0-9-]+[.](?:png|webp))"','g'))].map(m=>m[1]);
     if(urls.length!==7||new Set(urls).size!==7||page.includes('data:image/png;base64,'))
       throw new Error('BETA Stats: expected seven distinct external report images; got '+JSON.stringify(urls));
     return urls;
@@ -323,6 +382,30 @@ const assertions=`
      JSON.stringify(loadSavedJourney())!==statsSavedBefore)
     throw new Error('BETA Stats: navigation altered campaign or allocated a call sign');
   console.log('BETA STATS LIGHT FIRST OPEN + CANONICAL REFRESH: PASS');
+
+  // Execute the exact editor script rendered into Stats. A name entered there
+  // must persist to the shared Campaign AND notify the still-open Clubfinder.
+  const statsHandlers={};
+  let identityRefreshCalls=0;
+  const fakeStatsDocument={addEventListener(name,listener){statsHandlers[name]=listener;}};
+  const fakeStatsWindow={opener:{closed:false,tinFoilRefreshCampaignIdentityDisplay(){identityRefreshCalls++;}}};
+  new Function('window','document','localStorage',editorJs)(fakeStatsWindow,fakeStatsDocument,localStorage);
+  if(typeof statsHandlers.change!=='function')
+    throw new Error('BETA Stats editor: real generated change handler was not installed');
+  const nameBeforeStatsEdit=loadSavedJourney().pigeonName;
+  statsHandlers.change({target:{
+    matches(selector){return selector==='.stats-pigeon-editor';},
+    dataset:{campaignCallSign:tinFoilSavedCallSign(loadSavedJourney())},
+    value:'Stats Named Me'
+  }});
+  if(loadSavedJourney().pigeonName!=='Stats Named Me'||identityRefreshCalls!==1)
+    throw new Error('BETA Stats editor: name was not persisted and synchronised immediately with opener');
+  if(getCounterIncrementCalls()!==statsCounterBefore)
+    throw new Error('BETA Stats editor: name edit incremented the counter');
+  tinFoilSavePigeonName(nameBeforeStatsEdit);
+  if(JSON.stringify(loadSavedJourney())!==statsSavedBefore)
+    throw new Error('BETA Stats editor: test restoration unexpectedly changed saved Campaign identity');
+  console.log('BETA STATS NAME EDIT -> ORIGINAL CLUBFINDER: PASS');
 
   // Execute the real Clubfinder -> Challenges producer path, not merely a
   // static source check. It must export canonical miles and the full identity
@@ -428,6 +511,10 @@ const assertions=`
 
   if(sessionStorage.getItem('tffc.challengeOrigin')!=='clubfinder-beta')throw new Error('BETA bridge contract: origin marker was not saved');
   if(window.location.href!=='challenges-beta.html')throw new Error('BETA bridge contract: direct Deck route missing');
+  // Browser Back must have a real Clubfinder entry to return to.
+  // The launch itself uses href; the VM stub observes its destination.
+  if(typeof window.location.replace!=='function')
+    throw new Error('BETA navigation: location stub must model browser navigation');
   const returnRecord=JSON.parse(sessionStorage.getItem(TIN_FOIL_CLUBFINDER_RETURN_SNAPSHOT_KEY)||'null');
   if(!returnRecord||returnRecord.postcode!=='HP7 0EJ'||!returnRecord.resultsHtml.includes('Pigeon McPigeonface'))throw new Error('BETA bridge contract: full Campaign return snapshot missing');
   if(getCounterIncrementCalls()!==priorCounterCalls)throw new Error('BETA bridge contract: opening Challenges issued a counter number');
@@ -475,8 +562,8 @@ try{
     setItem:(k,v)=>{storage[k]=String(v)},
     removeItem:k=>{delete storage[k]}
   };
-  const ctx={window:page,sessionStorage:session,console,requestAnimationFrame:fn=>fn()};
-  await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});
+  const ctx={window:page,sessionStorage:session,console,setTimeout,clearTimeout,requestAnimationFrame:fn=>fn()};
+  await vm.runInNewContext(script,{...ctx,requestAnimationFrame:()=>{}},{filename:'beta/stats-beta.html'});
   if(renders!==1||redirects.length||storage['tffc.stats-fast-open.v1']!=='1')
     throw new Error('BETA lite Stats: first load failed to use available opener');
   await vm.runInNewContext(script,ctx,{filename:'beta/stats-beta.html'});

@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+"""Synthetic tests for canonical shadow replay advancement."""
+from shadow_replay_advancement import shadow
+
+def state():
+    return {"schema_version":1,"season":"2026-27",
+      "source_url":"https://www.thefa.com/competitions/thefacup/fixtures",
+      "fixtures":{"next":{"round":"First Round Proper","home":"Future Winners","away":"Example United","date":"2026-11-07"}},
+      "replays":{"tie":{"round":"Fourth Round Qualifying Replay","home":"Example Town","away":"Future Winners","date":"2026-10-20"}},
+      "result_history":{},"results":{}}
+
+data=state()
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==1,report
+assert data["results"]=={},"shadow mutated canonical input"
+assert report["raw_replay_proposals"]==1 and report["distinct_ties_proposed"]==1,report
+data=state()
+data["fixtures"]={}
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,report
+data=state()
+data["fixtures"]["other"]={"round":"First Round Proper","home":"Future Winners","away":"Another United","date":"2026-11-07"}
+report,candidate=shadow(data)
+assert report["status"]=="BLOCKED",report
+data=state()
+data["result_history"]={"Example Town":[{"round":"Fourth Round Qualifying Replay","home":"Example Town","away":"Future Winners","date":"2026-10-20","winner":"Example Town","home_score":1,"away_score":0}]}
+report,candidate=shadow(data)
+assert report["status"]=="BLOCKED",report
+data=state()
+data["fixtures"]["next"]["round"]="Second Round Proper"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("skipped round",report)
+data=state()
+data["fixtures"]["next"]["date"]="2026-10-19"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("earlier date",report)
+data=state()
+data["replays"]["tie"]["round"]="Third Round Qualifying Replay"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("stale replay",report)
+data=state()
+data["fixtures"]["next"]["round"]="Unrecognised Cup Stage"
+report,candidate=shadow(data)
+assert report["status"]=="SHADOW_OK" and report["accepted"]==0,("unknown round",report)
+print("SHADOW PRODUCER REGRESSION: PASS")

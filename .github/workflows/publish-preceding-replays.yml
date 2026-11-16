@@ -2,26 +2,38 @@ name: Guarded publication of outstanding preceding-round replays
 on:
   pull_request:
     paths:
+      - 'updater/match_decisions.py'
+      - 'updater/retry_match_decisions.py'
+      - 'tests/test_match_decisions.py'
       - 'updater/audit_preceding_round_replays.py'
       - 'updater/stage_preceding_replay_candidates.py'
       - 'updater/patch_clubfinder_replay_progression.py'
       - 'updater/clubfinder_render_regression.js'
+      - 'updater/clubfinder_stats_regression.js'
       - 'updater/guard_archived_replay_promotion.py'
       - 'updater/reconcile_quarantined_replay_evidence.py'
       - 'tests/test_archived_replay_source.py'
       - 'tests/test_stage_preceding_replay_candidates.py'
       - 'tests/test_guard_archived_replay_promotion.py'
+      - 'tests/test_archived_replay_publication_boundary.py'
       - '.github/workflows/publish-preceding-replays.yml'
   push:
     branches: [main]
     paths:
       - '.github/workflows/publish-preceding-replays.yml'
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Explicitly publish fully guarded replay candidates on main'
+        type: boolean
+        required: true
+        default: false
 permissions:
   contents: write
 concurrency:
-  group: competition-state-${{ github.ref_name }}
+  group: ${{ github.event_name == 'pull_request' && format('replay-review-{0}', github.run_id) || format('competition-state-{0}', github.ref_name) }}
   cancel-in-progress: false
+  queue: max
 jobs:
   staging:
     runs-on: ubuntu-latest
@@ -29,9 +41,16 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Test the PR merge ref; re-resolve queued production runs at branch head.
+          ref: ${{ github.event_name == 'pull_request' && github.ref || github.ref_name }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Guard manual opt-in publication boundary
+        run: python -m unittest discover -s tests -p 'test_archived_replay_publication_boundary.py' -v
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
       - name: Guard dedicated archived replay source selection
         run: python -m unittest discover -s tests -p 'test_archived_replay_source.py' -v
       - name: Guard staging chronology and publication boundary
@@ -40,7 +59,21 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_quarantined_replay_evidence.py' -v
       - name: Guard partial promotion and independent penalty evidence
         run: python -m unittest discover -s tests -p 'test_guard_archived_replay_promotion.py' -v
+      - name: Check whether the live qualifying replay rehearsal applies
+        id: replay_window
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, sys
+          sys.path.insert(0, 'updater')
+          from auto_draw import ROUND_ORDER
+          from audit_preceding_round_replays import ROUNDS
+          from round_state_engine import base_round
+          current = base_round(json.load(open('competition.json'))['source_round'])
+          outside_window = current in ROUND_ORDER and ROUND_ORDER.index(current) > ROUND_ORDER.index(ROUNDS[-1])
+          print(f"outside_window={str(outside_window).lower()}")
+          PY
       - name: Produce read-only source-backed promotion readiness report
+        if: github.event_name != 'pull_request' || steps.replay_window.outputs.outside_window != 'true'
         run: |
           python updater/audit_preceding_round_replays.py --fetch > /tmp/archived-replay-audit.json
           python - <<'PY'
@@ -71,6 +104,7 @@ jobs:
           python -m json.tool /tmp/replay-promotion-readiness.json
       - name: Stage real preceding-round replay candidates in memory
         id: stage
+        if: github.event_name != 'pull_request' || steps.replay_window.outputs.outside_window != 'true'
         run: |
           set -euo pipefail
           python updater/stage_preceding_replay_candidates.py --readiness /tmp/replay-promotion-readiness.json --candidate-output /tmp/staged-replay-candidate.json | tee /tmp/staged-replays.json
@@ -126,21 +160,27 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
+          sys.path.insert(0, 'updater')
+          from guard_archived_replay_promotion import readiness
           report=json.load(open('/tmp/replay-promotion-readiness.json'))
+          audit=json.load(open('/tmp/archived-replay-audit.json'))
+          evidence=json.load(open('/tmp/replay-independent-evidence.json'))
+          assert report==readiness(audit,evidence), 'readiness report differs from fresh evidence validation'
           expected=len(report['scheduled_replay_gaps'])
           assert report['approved_count']+report['held_count']==expected, report
           assert report['approved_count']>0, report
-          assert report['already_recorded']+report['approved_count']+report['held_count']==report['observations'], report
-          if report['held']:
-              assert all('wimborne town' in item['fixture'] for item in report['held']), report
-              assert all(r.get('winner')!='Wimborne Town' for r in report['approved']), report
-          if any(r.get('decision')=='penalties' for r in report['approved']):
-              evidence=json.load(open('/tmp/replay-independent-evidence.json'))
-              assert any(len(rows)>=2 for rows in evidence.values()), evidence
+          assert report['already_recorded']+report['approved_count']+report['held_count']==report['observations']+report['unobserved_scheduled'], report
+          def key(row):
+              return '|'.join((row['date'],*sorted((row['home'].casefold(),row['away'].casefold()))))
+          held={item['fixture'] for item in report['held']}
+          approved={key(row) for row in report['approved']}
+          assert not held.intersection(approved), 'held replay was approved'
+          assert held.union(approved)=={key(row) for row in report['scheduled_replay_gaps']}, report
           print('FIXTURE-LOCAL PUBLICATION GATE:',report['approved_count'],'new cleared,',report['held_count'],'held,',report['already_recorded'],'previously published')
           PY
       - name: Publish guarded candidate only after all isolated guards pass
-        if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' && steps.stage.outputs.has_changes == 'true' }}
+        if: ${{ github.ref_name == 'main' && github.event_name == 'workflow_dispatch' && inputs.publish == true && steps.stage.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
           SIM="$(cat /tmp/replay-simulation-path)"

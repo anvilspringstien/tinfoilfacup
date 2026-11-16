@@ -13,7 +13,8 @@ body{
   display:grid;
   place-items:center;
   padding:24px;
-  background:#ededed;
+  background:radial-gradient(circle at 50% 8%,#27221c 0,#181512 38%,#100f0d 100%);
+  background-attachment:fixed;
   color:var(--deep);
   font-family:Arial,sans-serif;
 }
@@ -112,7 +113,10 @@ body{
       return;
     }
     sessionStorage.setItem(marker,"1");
-    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    await new Promise(resolve=>{
+      const timer=setTimeout(resolve,150);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{clearTimeout(timer);resolve();}));
+    });
     const source=window.opener;
     if(source && !source.closed &&
        source.location.origin===window.location.origin &&

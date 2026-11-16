@@ -29,6 +29,27 @@ FA_PAGE = "https://www.thefa.com/Competitions/Fixtures/Fixtures?competitionId=1&
 OFFICIAL_SOURCE = "https://www.thefa.com/competitions/thefacup/fixtures"
 UA = {"User-Agent": "Mozilla/5.0 TinFoilFACupDrawWatcher/1.1", "Accept": "text/html,application/xhtml+xml"}
 
+# Explicit source-name equivalence where token abbreviation alone cannot
+# establish identity. Shared by draw matching and archived replay resolution.
+# Evidence: frozen FA First Proper slot "Chesham or Forest Grn" and the
+# canonical Fourth Qualifying replay schedule (19 October 2026 import).
+DRAW_TEAM_ALIASES = {"forest grn": "forest green rovers"}
+
+EXPECTED_ROUND_TIES = {
+    "First Round Qualifying": 112,
+    "Second Round Qualifying": 80,
+    "Third Round Qualifying": 40,
+    "Fourth Round Qualifying": 32,
+    "First Round Proper": 40,
+    "Second Round Proper": 20,
+    "Third Round Proper": 32,
+    "Fourth Round Proper": 16,
+    "Fifth Round Proper": 8,
+    "Quarter Final": 4,
+    "Semi Final": 2,
+    "Final": 1,
+}
+
 ROUND_ORDER = [
     "Extra Preliminary Round",
     "Preliminary Round",
@@ -82,7 +103,8 @@ def clean(x):
 def norm(s):
     s = (s or "").lower().replace("&", " and ")
     s = re.sub(r"\b(fc|afc|cfc)\b", " ", s)
-    return re.sub(r"[^a-z0-9]+", " ", s).strip()
+    value = re.sub(r"[^a-z0-9]+", " ", s).strip()
+    return DRAW_TEAM_ALIASES.get(value, value)
 
 
 def canonical_conditional(s):
@@ -167,6 +189,69 @@ def compatible(a, b):
 
 def active_source_complete(official_ties, expected_ties):
     return len(official_ties) == int(expected_ties)
+
+
+def verified_replay_phase(data, official_ties, expected_ties):
+    """Recognise a shrinking fixtures feed without authorising fixture writes.
+
+    Every original tie needs a sourced final result. Drawn originals must have
+    either a sourced decisive replay or an exact outstanding replay in the FA
+    feed. Missing/extra/ambiguous fixtures fail closed.
+    """
+    current = data.get("source_round", "")
+    originals = fixture_values(data.get("fixtures") or {})
+    if len(originals) != expected_ties or any(
+        is_conditional_fixture(f) or f.get("round") != current or not f.get("date") for f in originals
+    ):
+        return False
+    records = list((data.get("results") or {}).values())
+    for history in (data.get("result_history") or {}).values():
+        records.extend(history)
+    records = [r for r in records if isinstance(r, dict) and r.get("source_url")
+               and r.get("status") == "FT"]
+    replays = fixture_values(data.get("replays") or {})
+
+    def same_pair(a, b):
+        return (compatible(a.get("home"), b.get("home")) and compatible(a.get("away"), b.get("away"))) or (
+            compatible(a.get("home"), b.get("away")) and compatible(a.get("away"), b.get("home")))
+
+    pending = []
+    for original in originals:
+        matches = [r for r in records if r.get("round") == current
+                   and r.get("date") == original.get("date") and same_pair(r, original)]
+        outcomes = {(r.get("home_score"), r.get("away_score"), norm(r.get("winner"))) for r in matches}
+        if len(outcomes) != 1:
+            return False
+        home, away, winner = next(iter(outcomes))
+        if not isinstance(home, int) or not isinstance(away, int):
+            return False
+        if winner:
+            if not any(compatible(winner, original.get(side)) for side in ("home", "away")):
+                return False
+            continue
+        if home != away:
+            return False
+        decisive = [r for r in records if r.get("round") == current + " Replay"
+                    and r.get("date", "") > original.get("date", "")
+                    and r.get("winner") and same_pair(r, original)
+                    and any(compatible(r["winner"], original.get(side)) for side in ("home", "away"))]
+        if decisive:
+            if len({norm(r["winner"]) for r in decisive}) != 1:
+                return False
+            continue
+        candidates = [r for r in replays if r.get("round") == current + " Replay"
+                      and r.get("source_url") and r.get("date", "") > original.get("date", "")
+                      and same_pair(r, original)]
+        if len(candidates) != 1:
+            return False
+        pending.append(candidates[0])
+    if len(pending) != len(official_ties):
+        return False
+    # A bijection also rejects ambiguous club abbreviations and duplicate rows.
+    def exact(a, b):
+        return fixture_matches_slot(a, b) and a.get("date") == b.get("date")
+    return all(sum(exact(o, p) for p in pending) == 1 for o in official_ties) and all(
+        sum(exact(o, p) for o in official_ties) == 1 for p in pending)
 
 
 def is_conditional_fixture(fixture):
@@ -365,14 +450,11 @@ def fixture_values(fixtures):
 
 
 def validate_target(target, ties):
-    if len(ties) < 20 and target not in {"Quarter Final", "Semi Final", "Final"}:
+    expected = EXPECTED_ROUND_TIES.get(target)
+    if expected is not None and len(ties) != expected:
+        raise SystemExit(f"Publication blocked: expected {expected} {target} ties, found {len(ties)}.")
+    if expected is None and len(ties) < 20:
         raise SystemExit(f"Publication blocked: only {len(ties)} {target} ties found on official Emirates FA Cup fixture pages.")
-    if target == "Quarter Final" and len(ties) != 4:
-        raise SystemExit(f"Publication blocked: expected 4 Quarter Final ties, found {len(ties)}.")
-    if target == "Semi Final" and len(ties) != 2:
-        raise SystemExit(f"Publication blocked: expected 2 Semi Final ties, found {len(ties)}.")
-    if target == "Final" and len(ties) != 1:
-        raise SystemExit(f"Publication blocked: expected 1 Final tie, found {len(ties)}.")
 
     concrete = []
     for f in ties:
@@ -455,31 +537,56 @@ def main():
     # normal replay-resolution path: the machine updates its canonical fixture
     # producer instead of relying on Clubfinder to infer the winner forever.
     current_official = unique_ties([r for r in all_rows if r["round"] == current])
+    target_ties = unique_ties([r for r in all_rows if r["round"] == target])
 
     saved_current = fixture_values(data.get("fixtures") or {})
     expected_active_ties = int(data.get("source_tie_count") or len(saved_current))
     source_complete = active_source_complete(current_official, expected_active_ties)
+    replay_phase_verified = not source_complete and verified_replay_phase(data, current_official, expected_active_ties)
+    target_complete = False
+    if target_ties:
+        # A newly published next-round draw is an independent source instrument.
+        # Validate its exact coverage before allowing it to cross a round boundary
+        # where the FA may expose only the unresolved fixtures from the old round.
+        validate_target(target, target_ties)
+        target_complete = True
+
     if not source_complete:
         print(
             "ACTIVE ROUND SOURCE INCOMPLETE:",
             f"official={len(current_official)} expected={expected_active_ties}",
         )
-        if args.publish:
-            write_report(
-                status="blocked",
-                current_round=current,
-                target_round=target,
-                pages_checked=pages_checked,
-                pagination_stop=fetch_stop,
-                active_round_official_ties=len(current_official),
-                active_round_expected_ties=expected_active_ties,
-                active_round_source_complete=False,
+        if replay_phase_verified:
+            print("VERIFIED REPLAY PHASE: outstanding official fixtures match canonical replay chronology; active fixtures retained.")
+        elif not target_complete:
+            if args.publish:
+                write_report(
+                    status="blocked",
+                    current_round=current,
+                    target_round=target,
+                    pages_checked=pages_checked,
+                    pagination_stop=fetch_stop,
+                    active_round_official_ties=len(current_official),
+                    active_round_expected_ties=expected_active_ties,
+                    active_round_source_complete=False,
+                )
+                raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
+        else:
+            print(
+                "ROUND BOUNDARY:",
+                f"active catalogue is partial ({len(current_official)}/{expected_active_ties});",
+                f"independently validated {target} draw has {len(target_ties)} ties.",
             )
-            raise SystemExit("Publication blocked: official active-round fixture catalogue is incomplete.")
 
-    refreshed_current, active_transitions, active_metadata_updates, active_ambiguities = reconcile_active_conditionals(
-        saved_current, current_official
-    )
+    if source_complete:
+        refreshed_current, active_transitions, active_metadata_updates, active_ambiguities = reconcile_active_conditionals(
+            saved_current, current_official
+        )
+    else:
+        # Never use a partial old-round catalogue to mutate canonical active
+        # fixtures. It may only coexist with an independently complete new draw.
+        refreshed_current = saved_current
+        active_transitions, active_metadata_updates, active_ambiguities = [], [], []
     active_unresolved = diagnose_unresolved_conditionals(saved_current, current_official)
     if active_unresolved:
         print(f"ACTIVE ROUND CONDITIONALS UNRESOLVED: {len(active_unresolved)}")
@@ -521,7 +628,6 @@ def main():
         else:
             print("DRY RUN: active-round changes not written.")
 
-    target_ties = unique_ties([r for r in all_rows if r["round"] == target])
     report = write_report(
         status="detected" if target_ties else ("active-round-refreshed" if active_published else "no-new-draw"),
         current_round=current,
@@ -531,6 +637,10 @@ def main():
         pagination_stop=fetch_stop,
         published=active_published,
         active_round_official_ties=len(current_official),
+        active_round_expected_ties=expected_active_ties,
+        active_round_source_complete=source_complete,
+        target_round_source_complete=target_complete,
+        replay_phase_verified=replay_phase_verified,
         active_round_conditional_resolutions=active_transitions,
         active_round_metadata_updates=active_metadata_updates,
         active_round_unresolved_diagnostics=active_unresolved,
@@ -542,7 +652,6 @@ def main():
         print(f"NO NEW DRAW: official Emirates FA Cup fixture pages do not yet expose {target}.")
         return
 
-    validate_target(target, target_ties)
     print(f"OFFICIAL EMIRATES FA CUP DRAW DETECTED: {target}: {len(target_ties)} ties")
     if not args.publish:
         print("DRY RUN: competition.json unchanged.")

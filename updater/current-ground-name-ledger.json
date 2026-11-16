@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "policy": "Reviewed current listing names only. A rename does not change postcode, coordinates, eligibility, historical venues or canonical competition data.",
+  "approved": [
+    {
+      "club": "Sholing FC",
+      "previous_name": "Mortgage Decisions Community Stadium",
+      "current_name": "The Charters Stadium",
+      "postcode": "SO19 9PW",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-10-26",
+      "announced_on": "2026-10-07",
+      "public_sources": [
+        "https://sholingfc.co.uk/introducing-the-charters-stadium/",
+        "https://sholingfc.co.uk/club/club-board-staff/"
+      ],
+      "review_notes": "Sholing's Head of Media and Admin confirmed on 26 October that the stadium name was the only correction to the supplied club-details panel. The club's public announcement confirms the new sponsor name at the same ground."
+    },
+    {
+      "club": "AFC Rushden & Diamonds",
+      "previous_name": "Rushden & Higham United FC",
+      "current_name": "Hayden Road Sports Ground",
+      "postcode": "NN10 0HX",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-10-27",
+      "public_sources": [
+        "https://afcdiamonds.com/contacts/",
+        "https://afcdiamonds.com/venue/hayden-road-sports-ground/"
+      ],
+      "review_notes": "The club confirmed on 27 October that Hayden Road Sports Ground is the preferred ground name; groundsharing with Rushden & Higham does not name the venue after that club. Public club contact and venue pages corroborate the name at the same postcode. Current listing name only; no shared-ground relationship, coordinates, postcode or historical venue changed."
+    },
+    {
+      "club": "Forest Green Rovers FC",
+      "previous_name": "The Bolt New Lawn",
+      "current_name": "The New Lawn",
+      "postcode": "GL6 0ET",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-10-27",
+      "public_sources": [
+        "https://www.fgr.co.uk/the-new-lawn/",
+        "https://www.fgr.co.uk/contact-us/"
+      ],
+      "review_notes": "The club confirmed on 27 October that the ground is The New Lawn, without Bolt. Club visitor/contact pages corroborate the name. Rename only in the supplemental current origin listing; preserve its postcode, coordinates, verification state and historical/canonical competition venues. The club visitor page separately distinguishes the GL6 0FG club address from the school-car-park GL6 0ET postcode; that location discrepancy requires a separate guarded review and is not resolved by this name correction."
+    },
+    {
+      "club": "Fairford Town FC",
+      "previous_name": "Acorn Property Group Stadium",
+      "current_name": "Cinder Lane",
+      "postcode": "GL7 4AX",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-11",
+      "public_sources": [
+        "https://fairfordtownfc.co.uk/map-directions",
+        "https://fairfordtownfc.co.uk/teams/fairford-town"
+      ],
+      "review_notes": "Fairford Town confirmed Cinder Lane as the preferred ground name by email. The club directions and first-team pages corroborate Cinder Lane at the existing postcode. This is a current listing name correction only."
+    },
+    {
+      "club": "Brixham AFC",
+      "previous_name": "MoreSeaFood Ground",
+      "current_name": "Pump Technology Ltd Ground",
+      "postcode": "TQ5 9UE",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-14",
+      "public_sources": [
+        "https://brixhamafc.co.uk/club-committee/"
+      ],
+      "review_notes": "The club secretary confirmed the new sponsor name by email on 13 November. The public committee page corroborates his role. Current listing name only."
+    },
+    {
+      "club": "1874 Northwich FC",
+      "previous_name": "Barnton FC - The Creative Hut Stadium",
+      "current_name": "The Creative Hut Stadium",
+      "postcode": "CW8 4LH",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-16",
+      "public_sources": [
+        "https://1874northwich.com/match-day-information/",
+        "https://1874northwich.com/about-us/"
+      ],
+      "review_notes": "The club secretary confirmed the preferred stadium name by email on 5 November 2026. Barnton FC are the landlords and the club asked for their name to be removed from the stadium label. The club's matchday information confirms the current name and address at CW8 4LH."
+    },
+    {
+      "club": "Barton Town FC",
+      "previous_name": "The Easy Buy Stadium",
+      "current_name": "The Matte Black Surfacing Stadium",
+      "postcode": "DN18 5RL",
+      "previous_postcode": "DN18 5JD",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-16",
+      "public_sources": [
+        "https://bartontownfc.co.uk/contact/"
+      ],
+      "review_notes": "The secretary confirmed the sponsored name and DN18 5RL for pedestrian and vehicle access by email on 15 November. DN18 5JD is pedestrian-only. Postcodes.io confirmed DN18 5RL and its centroid at 53.689818, -0.429718, approximately 295 metres from the surveyed stadium pin. Keep the stadium coordinates and use the club-confirmed postcode for directions."
+    },
+    {
+      "club": "Cirencester Town FC",
+      "previous_name": "Corinium Stadium",
+      "current_name": "HGV Drivers UK Stadium",
+      "postcode": "GL7 1HS",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-16",
+      "public_sources": [
+        "https://www.thehellenicleague.com/clubs/cirencester-town/"
+      ],
+      "review_notes": "The club secretary confirmed the stadium name and postcode by email on 16 November. The Hellenic League listing corroborates his role."
+    },
+    {
+      "club": "Bridlington Town AFC",
+      "previous_name": "Mounting Systems Stadium",
+      "current_name": "HDM Energies Stadium",
+      "postcode": "YO16 7LN",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-16",
+      "public_sources": [
+        "https://bridtownafc.ktckts.com/"
+      ],
+      "review_notes": "The club confirmed the new stadium name by email on 15 November. Its match ticketing pages corroborate the name. The club website is currently offline per the club."
+    }
+  ]
+}

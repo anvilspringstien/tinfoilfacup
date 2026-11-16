@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-10-28",
+  "scope": "Batch 09: twelve previously unreviewed missing original qualifying-club websites, Bishop Auckland through Bourne Town. All 80 current clubs already verified and linked. Website identity only; no correspondence, location, competition or search-origin changes.",
+  "reviewed_count": 12,
+  "verified": [
+    {
+      "club": "Bishop Auckland FC",
+      "aliases": [],
+      "url": "https://bishopafc.com/",
+      "evidence_url": "https://bishopafc.com/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own homepage identifies Bishop Auckland FC, senior first team, club officials and Heritage Park. Northern League directly links bishopafc.com for the same senior club. Research-reader timeouts cleared through an ordinary HTTP GET, which returned 200; no access restriction bypassed.",
+      "supporting_evidence_urls": [
+        "https://www.northernfootballleague.org/team/bishop-auckland/"
+      ]
+    },
+    {
+      "club": "Bishop's Cleeve FC",
+      "aliases": [],
+      "url": "https://www.pitchero.com/clubs/bishopscleevefc/",
+      "evidence_url": "https://www.pitchero.com/clubs/bishopscleevefc/contact",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed contact page identifies Bishops Cleeve FC at Kayte Lane GL52 3PD; own homepage has current senior fixtures and reports. Southern League corroborates the Mitres at Kayte Lane. The separate Bishops Cleeve Colts site is not substituted.",
+      "supporting_evidence_urls": [
+        "https://www.southern-football-league.co.uk/clubs/bishops-cleeve"
+      ]
+    },
+    {
+      "club": "Bishop's Stortford FC",
+      "aliases": [],
+      "url": "https://bsfc.co.uk/",
+      "evidence_url": "https://bsfc.co.uk/club-news/league-confirmation-2/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own site identifies Bishop's Stortford Football Club at Woodside Park CM23 5RG, and homepage has October 2026 senior match reports. Southern League's current preview corroborates its 3-1 Real Bedford result. Homepage returned 200 on ordinary HTTP check after reader timeouts. Separate Community FC and Swifts identities are excluded.",
+      "supporting_evidence_urls": [
+        "https://slc-www.southern-football-league.co.uk/articles/tuesday-night-preview-or-a-look-at-how-sides-fare-coming-into-another-round-of-southern-league-midweek-fixtures"
+      ]
+    },
+    {
+      "club": "Blyth Spartans AFC",
+      "aliases": [],
+      "url": "https://www.blythspartans.com/",
+      "evidence_url": "https://www.blythspartans.com/match-centre/how-to-get-to-croft-park/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Accessible club homepage and own directions identify Blyth Spartans AFC, Croft Park, Plessey Road NE24 3JE. NPL corroborates the Spartans at Croft Park. Ordinary CLI HTTP check returned 403; the research reader can read both public club pages. No restriction was bypassed. Distinct from Blyth Town and Blyth AFC.",
+      "supporting_evidence_urls": [
+        "https://www.thenpl.co.uk/clubs/blyth-spartans"
+      ]
+    },
+    {
+      "club": "Bognor Regis Town FC",
+      "aliases": [],
+      "url": "https://bognorregistownfc.co.uk/",
+      "evidence_url": "https://bognorregistownfc.co.uk/club/club-officials/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own officials page identifies Bognor Regis Town FC, senior club officers and MKM Arena, Nyewood Lane PO21 2TY. Own homepage has current senior news. Isthmian League corroborates the Rocks, founded 1883, at Nyewood Lane. Website identity only; no sponsored-ground name correction.",
+      "supporting_evidence_urls": [
+        "https://www.isthmian.co.uk/clubs/bognor-regis-town"
+      ]
+    },
+    {
+      "club": "Boldmere St Michaels FC",
+      "aliases": [],
+      "url": "https://boldmerestmichaelsfc.co.uk/",
+      "evidence_url": "https://boldmerestmichaelsfc.co.uk/contact-us/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own contact page identifies Boldmere St Michaels, company 00473418, Amber Arena and Community Stadium, Church Road B73 5RY. Homepage distinguishes men's senior team from women's/youth sections. NPL's published 2026/27 fixtures corroborate the exact senior club.",
+      "supporting_evidence_urls": [
+        "https://www.thenpl.co.uk/articles/202627-northern-premier-league-fixtures-released"
+      ]
+    },
+    {
+      "club": "Boston Town FC",
+      "aliases": [],
+      "url": "https://bostontownfc.co.uk/",
+      "evidence_url": "https://bostontownfc.co.uk/contact/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own contact page identifies Boston Town FC at Mortgages For You Stadium, Tattershall Road PE21 9LR; homepage and fixture page carry current first-team news. NPL's 2026/27 fixture publication corroborates Boston Town. Distinct from Boston United at a different ground/postcode.",
+      "supporting_evidence_urls": [
+        "https://www.thenpl.co.uk/articles/202627-northern-premier-league-fixtures-released"
+      ]
+    },
+    {
+      "club": "Boston United FC",
+      "aliases": [],
+      "url": "https://www.bostonunited.co.uk/",
+      "evidence_url": "https://www.bostonunited.co.uk/contact",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed contacts identify Boston United Football Club, Jakemans Community Stadium, Pilgrim Way PE21 7NE and first-team staff. Homepage contains current senior news and National League fixtures. League's published streaming preview corroborates Boston United's senior identity. Distinct from Boston Town.",
+      "supporting_evidence_urls": [
+        "https://www.thenationalleague.org.uk/news/2026/october/21/how-to-watch-and-follow-the-enterprise-national-league-this-weekend/"
+      ]
+    },
+    {
+      "club": "Bottesford Town FC",
+      "aliases": [],
+      "url": "https://bottesfordtown.co.uk/",
+      "evidence_url": "https://bottesfordtown.co.uk/contact-us/",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own contact page identifies Bottesford Town Football Club, Barrett Steel Stadium, Birch Park, Ontario Road DN17 2TQ, established 1974. NCEL club page agrees on founding year, senior identity and address. Reject the separate Bottesford FC in Leicestershire and stale Pitchero results.",
+      "supporting_evidence_urls": [
+        "https://www.ncefl.org.uk/teams/bottesfordtown/"
+      ]
+    },
+    {
+      "club": "Bourne Town FC",
+      "aliases": [],
+      "url": "https://www.bournetownfc.co.uk/",
+      "evidence_url": "https://www.bournetownfc.co.uk/copy-of-history",
+      "verified_on": "2026-10-28",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own club-information page identifies Bourne Town, the Wakes, founded 1883, Abbey Lawn and its senior NPL Midlands side. Homepage publishes club ownership/legal form and current club navigation. NPL's 2026/27 fixtures corroborate Bourne Town. No ground-name/location change is inferred.",
+      "supporting_evidence_urls": [
+        "https://www.thenpl.co.uk/articles/202627-northern-premier-league-fixtures-released"
+      ]
+    }
+  ],
+  "held": [
+    {
+      "club": "Blackstones AFC",
+      "candidate_url": "https://www.pitchero.com/clubs/blackstonesfc/",
+      "reviewed_on": "2026-10-28",
+      "status": "held_preferred_destination",
+      "evidence_urls": [
+        "https://www.pitchero.com/clubs/blackstonesfc/",
+        "https://www.pitchero.com/clubs/blackstonesfc/contact",
+        "https://theucl.co.uk/clubs/blackstones-fc/",
+        "https://www.blackstonesstamford.co.uk/"
+      ],
+      "reason": "Club-managed Pitchero contacts match the league's senior officers and Stamford PE9 1UU identity, but latest visible homepage reports are April 2022. Current league entry instead points to Facebook. The current Sports and Social Club site includes football events but does not establish the senior football club's preferred homepage. Neither a social page nor an inferred venue-site replacement is promoted.",
+      "next_step": "Establish the senior club's preferred current non-social destination before approval; retain the exact eligible identity."
+    },
+    {
+      "club": "Boro Rangers FC",
+      "candidate_url": "https://bororangers.co.uk/",
+      "reviewed_on": "2026-10-28",
+      "status": "held_unavailable_club_evidence",
+      "evidence_urls": [
+        "https://www.northernfootballleague.org/team/boro-rangers/",
+        "https://bororangers.co.uk/",
+        "https://www.northernfootballleague.org/news/boro-rangers-new-home-unveiled/"
+      ],
+      "reason": "Northern League directly links bororangers.co.uk and corroborates Phoenix Park TS4 3JW. The club destination timed out in the research reader and returned HTTP 503 on ordinary GET, so no accessible club-published identity/contact evidence was established. Do not substitute a directory, social page, Brora Rangers or a youth organisation.",
+      "next_step": "Check the league-linked club homepage when ordinarily accessible; no eligibility or competition inference is made."
+    }
+  ]
+}

@@ -15,6 +15,9 @@ const documentStub={getElementById(id){return elements[id]},querySelector(){retu
 const localStore={};
 const sandbox={console,process,document:documentStub,canonicalCompetition:competition,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request in render regression: '+s)}};
 sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
+const chronologyChecks=fs.readFileSync(path.join(ROOT,'tests/dl5_chronology_assertions.js'),'utf8');
+sandbox.verifiedCustodianAfter=require('../tests/verified_custody_expectation.js');
+sandbox.verifiedJourneyMilestones=JSON.parse(fs.readFileSync(path.join(ROOT,'tests/fixtures/results-repair/verified-milestones.json'),'utf8'));
 const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
@@ -43,6 +46,10 @@ const assertions=`
   const canonicalFixtures=canonicalRecords(canonicalCompetition.fixtures);
   const archivedSecondQFixtures=canonicalRecords((canonicalCompetition.round_fixtures||{})['Second Round Qualifying']);
   const canonicalSecondQFixtures=[...canonicalFixtures,...archivedSecondQFixtures];
+  const archivedThirdQFixtures=canonicalRecords((canonicalCompetition.round_fixtures||{})['Third Round Qualifying']);
+  const canonicalThirdQFixtures=[...canonicalFixtures,...archivedThirdQFixtures];
+  const archivedFourthQFixtures=canonicalRecords((canonicalCompetition.round_fixtures||{})['Fourth Round Qualifying']);
+  const canonicalFourthQFixtures=[...canonicalFixtures,...archivedFourthQFixtures];
   const canonicalHistory=canonicalRecords(canonicalCompetition.result_history||canonicalCompetition.results||[]);
   const canonicalSecondQFixture=(club,label)=>{
     const f=canonicalSecondQFixtures.find(x=>/Second Round Qualifying/i.test(x.round||'Second Round Qualifying')&&(same(x.home,club.name)||same(x.away,club.name)));
@@ -51,7 +58,30 @@ const assertions=`
   };
   if(!same(carrier.name,'Heaton Stannington')&&!allowActiveAdvance) throw new Error('DL5 render regression: expected current custodian Heaton Stannington, got '+carrier.name);
   const heatonActiveResult=canonicalHistory.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
-  if(allowActiveAdvance&&heatonActiveResult&&!same(carrier.name,'Trafford'))throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance custodian to Trafford; got '+carrier.name);
+  const athertonAdvancement=canonicalHistory.find(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.decision==='next-round-fixture'&&same(r.winner,'Atherton Collieries')&&r.home_score==null&&r.away_score==null&&r.source_url&&r.evidence_fixture==='AFC Fylde v Atherton Collieries');
+  // A source-backed, decided replay is independent evidence of progression.
+  // A next-round draw alone must never count as a replay result.
+  const athertonScoredReplay=canonicalHistory.find(r=>
+    same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&
+    r.round==='Third Round Qualifying Replay'&&r.date==='2026-10-06'&&
+    same(r.winner,'Atherton Collieries')&&
+    Number.isInteger(r.home_score)&&Number.isInteger(r.away_score)&&
+    r.home_score>r.away_score&&r.status==='FT'&&
+    typeof r.source_url==='string'&&
+    r.source_url.startsWith('https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round-replay'));
+  const athertonEvidence=athertonAdvancement||athertonScoredReplay;
+  const athertonFourthQ=canonicalFourthQFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
+  // This replay is a historical milestone, not a permanent terminal custodian.
+  // Follow subsequent source-backed full-time results, independently of buildJourney.
+  const expectedAfter=(club,date)=>verifiedCustodianAfter(canonicalCompetition,club,date);
+  if(allowActiveAdvance&&heatonActiveResult&&athertonEvidence&&athertonFourthQ){
+    const expected=expectedAfter('Atherton Collieries','2026-10-06');
+    if(!same(carrier.name,expected))throw new Error('DL5 render regression: chronological custody expected '+expected+', got '+carrier.name);
+    if(!history.some(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.date==='2026-10-06'))
+      throw new Error('DL5 render regression: verified replay disappeared from journey');
+  }
+  if(allowActiveAdvance&&heatonActiveResult&&!athertonEvidence&&!same(carrier.name,'Trafford'))throw new Error('DL5 render regression: verified Heaton 1-2 Trafford result did not advance custodian to Trafford; got '+carrier.name);
+  if(allowActiveAdvance&&athertonEvidence&&!athertonFourthQ)throw new Error('DL5 render regression: replay advancement lacks definite Fourth Qualifying fixture evidence');
   if(allowActiveAdvance&&!heatonActiveResult&&!same(carrier.name,'Heaton Stannington'))throw new Error('DL5 render regression: custodian advanced without canonical Heaton-Trafford result; got '+carrier.name);
   const heaton=ELIGIBLE.find(c=>same(c.name,'Heaton Stannington FC'))||{name:'Heaton Stannington'};
   const state=competitionState(heaton);
@@ -77,7 +107,7 @@ const assertions=`
   const bishopCarrier=(bishopJourney.carrier||bishop);
   const emleyActiveResult=canonicalHistory.find(r=>same(r.home,'Emley AFC')&&same(r.away,'Spennymoor Town')&&Number(r.home_score)===0&&Number(r.away_score)===4&&/Second Round Qualifying/i.test(r.round||''));
   if(allowActiveAdvance){
-    if(emleyActiveResult&&!same(bishopCarrier.name,'Spennymoor Town'))throw new Error('Replay regression: verified Emley 0-4 Spennymoor result did not advance custodian to Spennymoor Town; got '+bishopCarrier.name);
+    if(emleyActiveResult&&!same(bishopCarrier.name,expectedAfter('Spennymoor Town',emleyActiveResult.date)))throw new Error('Replay regression: verified Emley 0-4 Spennymoor result did not advance custodian to Spennymoor Town; got '+bishopCarrier.name);
     if(!emleyActiveResult&&!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: Bishop journey advanced without canonical Emley active-round result; got '+bishopCarrier.name);
   }else if(!same(bishopCarrier.name,'Emley AFC'))throw new Error('Replay regression: expected Emley AFC to become custodian after Bishop replay');
 
@@ -106,12 +136,12 @@ const assertions=`
       same(r.home,'Thame United')&&same(r.away,'Eastbourne Borough')&&
       same(r.winner,'Eastbourne Borough'));
     if(allowActiveAdvance&&thameActiveResult){
-      if(!same(exmouthCarrier.name,'Eastbourne Borough'))
+      if(!same(exmouthCarrier.name,expectedAfter('Eastbourne Borough',thameActiveResult.date)))
         throw new Error('Replay regression: verified Thame–Eastbourne result did not advance custodian to Eastbourne Borough; got '+exmouthCarrier.name);
     }else if(!same(exmouthCarrier.name,'Thame United')){
       throw new Error('Replay regression: Thame should become custodian after verified Exmouth 1–3 Thame replay; got '+exmouthCarrier.name);
     }
-    const thameDraw=canonicalFixtures.find(f=>
+    const thameDraw=canonicalThirdQFixtures.find(f=>
       String(f.round||'')==='Third Round Qualifying'&&
       same(f.home,'Thame United')&&same(f.away,'Eastbourne Borough'));
     if(!thameDraw)throw new Error('Replay regression: definite Thame United–Eastbourne Borough Third Qualifying fixture missing');
@@ -139,7 +169,7 @@ const assertions=`
     same(r.home,'Oxford City')&&same(r.away,'Enfield Town')&&
     Number(r.home_score)===6&&Number(r.away_score)===1&&same(r.winner,'Oxford City'));
   if(allowActiveAdvance&&oxfordActiveResult){
-    if(!same(wcarrier.name,'Oxford City'))throw new Error('W1D regression: verified Oxford City 6-1 Enfield result did not advance custodian to Oxford City; got '+wcarrier.name);
+    if(!same(wcarrier.name,expectedAfter('Oxford City',oxfordActiveResult.date)))throw new Error('W1D regression: verified Oxford City 6-1 Enfield result did not advance custodian to Oxford City; got '+wcarrier.name);
   }else if(!same(wcarrier.name,'Enfield Town')){
     throw new Error('W1D regression: expected Enfield Town custodian after Frenford loss and verified Second Qualifying win; got '+wcarrier.name);
   }
@@ -150,6 +180,7 @@ const assertions=`
     if(same(enfieldSecondQ.home,'Frenford')||same(enfieldSecondQ.away,'Frenford'))throw new Error('W1D regression: played Frenford-Enfield First Qualifying tie leaked into Enfield next-round fixture');
   }
 
+${chronologyChecks}
   console.log('CLUBFINDER RENDER REGRESSION: PASS');
   console.log('DL5 custody:',origin.name,'-> Kendal Town ->',carrier.name);
   console.log('Heaton First Qualifying result: 1-0 Knaresborough — PASS');

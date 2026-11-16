@@ -1,0 +1,71 @@
+name: Publish verified competition check status
+on:
+  workflow_dispatch:
+  # Recalculate as soon as a trusted main-branch scanner finishes; the hourly
+  # publisher remains a fallback if an upstream completion is missed.
+  workflow_run:
+    workflows:
+      - "Scan FA Cup results (v7.6 guarded)"
+      - "Scan FA Cup draw (guarded)"
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: "55 * * * *"
+  # Bootstrap and validate the monitor after changes to its own machinery.
+  # GITHUB_TOKEN status commits do not retrigger push workflows.
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-competition-check-status.yml"
+      - "updater/publish_competition_check_status.py"
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: competition-check-status-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  publish:
+    # workflow_run has write-capable credentials. Only trust scheduled/main-push
+    # scanner completions from this repository, never PR/manual/fork runs.
+    if: >-
+      github.ref_name == 'main' &&
+      (github.event_name != 'workflow_run' ||
+       ((github.event.workflow_run.event == 'schedule' || github.event.workflow_run.event == 'push') &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.head_repository.full_name == github.repository))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard trusted status and scheduled freshness
+        run: python -m unittest discover -s tests -p 'test_competition_check_status.py' -v
+      - name: Read latest trusted scanner outcomes and separate schedule health
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python updater/publish_competition_check_status.py
+      - name: Publish only if check status changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "Tin Foil FA Cup Check Monitor"
+          git config user.email "actions@users.noreply.github.com"
+          git add beta/competition-check-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Record verified competition scan status"
+            git pull --rebase origin main
+            # Refresh the verdict after rebasing so queued publication cannot
+            # overwrite a newer outcome with its earlier observation.
+            python updater/publish_competition_check_status.py
+            git add beta/competition-check-status.json
+            git commit --amend --no-edit
+            git push origin HEAD:main
+          fi

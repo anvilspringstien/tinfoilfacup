@@ -1,0 +1,20 @@
+@import url('two-rooms.css');
+html.tffc-actual-master-doorway:not(.tffc-stats-route) body{padding:0!important}
+html.tffc-actual-master-doorway .stage{height:100svh!important;min-height:0!important;display:flex!important;padding:clamp(6px,1.2vh,13px)!important;zoom:1!important}
+html.tffc-actual-master-doorway .stage .field{height:100%!important;max-width:628px!important;overflow:hidden!important}
+html.tffc-actual-master-doorway .stage .room{height:100%!important;display:grid!important;grid-template-rows:auto minmax(0,1fr)!important}
+html.tffc-actual-master-doorway .stage .crest-compartment{padding-top:clamp(6px,5.8cqw,30px)!important}
+html.tffc-actual-master-doorway .stage .crest{width:83.333%!important;max-width:450px!important;margin:0!important}
+html.tffc-actual-master-doorway .stage .clubfinder-furniture{overflow:auto!important;display:flex!important;flex-direction:column!important}
+html.tffc-actual-master-doorway .stage #searchPanel{display:flex!important;gap:10px!important;padding:20px 20px 0!important;margin:0!important;width:auto!important;max-width:100%!important;border:0!important;background:transparent!important;box-shadow:none!important}
+html.tffc-actual-master-doorway .stage #postcode{flex:0 1 175px!important;width:175px!important;min-width:0!important;padding:12px 14px!important;font-size:13px!important;height:auto!important;transform:none!important}
+html.tffc-actual-master-doorway .stage #findBtn{flex:none!important;width:auto!important;height:auto!important;padding:10px 15px!important;font-size:13px!important;transform:none!important}
+html.tffc-actual-master-doorway .stage #liveDataTools{justify-content:center!important;margin:0!important;padding:0!important;font-size:10px!important}
+html.tffc-actual-master-doorway .stage #status{margin:0!important;padding:0!important;font-size:10px!important;color:#f6f3e8!important}
+html.tffc-actual-master-doorway:not(.tffc-campaign-results) #clubfinderField{display:none!important}
+html.tffc-actual-master-doorway.tffc-campaign-results .stage{height:auto!important;min-height:100svh!important}
+html.tffc-actual-master-doorway.tffc-campaign-results .stage .field{height:auto!important;overflow:visible!important}
+html.tffc-actual-master-doorway.tffc-campaign-results .stage .room{height:auto!important;grid-template-rows:auto auto!important}
+html.tffc-actual-master-doorway.tffc-campaign-results .stage .clubfinder-furniture{overflow:visible!important}
+@media(max-height:700px){html.tffc-actual-master-doorway .stage .crest-compartment{padding-top:6px!important}html.tffc-actual-master-doorway .stage .crest{width:min(83.333%,43svh)!important}}
+@media(min-width:700px){html.tffc-actual-master-doorway .stage .field{max-width:550px!important}html.tffc-actual-master-doorway .stage .room{max-width:508px!important}html.tffc-actual-master-doorway .stage .crest{max-width:394px!important}}

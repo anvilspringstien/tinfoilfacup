@@ -139,17 +139,19 @@ assert.ok(Object.values(competition.results || {}).some(isFinalReplay),
 assert.ok(Object.values(competition.result_history || {})
   .some(rows => Array.isArray(rows) && rows.some(isFinalReplay)),
   'Live published result is missing from canonical history');
-const liveThameDraw = Object.values(competition.fixtures || {}).find(f =>
+const archivedThird = (competition.round_fixtures || {})['Third Round Qualifying'] || [];
+const archivedThirdRows = Array.isArray(archivedThird) ? archivedThird : Object.values(archivedThird);
+const liveThameDraw = archivedThirdRows.find(f =>
   f && f.round === 'Third Round Qualifying' &&
   f.home === 'Thame United' &&
   f.away === 'Eastbourne Borough');
-assert.ok(liveThameDraw, 'Resolved Third Qualifying Thame–Eastbourne fixture is absent');
+assert.ok(liveThameDraw, 'Archived resolved Third Qualifying Thame–Eastbourne fixture is absent');
 assert.ok(!liveThameDraw.conditional,
-  'Resolved Third Qualifying Thame–Eastbourne fixture must not remain conditional');
+  'Archived resolved Third Qualifying Thame–Eastbourne fixture must not remain conditional');
+// Historical TRQ evidence must not be resurrected into the active FQR index.
 ctx.LIVE_COMPETITION_DATA = competition;
-const actualThame = ctx.resolveLiveFixtureForCarrier(liveThameDraw,
-  {name: 'Thame United FC'}, true);
-check(actualThame, 'Thame United', 'Eastbourne Borough', false);
+assert.equal((competition.fixtures || {})['Thame United'], undefined,
+  'Eliminated Thame must not retain an active fixture index');
 
 // The synthetic conditional fixture above remains the fail-closed control:
 // without decisive replay evidence it must stay conditional rather than guess.

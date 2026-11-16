@@ -15,8 +15,26 @@ on:
     - cron: "17 * * * *"
   push:
     paths:
+      - "updater/guard_publication_base.py"
+      - "tests/test_competition_publication.py"
       - "updater/auto_results.py"
       - "updater/auto_round_results.py"
+      - "updater/bbc_results.py"
+      - "updater/match_decisions.py"
+      - "updater/retry_match_decisions.py"
+      - "tests/test_match_decisions.py"
+      - "updater/scheduled_archived_replays.py"
+      - "updater/audit_preceding_round_replays.py"
+      - "updater/guard_archived_replay_promotion.py"
+      - "updater/stage_preceding_replay_candidates.py"
+      - "tests/test_round_replay_lifecycle.py"
+      - "updater/result_metadata.py"
+      - "tests/test_results_repair.py"
+      - "tests/dl5_chronology_assertions.js"
+      - "tests/verified_custody_expectation.js"
+      - "tests/fixtures/results-repair/**"
+      - "updater/shadow_replay_advancement.py"
+      - "updater/shadow_replay_advancement_regression.py"
       - "updater/exceptional-replay-dispositions.json"
       - "updater/apply_exceptional_replay_dispositions.py"
       - "updater/unicorn_replay_regression.py"
@@ -32,7 +50,6 @@ on:
       - "updater/sync_extra_preliminary_chronology.py"
       - "updater/extra_preliminary_replay_regression.py"
       - "updater/apply_replay_orientation_fix.py"
-      - "updater/repair_first_qualifying_replays_20260909.py"
       - "updater/sync_second_qualifying_resolved.py"
       - "updater/sync_second_qualifying_stable.py"
       - "updater/active_draw_stability_regression.py"
@@ -81,6 +98,7 @@ permissions:
 concurrency:
   group: competition-state-${{ github.ref_name }}
   cancel-in-progress: false
+  queue: max
 jobs:
   scan:
     runs-on: ubuntu-latest
@@ -92,6 +110,18 @@ jobs:
           # Scheduled runs can wait behind the shared concurrency lock. Re-resolve the branch
           # head when execution starts so a queued run does not build from a stale event SHA.
           ref: ${{ github.ref_name }}
+      - name: Guard publication serialization and stale candidate rejection
+        run: python -m unittest discover -s tests -p 'test_competition_publication.py' -v
+
+      - name: Record candidate input revision
+        run: git rev-parse HEAD > "$RUNNER_TEMP/competition-build-base"
+
+      - name: Preserve exact Results input for diagnostics
+        run: cp competition.json updater/results-input-competition.json
+      - name: Guard complete draw and preceding replay lifecycle
+        run: python -m unittest discover -s tests -p 'test_round_replay_lifecycle.py' -v
+      - name: Guard shared fixture decisions and automatic recovery
+        run: python -m unittest discover -s tests -p 'test_match_decisions.py' -v
       - name: Guard universal round-state chronology
         run: python updater/round_state_regression.py
       - name: Guard round-source disposition parsing
@@ -102,8 +132,6 @@ jobs:
         run: python updater/extra_preliminary_replay_regression.py
       - name: Apply guarded replay-orientation fix
         run: python updater/apply_replay_orientation_fix.py
-      - name: Repair verified 9 September First Qualifying replays
-        run: python updater/repair_first_qualifying_replays_20260909.py
       - name: Synchronise resolved Second Qualifying draw
         run: python updater/run_source_resilient.py --label "Resolved Second Qualifying sync" -- python updater/sync_second_qualifying_stable.py
       - name: Guard active draw stability
@@ -122,6 +150,7 @@ jobs:
         run: python updater/apply_exceptional_replay_dispositions.py
       - name: Scan active round and validate dispositions
         env:
+          TFFC_RESULTS_SOURCE_LOG: updater/results-source-observations.csv
           EVENT_NAME: ${{ github.event_name }}
           INPUT_SOURCE_URL: ${{ inputs.source_url }}
           INPUT_PUBLISH: ${{ inputs.publish }}
@@ -145,7 +174,9 @@ jobs:
       - name: Guard complete First Qualifying replay coverage
         run: python updater/replay_completion_guard.py
       - name: Enrich later-round fixture venues
-        run: python updater/enrich_later_round_venues.py
+        run: |
+          python -m unittest discover -s tests -p 'test_conditional_fixture_venues.py' -v
+          python updater/enrich_later_round_venues.py
       - name: Enrich replay kick-offs and active fixture venues
         run: python updater/enrich_replay_kickoffs_and_active_venues.py
       - name: Propagate verified venues across active fixture copies
@@ -154,6 +185,16 @@ jobs:
         run: python updater/propagate_historical_match_venues.py
       - name: Guard enriched replay kick-offs and active venues
         run: python updater/kickoff_venue_regression.py
+      # Diagnostic only: neither the shadow producer nor this step can write
+      # canonical competition data or approve a publication.
+      - name: Guard canonical replay shadow producer
+        run: python updater/shadow_replay_advancement_regression.py
+      - name: Assess replay advancement shadow (non-publishing)
+        continue-on-error: true
+        run: |
+          python updater/shadow_replay_advancement.py \
+            --competition competition.json \
+            --report updater/replay-advancement-shadow-report.json
       - name: Audit repaired competition chronology
         env:
           TFFC_FIXTURE_LOCAL_HEALTH: "1"
@@ -221,7 +262,21 @@ jobs:
         if: always()
         with:
           name: results-pilot-report
-          path: updater/results-pilot-report.json
+          path: |
+            updater/results-pilot-report.json
+            updater/replay-advancement-shadow-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-candidate-diagnostics
+          path: |
+            updater/results-input-competition.json
+            competition.json
+            clubfinder.html
+            updater/results-source-capture.json
+            updater/results-source-observations.csv
+            updater/kickoff-venue-enrichment-report.json
+            updater/active-replay-fixture-sync-report.json
       - name: Commit validated competition data and Clubfinder
         if: ${{ github.ref_name == 'main' && (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish) }}
         run: |
@@ -233,7 +288,9 @@ jobs:
           else
             git commit -m "Resolve replay journeys in Clubfinder v7.6"
             git pull --rebase origin "${GITHUB_REF_NAME}"
+            python updater/guard_publication_base.py --base "$(cat "$RUNNER_TEMP/competition-build-base")" --upstream "origin/${GITHUB_REF_NAME}"
             echo "Re-running critical publish guards after rebase..."
+            python updater/competition_regression_guard.py
             python updater/reconcile_result_history_aliases.py --check
             python updater/extra_preliminary_replay_regression.py
             node updater/amersham_card_render_regression.js

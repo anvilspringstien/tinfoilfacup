@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shed — full BETA with approved Four Laws doorway</title></head><body><script>
+(async()=>{
+ try{
+ const response=await fetch('clubfinder-beta.html',{cache:'no-store'});
+ if(!response.ok)throw Error('Original BETA unavailable');
+ let html=await response.text();
+ const anchor='</body>';
+ const bridge=`<script>
+(function(){
+ if(new URLSearchParams(location.search).has('stats'))return;
+ const laws=document.getElementById('tffcFourLaws');
+ const field=document.getElementById('clubfinderField');
+ if(!laws||!field) return;
+ document.documentElement.classList.remove('tffc-single-frame');
+ document.documentElement.classList.add('tffc-new-doorway');
+ const originalControls=['searchPanel','liveDataTools','status'].map(id=>document.getElementById(id));
+ if(originalControls.some(x=>!x))return;
+ laws.innerHTML='<div class="tffcOuter"><div class="doorway-room"><div class="doorway-crest-compartment"><img class="doorway-crest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup crest"></div><div class="doorway-furniture"><h1 class="doorway-title">The Four Laws</h1><div class="doorway-laws"><div>1. Make a Tin Foil FA Cup</div><div>2. Find your nearest Qualifying Round</div><div>3. Follow the Winner until you Can\\'t Get Tickets</div><div>4. Eat Pies</div></div><div class="doorway-machine" id="doorwayMachine"></div><p class="doorway-invocation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p><p class="doorway-footnote">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p></div></div></div>';
+ const machine=document.getElementById('doorwayMachine');
+ for(const node of originalControls)machine.appendChild(node);
+ laws.insertAdjacentElement('afterend',field);
+ const root=document.documentElement,results=document.getElementById('results');
+ const sync=()=>{const visible=results.children.length>0&&getComputedStyle(results).display!=='none';root.classList.toggle('tffc-campaign-results',visible)};
+ new MutationObserver(sync).observe(results,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
+ sync();
+})();
+<\/script>`;
+ html=html.replace('</head>','<link rel="stylesheet" href="two-rooms-beta-doorway.css"></head>');
+ if(!html.includes(anchor))throw Error('BETA document structure changed');
+ html=html.replace(anchor,bridge+anchor);
+ document.open();document.write(html);document.close();
+ }catch(error){document.body.textContent='Shed doorway could not load BETA: '+error.message}
+})();
+</script></body></html>

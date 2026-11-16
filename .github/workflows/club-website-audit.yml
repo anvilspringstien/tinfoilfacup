@@ -1,0 +1,29 @@
+name: Club website evidence and queue
+on:
+  pull_request:
+    paths:
+      - 'updater/club_website*'
+      - 'tests/test_club_website_publication.js'
+      - 'beta/clubfinder-beta.html'
+      - '.github/workflows/club-website-audit.yml'
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'updater/club_website*'
+      - 'tests/test_club_website_publication.js'
+      - '.github/workflows/club-website-audit.yml'
+permissions:
+  contents: read
+jobs:
+  evidence-and-publication:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          node tests/test_club_website_publication.js
+          node updater/club_website_queue.js --out /tmp/club-website-queue.json
+          node updater/club_website_bulk_promote.js --ledger updater/club_website_verified_batch_04.json --out /tmp/club-website-map.json --apply-beta
+          git diff --exit-code -- beta/clubfinder-beta.html competition.json clubfinder.html

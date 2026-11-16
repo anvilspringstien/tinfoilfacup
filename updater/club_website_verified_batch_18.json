@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-06",
+  "scope": "Batch 18: twelve previously unreviewed missing original qualifying-club websites. Website identity only.",
+  "reviewed_count": 12,
+  "verified": [
+    {
+      "club": "Dulwich Hamlet FC",
+      "aliases": [],
+      "url": "https://dulwichhamletfc.co.uk/",
+      "evidence_url": "https://dulwichhamletfc.co.uk/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club contact identifies Champion Hill, Edgar Kail Way SE22 8BD; current men’s fixtures and Isthmian allocation identify the senior Hamlet. Supporters’ and junior sites are separate.",
+      "supporting_evidence_urls": [
+        "https://www.isthmian.co.uk/articles/club-allocations-for-202627-season"
+      ]
+    },
+    {
+      "club": "Dunston FC",
+      "aliases": [],
+      "url": "https://www.dunstonutsfc.com/",
+      "evidence_url": "https://www.dunstonutsfc.com/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own UTS-branded site identifies the Dunston first team, UTS Stadium, Wellington Road NE11 9JL. NPL lists Dunston in the 2026/27 East allocation.",
+      "supporting_evidence_urls": [
+        "https://www.thenpl.co.uk/articles/club-allocations-confirmed-for-202627-season"
+      ]
+    },
+    {
+      "club": "Easington Colliery FC",
+      "aliases": [],
+      "url": "https://www.pitchero.com/clubs/easingtoncollieryafc/",
+      "evidence_url": "https://www.pitchero.com/clubs/easingtoncollieryafc/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own senior club-managed site and contact identify Welfare Park, Memorial Avenue SR8 3PL. Northern League corroborates senior Colliery at Welfare Park. No social club or Easington Sports substitution.",
+      "supporting_evidence_urls": [
+        "https://www.northernfootballleague.org/team/easington-colliery/"
+      ]
+    },
+    {
+      "club": "Easington Sports FC",
+      "aliases": [],
+      "url": "https://www.easingtonsportsfc.com/",
+      "evidence_url": "https://www.easingtonsportsfc.com/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club contact and men’s first-team page identify Easington Sports at Addison Road, Banbury OX16 9DH and Combined Counties senior football; FA Full-Time corroborates the exact side.",
+      "supporting_evidence_urls": [
+        "https://fulltime.thefa.com/index.html?divisionseason=497177847"
+      ]
+    },
+    {
+      "club": "East Grinstead Town FC",
+      "aliases": [],
+      "url": "https://www.egtfc.co.uk/",
+      "evidence_url": "https://www.egtfc.co.uk/contact-us/",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "SCFL explicitly links this domain. Own contact and current November 2026 fixture page identify East Grinstead Town. Both are readable via the public reader despite ordinary GET 403; no restriction bypassed.",
+      "supporting_evidence_urls": [
+        "https://www.scfl.org.uk/prem-club-directory/east-grinstead-fc"
+      ]
+    },
+    {
+      "club": "Eastbourne United AFC",
+      "aliases": [],
+      "url": "https://www.eastbourneunitedafc.com/",
+      "evidence_url": "https://www.eastbourneunitedafc.com/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "SCFL explicitly links this domain for United at the Oval. Own contact identifies Channel View Road BN22 7LN and senior football officers; own November 2026 match calendar lists senior fixtures. Eastbourne Town and Borough remain separate.",
+      "supporting_evidence_urls": [
+        "https://www.scfl.org.uk/prem-club-directory/eastbourne-united-fc"
+      ]
+    },
+    {
+      "club": "Eastwood Community FC",
+      "aliases": [],
+      "url": "https://www.eastwoodcfc.co.uk/",
+      "evidence_url": "https://www.eastwoodcfc.co.uk/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "UCL explicitly links the domain for Eastwood Community FC at Coronation Park NG16 3HB. Own senior home and contact confirm ground and current first-team coverage; both readable through the public reader despite ordinary GET 503. Separate matchday offer page is not substituted.",
+      "supporting_evidence_urls": [
+        "https://theucl.co.uk/clubs/eastwood-cfc/"
+      ]
+    },
+    {
+      "club": "Ebbsfleet United FC",
+      "aliases": [],
+      "url": "https://ebbsfleetunited.co.uk/",
+      "evidence_url": "https://ebbsfleetunited.co.uk/contact/",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current senior site and contact identify Ebbsfleet United at Morrow Stadium, Stonebridge Road, Northfleet. National League corroborates the senior Fleet. Home and contact readable via public reader despite ordinary GET 403; no restriction bypassed.",
+      "supporting_evidence_urls": [
+        "https://www.thenationalleague.org.uk/news/2026/october/28/new-teams-take-over-at-the-top-after-eventful-enterprise-national-league-north-and-south-night/"
+      ]
+    },
+    {
+      "club": "Egham Town FC",
+      "aliases": [],
+      "url": "https://officialeghamtownfcltd.com/",
+      "evidence_url": "https://officialeghamtownfcltd.com/contact-us",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current 2026/27 home and contact identify Egham Town Football Club Ltd 02690511, Runnymede Stadium, and senior results. Isthmian South Central allocation corroborates Egham Town. Older sites not substituted. Public reader could read both pages despite ordinary GET 403.",
+      "supporting_evidence_urls": [
+        "https://www.isthmian.co.uk/articles/club-allocations-for-202627-season"
+      ]
+    },
+    {
+      "club": "Ely City FC",
+      "aliases": [],
+      "url": "https://www.elycityfc.co.uk/",
+      "evidence_url": "https://www.elycityfc.co.uk/contact",
+      "verified_on": "2026-11-06",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own senior home/contact identify Ely City at Demcom Stadium, Downhams Road CB6 2SH. Historical FA Thurlow Nunn senior record corroborates club and stadium; youth entries excluded.",
+      "supporting_evidence_urls": [
+        "https://fulltime.thefa.com/displayTeam.html?divisionseason=974538849&teamID=834534722"
+      ]
+    }
+  ],
+  "held": [
+    {
+      "club": "Dunstable FC",
+      "candidate_url": "https://www.dunstablefc.com/",
+      "reviewed_on": "2026-11-06",
+      "status": "held_unavailable_club_evidence",
+      "evidence_urls": [
+        "https://www.dunstablefc.com/",
+        "https://uk.linkedin.com/company/dunstablefc",
+        "https://www.ssmfl.uk/news/news-new-club-logo-unveiled-by-dunstable-fc",
+        "https://www.dunstabletownfc.co.uk/post/micky-s-pre-match-notes-v-aylesbury-vale-dynamos"
+      ],
+      "reason": "The new club publishes this URL on its profile but it returns 404. League and predecessor statements corroborate the new identity; no predecessor website or social page substituted and no identities merged.",
+      "next_step": "Verify an accessible website published by the new senior club."
+    },
+    {
+      "club": "East Cowes Victoria Athletic FC",
+      "candidate_url": "https://www.pitchero.com/clubs/eastcowesvicsafc2/",
+      "reviewed_on": "2026-11-06",
+      "status": "held_preferred_destination",
+      "evidence_urls": [
+        "https://www.pitchero.com/clubs/eastcowesvicsafc2/",
+        "https://www.pitchero.com/clubs/eastcowesvicsafc2/contact",
+        "https://www.wessexleague.co.uk/premier-division"
+      ],
+      "reason": "Club-managed pages match Beatrice Avenue PO32 6PA but homepage coverage is from March 2024 and earlier. The league lists a social destination rather than this old site. Current preferred non-social club destination not established; Cowes Sports is separate.",
+      "next_step": "Find current senior club-published evidence supporting a functioning preferred non-social destination."
+    }
+  ]
+}

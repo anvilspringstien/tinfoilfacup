@@ -1,0 +1,6 @@
+/* Test-entry-only counterpart to the Shed Campaign page. Both reserve the
+   same desktop scrollbar gutter from their first paint, even before Find.
+   No modifications to the approved, frozen Splash or Four Laws styles. */
+@media (min-width:1200px) {
+ html { scrollbar-gutter:stable; }
+}

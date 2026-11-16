@@ -46,7 +46,8 @@ const activeAmershamResult=canonicalRows(competition.result_history||competition
   String(r.away||'').replace(/[^a-z0-9]/gi,'').toLowerCase().includes('windsoreton') &&
   Number(r.home_score)===3 && Number(r.away_score)===0
 );
-const expectedAmershamCustodian=allowActiveAdvance&&activeAmershamResult?'Eastbourne Borough':'Windsor & Eton';
+const followVerified=require('../tests/verified_custody_expectation.js');
+const expectedAmershamCustodian=allowActiveAdvance&&activeAmershamResult?followVerified(competition,'Eastbourne Borough',activeAmershamResult.date):'Windsor & Eton';
 
 const assertions=`
 (async()=>{
@@ -59,6 +60,9 @@ const assertions=`
   lookup=async()=>({lat:Number(ground.lat),lon:Number(ground.lon),postcode:'HP7 0EJ'});
   geocodeClubPostcodes=async()=>{};
   document.getElementById('postcode').value='HP7 0EJ';
+  // Select this Campaign so unrelated nearby clubs' new draws cannot mask
+  // the historical HP7 replay guard. Every existing ancestry assertion remains.
+  saveJourney(amersham,'HP7 0EJ');
   await go();
 
   const rendered=String(document.getElementById('results').innerHTML||'');
@@ -97,7 +101,7 @@ const assertions=`
   console.log('AMERSHAM CARD RENDER REGRESSION: PASS');
   console.log('HP7 0EJ go() render: PASS');
   console.log('Resolved custodian:',expectedCustodian);
-  console.log('Replay details TBC absent: PASS');
+  console.log('Replay details TBC absent from selected HP7 Campaign: PASS');
   console.log('Petts Wood historical venue rendered: The New Inn Stadium, BR2 8HQ — PASS');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});`;
 

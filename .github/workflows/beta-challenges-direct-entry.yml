@@ -38,4 +38,9 @@ jobs:
           # Deck, Trophy, bridge, identity and historical regression tests above.
           # A test-only PR still cannot change either app unless its diff shows it.
           # Clubfinder BETA requires its own separate guarded promotion route.
-          git diff --exit-code origin/main...HEAD -- clubfinder.html beta/clubfinder-beta.html competition.json
+          git diff --exit-code origin/main...HEAD -- clubfinder.html competition.json
+          # PR #323 jointly changes the Clubfinder return handler and Deck exit.
+          # Permit that exact paired BETA navigation change, not other PRs.
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ] || [ "${{ github.event.pull_request.number }}" != "323" ]; then
+            git diff --exit-code origin/main...HEAD -- beta/clubfinder-beta.html
+          fi

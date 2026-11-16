@@ -5,7 +5,7 @@ const vm=require('node:vm');
 const html=fs.readFileSync('beta/clubfinder-beta.html','utf8');
 const live=JSON.parse(fs.readFileSync('competition.json','utf8'));
 const fallback=JSON.parse(fs.readFileSync('beta/competition-fallback.json','utf8'));
-const source=html.slice(html.indexOf("const LIVE_COMPETITION_DATA_URL="),html.indexOf('function liveLookup('))+
+const source=html.slice(html.indexOf("const BETA_COMPETITION_DATA_URL="),html.indexOf('function liveLookup('))+
   html.slice(html.indexOf('function applyLiveRoundDates(){'),html.indexOf('\nconst ROUND_META={'));
 assert(source.includes('async function refreshCompetitionData(force=false)'));
 assert(html.includes('if(!LIVE_COMPETITION_DATA){status.textContent=LIVE_DATA_STATUS.message;return}'));
@@ -20,7 +20,8 @@ async function scenario(liveOK,fallbackOK){
         if(!liveOK)throw Error('live unavailable');
         return {ok:true,json:async()=>live};
       }
-      assert.equal(url,'./competition-fallback.json');
+      if(String(url)==='./competition-check-status.json')return {ok:false};
+      assert.match(String(url),/^\.\/competition-fallback\.json\?t=\d+$/);
       if(!fallbackOK)throw Error('fallback unavailable');
       return {ok:true,json:async()=>fallback};
     }};
@@ -33,11 +34,11 @@ async function scenario(liveOK,fallbackOK){
 (async()=>{
   const success=await scenario(true,true);
   assert.equal(success.result,true);assert.equal(success.state,'live');
-  assert.equal(success.calls.length,1);assert.match(success.calls[0].url,/^\.\.\/competition\.json\?t=\d+$/);
+  assert.equal(success.calls.filter(c=>c.url.startsWith('../competition.json')).length,1);assert.match(success.calls[0].url,/^\.\.\/competition\.json\?t=\d+$/);
   assert.equal(success.calls[0].options.cache,'no-store');assert.equal(success.data.updated_at,live.updated_at);
   const offline=await scenario(false,true);
   assert.equal(offline.result,false);assert.equal(offline.state,'fallback');
-  assert.equal(offline.calls.length,2);assert.equal(offline.calls[1].url,'./competition-fallback.json');
+  assert.equal(offline.calls.filter(c=>c.url.includes('competition.json')||c.url.includes('competition-fallback.json')).length,2);assert.match(offline.calls.find(c=>c.url.startsWith('./competition-fallback.json')).url,/^\.\/competition-fallback\.json\?t=\d+$/);
   assert.equal(offline.calls[1].options.cache,'no-store');assert.equal(offline.data.updated_at,fallback.updated_at);
   assert.equal(offline.date,fallback.round_dates['Third Round Qualifying']);
   const unavailable=await scenario(false,false);

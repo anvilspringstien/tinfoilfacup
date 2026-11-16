@@ -27,11 +27,19 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
         for old, new in (
             ("../competition.json", "./competition.json"),
             ("./competition-fallback.json", "../competition.json"),
-            ("fetch(FALLBACK_COMPETITION_DATA_URL", "fetch('missing.json'"),
+            ("loadSource(BETA_COMPETITION_DATA_URL", "loadSource('missing.json'"),
+            ("loadSource(PRODUCTION_COMPETITION_DATA_URL", "loadSource('missing.json'"),
         ):
             with self.subTest(old=old):
                 with self.assertRaises(ValueError):
                     refresh(self.html.replace(old, new), self.live)
+
+    def test_reversed_source_precedence_fails_closed(self):
+        canonical = "const d=await loadSource(PRODUCTION_COMPETITION_DATA_URL,'canonical');"
+        fallback = "const d=await loadSource(BETA_COMPETITION_DATA_URL,'BETA fallback');"
+        changed = self.html.replace(canonical, '__CANONICAL__').replace(fallback, canonical).replace('__CANONICAL__', fallback)
+        with self.assertRaises(ValueError):
+            refresh(changed, self.live)
 
     def test_refresh_source_is_canonical_competition(self):
         self.assertEqual(DATA, ROOT / 'competition.json')
@@ -39,8 +47,8 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
 
     def test_committed_fallback_matches_canonical_data(self):
         live = json.loads(DATA.read_text(encoding='utf-8'))
-        self.assertIn("const LIVE_COMPETITION_DATA_URL='../competition.json';", self.html)
-        self.assertNotIn("const LIVE_COMPETITION_DATA_URL='./competition.json';", self.html)
+        self.assertIn("const PRODUCTION_COMPETITION_DATA_URL='../competition.json';", self.html)
+        self.assertNotIn("const PRODUCTION_COMPETITION_DATA_URL='./competition.json';", self.html)
         fallback = json.loads(FALLBACK.read_text(encoding='utf-8'))
         self.assertEqual(FALLBACK.read_text(encoding='utf-8'), refresh(self.html, live))
         self.assertEqual(fallback, live)
@@ -51,10 +59,31 @@ class BetaFallbackSnapshotTests(unittest.TestCase):
             and r.get('winner') == 'Thame United'
             and r.get('home_score') == 1 and r.get('away_score') == 3
             for r in fallback.get('results', {}).values()))
+        archived = fallback.get('round_fixtures', {}).get('Third Round Qualifying', [])
+        archived_rows = archived if isinstance(archived, list) else archived.values()
         self.assertTrue(any(
             v.get('round') == 'Third Round Qualifying'
+            and v.get('home') == 'Thame United'
             and v.get('away') == 'Eastbourne Borough'
-            for v in fallback.get('fixtures', {}).values()))
+            for v in archived_rows))
+        # FQR remains auditable after auto_draw archives it at promotion.
+        fqr_source = (fallback.get('fixtures', {})
+                      if fallback.get('source_round') == 'Fourth Round Qualifying'
+                      else fallback.get('round_fixtures', {}).get('Fourth Round Qualifying', []))
+        fqr_rows = fqr_source.values() if isinstance(fqr_source, dict) else fqr_source
+        fqr = {
+            (v.get('round'), v.get('date'), v.get('home'), v.get('away'))
+            for v in fqr_rows
+            if v.get('round') == 'Fourth Round Qualifying'
+        }
+        self.assertEqual(len(fqr), 32)
+        active = list(fallback.get('fixtures', {}).values())
+        self.assertTrue(active)
+        self.assertTrue(all(v.get('round') == fallback.get('source_round') for v in active))
+        unique_active = {
+            (v.get('round'), v.get('date'), v.get('home'), v.get('away')) for v in active
+        }
+        self.assertEqual(len(unique_active), fallback.get('source_tie_count'))
 
 
 if __name__ == '__main__':

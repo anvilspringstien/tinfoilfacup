@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-07",
+  "scope": "Batch 19: twelve previously unreviewed missing original qualifying-club websites. Website identity only.",
+  "reviewed_count": 12,
+  "verified": [
+    {
+      "club": "Emley AFC",
+      "aliases": [],
+      "url": "https://www.emleyafc.co.uk/",
+      "evidence_url": "https://www.emleyafc.co.uk/contact",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club contact identifies Emley AFC senior management and Fantastic Media Welfare Ground, HD8 9RE; current first-team fixtures and NPL allocation corroborate the senior club.",
+      "supporting_evidence_urls": [
+        "https://www.thenpl.co.uk/articles/club-allocations-confirmed-for-202627-season"
+      ]
+    },
+    {
+      "club": "Enfield Town FC",
+      "aliases": [],
+      "url": "https://etfc.london/",
+      "evidence_url": "https://etfc.london/information/whoswho/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club board and first-team staff page identifies Enfield Town FC; Isthmian lists the senior Town side. Separate from Enfield FC and youth/ladies sites.",
+      "supporting_evidence_urls": [
+        "https://www.isthmian.co.uk/articles/club-allocations-for-202627-season"
+      ]
+    },
+    {
+      "club": "Erith & Belvedere FC",
+      "aliases": [],
+      "url": "https://thederesfc.co.uk/",
+      "evidence_url": "https://thederesfc.co.uk/club-contacts",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own first team and contacts identify the Deres, Acclaim Handling Community Stadium, Welling. SCEFL corroborates the senior identity. Separate from Erith Town.",
+      "supporting_evidence_urls": [
+        "https://scefl.com/sceflclub-erith-belvedere"
+      ]
+    },
+    {
+      "club": "Erith Town FC",
+      "aliases": [],
+      "url": "https://erithtown.com/",
+      "evidence_url": "https://erithtown.com/about/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own About identifies Erith Town Football Club (2017 Ltd), the Dockers and senior club history. Isthmian identifies the same senior team. Separate from Erith & Belvedere.",
+      "supporting_evidence_urls": [
+        "https://www.isthmian.co.uk/clubs/erith-town"
+      ]
+    },
+    {
+      "club": "Euxton Villa FC",
+      "aliases": [],
+      "url": "https://www.euxtonvillafc.com/",
+      "evidence_url": "https://www.euxtonvillafc.com/teams/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club teams page identifies first-team officials; NWCFL corroborates the senior club and lists the same domain.",
+      "supporting_evidence_urls": [
+        "https://nwcfl.com/clubpage.php?id=897"
+      ]
+    },
+    {
+      "club": "Everett Rovers FC",
+      "aliases": [],
+      "url": "https://everettroversfc.co.uk/",
+      "evidence_url": "https://everettroversfc.co.uk/about-us/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Spartan league publishes this club domain. Club home and About identify Watford club and Saturday first team, readable through ordinary public reader despite direct GET 403. No restriction bypassed.",
+      "supporting_evidence_urls": [
+        "https://ssmfl.uk/teams/everett-rovers"
+      ]
+    },
+    {
+      "club": "Eversley & California FC",
+      "aliases": [],
+      "url": "https://www.pitchero.com/clubs/californiafc/",
+      "evidence_url": "https://www.pitchero.com/clubs/californiafc/contact",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed homepage and contact identify senior Eversley & California at Halls Way, RG27 0NS. FA Combined Counties senior fixtures corroborate the exact side. Separate youth destination excluded.",
+      "supporting_evidence_urls": [
+        "https://fulltime.thefa.com/displayTeam.html?id=563338778"
+      ]
+    },
+    {
+      "club": "Evesham United FC",
+      "aliases": [],
+      "url": "https://eveshamunitedfc.com/",
+      "evidence_url": "https://eveshamunitedfc.com/contact-admission/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club contact identifies Evesham United, Spiers & Hartwell Stadium, WR11 2LZ and 2026/27 men’s admissions. Southern League corroborates the senior team; older division wording is not a competition-data correction. Foundation separate.",
+      "supporting_evidence_urls": [
+        "https://www.southern-football-league.co.uk/match/6a5a1cc3ce9ef452b61f44f4"
+      ]
+    },
+    {
+      "club": "Exmouth Town FC",
+      "aliases": [],
+      "url": "https://exmouth-townfc.co.uk/",
+      "evidence_url": "https://exmouth-townfc.co.uk/first-team-fixtures/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club homepage identifies company 08773468, senior side and Southern Road EX8 3EE. First-team page readable via public reader despite direct GET 403. Southern League corroborates the senior side. No restriction bypassed.",
+      "supporting_evidence_urls": [
+        "https://www.southern-football-league.co.uk/match/6a5a1cc3ce9ef452b61f44b0"
+      ]
+    },
+    {
+      "club": "Eynesbury Rovers FC",
+      "aliases": [],
+      "url": "https://eynesburyrovers.com/",
+      "evidence_url": "https://eynesburyrovers.com/",
+      "verified_on": "2026-11-07",
+      "status": "verified_official_club_site",
+      "verification_notes": "UCL explicitly lists the domain and Alfred Hall Memorial Ground, Hall Road PE19 2SF. Ordinary GET loads club-published homepage with first-team and club contact details at matching ground, despite reader retrieval failure.",
+      "supporting_evidence_urls": [
+        "https://theucl.co.uk/clubs/eynesbury-rovers-fc/"
+      ]
+    }
+  ],
+  "held": [
+    {
+      "club": "Enfield FC",
+      "candidate_url": "https://www.enfieldfc.co.uk/",
+      "reviewed_on": "2026-11-07",
+      "status": "held_unavailable_club_evidence",
+      "evidence_urls": [
+        "https://www.enfieldfc.co.uk/",
+        "https://www.pitchero.com/clubs/enfield1893/",
+        "https://ssmfl.uk/teams/enfield/fixtures-results"
+      ],
+      "reason": "Old club-managed site explicitly says it stopped updating and points to the current candidate, which returned 503 on ordinary GET and was unavailable through the reader. League corroborates the senior side but cannot establish an accessible club destination.",
+      "next_step": "Verify the club’s functioning preferred site; do not substitute Enfield Town or the abandoned site."
+    },
+    {
+      "club": "Epsom & Ewell FC",
+      "candidate_url": "https://epsomandewellfc.co.uk/",
+      "reviewed_on": "2026-11-07",
+      "status": "held_unavailable_club_evidence",
+      "evidence_urls": [
+        "https://epsomandewellfc.co.uk/",
+        "https://epsomandewellfc.co.uk/club/",
+        "https://fulltime.thefa.com/displayTeam.html?divisionseason=459555064&teamID=992159276"
+      ],
+      "reason": "Indexed club pages are historical evidence, but ordinary GET of both home and club paths serves a HostPapa hosting placeholder. FA Combined Counties corroborates identity, not a currently functioning destination.",
+      "next_step": "Verify a restored or newly club-published functioning senior site; do not substitute the Colts."
+    }
+  ]
+}

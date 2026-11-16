@@ -1,0 +1,367 @@
+import assert from 'node:assert/strict';
+import {mkdir} from 'node:fs/promises';
+import {chromium} from 'playwright';
+
+const origin='http://127.0.0.1:8765';
+const saved={originName:'Newton Aycliffe FC',postcode:'DL5 4RQ',searchNumber:12345,callSign:'Tango Foxtrot 2 Alpha Charlie [12345]',pigeonName:'Shed Pigeon',ended:false};
+const browser=await chromium.launch();
+await mkdir('phone-frame-evidence',{recursive:true});
+try{
+ for(const [width,height] of [[1680,889],[1024,768],[768,1024],[390,669]]){
+  const context=await browser.newContext({viewport:{width,height}});
+  const page=await context.newPage();
+  await page.goto(origin+'/');
+  const app=page.frameLocator('#phoneApp');
+  await app.getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
+  await app.locator('.crest').evaluate(img=>img.decode());
+  const geometry=await page.locator('#phoneApp').evaluate(f=>{
+   const r=f.getBoundingClientRect();
+   return {width:r.width,height:r.height,left:r.left,canvas:f.clientWidth};
+  });
+  assert.equal(geometry.canvas,390);
+  assert.ok(geometry.width<=width+.5&&geometry.height<=height+.5);
+  assert.ok(Math.abs(geometry.left-(width-geometry.width)/2)<1);
+  if(width>=700)assert.ok(Math.abs(geometry.width/geometry.height-9/16)<.001);
+  else assert.ok(Math.abs(geometry.height-height)<1);
+  const splashField=await app.locator('.field').boundingBox();
+  await page.screenshot({path:`phone-frame-evidence/splash-${width}x${height}.png`});
+  await app.getByRole('link',{name:'Start Campaign',exact:true}).click();
+  await app.frameLocator('.tffc-exact-master-frame').getByRole('textbox',{name:'Enter Your Postcode'}).waitFor();
+  const lawsField=await app.frameLocator('.tffc-exact-master-frame').locator('.field').boundingBox();
+  assert.ok(Math.abs(splashField.width-lawsField.width)<1.5,'Splash → Four Laws must not change frame width');
+  assert.ok(Math.abs(splashField.x-lawsField.x)<1.5,'Splash → Four Laws must not shift sideways');
+  assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
+  await context.close();
+ }
+ // All supported shell entrances render exactly one app frame, without recursion.
+ for(const path of ['/index.html','/beta/phone-frame.html','/beta/phone-frame-shed.html']){
+  const context=await browser.newContext({viewport:{width:1024,height:768}});
+  const page=await context.newPage();await page.goto(origin+path);
+  await page.frameLocator('#phoneApp').getByRole('link',{name:'Start Campaign',exact:true}).waitFor();
+  assert.equal(await page.frameLocator('#phoneApp').locator('#phoneApp').count(),0);
+  assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
+  await context.close();
+ }
+ {
+  // Start from an existing Campaign in the installed phone frame, then search again.
+  const keep=await browser.newContext({viewport:{width:390,height:669},hasTouch:true});
+  await keep.addInitScript(()=>Object.defineProperty(navigator,'standalone',{value:true}));
+  await keep.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',route=>route.abort());
+  await keep.route('https://api.postcodes.io/**',route=>{
+   const path=decodeURIComponent(new URL(route.request().url()).pathname).toUpperCase();
+   if(path==='/POSTCODES/DL5 4RQ')return route.fulfill({json:{status:200,result:{postcode:'DL5 4RQ',latitude:54.619,longitude:-1.57}}});
+   if(path==='/POSTCODES/NE6 5NL')return route.fulfill({json:{status:200,result:{postcode:'NE6 5NL',latitude:54.99,longitude:-1.56}}});
+   return route.abort();
+  });
+  const logoutMethods=[];
+  await keep.route('**/beta/boot-room/api/logout',route=>{
+   logoutMethods.push(route.request().method());
+   return route.fulfill({json:{ok:true}});
+  });
+  const keepPage=await keep.newPage();
+  await keepPage.goto(origin+'/');
+  await keepPage.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
+  await keepPage.goto(origin+'/beta/phone-frame.html?view=campaign');
+  const keepApp=keepPage.frameLocator('#phoneApp');
+  const reset=keepApp.getByRole('button',{name:'Reset',exact:true});
+  await reset.click({timeout:30000});
+  const laws=keepApp.frameLocator('.tffc-exact-master-frame');
+  const postcode=laws.getByRole('textbox',{name:'Enter Your Postcode'});
+  await postcode.fill('NE6 5NL');
+  await laws.getByRole('button',{name:'Find My Club',exact:true}).click();
+  const summary=keepApp.locator('#tffc-results-summary');
+  await summary.waitFor({timeout:30000});
+  assert.match(await summary.innerText(),/3 Tin Foil FA Cup Campaigns found for NE6 5NL/);
+  const choices=keepApp.locator('#results .journey-lozenge');
+  await choices.last().waitFor();
+  assert.equal(await choices.count(),3);
+  assert.doesNotMatch(await laws.locator('#clubfinder-status').innerText(),/Campaigns found/);
+  const campaignFrame=await (await keepPage.locator('#phoneApp').elementHandle()).contentFrame();
+  await campaignFrame.waitForFunction(()=>{
+   const summary=document.getElementById('tffc-results-summary');
+   return !summary.hidden&&Math.abs(summary.getBoundingClientRect().top-(parseFloat(getComputedStyle(summary).scrollMarginTop)||0))<3;
+  });
+  assert.deepEqual(await keepPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7'))),saved);
+  assert.deepEqual(logoutMethods,[],'ordinary Reset preserves the Boot Room session');
+  await keepPage.reload();
+  const hardReset=keepApp.getByRole('button',{name:'Hard Reset',exact:true});
+  await hardReset.click({timeout:30000});
+  await keepApp.locator('#tinFoilConfirmCancel').click();
+  assert.deepEqual(logoutMethods,[],'cancelling Hard Reset preserves the Boot Room session');
+  assert.deepEqual(await keepPage.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7'))),saved);
+  await hardReset.click();
+  await keepApp.locator('#tinFoilConfirmOk').click();
+  await hardReset.waitFor({state:'hidden'});
+  assert.deepEqual(logoutMethods,['POST'],'confirming Hard Reset signs out of Boot Room chat');
+  assert.equal(await keepPage.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),null);
+  await keep.close();
+ }
+ const fallback=await browser.newContext({javaScriptEnabled:false});
+ const plain=await fallback.newPage();await plain.goto(origin+'/');
+ assert.equal(await plain.getByRole('link',{name:'Start Campaign',exact:true}).getAttribute('href'),'beta/clubfinder-journey.html');
+ await fallback.close();
+ const context=await browser.newContext({viewport:{width:1024,height:768}});
+ context.setDefaultTimeout(20000);
+ let counterCalls=0;
+ await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',r=>{counterCalls++;return r.abort()});
+ await context.route('https://api.postcodes.io/**',r=>r.fulfill({json:{status:200,result:{postcode:'DL5 4RQ',latitude:54.618,longitude:-1.571}}}));
+ await context.addInitScript(value=>{
+  // Seed once, so navigation and returns must preserve subsequent state.
+  if(!localStorage.getItem('tinFoilFACupJourney_v7'))localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value));
+ },saved);
+ let roomStatus={open:false,until:0};
+ await context.route('https://tinfoilfacup.com/beta/boot-room/api/doors',r=>r.fulfill({status:roomStatus?200:503,headers:{'access-control-allow-origin':'*'},json:roomStatus||{error:'fixture unavailable'}}));
+ const page=await context.newPage();
+ await page.goto(origin+'/clubfinder.html');
+ await page.waitForURL(origin+'/beta/phone-frame.html?view=campaign');
+ const legacyCampaign=page.frameLocator('#phoneApp');
+ const legacyName=legacyCampaign.getByRole('textbox',{name:'Pigeon name',exact:true});
+ assert.equal(await legacyName.inputValue(),'Shed Pigeon');
+ assert.equal(counterCalls,0,'Legacy Clubfinder must not allocate a new Campaign identity');
+ await page.goto(origin+'/stats.html');
+ await page.getByRole('button',{name:'Campaign',exact:true}).click();
+ await page.waitForURL(origin+'/beta/phone-frame.html?view=campaign');
+ assert.equal(await legacyName.inputValue(),'Shed Pigeon');
+ assert.equal(counterCalls,0,'The legacy Stats Campaign button must restore the saved identity');
+ await page.goto(origin+'/clubfinder.html?stats=1&return=challenges');
+ await page.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1&return=challenges');
+ await page.goto(origin+'/');
+ const app=page.frameLocator('#phoneApp');
+ await app.getByRole('link',{name:'My Campaign',exact:true}).click();
+ await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
+ assert.equal(await app.getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
+ const nav=app.locator('.phone-frame-nav');
+ await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
+ const boot=nav.locator('.boot-room-launch');await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.equal(await nav.locator('.campaign-boot-room-nav').evaluate(row=>row.nextElementSibling.className),'campaign-barry-nav');
+ const refresh=app.getByRole('button',{name:'Refresh TFFAC',exact:true});await refresh.waitFor();
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Tap to refresh this page/);
+ const refreshGeometry=await app.locator('.tffc-refresh-row').evaluate(row=>{
+  const button=row.querySelector('button').getBoundingClientRect(),line=row.getBoundingClientRect();
+  const keep=document.querySelector('.campaign-keep').getBoundingClientRect(),share=document.querySelector('.campaign-share').getBoundingClientRect();
+  const support=row.previousElementSibling.getBoundingClientRect(),border=parseFloat(getComputedStyle(row).borderTopWidth);
+  return {refresh:button.height,keep:keep.height,share:share.height,above:line.top-support.bottom,below:button.top-line.top-border};
+ });
+ assert.ok(Math.abs(refreshGeometry.refresh-refreshGeometry.keep)<.6&&Math.abs(refreshGeometry.refresh-refreshGeometry.share)<.6,'Refresh should match Keep/Share height');
+ assert.ok(Math.abs(refreshGeometry.above-refreshGeometry.below)<.6,'Divider should have equal spacing above and below');
+ assert.ok(Math.abs(refreshGeometry.above-20)<.6,'Preserve the existing space below Support');
+ const beforeRefresh=await app.locator('body').evaluate(()=>JSON.stringify({...localStorage}));
+ const beforeCounter=counterCalls;
+ await refresh.click();await page.waitForURL(/tffc-refresh=/);
+ await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
+ await app.locator('.boot-room-status').getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.equal(await app.locator('body').evaluate(()=>JSON.stringify({...localStorage})),beforeRefresh,'Manual refresh must preserve all saved records');
+ assert.equal(counterCalls,beforeCounter,'Manual refresh must not allocate another identity');
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Page refreshed/);
+ // The installed Keep launch uses /beta/ scope, not the public root.
+ await page.goto(origin+'/beta/phone-frame.html?view=campaign');
+ await app.getByRole('button',{name:'Refresh TFFAC',exact:true}).waitFor();
+ const keepSaved=await app.locator('body').evaluate(()=>JSON.stringify({...localStorage}));
+ const keepCounter=counterCalls;
+ await app.getByRole('button',{name:'Refresh TFFAC',exact:true}).click();
+ await page.waitForURL(url=>url.pathname==='/beta/phone-frame.html'&&url.searchParams.has('tffc-refresh'));
+ await app.getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
+ await app.locator('.boot-room-status').getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.match(await app.locator('.tffc-refresh-row').innerText(),/Page refreshed/);
+ assert.equal(await app.locator('body').evaluate(()=>JSON.stringify({...localStorage})),keepSaved);
+ assert.equal(counterCalls,keepCounter);
+ const unchanged=await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
+ const custodian=await app.locator('.chosen-campaign-current .custodian-name').innerText();
+ const entrance=origin+'/beta/boot-room/?frame=campaign';
+ await context.route(entrance,r=>r.fulfill({contentType:'text/html',body:'<h1>Boot Room chalkboard</h1>'}));
+ await boot.click();
+ await page.waitForURL(url=>url.pathname==='/beta/phone-frame.html'&&url.searchParams.get('view')==='boot-room');
+ await app.getByRole('heading',{name:'Boot Room chalkboard'}).waitFor();
+ const joinURL=new URL(page.url());
+ const claim=JSON.parse(decodeURIComponent(joinURL.hash.slice('#campaign='.length)));
+ assert.deepEqual(Object.keys(claim).sort(),['callSign','custodian','fixture','name','origin']);
+ assert.equal(claim.callSign,'TF2AC 12345');
+ assert.equal(claim.name,'Shed Pigeon');
+ assert.equal(claim.origin,JSON.parse(unchanged).originName);
+ assert.equal(claim.custodian,custodian);
+ assert.ok(claim.fixture.length>0);
+ await page.goBack();
+ await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.equal(await app.locator('body').evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7')),unchanged);
+ roomStatus={open:true,until:Date.now()+3600000};await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('DOORS OPEN',{exact:true}).waitFor();
+ roomStatus=null;await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('CHECK THE DOORS',{exact:true}).waitFor();
+ roomStatus={open:false,until:0};await app.locator('body').evaluate(()=>window.dispatchEvent(new Event('online')));await boot.getByText('DOORS CLOSED',{exact:true}).waitFor();
+ assert.deepEqual(await nav.locator('.campaign-primary-nav button').allTextContents(),['My Campaign','My Stats','My Challenges']);
+ assert.deepEqual(await nav.locator('.campaign-secondary-nav button').allTextContents(),['Original Campaigns','Reset','End My Campaign','Hard Reset']);
+ const primary=await nav.locator('.campaign-primary-nav button').evaluateAll(buttons=>buttons.map(b=>{const r=b.getBoundingClientRect();return {y:r.y,width:r.width,height:r.height}}));
+ for(const box of primary){assert.ok(Math.abs(box.width-primary[0].width)<1);assert.ok(Math.abs(box.y-primary[0].y)<1);assert.ok(box.height>=44);}
+ await nav.locator('.barry-air-launch img').evaluate(img=>img.decode());
+ assert.equal(await nav.locator('.barry-air-launch img').evaluate(img=>{const s=getComputedStyle(img);return Math.round(img.getBoundingClientRect().width-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight))}),240,'filter padding must preserve the visible badge width');
+ assert.equal(await nav.locator('.campaign-primary-nav .barry-air-launch').count(),0);
+ assert.equal(await nav.locator('.campaign-magic-nav').count(),0);
+ assert.equal(await nav.locator('.campaign-keep,.campaign-share').count(),0);
+ assert.match(await nav.locator('.barry-air-launch img').evaluate(img=>getComputedStyle(img).filter),/drop-shadow/);
+ assert.equal(await nav.locator('.campaign-secondary-nav').evaluate(row=>getComputedStyle(row).justifyContent),'center');
+ const navOrder=await nav.evaluate(bar=>Array.from(bar.children).map(n=>n.className));
+ assert.ok(navOrder[0].includes('campaign-primary-nav')&&navOrder[1].includes('campaign-boot-room-nav')&&navOrder[2].includes('campaign-barry-nav')&&navOrder[3].includes('campaign-secondary-nav'));
+ assert.equal(await nav.locator('.campaign-secondary-nav button').first().evaluate(b=>getComputedStyle(b).backgroundColor),'rgb(8, 76, 97)');
+ async function checkMagicFooter(){
+  const footer=app.locator('.tffc-magic-row');
+  await footer.getByRole('button',{name:'Keep the Magic',exact:true}).waitFor();
+  assert.deepEqual(await footer.locator('button').allTextContents(),['Keep the Magic','Share the Magic']);
+  const actual=await footer.evaluate(row=>{
+   const support=row.nextElementSibling;
+   const a=getComputedStyle(row.querySelector('button')),b=getComputedStyle(support.querySelector('a'));
+   return {aboveSupport:support.classList.contains('tffc-support-row'),margin:getComputedStyle(row).margin,referenceMargin:getComputedStyle(support).margin,
+    radius:a.borderRadius,magicBackground:a.backgroundColor,supportBackground:b.backgroundColor,supportColor:b.color,supportBorder:b.borderTopColor,supportRadius:b.borderRadius,style:[a.padding,a.font],referenceStyle:[b.padding,b.font]};
+  });
+  assert.equal(actual.magicBackground,'rgb(240, 198, 79)');assert.equal(actual.supportBackground,'rgb(0, 0, 0)');assert.equal(actual.supportColor,'rgb(255, 255, 255)');assert.equal(actual.supportBorder,'rgb(129, 129, 129)');assert.equal(actual.supportRadius,'999px');assert.equal(actual.radius,'6px');assert.ok(actual.aboveSupport);assert.equal(actual.margin,actual.referenceMargin);assert.deepEqual(actual.style,actual.referenceStyle);
+ }
+ assert.equal(await app.locator('.tffc-beta-help').getByRole('button',{name:'Share',exact:true}).count(),0);
+ await checkMagicFooter();
+ await app.getByRole('button',{name:'Original Campaigns',exact:true}).click();
+ await app.getByRole('button',{name:'Return to My Campaign',exact:true}).first().waitFor();
+ assert.equal(await app.locator('.journey-lozenge').count(),3);
+ await checkMagicFooter();
+ await app.getByRole('button',{name:'Return to My Campaign',exact:true}).first().click();
+ await nav.getByRole('button',{name:'Barry Air',exact:true}).waitFor();
+ await app.getByRole('button',{name:'Keep the Magic',exact:true}).click();
+ const keep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+ await keep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
+ await keep.getByRole('button',{name:'Close',exact:true}).click();
+ // Closing footer Keep returns to Frame 2 before testing wheel movement.
+ await page.waitForFunction(()=>Math.abs(document.getElementById('phoneApp').contentDocument.getElementById('tffc-results-summary').getBoundingClientRect().top-14)<3);
+ // A long Campaign must retain the full phone width, yet still scroll.
+ assert.equal(await app.locator('html').evaluate(h=>h.clientWidth),390);
+ assert.equal(await app.locator('html').evaluate(h=>getComputedStyle(h).scrollbarWidth),'none');
+ const beforeWheel=await app.locator('body').evaluate(b=>b.ownerDocument.scrollingElement.scrollTop);
+ await page.locator('#phoneApp').hover();
+ await page.mouse.wheel(0,240);
+ await page.waitForFunction(before=>document.getElementById('phoneApp').contentDocument.scrollingElement.scrollTop>before,beforeWheel);
+ await app.getByRole('button',{name:'My Stats',exact:true}).click();
+ console.log('Checking Stats opens from My Campaign');
+ const opened=context.waitForEvent('page',{timeout:20000});
+ await app.getByRole('button',{name:'Got It!',exact:true}).click();
+ const stats=await opened;
+ stats.on('pageerror',e=>console.error('Stats wrapper error:',String(e)));
+ async function waitForReportFrame(){
+  try{await stats.waitForFunction(()=>document.getElementById('phoneApp')?.clientWidth===980,{},{timeout:10000});}
+  catch(error){console.error('Stats frame diagnostic:',await stats.locator('html').evaluate(h=>({url:location.href,ready:document.readyState,html:h.outerHTML.slice(0,2000),innerURL:h.querySelector('iframe')?.contentWindow?.location?.href})));throw error;}
+ }
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Share PDF',exact:true}).waitFor({timeout:30000});
+ // The report can render before the outer tab's deferred frame script loads.
+ await waitForReportFrame();
+ assert.equal(await stats.locator('#phoneApp').evaluate(f=>f.clientWidth),980);
+ const statsRatio=await stats.locator('#phoneApp').evaluate(f=>{const r=f.getBoundingClientRect();return r.width/r.height});
+ assert.ok(Math.abs(statsRatio-9/16)<.001);
+ assert.equal(stats.url(),origin+'/beta/phone-frame.html?view=stats','Stats should retain the Keep shell route as well');
+ await stats.reload();
+ await stats.frameLocator('#phoneApp').getByRole('button',{name:'Share PDF',exact:true}).waitFor({timeout:30000});
+ await waitForReportFrame();
+ const statsApp=stats.frameLocator('#phoneApp');
+ const statsBar=statsApp.getByRole('navigation',{name:'Stats actions'});
+ const shareStats=statsBar.getByRole('button',{name:'Share PDF'});
+ const beforeScroll=await shareStats.boundingBox();
+ assert.ok(beforeScroll.height>=43,'The Share control must retain a full-size tap target inside the scaled frame');
+ await statsApp.locator('.sheet').evaluate(sheet=>sheet.ownerDocument.defaultView.scrollTo(0,sheet.ownerDocument.body.scrollHeight));
+ const afterScroll=await shareStats.boundingBox();
+ assert.ok(Math.abs(beforeScroll.y-afterScroll.y)<2,'The Stats bar must stay fixed while scrolling');
+ const motto=await statsApp.locator('.motto').boundingBox();
+ const actions=await statsBar.boundingBox();
+ assert.ok(motto.y+motto.height<=actions.y,'At the end of the report the bar must clear the final row');
+ await stats.emulateMedia({media:'print'});
+ assert.equal(await statsBar.isVisible(),false,'The Stats bar must be hidden when printing');
+ await stats.emulateMedia({media:'screen'});
+ console.log('Checking Stats PDF share and download');
+ assert.equal(await shareStats.locator('svg[aria-hidden="true"]').count(),1);
+ await shareStats.evaluate(button=>{
+  const win=button.ownerDocument.defaultView;
+  Object.defineProperty(win.navigator,'canShare',{configurable:true,value:()=>true});
+  Object.defineProperty(win.navigator,'share',{configurable:true,value:async ({files})=>{win.sharedPdf=files[0];}});
+ });
+ await shareStats.click();
+ const shared=await shareStats.evaluate(async button=>{
+  const file=button.ownerDocument.defaultView.sharedPdf;
+  return {name:file.name,type:file.type,header:await file.slice(0,8).text()};
+ });
+ assert.deepEqual(shared,{name:'tin-foil-fa-cup-stats.pdf',type:'application/pdf',header:'%PDF-1.4'});
+ await shareStats.evaluate(button=>{
+  Object.defineProperty(button.ownerDocument.defaultView.navigator,'canShare',{configurable:true,value:()=>false});
+ });
+ const downloadPromise=stats.waitForEvent('download');
+ await shareStats.click();
+ assert.equal((await downloadPromise).suggestedFilename(),'tin-foil-fa-cup-stats.pdf');
+
+ const phone=await context.newPage();
+ try{
+  await phone.addInitScript(()=>{
+   Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'});
+   Object.defineProperty(navigator,'standalone',{configurable:true,value:true});
+   Object.defineProperty(navigator,'canShare',{value:()=>true,configurable:true});
+   Object.defineProperty(navigator,'share',{value:async ({files})=>{window.sharedPdf=files[0];},configurable:true});
+  });
+  await phone.goto(origin+'/beta/phone-frame.html?view=campaign');
+  const phoneApp=phone.frameLocator('#phoneApp');
+  await phoneApp.getByRole('button',{name:'My Stats',exact:true}).click();
+  await phoneApp.getByRole('button',{name:'Got It!',exact:true}).click();
+  await phone.waitForURL(origin+'/beta/clubfinder-beta.html?stats=1');
+  await phone.getByRole('button',{name:'Share PDF',exact:true}).click();
+  assert.equal(await phone.evaluate(()=>window.sharedPdf?.type),'application/pdf');
+  assert.equal(await phone.locator('iframe').count(),0);
+  await phone.getByRole('button',{name:'← My Campaign',exact:true}).click();
+  await phone.frameLocator('#phoneApp').getByRole('button',{name:'My Stats',exact:true}).waitFor();
+ }finally{
+  await phone.close();
+ }
+ // Existing Stats returns to its opener when available; after a refresh
+ // without one, it opens Campaign in the same tab. Both must stay usable.
+ console.log('Checking Stats returns to My Campaign');
+ const hasOpener=await stats.frameLocator('#phoneApp').locator('body').evaluate(()=>!!window.opener&&!window.opener.closed);
+ if(hasOpener){
+  const closed=stats.waitForEvent('close',{timeout:10000});
+  const returnButton=stats.frameLocator('#phoneApp').getByRole('button',{name:'← My Campaign',exact:true});
+  await returnButton.click().catch(error=>{
+   if(!stats.isClosed()||!/Target page, context or browser has been closed/.test(error.message))throw error;
+  });
+  await closed;
+ }else{
+  await stats.frameLocator('#phoneApp').getByRole('button',{name:'← My Campaign',exact:true}).click();
+  await stats.frameLocator('#phoneApp').getByRole('button',{name:'My Stats',exact:true}).waitFor({timeout:30000});
+  await stats.close();
+ }
+ await app.getByRole('button',{name:'My Challenges',exact:true}).click();
+ await app.getByRole('button',{name:'Got It!',exact:true}).click();
+ await app.getByRole('button',{name:'← My Campaign',exact:true}).waitFor({timeout:30000});
+ await checkMagicFooter();
+ assert.equal(await app.locator('#challengeShareLinkFooter').isVisible(),false);
+ assert.deepEqual(await app.locator('.deck-sales-coming').evaluate(button=>{const s=getComputedStyle(button);return [s.backgroundColor,s.color,s.opacity]}),['rgb(201, 0, 0)','rgb(255, 255, 255)','1']);
+ await app.locator('.tffc-like-row').waitFor({state:'visible'});
+ assert.ok(await app.locator('.tffc-magic-row').evaluate(row=>{const like=row.previousElementSibling;return like.classList.contains('tffc-like-row')&&like.querySelector('button')?.getAttribute('aria-label')==='I love TFFAC'&&like.previousElementSibling.classList.contains('deck-sales-tease')}),'Challenges footer order: Coming Soon, I heart TFFAC, Keep/Share');
+ await app.getByRole('button',{name:'Keep the Magic',exact:true}).click();
+ const challengeKeep=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+ await challengeKeep.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
+ await challengeKeep.getByRole('button',{name:'Close',exact:true}).click();
+ await app.getByRole('button',{name:'← My Campaign',exact:true}).click();
+ await app.getByRole('button',{name:'Share the Magic',exact:true}).click();
+ const share=app.frameLocator('iframe[title="Share Tin Foil FA Cup"]');
+ await share.getByRole('button',{name:'Keep the Magic',exact:true}).click();
+ await share.getByRole('heading',{name:'Keep the Magic',exact:true}).waitFor();
+ await share.getByRole('button',{name:'Back to Share',exact:true}).click();
+ await share.getByRole('button',{name:'Close',exact:true}).click();
+ await page.setViewportSize({width:768,height:1024});
+ assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
+ const identity=await app.locator('body').evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));
+ for(const key of ['originName','searchNumber','callSign','pigeonName'])assert.equal(identity[key],saved[key]);
+ assert.equal(counterCalls,0,'saved Campaign and all returns must allocate no counter');
+ await app.getByRole('button',{name:'Barry Air',exact:true}).click();
+ const barryIntro=app.locator('#tffc-campaign-intro');await barryIntro.waitFor();assert.equal(await barryIntro.getByRole('heading').innerText(),'Barry Air');assert.match(await barryIntro.locator('#tffc-intro-message').innerText(),/Tin Foil FA Cup’s partner airline of choice/);assert.match(await barryIntro.locator('#tffc-intro-message').innerText(),/CEO & Founder, Barry Air\.$/);
+ assert.equal(await barryIntro.getByRole('checkbox').isChecked(),false);await barryIntro.getByRole('checkbox').check();await barryIntro.getByRole('button',{name:'Close',exact:true}).click();assert.equal(await app.locator('body').evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).introDismissed?.barry),undefined,'closing must not save a dismissal');
+ await app.getByRole('button',{name:'Barry Air',exact:true}).click();await barryIntro.waitFor();assert.equal(await barryIntro.getByRole('checkbox').isChecked(),false);await barryIntro.getByRole('checkbox').check();await barryIntro.getByRole('button',{name:'Got It!',exact:true}).click();
+ await page.getByRole('heading',{name:'Pigeon Control',exact:true}).waitFor();
+ await page.getByText('TF2AC 12345',{exact:true}).waitFor();
+ assert.equal(new URL(page.url()).pathname,'/beta/barry-air/');
+ assert.equal(await page.locator('#pigeon-name').innerText(),'Shed Pigeon');
+ await page.getByRole('link',{name:'← My Campaign',exact:true}).click();
+ await page.frameLocator('#phoneApp').getByRole('textbox',{name:'Pigeon name',exact:true}).waitFor();
+ assert.equal(await page.frameLocator('#phoneApp').getByRole('textbox',{name:'Pigeon name',exact:true}).inputValue(),'Shed Pigeon');
+ assert.equal(await page.frameLocator('#phoneApp').locator('body').evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')).introDismissed.barry),true);
+ await page.frameLocator('#phoneApp').getByRole('button',{name:'Barry Air',exact:true}).click();await page.getByRole('heading',{name:'Pigeon Control',exact:true}).waitFor();assert.equal(new URL(page.url()).pathname,'/beta/barry-air/','dismissed explanation must launch directly');
+ assert.equal(counterCalls,0,'Barry Air and its return must preserve identity without allocating a counter');
+ await context.close();
+ console.log('PASS: shared frame at four viewports; Four Laws, saved Campaign, Stats tab/return, Challenges, Share/Keep, rotation and identity without counter calls');
+}finally{await browser.close()}

@@ -39,10 +39,8 @@ for(const token of [
 
 
 const navBlock=html.slice(openStart,nav+80);
-assert(navBlock.includes("tinFoilRemoveChallengesPrep();"),
-  'Challenges loader must be removed before navigating away');
-assert(navBlock.indexOf("tinFoilRemoveChallengesPrep();")<navBlock.indexOf("window.location.href='challenges-beta.html';"),
-  'Challenges loader cleanup must happen before navigation');
+assert(!navBlock.includes("tinFoilRemoveChallengesPrep();"),
+  'Challenges loader must remain painted until navigation/pagehide owns cleanup');
 assert(!navBlock.includes("raf(resolve);"),
   'Challenges navigation must not expose an extra painted Clubfinder frame after loader cleanup');
 

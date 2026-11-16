@@ -17,7 +17,10 @@ const coords={
   'SL43DR':{latitude:51.482,longitude:-0.612},
   'BR28HQ':{latitude:51.384,longitude:0.022},
   'OX93RN':{latitude:51.755598,longitude:-0.975360},
-  'BN237QH':{latitude:50.796,longitude:0.323}
+  'BN237QH':{latitude:50.796,longitude:0.323},
+  // Salisbury is reached after its verified Fourth Qualifying victory.
+  // Coordinates match the existing verified Law 2 ledger (SP4 6PU).
+  'SP46PU':{latitude:51.104002,longitude:-1.786241}
 };
 function postcodeFromUrl(url){
   const s=decodeURIComponent(String(url));

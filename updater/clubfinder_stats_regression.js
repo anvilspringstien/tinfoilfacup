@@ -25,6 +25,7 @@ function popupStub(){
 const sandbox={console,process,document:documentStub,localStorage:{getItem:k=>localStore[k]??null,setItem:(k,v)=>{localStore[k]=String(v)},removeItem:k=>delete localStore[k]},navigator:{},location:{href:'https://example.test/clubfinder.html'},URL,URLSearchParams,TextEncoder,TextDecoder,setTimeout,clearTimeout,MutationObserver:undefined,open:()=>popupStub(),fetch:async(url)=>{const s=String(url);if(s.includes('competition.json'))return {ok:true,json:async()=>competition,text:async()=>JSON.stringify(competition)};throw new Error('Unexpected network request: '+s)}};
 sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.createContext(sandbox);
 const allowActiveAdvance=process.env.TFFC_ALLOW_ACTIVE_RESULT_ADVANCE==='1'||String(competition.source_round||'')!=='Second Round Qualifying';
+sandbox.verifiedCustodianAfter=require('../tests/verified_custody_expectation.js');
 const assertions=`
 (async()=>{
   if(typeof refreshCompetitionData==='function') await refreshCompetitionData(false);
@@ -49,7 +50,23 @@ const assertions=`
   if(!replay||!same(tinFoilCertificateWinner(replay),'Heaton Stannington'))throw new Error('DL5 Stats regression: replay certificate winner mismatch');
 
   const activeSecondQ=history.find(r=>same(r.home,'Heaton Stannington')&&same(r.away,'Trafford')&&Number(r.home_score)===1&&Number(r.away_score)===2&&/Second Round Qualifying/i.test(r.round||''));
-  const expectedCustodian=${allowActiveAdvance}?'Trafford':'Heaton Stannington';
+  const athertonAdvancement=history.find(r=>same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&r.decision==='next-round-fixture'&&same(r.winner,'Atherton Collieries')&&r.home_score==null&&r.away_score==null&&r.source_url&&r.evidence_fixture==='AFC Fylde v Atherton Collieries');
+  const fourthQFixtures=[...Object.values(${JSON.stringify(competition.fixtures||{})}),
+    ...Object.values(${JSON.stringify((competition.round_fixtures||{})['Fourth Round Qualifying']||{})})];
+  // Accept an observed, decided replay as well as a scoreless official-draw
+  // advancement. The draw alone cannot establish the replay winner.
+  const athertonScoredReplay=history.find(r=>
+    same(r.home,'Atherton Collieries')&&same(r.away,'Trafford')&&
+    r.round==='Third Round Qualifying Replay'&&r.date==='2026-10-06'&&
+    same(r.winner,'Atherton Collieries')&&
+    Number.isInteger(r.home_score)&&Number.isInteger(r.away_score)&&
+    r.home_score>r.away_score&&r.status==='FT'&&
+    typeof r.source_url==='string'&&
+    r.source_url.startsWith('https://www.footballwebpages.co.uk/fa-cup/fixtures-results/third-qualifying-round-replay'));
+  const athertonEvidence=athertonAdvancement||athertonScoredReplay;
+  const athertonFourthQ=fourthQFixtures.some(f=>same(f.home,'AFC Fylde')&&same(f.away,'Atherton Collieries')&&f.round==='Fourth Round Qualifying');
+  if(athertonEvidence&&!athertonFourthQ)throw new Error('DL5 Stats regression: advancement lacks definite Fourth Qualifying fixture');
+  const expectedCustodian=${allowActiveAdvance}?(athertonEvidence&&athertonFourthQ?verifiedCustodianAfter(${JSON.stringify(competition)},'Atherton Collieries','2026-10-06'):'Trafford'):'Heaton Stannington';
   if(${allowActiveAdvance}&&!activeSecondQ)throw new Error('DL5 Stats regression: verified Heaton 1-2 Trafford result missing from candidate journey');
   if(!same(carrier.name,expectedCustodian))throw new Error('DL5 Stats regression: expected current custodian '+expectedCustodian+', got '+carrier.name);
   if(${allowActiveAdvance}){

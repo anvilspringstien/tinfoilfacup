@@ -7,7 +7,7 @@ from pathlib import Path
 
 import audit_preceding_round_replays as audit
 import auto_round_results as scan
-from round_state_engine import norm, compatible, base_round, pair_key
+from round_state_engine import norm, base_round, pair_key
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCEPTION_LEDGER = ROOT / "updater" / "exceptional-replay-dispositions.json"
@@ -47,11 +47,15 @@ DRAW_ALIASES = {
 
 
 def draw_matches(data, winner):
+    # The FA abbreviates next-round slots (for example Anstey N). Use the
+    # same structural comparison as conditional resolution, while retaining
+    # the unique-destination check in stage(). This does not decide a winner.
+    from auto_draw import compatible as draw_compatible
     matches = {}
     for fixture in scan.fixture_values(data.get("fixtures") or {}):
         sides = [p.strip() for side in (fixture["home"], fixture["away"])
                  for p in side.split(" or ")]
-        if any(compatible(DRAW_ALIASES.get(norm(side), side), winner) for side in sides):
+        if any(draw_compatible(DRAW_ALIASES.get(norm(side), norm(side)), norm(winner)) for side in sides):
             key = (fixture["home"], fixture["away"], fixture.get("date"))
             matches[key] = fixture
     return list(matches.values())
@@ -132,6 +136,7 @@ def main():
         if len(approved) + len(held) != len(gaps):
             raise SystemExit("Readiness does not account for each unpublished scheduled replay")
         report["replay_candidates"] = approved
+        report['blocked'] = []  # Readiness has accounted for and retained every held fixture.
     if not report["replay_candidates"] and not held and not report.get("scheduled_replay_gaps"):
         print(json.dumps({"status": "already_published",
                           "already_recorded": report["already_recorded"],
@@ -143,6 +148,9 @@ def main():
                        "blocked": report["blocked"], "events": report["events"],
                        "source_url": url, "production_mutation": False}
         print(json.dumps(diagnostics, indent=2))
+        if held:
+            print('No cleared candidates; fixture holds will be retried on the next scan', file=__import__('sys').stderr)
+            return
         raise SystemExit("No replay candidates in current source: inspect observation counts and archived source; publication withheld")
     summary, candidate = stage(data, report)
     if args.readiness:

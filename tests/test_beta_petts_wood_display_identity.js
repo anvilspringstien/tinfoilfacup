@@ -47,7 +47,9 @@ const run=(s,vars={})=>{Object.assign(ctx,vars);return vm.runInContext(s,ctx,{ti
   assert.equal(restored.name,'Petts Wood & Holmesdale FC');
   const journey=run("buildJourney(__origin)",{__origin:restored});
   assert.equal(journey.origin.name,'Petts Wood & Holmesdale FC');
-  assert.equal(journey.carrier.name,'Eastbourne Borough FC');
+  const legacyJourney=run("buildJourney({...__origin,name:'Holmesdale FC'})",{__origin:restored});
+  assert.equal(journey.carrier.name,legacyJourney.carrier.name,'Display rename must preserve the current custodian as results advance');
+  assert(journey.carrier.name,'Current custodian is missing');
   const previous=run("previousRoundsHtml(__journey)",{__journey:journey});
   assert(previous.includes('This Campaign starts with: Petts Wood &amp; Holmesdale FC'),
     'Previous Rounds still exposes retired Holmesdale name');

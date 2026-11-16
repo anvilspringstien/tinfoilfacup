@@ -1,0 +1,66 @@
+name: Draw ball numbers Shed proof
+on:
+  pull_request:
+    paths:
+      - updater/draw_ball_numbers.py
+      - .github/workflows/draw-ball-numbers-shed.yml
+permissions:
+  contents: read
+jobs:
+  validate:
+    if: github.head_ref == 'shed/official-draw-ball-numbers'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - run: cp competition.json "$RUNNER_TEMP/competition-before.json"
+      - name: Validate the published Second Round Proper ball list
+        run: >
+          python updater/draw_ball_numbers.py
+          --stage
+      - name: Verify the staged preview leaves canonical draw and results intact
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          before = json.loads((Path(os.environ["RUNNER_TEMP"]) / "competition-before.json").read_text())
+          after = json.loads(Path("competition.json").read_text())
+          preview = after.pop("draw_preview")
+          before.pop("draw_preview", None)
+          assert after == before, "Staging modified canonical competition fields"
+          numbers = {entry["number"]: entry["clubs"] for entry in preview["entries"]}
+          assert numbers[19] == ["AFC Fylde"]
+          assert numbers[40] == ["Salisbury"]
+          assert 27 not in numbers
+          assert preview["draw_schedule"] == {
+              "date_text": "Monday 9 November", "time_text": "approximately 6.45pm GMT",
+          }
+          print("Verified staged draw preview and unchanged canonical competition fields")
+          PY
+
+      - name: Check My Campaign draw preview rendering
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          import vm from 'node:vm';
+
+          const page = readFileSync('beta/clubfinder-beta.html', 'utf8');
+          const source = (start, end) => page.slice(page.indexOf(start), page.indexOf(end, page.indexOf(start)));
+          const {draw_preview: preview} = JSON.parse(readFileSync('competition.json', 'utf8'));
+          const render = vm.runInNewContext(
+            source('function canonicalClubKey(', '/* TIN_FOIL_BETA_HOLMESDALE') +
+            source('function nextProgressHtml(', 'function stateHtml(') +
+            'nextProgressHtml',
+            {esc: String},
+          );
+          const card = (drawClub) => render({}, {name: preview.target_round, drawClub, drawPreview: preview});
+          assert.match(card('AFC Fylde'), /Second Round Proper/);
+          assert.match(card('AFC Fylde'), /Monday 9 November.*approximately 6\.45pm GMT.*ball 19.*Opponent TBC/);
+          assert.match(card('Salisbury FC'), /ball 40/);
+          assert.doesNotMatch(card('Eastleigh'), /ball 27/);
+          JS

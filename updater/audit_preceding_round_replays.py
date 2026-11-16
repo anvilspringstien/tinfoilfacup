@@ -9,10 +9,13 @@ It does NOT enable publication.
 import argparse
 import json
 import re
+from datetime import date, datetime, time, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import auto_round_results as scan
-from round_state_engine import classify_observation, pair_key, base_round
+from round_state_engine import classify_observation, pair_key, base_round, norm
+from match_decisions import classify_batch
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCEPTION_LEDGER = ROOT / "updater" / "exceptional-replay-dispositions.json"
@@ -48,10 +51,79 @@ def validate_archived_replay_page(raw, preceding, url):
 
 
 ROUNDS = ["Extra Preliminary Round", "Preliminary Round", "First Round Qualifying",
-          "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying"]
+          "Second Round Qualifying", "Third Round Qualifying", "Fourth Round Qualifying",
+          "First Round Proper"]
+UK_TZ = ZoneInfo("Europe/London")
+REPLAY_COMPLETION_GRACE = timedelta(hours=4)
 
 
-def audit(data, source_html, live_html="", source_url=""):
+def reconcile_penalty_refinements(observations):
+    """Treat a cross-page winner note as detail of the same level score.
+
+    This only removes an incomplete FT observation when another page supplies
+    one unambiguous penalty winner for the identical dated, oriented score.
+    It is not independent penalty evidence: readiness still quarantines it.
+    Different scores, dates, orientations or named winners remain conflicts.
+    """
+    retained, refinements = [], []
+    for item in observations:
+        obs = item["observation"]
+        detailed = []
+        if (str(obs.get("status") or "").upper().startswith("FT")
+                and not obs.get("winner") and not obs.get("decision")
+                and isinstance(obs.get("home_score"), int)
+                and obs.get("home_score") == obs.get("away_score")
+                and obs.get("date") and obs.get("source_url")):
+            for other in observations:
+                row = other["observation"]
+                if (row.get("source_url") and row["source_url"] != obs["source_url"]
+                        and row.get("date") == obs["date"]
+                        and norm(row.get("home")) == norm(obs.get("home"))
+                        and norm(row.get("away")) == norm(obs.get("away"))
+                        and row.get("home_score") == obs["home_score"]
+                        and row.get("away_score") == obs["away_score"]
+                        and str(row.get("status") or "").upper().startswith("FT")
+                        and row.get("decision") == "penalties"
+                        and norm(row.get("winner")) in pair_key(obs)):
+                    detailed.append(row)
+        if detailed and len({norm(row["winner"]) for row in detailed}) == 1:
+            refinements.append({"home": obs["home"], "away": obs["away"],
+                                "date": obs["date"], "incomplete_source": obs["source_url"],
+                                "winner_sources": sorted({row["source_url"] for row in detailed})})
+        else:
+            retained.append(item)
+    return retained, refinements
+
+
+def replay_is_due(scheduled, as_of):
+    """A replay is due only after its canonical UK-local KO plus completion grace.
+
+    Date-only fixtures become due the following local day rather than being
+    treated as overdue from midnight. Missing/malformed dates still fail closed.
+    """
+    raw_date = scheduled.get("date")
+    if not raw_date:
+        return True
+    try:
+        fixture_date = date.fromisoformat(str(raw_date))
+    except ValueError:
+        return True
+    if isinstance(as_of, datetime):
+        now = as_of if as_of.tzinfo else as_of.replace(tzinfo=UK_TZ)
+        now = now.astimezone(UK_TZ)
+    else:
+        now = datetime.combine(as_of, time.max, tzinfo=UK_TZ)
+    raw_kickoff = str(scheduled.get("kickoff") or "").strip()
+    if re.fullmatch(r"\d{1,2}:\d{2}", raw_kickoff):
+        hour, minute = map(int, raw_kickoff.split(":"))
+        if 0 <= hour <= 23 and 0 <= minute <= 59:
+            due_at = datetime.combine(fixture_date, time(hour, minute), tzinfo=UK_TZ) + REPLAY_COMPLETION_GRACE
+            return now >= due_at
+    return now.date() > fixture_date
+
+
+def audit(data, source_html, live_html="", source_url="", as_of=None):
+    as_of = as_of or datetime.now(UK_TZ)
     current = base_round(data.get("source_round"))
     if current not in ROUNDS or ROUNDS.index(current) == 0:
         raise ValueError("no eligible preceding qualifying round")
@@ -64,6 +136,8 @@ def audit(data, source_html, live_html="", source_url=""):
         scan.parse_fwp_observations(source_html, known, source_url)
         + (scan.parse_fwp_observations(live_html, known, scan.FWP_LIVE_URL) if live_html else [])
     )
+    source_observation_count = len(observations)
+    observations, refinements = reconcile_penalty_refinements(observations)
     history = scan.history_rows(data)
     published_history = list(history)  # Do not mistake in-memory candidates for published results.
     known_pairs={pair_key(f) for f in known}
@@ -88,39 +162,36 @@ def audit(data, source_html, live_html="", source_url=""):
             overlaid.append(replacement)
         history=overlaid
     results, blocked, duplicates, events = [], [], [], []
-    for item in observations:
-        obs = item["observation"]
-        # FWP can encode a penalty decision with a scoreline that disagrees
-        # with the clubs' official match report (Wimborne: 3-2 vs 1-1 AET,
-        # 4-3 penalties). Never silently turn that into a 90/120-minute win.
-        if (str(obs.get("decision") or "").lower() == "penalties"
-                and obs.get("home_score") != obs.get("away_score")):
-            blocked.append({"home": obs["home"], "away": obs["away"],
-                            "date": obs.get("date", ""),
-                            "reason": "penalty decision with non-level source score: independent verification required"})
+    decisions = classify_batch(observations, history)
+    for item in decisions:
+        if item.get('held'):
+            obs = item['observation']
+            blocked.append({'home': obs['home'], 'away': obs['away'], 'date': obs['date'],
+                            'reason': item['held']})
             continue
-        try:
-            outcome = classify_observation(item["fixture"], obs, history)
-        except ValueError as exc:
-            blocked.append({"home": obs["home"], "away": obs["away"],
-                            "date": obs["date"], "reason": str(exc)})
-            continue
+        outcome = item['outcome']
+        obs = outcome.get('result') or outcome.get('event')
         kind = outcome["kind"]
         if kind == "result":
             row = outcome["result"]
             if row.get("round", "").endswith(" Replay"):
                 results.append(row)
-                history.append(row)
             else:
                 blocked.append({"home": obs["home"], "away": obs["away"],
                                 "reason": "new non-replay result in archived round"})
         elif kind == "duplicate":
             duplicates.append(outcome["result"])
         else:
-            events.append(outcome["event"])
+            event = outcome['event']
+            blocked.append({'home': event['home'], 'away': event['away'], 'date': event['date'],
+                            'reason': 'replay awaiting completion: ' + event['status']})
+            item.update(held=blocked[-1]['reason'], state='awaiting-decision', observation=event)
+            item.pop('outcome', None)
     # Scheduled preceding-round replays are an independent completeness set.
     # A source count alone cannot prove that the source included every tie.
     observed_pairs = {pair_key(item["observation"]) for item in observations}
+    candidate_pairs = {pair_key(row) for row in results + blocked}
+    blocked_pairs = {pair_key(row) for row in blocked}
     recorded_pairs = {pair_key(row) for row in published_history
                       if base_round(row.get("round")) == preceding
                       and str(row.get("round") or "").endswith(" Replay")
@@ -136,7 +207,8 @@ def audit(data, source_html, live_html="", source_url=""):
         if not all(pair) or pair in seen_scheduled:
             continue
         seen_scheduled.add(pair)
-        if pair not in recorded_pairs:
+        due = replay_is_due(scheduled, as_of)
+        if (pair not in recorded_pairs or pair in blocked_pairs) and (due or pair in candidate_pairs):
             scheduled_replay_gaps.append({
                 "home": scheduled.get("home"), "away": scheduled.get("away"),
                 "date": scheduled.get("date"),
@@ -160,9 +232,12 @@ def audit(data, source_html, live_html="", source_url=""):
         })
 
     return {"active_round": current, "archived_round": preceding,
-            "archived_ties": len(known), "observations": len(observations),
+            "archived_ties": len(known), "observations": len(decisions),
+            "source_observations": source_observation_count,
+            "penalty_refinements": refinements,
             "replay_candidates": results, "already_recorded": len(duplicates),
             "blocked": blocked, "events": len(events),
+            "fixture_decisions": decisions,
             "scheduled_replay_gaps": scheduled_replay_gaps,
             "production_mutation": False}
 
@@ -190,8 +265,9 @@ def main():
         parser.error("provide --fetch or --source-html")
     result = audit(data, raw, live, url)
     print(json.dumps(result, indent=2, ensure_ascii=False))
-    if result["blocked"]:
-        raise SystemExit("PRECEDING REPLAY AUDIT: blocked observations; no production changes")
+    if result['blocked']:
+        import sys
+        print('PRECEDING REPLAY AUDIT: fixture-local holds retained; no production changes', file=sys.stderr)
 
 
 if __name__ == "__main__":

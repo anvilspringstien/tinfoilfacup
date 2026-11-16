@@ -4,6 +4,7 @@ import json
 import re
 import urllib.request
 from pathlib import Path
+from enrich_replay_kickoffs_and_active_venues import unique_lookup
 
 ROOT=Path(__file__).resolve().parents[1]
 COMP=ROOT/'competition.json'
@@ -57,7 +58,7 @@ def extract_js_array(text,name):
 
 req=urllib.request.Request(SOURCE_URL,headers={'User-Agent':'Mozilla/5.0 TinFoilFACupLaterRoundVenues/7.9.21','Accept':'text/html,*/*'})
 with urllib.request.urlopen(req,timeout=40) as r: raw=r.read().decode('utf-8','replace')
-gaz=parse_fchd(raw); by={norm(x['club']):x for x in gaz}
+gaz=parse_fchd(raw)
 comp=json.loads(COMP.read_text(encoding='utf-8'))
 html=HTML.read_text(encoding='utf-8')
 grounds=extract_js_array(html,'GROUNDS')
@@ -71,7 +72,8 @@ for f in values:
     home=f.get('home') or ''
     away=f.get('away') or ''
     if not home:continue
-    if f.get('conditional') or re.search(r'\s+or\s+',home,re.I) or re.search(r'\s+or\s+',away,re.I):continue
+    # A conditional visitor does not make the definite home ground unknown.
+    if re.search(r'\s+or\s+',home,re.I):continue
     fixture_key=(norm(home),norm(away),f.get('date',''),f.get('round',''))
     v=f.get('venue') or {}
     if v.get('postcode') and not re.search(r'TBC',str(v.get('postcode')),re.I):
@@ -79,7 +81,7 @@ for f in values:
     if norm(home) in known:
         # Starter-club venues remain runtime-resolved from protected GROUNDS.
         continue
-    row=by.get(norm(home))
+    row=unique_lookup(gaz,home)
     if not row:
         unresolved.append(home);continue
     f['venue']={'ground':row['ground'],'postcode':row['postcode'],'source':row['source'],'verification':'fchd-gazetteer'}

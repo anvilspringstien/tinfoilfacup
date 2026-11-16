@@ -33,6 +33,12 @@ function canonicalResultWinner(r){
   if(!r)return '';
   const status=String(r.status||'').toUpperCase();
   if(status==='VOID'||status==='VOIDED'||String(r.decision||'').toLowerCase()==='voided-replay-ordered')return '';
+  // Scores observed before full time must never transfer custody.
+  if(!/^(FT(?:\b|$)|AET$|AWARDED$|WALKOVER$|W\/O$)/.test(status))return '';
+  if(!r.source_url)return '';
+  const awarded=/^(AWARDED|WALKOVER|W\/O)$/.test(status);
+  const advancement=r.decision==='next-round-fixture'&&r.evidence_fixture&&r.evidence_round&&r.home_score==null&&r.away_score==null;
+  if(!awarded&&!advancement&&(!Number.isInteger(r.home_score)||!Number.isInteger(r.away_score)))return '';
   const hs=Number(r.home_score),as=Number(r.away_score);
   if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
   if(r.decision==='draw-replay')return '';

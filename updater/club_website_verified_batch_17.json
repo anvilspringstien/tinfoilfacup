@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-05",
+  "scope": "Batch17: twelve previously unreviewed missing original qualifying-club websites. Website identity only; no mail, competition, location or search-origin changes.",
+  "reviewed_count": 12,
+  "verified": [
+    {
+      "club": "Deeping Rangers FC",
+      "aliases": [],
+      "url": "https://www.deepingrangersfc.co.uk/",
+      "evidence_url": "https://www.deepingrangersfc.co.uk/contact",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current senior homepage/contact identify Deeping Rangers FC, company12828593 and Haydon Whitham Stadium, Outgang Road, Market Deeping. UCL explicitly links this domain and agrees on identity/ground. Own PE6 8LQ and league PE6 8QL differ; this audit does not correct location data. Older deepingrangers.co.uk and youth-only destinations not substituted.",
+      "supporting_evidence_urls": [
+        "https://theucl.co.uk/clubs/deeping-rangers-fc/"
+      ]
+    },
+    {
+      "club": "Dereham Town FC",
+      "aliases": [],
+      "url": "https://www.derehamtownfc.co.uk/",
+      "evidence_url": "https://www.derehamtownfc.co.uk/club-contacts",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own official homepage identifies senior Dereham Town/Magpies,2026 first-team reports and separate youth teams. Own contacts identify Aldiss Park and senior club roles. Homepage readable through public reader despite ordinary GET timeout; contacts also return200 directly. Thurlow Nunn July2024 fixtures corroborate exact senior identity historically, not current membership. No access restriction bypassed.",
+      "supporting_evidence_urls": [
+        "https://thurlownunnleague.com/early-season-league-fixtures/"
+      ]
+    },
+    {
+      "club": "Desborough Town FC",
+      "aliases": [],
+      "url": "https://www.pitchero.com/clubs/desboroughtown/",
+      "evidence_url": "https://www.pitchero.com/clubs/desboroughtown/contact",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current club-managed senior homepage/contact identify Desborough Town, VPK Stadium/Waterworks Field, Braybrooke Road NN14 2LJ, new chairman Kris Malde, manager Neil Healey and2026 FA Cup report. Spartan directory independently corroborates ground, Healey and John Lee; its older chair/social link is not promoted. Old artarnfc.co.uk archive and separate Desborough Town JFC are excluded.",
+      "supporting_evidence_urls": [
+        "https://ssmfl.uk/teams/desborough-town"
+      ]
+    },
+    {
+      "club": "Devizes Town FC",
+      "aliases": [],
+      "url": "https://devizestownfootball.co.uk/",
+      "evidence_url": "https://devizestownfootball.co.uk/committee/",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current senior homepage identifies Devizes Town founded1884 and first team at Grist Environmental Ground, Nursteed Road SN10 3DX. Committee identifies unincorporated members/social club, co-chairs Tom Perkins/Dan Sloan and secretary Ken Sanders-Fox. Hellenic directly links this domain and corroborates officials/ground. Committee public reader readable despite ordinary GET403; homepage200. Mixed older Western/current Hellenic wording is not a competition correction. Separate youth club excluded.",
+      "supporting_evidence_urls": [
+        "https://www.thehellenicleague.com/clubs/devizes-town/"
+      ]
+    },
+    {
+      "club": "Didcot Town FC",
+      "aliases": [],
+      "url": "https://www.pitchero.com/clubs/didcottown/",
+      "evidence_url": "https://www.pitchero.com/clubs/didcottown/contact",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current club-managed homepage/contact identify senior Didcot Town, Loop Meadow Stadium, Bowmont Water OX11 7GA and first-team manager Jamie Heapy. Southern League2026/27 introduction directly links this exact destination and corroborates Railwaymen/Loop Meadow. Separate Didcot Town Youth and1907 venue-only page not substituted.",
+      "supporting_evidence_urls": [
+        "https://www.southern-football-league.co.uk/articles/meet-the-new-clubs-in-the-southern-league-division-one-central"
+      ]
+    },
+    {
+      "club": "Dorchester Town FC",
+      "aliases": [],
+      "url": "https://www.dorchestertownfc.co.uk/",
+      "evidence_url": "https://www.dorchestertownfc.co.uk/legal/companyinfo",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current senior homepage, contact and legal page identify Dorchester Town Community Football Club Limited RS007128, founded1880, Magpies and The Avenue Stadium, Weymouth Avenue DT1 2RY. Southern League2026/27 introduction explicitly links this domain and corroborates identity/ground. Older league wording in own legal page does not change competition data. Youth-only and older Pitchero destination not substituted.",
+      "supporting_evidence_urls": [
+        "https://www.southern-football-league.co.uk/articles/meet-the-nine-new-teams-entering-the-southern-league-division-one-south-for-202627",
+        "https://www.dorchestertownfc.co.uk/club/contact"
+      ]
+    },
+    {
+      "club": "Dorking Wanderers FC",
+      "aliases": [],
+      "url": "https://dwfc.co.uk/",
+      "evidence_url": "https://dwfc.co.uk/contact-us/",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own official current homepage/contact identify Dorking Wanderers Football Club Ltd08964370, senior first team, Meadowbank Stadium, Mill Lane RH4 1DX and general club office. National League2024/25 constitution corroborates exact senior identity historically, not current membership. Dorking FC, academy and supporters forum are not merged or substituted.",
+      "supporting_evidence_urls": [
+        "https://www.thenationalleague.org.uk/news/2024/june/8/vanarama-national-league-202425-line-up-confirmed-81885/"
+      ]
+    },
+    {
+      "club": "Downton FC",
+      "aliases": [],
+      "url": "https://www.downtonfc.co.uk/",
+      "evidence_url": "https://www.downtonfc.co.uk/map-directions",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own official homepage identifies senior Downton first team and Wessex affiliation; own directions identify The Nest, Wick Lane, Downton SP5 3NF. Wessex senior directory directly links this domain and corroborates Wick Lane SP5 3NF (Brian Whitehead Sports Ground wording). No ground/name data correction made, no venue-only destination substituted.",
+      "supporting_evidence_urls": [
+        "https://www.wessexleague.co.uk/premier-division"
+      ]
+    },
+    {
+      "club": "Droitwich Spa FC",
+      "aliases": [],
+      "url": "https://www.dsfc.news/",
+      "evidence_url": "https://www.dsfc.news/contact",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current club-managed homepage/contact identify senior Droitwich Spa,2026/27 match reports, The Pavilion KGPF, Briar Mill WR9 0RZ, Robert Lamb, Dan Watson and Wayne Oliver. Hellenic senior directory directly links dsfc.news and corroborates same officers. Manager-role differences do not change identity or competition data. Separate Droitwich Spa BGFC/youth website is not substituted.",
+      "supporting_evidence_urls": [
+        "https://www.thehellenicleague.com/clubs/droitwich-spa/"
+      ]
+    },
+    {
+      "club": "Dudley Town FC",
+      "aliases": [],
+      "url": "https://www.dudleytownfootballclub.co.uk/",
+      "evidence_url": "https://www.dudleytownfootballclub.co.uk/club-contacts",
+      "verified_on": "2026-11-05",
+      "status": "verified_official_club_site",
+      "verification_notes": "Own current homepage/contact identify senior Dudley Town/Robins, mens first team, directors David Ferrier/Jon Edwards/Stephen Austin and November2026 senior reports. Midland League October31 report independently corroborates the exact Uttoxeter result and next Northwich fixture shown by own club. Dudley Sports and youth-only destinations remain separate.",
+      "supporting_evidence_urls": [
+        "https://midlandfootballleague.co.uk/capelli-mfl-premier-division-and-division-one-round-up-step-5-6-results-saturday-october-31/"
+      ]
+    }
+  ],
+  "held": [
+    {
+      "club": "Downham Town FC",
+      "candidate_url": "https://www.downhamtownfc.com/",
+      "reviewed_on": "2026-11-05",
+      "status": "held_unavailable_preferred_destination",
+      "evidence_urls": [
+        "https://www.downhamtownfc.com/",
+        "https://downhamtownfc.co.uk/",
+        "https://fulltime.thefa.com/displayTeam.html?id=460207487"
+      ],
+      "reason": "Published club-managed .com homepage returns503 to ordinary GET and502 to public reader. Separately indexed .co.uk homepage returns200 but an empty body, also no readable reader content. FA Thurlow Nunn record corroborates exact senior identity, but no functioning accessible preferred club-published homepage established. No social/directory replacement or guessed domain promoted; no restriction bypassed.",
+      "next_step": "Verify an accessible preferred senior club homepage and club-published identity/contact evidence."
+    },
+    {
+      "club": "Droylsden FC",
+      "candidate_url": "https://www.droylsdenfc.com/",
+      "reviewed_on": "2026-11-05",
+      "status": "held_unavailable_club_evidence",
+      "evidence_urls": [
+        "https://www.nwcfl.com/clubpage.php?id=132",
+        "https://www.droylsdenfc.com/",
+        "https://www.droylsdenfootballclub.com/"
+      ],
+      "reason": "NWCFL directly lists droylsdenfc.com and corroborates senior Droylsden, company01220282 and Butchers Arms M43 7AY. Listed homepage returns403 to ordinary GET and public reader. Its indexed old homepage advertises droylsdenfootballclub.com, but that published candidate returns503 and is unavailable to reader. No accessible current own identity/contact destination established. Droylsden Athletic, social and directory pages are not substitutes; no restriction bypassed.",
+      "next_step": "Verify an ordinarily accessible preferred current senior club website before promotion."
+    }
+  ]
+}

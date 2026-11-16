@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#100f0d"><title>Keep the Magic — Tin Foil FA Cup BETA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(circle at 50% 0,#29241e,#141210 70%);color:#f6f3e8;font:300 16px/1.55 Poppins,"Helvetica Neue",Arial,sans-serif;padding:16px}
+main{max-width:570px;margin:auto;border:1px solid #818181;border-radius:12px;background:#100f0d;padding:clamp(20px,5vw,32px)}
+h1{font-size:clamp(32px,7vw,49px);font-weight:300;line-height:1.12;margin:4px 0 14px}h2{font-size:21px;font-weight:400;margin:26px 0 6px}p{margin:10px 0}a{color:#d1e8f0}a:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.crest{display:block;width:min(180px,44vw);height:auto;margin:4px auto 16px}.eyebrow{text-align:center;color:#b3ccd4;font-size:13px;letter-spacing:.08em;text-transform:uppercase}.intro{font-size:17px}
+.action{background:#084c61;color:#fff;border:2px solid #f6f3e8;border-radius:5px;padding:10px 16px;min-height:44px;font:inherit;cursor:pointer}
+.buttons{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.note{font-size:13px;color:#d8d2c8}.status{font-size:14px;min-height:1.6em;margin:10px 0;color:#fff}.foot{border-top:1px solid #5a5753;padding-top:20px;margin-top:24px}
+</style></head><body><main><img class="crest" src="tffc-splash-logo-q80.webp" alt="Tin Foil FA Cup crest"><div class="eyebrow">Tin Foil FA Cup · BETA</div><h1>Keep the Magic</h1><p class="intro">Keep your Cup Run close. Put Tin Foil FA Cup on your Home Screen, and make a private backup of your Campaign and Challenges progress.</p>
+<h2>Keep it on your Home Screen</h2><p><strong>iPhone or iPad — Safari:</strong> Open the Clubfinder website, tap Safari's Share button, choose <strong>Add to Home Screen</strong>, then <strong>Add</strong> (or enable <strong>Open as Web App</strong> if offered).</p>
+<p><strong>Android — Chrome:</strong> Open Clubfinder, tap the three-dot menu and choose <strong>Add to Home screen</strong> or <strong>Install app</strong>, whichever your browser offers.</p>
+<p><strong>Computer:</strong> Bookmark the page using Cmd+D or Ctrl+D. Some browsers also offer an Install option.</p>
+<p class="note">A Home Screen shortcut is not a cloud account and is not an offline copy. Campaign data stays on the device and within the relevant browser/app storage.</p>
+<h2>Save your progress privately</h2><p>Use <strong>Download Backup</strong> in the browser where your Campaign lives. Later, open this page in the new browser, installed app or domain and use <strong>Restore Backup</strong>.</p>
+<div class="buttons"><button class="action" type="button" id="backup">Download Backup</button><button class="action" type="button" id="restore">Restore Backup…</button><input type="file" id="file" accept=".json,application/json" hidden></div><p id="status" class="status" role="status" aria-live="polite"></p>
+<p class="note">Your backup can contain your postcode, pigeon name and Challenge progress. Keep the file private. It is created and restored on your device; nothing is uploaded to Tin Foil FA Cup. Restore <strong>replaces</strong> existing Campaign and Challenges progress in the current browser/app. This feature does not combine two histories.</p>
+<div class="foot"><a href="clubfinder-beta.html">Return to Clubfinder</a></div></main>
+<script src="keep-the-magic-data.js"></script>
+<script>
+(function(){
+  const el=id=>document.getElementById(id),say=message=>{el('status').textContent=message};
+  el('backup').addEventListener('click',()=>{
+    try{
+      const data=TffcMagicBackup.create(localStorage);
+      if(!Object.keys(data.data).length){say('No Campaign or Challenge progress was found in this browser. Open the browser containing your saved progress.');return;}
+      const contents=JSON.stringify(data,null,2);
+      const url=URL.createObjectURL(new Blob([contents],{type:'application/json'}));
+      const anchor=document.createElement('a');anchor.href=url;anchor.download='tin-foil-fa-cup-backup.json';
+      document.body.appendChild(anchor);anchor.click();anchor.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),10000);
+      say('Backup prepared. Store the JSON file somewhere private.');
+    }catch(e){say('Backup unavailable: '+e.message)}
+  });
+  el('restore').addEventListener('click',()=>el('file').click());
+  el('file').addEventListener('change',async event=>{
+    const file=event.target.files[0];if(!file)return;
+    try{
+      if(file.size>2000000)throw Error('File exceeds 2 MB');
+      const doc=await file.text();const data=TffcMagicBackup.validate(doc);
+      const existing=TffcMagicBackup.KEYS.some(key=>localStorage.getItem(key)!==null);
+      const question=existing?'Restore this backup? It will REPLACE the Campaign and Challenges currently saved in this browser.':'Restore this saved Tin Foil FA Cup Campaign/Challenges backup to this browser?';
+      if(!confirm(question)){say('Restore cancelled. Nothing changed.');return;}
+      const count=TffcMagicBackup.restore(localStorage,data);
+      say('Restored '+count+' saved progress record'+(count===1?'':'s')+'. Return to Clubfinder and refresh the page to see your Campaign.');
+    }catch(e){say('Restore unavailable: '+e.message)}
+    finally{event.target.value='';}
+  });
+})();
+</script></body></html>

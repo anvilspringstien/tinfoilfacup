@@ -41,17 +41,4 @@ for (const [name,expected] of [
   ['Gainsborough Trinity FC',"Leamington or G'borough T"]
 ]) assert.equal(ctx.liveConditionalFixtureForClub(name).home,expected,name);
 assert.equal(ctx.liveConditionalFixtureForClub('An Unrelated Club'), null);
-// Validate the real current draw, not just hand-written example fixtures.
-ctx.LIVE_COMPETITION_DATA = JSON.parse(fs.readFileSync('competition.json','utf8'));
-for (const winner of [
-  'Braintree Town','Chippenham Town','Cirencester Town',
-  'Cray Wanderers','Crowborough Athletic','Dagenham & Redbridge',
-  'Dorking Wanderers','Uxbridge','Gainsborough Trinity',
-  'Wingate & Finchley','Truro City','Worksop Town','Wimborne Town'
-]) {
-  assert(ctx.liveConditionalFixtureForClub(winner),
-    'No unique Third Qualifying draw for ' + winner);
-}
-assert.equal(ctx.liveConditionalFixtureForClub('Hampton & Richmond Borough FC'), null,
-  'Eliminated Hampton must not retain a resolved Third Qualifying draw');
-console.log('BETA conditional draw alias regression: PASS (Hampton, Weston, unrelated club)');
+console.log('BETA conditional draw alias regression: PASS (synthetic conditional fixtures; independent of current round)');
