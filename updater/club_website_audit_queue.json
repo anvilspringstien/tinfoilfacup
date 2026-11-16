@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-14T10:35:56.287824+00:00",
+  "competition_updated_at": "2026-11-16T09:44:57.761484+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 300,
+  "eligible_linked": 314,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -829,17 +829,6 @@
       "evidence": []
     },
     {
-      "club": "Barton Town FC",
-      "identities": [
-        "Barton Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Beckenham Town FC",
       "identities": [
         "Beckenham Town FC"
@@ -1060,75 +1049,9 @@
       "evidence": []
     },
     {
-      "club": "Hartlepool United FC",
-      "identities": [
-        "Hartlepool United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Harwich & Parkeston FC",
       "identities": [
         "Harwich & Parkeston FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hashtag United FC",
-      "identities": [
-        "Hashtag United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hassocks FC",
-      "identities": [
-        "Hassocks FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hastings United FC",
-      "identities": [
-        "Hastings United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Havant & Waterlooville FC",
-      "identities": [
-        "Havant & Waterlooville FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Haverhill Rovers FC",
-      "identities": [
-        "Haverhill Rovers FC"
       ],
       "current_competition": false,
       "website": null,
@@ -1148,86 +1071,9 @@
       "evidence": []
     },
     {
-      "club": "Haywards Heath Town FC",
-      "identities": [
-        "Haywards Heath Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Heacham FC",
-      "identities": [
-        "Heacham FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Heanor Town FC",
-      "identities": [
-        "Heanor Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Hebburn Town FC",
       "identities": [
         "Hebburn Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hednesford Town FC",
-      "identities": [
-        "Hednesford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hemel Hempstead Town FC",
-      "identities": [
-        "Hemel Hempstead Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hereford FC",
-      "identities": [
-        "Hereford FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hereford Pegasus FC",
-      "identities": [
-        "Hereford Pegasus FC"
       ],
       "current_competition": false,
       "website": null,
@@ -5568,6 +5414,24 @@
       ]
     },
     {
+      "club": "Barton Town FC",
+      "identities": [
+        "Barton Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://bartontownfc.co.uk/contact/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bartontownfc.co.uk/contact/",
+          "evidence_url": "https://bartontownfc.co.uk/contact/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
       "club": "Barwell FC",
       "identities": [
         "Barwell FC"
@@ -9384,6 +9248,24 @@
       ]
     },
     {
+      "club": "Hartlepool United FC",
+      "identities": [
+        "Hartlepool United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.hartlepoolunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.hartlepoolunited.co.uk/",
+          "evidence_url": "https://www.hartlepoolunited.co.uk/pools-launch-new-website/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
       "club": "Hartley Wintney FC",
       "identities": [
         "Hartley Wintney FC"
@@ -9420,6 +9302,150 @@
       ]
     },
     {
+      "club": "Hashtag United FC",
+      "identities": [
+        "Hashtag United FC"
+      ],
+      "current_competition": false,
+      "website": "https://hashtagunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://hashtagunited.co.uk/",
+          "evidence_url": "https://hashtagunited.co.uk/our-story/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Hassocks FC",
+      "identities": [
+        "Hassocks FC"
+      ],
+      "current_competition": false,
+      "website": "https://hassocksfc.net/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://hassocksfc.net/",
+          "evidence_url": "https://hassocksfc.net/club-information/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Hastings United FC",
+      "identities": [
+        "Hastings United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.hastingsunited.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.hastingsunited.com/",
+          "evidence_url": "https://www.hastingsunited.com/club/club-information/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Havant & Waterlooville FC",
+      "identities": [
+        "Havant & Waterlooville FC"
+      ],
+      "current_competition": false,
+      "website": "https://havantandwaterloovillefc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://havantandwaterloovillefc.co.uk/",
+          "evidence_url": "https://havantandwaterloovillefc.co.uk/club/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Haverhill Rovers FC",
+      "identities": [
+        "Haverhill Rovers FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/haverhillroversfc/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/haverhillroversfc/",
+          "evidence_url": "https://www.pitchero.com/clubs/haverhillroversfc/information",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Haywards Heath Town FC",
+      "identities": [
+        "Haywards Heath Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://hhtfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://hhtfc.co.uk/",
+          "evidence_url": "https://hhtfc.co.uk/hsenergy-group-stadium/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Heacham FC",
+      "identities": [
+        "Heacham FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.heachamfootballclub.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.heachamfootballclub.co.uk/",
+          "evidence_url": "https://www.heachamfootballclub.co.uk/teams/243631",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Heanor Town FC",
+      "identities": [
+        "Heanor Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.heanortownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.heanortownfc.co.uk/",
+          "evidence_url": "https://www.heanortownfc.co.uk/teams/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
       "club": "Heaton Stannington FC",
       "identities": [
         "Heaton Stannington FC"
@@ -9438,6 +9464,42 @@
       ]
     },
     {
+      "club": "Hednesford Town FC",
+      "identities": [
+        "Hednesford Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://htfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://htfc.co.uk/",
+          "evidence_url": "https://htfc.co.uk/first-team/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Hemel Hempstead Town FC",
+      "identities": [
+        "Hemel Hempstead Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.hemelfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.hemelfc.com/",
+          "evidence_url": "https://www.hemelfc.com/club-information",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
       "club": "Hendon FC",
       "identities": [
         "Hendon FC"
@@ -9452,6 +9514,42 @@
           "evidence_url": "https://hendonfc.com/",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_05.json"
+        }
+      ]
+    },
+    {
+      "club": "Hereford FC",
+      "identities": [
+        "Hereford FC"
+      ],
+      "current_competition": false,
+      "website": "https://herefordfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://herefordfc.co.uk/",
+          "evidence_url": "https://herefordfc.co.uk/about-us/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Hereford Pegasus FC",
+      "identities": [
+        "Hereford Pegasus FC"
+      ],
+      "current_competition": false,
+      "website": "https://herefordpegasus.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://herefordpegasus.co.uk/",
+          "evidence_url": "https://herefordpegasus.co.uk/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_24.json"
         }
       ]
     },
