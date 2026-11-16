@@ -70,20 +70,27 @@ export async function statsSharePdf(sheet) {
   }
 
   page();
-  label('STATS', MARGIN, y, 84, '#161514', true);
-  art(images[0], WIDTH - MARGIN - 155, y, 155);
-  label(text('.season'), WIDTH - MARGIN - 77, y + 166, 25, RED, true, 'center');
-  y += 88;
-  label(text('.sub'), MARGIN, y, 21, RED, true);
-  y += 35;
+  const clubWidth = 460;
+  const clubCenter = MARGIN + clubWidth / 2;
+  const badgeCenter = WIDTH - MARGIN - 107;
+  label('STATS', clubCenter, y, 84, '#161514', true, 'center');
+  art(images[0], badgeCenter - 78, y + 45, 156);
+  label(text('.season'), badgeCenter, y + 225, 30, '#161514', true, 'center');
+  y += 94;
+  for (const line of wrap(text('.sub'), clubWidth, 22)) {
+    label(line, clubCenter, y, 22, RED, true, 'center');
+    y += 27;
+  }
+  label('★', clubCenter, y, 24, RED, true, 'center');
+  y += 36;
   for (const club of sheet.querySelectorAll('.top-left .club')) {
-    label(club.previousElementSibling.innerText, MARGIN, y, 14, RED, true);
-    y += 20;
-    for (const line of wrap(club.innerText, WIDTH - 2 * MARGIN - 175, 22)) {
-      label(line, MARGIN, y, 22, '#161514', true);
+    label(club.previousElementSibling.innerText, clubCenter, y, 16, RED, true, 'center');
+    y += 23;
+    for (const line of wrap(club.innerText, clubWidth, 22)) {
+      label(line, clubCenter, y, 22, '#161514', true, 'center');
       y += 26;
     }
-    y += 8;
+    y += 14;
   }
   const identity = sheet.querySelector('.campaign-identity-band');
   if (identity) {
@@ -134,16 +141,55 @@ export async function statsSharePdf(sheet) {
     rule(y);
     y += 5;
   }
-  for (const section of sheet.querySelectorAll('.challenge-honours, .bottom > div')) {
-    const title = section.querySelector('.section-title,.bt');
-    if (!title) continue;
-    if (y + 100 > HEIGHT - MARGIN) page();
-    heading(title.innerText);
-    for (const item of [...section.children].filter(child => child !== title)) {
-      block(item.innerText);
+  const honours = [...sheet.querySelectorAll('.challenge-honour')];
+  if (honours.length) {
+    if (y + 112 > HEIGHT - MARGIN) page();
+    heading('CHALLENGE HONOURS');
+    label(text('.challenge-count'), WIDTH / 2, y, 17, '#161514', true, 'center');
+    y += 28;
+    const columnWidth = (WIDTH - 2 * MARGIN - 22) / 2;
+    for (let index = 0; index < honours.length; index += 2) {
+      const row = honours.slice(index, index + 2);
+      const titles = row.map(item => wrap(item.querySelector('span').innerText, columnWidth - 104, 14));
+      const height = Math.max(...titles.map(lines => lines.length)) * 18 + 10;
+      if (y + height > HEIGHT - MARGIN) {
+        page();
+        heading('CHALLENGE HONOURS');
+      }
+      row.forEach((item, column) => {
+        const x = MARGIN + column * (columnWidth + 22);
+        titles[column].forEach((line, rowIndex) => label(line, x, y + rowIndex * 18, 14));
+        label(item.querySelector('small').innerText, x + columnWidth, y + 2, 10, RED, true, 'right');
+        context.fillStyle = RED;
+        context.fillRect(x, y + height - 5, columnWidth, 1);
+      });
+      y += height;
     }
   }
-  block(text('.motto'));
+
+  const panels = [...sheet.querySelectorAll('.bottom > div')];
+  const panelWidth = (WIDTH - 2 * MARGIN) / panels.length;
+  const content = panels.map(panel => [...panel.children].slice(1).flatMap(child =>
+    wrap(child.innerText, panelWidth - 24, 14)
+  ));
+  const panelHeight = Math.max(...content.map(lines => lines.length)) * 19 + 58;
+  if (y + panelHeight + 62 > HEIGHT - MARGIN) page();
+  y += 12;
+  context.strokeStyle = RED;
+  context.lineWidth = 1;
+  context.strokeRect(MARGIN, y, WIDTH - 2 * MARGIN, panelHeight);
+  panels.forEach((panel, index) => {
+    const x = MARGIN + panelWidth * index;
+    if (index) context.strokeRect(x, y, 0, panelHeight);
+    label(panel.querySelector('.bt').innerText, x + panelWidth / 2, y + 12, 19, RED, true, 'center');
+    content[index].forEach((line, row) => {
+      const center = index > 0;
+      label(line, x + (center ? panelWidth / 2 : 12), y + 43 + row * 19, 14,
+        '#161514', false, center ? 'center' : 'left');
+    });
+  });
+  y += panelHeight + 24;
+  label(text('.motto').replace(/\s+/g, ' '), WIDTH / 2, y, 17, '#161514', false, 'center');
   return encodePdf(pages);
 }
 

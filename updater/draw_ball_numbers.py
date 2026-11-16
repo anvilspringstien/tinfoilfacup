@@ -126,7 +126,6 @@ def verify_article_context(html, source_url, target, fixtures):
     stamp = re.match(r"/news/(\d{4})/([a-z]{3})/(\d{2})/", path, re.I)
     if not stamp:
         raise ValueError("Official article has no dated FA news path")
-
     published = datetime.strptime("-".join(stamp.groups()), "%Y-%b-%d").date()
 
     def season_start(day):
@@ -255,7 +254,6 @@ def discover_article_urls(fetch, saved_url=None):
             if official_fa_url(url) and re.fullmatch(r"/news/\d{4}/[a-z]{3}/\d{2}/[^/]*draw[^/]*", parts.path, re.I):
                 urls.add(urljoin("https://www.thefa.com/", parts.path))
     def publication_date(url):
-
         try:
             return datetime.strptime(urlsplit(url).path[6:17], "%Y/%b/%d")
         except ValueError:

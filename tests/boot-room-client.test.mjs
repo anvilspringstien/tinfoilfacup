@@ -36,20 +36,24 @@ test('fresh messages preserve an older reading position in the shared header-and
  assert.equal(scroll.scrollTop,250);
  scroll.scrollTop=1880;b.snapshot(ws);assert.equal(scroll.scrollTop,2400);
 });
-test('the Chat navigation returns as soon as the reader scrolls toward newer posts',async()=>{
- const b=browser();await b.settle();
- const scroll=b.$('room-scroll'),nav=b.$('room-navigation');
- scroll.scrollHeight=2400;scroll.clientHeight=500;scroll.scrollTop=1900;
- scroll.onscroll();
- scroll.scrollTop=600;scroll.onscroll();
- assert.equal(nav['data-revealed'],undefined);
- scroll.scrollTop=624;scroll.onscroll();
- assert.equal(nav['data-revealed'],'');
- b.snapshot(b.sockets[0]);
- assert.equal(scroll.scrollTop,624);
- assert.equal(nav['data-revealed'],'');
- scroll.scrollTop=602;scroll.onscroll();
- assert.equal(nav['data-revealed'],undefined);
+test('normal Chat navigation stays visible while sign-out is reserved for Campaign mismatch recovery',async()=>{
+ assert.match(page,/<div id="room-scroll"[\s\S]*?<section id="room"[\s\S]*?<\/section>\s*<\/div><nav class="room-footer" id="room-navigation"/);
+ const b=browser();await b.settle();const ws=b.sockets[0];b.snapshot(ws);
+ assert.equal(b.$('logout').hidden,true);
+ b.setState({open:false});b.snapshot(ws);
+ assert.equal(b.$('logout').hidden,true);
+ assert.equal(b.$('composer-wrap').hidden,true);
+ const other={callSign:'TF2AC 01958',name:'New pigeon'};
+ const stale=browser('/beta/boot-room/chat',other,{responses:[
+  {ok:true,json:async()=>({you:{campaign:{callSign:'TF2AC 01957'}}})}
+ ]});
+ await stale.settle();
+ assert.equal(stale.$('logout').hidden,false);
+ assert.match(stale.$('status').textContent,/Tap Sign out of chat/);
+ await stale.$('logout').onclick();
+ assert.ok(stale.requests.includes('/beta/boot-room/api/logout'));
+ assert.equal(stale.$('logout').hidden,true);
+ assert.match(stale.$('status').textContent,/signed out of chat/);
 });
 
 test('a visitor without a Campaign can reach closed history from the public Chalk Board',async()=>{

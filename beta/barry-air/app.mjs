@@ -60,7 +60,13 @@ flightShareButton.addEventListener('click',()=>openImageShare(
   if(!mapTemplate)throw Error('Map unavailable');
   const svg=mapTemplate.cloneNode(true);
   drawRoute(svg,publicFlightStops(model.stops),model.flights);
-  return flightPathImage(svg);
+  return flightPathImage(svg,{
+   name:readSaved()?.pigeonName||model.name,
+   callSign:model.digits==='00000'?model.callSign:'TF2AC '+model.digits,
+   milesFlown:Number.isFinite(model.miles.miles)?Math.round(model.miles.miles):undefined,
+   origin:model.origin,
+   custodian:model.carrier
+  });
  }
 ));
 async function openImageShare(button,title,makeImage){
@@ -79,6 +85,7 @@ async function openImageShare(button,title,makeImage){
   shareImage.src=shareSave.href=shareURL;
   shareStatus.hidden=true;
   shareNative.hidden=!(navigator.share&&navigator.canShare?.({files:[shareFile]}));
+  button.disabled=false;
   shareDialog.showModal();
  }catch{toast('Your '+title+' image could not be prepared. Try again.');}
  finally{button.disabled=false;preparingShare=false;}
@@ -96,9 +103,48 @@ shareDialog.addEventListener('close',()=>{
  shareURL=shareFile=null;
 });
 function toast(value){text('#toast',value);$('#toast').hidden=false;setTimeout(()=>$('#toast').hidden=true,2400);}
-$('#edit-name').addEventListener('click',()=>{if(!model)return;$('#name-form').hidden=false;$('#edit-name').hidden=true;$('#name-input').value=readSaved()?.pigeonName||'';$('#name-input').focus();$('#name-input').select();});
-function closeName(){$('#name-form').hidden=true;$('#edit-name').hidden=false;$('#edit-name').focus();}
-$('#cancel-name').addEventListener('click',closeName);$('#name-input').addEventListener('input',()=>$('#name-input').setCustomValidity(''));$('#name-input').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeName();}});
+const pigeonEditor=$('#pigeon-editor');
+const nameForm=$('#name-form');
+const nameInput=$('#name-input');
+const editName=$('#edit-name');
+function positionPigeonEditor(){
+ if(!pigeonEditor.open)return;
+ const viewport=window.visualViewport;
+ pigeonEditor.style.setProperty('--pigeon-editor-top',(viewport?.offsetTop??0)+'px');
+ pigeonEditor.style.setProperty('--pigeon-editor-height',(viewport?.height??window.innerHeight)+'px');
+}
+editName.addEventListener('click',()=>{
+ if(!model)return;
+ nameInput.value=readSaved()?.pigeonName||'';
+ nameInput.setCustomValidity('');
+ nameForm.hidden=false;
+ if(/iPhone|iPod/i.test(navigator.userAgent)){
+  pigeonEditor.append(nameForm);
+  pigeonEditor.showModal();
+  positionPigeonEditor();
+  nameInput.focus();
+  nameInput.setSelectionRange(nameInput.value.length,nameInput.value.length);
+ }else{
+  editName.hidden=true;
+  nameInput.focus();
+  nameInput.select();
+ }
+});
+function closeName(){
+ if(pigeonEditor.open)pigeonEditor.close();
+ nameForm.hidden=true;
+ editName.hidden=false;
+ editName.focus();
+}
+pigeonEditor.addEventListener('cancel',event=>{event.preventDefault();closeName();});
+window.visualViewport?.addEventListener('resize',positionPigeonEditor,{passive:true});
+window.visualViewport?.addEventListener('scroll',positionPigeonEditor,{passive:true});
+$('#cancel-name').addEventListener('click',closeName);
+nameInput.addEventListener('input',()=>nameInput.setCustomValidity(''));
+nameInput.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){e.preventDefault();closeName();}
+ else if(e.key==='Enter'&&!e.isComposing){e.preventDefault();nameForm.requestSubmit();}
+});
 $('#name-form').addEventListener('submit',e=>{e.preventDefault();const saved=readSaved();if(!saved||identityKey(saved)!==model.identity){unavailable('Your Campaign has changed. Reload Barry Air for your current pigeon.');return;}const name=$('#name-input').value.replace(/\s+/g,' ').trim().slice(0,20);if(!name){$('#name-input').setCustomValidity('Give your pigeon a name.');$('#name-input').reportValidity();return;}
  try{localStorage.setItem(JOURNEY_KEY,JSON.stringify({...saved,pigeonName:name}));const key='tffc.clubfinderCampaignIdentity.v1',backup=JSON.parse(localStorage.getItem(key)||'null');if(backup&&backup.searchNumber===saved.searchNumber&&backup.originName===saved.originName)localStorage.setItem(key,JSON.stringify({...backup,pigeonName:name}));text('#pigeon-name',name);toast('Pigeon name saved.');}catch{toast('Your browser could not save the pigeon name.');}closeName();});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-stop]');if(b)choose(Number(b.dataset.stop),b.dataset.flight===undefined?null:model.flights[Number(b.dataset.flight)]);});document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.map-stop')){e.preventDefault();choose(Number(e.target.dataset.stop));}});

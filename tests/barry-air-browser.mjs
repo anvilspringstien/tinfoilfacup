@@ -37,6 +37,7 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     await sharePass.click();
     const preview=p.getByRole('dialog',{name:'Share the Magic'});
     await preview.waitFor();
+    assert.equal(await preview.locator('h2:focus').count(),1,'the preview heading receives initial focus');
     assert.equal(await preview.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth;}),passWidth*3);
     const save=preview.getByRole('link',{name:'Save image'});
     assert.equal(await save.evaluate(async link=>(await fetch(link.href)).headers.get('content-type')),'image/png');
@@ -66,6 +67,12 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     const camera=await map.locator('.map-content').getAttribute('transform');
     const futureLegs=await map.locator('.route-line.future-line').count();
     await p.evaluate(()=>{
+      window.flightShareText=[];
+      const fillText=CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText=function(value,...args){
+        window.flightShareText.push(value);
+        return fillText.call(this,value,...args);
+      };
       const create=URL.createObjectURL;
       URL.createObjectURL=function(blob){
         if(blob.type==='image/svg+xml')window.sharedRoute=blob.text();
@@ -76,6 +83,14 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     await preview.waitFor();
     assert.equal(await preview.locator('img').evaluate(async img=>{await img.decode();return img.naturalWidth;}),1200);
     assert.equal(await save.getAttribute('download'),'barry-air-flight-path.png');
+    assert.equal(await preview.locator('h2:focus').count(),1);
+    const flightLabels=await p.evaluate(()=>window.flightShareText);
+    const flightMileage=Number.isFinite(expected.miles.miles)
+      ?Math.round(expected.miles.miles).toLocaleString('en-GB')+' miles flown':'Miles flown unavailable';
+    for(const label of [expected.name,'TF2AC 12345 · '+flightMileage,'Campaign · '+expected.origin,'Custodian · '+expected.carrier]){
+      assert.ok(flightLabels.includes(label),label);
+    }
+    assert.ok(flightLabels.every(label=>!label.includes(saved.postcode)),'Flight Path header must omit the departure postcode');
     const route=await p.evaluate(async()=>{
       const text=await window.sharedRoute;
       const svg=new DOMParser().parseFromString(text,'image/svg+xml');
@@ -116,7 +131,11 @@ const browser=await (process.env.TFFC_BROWSER==='webkit'?webkit:chromium).launch
     assert.equal(await map.locator('.map-content').getAttribute('transform'),camera);
   }
   if(process.env.TFFC_LANDING_ONLY==='1'){await context.close();continue;}await p.reload();await p.locator('.field[aria-busy="false"]').waitFor();assert.equal(await checkIn.isChecked(),expected.canCheckIn);
-  await p.getByRole('button',{name:'Edit pigeon name',exact:true}).click();await p.getByRole('textbox',{name:'Pigeon name',exact:true}).fill('Pie Captain');await p.getByRole('button',{name:'Save',exact:true}).click();const identity=await p.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));assert.equal(identity.searchNumber,12345);assert.equal(identity.pigeonName,'Pie Captain');assert.equal(identity.originName,saved.originName);
+  if(width===390)await p.evaluate(()=>Object.defineProperty(navigator,'userAgent',{configurable:true,value:'iPhone'}));
+  await p.getByRole('button',{name:'Edit pigeon name',exact:true}).click();
+  assert.equal(await p.locator('#pigeon-editor').isVisible(),width===390);
+  if(width===390)assert.equal(await p.locator('#pigeon-editor textarea:focus').count(),1);
+  await p.getByRole('textbox',{name:'Pigeon name',exact:true}).fill('Pie Captain');await p.getByRole('button',{name:'Save',exact:true}).click();const identity=await p.evaluate(()=>JSON.parse(localStorage.getItem('tinFoilFACupJourney_v7')));assert.equal(identity.searchNumber,12345);assert.equal(identity.pigeonName,'Pie Captain');assert.equal(identity.originName,saved.originName);
   await p.getByRole('link',{name:'Flight Path',exact:true}).click();await p.locator('#map-host svg').waitFor();assert.equal(await p.locator('#map-host [data-stop]').count(),expected.stops.filter(s=>Number.isFinite(s.lat)&&Number.isFinite(s.lon)).length);const route=await p.locator('#map-host .route-line').evaluateAll(lines=>lines.map(e=>[Number(e.dataset.from),Number(e.dataset.to),e.classList.contains('future-line')]));const expectedRoute=[];let previous=0;for(const flight of expected.flights){if(previous!==flight.stop)expectedRoute.push([previous,flight.stop,flight.status==='NEXT FLIGHT']);previous=flight.stop;}assert.deepEqual(route,expectedRoute,'map must follow the Campaign between venues, including replay order');const selectedStop=expected.nextStop??expected.lastLanded;
   const selectedResult=expected.upcoming?nextFixtureLabel(expected):expected.stops[selectedStop]?.result||'Flight details to be confirmed';
   assert.equal(await p.locator('#detail-result').innerText(),selectedResult);await p.getByRole('button',{name:'Zoom map in',exact:true}).click();

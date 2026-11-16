@@ -39,6 +39,16 @@ class CurrentGroundNameTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 apply_names(self.html.replace(original, replacement), self.ledger)
 
+    def test_reviewed_access_postcode_preserves_coordinates(self):
+        self.ledger['approved'][0].update(postcode='SO19 9PX', previous_postcode='SO19 9PW')
+        html = self.html.replace('Mortgage Decisions Community Stadium', 'The Charters Stadium')
+        updated, changes = apply_names(html, self.ledger)
+        self.assertEqual(changes, ['Sholing FC'])
+        self.assertEqual(updated, html.replace('SO19 9PW', 'SO19 9PX'))
+        self.assertEqual(apply_names(updated, self.ledger), (updated, []))
+        with self.assertRaisesRegex(ValueError, 'identity/postcode drift'):
+            apply_names(html.replace('SO19 9PW', 'SO19 9PZ'), self.ledger)
+
     def test_committed_listing_matches_reviewed_name(self):
         html = (ROOT / 'beta/clubfinder-beta.html').read_text()
         ledger = json.loads((ROOT / 'updater/current-ground-name-ledger.json').read_text())
