@@ -27,7 +27,9 @@ for(const selector of ['#openChallenges','.challenge-launch','.challenges-btn'])
 assert(!retiredLaunchSelectors.test(html),'Obsolete BETA launch-only CSS must not return');
 assert(html.includes('function renderStats()'),'Live Deck progress and Trophy Cabinet renderer must be retained');
 assert(/id="deckCabinet"/.test(html),'Trophy Cabinet must be retained');
-assert(/id="exitBtn"/.test(html),'Explicit Exit button must be retained');
+assert.match(html, /<div class="campaign-return-row"><button class="campaign-return" id="exitBtn" type="button">← My Campaign<\/button><\/div>\s*<div class="campaign-truth"/,
+  'My Campaign must have its own row directly above Campaign standing');
+assert.equal((html.match(/id="exitBtn"/g)||[]).length,1,'Challenges must have exactly one Campaign return button');
 
 assert(/@media\(max-width:680px\)\s*\{\s*\.deckbody\{height:auto;min-height:0;padding:4px 4px 8px;overflow:visible\}\s*\.cardstage\{height:auto;min-height:0\}/.test(html),
   'Phone Deck must follow the actual mat height instead of leaving a fixed viewport gap before feedback');
@@ -91,6 +93,16 @@ const local={
 const first=boot('',local,{});
 assert(first.nodes.overlay.classList.contains('open'),'Deck must open immediately, without Splash');
 assert.equal(vm.runInContext('index',first.ctx),0,'Direct launch must show first mat');
+assert.match(html, /<span class="verifybadge" id="verifyBadge">/, 'The Challenge type is a label');
+assert.match(first.nodes.verifyHelp.textContent,/The Law!/, 'Show the first mat’s help on entry');
+assert.equal(first.nodes.deckPrompt.hidden,false,'Show the deck navigation prompt on the opening mat');
+first.nodes.next.onclick();
+assert.equal(first.nodes.deckPrompt.hidden,true,'Hide the prompt after leaving the opening mat');
+assert.notEqual(first.nodes.verifyHelp.textContent,'');
+assert.doesNotMatch(first.nodes.verifyHelp.textContent,/The Law!/, 'Refresh the visible help when the mat changes');
+first.nodes.prev.onclick();
+assert.equal(first.nodes.deckPrompt.hidden,false,'Restore the prompt on returning to the opening mat');
+
 assert.equal(vm.runInContext('state.completed["01"]',first.ctx),true,'Previously completed trophy lost');
 assert.equal(first.nodes.deckCabinet.children.length,27,'Trophy Cabinet cards lost during navigation change');
 assert.equal(first.nodes.cabinetCount.textContent,'2 / 27','Verified Third Qualifying progress should award the campaign milestone trophy');

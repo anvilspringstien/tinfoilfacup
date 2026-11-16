@@ -54,6 +54,7 @@
   const club=candidateClubByName(custodian);
   const fixture=club&&nextRoundInfo(club)?.knownFixture;
   const detail={callSign:'TF2AC '+digits,name,custodian,fixture:fixture?.home&&fixture?.away?fixture.home+' v '+fixture.away:'Fixture to be announced'};
+  if(saved.originName)detail.origin=saved.originName;
   return home+'/#campaign='+encodeURIComponent(JSON.stringify(detail));
  }
  function openEntrance(){

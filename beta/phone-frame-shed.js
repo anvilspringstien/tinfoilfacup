@@ -37,7 +37,7 @@
   if(!doc?.documentElement)return;
   const root=doc.documentElement;
   const desktop=matchMedia('(min-width:700px) and (hover:hover) and (pointer:fine)').matches;
-  const hide=desktop&&!report&&!doc.querySelector('.sheet .stats-return');
+  const hide=desktop&&!report&&!doc.querySelector('.stats-actions');
   if(hide){
    root.dataset.phoneFrameScrollbar='hidden';
    root.style.setProperty('scrollbar-width','none','important');
@@ -72,7 +72,7 @@
   if(href.origin!==location.origin)return;
   // document.write from the Campaign opener can give Stats its opener's
   // URL. Identify the rendered report as well as canonical Stats routes.
-  report=popup||!!win.document.querySelector('.sheet .stats-return')||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
+  report=popup||!!win.document.querySelector('.stats-actions')||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
   fit();
   if(report&&window.opener){
    // Stats still opens in its own tab and returns to the original Campaign.
@@ -93,7 +93,7 @@
    if(!tab)return null;
    const css=new URL('phone-frame-shed.css',base).href;
    tab.document.open();
-   tab.document.write('<!doctype html><html lang="en-GB" data-stats-popup="1"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tin Foil FA Cup Stats</title><link rel="stylesheet" href="'+css+'"><style>html,body{margin:0;height:100svh;overflow:hidden;background:#141210}.phone-shell{position:relative;margin:0 auto;overflow:hidden}#phoneApp{display:block;border:0;position:absolute;left:0;top:0;transform-origin:top left;background:#141210}</style></head><body><main class="phone-shell"><iframe id="phoneApp" title="Tin Foil FA Cup Stats"></iframe></main></body></html>');
+   tab.document.write('<!doctype html><html lang="en-GB" data-stats-popup="1"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tin Foil FA Cup Stats</title><link rel="stylesheet" href="'+css+'"><style>html,body{margin:0;height:100svh;overflow:hidden;background:#141210}.phone-shell{position:relative;margin:0 auto;overflow:hidden}#phoneApp{display:block;border:0;position:absolute;left:0;top:0;transform-origin:top left;background:#141210}</style></head><body><main class="phone-shell"><iframe id="phoneApp" title="Tin Foil FA Cup Stats" allow="web-share"></iframe></main></body></html>');
    tab.document.close();
    tab.opener=win;
    // Give the outer tab a refreshable route, rather than leaving about:blank.

@@ -113,7 +113,10 @@ body{
       return;
     }
     sessionStorage.setItem(marker,"1");
-    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    await new Promise(resolve=>{
+      const timer=setTimeout(resolve,150);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{clearTimeout(timer);resolve();}));
+    });
     const source=window.opener;
     if(source && !source.closed &&
        source.location.origin===window.location.origin &&

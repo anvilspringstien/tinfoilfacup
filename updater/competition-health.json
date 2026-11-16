@@ -1,48 +1,31 @@
 {
-  "checked_at": "2026-11-07T20:53:17.845544+00:00",
+  "checked_at": "2026-11-16T09:45:03.113065+00:00",
   "grace_hours": 3,
   "coverage": {
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 162,
     "first_qualifying_unique_fixtures": 112,
-    "active_round": "First Round Proper",
-    "active_round_unique_fixtures": 40,
+    "active_round": "Second Round Proper",
+    "active_round_unique_fixtures": 20,
     "active_round_conditional_slots": 0
   },
   "counts": {
-    "known_fixtures": 177,
-    "complete": 171,
-    "awaiting_grace": 1,
+    "known_fixtures": 157,
+    "complete": 137,
+    "awaiting_grace": 0,
     "overdue": 0,
-    "upcoming": 5,
+    "upcoming": 20,
     "critical": 0
   },
   "critical": [],
   "fixture_local_health": true,
   "overdue": [],
-  "awaiting_grace": [
-    {
-      "round": "First Round Proper",
-      "home": "Peterborough United",
-      "away": "Reading",
-      "date": "2026-11-07",
-      "kickoff": "20:00",
-      "venue": {
-        "ground": "Weston Homes Stadium",
-        "postcode": "PE2 8AL",
-        "source": "https://fchd.info/maps/GAZ.htm",
-        "verification": "fchd-gazetteer"
-      },
-      "section": "fixtures",
-      "scheduled": "2026-11-07T20:00:00+00:00",
-      "deadline": "2026-11-07T23:00:00+00:00"
-    }
-  ],
+  "awaiting_grace": [],
   "competition_sync": {
     "source": "Football Web Pages + static kick-off listing",
     "source_url": "https://www.footballwebpages.co.uk/fa-cup/fixtures-results/first-qualifying-round",
     "kickoff_source_url": "https://kiscofootball.com/fa-cup/2026-27/round/preliminary-round/",
-    "synced_at": "2026-11-07T20:35:46.318811+00:00",
+    "synced_at": "2026-11-15T23:22:33.241034+00:00",
     "preliminary_fixture_source": "played original ties",
     "preliminary_unique_fixtures": 137,
     "preliminary_results_and_replays": 161,
@@ -59,7 +42,7 @@
     ],
     "kickoffs_enriched": 150,
     "replay_kickoffs_verified": 24,
-    "active_round_preserved": "First Round Proper"
+    "active_round_preserved": "Second Round Proper"
   },
   "pending_match_decisions": [],
   "data_state": "complete"

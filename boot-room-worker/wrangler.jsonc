@@ -2,6 +2,7 @@
   "name": "tffac-boot-room-shed",
   "main": "index.mjs",
   "compatibility_date": "2026-11-03",
+  "assets": {"directory": "../beta/barry-air", "binding": "FLIGHT_PATH_ASSETS", "run_worker_first": true},
   "durable_objects": {"bindings": [{"name": "BOOT_ROOM", "class_name": "BootRoom"}]},
   "migrations": [{"tag": "v1", "new_sqlite_classes": ["BootRoom"]}],
   "previews": {"durable_objects": {"bindings": [{"name": "BOOT_ROOM", "class_name": "BootRoom"}]}}

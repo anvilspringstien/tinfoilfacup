@@ -1,13 +1,19 @@
 """Offline ingestion and historical metadata checks using captured source HTML."""
 import copy
+import csv
+import io
 import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stdout
+from urllib.error import HTTPError
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'updater'))
+import apply_exceptional_replay_dispositions as exceptional
 import auto_round_results as scan
 import enrich_replay_kickoffs_and_active_venues as enrich
 from result_metadata import preserve_result_metadata, retain_metadata
@@ -125,6 +131,114 @@ class ResultsRepair(unittest.TestCase):
         for status in ('HT', 'LIVE', ''):
             with self.subTest(status=status), self.assertRaises(ValueError):
                 scan.classify_observation(row['fixture'], {**row['observation'], 'status': status}, [])
+
+
+class ResultsSourceLoggingTests(unittest.TestCase):
+    def setUp(self):
+        self.directory = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        self.data_path = self.directory / 'competition.json'
+        self.report_path = self.directory / 'report.json'
+        self.log_path = self.directory / 'sources.csv'
+        self.round_name = 'Second Round Proper'
+        self.primary = 'https://www.thefa.com/competitions/thefacup/results'
+        self.fixture = dict(home='Alpha Town', away='Beta City', date='2026-11-14', round=self.round_name)
+        self.enterContext(patch.object(scan, 'DATA', self.data_path))
+        self.enterContext(patch.object(scan, 'REPORT', self.report_path))
+        self.enterContext(patch.object(scan, 'SOURCE_CAPTURE', self.directory / 'capture.json'))
+        self.enterContext(patch.object(sys, 'argv', ['auto_round_results.py', '--publish']))
+
+    def run_scan(self, source, log_path):
+        self.data_path.write_text(json.dumps({
+            'source_round': self.round_name, 'fixtures': {'Alpha Town': self.fixture},
+        }))
+        with patch.dict('os.environ', TFFC_RESULTS_SOURCE_LOG=str(log_path)), \
+             patch.object(scan, 'fetch', side_effect=source) as fetch, redirect_stdout(io.StringIO()) as output:
+            scan.main()
+        return fetch.call_count, output.getvalue()
+
+    def test_unwritable_log_does_not_mask_fa_504_or_block_bbc_in_second_round(self):
+        def source(url):
+            if url == self.primary:
+                raise HTTPError(url, 504, 'Gateway Timeout', {}, None)
+            self.assertIn('www.bbc.co.uk/', url)
+            return ('<a href="/sport/football/live/test-match"><span class="visually-hidden">'
+                    'Alpha Town 2, Beta City 0 at Full time</span></a>')
+
+        for log_path in (self.directory / 'missing' / 'sources.csv', self.directory):
+            with self.subTest(log_path=log_path):
+                calls, output = self.run_scan(source, log_path)
+                self.assertEqual(calls, 3)
+                self.assertEqual(output.count('Could not write the Results source observations CSV'), 1)
+                self.assertEqual(json.loads(self.report_path.read_text())['source_observations']['bbc'], 1)
+                data = json.loads(self.data_path.read_text())
+                self.assertEqual(scan.history_rows(data)[0]['winner'], 'Alpha Town')
+
+        calls, _ = self.run_scan(source, self.log_path)
+        self.assertEqual(calls, 3)
+        with self.log_path.open(newline='') as stream:
+            rows = list(csv.DictReader(stream))
+        self.assertEqual([row['event'] for row in rows], ['fetch_error', 'fetch_ok', 'fetch_ok', 'final_score'])
+        self.assertEqual(rows[0]['source_url'], self.primary)
+        self.assertIn('HTTP Error 504', rows[0]['detail'])
+        self.assertTrue(rows[-1]['source_url'].startswith('https://www.bbc.co.uk/'))
+
+    def test_csv_preserves_source_score_orientation_across_retries(self):
+        fixtures_url = scan.fwp_round_url(self.round_name)
+        raw = ('<h1>Fixtures/Results, Second Round, 2026-2027</h1><h2>Saturday 14 November 2026</h2>'
+               '<table><tr><td>FT</td><td>Beta City</td><td>3</td><td>1</td>'
+               '<td>Alpha Town</td></tr></table>')
+
+        def source(url):
+            return raw if url == fixtures_url else ''
+
+        for _ in range(2):
+            calls, _ = self.run_scan(source, self.log_path)
+            self.assertEqual(calls, 3)
+        with self.log_path.open(newline='') as stream:
+            rows = list(csv.DictReader(stream))
+        self.assertEqual([row['event'] for row in rows], (['fetch_ok'] * 3 + ['final_score']) * 2,
+                         msg='Each scan records three fetches and one final score')
+        self.assertEqual(
+            [(row['home'], row['detail'], row['away'], row['source_url']) for row in rows if row['event'] == 'final_score'],
+            [('Beta City', '3-1', 'Alpha Town', fixtures_url)] * 2,
+        )
+
+
+class OrderedReplayReplacementTests(unittest.TestCase):
+    def setUp(self):
+        items = json.loads(exceptional.LEDGER.read_text())['dispositions']
+        self.reviewed = next(item for item in items if item.get('drawn_tie'))
+        drawn = {**self.reviewed['drawn_tie'], 'status': 'FT', 'winner': '', 'decision': 'draw-replay'}
+        self.data = {
+            'result_history': {'Herne Bay': [drawn]},
+            'results': {'Herne Bay': copy.deepcopy(drawn)},
+            'preliminary_fixtures': {'Broadfields United': self.reviewed['downstream']},
+        }
+
+    def test_missing_superseded_replay_is_retained_as_void_and_replacement_transfers_custody(self):
+        self.assertTrue(exceptional.apply_one(self.data, self.reviewed)[0])
+        rows = self.data['result_history']['Herne Bay']
+        self.assertEqual([(row['status'], row['winner']) for row in rows],
+                         [('FT', ''), ('VOID', ''), ('FT (AET)', 'Broadfields United')])
+        self.assertEqual(self.data['results']['Herne Bay'], rows[-1])
+        before = copy.deepcopy(self.data)
+        self.assertFalse(exceptional.apply_one(self.data, self.reviewed)[0])
+        self.assertEqual(self.data, before)
+
+    def test_missing_ancestry_missing_downstream_and_conflicting_result_stop_without_mutation(self):
+        for change, message in (
+            ({'result_history': {}}, 'replay ancestry'),
+            ({'preliminary_fixtures': {}}, 'downstream slot'),
+            ({'result_history': {'Herne Bay': [
+                {**self.reviewed['replay_result'], 'home_score': 3},
+            ]}}, 'conflicting replacement'),
+        ):
+            with self.subTest(message=message):
+                candidate = copy.deepcopy({**self.data, **change})
+                before = copy.deepcopy(candidate)
+                with self.assertRaisesRegex(SystemExit, message):
+                    exceptional.apply_one(candidate, self.reviewed)
+                self.assertEqual(candidate, before)
 
 
 if __name__ == '__main__':

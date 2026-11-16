@@ -10,8 +10,11 @@ for(const club of ['York City','AFC Fylde','Harrogate Town','Guiseley AFC']){
  const expected=all.filter(j=>engine.sameClubIdentity(j.carrier.name,club));
  const actual=clubCampaigns(club,c);
  if(expected.length){assert.equal(actual.category,'custodian');assert.deepEqual(actual.journeys.map(j=>j.origin),expected.map(j=>j.origin.name));}
- else if(club==='York City'){assert.equal(actual.category,'example');assert.equal(actual.count,0);assert.equal(actual.journeys[0].origin,'Newton Aycliffe FC');}
 }
+const example=clubCampaigns('Example Test Club',c);
+assert.equal(example.category,'example');
+assert.equal(example.count,0);
+assert.equal(example.journeys[0].origin,'Newton Aycliffe FC');
 const projected=structuredClone(c);
 const names=['York City','Northampton Town','AFC Fylde','Harrogate Town'];
 for(const [key,f] of Object.entries(projected.fixtures))if(names.some(n=>engine.sameClubIdentity(f.home,n)||engine.sameClubIdentity(f.away,n)))delete projected.fixtures[key];

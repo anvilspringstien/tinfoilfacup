@@ -1,10 +1,24 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
+
+// Exercise the original First Round Proper outreach state as the live draw advances.
+const firstProper=JSON.parse(gunzipSync(readFileSync(new URL('./fixtures/draw-transition-20261019/competition-published.json.gz',import.meta.url))));
+const live=JSON.parse(readFileSync(new URL('../competition.json',import.meta.url)));
+const fixtures=live.round_fixtures?.['First Round Proper']??live.fixtures;
+for(const fixture of Object.values(firstProper.fixtures)){
+ const published=Object.values(fixtures).find(row=>row.round===fixture.round&&row.home===fixture.home&&row.away===fixture.away);
+ if(published?.venue)fixture.venue=published.venue;
+}
+const firstProperBody=JSON.stringify(firstProper);
+const useFirstProper=context=>context.route('**/competition.json',route=>route.fulfill({contentType:'application/json',body:firstProperBody}));
 const browser=await chromium.launch();
 const origin='http://127.0.0.1:8765';
 try{
  for(const width of [390,1024]){
   const context=await browser.newContext({viewport:{width,height:768}});let counter=0;
+  await useFirstProper(context);
   await context.route('https://tffac-clubfinder-counter.anvilspringstien.workers.dev/**',r=>{counter++;return r.abort()});
   await context.addInitScript(()=>{localStorage.setItem('tinFoilFACupJourney_v7','{"originName":"Keep existing","pigeonName":"Checky"}');localStorage.setItem('tffc.challengeDeck.v1','preserve-cabinet');});
   const page=await context.newPage();
@@ -50,6 +64,7 @@ try{
  // the successful default browser path that missed the reported loading state.
  for(const mode of ['throws','silent','network-error']){
   const context=await browser.newContext({viewport:{width:390,height:768}});
+  await useFirstProper(context);
   await context.addInitScript(mode=>{
    localStorage.setItem('tinFoilFACupJourney_v7','preserve-my-campaign');
    if(mode==='silent')window.Worker=class{postMessage(){}terminate(){}};

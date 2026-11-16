@@ -39,6 +39,9 @@ DATA = ROOT / "competition.json"
 REPORT = ROOT / "updater" / "results-pilot-report.json"
 SOURCE_CAPTURE = ROOT / "updater" / "results-source-capture.json"
 FWP_FIXTURES_BASE = "https://www.footballwebpages.co.uk/fa-cup/fixtures-results"
+BBC_COMPETITION_SOURCES = {
+    "fa-cup": "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/",
+}
 FWP_LIVE_URL = "https://www.footballwebpages.co.uk/fa-cup"
 FWP_ROUND_SLUGS = {
     "Extra Preliminary Round": "extra-preliminary-round",
@@ -479,6 +482,7 @@ def merge_event(data, event):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="https://www.thefa.com/competitions/thefacup/results")
+    parser.add_argument("--competition", choices=BBC_COMPETITION_SOURCES, default="fa-cup")
     parser.add_argument("--publish", action="store_true")
     args = parser.parse_args()
 
@@ -489,27 +493,30 @@ def main():
 
     source_log_path = os.environ.get("TFFC_RESULTS_SOURCE_LOG")
     source_log = Path(source_log_path) if source_log_path else None
-    fields = ("checked_at", "round", "source_url", "event", "detail", "fixture_date", "home", "away")
-    if source_log is not None and not source_log.exists():
-        with source_log.open("w", encoding="utf-8", newline="") as stream:
-            csv.writer(stream).writerow(fields)
 
-    def record(source_url, event, detail="", fixture_date="", home="", away=""):
+    def record_source(url, event, detail="", fixture_date="", home="", away=""):
+        nonlocal source_log
         if source_log is None:
             return
-        with source_log.open("a", encoding="utf-8", newline="") as stream:
-            csv.writer(stream).writerow((
-                datetime.now(timezone.utc).isoformat(), round_name, source_url,
-                event, detail, fixture_date, home, away,
-            ))
+        try:
+            with source_log.open("a", encoding="utf-8", newline="") as stream:
+                writer = csv.writer(stream)
+                if stream.tell() == 0:
+                    writer.writerow(("checked_at", "scan_round", "source_url", "event",
+                                     "detail", "fixture_date", "home", "away"))
+                writer.writerow((datetime.now(timezone.utc).isoformat(), round_name, url,
+                                 event, detail, fixture_date, home, away))
+        except (OSError, UnicodeError, csv.Error):
+            print("::warning::Could not write the Results source observations CSV. Continuing the scan.")
+            source_log = None
 
     def observed_fetch(url):
         try:
             raw = fetch(url)
         except (OSError, ValueError) as exc:
-            record(url, "fetch_error", f"{type(exc).__name__}: {exc}")
+            record_source(url, "fetch_error", f"{type(exc).__name__}: {exc}")
             raise
-        record(url, "fetch_ok")
+        record_source(url, "fetch_ok")
         return raw
 
     fwp_round_source = fwp_round_url(round_name)
@@ -531,9 +538,7 @@ def main():
             "fwp_live": parse_fwp_observations(live_raw, known, FWP_LIVE_URL),
         }
     except (URLError, TimeoutError) as exc:
-        if round_name != "First Round Proper" or (
-            isinstance(exc, HTTPError) and not 500 <= exc.code < 600
-        ):
+        if isinstance(exc, HTTPError) and not 500 <= exc.code < 600:
             raise
         from bbc_results import full_time_observations
 
@@ -546,7 +551,7 @@ def main():
                 continue
             if date > datetime.now(timezone.utc).date().isoformat():
                 continue
-            month_url = "https://www.bbc.co.uk/sport/football/fa-cup/scores-fixtures/" + date[:7]
+            month_url = BBC_COMPETITION_SOURCES[args.competition] + date[:7]
             date_url = "https://www.bbc.co.uk/sport/football/scores-fixtures/" + date
             for url in (month_url, date_url):
                 if url not in captures:
@@ -561,19 +566,19 @@ def main():
             "bbc": [{"url": url, "html": raw} for url, raw in captures.items()],
         }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         by_source = {"primary_awards": [], "fwp_fixtures": [], "fwp_live": [], "bbc": bbc_observations}
-    for rows in by_source.values():
-        for item in rows:
-            observation = item["observation"]
-            if observation.get("home_score") is None or observation.get("away_score") is None:
-                continue
-            if not str(observation.get("status", "")).upper().startswith("FT"):
-                continue
-            fixture = item["fixture"]
-            record(
-                observation.get("source_url", ""), "final_score",
-                f'{observation["home_score"]}-{observation["away_score"]}',
-                observation.get("date", ""), fixture.get("home", ""), fixture.get("away", ""),
-            )
+    if source_log is not None:
+        for rows in by_source.values():
+            for item in rows:
+                observation = item["observation"]
+                if not str(observation.get("status", "")).upper().startswith("FT"):
+                    continue
+                home_score, away_score = observation.get("home_score"), observation.get("away_score")
+                if home_score is None or away_score is None:
+                    continue
+                record_source(
+                    observation.get("source_url", ""), "final_score", f"{home_score}-{away_score}",
+                    observation.get("date", ""), observation["home"], observation["away"],
+                )
     observations = dedupe_observations(sum(by_source.values(), []))
     history = history_rows(data)
     classified = []
@@ -616,7 +621,7 @@ def main():
 
     # Persisted fixture identities outlive draw promotion. Retry their original
     # round's source even when the current source can no longer contain them.
-    from retry_match_decisions import retry_archived_holds
+    from retry_match_decisions import retry_archived_holds, scan_unfinished_archived_ties
     def capture_retry_source(url):
         raw = observed_fetch(url)
         capture = json.loads(SOURCE_CAPTURE.read_text(encoding='utf-8'))
@@ -627,6 +632,8 @@ def main():
                (archived_report.get('audit') or {}).get('archived_round')}
     data, retry_report = retry_archived_holds(data, capture_retry_source, live_raw, visited)
     changed = changed or retry_report['changed']
+    data, unfinished_report = scan_unfinished_archived_ties(data, capture_retry_source, live_raw)
+    changed = changed or unfinished_report['changed']
 
     report = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
@@ -642,6 +649,7 @@ def main():
         "blocked": blocked,
         "pending_match_decisions": data.get('pending_match_decisions', []),
         "retried_match_decisions": retry_report,
+        "unfinished_archived_ties": unfinished_report,
         "publish": bool(args.publish),
         "competition_changed": bool(changed),
     }
@@ -659,6 +667,7 @@ def main():
     print("Unresolved events classified:", report["classified_events"])
     print("Blocked chronology conflicts:", len(blocked))
     print("Archived replay collection:", archived_report["status"])
+    print("Unfinished archived ties:", unfinished_report)
     for held in archived_report.get("held", []):
         print("::warning::Archived replay remains unresolved: " + str(held))
     for held in data.get('pending_match_decisions', []):
