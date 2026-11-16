@@ -5,7 +5,7 @@
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 316,
+  "eligible_linked": 317,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -3791,17 +3791,6 @@
       "club": "Torquay United FC",
       "identities": [
         "Torquay United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Trafford FC",
-      "identities": [
-        "Trafford FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9870,6 +9859,24 @@
           "evidence_url": "https://www.suttonunited.net/contact-us/",
           "verified_on": "2026-10-21",
           "ledger": "club_website_verified_batch_04.json"
+        }
+      ]
+    },
+    {
+      "club": "Trafford FC",
+      "identities": [
+        "Trafford FC"
+      ],
+      "current_competition": false,
+      "website": "https://traffordfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://traffordfc.com/",
+          "evidence_url": "https://traffordfc.com/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_25.json"
         }
       ]
     },

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "verified_on": "2026-11-16",
-  "scope": "Batch 25: two remaining website links carried forward from PR #692.",
-  "reviewed_count": 2,
+  "scope": "Batch 25: verified website links carried forward from PRs #692 and #211.",
+  "reviewed_count": 3,
   "verified": [
     {
       "club": "Biggleswade Town FC",
@@ -26,6 +26,20 @@
       "verification_notes": "Official senior site publishes the first-team programme and confirms VX3 Stadium at Homers Heath.",
       "supporting_evidence_urls": [
         "https://bucklandathletic.co.uk/team/buckland-athletic-fc/"
+      ]
+    },
+    {
+      "club": "Trafford FC",
+      "aliases": [
+        "Trafford"
+      ],
+      "url": "https://traffordfc.com/",
+      "evidence_url": "https://traffordfc.com/",
+      "verified_on": "2026-11-16",
+      "status": "verified_official_club_site",
+      "verification_notes": "Official club site lists current first-team fixtures and confirms Shawe View, Manchester M41 5DL, matching Clubfinder.",
+      "supporting_evidence_urls": [
+        "https://traffordfc.com/fixtures/"
       ]
     }
   ],
