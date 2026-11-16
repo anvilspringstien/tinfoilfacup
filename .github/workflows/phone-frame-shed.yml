@@ -12,6 +12,9 @@ on:
       - 'tests/club-details-*'
       - 'updater/build_club_campaign_engine.py'
       - 'index.html'
+      - 'clubfinder.html'
+      - 'stats.html'
+      - 'beta/legacy-clubfinder-route.js'
       - 'beta/phone-frame.html'
       - 'beta/phone-frame-launch.js'
       - 'beta/keep-the-magic-shed.html'
@@ -34,6 +37,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check beta/phone-frame-shed.js
+      - run: node --check beta/legacy-clubfinder-route.js
       - run: node --check beta/phone-frame-navigation.js
       - run: node --check beta/boot-room-launcher.js
       - run: node --check beta/refresh-tffac.js
