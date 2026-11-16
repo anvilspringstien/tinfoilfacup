@@ -2,6 +2,7 @@ name = "tffc-ombudsman"
 main = "worker.mjs"
 compatibility_date = "2026-10-14"
 workers_dev = true
+keep_vars = true
 
 [triggers]
 crons = ["20 * * * *"]
