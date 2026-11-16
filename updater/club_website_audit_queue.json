@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-16T09:44:57.761484+00:00",
+  "competition_updated_at": "2026-11-16T11:59:52.065857+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 314,
+  "eligible_linked": 316,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -840,17 +840,6 @@
       "evidence": []
     },
     {
-      "club": "Biggleswade Town FC",
-      "identities": [
-        "Biggleswade Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Blackstones AFC",
       "identities": [
         "Blackstones AFC"
@@ -887,17 +876,6 @@
       "club": "Bridlington Town AFC",
       "identities": [
         "Bridlington Town AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Buckland Athletic FC",
-      "identities": [
-        "Buckland Athletic FC"
       ],
       "current_competition": false,
       "website": null,
@@ -5810,6 +5788,24 @@
       ]
     },
     {
+      "club": "Biggleswade Town FC",
+      "identities": [
+        "Biggleswade Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/biggleswadetownfc",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/biggleswadetownfc",
+          "evidence_url": "https://www.pitchero.com/clubs/biggleswadetownfc/teams/118660",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_25.json"
+        }
+      ]
+    },
+    {
       "club": "Biggleswade United FC",
       "identities": [
         "Biggleswade United FC"
@@ -6490,6 +6486,24 @@
           "evidence_url": "https://bhfc.co.uk/contact/",
           "verified_on": "2026-10-30",
           "ledger": "club_website_verified_batch_11.json"
+        }
+      ]
+    },
+    {
+      "club": "Buckland Athletic FC",
+      "identities": [
+        "Buckland Athletic FC"
+      ],
+      "current_competition": false,
+      "website": "https://bucklandathletic.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://bucklandathletic.co.uk/",
+          "evidence_url": "https://bucklandathletic.co.uk/contact-us/",
+          "verified_on": "2026-11-16",
+          "ledger": "club_website_verified_batch_25.json"
         }
       ]
     },
