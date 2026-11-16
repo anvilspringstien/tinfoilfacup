@@ -7,8 +7,15 @@ const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'beta/c
 const eligible=literalRange(html,'ELIGIBLE','[',']').value,websites=literalRange(html,'CLUB_WEBSITES','{','}').value;
 const competition=JSON.parse(fs.readFileSync(path.join(root,'competition.json'),'utf8'));
 const active=new Set();for(const f of Object.values(competition.fixtures||{}))for(const n of [f.home,f.away])if(typeof n==='string'&&!/\s\/\s|\b(tbc|tbd|winner)\b/i.test(n))active.add(n);
-const evidence=new Map(),reviewedAliases=[];for(const file of fs.readdirSync(__dirname).filter(n=>/^club_website_verified_batch_.*\.json$/.test(n))){
+const evidence=new Map(),withdrawals=new Map(),reviewedAliases=[];for(const file of fs.readdirSync(__dirname).filter(n=>/^club_website_verified_batch_.*\.json$/.test(n))){
  const ledger=JSON.parse(fs.readFileSync(path.join(__dirname,file),'utf8'));for(const row of ledger.verified||[])if(row.status==='verified_official_club_site')reviewedAliases.push([row.club,...(row.aliases||[])]);for(const row of ledger.verified||[])for(const name of [row.club,...(row.aliases||[])])if(row.status==='verified_official_club_site')evidence.set(name,{url:row.url,evidence_url:row.evidence_url,verified_on:row.verified_on||ledger.verified_on,ledger:file});
+ for(const row of ledger.withdrawn||[]){
+  if(row.status!=='club_confirmed_offline')continue;
+  const identities=[row.club,...(row.aliases||[])];
+  reviewedAliases.push(identities);
+  const record={url:row.url,evidence_url:row.evidence_url,verified_on:row.verified_on||ledger.verified_on,ledger:file,status:row.status,reason:row.reason};
+  for(const name of identities)withdrawals.set(name,record);
+ }
 }
 const allNames=new Set([...active,...eligible.map(c=>c.name)]),parents=new Map([...allNames].map(n=>[n,n]));
 const leader=name=>{let n=name;while(parents.get(n)!==n)n=parents.get(n);return n};
@@ -17,6 +24,11 @@ const groups=new Map();for(const name of allNames){const key=leader(name);if(!gr
 const rows=[...groups.values()].map(set=>{
  const identities=[...set].sort(),current=identities.filter(n=>active.has(n)),links=[...new Set(identities.map(n=>websites[n]).filter(Boolean))];
  const records=identities.map(n=>evidence.get(n)).filter(Boolean),verified=links.length===1&&records.some(r=>r.url===links[0]);
+ const withdrawn=links.length===0&&identities.some(n=>withdrawals.has(n));
+ if(withdrawn){
+  const reasons=[...new Set(identities.map(n=>withdrawals.get(n)).filter(Boolean))];
+  return {club:current[0]||identities[0],identities,current_competition:!!current.length,website:null,status:'withdrawn',priority:current.length?0:3,evidence:reasons};
+ }
  return {club:current[0]||identities[0],identities,current_competition:!!current.length,website:links.length===1?links[0]:null,status:links.length>1?'conflict':verified?'verified':links.length?'needs_verification':'missing',priority:current.length?0:verified?3:links.length?1:2,evidence:records};
 }).sort((a,b)=>a.priority-b.priority||a.club.localeCompare(b.club,'en-GB'));
 const report={schema_version:1,competition_updated_at:competition.updated_at,eligible:eligible.length,current_clubs:active.size,current_verified:rows.filter(r=>r.current_competition&&r.status==='verified').length,current_linked:rows.filter(r=>r.current_competition&&r.website).length,eligible_linked:eligible.filter(c=>websites[c.name]).length,rows};
