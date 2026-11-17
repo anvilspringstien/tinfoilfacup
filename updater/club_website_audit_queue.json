@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-16T17:47:26.146695+00:00",
+  "competition_updated_at": "2026-11-17T03:55:02.447396+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 316,
+  "eligible_linked": 319,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -807,28 +807,6 @@
       "evidence": []
     },
     {
-      "club": "Abbey Hey FC",
-      "identities": [
-        "Abbey Hey FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Barking FC",
-      "identities": [
-        "Barking FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Beckenham Town FC",
       "identities": [
         "Beckenham Town FC"
@@ -942,17 +920,6 @@
       "club": "Dearne & District FC",
       "identities": [
         "Dearne & District FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Downham Town FC",
-      "identities": [
-        "Downham Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -4499,6 +4466,24 @@
       ]
     },
     {
+      "club": "Abbey Hey FC",
+      "identities": [
+        "Abbey Hey FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/abbeyheyfootballclub2",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/abbeyheyfootballclub2",
+          "evidence_url": "https://www.pitchero.com/clubs/abbeyheyfootballclub2/contact",
+          "verified_on": "2026-11-17",
+          "ledger": "club_website_verified_batch_26.json"
+        }
+      ]
+    },
+    {
       "club": "Abbey Hulton United FC",
       "identities": [
         "Abbey Hulton United FC"
@@ -5341,6 +5326,24 @@
           "evidence_url": "https://www.banburyunitedfc.co.uk/contact",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_06.json"
+        }
+      ]
+    },
+    {
+      "club": "Barking FC",
+      "identities": [
+        "Barking FC"
+      ],
+      "current_competition": false,
+      "website": "https://barking-fc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://barking-fc.co.uk/",
+          "evidence_url": "https://barking-fc.co.uk/wp-content/programmes/Grays020825.pdf",
+          "verified_on": "2026-11-17",
+          "ledger": "club_website_verified_batch_26.json"
         }
       ]
     },
@@ -7681,6 +7684,24 @@
           "evidence_url": "https://dwfc.co.uk/contact-us/",
           "verified_on": "2026-11-05",
           "ledger": "club_website_verified_batch_17.json"
+        }
+      ]
+    },
+    {
+      "club": "Downham Town FC",
+      "identities": [
+        "Downham Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://downhamtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://downhamtownfc.co.uk/",
+          "evidence_url": "https://downhamtownfc.co.uk/contact",
+          "verified_on": "2026-11-17",
+          "ledger": "club_website_verified_batch_26.json"
         }
       ]
     },
