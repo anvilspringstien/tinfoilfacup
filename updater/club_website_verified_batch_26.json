@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-17",
+  "scope": "Batch 26: review missing qualifying-club website destinations",
+  "reviewed_count": 14,
+  "verified": [
+    {
+      "club": "Abbey Hey FC",
+      "aliases": [],
+      "url": "https://www.pitchero.com/clubs/abbeyheyfootballclub2",
+      "evidence_url": "https://www.pitchero.com/clubs/abbeyheyfootballclub2/contact",
+      "verified_on": "2026-11-17",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed site lists fixtures, teams and contacts. The league identifies the same club at Abbey Stadium. Its old domain now serves unrelated content.",
+      "supporting_evidence_urls": [
+        "https://nwcfl.com/clubpage.php?id=23"
+      ]
+    },
+    {
+      "club": "Barking FC",
+      "aliases": [],
+      "url": "https://barking-fc.co.uk/",
+      "evidence_url": "https://barking-fc.co.uk/wp-content/programmes/Grays020825.pdf",
+      "verified_on": "2026-11-17",
+      "status": "verified_official_club_site",
+      "verification_notes": "The official programme names the domain and confirms the first team and Mayesbrook Park address at RM8 2JR. The homepage answered successfully.",
+      "supporting_evidence_urls": []
+    },
+    {
+      "club": "Downham Town FC",
+      "aliases": [],
+      "url": "https://downhamtownfc.co.uk/",
+      "evidence_url": "https://downhamtownfc.co.uk/contact",
+      "verified_on": "2026-11-17",
+      "status": "verified_official_club_site",
+      "verification_notes": "Active club-operated site carries match, team and ticket pages and identifies the home ground in Downham Market.",
+      "supporting_evidence_urls": []
+    }
+  ],
+  "held": [
+    {
+      "club": "Beckenham Town FC",
+      "reason": "League cross-link exists, but the intended senior homepage could not be checked as a working destination."
+    },
+    {
+      "club": "Blackstones AFC",
+      "reason": "League points to Facebook; no independently verified standalone senior club site."
+    },
+    {
+      "club": "Boro Rangers FC",
+      "reason": "League cross-link is available, but the preferred public homepage returned 503."
+    },
+    {
+      "club": "Bovey Tracey FC",
+      "reason": "Club homepage returned 503 on direct verification."
+    },
+    {
+      "club": "Clay Cross Town FC",
+      "reason": "League directory has no club website and no current club-operated site was established."
+    },
+    {
+      "club": "Corsham Town FC",
+      "reason": "Club link directory points to the intended domain, but a usable senior homepage could not be confirmed."
+    },
+    {
+      "club": "Coventry United FC",
+      "reason": "Club landing page shows a maintenance notice."
+    },
+    {
+      "club": "Cowes Sports FC",
+      "reason": "Club site is a holding page without senior team information."
+    },
+    {
+      "club": "Dearne & District FC",
+      "reason": "League and club-group pages establish the identity but no current standalone senior club website was verified."
+    },
+    {
+      "club": "Droylsden FC",
+      "reason": "Club homepage returned 403 in the review environment."
+    },
+    {
+      "club": "Dunstable FC",
+      "reason": "Candidate site shows historical content, but current first-team ownership and preferred destination are unconfirmed."
+    }
+  ]
+}
