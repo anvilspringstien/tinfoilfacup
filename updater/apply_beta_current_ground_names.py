@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply reviewed current ground-name changes to the public BETA listing only."""
+"""Apply reviewed current ground names and access postcodes to the BETA listing."""
 import argparse
 import json
 import re
@@ -50,13 +50,18 @@ def apply_names(html, ledger):
         before, after, postcode = (item.get(k) for k in ('previous_name', 'current_name', 'postcode'))
         if not all(isinstance(v, str) and v.strip() == v and v for v in (before, after, postcode)) or before == after:
             raise ValueError('Invalid name-only change: ' + club)
+        previous_postcode = item.get('previous_postcode', postcode)
+        if not isinstance(previous_postcode, str) or not re.fullmatch(r'[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}', previous_postcode):
+            raise ValueError('Invalid previous postcode: ' + club)
+        if not re.fullmatch(r'[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}', postcode):
+            raise ValueError('Invalid reviewed postcode: ' + club)
         matches = [(store, row) for store in stores for row in store['rows'] if row.get('name') == club]
         if len(matches) != 1:
             raise ValueError('Expected one exact ground record: ' + club)
         store, row = matches[0]
-        if row.get('postcode') != postcode or row.get('ground') not in (before, after):
+        if row.get('postcode') not in (previous_postcode, postcode) or row.get('ground') not in (before, after):
             raise ValueError('Ground identity/postcode drift: ' + club)
-        if row['ground'] == after:
+        if row['ground'] == after and row['postcode'] == postcode:
             continue
         ascii_row = compact(row, ensure_ascii=True)
         original = compact(row)
@@ -65,7 +70,7 @@ def apply_names(html, ledger):
             original = ascii_row
         if store['body'].count(original) != 1:
             raise ValueError('Ground serialization boundary changed: ' + club)
-        updated = compact(dict(row, ground=after), ensure_ascii=ensure_ascii)
+        updated = compact(dict(row, ground=after, postcode=postcode), ensure_ascii=ensure_ascii)
         store['body'] = store['body'].replace(original, updated, 1)
         changes.append(club)
     for store in sorted(stores, key=lambda item: item['start'], reverse=True):
