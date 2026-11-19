@@ -23,7 +23,7 @@ For ordinary football, if the answer is yes, the design is carrying data as code
   A home win, away win, draw, replay, new opponent, new ordinary ground or previously unseen valid postcode must not normally require a code edit.
 
 - **Quarantine uncertainty; do not encode guesses.**
-  Ambiguous source evidence or exceptional competition decisions should fail closed for review rather than being promoted through an ad-hoc assumption.
+  Ambiguous source evidence, club identity, groundshare, sponsorship, exact postcode or exceptional competition decisions should fail closed for review rather than being promoted through an ad-hoc assumption. A held item never becomes verified merely because other work has succeeded.
 
 - **Tests must admit valid future data.**
   Regression harnesses may use fixed historical controls, but their mocks must not reject an otherwise valid future club, ground, postcode, winner or round merely because it has not occurred before.
@@ -45,14 +45,20 @@ Canonical/UI publication must be transactional:
 
 **build → validate → health → regress → commit**
 
-A critical health result must prevent publication. Diagnostic reports may still be retained as artifacts, but an unhealthy candidate must not become canonical state.
+A **critical candidate-health failure** must block publication of the affected candidate. A candidate that fails canonical chronology, source evidence, identity, venue/postcode, round coverage, publication freshness or regression guards cannot become canonical state. A delayed or missing *scheduled launch* is a distinct operational warning: it never proves the last published competition data correct, nor does it automatically invalidate independently validated data.
+
+**Fixture-local quarantine:** a disputed/uncertain tie or result is held rather than inferred. Where current safeguards can prove separation, this does not automatically block publication of an **unrelated, independently sourced and fully validated** result. It must not alter a held fixture, invent a progression/custodian, bypass shared chronology checks or turn an overall unresolved state into a verified all-clear. If the boundary between held and proposed data cannot be proved, fail closed at the broader publication boundary.
+
+Publication order remains **build → validate → health → regress → commit**, followed by the required stale-input/rebase checks before push. A green result for a *single item* is not the same as overall health, and a successful catch-up run is not evidence that its scheduled launch occurred. Diagnostic reports may still be retained without canonical publication.
 
 ## Future Round Fire Drill
 
-Hardening is complete only when a synthetic unfamiliar round can travel through the ordinary pipeline without application-code edits. The drill should include unknown clubs, unfamiliar valid grounds/postcodes, home and away wins, draws/replays where applicable, changing custodians and campaigns reaching new venues.
+Hardening is complete **only when an end-to-end synthetic Future Round Fire Drill passes as an acceptance test** through the ordinary pipeline without application-code edits; documentation, selected historical regression tests, or a passing current-round scan do not substitute for this proof. The drill should include unknown clubs, unfamiliar valid grounds/postcodes, home and away wins, draws/replays where applicable, changing custodians and campaigns reaching new venues.
 
 Success means:
 
 > **A completely unfamiliar but otherwise ordinary FA Cup round can move from official observation → validated canonical data → derived campaigns/custodians → Clubfinder → Stats/Pigeon Miles → BETA fallback without a human editing code.**
+
+The acceptance drill must explicitly verify fail-closed quarantines for ambiguous club names, sponsored grounds, groundshares, qualifying roles and exact-postcode conflicts, plus independently verified fixture-local recovery, safe rebase/concurrent-writer handling and canonical publication gates.
 
 Exceptional football may still require a reviewed disposition. Ambiguous evidence may quarantine. Neither is permission to hard-code ordinary future football.
