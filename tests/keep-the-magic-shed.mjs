@@ -134,7 +134,7 @@ try{
  assert.equal(await page.evaluate(async()=>('serviceWorker' in navigator)?(await navigator.serviceWorker.getRegistrations()).length:0),0);
  const manifest=await page.evaluate(async()=>{const r=await fetch(document.querySelector('link[rel="manifest"]').href);return r.json()});
  assert.equal(manifest.id,'/beta/keep-the-magic-shed');assert.equal(manifest.name,'Tin Foil FA Cup');assert.equal(manifest.short_name,'Tin Foil FA Cup');assert.equal(manifest.start_url,'/beta/keep-the-magic-shed.html');assert.equal(manifest.display,'standalone');
- for(const icon of manifest.icons){const response=await page.request.get(base+'/beta/'+icon.src);assert.equal(response.status(),200)}
+ for(const icon of manifest.icons){const iconUrl=new URL(icon.src,base+'/beta/keep-the-magic-shed.webmanifest');const response=await page.request.get(iconUrl.href);assert.equal(response.status(),200,`App icon missing: ${iconUrl.pathname}`)}
  await page.keyboard.press('Escape');await page.waitForURL(base+'/beta/');
  await page.goto(base+'/beta/keep-the-magic-shed.html');
  await page.setViewportSize({width:1440,height:900});await page.locator('#keep').click();await fits();
