@@ -22,6 +22,9 @@ on:
       - 'beta/clubfinder-ground-review-journey.html'
       - 'tests/entrant-ground-preview-transform.test.mjs'
       - 'tests/beta-ground-review-hosted-browser.mjs'
+      - 'tests/beta-ground-review-current-ui-browser.mjs'
+      - 'beta/phone-frame-ground-review.html'
+      - 'beta/phone-frame-shed.js'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -116,12 +119,15 @@ jobs:
             sleep 0.2
           done
           node tests/beta-ground-review-hosted-browser.mjs
+          node tests/beta-ground-review-current-ui-browser.mjs
       - name: Retain opt-in Shed review Campaign screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: shed-dynamic-ground-review
-          path: /tmp/tffc-ground-optin/*.png
+          path: |
+            /tmp/tffc-ground-optin/*.png
+            /tmp/tffc-current-ground-ui/*.png
           if-no-files-found: ignore
       - name: Assert existing Stats return and Barry Air mileage model remain unchanged
         run: |
