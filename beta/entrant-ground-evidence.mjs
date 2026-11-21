@@ -14,7 +14,7 @@ export function entrantIdentityKey(value) {
 export function pendingCustodianGround(club, evidence) {
   const key = entrantIdentityKey(club);
   if (!key || !evidence || evidence.season !== '2026-27'
-      || evidence.safety?.automatic_ground_promotion !== false
+      || evidence.safety?.automated_ground_promotion !== false
       || evidence.safety?.verified_location_badge_authorized !== false)
     return null;
   const conflicts = evidence.unresolved_conflicts || [];
