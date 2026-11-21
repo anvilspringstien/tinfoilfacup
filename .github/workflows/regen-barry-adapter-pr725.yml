@@ -1,0 +1,42 @@
+name: PR725 controlled Barry Air adapter regeneration
+
+on:
+  pull_request:
+    paths:
+      - 'beta/clubfinder-beta.html'
+      - '.github/workflows/regen-barry-adapter-pr725.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild-adapter:
+    if: ${{ github.event.pull_request.number == 725 && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - name: Generate authoritative Barry Air adapter and check model
+        run: |
+          set -euo pipefail
+          python3 updater/build_barry_air_adapter.py
+          python3 updater/build_barry_air_adapter.py --check
+          node tests/barry-air-model.mjs
+          test -z "$(git diff --name-only -- competition.json clubfinder.html beta/clubfinder-beta.html)"
+          unexpected="$(git diff --name-only | grep -v '^beta/barry-air/campaign-adapter.mjs$' || true)"
+          if [ -n "$unexpected" ]; then echo "Unexpected generated changes: $unexpected"; exit 1; fi
+      - name: Commit only generated adapter to this review branch
+        run: |
+          set -euo pipefail
+          git config user.name "TFFAC Ground Review CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add beta/barry-air/campaign-adapter.mjs
+          if git diff --cached --quiet; then
+            echo 'Adapter already synchronized.'
+          else
+            test "$(git diff --cached --name-only)" = 'beta/barry-air/campaign-adapter.mjs'
+            git commit -m 'Regenerate Barry Air adapter from guarded BETA ground registry'
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
