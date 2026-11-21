@@ -78,7 +78,7 @@ def next_round_entrants(data, round_name="Second Round Proper"):
         for side in ("home", "away"):
             name = row.get(side)
             if name:
-                clubs.setdefault(display_key(name), name)
+                clubs.setdefault(identity_key(name), name)
     return clubs
 
 
@@ -128,8 +128,13 @@ def analyze(root=ROOT):
     missing = {}
     for build, values in builds.items():
         missing[build] = []
-        for lookup, name in sorted(next_clubs.items()):
-            if lookup in values["records"]:
+        for _, name in sorted(next_clubs.items()):
+            # A loose display-key hit alone is not proof of club identity:
+            # AFC Liverpool must never borrow Liverpool FC's ground (or vice versa).
+            records = values["records"].get(display_key(name), [])
+            exact = [row for row in records if identity_key(
+                row.get("name") or row.get("club")) == identity_key(name)]
+            if len(exact) == 1:
                 continue
             record = registry_by_name.get(identity_key(name))
             candidates = (record or {}).get("supporting_ground_evidence") or []
