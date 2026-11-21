@@ -4,8 +4,9 @@ import {readFileSync} from 'node:fs';
 import {buildEntrantGroundPreview} from '../beta/entrant-ground-preview-transform.mjs';
 const html=readFileSync(new URL('../beta/clubfinder-beta.html',import.meta.url),'utf8');
 const ledger=JSON.parse(readFileSync(new URL('../updater/entrant-home-ground-evidence-2026.json',import.meta.url),'utf8'));
+const competition=JSON.parse(readFileSync(new URL('../competition.json',import.meta.url),'utf8'));
 test('runtime review of current BETA never promotes a location or freezes source',()=>{
- const {html:preview,additions,skipped}=buildEntrantGroundPreview(html,ledger);
+ const {html:preview,additions,skipped}=buildEntrantGroundPreview(html,ledger,competition);
  assert.equal(additions.length,31);
  assert.equal(additions.filter(x=>x.verification==='unverified').length,31);
  for(const row of additions){
@@ -22,5 +23,5 @@ test('runtime review of current BETA never promotes a location or freezes source
  assert.equal(skipped.length,ledger.clubs.length-additions.length);
  const tampered=structuredClone(ledger);
  tampered.safety.verified_location_badge_authorized=true;
- assert.throws(()=>buildEntrantGroundPreview(html,tampered),/safety policy/);
+ assert.throws(()=>buildEntrantGroundPreview(html,tampered,competition),/safety policy/);
 });
