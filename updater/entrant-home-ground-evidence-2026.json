@@ -444,25 +444,21 @@
       "coordinates_review": "pending",
       "review_status": "awaiting-coordinates-and-human-promotion",
       "notes": "Official stadium website identifies The Brick Community Stadium, Loire Drive, Robin Park, Wigan WN5 0UH, and the Wigan Athletic ground naming history."
-    }
-  ],
-  "unresolved_conflicts": [
+    },
     {
       "official_identity": "Rotherham United FC",
-      "issue": "distinct-official-stadium-company-visitor-and-fchd-postcodes",
-      "candidate_postcodes": [
-        "S60 1AH",
-        "S60 1FJ",
-        "S60 1DF"
-      ],
-      "official_sources": [
-        "https://www.themillers.co.uk/company-details",
-        "https://www.aessealnewyorkstadium.com/location"
-      ],
-      "status": "blocked-pending-source-reconciliation",
-      "action": "Confirm approved stadium geolocation/postcode role for official correspondence (S60 1AH) versus venue/visitor address (S60 1FJ) and historical FCHD candidate (S60 1DF); do not promote."
+      "ground": "AESSEAL New York Stadium",
+      "postcode": "S60 1FJ",
+      "official_home_ground_source": "https://www.aessealnewyorkstadium.com/location",
+      "supporting_official_source": "https://www.aessealnewyorkstadium.com/contact-us",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "New York Way S60 1FJ is the stadium visitor/satnav postcode. S60 1AH is a company correspondence address; S60 1DF is a legacy FCHD candidate. No coordinate guess, Verified Location badge or Clubfinder promotion."
     }
   ],
+  "unresolved_conflicts": [],
   "resolved_conflicts": [
     {
       "official_identity": "Gillingham FC",
@@ -474,6 +470,23 @@
         "https://www.gillinghamfootballclub.com/club/visit-us",
         "https://www.gillinghamfootballclub.com/contact-us",
         "https://www.gillinghamfootballclub.com/company-details"
+      ],
+      "status": "resolved-stadium-postcode-only",
+      "coordinates_review": "pending"
+    },
+    {
+      "official_identity": "Rotherham United FC",
+      "issue": "distinct-official-stadium-company-visitor-and-fchd-postcodes",
+      "stadium_postcode": "S60 1FJ",
+      "other_postcodes": [
+        "S60 1AH",
+        "S60 1DF"
+      ],
+      "resolution": "Current stadium operator's location/contact pages give New York Way S60 1FJ for visitors. The official company correspondence postcode S60 1AH and FCHD candidate S60 1DF are kept as separate-provenance evidence, not as navigational stadium postcode.",
+      "official_sources": [
+        "https://www.aessealnewyorkstadium.com/location",
+        "https://www.aessealnewyorkstadium.com/contact-us",
+        "https://www.themillers.co.uk/company-details"
       ],
       "status": "resolved-stadium-postcode-only",
       "coordinates_review": "pending"
