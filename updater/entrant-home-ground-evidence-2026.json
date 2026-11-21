@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "purpose": "Human-reviewed source evidence for newly entering custodian home grounds; never automatically promoted",
+  "safety": {
+    "automated_ground_promotion": false,
+    "verified_location_badge_authorized": false,
+    "canonical_fixture_venue_untouched": true,
+    "protected_clubfinder_grounds_untouched": true,
+    "coordinates_required_before_location_promotion": true
+  },
+  "clubs": [
+    {
+      "official_identity": "Leyton Orient FC",
+      "ground": "BetWright Stadium",
+      "postcode": "E10 5NF",
+      "official_home_ground_source": "https://www.leytonorient.com/club/company-details",
+      "supporting_official_source": "https://www.leytonorient.com/fans/matchday-guide/travel-information/",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "The official club lists the BetWright Stadium at E10 5NF; the ground must not be confused with Port Vale's Vale Park, the away tie venue on 5 Dec 2026."
+    },
+    {
+      "official_identity": "Port Vale FC",
+      "ground": "Vale Park",
+      "postcode": "ST6 1AW",
+      "official_home_ground_source": "https://www.port-vale.co.uk/club/contact-us-0",
+      "supporting_official_source": "https://www.port-vale.co.uk/directions-vale-park",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Vale Park is Port Vale's home ground; use as the 5 Dec 2026 tie venue only because that specific fixture says Port Vale is home, not as Leyton Orient's home ground."
+    }
+  ]
+}
