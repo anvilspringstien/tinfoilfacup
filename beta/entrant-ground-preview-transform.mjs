@@ -16,12 +16,21 @@ function readArray(source, name) {
  return {match:matches[0],values};
 }
 
-export function buildEntrantGroundPreview(source, evidence) {
+export function buildEntrantGroundPreview(source, evidence, competition) {
  if(typeof source!=='string'||!evidence||evidence.season!=='2026-27'
   ||evidence.safety?.automated_ground_promotion!==false
   ||evidence.safety?.verified_location_badge_authorized!==false
   ||evidence.safety?.coordinates_required_before_location_promotion!==true)
   throw new Error('Evidence safety policy failed');
+ if(!competition||competition.season!==evidence.season||!competition.fixtures)
+  throw new Error('Canonical competition missing or stale');
+ const secondRound=new Set();
+ for(const fixture of Object.values(competition.fixtures)){
+  if(fixture?.round!=='Second Round Proper')continue;
+  if(fixture.home)secondRound.add(entrantIdentityKey(fixture.home));
+  if(fixture.away)secondRound.add(entrantIdentityKey(fixture.away));
+ }
+ if(secondRound.size!==40)throw new Error('Second Round entrant scope changed');
  const original=readArray(source,'GROUNDS');
  const law2=readArray(source,'LAW2_ORIGIN_LOCATIONS');
  const existing=new Map();
@@ -37,6 +46,10 @@ export function buildEntrantGroundPreview(source, evidence) {
   const key=entrantIdentityKey(row.official_identity);
   if(!key||encountered.has(key))throw new Error('Duplicate or missing official identity');
   encountered.add(key);
+  if(!secondRound.has(key)){
+   skipped.push({club:row.official_identity,reason:'outside current Second Round'});
+   continue;
+  }
   if(blocked.has(key))throw new Error('Unresolved official location conflict');
   if(!['awaiting-coordinates-and-human-promotion','awaiting-human-promotion'].includes(row.review_status)
     ||row.source_review!=='official-ground-and-postcode-confirmed'
@@ -57,7 +70,7 @@ export function buildEntrantGroundPreview(source, evidence) {
   });
   existing.set(d,new Set([key]));
  }
- if(additions.length!==31)throw new Error('Entrant evidence preview must match current 31-location audit');
+ if(additions.length!==31)throw new Error('Entrant evidence preview must match current 31-location audit; got '+additions.length);
  const updated=source.slice(0,original.match.index+original.match[1].length)
   +JSON.stringify([...original.values,...additions])
   +source.slice(original.match.index+original.match[0].length-original.match[3].length);
