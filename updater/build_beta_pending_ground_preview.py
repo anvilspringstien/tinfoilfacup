@@ -69,6 +69,27 @@ def build(root=ROOT):
     # Preserve the original array rows and every other byte outside the array.
     updated=grounds+additions
     changed=html[:match.start(2)]+json.dumps(updated,ensure_ascii=False,separators=(",",":"))+html[match.end(2):]
+    # The existing display-key normaliser erases leading AFC, so "Liverpool FC"
+    # could otherwise inherit AFC Liverpool's ground. In this isolated preview
+    # guard the existing lookup without changing the protected BETA master.
+    start_marker = "function findGround(c){"
+    end_marker = "}function verification(c,g){"
+    if changed.count(start_marker)!=1 or changed.count(end_marker)!=1:
+        raise ValueError("BETA ground lookup anchors have drifted")
+    before, tail = changed.split(start_marker, 1)
+    lookup, after = tail.split(end_marker, 1)
+    if lookup.count("if(g)return g;")!=1 or lookup.count("if(s)return s;")!=1:
+        raise ValueError("BETA lookup return structure has drifted")
+    # Only prohibit cross-identity borrowing involving a *leading* AFC prefix.
+    # Existing alias rules for unrelated clubs are preserved.
+    boundary = ("  const previewAfcBoundary=(requested,record)=>"
+                "/^\\s*afc\\b/i.test(requested||'')==="
+                "/^\\s*afc\\b/i.test(record||'');\\n")
+    lookup = boundary + lookup.replace("if(g)return g;",
+                "if(g&&previewAfcBoundary(c.name,g.name))return g;").replace(
+                "if(s)return s;",
+                "if(s&&previewAfcBoundary(c.name,s.name))return s;")
+    changed = before + start_marker + lookup + end_marker + after
     if len(additions)+len(skipped)!=len(gaps):
         raise AssertionError("Preview coverage mismatch")
     if not all(x["verification"]=="unverified" for x in additions):
