@@ -82,6 +82,18 @@ try {
   const storedAfter=await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
   assert.equal(storedAfter,storedBefore,'Saved Campaign must persist through Shed reload');
   assert.match(await page.locator('.chosen-campaign-current').innerText(),/Unverified Location/);
+  if(device==='big-boy'){
+   const links=await page.evaluate(()=>[...document.querySelectorAll('#results button,#results a')]
+    .filter(el=>/My Stats|Barry Air|My Challenges/i.test(el.textContent||el.getAttribute('aria-label')||''))
+    .slice(0,10).map(el=>({
+      tag:el.tagName,
+      label:(el.textContent||el.getAttribute('aria-label')||'').trim().slice(0,70),
+      href:el.getAttribute('href'),
+      onclick:el.getAttribute('onclick')?.slice(0,180),
+      cls:el.className
+    })));
+   console.log('Shed cross-module navigation contracts',JSON.stringify(links));
+  }
   console.log('PASS saved Bishop Auckland → Leyton Orient Campaign and persistence',device);
   await page.screenshot({path:'/tmp/tffc-ground-journey/'+device+'.png',fullPage:true});
   await context.close();
