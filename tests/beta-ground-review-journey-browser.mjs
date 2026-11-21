@@ -64,7 +64,7 @@ try {
   await page.waitForFunction(()=>{
    const text=document.querySelector('.chosen-campaign-current')?.innerText||'';
    return text.includes('BetWright Stadium')&&text.includes('E10 5NF');
-  },{timeout:16000});
+  },null,{timeout:16000});
   const chosen=await page.locator('.chosen-campaign-current').innerText();
   assert.match(chosen,/Leyton Orient/);
   assert.match(chosen,/BetWright Stadium\s*•\s*E10 5NF/);
@@ -78,7 +78,7 @@ try {
   await page.waitForFunction(()=>{
    const text=document.querySelector('.chosen-campaign-current')?.innerText||'';
    return text.includes('BetWright Stadium')&&text.includes('E10 5NF');
-  },{timeout:18000});
+  },null,{timeout:18000});
   const storedAfter=await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
   assert.equal(storedAfter,storedBefore,'Saved Campaign must persist through Shed reload');
   assert.match(await page.locator('.chosen-campaign-current').innerText(),/Unverified Location/);
