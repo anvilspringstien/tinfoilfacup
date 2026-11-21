@@ -128,8 +128,8 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_apply_reviewed_entrant_grounds_beta.py' -v
-          python updater/apply_reviewed_entrant_grounds_beta.py --apply
-          python updater/apply_reviewed_entrant_grounds_beta.py --check
+          python -m updater.apply_reviewed_entrant_grounds_beta --apply
+          python -m updater.apply_reviewed_entrant_grounds_beta --check
           python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-normal-ground-http.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true; git restore -- beta/clubfinder-beta.html' EXIT
