@@ -14,7 +14,7 @@ try {
   await page.goto(root+'/beta/phone-frame-ground-review.html?view=ground-review',{waitUntil:'domcontentloaded'});
   const iframe=page.frameLocator('#phoneApp');
   await iframe.locator('iframe.tffc-exact-master-frame').waitFor({timeout:30000});
-  await iframe.locator('#postcode').waitFor({timeout:30000});
+  await iframe.frameLocator('iframe.tffc-exact-master-frame').locator('#postcode').waitFor({timeout:30000});
   await page.waitForFunction(()=>{
    const d=document.querySelector('#phoneApp')?.contentDocument;
    return !!d && typeof d.defaultView?.findGround==='function';
