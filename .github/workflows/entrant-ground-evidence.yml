@@ -5,6 +5,8 @@ on:
     paths:
       - 'updater/entrant-home-ground-evidence-2026.json'
       - 'tests/test_entrant_home_ground_evidence.py'
+      - 'updater/reconcile_entrant_ground_evidence.py'
+      - 'updater/audit_active_custodian_locations.py'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -21,3 +23,5 @@ jobs:
           python-version: '3.12'
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
+      - name: Reconcile current BETA and production gaps without changing data
+        run: python -m updater.reconcile_entrant_ground_evidence
