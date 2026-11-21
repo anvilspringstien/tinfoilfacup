@@ -168,6 +168,59 @@
       "coordinates_review": "pending",
       "review_status": "awaiting-coordinates-and-human-promotion",
       "notes": "Official address lists stadium complex postcode and club announcement identifies stadium name; coordinate verification still pending."
+    },
+    {
+      "official_identity": "Reading FC",
+      "ground": "Select Car Leasing Stadium",
+      "postcode": "RG2 0FL",
+      "official_home_ground_source": "https://www.readingfc.co.uk/matchday/travel-parking/",
+      "supporting_official_source": "https://www.readingfc.co.uk/news/2026/november/16/stockport-county-cup-date-confirmed/",
+      "notes": "Current club travel page and Second Round Proper home fixture confirm the stadium, never borrow the visiting Stockport home ground.",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion"
+    },
+    {
+      "official_identity": "Shrewsbury Town FC",
+      "ground": "The Croud Meadow",
+      "postcode": "SY2 6ST",
+      "official_home_ground_source": "https://www.shrewsburytown.com/club/stadium",
+      "supporting_official_source": "https://shrewsburytown.com/contact",
+      "notes": "Current official stadium branding, club address and postcode. Historical sponsorship names not used.",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion"
+    },
+    {
+      "official_identity": "Swindon Town FC",
+      "ground": "Nigel Eady County Ground",
+      "postcode": "SN1 2ED",
+      "official_home_ground_source": "https://www.swindontownfc.co.uk/concert/clubland/frequently-asked-questions",
+      "supporting_official_source": "https://www.swindontownfc.co.uk/tickets/away-fans-travel-information",
+      "notes": "Club explicitly uses current Nigel Eady County Ground name and postcode in its official visitor FAQ.",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion"
+    }
+  ],
+  "unresolved_conflicts": [
+    {
+      "official_identity": "Gillingham FC",
+      "issue": "official-club-sources-disagree-on-stadium-postcode",
+      "candidate_postcodes": [
+        "ME7 2PE",
+        "ME7 4DD"
+      ],
+      "official_sources": [
+        "https://www.gillinghamfootballclub.com/club/visit-us",
+        "https://www.gillinghamfootballclub.com/company-details",
+        "https://www.gillinghamfootballclub.com/news/vacancy-football-and-sports-coach"
+      ],
+      "status": "blocked-pending-source-reconciliation",
+      "action": "Confirm which address/postcode is authoritative for stadium coordinates versus administration or foundation; no promotion"
     }
   ]
 }
