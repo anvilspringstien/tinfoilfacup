@@ -55,7 +55,7 @@ jobs:
         run: python updater/build_journey_club_registry.py
 
       - name: Audit newly entered custodians and ambiguous identities (read-only)
-        run: python updater/audit_active_custodian_locations.py
+        run: python updater/audit_active_custodian_locations.py --require-lifecycle-current
 
       - name: Guard writable scope
         run: |
