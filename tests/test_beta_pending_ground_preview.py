@@ -26,7 +26,7 @@ class PendingGroundPreviewTests(unittest.TestCase):
         self.assertEqual(array_from_html(original,"LAW2_ORIGIN_LOCATIONS"),
                          array_from_html(generated,"LAW2_ORIGIN_LOCATIONS"))
         by_id={identity_key(x["name"]):x for x in new_rows}
-        for name,postcode in [("Leyton Orient FC","E10 5NF"),("Gillingham FC","ME7 2PE"),("Rotherham United FC","S60 1FJ")]:
+        for name,postcode in [("Leyton Orient FC","E10 5NF"),("Port Vale FC","ST6 1AW"),("Rotherham United FC","S60 1FJ")]:
             self.assertEqual(by_id[identity_key(name)]["postcode"],postcode)
         self.assertNotIn(identity_key("Liverpool FC"),by_id)
         self.assertNotIn(identity_key("AFC Liverpool"),by_id)
