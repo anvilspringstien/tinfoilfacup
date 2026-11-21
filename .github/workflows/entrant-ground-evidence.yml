@@ -94,6 +94,10 @@ jobs:
           done
           node tests/beta-pending-ground-preview-browser.mjs
           node tests/beta-ground-review-journey-browser.mjs
+      - name: Assert existing Stats return and Barry Air mileage model remain unchanged
+        run: |
+          node tests/test_beta_stats_pigeon_return_sync.js
+          node tests/barry-air-model.mjs
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
