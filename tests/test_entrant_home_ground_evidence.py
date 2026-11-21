@@ -16,7 +16,7 @@ class EntrantGroundEvidenceTests(unittest.TestCase):
         ids = [r["official_identity"] for r in doc["clubs"]]
         self.assertEqual(len(ids), len(set(ids)))
         for row in doc["clubs"]:
-            self.assertIn(row["official_home_ground_source"].split("/")[2], ("www.leytonorient.com", "www.port-vale.co.uk", "www.afcwimbledon.co.uk", "barnetfc.com", "www.lutontown.co.uk", "www.stockportcounty.com", "www.accringtonstanley.co.uk", "www.bristolrovers.co.uk", "www.cambridgeunited.com", "chesterfield-fc.co.uk", "www.crewealex.net", "www.exetercityfc.co.uk", "www.doncasterroversfc.co.uk", "www.readingfc.co.uk", "www.shrewsburytown.com", "www.swindontownfc.co.uk"))
+            self.assertIn(row["official_home_ground_source"].split("/")[2], ("www.leytonorient.com", "www.port-vale.co.uk", "www.afcwimbledon.co.uk", "barnetfc.com", "www.lutontown.co.uk", "www.stockportcounty.com", "www.accringtonstanley.co.uk", "www.bristolrovers.co.uk", "www.cambridgeunited.com", "chesterfield-fc.co.uk", "www.crewealex.net", "www.exetercityfc.co.uk", "www.doncasterroversfc.co.uk", "www.readingfc.co.uk", "www.shrewsburytown.com", "www.swindontownfc.co.uk", "www.gillinghamfootballclub.com"))
             self.assertEqual(row["source_review"], "official-ground-and-postcode-confirmed")
             if row["coordinates"] is None:
                 self.assertEqual(row["coordinates_review"], "pending")
@@ -25,14 +25,20 @@ class EntrantGroundEvidenceTests(unittest.TestCase):
                 self.assertEqual(row["official_identity"], "AFC Wimbledon")
                 self.assertEqual(row["coordinates_review"], "published-by-club-matchday-guide")
                 self.assertEqual(row["review_status"], "awaiting-human-promotion")
-    def test_conflicting_official_postcodes_fail_closed(self):
+    def test_gillingham_stadium_postcode_resolved_without_promotion(self):
         doc = json.loads((ROOT / "updater" / "entrant-home-ground-evidence-2026.json").read_text(encoding="utf-8"))
-        conflicts = doc.get("unresolved_conflicts") or []
-        self.assertTrue(any(x["official_identity"] == "Gillingham FC" for x in conflicts))
-        self.assertNotIn("Gillingham FC", {x["official_identity"] for x in doc["clubs"]})
-        for row in conflicts:
-            self.assertEqual(row["status"], "blocked-pending-source-reconciliation")
-            self.assertGreaterEqual(len(row["candidate_postcodes"]), 2)
+        by_id = {x["official_identity"]: x for x in doc["clubs"]}
+        gills = by_id["Gillingham FC"]
+        self.assertEqual(gills["postcode"], "ME7 2PE")
+        self.assertEqual(gills["ground"], "MEMS Priestfield Stadium")
+        self.assertIsNone(gills["coordinates"])
+        self.assertEqual(gills["review_status"], "awaiting-coordinates-and-human-promotion")
+        resolved = [x for x in doc.get("resolved_conflicts", []) if x["official_identity"] == "Gillingham FC"]
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(resolved[0]["stadium_postcode"], "ME7 2PE")
+        self.assertEqual(resolved[0]["other_postcode"], "ME7 4DD")
+        self.assertEqual(resolved[0]["status"], "resolved-stadium-postcode-only")
+        self.assertFalse(any(x["official_identity"] == "Gillingham FC" for x in doc.get("unresolved_conflicts", [])))
 
     def test_tie_venue_not_away_club_home_ground(self):
         doc = json.loads((ROOT / "updater" / "entrant-home-ground-evidence-2026.json").read_text(encoding="utf-8"))
