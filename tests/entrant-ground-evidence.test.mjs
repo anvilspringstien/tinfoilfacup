@@ -35,7 +35,7 @@ test('fail closed on blocked or duplicated identities', () => {
 });
 test('reject altered safety gates and invalid evidence, never create miles', () => {
   const isolated = structuredClone(evidence);
-  isolated.safety.verified_location_badge_authorized = true;
+  isolated.safety.automated_ground_promotion = true;
   assert.equal(pendingCustodianGround('Leyton Orient', isolated), null);
   const w = pendingCustodianGround('AFC Wimbledon', evidence);
   assert.equal(w.coordinates, null); // even source-provided coords need separate human approval
