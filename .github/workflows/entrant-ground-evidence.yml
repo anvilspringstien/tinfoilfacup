@@ -18,6 +18,10 @@ on:
       - 'tests/test_beta_pending_ground_preview.py'
       - 'tests/beta-pending-ground-preview-browser.mjs'
       - 'tests/beta-ground-review-journey-browser.mjs'
+      - 'beta/entrant-ground-preview-transform.mjs'
+      - 'beta/clubfinder-ground-review-journey.html'
+      - 'tests/entrant-ground-preview-transform.test.mjs'
+      - 'tests/beta-ground-review-hosted-browser.mjs'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -36,7 +40,7 @@ jobs:
         with:
           node-version: '22'
       - name: Test pending-location BETA adapter (no promotion)
-        run: node --test tests/entrant-ground-evidence.test.mjs tests/entrant-ground-diagnostic.test.mjs
+        run: node --test tests/entrant-ground-evidence.test.mjs tests/entrant-ground-diagnostic.test.mjs tests/entrant-ground-preview-transform.test.mjs
       - name: Smoke-test standalone Shed route and its static dependencies
         run: |
           set -euo pipefail
@@ -100,6 +104,24 @@ jobs:
         with:
           name: shed-saved-campaign-ground-review
           path: /tmp/tffc-ground-journey/*.png
+          if-no-files-found: ignore
+      - name: Browser-test the opt-in dynamically sourced Shed review journey
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-optin-review-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/clubfinder-ground-review-journey.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          node tests/beta-ground-review-hosted-browser.mjs
+      - name: Retain opt-in Shed review Campaign screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shed-dynamic-ground-review
+          path: /tmp/tffc-ground-optin/*.png
           if-no-files-found: ignore
       - name: Assert existing Stats return and Barry Air mileage model remain unchanged
         run: |
