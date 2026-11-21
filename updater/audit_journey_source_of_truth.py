@@ -25,12 +25,23 @@ def key(s):
  return re.sub(r'\s+',' ',s).strip()
 
 def fixture_rows(comp):
+ # CL: a newly entering club remains journey-active after the competition
+ # advances. The current fixtures alone lose eliminated and historic entrants.
+ # Observe canonical results and all published round fixture buckets as well.
+ # Keep each row's ACTUAL tie venue and its provenance; never derive a home
+ # ground by borrowing an away fixture or treating FCHD as independent proof.
  out=[]
- for bucket in ('preliminary_fixtures','fixtures','replays'):
+ for bucket in ('preliminary_fixtures','fixtures','replays','results'):
   data=comp.get(bucket,{}) or {}
   vals=list(data.values()) if isinstance(data,dict) else list(data)
   for f in vals:
-   if isinstance(f,dict):out.append((bucket,f))
+   if isinstance(f,dict) and f.get('home') and f.get('away'):
+    out.append((bucket,f))
+ for round_name,data in (comp.get('round_fixtures',{}) or {}).items():
+  vals=list(data.values()) if isinstance(data,dict) else list(data)
+  for f in vals:
+   if isinstance(f,dict) and f.get('home') and f.get('away'):
+    out.append(('round_fixtures:'+str(round_name),f))
  return out
 
 if not COVER.exists():raise SystemExit('ABORT: journey ground coverage audit missing')
@@ -98,6 +109,6 @@ md += ['','## Rules','- A club not yet reached by the journey is not promoted me
        '## Safety','- READ ONLY. Clubfinder, competition, GROUNDS, mileage and journey logic are untouched.']
 MD.write_text('\n'.join(md)+'\n',encoding='utf-8')
 print('JOURNEY SOURCE OF TRUTH AUDIT: SUCCESS')
-print('Fixture/replay rows examined:',len(rows))
+print('Competition journey rows examined:',len(rows))
 for s,n in sorted(counts.items()):print(s+':',n)
 print('READ ONLY: canonical data untouched')

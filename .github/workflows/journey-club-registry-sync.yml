@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - 'competition.json'
+      - 'updater/audit_active_custodian_locations.py'
       - 'updater/audit_fa_cup_journey_registry.py'
       - 'updater/audit_journey_ground_coverage.py'
       - 'updater/audit_journey_source_of_truth.py'
@@ -11,6 +13,10 @@ on:
       - 'updater/build_journey_club_registry.py'
       - 'updater/patch_clubfinder_law2_origins.py'
       - '.github/workflows/journey-club-registry-sync.yml'
+
+concurrency:
+  group: journey-registry-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -48,6 +54,12 @@ jobs:
       - name: Build canonical Journey Club Registry
         run: python updater/build_journey_club_registry.py
 
+      - name: Regression tests — custodian location, FCHD and AFC identities
+        run: python -m unittest discover -s tests -p test_active_custodian_location_audit.py
+
+      - name: Audit newly entered custodians and ambiguous identities (read-only)
+        run: python updater/audit_active_custodian_locations.py --require-lifecycle-current
+
       - name: Guard writable scope
         run: |
           # Clubfinder is patched transiently only so all gates see the Law 2
@@ -65,7 +77,7 @@ jobs:
             updater/journey-ground-coverage-audit.json \
             updater/journey-source-of-truth-audit.json \
             updater/journey-promotion-readiness-audit.json
-          changed="$(git status --porcelain -- journey-club-registry.json)"
+          # Python imports create bytecode caches. Remove only these transient\n          # generated files; keep the repository write-scope guard strict.\n          find . -type d -name __pycache__ -prune -exec rm -rf {} +\n          changed="$(git status --porcelain -- journey-club-registry.json)"
           other="$(git status --porcelain -- . ':!journey-club-registry.json')"
           if [ -n "$other" ]; then
             echo "ABORT: unexpected files changed during registry sync"
