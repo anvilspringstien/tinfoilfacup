@@ -16,6 +16,7 @@ on:
       - 'updater/inspect_beta_ground_call_sites.py'
       - 'updater/build_beta_pending_ground_preview.py'
       - 'tests/test_beta_pending_ground_preview.py'
+      - 'tests/beta-pending-ground-preview-browser.mjs'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -77,6 +78,18 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_beta_pending_ground_preview.py' -v
           python -m updater.build_beta_pending_ground_preview --output /tmp/tffc-ground-review/beta/clubfinder-beta.html
+      - name: Test temporary BETA Campaign ground lookup in Chromium
+        run: |
+          set -euo pipefail
+          cp /tmp/tffc-ground-review/beta/clubfinder-beta.html beta/clubfinder-ground-review.html
+          trap 'rm -f beta/clubfinder-ground-review.html; kill "$server_pid" 2>/dev/null || true' EXIT
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-campaign-ground-http.log 2>&1 &
+          server_pid=$!
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/clubfinder-ground-review.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          node tests/beta-pending-ground-preview-browser.mjs
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
