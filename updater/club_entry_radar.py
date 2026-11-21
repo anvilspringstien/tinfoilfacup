@@ -98,8 +98,15 @@ def inspect_rounds(competition, registries, journey_registry=None):
                 raise ValueError("Duplicate journey registry identity")
             registry[key] = row
     sources = {name: _ground_registry(html) for name, html in registries.items()}
-    names = sorted(rounds, key=lambda r: (
-        ROUND_ORDER.index(r) if r in ROUND_ORDER else len(ROUND_ORDER), r))
+    def round_sort_key(name):
+        # Replay is part of its parent round, before the next round starts.
+        base = name.removesuffix(" Replay")
+        if base in ROUND_ORDER:
+            return (ROUND_ORDER.index(base), 1 if name != base else 0, name)
+        # Unrecognized canonical round labels must remain visible, never dropped.
+        return (len(ROUND_ORDER), 0, name)
+
+    names = sorted(rounds, key=round_sort_key)
     previously_seen = set()
     reports = []
     for round_name in names:
