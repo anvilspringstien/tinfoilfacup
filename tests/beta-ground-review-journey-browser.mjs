@@ -59,6 +59,15 @@ try {
    console.log('Shed Campaign review contract',JSON.stringify(contracts));
   }
   console.log('PASS approved three-frame Shed',device,'custodian ground evidence, identity and 0 coords',JSON.stringify(interfaces));
+  if(device==='big-boy'){
+    await page.evaluate(async()=>chooseJourney('Bishop Auckland FC','DL14 9AE'));
+    const campaign=await page.evaluate(()=>({
+      saved:Object.keys(localStorage).filter(k=>/tin|campaign|pigeon|tffc/i.test(k)).slice(0,15),
+      resultText:(document.querySelector('#results')?.innerText||'').slice(0,2400),
+      chosenText:(document.querySelector('.chosen-campaign-current')?.innerText||'').slice(0,1000)
+    }));
+    console.log('Shed saved Campaign probe',JSON.stringify(campaign));
+  }
   await page.screenshot({path:'/tmp/tffc-ground-journey/'+device+'.png',fullPage:true});
   await context.close();
  }
