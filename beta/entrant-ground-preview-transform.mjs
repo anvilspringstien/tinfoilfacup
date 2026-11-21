@@ -41,7 +41,7 @@ export function buildEntrantGroundPreview(source, evidence, competition) {
   existing.get(d).add(entrantIdentityKey(record.name));
  }
  const blocked=new Set((evidence.unresolved_conflicts||[]).map(r=>entrantIdentityKey(r.official_identity)));
- const encountered=new Set(), additions=[], skipped=[];
+ const encountered=new Set(), additions=[], already=[], skipped=[];
  for(const row of evidence.clubs||[]){
   const key=entrantIdentityKey(row.official_identity);
   if(!key||encountered.has(key))throw new Error('Duplicate or missing official identity');
@@ -59,7 +59,15 @@ export function buildEntrantGroundPreview(source, evidence, competition) {
   }
   const d=displayKey(row.official_identity);
   if(existing.has(d)){
-   skipped.push({club:row.official_identity,reason:'existing record or collision'});
+   const matching=[...original.values,...law2.values].filter(r=>displayKey(r.name)===d);
+   const reviewed=matching.find(r=>entrantIdentityKey(r.name)===key && r.preview_evidence_only===true);
+   if(reviewed){
+    if(matching.length!==1 || reviewed.ground!==row.ground || reviewed.postcode!==row.postcode
+      || reviewed.verification!=='unverified' || reviewed.source!==row.official_home_ground_source
+      || ['lat','lon','latitude','longitude','distance'].some(k=>k in reviewed))
+     throw new Error('Reviewed pending ground record drift: '+row.official_identity);
+    already.push(reviewed);
+   }else skipped.push({club:row.official_identity,reason:'existing non-preview record'});
    continue;
   }
   additions.push({
@@ -70,7 +78,7 @@ export function buildEntrantGroundPreview(source, evidence, competition) {
   });
   existing.set(d,new Set([key]));
  }
- if(additions.length!==31)throw new Error('Entrant evidence preview must match current 31-location audit; got '+additions.length);
+ if(additions.length+already.length!==31)throw new Error('Entrant evidence preview must cover 31 ground records, got '+(additions.length+already.length));
  const updated=source.slice(0,original.match.index+original.match[1].length)
   +JSON.stringify([...original.values,...additions])
   +source.slice(original.match.index+original.match[0].length-original.match[3].length);
@@ -79,10 +87,18 @@ export function buildEntrantGroundPreview(source, evidence, competition) {
   throw new Error('BETA lookup anchor changed');
  const [before,tail]=updated.split(start);
  const [lookup,after]=tail.split(end);
- if(lookup.split('if(g)return g;').length!==2||lookup.split('if(s)return s;').length!==2)
-  throw new Error('BETA location return contract changed');
- const guard="  const previewAfcBoundary=(requested,record)=>/^\\s*afc\\b/i.test(requested||'')===/^\\s*afc\\b/i.test(record||'');\n";
- const bounded=guard+lookup.replace('if(g)return g;','if(g&&previewAfcBoundary(c.name,g.name))return g;')
-  .replace('if(s)return s;','if(s&&previewAfcBoundary(c.name,s.name))return s;');
- return {html:before+start+bounded+end+after,additions,skipped};
+ let bounded;
+ if(lookup.includes('previewAfcBoundary')){
+  if(!lookup.includes('if(g&&previewAfcBoundary(c.name,g.name))return g;')||
+     !lookup.includes('if(s&&previewAfcBoundary(c.name,s.name))return s;'))
+   throw new Error('Partial BETA location identity guard');
+  bounded=lookup;
+ }else{
+  if(lookup.split('if(g)return g;').length!==2||lookup.split('if(s)return s;').length!==2)
+   throw new Error('BETA location return contract changed');
+  const guard="  const previewAfcBoundary=(requested,record)=>/^\\s*afc\\b/i.test(requested||'')===/^\\s*afc\\b/i.test(record||'');\n";
+  bounded=guard+lookup.replace('if(g)return g;','if(g&&previewAfcBoundary(c.name,g.name))return g;')
+   .replace('if(s)return s;','if(s&&previewAfcBoundary(c.name,s.name))return s;');
+ }
+ return {html:before+start+bounded+end+after,additions,already,skipped};
 }
