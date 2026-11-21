@@ -9,6 +9,9 @@ on:
       - 'updater/audit_active_custodian_locations.py'
       - 'beta/entrant-ground-evidence.mjs'
       - 'tests/entrant-ground-evidence.test.mjs'
+      - 'beta/entrant-ground-diagnostic.html'
+      - 'beta/entrant-ground-diagnostic.mjs'
+      - 'tests/entrant-ground-diagnostic.test.mjs'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -27,7 +30,7 @@ jobs:
         with:
           node-version: '22'
       - name: Test pending-location BETA adapter (no promotion)
-        run: node --test tests/entrant-ground-evidence.test.mjs
+        run: node --test tests/entrant-ground-evidence.test.mjs tests/entrant-ground-diagnostic.test.mjs
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
