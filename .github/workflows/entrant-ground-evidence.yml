@@ -7,6 +7,24 @@ on:
       - 'tests/test_entrant_home_ground_evidence.py'
       - 'updater/reconcile_entrant_ground_evidence.py'
       - 'updater/audit_active_custodian_locations.py'
+      - 'beta/entrant-ground-evidence.mjs'
+      - 'tests/entrant-ground-evidence.test.mjs'
+      - 'beta/entrant-ground-diagnostic.html'
+      - 'beta/entrant-ground-diagnostic.mjs'
+      - 'tests/entrant-ground-diagnostic.test.mjs'
+      - 'tests/entrant-ground-diagnostic-browser.mjs'
+      - 'updater/inspect_beta_ground_call_sites.py'
+      - 'updater/build_beta_pending_ground_preview.py'
+      - 'tests/test_beta_pending_ground_preview.py'
+      - 'tests/beta-pending-ground-preview-browser.mjs'
+      - 'tests/beta-ground-review-journey-browser.mjs'
+      - 'beta/entrant-ground-preview-transform.mjs'
+      - 'beta/clubfinder-ground-review-journey.html'
+      - 'tests/entrant-ground-preview-transform.test.mjs'
+      - 'tests/beta-ground-review-hosted-browser.mjs'
+      - 'tests/beta-ground-review-current-ui-browser.mjs'
+      - 'beta/phone-frame-ground-review.html'
+      - 'beta/phone-frame-shed.js'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -21,7 +39,103 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test pending-location BETA adapter (no promotion)
+        run: node --test tests/entrant-ground-evidence.test.mjs tests/entrant-ground-diagnostic.test.mjs tests/entrant-ground-preview-transform.test.mjs
+      - name: Smoke-test standalone Shed route and its static dependencies
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/entrant-ground-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/entrant-ground-diagnostic.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          for path in beta/entrant-ground-diagnostic.html beta/entrant-ground-diagnostic.mjs beta/entrant-ground-evidence.mjs updater/entrant-home-ground-evidence-2026.json; do
+            curl --fail --silent --show-error "http://127.0.0.1:8765/$path" >/dev/null
+          done
+          curl --fail --silent http://127.0.0.1:8765/updater/entrant-home-ground-evidence-2026.json | python -c 'import json,sys; x=json.load(sys.stdin); assert len(x["clubs"])==37 and x["safety"]["automated_ground_promotion"] is False'
+      - name: Install isolated Chromium acceptance dependencies
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test Shed diagnostic in Chromium across Big Boy, iPhone and iPad
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-ground-browser-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/entrant-ground-diagnostic.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          node tests/entrant-ground-diagnostic-browser.mjs
+      - name: Retain Shed home-ground diagnostic screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shed-home-ground-diagnostic
+          path: |
+            /tmp/tffc-ground-diagnostic/*.png
+            /tmp/tffc-ground-journey/*.png
+          if-no-files-found: ignore
+      - name: Inspect BETA ground lookup and display call-sites (read-only)
+        run: python updater/inspect_beta_ground_call_sites.py
+      - name: Build read-only unverified BETA ground preview and regress protected source
+        run: |
+          python -m unittest discover -s tests -p 'test_beta_pending_ground_preview.py' -v
+          python -m updater.build_beta_pending_ground_preview --output /tmp/tffc-ground-review/beta/clubfinder-beta.html
+      - name: Test temporary BETA Campaign ground lookup in Chromium
+        run: |
+          set -euo pipefail
+          cp /tmp/tffc-ground-review/beta/clubfinder-beta.html beta/clubfinder-ground-review.html
+          trap 'rm -f beta/clubfinder-ground-review.html; kill "$server_pid" 2>/dev/null || true' EXIT
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-campaign-ground-http.log 2>&1 &
+          server_pid=$!
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/clubfinder-ground-review.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          node tests/beta-pending-ground-preview-browser.mjs
+          node tests/beta-ground-review-journey-browser.mjs
+      - name: Retain approved Shed saved-Campaign screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shed-saved-campaign-ground-review
+          path: /tmp/tffc-ground-journey/*.png
+          if-no-files-found: ignore
+      - name: Browser-test the opt-in dynamically sourced Shed review journey
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-optin-review-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/clubfinder-ground-review-journey.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          node tests/beta-ground-review-hosted-browser.mjs
+          node tests/beta-ground-review-current-ui-browser.mjs
+      - name: Retain opt-in Shed review Campaign screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shed-dynamic-ground-review
+          path: |
+            /tmp/tffc-ground-optin/*.png
+            /tmp/tffc-current-ground-ui/*.png
+          if-no-files-found: ignore
+      - name: Assert existing Stats return and Barry Air mileage model remain unchanged
+        run: |
+          node tests/test_beta_stats_pigeon_return_sync.js
+          node tests/barry-air-model.mjs
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
-        run: python -m updater.reconcile_entrant_ground_evidence
+        run: |
+          python -m updater.reconcile_entrant_ground_evidence
+          python -c 'from updater.reconcile_entrant_ground_evidence import reconcile; a=reconcile(); assert a["second_round_clubs"] == 40; assert all(x["missing_location_count"] == 31 and not x["missing_without_staged_evidence"] for x in a["builds"].values()), "Current second-round entrant location coverage has regressed"'

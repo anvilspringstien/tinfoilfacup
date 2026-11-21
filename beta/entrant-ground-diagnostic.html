@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>BETA diagnostic — Custodian ground evidence | TFFAC</title>
+<style>
+:root { color-scheme: light; font-family: system-ui, sans-serif; background:#f2ede2; color:#1e2926; }
+body { margin:0; padding:24px 12px; }
+main { box-sizing:border-box; max-width:480px; margin:0 auto; padding:24px; border:2px solid #1e2926; border-radius:14px; background:#fffdf8; }
+h1 { margin:0 0 12px; font-size:1.45rem; }
+p { line-height:1.5; }
+.warning { border-left:4px solid #ad7133; padding:8px 12px; background:#fff1d9; }
+label { display:block; margin:16px 0 6px; font-weight:700; }
+input { box-sizing:border-box; width:100%; font:inherit; padding:12px; border:1px solid #636363; border-radius:6px; }
+button { padding:12px 18px; margin-top:12px; font:inherit; font-weight:700; border-radius:6px; border:0; color:white; background:#244937; cursor:pointer; }
+button:disabled { opacity:.5; cursor:default; }
+#result { margin-top:18px; padding:14px; border:1px solid #ccc; border-radius:8px; min-height:70px; }
+#result p { margin:.4rem 0; }
+small { color:#4d5651; }
+a { color:#155c65; overflow-wrap:anywhere; }
+</style>
+<script type="module" src="entrant-ground-diagnostic.mjs"></script>
+</head>
+<body>
+<main>
+<h1>Custodian home-ground evidence — BETA diagnostic</h1>
+<p class="warning"><strong>Evidence only. Not a verified location.</strong> This isolated page does not select a Campaign, establish custody, change mileage, or update Clubfinder, Stats or Barry Air.</p>
+<form id="lookup">
+<label for="club">Exact official club name</label>
+<input id="club" name="club" required autocomplete="off" placeholder="e.g. Leyton Orient FC" maxlength="120">
+<button id="inspect" type="submit" disabled>Inspect pending evidence</button>
+</form>
+<section id="result" aria-live="polite"><p>Loading evidence safely…</p></section>
+<p><small>Only staged identity-specific records can appear here. Missing evidence and uncertain identities fail closed. Coordinates are intentionally not returned, even when source candidates contain them.</small></p>
+<p><a href="index.html">Return to the BETA entrance</a></p>
+</main>
+</body>
+</html>

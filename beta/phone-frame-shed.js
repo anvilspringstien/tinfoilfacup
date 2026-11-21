@@ -117,7 +117,8 @@
  fit();
  if(popup)prepareDocument();
  else{
-  const destination=new URL(framedRoom?'boot-room/?frame='+(shedRoom?'shed':'campaign'):entries[entry]||entries.splash,base);
+  const groundReview=location.pathname.endsWith('/phone-frame-ground-review.html')&&entry==='ground-review';
+  const destination=new URL(groundReview?'clubfinder-ground-review-journey.html':framedRoom?'boot-room/?frame='+(shedRoom?'shed':'campaign'):entries[entry]||entries.splash,base);
   if(framedRoom)destination.hash=location.hash;
   if(entry==='club')destination.searchParams.set('club',new URLSearchParams(location.search).get('club')||'');
   frame.src=destination.href;
