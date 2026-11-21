@@ -59,19 +59,30 @@ try {
    console.log('Shed Campaign review contract',JSON.stringify(contracts));
   }
   console.log('PASS approved three-frame Shed',device,'custodian ground evidence, identity and 0 coords',JSON.stringify(interfaces));
-  if(device==='big-boy'){
-    await page.evaluate(async()=>chooseJourney('Bishop Auckland FC','DL14 9AE'));
-    await page.waitForFunction(()=>document.querySelector('#results')?.children.length>0,{timeout:12000}).catch(()=>{});
-    const campaign=await page.evaluate(()=>({
-      saved:Object.keys(localStorage).filter(k=>/tin|campaign|pigeon|tffc/i.test(k)).slice(0,15),
-      resultText:(document.querySelector('#results')?.innerText||'').slice(0,2400),
-      chosenText:(document.querySelector('.chosen-campaign-current')?.innerText||'').slice(0,1000),
-      status:document.querySelector('#status')?.innerText,
-      resultsChildren:document.querySelector('#results')?.children.length,
-      savedValue:(localStorage.getItem('tinFoilFACupJourney_v7')||'').slice(0,450)
-    }));
-    console.log('Shed saved Campaign probe',JSON.stringify(campaign));
-  }
+  // Exercise the *real* saved Campaign rather than only the findGround helper.
+  await page.evaluate(async()=>chooseJourney('Bishop Auckland FC','DL14 9AE'));
+  await page.waitForFunction(()=>{
+   const text=document.querySelector('.chosen-campaign-current')?.innerText||'';
+   return text.includes('BetWright Stadium')&&text.includes('E10 5NF');
+  },{timeout:16000});
+  const chosen=await page.locator('.chosen-campaign-current').innerText();
+  assert.match(chosen,/Leyton Orient/);
+  assert.match(chosen,/BetWright Stadium\s*•\s*E10 5NF/);
+  assert.match(chosen,/Unverified Location/);
+  assert.doesNotMatch(chosen,/✅ Verified Location/);
+  assert.match(chosen,/Port Vale v Leyton Orient/);
+  assert.match(chosen,/Vale Park\s*•\s*ST6 1AW/);
+  const storedBefore=await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
+  assert.ok(storedBefore&&storedBefore.includes('Bishop Auckland'),'Campaign origin saved');
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>{
+   const text=document.querySelector('.chosen-campaign-current')?.innerText||'';
+   return text.includes('BetWright Stadium')&&text.includes('E10 5NF');
+  },{timeout:18000});
+  const storedAfter=await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
+  assert.equal(storedAfter,storedBefore,'Saved Campaign must persist through Shed reload');
+  assert.match(await page.locator('.chosen-campaign-current').innerText(),/Unverified Location/);
+  console.log('PASS saved Bishop Auckland → Leyton Orient Campaign and persistence',device);
   await page.screenshot({path:'/tmp/tffc-ground-journey/'+device+'.png',fullPage:true});
   await context.close();
  }
