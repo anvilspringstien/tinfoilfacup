@@ -94,6 +94,13 @@ jobs:
           done
           node tests/beta-pending-ground-preview-browser.mjs
           node tests/beta-ground-review-journey-browser.mjs
+      - name: Retain approved Shed saved-Campaign screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shed-saved-campaign-ground-review
+          path: /tmp/tffc-ground-journey/*.png
+          if-no-files-found: ignore
       - name: Assert existing Stats return and Barry Air mileage model remain unchanged
         run: |
           node tests/test_beta_stats_pigeon_return_sync.js
