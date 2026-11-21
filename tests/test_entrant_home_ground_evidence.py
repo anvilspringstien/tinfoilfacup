@@ -16,7 +16,7 @@ class EntrantGroundEvidenceTests(unittest.TestCase):
         ids = [r["official_identity"] for r in doc["clubs"]]
         self.assertEqual(len(ids), len(set(ids)))
         for row in doc["clubs"]:
-            self.assertIn(row["official_home_ground_source"].split("/")[2], ("www.leytonorient.com", "www.port-vale.co.uk", "www.afcwimbledon.co.uk", "barnetfc.com", "www.lutontown.co.uk", "www.stockportcounty.com", "www.accringtonstanley.co.uk", "www.bristolrovers.co.uk", "www.cambridgeunited.com", "chesterfield-fc.co.uk", "www.crewealex.net", "www.exetercityfc.co.uk", "www.doncasterroversfc.co.uk", "www.readingfc.co.uk", "www.shrewsburytown.com", "www.swindontownfc.co.uk", "www.gillinghamfootballclub.com", "www.barnsleyfc.co.uk", "shop.blackpoolfc.co.uk", "www.bradfordcityafc.com", "www.burtonalbionfc.co.uk", "www.ctfc.com", "tickets.colchesterunited.net", "www.lcfc.com", "www.mansfieldtown.net", "shop.nottscountyfc.co.uk", "www.oldhamathletic.co.uk", "shop.wwfc.com", "www.yorkcityfootballclub.co.uk"))
+            self.assertIn(row["official_home_ground_source"].split("/")[2], ("www.leytonorient.com", "www.port-vale.co.uk", "www.afcwimbledon.co.uk", "barnetfc.com", "www.lutontown.co.uk", "www.stockportcounty.com", "www.accringtonstanley.co.uk", "www.bristolrovers.co.uk", "www.cambridgeunited.com", "chesterfield-fc.co.uk", "www.crewealex.net", "www.exetercityfc.co.uk", "www.doncasterroversfc.co.uk", "www.readingfc.co.uk", "www.shrewsburytown.com", "www.swindontownfc.co.uk", "www.gillinghamfootballclub.com", "www.barnsleyfc.co.uk", "shop.blackpoolfc.co.uk", "www.bradfordcityafc.com", "www.burtonalbionfc.co.uk", "www.ctfc.com", "tickets.colchesterunited.net", "www.lcfc.com", "www.mansfieldtown.net", "shop.nottscountyfc.co.uk", "www.oldhamathletic.co.uk", "shop.wwfc.com", "www.yorkcityfootballclub.co.uk", "gtfc.co.uk", "shop.mkdons.com", "www.newport-county.co.uk", "www.pafc.co.uk", "rochdaleafc.co.uk", "jobs.stevenagefc.com", "thebrickcommunitystadium.com"))
             self.assertEqual(row["source_review"], "official-ground-and-postcode-confirmed")
             if row["coordinates"] is None:
                 self.assertEqual(row["coordinates_review"], "pending")
@@ -39,6 +39,15 @@ class EntrantGroundEvidenceTests(unittest.TestCase):
         self.assertEqual(resolved[0]["other_postcode"], "ME7 4DD")
         self.assertEqual(resolved[0]["status"], "resolved-stadium-postcode-only")
         self.assertFalse(any(x["official_identity"] == "Gillingham FC" for x in doc.get("unresolved_conflicts", [])))
+
+    def test_rotherham_remains_blocked_with_multiple_stadium_postcodes(self):
+        doc = json.loads((ROOT / "updater" / "entrant-home-ground-evidence-2026.json").read_text(encoding="utf-8"))
+        by_id = {r["official_identity"]: r for r in doc["clubs"]}
+        self.assertNotIn("Rotherham United FC", by_id)
+        conflicts = [r for r in doc.get("unresolved_conflicts", []) if r["official_identity"] == "Rotherham United FC"]
+        self.assertEqual(len(conflicts), 1)
+        self.assertEqual(conflicts[0]["status"], "blocked-pending-source-reconciliation")
+        self.assertEqual(set(conflicts[0]["candidate_postcodes"]), {"S60 1AH", "S60 1FJ", "S60 1DF"})
 
     def test_tie_venue_not_away_club_home_ground(self):
         doc = json.loads((ROOT / "updater" / "entrant-home-ground-evidence-2026.json").read_text(encoding="utf-8"))
