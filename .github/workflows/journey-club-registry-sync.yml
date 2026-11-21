@@ -77,7 +77,10 @@ jobs:
             updater/journey-ground-coverage-audit.json \
             updater/journey-source-of-truth-audit.json \
             updater/journey-promotion-readiness-audit.json
-          # Python imports create bytecode caches. Remove only these transient\n          # generated files; keep the repository write-scope guard strict.\n          find . -type d -name __pycache__ -prune -exec rm -rf {} +\n          changed="$(git status --porcelain -- journey-club-registry.json)"
+          # Python imports create bytecode caches. Remove only these transient
+          # generated files; keep the repository write-scope guard strict.
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          changed="$(git status --porcelain -- journey-club-registry.json)"
           other="$(git status --porcelain -- . ':!journey-club-registry.json')"
           if [ -n "$other" ]; then
             echo "ABORT: unexpected files changed during registry sync"
