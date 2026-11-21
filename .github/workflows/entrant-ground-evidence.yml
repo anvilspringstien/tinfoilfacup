@@ -31,6 +31,20 @@ jobs:
           node-version: '22'
       - name: Test pending-location BETA adapter (no promotion)
         run: node --test tests/entrant-ground-evidence.test.mjs tests/entrant-ground-diagnostic.test.mjs
+      - name: Smoke-test standalone Shed route and its static dependencies
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/entrant-ground-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/entrant-ground-diagnostic.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          for path in beta/entrant-ground-diagnostic.html beta/entrant-ground-diagnostic.mjs beta/entrant-ground-evidence.mjs updater/entrant-home-ground-evidence-2026.json; do
+            curl --fail --silent --show-error "http://127.0.0.1:8765/$path" >/dev/null
+          done
+          curl --fail --silent http://127.0.0.1:8765/updater/entrant-home-ground-evidence-2026.json | python -c 'import json,sys; x=json.load(sys.stdin); assert len(x["clubs"])==37 and x["safety"]["automated_ground_promotion"] is False'
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
