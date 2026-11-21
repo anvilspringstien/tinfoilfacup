@@ -19,7 +19,7 @@ COMPETITION=ROOT / "competition.json"
 DECODER=json.JSONDecoder()
 
 def literal(html,name):
-    match=re.search(r"\\b(?:const|let|var)\\s+"+re.escape(name)+r"\\s*=\\s*",html)
+    match=re.search(r"\b(?:const|let|var)\s+"+re.escape(name)+r"\s*=\s*",html)
     if not match: raise ValueError("Missing original "+name+" data")
     data,size=DECODER.raw_decode(html[match.end():])
     if not isinstance(data,list): raise ValueError("Expected location array: "+name)
@@ -32,7 +32,7 @@ def ground_record(row):
         raise ValueError("Missing acceptable official evidence URL")
     if row.get("source_review")!="official-ground-and-postcode-confirmed" or row.get("review_status") not in ("awaiting-coordinates-and-human-promotion","awaiting-human-promotion"):
         raise ValueError("Cannot promote unreconciled ground evidence")
-    if not row.get("ground") or not re.fullmatch(r"[A-Z]{1,2}\\d[A-Z\\d]? \\d[A-Z]{2}",row.get("postcode","")):
+    if not row.get("ground") or not re.fullmatch(r"[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}",row.get("postcode","")):
         raise ValueError("Invalid ground name or postcode")
     return {"name":row["official_identity"],"ground":row["ground"],
        "postcode":row["postcode"],"verification":"unverified",
@@ -88,7 +88,7 @@ def transform(html,evidence,competition):
     if changed.count(start_marker)!=1 or changed.count(end_marker)!=1:
         raise ValueError("Clubfinder ground lookup structure drift")
     before,tail=changed.split(start_marker,1);lookup,after=tail.split(end_marker,1)
-    guard=r"  const previewAfcBoundary=(requested,record)=>/^\\s*afc\\b/i.test(requested||'')===/^\\s*afc\\b/i.test(record||'');" + "\\n"
+    guard=r"  const previewAfcBoundary=(requested,record)=>/^\s*afc\b/i.test(requested||'')===/^\s*afc\b/i.test(record||'');" + "\n"
     if "previewAfcBoundary" not in lookup:
         if lookup.count("if(g)return g;")!=1 or lookup.count("if(s)return s;")!=1:
             raise ValueError("Unsafe Clubfinder identity lookup drift")
