@@ -13,17 +13,18 @@ a{color:#dec692}</style>
 <script type="module">
 import {buildEntrantGroundPreview} from './entrant-ground-preview-transform.mjs';
 try {
- const [sourceResponse,ledgerResponse,journeyResponse]=await Promise.all([
+ const [sourceResponse,ledgerResponse,journeyResponse,competitionResponse]=await Promise.all([
   fetch('clubfinder-beta.html',{cache:'no-store',credentials:'same-origin'}),
   fetch('../updater/entrant-home-ground-evidence-2026.json',{cache:'no-store',credentials:'same-origin'}),
-  fetch('clubfinder-journey.html',{cache:'no-store',credentials:'same-origin'})
+  fetch('clubfinder-journey.html',{cache:'no-store',credentials:'same-origin'}),
+  fetch('../competition.json',{cache:'no-store',credentials:'same-origin'})
  ]);
- if(!sourceResponse.ok||!ledgerResponse.ok||!journeyResponse.ok)
+ if(!sourceResponse.ok||!ledgerResponse.ok||!journeyResponse.ok||!competitionResponse.ok)
   throw new Error('Current BETA or approved evidence unavailable');
- const [source,ledger,journey]=await Promise.all([
-  sourceResponse.text(),ledgerResponse.json(),journeyResponse.text()
+ const [source,ledger,journey,competition]=await Promise.all([
+  sourceResponse.text(),ledgerResponse.json(),journeyResponse.text(),competitionResponse.json()
  ]);
- const preview=buildEntrantGroundPreview(source,ledger);
+ const preview=buildEntrantGroundPreview(source,ledger,competition);
  const expected="fetch('clubfinder-beta.html',{cache:'no-store'})";
  if(journey.split(expected).length!==2)
   throw new Error('Approved Shed journey fetch contract changed');
