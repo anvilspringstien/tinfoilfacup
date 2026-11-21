@@ -169,9 +169,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--strict", action="store_true",
                         help="Fail while any Second Round Proper custodian has no ground record")
+    parser.add_argument("--require-lifecycle-current", action="store_true",
+                        help="Fail if a published entrant is still labelled awaiting")
     args = parser.parse_args()
     report = analyze()
     print(json.dumps(report, indent=2, ensure_ascii=False))
+    if args.require_lifecycle_current and report["registry_marked_awaiting_but_seen"]:
+        raise SystemExit("Registry lifecycle is stale against canonical competition history")
     if args.strict and any(report["missing_second_round_custodian_locations"].values()):
         raise SystemExit("Missing ground records require independently verified review")
 
