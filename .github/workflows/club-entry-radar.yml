@@ -1,0 +1,52 @@
+name: Club Entry Radar (read-only)
+
+on:
+  pull_request:
+    paths:
+      - 'updater/club_entry_radar.py'
+      - 'tests/test_club_entry_radar.py'
+      - 'docs/club-entry-radar.md'
+      - '.github/workflows/club-entry-radar.yml'
+      - 'updater/audit_active_custodian_locations.py'
+      - 'competition.json'
+      - 'journey-club-registry.json'
+      - 'clubfinder.html'
+      - 'beta/clubfinder-beta.html'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test round-aware extraction, identity safety and read-only contract
+        run: python -m unittest discover -s tests -p 'test_club_entry_radar.py' -v
+      - name: Produce read-only Mission Control radar data
+        run: |
+          mkdir -p /tmp/tffc-radar
+          python -m updater.club_entry_radar > /tmp/tffc-radar/club-entry-radar.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/tffc-radar/club-entry-radar.json').read_text())
+          assert r['read_only'] and not r['automatic_ground_promotion']
+          for group in r['rounds']:
+              assert group['entrant_count']==len(group['clubs'])
+              for source, counts in group['coverage'].items():
+                  assert sum(counts.values())==group['entrant_count'], (group['round'],source,counts)
+              print(group['round'], 'entrants',group['entrant_count'],
+                    'new',group['new_to_observed_rounds'],
+                    'coverage',group['coverage'])
+          PY
+      - name: Retain Machine-readable Mission Control audit (not published)
+        uses: actions/upload-artifact@v4
+        with:
+          name: club-entry-radar-readonly
+          path: /tmp/tffc-radar/club-entry-radar.json
+          if-no-files-found: error
