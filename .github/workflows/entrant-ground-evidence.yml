@@ -1,0 +1,23 @@
+name: Entrant home-ground evidence safety
+
+on:
+  pull_request:
+    paths:
+      - 'updater/entrant-home-ground-evidence-2026.json'
+      - 'tests/test_entrant_home_ground_evidence.py'
+      - '.github/workflows/entrant-ground-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Ensure evidence is non-promoting and identities remain distinct
+        run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
