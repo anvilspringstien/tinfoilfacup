@@ -12,7 +12,29 @@
   const response=await fetch('clubfinder-beta.html',{cache:'no-store'});
   if(!response.ok)throw Error('Original BETA unavailable');
   // Apply the dark canvas before fonts, stylesheets or body content can paint.
-  const html=(await response.text()).replace('<head>','<head><style>html{background:#141210!important;color-scheme:dark}body{background:#141210}</style>');
+  // Guarded location bridge: retain the original BETA engine, styles, saved
+  // Campaign and fixture-driven mileage. Official ground/postcode evidence
+  // is display-only until coordinates pass independent location verification.
+  let source=await response.text();
+  try{
+   const [module,evidenceResponse,competitionResponse]=await Promise.all([
+    import('./entrant-ground-preview-transform.mjs'),
+    fetch('../updater/entrant-home-ground-evidence-2026.json',{cache:'no-store'}),
+    fetch('../competition.json',{cache:'no-store'})
+   ]);
+   if(!evidenceResponse.ok||!competitionResponse.ok)
+    throw Error('Ground evidence or competition unavailable');
+   const [evidence,competition]=await Promise.all([
+    evidenceResponse.json(),competitionResponse.json()
+   ]);
+   const reviewed=module.buildEntrantGroundPreview(source,evidence,competition);
+   source=reviewed.html;
+  }catch(error){
+   // Ground verification is never promoted on failure. The original Campaign
+   // keeps working, and no ground is inferred from a fixture venue.
+   console.warn('Ground evidence bridge skipped:',error);
+  }
+  const html=source.replace('<head>','<head><style>html{background:#141210!important;color-scheme:dark}body{background:#141210}</style>');
   const head=html.indexOf('</head>');
   const body=html.lastIndexOf('</body>');
   if(head<0||body<head)throw Error('Original BETA document structure changed');
