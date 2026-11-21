@@ -14,6 +14,8 @@ on:
       - 'tests/entrant-ground-diagnostic.test.mjs'
       - 'tests/entrant-ground-diagnostic-browser.mjs'
       - 'updater/inspect_beta_ground_call_sites.py'
+      - 'updater/build_beta_pending_ground_preview.py'
+      - 'tests/test_beta_pending_ground_preview.py'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -71,6 +73,10 @@ jobs:
           if-no-files-found: ignore
       - name: Inspect BETA ground lookup and display call-sites (read-only)
         run: python updater/inspect_beta_ground_call_sites.py
+      - name: Build read-only unverified BETA ground preview and regress protected source
+        run: |
+          python -m unittest discover -s tests -p 'test_beta_pending_ground_preview.py' -v
+          python -m updater.build_beta_pending_ground_preview --output /tmp/tffc-ground-review/beta/clubfinder-beta.html
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
