@@ -48,6 +48,14 @@ class CustodianLocationAuditTests(unittest.TestCase):
         self.assertNotIn("Harborough Town", entries.values())
         self.assertTrue(all(isinstance(name, str) for name in entries.values()))
 
+    def test_afc_club_and_non_afc_club_are_distinct_round_entrants(self):
+        comp = {"fixtures": {"one": {
+            "round": "Second Round Proper", "home": "AFC Liverpool",
+            "away": "Liverpool FC"}}}
+        entrants = next_round_entrants(comp)
+        self.assertEqual(len(entrants), 2)
+        self.assertEqual(set(entrants), {"afc liverpool", "liverpool"})
+
     def test_fchd_only_candidate_is_not_promoted_or_marked_verified(self):
         with TemporaryDirectory() as folder:
             root = Path(folder)
