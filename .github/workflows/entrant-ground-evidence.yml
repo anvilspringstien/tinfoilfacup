@@ -27,6 +27,8 @@ on:
       - 'beta/phone-frame-shed.js'
       - 'beta/clubfinder-journey.html'
       - 'tests/normal-campaign-ground-browser.mjs'
+      - 'updater/apply_reviewed_entrant_grounds_beta.py'
+      - 'tests/test_apply_reviewed_entrant_grounds_beta.py'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -125,9 +127,12 @@ jobs:
       - name: Browser-test normal Campaign with reviewed unverified custodian grounds
         run: |
           set -euo pipefail
+          python -m unittest discover -s tests -p 'test_apply_reviewed_entrant_grounds_beta.py' -v
+          python updater/apply_reviewed_entrant_grounds_beta.py --apply
+          python updater/apply_reviewed_entrant_grounds_beta.py --check
           python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-normal-ground-http.log 2>&1 &
           server_pid=$!
-          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          trap 'kill "$server_pid" 2>/dev/null || true; git restore -- beta/clubfinder-beta.html' EXIT
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:8765/beta/phone-frame.html >/dev/null; then break; fi
             sleep 0.2
