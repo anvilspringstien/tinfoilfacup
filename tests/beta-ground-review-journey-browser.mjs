@@ -50,6 +50,14 @@ try {
    functions:['chooseJourney','renderResults','render','buildJourney','findGround','verification','saveCampaign'].filter(k=>typeof window[k]==='function'),
    controls:[...document.querySelectorAll('#postcode,#findBtn,#results,#clubfinderField')].map(x=>x.id)
   }));
+  if(device==='big-boy'){
+   const contracts=await page.evaluate(()=>({
+     choose:chooseJourney.toString().slice(0,1700),
+     find:findGround.toString().slice(0,800),
+     campaignKeys:Object.keys(localStorage).filter(k=>/tin|campaign|pigeon|tffc/i.test(k)).slice(0,12)
+   }));
+   console.log('Shed Campaign review contract',JSON.stringify(contracts));
+  }
   console.log('PASS approved three-frame Shed',device,'custodian ground evidence, identity and 0 coords',JSON.stringify(interfaces));
   await page.screenshot({path:'/tmp/tffc-ground-journey/'+device+'.png',fullPage:true});
   await context.close();
