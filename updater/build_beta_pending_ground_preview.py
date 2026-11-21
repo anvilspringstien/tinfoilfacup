@@ -82,9 +82,9 @@ def build(root=ROOT):
         raise ValueError("BETA lookup return structure has drifted")
     # Only prohibit cross-identity borrowing involving a *leading* AFC prefix.
     # Existing alias rules for unrelated clubs are preserved.
-    boundary = ("  const previewAfcBoundary=(requested,record)=>"
-                "/^\\s*afc\\b/i.test(requested||'')==="
-                "/^\\s*afc\\b/i.test(record||'');\\n")
+    boundary = (r"  const previewAfcBoundary=(requested,record)=>"
+                r"/^\s*afc\b/i.test(requested||'')==="
+                r"/^\s*afc\b/i.test(record||'');" + "\n")
     lookup = boundary + lookup.replace("if(g)return g;",
                 "if(g&&previewAfcBoundary(c.name,g.name))return g;").replace(
                 "if(s)return s;",
