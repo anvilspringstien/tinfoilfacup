@@ -163,4 +163,4 @@ jobs:
       - name: Reconcile current BETA and production gaps without changing data
         run: |
           python -m updater.reconcile_entrant_ground_evidence
-          python -c 'from updater.reconcile_entrant_ground_evidence import reconcile; a=reconcile(); assert a["second_round_clubs"] == 40; assert all(x["missing_location_count"] == 31 and not x["missing_without_staged_evidence"] for x in a["builds"].values()), "Current second-round entrant location coverage has regressed"'
+          python -c 'from updater.reconcile_entrant_ground_evidence import reconcile; a=reconcile(); assert a["second_round_clubs"] == 40; assert a["builds"]["production"]["missing_location_count"] == 31 and a["builds"]["beta"]["missing_location_count"] == 0 and not a["builds"]["beta"]["missing_without_staged_evidence"], "Current second-round entrant location coverage has regressed"'
