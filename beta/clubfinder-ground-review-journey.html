@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Tin Foil FA Cup — Ground Review Shed (Unverified)</title>
+<style>html,body{margin:0;background:#141210;color:#f6f3e8;font-family:system-ui,sans-serif}
+#reviewLoading{max-width:480px;margin:36px auto;padding:20px;border:1px solid #999;border-radius:12px}
+a{color:#dec692}</style>
+</head><body>
+<main id="reviewLoading" role="status">Loading the original Shed journey with independently sourced, <strong>unverified</strong> ground evidence…</main>
+<script type="module">
+import {buildEntrantGroundPreview} from './entrant-ground-preview-transform.mjs';
+try {
+ const [sourceResponse,ledgerResponse,journeyResponse]=await Promise.all([
+  fetch('clubfinder-beta.html',{cache:'no-store',credentials:'same-origin'}),
+  fetch('../updater/entrant-home-ground-evidence-2026.json',{cache:'no-store',credentials:'same-origin'}),
+  fetch('clubfinder-journey.html',{cache:'no-store',credentials:'same-origin'})
+ ]);
+ if(!sourceResponse.ok||!ledgerResponse.ok||!journeyResponse.ok)
+  throw new Error('Current BETA or approved evidence unavailable');
+ const [source,ledger,journey]=await Promise.all([
+  sourceResponse.text(),ledgerResponse.json(),journeyResponse.text()
+ ]);
+ const preview=buildEntrantGroundPreview(source,ledger);
+ const expected="fetch('clubfinder-beta.html',{cache:'no-store'})";
+ if(journey.split(expected).length!==2)
+  throw new Error('Approved Shed journey fetch contract changed');
+ // Blob is same-origin and uses the current BETA source; nothing is written
+ // to the repository, Campaign storage, fixture data or the production site.
+ const url=URL.createObjectURL(new Blob([preview.html],{type:'text/html;charset=utf-8'}));
+ const patchedJourney=journey.replace(expected,"fetch("+JSON.stringify(url)+",{cache:'no-store'})");
+ document.open();
+ document.write(patchedJourney);
+ document.close();
+} catch(error) {
+ document.getElementById('reviewLoading').textContent=
+   'Ground review unavailable — no unverified data was applied. '+error.message;
+}
+</script>
+</body></html>
