@@ -25,7 +25,10 @@ try {
    userWidth:innerWidth
   }));
   assert.ok(layout.shell>0&&layout.shell<=Math.max(width,390),'current phone frame dimension must be valid');
-  if(width>=700)assert.ok(layout.shell>=385&&layout.shell<=395,'desktop/iPad shell must retain 390px frame');
+  if(width>=700){
+   const expected=390*Math.min(width/390,height/(390*16/9));
+   assert.ok(Math.abs(layout.shell-expected)<2,device+' must retain approved scaled 390px composition, expected '+expected+' got '+layout.shell);
+  }
   await iframe.locator('#postcode').evaluate(async(el)=>{
    await el.ownerDocument.defaultView.chooseJourney('Bishop Auckland FC','DL14 9AE');
   });
