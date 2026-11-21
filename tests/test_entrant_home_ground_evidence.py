@@ -16,10 +16,15 @@ class EntrantGroundEvidenceTests(unittest.TestCase):
         ids = [r["official_identity"] for r in doc["clubs"]]
         self.assertEqual(len(ids), len(set(ids)))
         for row in doc["clubs"]:
-            self.assertIn(row["official_home_ground_source"].split("/")[2], ("www.leytonorient.com", "www.port-vale.co.uk"))
+            self.assertIn(row["official_home_ground_source"].split("/")[2], ("www.leytonorient.com", "www.port-vale.co.uk", "www.afcwimbledon.co.uk", "barnetfc.com", "www.lutontown.co.uk"))
             self.assertEqual(row["source_review"], "official-ground-and-postcode-confirmed")
-            self.assertIsNone(row["coordinates"])
-            self.assertEqual(row["review_status"], "awaiting-coordinates-and-human-promotion")
+            if row["coordinates"] is None:
+                self.assertEqual(row["coordinates_review"], "pending")
+                self.assertEqual(row["review_status"], "awaiting-coordinates-and-human-promotion")
+            else:
+                self.assertEqual(row["official_identity"], "AFC Wimbledon")
+                self.assertEqual(row["coordinates_review"], "published-by-club-matchday-guide")
+                self.assertEqual(row["review_status"], "awaiting-human-promotion")
     def test_tie_venue_not_away_club_home_ground(self):
         doc = json.loads((ROOT / "updater" / "entrant-home-ground-evidence-2026.json").read_text(encoding="utf-8"))
         by_id = {r["official_identity"]: r for r in doc["clubs"]}
