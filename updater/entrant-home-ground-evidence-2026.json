@@ -360,9 +360,109 @@
       "coordinates_review": "pending",
       "review_status": "awaiting-coordinates-and-human-promotion",
       "notes": "Official club shop lists stadium and YO32 9AF, with Nov 2026 FA Cup Second Round home fixture at the same stadium."
+    },
+    {
+      "official_identity": "Grimsby Town FC",
+      "ground": "Blundell Park",
+      "postcode": "DN35 7PY",
+      "official_home_ground_source": "https://gtfc.co.uk/visitors/",
+      "supporting_official_source": "https://gtfc.co.uk/match-information-nottingham-forest-u21s-h/",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Official GTFC visitor guide identifies Blundell Park in Cleethorpes and postcode DN35 7PY."
+    },
+    {
+      "official_identity": "Milton Keynes Dons FC",
+      "ground": "Stadium MK",
+      "postcode": "MK1 1ST",
+      "official_home_ground_source": "https://shop.mkdons.com/contact-us",
+      "supporting_official_source": "https://shop.mkdons.com/terms",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Official MK Dons club shop contact and terms identify Stadium MK and MK1 1ST."
+    },
+    {
+      "official_identity": "Newport County AFC",
+      "ground": "Rodney Parade",
+      "postcode": "NP19 0UU",
+      "official_home_ground_source": "https://www.newport-county.co.uk/company-details",
+      "supporting_official_source": "https://www.newport-county.co.uk/getting-rodney-parade",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Official company address and visitor directions both identify Rodney Parade, Rodney Road, Newport NP19 0UU."
+    },
+    {
+      "official_identity": "Plymouth Argyle FC",
+      "ground": "Home Park Stadium",
+      "postcode": "PL2 3DQ",
+      "official_home_ground_source": "https://www.pafc.co.uk/club/visiting-home-park",
+      "supporting_official_source": "https://homeparkstadium.com/getting-here",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Club visitor guide confirms Home Park Stadium and PL2 3DQ."
+    },
+    {
+      "official_identity": "Rochdale AFC",
+      "ground": "Crown Oil Arena",
+      "postcode": "OL11 5DR",
+      "official_home_ground_source": "https://rochdaleafc.co.uk/company-details/",
+      "supporting_official_source": "https://rochdaleafc.co.uk/visitor-guide/",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Official company address and visitor guide confirm Crown Oil Arena, Sandy Lane OL11 5DR."
+    },
+    {
+      "official_identity": "Stevenage FC",
+      "ground": "The Lamex Stadium",
+      "postcode": "SG2 8RH",
+      "official_home_ground_source": "https://jobs.stevenagefc.com/contact/",
+      "supporting_official_source": "https://jobs.stevenagefc.com/",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Club jobs subdomain confirms The Lamex Stadium SG2 8RH; verify physical coordinates independently."
+    },
+    {
+      "official_identity": "Wigan Athletic FC",
+      "ground": "The Brick Community Stadium",
+      "postcode": "WN5 0UH",
+      "official_home_ground_source": "https://thebrickcommunitystadium.com/contact-us/",
+      "supporting_official_source": "https://www.thebrickcommunitystadium.com/the-brick-community-stadium/",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "Official stadium website identifies The Brick Community Stadium, Loire Drive, Robin Park, Wigan WN5 0UH, and the Wigan Athletic ground naming history."
     }
   ],
-  "unresolved_conflicts": [],
+  "unresolved_conflicts": [
+    {
+      "official_identity": "Rotherham United FC",
+      "issue": "distinct-official-stadium-company-visitor-and-fchd-postcodes",
+      "candidate_postcodes": [
+        "S60 1AH",
+        "S60 1FJ",
+        "S60 1DF"
+      ],
+      "official_sources": [
+        "https://www.themillers.co.uk/company-details",
+        "https://www.aessealnewyorkstadium.com/location"
+      ],
+      "status": "blocked-pending-source-reconciliation",
+      "action": "Confirm approved stadium geolocation/postcode role for official correspondence (S60 1AH) versus venue/visitor address (S60 1FJ) and historical FCHD candidate (S60 1DF); do not promote."
+    }
+  ],
   "resolved_conflicts": [
     {
       "official_identity": "Gillingham FC",
