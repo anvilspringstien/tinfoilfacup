@@ -204,23 +204,35 @@
       "coordinates": null,
       "coordinates_review": "pending",
       "review_status": "awaiting-coordinates-and-human-promotion"
-    }
-  ],
-  "unresolved_conflicts": [
+    },
     {
       "official_identity": "Gillingham FC",
-      "issue": "official-club-sources-disagree-on-stadium-postcode",
-      "candidate_postcodes": [
-        "ME7 2PE",
-        "ME7 4DD"
-      ],
+      "ground": "MEMS Priestfield Stadium",
+      "postcode": "ME7 2PE",
+      "official_home_ground_source": "https://www.gillinghamfootballclub.com/club/visit-us",
+      "supporting_official_source": "https://www.gillinghamfootballclub.com/company-details",
+      "source_review": "official-ground-and-postcode-confirmed",
+      "coordinates": null,
+      "coordinates_review": "pending",
+      "review_status": "awaiting-coordinates-and-human-promotion",
+      "notes": "The club's stadium visitor address is Redfern Avenue, Gillingham, Kent ME7 2PE. Older or other-purpose club materials containing ME7 4DD are not stadium postcode authority; no coordinates or Verified Location badge promoted."
+    }
+  ],
+  "unresolved_conflicts": [],
+  "resolved_conflicts": [
+    {
+      "official_identity": "Gillingham FC",
+      "issue": "stadium-visitor-postcode-versus-older-other-purpose-address",
+      "stadium_postcode": "ME7 2PE",
+      "other_postcode": "ME7 4DD",
+      "resolution": "Club's current visitor, contact and company details explicitly establish ME7 2PE as the stadium postcode; older or foundation material containing ME7 4DD is not the stadium location authority.",
       "official_sources": [
         "https://www.gillinghamfootballclub.com/club/visit-us",
-        "https://www.gillinghamfootballclub.com/company-details",
-        "https://www.gillinghamfootballclub.com/news/vacancy-football-and-sports-coach"
+        "https://www.gillinghamfootballclub.com/contact-us",
+        "https://www.gillinghamfootballclub.com/company-details"
       ],
-      "status": "blocked-pending-source-reconciliation",
-      "action": "Confirm which address/postcode is authoritative for stadium coordinates versus administration or foundation; no promotion"
+      "status": "resolved-stadium-postcode-only",
+      "coordinates_review": "pending"
     }
   ]
 }
