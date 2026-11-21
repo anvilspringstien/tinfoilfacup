@@ -23,8 +23,10 @@ try {
       assert.ok(!Number.isFinite(row.lat) && !Number.isFinite(row.lon),
         club+' must not get map coordinates or mileage');
     }
-    const spoof=await page.evaluate(()=>findGround({name:'AFC Liverpool'}));
-    assert.equal(spoof,null,'AFC Liverpool must not inherit Liverpool FC location');
+    const afc=await page.evaluate(()=>findGround({name:'AFC Liverpool'}));
+    assert.equal(afc?.name,'AFC Liverpool','Existing AFC Liverpool own-ground record must remain intact');
+    const other=await page.evaluate(()=>findGround({name:'Liverpool FC'}));
+    assert.notEqual(other?.name,'AFC Liverpool','Liverpool FC must NOT inherit AFC Liverpool ground');
     console.log('PASS guarded BETA preview lookup:',name);
     await ctx.close();
   }
