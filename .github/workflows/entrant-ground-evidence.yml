@@ -17,6 +17,7 @@ on:
       - 'updater/build_beta_pending_ground_preview.py'
       - 'tests/test_beta_pending_ground_preview.py'
       - 'tests/beta-pending-ground-preview-browser.mjs'
+      - 'tests/beta-ground-review-journey-browser.mjs'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -70,7 +71,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: shed-home-ground-diagnostic
-          path: /tmp/tffc-ground-diagnostic/*.png
+          path: |
+            /tmp/tffc-ground-diagnostic/*.png
+            /tmp/tffc-ground-journey/*.png
           if-no-files-found: ignore
       - name: Inspect BETA ground lookup and display call-sites (read-only)
         run: python updater/inspect_beta_ground_call_sites.py
@@ -90,6 +93,7 @@ jobs:
             sleep 0.2
           done
           node tests/beta-pending-ground-preview-browser.mjs
+          node tests/beta-ground-review-journey-browser.mjs
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
