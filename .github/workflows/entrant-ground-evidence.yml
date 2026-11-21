@@ -7,6 +7,8 @@ on:
       - 'tests/test_entrant_home_ground_evidence.py'
       - 'updater/reconcile_entrant_ground_evidence.py'
       - 'updater/audit_active_custodian_locations.py'
+      - 'beta/entrant-ground-evidence.mjs'
+      - 'tests/entrant-ground-evidence.test.mjs'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -21,6 +23,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test pending-location BETA adapter (no promotion)
+        run: node --test tests/entrant-ground-evidence.test.mjs
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
