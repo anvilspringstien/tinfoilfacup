@@ -52,6 +52,19 @@ class ClubEntryRadarTests(unittest.TestCase):
         self.assertEqual(later["new_to_observed_rounds"], 3)
         self.assertEqual(later["coverage"]["beta"]["missing_ground"], 3)
 
+    def test_replays_follow_parent_round_before_later_entry_counts(self):
+        comp = {"season": "2026-27",
+                "fixtures": {
+                    "a": {"round": "Preliminary Round", "home": "A", "away": "B"},
+                    "b": {"round": "First Round Proper", "home": "C", "away": "D"}},
+                "replays": {
+                    "r": {"round": "Preliminary Round Replay", "home": "A", "away": "B"}}}
+        report = inspect_rounds(comp, {"beta": html([])})
+        self.assertEqual([x["round"] for x in report["rounds"]],
+                         ["Preliminary Round", "Preliminary Round Replay", "First Round Proper"])
+        self.assertEqual([x["new_to_observed_rounds"] for x in report["rounds"]],
+                         [2, 0, 2])
+
     def test_afc_liverpool_must_not_borrow_liverpool_ground(self):
         self.comp["fixtures"]["a"]["home"] = "AFC Liverpool"
         self.comp["fixtures"]["a"]["away"] = "Liverpool FC"
