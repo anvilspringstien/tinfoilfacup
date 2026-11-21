@@ -12,6 +12,7 @@ on:
       - 'beta/entrant-ground-diagnostic.html'
       - 'beta/entrant-ground-diagnostic.mjs'
       - 'tests/entrant-ground-diagnostic.test.mjs'
+      - 'tests/entrant-ground-diagnostic-browser.mjs'
       - '.github/workflows/entrant-ground-evidence.yml'
   workflow_dispatch:
 
@@ -45,6 +46,28 @@ jobs:
             curl --fail --silent --show-error "http://127.0.0.1:8765/$path" >/dev/null
           done
           curl --fail --silent http://127.0.0.1:8765/updater/entrant-home-ground-evidence-2026.json | python -c 'import json,sys; x=json.load(sys.stdin); assert len(x["clubs"])==37 and x["safety"]["automated_ground_promotion"] is False'
+      - name: Install isolated Chromium acceptance dependencies
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test Shed diagnostic in Chromium across Big Boy, iPhone and iPad
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/tffc-ground-browser-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/beta/entrant-ground-diagnostic.html >/dev/null; then break; fi
+            sleep 0.2
+          done
+          node tests/entrant-ground-diagnostic-browser.mjs
+      - name: Retain Shed home-ground diagnostic screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shed-home-ground-diagnostic
+          path: /tmp/tffc-ground-diagnostic/*.png
+          if-no-files-found: ignore
       - name: Ensure evidence is non-promoting and identities remain distinct
         run: python -m unittest discover -s tests -p test_entrant_home_ground_evidence.py -v
       - name: Reconcile current BETA and production gaps without changing data
