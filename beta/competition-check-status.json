@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "monitor_ran_at": "2026-11-22T10:37:24.399088Z",
+  "monitor_ran_at": "2026-11-22T17:22:19.301696Z",
   "state": "unverified",
   "last_checked_at": null,
   "results": "unverified",
@@ -8,21 +8,21 @@
   "diagnostics": {
     "results": {
       "reason": "stale",
-      "run_id": 44979775189,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/44979775189",
+      "run_id": 45017991916,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/45017991916",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-11-22T03:19:19Z"
+      "updated_at": "2026-11-22T11:39:44Z"
     },
     "draw": {
       "reason": "verified",
-      "run_id": 45004358295,
-      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/45004358295",
+      "run_id": 45048996169,
+      "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/45048996169",
       "event": "schedule",
       "status": "completed",
       "conclusion": "success",
-      "updated_at": "2026-11-22T08:46:50Z"
+      "updated_at": "2026-11-22T17:21:59Z"
     }
   },
   "scheduled": {
@@ -33,21 +33,21 @@
     "diagnostics": {
       "results": {
         "reason": "stale",
-        "run_id": 44979775189,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/44979775189",
+        "run_id": 45017991916,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/45017991916",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-11-22T03:19:19Z"
+        "updated_at": "2026-11-22T11:39:44Z"
       },
       "draw": {
         "reason": "verified",
-        "run_id": 45004358295,
-        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/45004358295",
+        "run_id": 45048996169,
+        "url": "https://github.com/anvilspringstien/tinfoilfacup/actions/runs/45048996169",
         "event": "schedule",
         "status": "completed",
         "conclusion": "success",
-        "updated_at": "2026-11-22T08:46:50Z"
+        "updated_at": "2026-11-22T17:21:59Z"
       }
     }
   }
