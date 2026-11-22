@@ -17,3 +17,17 @@ All evidence reviewed on 2026-11-21. These are candidate checks, not a claim tha
 - Preserve all 651 eligible origins, all current website links, competition, custody, ground/postcode and production files.
 - Outreach blocked: Gmail draft creation in this connector does not embed the approved 600×226 photo-and-crest banner as a valid inline MIME image. Fifteen existing 20 November drafts are unsent, missing banner/footer; do not duplicate or send.
 - `docs/admin-daily-checklist.md` is not present on main as of this review. Restore/merge an approved daily checklist separately before relying on it.
+
+## Follow-up evidence audit — 22 November 2026 (no publication)
+
+This is a follow-up to BETA batch 27 (draft PR #718), not an approval to merge or a claim that all 15 candidate websites were rechecked today. Existing evidence for those 15 is recorded in `updater/club_website_verified_batch_27.json` on that draft branch. Gmail has 15 unsent, incomplete drafts for those recipients (created 20 November); no new outreach is prepared or sent because the currently available Gmail draft API cannot establish a working inline banner.
+
+| Club | Primary source checked 22 Nov | Finding | Decision |
+| --- | --- | --- | --- |
+| Ossett United FC | https://www.ossettutd.com/club/contact/ ; https://www.pitchero.com/clubs/ossetttown/contact ; https://www.footballwebpages.co.uk/ossett-united/club-information | The club's own current contact page uses Ingfield, WF5 9HL; the club-linked Pitchero profile and Football Web Pages use WF5 9HA, which is the Clubfinder postcode. These conflict; do not silently replace the postcode or treat either as conclusively corrected. | Website identity supported; **postcode discrepancy HOLD** pending direct club confirmation and location review |
+| Newcastle Town FC | https://newcastletownfc.co.uk/contact-us/ ; https://newcastletownfc.co.uk/matchday-info/ | Official senior club website and matchday contact identify the GRG Waste Stadium, ST5 3BX, matching the existing Clubfinder postcode. The website's club-secretary address also matches the current unsent outreach draft. | Website evidence supported for BETA review only; no promotion |
+| Portishead Town FC | https://portisheadtownfc.com/contact/ ; https://www.westernleague.co.uk/teams/premier-division/portishead-town | Official senior club website identifies Bristol Road, BS20 6QG and current senior team contacts; league independently confirms Bristol Road Playing Fields. | Website evidence supported for BETA review only; no promotion |
+
+The first-party pages above were checked against indexed/current web results on 22 November; do not interpret a crawl timestamp as a new club announcement. No production/BETA mapping, club identity, location, result or custody data is modified by this evidence-only update.
+
+**CLI release gate (not run in this automation environment):** `gh` is unavailable here. Before merging #718 or promoting any links, inspect the branch diff, check its base is current, run `node updater/club_website_audit.js`, `node tests/test_club_website_publication.js`, and `python updater/audit_beta_production_parity.py` with their supported flags, and confirm all 651 origins and existing mappings are preserved. CLI is the Law; do not represent this evidence review as passing regressions.
