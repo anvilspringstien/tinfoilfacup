@@ -998,7 +998,7 @@ function fixtureVenueVerification(club){
   const hasCoords=Number.isFinite(Number(v.lat))&&Number.isFinite(Number(v.lon));
   const verified=(v.verification||'').toLowerCase()==='verified' || (hasCoords && !v.verification);
   if(hasCoords&&verified)return {text:'✅ Verified Location.',colour:'#176b2c'};
-  if(hasLocation)return {text:'⚠️ Unverified Location - Please check before travelling.',colour:'#8a5a00'};
+  if(hasLocation)return {text:'Ground details recorded. Verification pending.',colour:'#486673'};
   return {text:'❌ No location data available.',colour:'#a32626'};
 }
 function fixtureVenueText(club){
@@ -2517,7 +2517,7 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
   const showOriginal=!!window.__showOriginalTinFoilJourneys||freshPostcodeSearch,shown=selected&&!showOriginal?[selected]:top;
   results.innerHTML=shown.map((origin,di)=>{
    const oi=top.findIndex(x=>norm(x.name)===norm(origin.name)),j=buildJourney(origin),c=j.carrier||origin,f=fixture(c),hasLoc=!!(origin.ground||origin.postcode),verified=origin.hasCoords&&origin.verification==='verified';
-   const loc=verified?'✅ Verified Location.':hasLoc?'⚠️ Unverified Location - Please check before travelling.':'❌ No location data available.',lc=verified?'#176b2c':hasLoc?'#8a5a00':'#a32626',dist=origin.hasCoords?` • ${origin.distance.toFixed(1)} miles`:'';
+   const loc=verified?'✅ Verified Location.':hasLoc?'Ground details recorded. Verification pending.':'❌ No location data available.',lc=verified?'#176b2c':hasLoc?'#486673':'#a32626',dist=origin.hasCoords?` • ${origin.distance.toFixed(1)} miles`:'';
    const website=(typeof CLUB_WEBSITES!=='undefined'&&CLUB_WEBSITES[origin.name])?` • <a href="${esc(CLUB_WEBSITES[origin.name])}" target="_blank" rel="noopener noreferrer">Website</a>`:'',ground=`${esc(origin.ground||'Ground location unavailable')} • ${esc(origin.postcode||'Postcode unavailable')}${dist}${website}`;
    const df=currentDisplayFixture(c),scored=resultTeamLine(c),round=df.round,tie=scored||df.tie||'',tieLine=tie?`<div><strong>${scored?scored:esc(df.tie)}</strong> • ${esc(round)}</div>`:'';
    const mine=saved&&sameClubIdentity(saved.originName,origin.name),jn=oi>=0?oi+1:di+1;
@@ -2547,7 +2547,7 @@ async function go(explicitPostcodeSearch=false,scrollAfterRender=explicitPostcod
    const ended=mine&&saved&&saved.ended?'<div class="journey-ended"><strong>Campaign completed here.</strong><br>You can still view your certificate or resume this Tin Foil FA Cup Campaign.</div>':'';
    const chosen=mine&&selected&&!showOriginal;
    const cg=findGround(c)||{},currentHasLoc=!!(cg.ground||cg.postcode),currentVerified=Number.isFinite(Number(cg.lat))&&Number.isFinite(Number(cg.lon))&&verification(c,cg)==='verified';
-   const currentLoc=currentVerified?'✅ Verified Location.':currentHasLoc?'⚠️ Unverified Location - Please check before travelling.':'❌ No location data available.',currentLc=currentVerified?'#176b2c':currentHasLoc?'#8a5a00':'#a32626';
+   const currentLoc=currentVerified?'✅ Verified Location.':currentHasLoc?'Ground details recorded. Verification pending.':'❌ No location data available.',currentLc=currentVerified?'#176b2c':currentHasLoc?'#486673':'#a32626';
    const currentWebsite=(c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'')?(' • <a href="'+esc(c.website||(typeof CLUB_WEBSITES!=='undefined'?CLUB_WEBSITES[c.name]:'')||'')+'" target="_blank" rel="noopener noreferrer">Website</a>'):'';
    const currentGround=esc(cg.ground||'Ground location unavailable')+' • '+esc(cg.postcode||'Postcode unavailable')+currentWebsite;
    const currentCampaign=chosen?'<div class="chosen-campaign-current"><div class="carrier">The current custodian of your Tin Foil FA Cup is:<div class="custodian-name">'+esc(c.name)+'</div></div><div class="meta">'+currentGround+'</div><div class="meta" style="color:'+currentLc+';font-weight:600">'+currentLoc+'</div><div class="fixture">'+tieLine+'<div>'+esc(df.dateLabel)+' • '+esc(df.kickoff)+' • '+esc(df.venue.ground||'Venue TBC')+' • '+esc(df.venue.postcode||'Postcode TBC')+'</div></div>'+stateHtml(c)+'</div>':'';
