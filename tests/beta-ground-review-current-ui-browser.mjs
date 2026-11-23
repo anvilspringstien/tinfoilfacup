@@ -36,7 +36,7 @@ try {
   const text=await iframe.locator('.chosen-campaign-current').innerText();
   assert.match(text,/Leyton Orient/);
   assert.match(text,/BetWright Stadium\s*•\s*E10 5NF/);
-  assert.match(text,/Unverified Location/);
+  assert.match(text,/Ground details recorded\. Verification pending\./);
   assert.match(text,/Port Vale v Leyton Orient/);
   await iframe.locator('.campaign-barry-nav .barry-air-launch').waitFor({timeout:15000});
   assert.equal(await iframe.locator('.campaign-barry-nav .barry-air-launch').getAttribute('aria-label'),'Barry Air');
