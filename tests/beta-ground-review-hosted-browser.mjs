@@ -26,7 +26,7 @@ try {
   await page.waitForFunction(()=>/BetWright Stadium.*E10 5NF/s.test(
     document.querySelector('.chosen-campaign-current')?.innerText||''),null,{timeout:18000});
   const chosen=await page.locator('.chosen-campaign-current').innerText();
-  assert.match(chosen,/Unverified Location/);
+  assert.match(chosen,/Ground details recorded\. Verification pending\./);
   assert.match(chosen,/Port Vale v Leyton Orient/);
   const saved=await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
   assert.ok(saved?.includes('Bishop Auckland'));
