@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'beta/clubfinder-beta.html'
+      - 'tests/test_beta_location_status_copy.py'
       - 'beta/competition-fallback.json'
       - 'tests/test_beta_verified_conditional_replay.js'
       - 'tests/test_beta_thame_next_fixture.js'
@@ -21,6 +22,7 @@ on:
   push:
     paths:
       - 'beta/clubfinder-beta.html'
+      - 'tests/test_beta_location_status_copy.py'
       - 'beta/competition-fallback.json'
       - 'updater/beta_campaign_identity_regression.js'
       - 'tests/test_beta_verified_conditional_replay.js'
@@ -48,6 +50,8 @@ jobs:
         run: |
           python updater/refresh_beta_embedded_snapshot.py --check
           python -m unittest discover -s tests -p 'test_beta_embedded_snapshot_refresh.py' -v
+      - name: Regress user-facing ground verification copy
+        run: python -m unittest discover -s tests -p 'test_beta_location_status_copy.py' -v
       - name: Regress BETA counter, Pigeon and refresh persistence
         run: node updater/beta_campaign_identity_regression.js
       - name: Regress Stats Pigeon Name return and stale Campaign snapshot
