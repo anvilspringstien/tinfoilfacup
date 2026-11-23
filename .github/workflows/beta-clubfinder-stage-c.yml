@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - 'beta/clubfinder-beta.html'
+      - 'tests/test_beta_legacy_penalty_progression.js'
       - 'updater/audit_beta_clubfinder_stage_c.py'
       - 'docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md'
       - 'updater/beta_campaign_identity_regression.js'
@@ -54,6 +55,7 @@ jobs:
           node tests/test_beta_weston_replay_stats.js
           node tests/test_beta_thame_next_fixture.js
           node tests/test_beta_verified_conditional_replay.js
+          node tests/test_beta_legacy_penalty_progression.js
           node tests/test_beta_conditional_draw_alias.js
       - name: Protect live production, canonical data and separately accepted Deck
         run: |
