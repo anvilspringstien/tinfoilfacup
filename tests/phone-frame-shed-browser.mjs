@@ -256,11 +256,37 @@ try{
  const statsApp=stats.frameLocator('#phoneApp');
  const statsBar=statsApp.getByRole('navigation',{name:'Stats actions'});
  const shareStats=statsBar.getByRole('button',{name:'Share PDF'});
+ // Check fixed placement against the REPORT iframe's visual viewport.
+ // The outer scaled phone frame can shift during late layout/scale fitting;
+ // absolute Playwright boundingBox coordinates are not a reliable measure
+ // of whether the Stats bar itself is fixed within its document.
+ async function statsBarGeometry(){
+  return statsBar.evaluate(async bar=>{
+   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+   const win=bar.ownerDocument.defaultView;
+   const vv=win.visualViewport;
+   const rect=bar.getBoundingClientRect();
+   return {position:win.getComputedStyle(bar).position,
+    barTop:rect.top,barBottom:rect.bottom,
+    viewportTop:vv?.offsetTop??0,
+    viewportBottom:vv?vv.offsetTop+vv.height:win.innerHeight,
+    scrollY:win.scrollY};
+  });
+ }
  const beforeScroll=await shareStats.boundingBox();
  assert.ok(beforeScroll.height>=43,'The Share control must retain a full-size tap target inside the scaled frame');
+ const startBar=await statsBarGeometry();
+ assert.equal(startBar.position,'fixed','Stats actions must use fixed positioning');
  await statsApp.locator('.sheet').evaluate(sheet=>sheet.ownerDocument.defaultView.scrollTo(0,sheet.ownerDocument.body.scrollHeight));
- const afterScroll=await shareStats.boundingBox();
- assert.ok(Math.abs(beforeScroll.y-afterScroll.y)<2,'The Stats bar must stay fixed while scrolling');
+ const endBar=await statsBarGeometry();
+ assert.ok(endBar.scrollY>startBar.scrollY+20,'Stats report must actually scroll');
+ for(const [phase,g] of [['before',startBar],['after',endBar]]){
+  assert.equal(g.position,'fixed','Stats bar lost fixed positioning '+phase+' scroll');
+  assert.ok(g.barTop>=g.viewportTop-3&&g.barBottom<=g.viewportBottom+3,
+   'Stats bar must remain visible in its own viewport '+phase+' scroll: '+JSON.stringify(g));
+  assert.ok(Math.abs(g.viewportBottom-g.barBottom)<3,
+   'Stats bar must remain anchored to the viewport bottom '+phase+' scroll: '+JSON.stringify(g));
+ }
  const motto=await statsApp.locator('.motto').boundingBox();
  const actions=await statsBar.boundingBox();
  assert.ok(motto.y+motto.height<=actions.y,'At the end of the report the bar must clear the final row');
