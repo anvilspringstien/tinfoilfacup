@@ -60,3 +60,18 @@ The official sources are first-party senior-club pages; a website crawl date doe
 - `docs/admin-daily-checklist.md` still absent on `main`; draft PR #719 remains open. Release gate remains **CLI/regression unverified** in this run. No merge until CLI checks and BETA/production parity safeguards pass.
 
 Carry forward: restore the exact inline Gmail banner and single footer, account for the missing Nelson draft, independently verify Campaign numbers, review sponsor-name differences without retroactive venue edits, inspect publication failures and scheduled-launch gaps, and run CLI regression checks before merging any website proposal.
+
+## 23 November 2026 — Direct Gmail reconciliation (supersedes the morning draft-count concern)
+
+A later, direct read of Gmail Drafts found **all 15 unsent introductions**, including **Nelson FC**. The morning scan's report of only 14 drafts was incomplete; **there is no demonstrated missing or deleted Nelson draft**.
+
+The same direct read inspected the bodies of all 15 existing drafts. Every one:
+- lacks the approved inline photograph-and-crest image;
+- lacks the complete standard contact footer; and
+- omits the **Ground** field from the `Your current listing:` section.
+
+Each does contain a postcode and a stated `Campaign 1` instruction, but the actual Campaign number still requires independent verification in live Clubfinder. All 15 draft postcodes currently match one exact BETA ground record each, with 15/15 eligible starting-club identities identified; this is **record parity**, not proof of a live browser's Campaign ranking.
+
+**Decision: Outreach remains BLOCKED, 15 held / 0 newly prepared / 0 verified / 0 sent.** Do not send or cosmetically repair the drafts before the complete four-field listing, inline-banner CID and footer pass acceptance. Preserve existing mail until a controlled, owner-reviewed single-draft pilot proves the approved format.
+
+The 09:11 UTC competition-status publication failure has also been traced to a non-fast-forward push rejection after another actor updated `main`; this is a status-report concurrency failure, not evidence that the preceding Results scanner failed. The stale Draw scheduling status and launch continuity warnings still require review. No watcher or competition source data was changed in this audit.
