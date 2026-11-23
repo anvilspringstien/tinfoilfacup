@@ -63,6 +63,21 @@ class CurrentGroundNameTests(unittest.TestCase):
         self.assertIn('const HISTORY="Mortgage Decisions Community Stadium"', updated)
         self.assertEqual(apply_names(updated, self.ledger), (updated, []))
 
+    def test_garforth_club_confirmed_rename_preserves_location_and_is_idempotent(self):
+        html = (ROOT / 'beta/clubfinder-beta.html').read_text()
+        ledger = json.loads((ROOT / 'updater/current-ground-name-ledger.json').read_text())
+        matches = [item for item in ledger['approved'] if item['club'] == 'Garforth Town FC']
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]['current_name'], 'BD Community Stadium')
+        self.assertEqual(matches[0]['postcode'], 'LS25 2PF')
+        self.assertEqual(apply_names(html, ledger), (html, []))
+        # Recreate the old current-name-only record and require the CLI transformation
+        # to touch no postcode, lat/lon, club identity or historical fixture records.
+        previous = html.replace('"ground":"BD Community Stadium","postcode":"LS25 2PF","lat":53.798834,"lon":-1.362335,"name":"Garforth Town FC"',
+                                '"ground":"Bannister Prentice Stadium","postcode":"LS25 2PF","lat":53.798834,"lon":-1.362335,"name":"Garforth Town FC"')
+        self.assertNotEqual(previous, html)
+        self.assertEqual(apply_names(previous, ledger), (html, ['Garforth Town FC']))
+
     def test_duplicate_identity_across_location_stores_fails(self):
         html = self.html + ';const LAW2_ORIGIN_LOCATIONS=' + json.dumps([self.row], separators=(',', ':')) + ';'
         with self.assertRaisesRegex(ValueError, 'one exact ground record'):
