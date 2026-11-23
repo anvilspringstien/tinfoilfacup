@@ -68,7 +68,7 @@ try {
   const chosen=await page.locator('.chosen-campaign-current').innerText();
   assert.match(chosen,/Leyton Orient/);
   assert.match(chosen,/BetWright Stadium\s*•\s*E10 5NF/);
-  assert.match(chosen,/Unverified Location/);
+  assert.match(chosen,/Ground details recorded\. Verification pending\./);
   assert.doesNotMatch(chosen,/✅ Verified Location/);
   assert.match(chosen,/Port Vale v Leyton Orient/);
   assert.match(chosen,/Vale Park\s*•\s*ST6 1AW/);
@@ -81,7 +81,7 @@ try {
   },null,{timeout:18000});
   const storedAfter=await page.evaluate(()=>localStorage.getItem('tinFoilFACupJourney_v7'));
   assert.equal(storedAfter,storedBefore,'Saved Campaign must persist through Shed reload');
-  assert.match(await page.locator('.chosen-campaign-current').innerText(),/Unverified Location/);
+  assert.match(await page.locator('.chosen-campaign-current').innerText(),/Ground details recorded\. Verification pending\./);
   if(device==='big-boy'){
    const links=await page.evaluate(()=>[...document.querySelectorAll('#results button,#results a')]
     .filter(el=>/My Stats|Barry Air|My Challenges/i.test(el.textContent||el.getAttribute('aria-label')||''))
