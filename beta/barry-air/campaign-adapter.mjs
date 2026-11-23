@@ -111,7 +111,17 @@ function canonicalResultWinner(r){
   const hs=Number(r.home_score),as=Number(r.away_score);
   if(Number.isFinite(hs)&&Number.isFinite(as)&&hs!==as)return hs>as?r.home:r.away;
   if(r.decision==='draw-replay')return '';
-  return r.winner||'';
+  if(r.winner)return r.winner;
+  // Legacy completed replays may record the decisive shootout score in
+  // decision ("pens 5-6") without a winner field. The home/away ordering
+  // supplies that winner only when the shootout scores are unambiguous.
+  // Unscored or conflicting decisions remain unresolved; do not guess.
+  const shootout=/^pens\s+(\d+)\s*[-–]\s*(\d+)$/i.exec(String(r.decision||'').trim());
+  if(shootout&&Number.isFinite(hs)&&Number.isFinite(as)&&hs===as){
+    const hp=Number(shootout[1]),ap=Number(shootout[2]);
+    if(hp!==ap)return hp>ap?r.home:r.away;
+  }
+  return '';
 }
 function clubByDisplayName(name){
   if(!name)return null;
@@ -401,7 +411,7 @@ function resultLinePlain(r){if(!r)return '';if(r.decision==='walkover')return r.
 function resultNeedsReplay(r){
   if(!r)return false;
   const h=Number(r.home_score),a=Number(r.away_score);
-  return r.decision==='draw-replay'||(Number.isFinite(h)&&Number.isFinite(a)&&h===a&&!r.winner);
+  return r.decision==='draw-replay'||(Number.isFinite(h)&&Number.isFinite(a)&&h===a&&!canonicalResultWinner(r));
 }
 function resultSortValue(r){
   if(!r||!r.date)return 0;
