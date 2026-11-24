@@ -1,0 +1,305 @@
+"""Protect the read-only League & Tier review boundary."""
+import csv
+import json
+import tempfile
+import unittest
+from collections import Counter
+from datetime import date
+from pathlib import Path
+from updater.league_tier_readonly import (
+    AMENDMENTS, EFL_SOURCE, MATCH_STATUSES, PREMIER_LEAGUE_SOURCE, SOURCE, STEPS_5_6_SOURCE,
+    apply_amendments, build_audit, key, load_allocations, load_amendments, match_population, write_audit,
+)
+from updater.league_tier_review import COMPETITION, cup_observations, review, validate_candidate, write_review
+
+
+class LeagueTierReadOnlyTests(unittest.TestCase):
+    def test_initial_fa_document_is_season_scoped_and_complete_for_steps_1_to_4(self):
+        official, provisional, counts = load_allocations([SOURCE])
+        self.assertEqual(counts, {"official_initial_allocation": 335, "provisional_ambiguous": 1})
+        self.assertEqual(sum(len(v) for v in official.values()), 335)
+        self.assertEqual(len(provisional), 1)
+        self.assertIn("Guernsey or Peacehaven & Telscombe", provisional[0]["club"])
+        self.assertEqual(official[key("Crowborough Athletic")][0]["fa_step"], 4)
+        self.assertEqual(official[key("AFC Fylde")][0]["fa_step"], 1)
+        for club_rows in official.values():
+            for r in club_rows:
+                self.assertEqual(r["source_as_of"], "2026-05-14")
+                self.assertNotIn("verified", r["source_status"])
+
+    def test_steps_5_to_6_tables_include_conditional_places_and_exclude_appendix(self):
+        official, provisional, counts = load_allocations([STEPS_5_6_SOURCE])
+        self.assertEqual(counts, {"official_initial_allocation": 655, "provisional_ambiguous": 5})
+        self.assertEqual(
+            {row["club"] for row in provisional},
+            {"AFC Knowsley", "Halewood Apollo", "Crewe", "Harlow Town", "Guernsey or Peacehaven & Telscombe"},
+        )
+        self.assertEqual(official[key("Amersham Town")][0]["fa_step"], 5)
+        self.assertEqual(official[key("Holmer Green")][0]["fa_step"], 6)
+        self.assertNotIn(key("Copthorne"), official)
+
+    def test_real_roster_complete_without_publication_or_awards(self):
+        rows, meta = build_audit(amendment_paths=[])
+        self.assertEqual(meta["season"], "2026-27")
+        self.assertEqual(meta["original_clubfinder_clubs"], 651)
+        self.assertEqual(meta["initial_fa_rows_by_step"], {
+            "1": 24, "2": 48, "3": 88, "4": 176, "5": 320, "6": 340
+        })
+        self.assertGreaterEqual(meta["total_distinct_clubs"], 651)
+        self.assertTrue(meta["read_only"])
+        self.assertFalse(meta["public_promotion"])
+        self.assertFalse(meta["giant_killer_awards_enabled"])
+        self.assertTrue(all(not row["approved_tier"] for row in rows))
+        names = {row["club"]: row for row in rows}
+        self.assertEqual(names["Crowborough Athletic FC"]["proposed_tier"], 8)
+        self.assertEqual(names["Amersham Town FC"]["proposed_tier"], 9)
+        self.assertEqual(names["Harlow Town FC"]["match_status"], "provisional_ambiguous")
+        self.assertEqual(names["Harlow Town FC"]["proposed_tier"], "")
+        self.assertEqual(names["Westfield FC"]["match_status"], "ambiguous_source")
+        self.assertIn("Step 4", names["Westfield FC"]["suggestions"])
+        self.assertIn("Step 6", names["Westfield FC"]["suggestions"])
+        self.assertIn(names["Crowborough Athletic FC"]["match_status"],
+                      ("matched_exact_initial", "matched_normalized_initial"))
+        self.assertTrue(any(row["match_status"] == "missing_allocation" for row in rows))
+        self.assertEqual(sum(meta["original_match_status"].values()), 651)
+
+    def test_official_membership_has_92_distinct_clubs_and_explicit_tiers(self):
+        official, provisional, counts = load_allocations([PREMIER_LEAGUE_SOURCE, EFL_SOURCE])
+        self.assertEqual(counts, {"official_season_membership": 92})
+        self.assertEqual(len(official), 92)
+        self.assertFalse(provisional)
+        memberships = [row for club_rows in official.values() for row in club_rows]
+        self.assertEqual(Counter(row["tier"] for row in memberships), {1: 20, 2: 24, 3: 24, 4: 24})
+        self.assertTrue(all(row["fa_step"] is None and row["season"] == "2026-27" for row in memberships))
+        for name, tier in [
+            ("Ipswich Town", 1), ("Wolverhampton Wanderers", 2), ("Leyton Orient", 3), ("Rochdale", 4)
+        ]:
+            with self.subTest(club=name):
+                self.assertEqual(official[key(name)][0]["tier"], tier)
+
+    def test_both_populations_and_review_queue_use_membership(self):
+        rows, meta = build_audit(amendment_paths=[])
+        journey = [row for row in rows if row["population"] == "companion-journey-registry"]
+        self.assertEqual(meta["season_membership_source_rows"], 92)
+        self.assertEqual(len(journey), 92)
+        self.assertEqual(Counter(row["proposed_tier"] for row in journey), {1: 20, 2: 24, 3: 24, 4: 24})
+        self.assertTrue(all(row["source_fa_step"] == "" and row["approved_tier"] == "" for row in journey))
+        self.assertTrue(all(row["source_status"] == "official_season_membership" for row in journey))
+        self.assertEqual(sum(meta["companion_match_status"].values()), 92)
+        self.assertEqual(sum(meta["original_match_status"].get(status, 0) for status in MATCH_STATUSES), 626)
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            write_audit(rows, meta, folder)
+            with (folder / "league-tier-review-queue-2026-27.csv").open() as file:
+                waiting = list(csv.DictReader(file))
+        self.assertEqual(Counter(row["match_status"] for row in waiting), {
+            "missing_allocation": 18, "ambiguous_source": 4, "provisional_ambiguous": 3
+        })
+        self.assertTrue(all(row["population"] == "original-clubfinder" for row in waiting))
+
+    def test_only_safe_suffix_normalisation_and_no_afc_prefix_collision(self):
+        self.assertEqual(key("Crowborough Athletic FC"), key("Crowborough Athletic"))
+        self.assertNotEqual(key("AFC Liverpool"), key("Liverpool FC"))
+        self.assertNotEqual(key("AFC Wimbledon"), key("Wimbledon FC"))
+        self.assertNotEqual(key("Biggleswade Town"), key("Biggleswade"))
+
+    def test_provisional_alternative_does_not_assign_a_tier(self):
+        _, pending, _ = load_allocations([SOURCE, STEPS_5_6_SOURCE])
+        rows = match_population([
+            {"club": "Peacehaven & Telscombe FC", "population": "test"},
+            {"club": "Guernsey FC", "population": "test"},
+        ], {}, pending)
+        self.assertTrue(all(row["match_status"] == "provisional_ambiguous" for row in rows))
+        self.assertTrue(all(row["proposed_tier"] == "" and row["approved_tier"] == "" for row in rows))
+
+    def test_duplicate_identity_blocks_automatic_classification(self):
+        first = dict(club="Some Town", fa_step=2, league="National League",
+                     division="North", source_status="official_initial_allocation",
+                     source_as_of="2026-05-14", source_url="https://www.thefa.com")
+        second = dict(first, fa_step=3, division="South")
+        rows = match_population([{"club": "Some Town FC", "population": "test"}],
+                                {key("Some Town"): [first, second]}, [])
+        self.assertEqual(rows[0]["match_status"], "ambiguous_source")
+        self.assertEqual(rows[0]["proposed_tier"], "")
+
+    def test_conflicting_membership_and_nls_evidence_stay_ambiguous(self):
+        nls, _, _ = load_allocations([SOURCE])
+        league, _, _ = load_allocations([EFL_SOURCE])
+        membership = league[key("Rochdale")][0]
+        allocation = dict(nls[key("AFC Fylde")][0], club="Rochdale")
+        result, = match_population(
+            [{"club": "Rochdale AFC"}], {key("Rochdale"): [membership, allocation]}, []
+        )
+        self.assertEqual(result["match_status"], "ambiguous_source")
+        self.assertEqual(result["proposed_tier"], "")
+        self.assertIn("Tier 4", result["suggestions"])
+        self.assertIn("Step 1", result["suggestions"])
+
+    def test_invalid_professional_evidence_fails_closed(self):
+        base = dict(season="2026-27", fa_step="", tier=3, club="Example FC", league="Test",
+                    division="Test", source_url="https://www.efl.com", source_as_of="2026-11-21",
+                    source_status="official_season_membership")
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "membership.csv"
+            for invalid in (dict(tier=""), dict(tier=5), dict(fa_step=1), dict(season="2025-26")):
+                with self.subTest(invalid=invalid):
+                    with path.open("w", newline="") as file:
+                        writer = csv.DictWriter(file, fieldnames=base.keys())
+                        writer.writeheader()
+                        writer.writerow(base | invalid)
+                    with self.assertRaisesRegex(ValueError, "Invalid season membership"):
+                        load_allocations([path])
+
+    def test_post_may_evidence_resolves_previous_exceptions_and_updates_existing_candidates(self):
+        rows, meta = build_audit(as_of=date(2026, 11, 24))
+        clubs = {row["club"]: row for row in rows}
+        self.assertEqual(meta["initial_fa_source_rows"], 996)
+        self.assertEqual(meta["season_membership_source_rows"], 92)
+        self.assertEqual(meta["original_match_status"]["matched_post_may"], 28)
+        waiting = [row["club"] for row in rows if row["match_status"] not in MATCH_STATUSES]
+        self.assertEqual(waiting, ["Boro Rangers FC"])
+        self.assertTrue(all(not row["approved_tier"] for row in rows))
+        self.assertEqual(clubs["Boro Rangers FC"]["match_status"], "withdrawn_allocation")
+        self.assertEqual(clubs["Boro Rangers FC"]["proposed_tier"], "")
+        expectations = {
+            "Bradford Town FC": (9, "Hellenic Football League"),
+            "Litherland Remyca FC": (9, "North West Counties League"),
+            "Wells City FC": (9, "Western Football League"),
+            "Guernsey FC": (9, "Southern Combination"),
+            "Peacehaven & Telscombe FC": (8, "Isthmian League"),
+            "Millbrook FC (Hampshire)": (9, "Wessex Football League"),
+            "Sutton United FC": (5, "National League"),
+            "Sutton United FC (Birmingham)": (9, "Midland Football League"),
+            "Royston Town FC": (8, "Southern League"),
+            "Stotfold FC": (8, "Southern League"),
+        }
+        for club, expected in expectations.items():
+            with self.subTest(club=club):
+                self.assertEqual((clubs[club]["proposed_tier"], clubs[club]["league"]), expected)
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            write_audit(rows, meta, folder)
+            report = (folder / "league-tier-exceptions-2026-27.md").read_text()
+        self.assertIn("## Boro Rangers FC", report)
+        self.assertIn("official replacement allocation", report)
+        self.assertIn("**Sutton United FC (Birmingham)**", report)
+
+    def test_amendments_require_exact_identity_and_effective_evidence(self):
+        before, _ = build_audit(as_of=date(2026, 6, 11))
+        clubs = {row["club"]: row for row in before}
+        self.assertEqual(clubs["Bradford Town FC"]["league"], "Western Football League")
+        self.assertEqual(clubs["Westfield FC"]["match_status"], "ambiguous_source")
+        evidence = load_amendments([AMENDMENTS])
+        official = evidence["Bradford Town FC"][0]
+        unofficial_alias = dict(clubs["Bradford Town FC"], club="Bradford Town")
+        self.assertEqual(apply_amendments(unofficial_alias, evidence.get("Bradford Town", []), date(2026, 11, 24)),
+                         unofficial_alias)
+        pending_effect = dict(official, available_on=date(2026, 11, 25))
+        self.assertEqual(apply_amendments(clubs["Bradford Town FC"], [pending_effect], date(2026, 11, 24)),
+                         clubs["Bradford Town FC"])
+
+    def test_amendment_precedence_and_conflicts_are_independent_of_row_order(self):
+        evidence = load_amendments([AMENDMENTS])
+        authority = evidence["Bradford Town FC"][0]
+        other = dict(authority, league="Western Football League",
+                     source_url="https://example.org/other")
+        weaker = dict(other, authority="participation", source_as_of="2026-11-23")
+        baseline = {"club": "Bradford Town FC"}
+        as_of = date(2026, 11, 24)
+        self.assertEqual(apply_amendments(baseline, [weaker, authority], as_of)["league"], "Hellenic Football League")
+        conflict = apply_amendments(baseline, [other, authority], as_of)
+        self.assertEqual(conflict, apply_amendments(baseline, [authority, other], as_of))
+        self.assertEqual(conflict["match_status"], "conflicting_amendments")
+        self.assertEqual(conflict["proposed_tier"], "")
+        withdrawal = apply_amendments({"club": "Pilkington"}, evidence["Pilkington"], as_of)
+        self.assertEqual(withdrawal["match_status"], "withdrawn_allocation")
+        self.assertEqual(withdrawal["proposed_tier"], "")
+
+    def test_approval_readiness_reviews_every_identity_without_approving(self):
+        snapshot = date(2026, 11, 24)
+        competition = json.loads(COMPETITION.read_text(encoding="utf-8"))
+        rows, unmatched = review(competition, snapshot)
+        self.assertEqual(len(rows), 743)
+        self.assertEqual(sum(bool(row["proposed_tier"]) for row in rows), 742)
+        self.assertTrue(all(not row["approved_tier"] for row in rows))
+        by_club = {row["club"]: row for row in rows}
+        self.assertEqual(by_club["Boro Rangers FC"]["matching_method"], "unresolved")
+        self.assertEqual(by_club["Bradford Town FC"]["documented_membership_start"], "2026-06-12")
+        self.assertEqual(by_club["Bradford Town FC"]["first_scored_cup_date"], "2026-08-08")
+        self.assertEqual(by_club["Liverpool FC"]["documented_membership_start"], "2026-06-05")
+        self.assertEqual(by_club["Milton Keynes Dons FC"]["matching_method"], "documented_publisher_alias")
+        self.assertEqual(by_club["Corinthian Casuals FC"]["matching_method"], "spelling_normalization")
+        self.assertEqual(by_club["Wells City FC"]["documented_membership_start"], "")
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            write_review(rows, unmatched, snapshot, out)
+            report = (out / "league-tier-readiness-2026-27.md").read_text()
+        self.assertIn("Boro Rangers FC", report)
+        self.assertIn("Unlinked scored-result labels", report)
+
+    def test_readiness_rejects_division_tier_mismatch(self):
+        wrong = {
+            "club": "Example FC", "source_club": "Example", "source_status": "official_season_membership",
+            "source_url": "https://www.efl.com/news/example", "source_as_of": "2026-11-21",
+            "match_status": "matched_normalized_membership", "approved_tier": "",
+            "source_fa_step": "", "proposed_tier": 2, "league": "English Football League", "division": "League Two",
+        }
+        with self.assertRaisesRegex(ValueError, "Professional division/Tier mismatch"):
+            validate_candidate(wrong, {}, {}, {}, date(2026, 11, 24))
+
+    def test_cup_dates_do_not_pick_homonyms_or_conflicting_played_dates(self):
+        rows = [
+            {"club": "United FC", "source_club": "United"},
+            {"club": "United FC (Other)", "source_club": "United"},
+            {"club": "Some Town FC", "source_club": "Some Town"},
+        ]
+        replay = dict(round="Preliminary Round Replay", home="United", away="Some Town",
+                      date="2026-08-26", home_score=2, away_score=1, status="FT")
+        awarded = dict(replay, round="First Round Qualifying", date="2026-09-05", status="Awarded")
+        competition = {"season": "2026-27", "results": {"one": replay, "two": awarded},
+                       "result_history": {"Some Town": [dict(replay, date="2026-08-25")]}}
+        dates, identities, conflicts, unmatched = cup_observations(competition, rows, date(2026, 11, 24))
+        self.assertFalse(dates)
+        self.assertEqual(set(identities), {"United FC", "United FC (Other)"})
+        self.assertEqual(set(conflicts), {"Some Town FC"})
+        self.assertFalse(unmatched)
+
+    def test_unsupported_step_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "invalid.csv"
+            with p.open("w", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=[
+                    "fa_step", "club", "league", "division", "source_url",
+                    "source_as_of", "source_status"
+                ])
+                w.writeheader()
+                w.writerow(dict(fa_step=7, club="Fake FC", league="Test", division="Test",
+                                source_url="https://thefa.com", source_as_of="2026-05-14",
+                                source_status="official_initial_allocation"))
+            with self.assertRaisesRegex(ValueError, "Invalid source allocation"):
+                load_allocations([p])
+
+    def test_diagnostics_write_only_to_requested_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp) / "results"
+            rows = [dict.fromkeys((
+                "club", "population", "entry_round", "postcode", "match_status",
+                "source_club", "source_fa_step", "proposed_tier", "approved_tier",
+                "league", "division", "source_as_of", "source_url", "source_status",
+                "review_note", "suggestions"
+            ), "")]
+            rows[0].update(club="Some Club", population="original-clubfinder",
+                           match_status="missing_allocation")
+            meta = {"original_clubfinder_clubs": 1, "companion_only_clubs": 0,
+                    "original_match_status": {"missing_allocation": 1}}
+            write_audit(rows, meta, folder)
+            self.assertEqual(len(list(folder.iterdir())), 5)
+            self.assertIn("Some Club", (folder / "league-tier-review-queue-2026-27.csv").read_text())
+            self.assertIn("NOT APPROVED", (folder / "league-tier-audit-2026-27.md").read_text())
+            exceptions = (folder / "league-tier-exceptions-2026-27.md").read_text()
+            self.assertIn("## Some Club", exceptions)
+            self.assertIn("Evidence required", exceptions)
+
+
+if __name__ == "__main__":
+    unittest.main()
