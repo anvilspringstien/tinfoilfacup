@@ -1,5 +1,6 @@
 """Protect the read-only League & Tier review boundary."""
 import csv
+import json
 import tempfile
 import unittest
 from collections import Counter
@@ -9,6 +10,7 @@ from updater.league_tier_readonly import (
     AMENDMENTS, EFL_SOURCE, MATCH_STATUSES, PREMIER_LEAGUE_SOURCE, SOURCE, STEPS_5_6_SOURCE,
     apply_amendments, build_audit, key, load_allocations, load_amendments, match_population, write_audit,
 )
+from updater.league_tier_review import COMPETITION, cup_observations, review, validate_candidate, write_review
 
 
 class LeagueTierReadOnlyTests(unittest.TestCase):
@@ -212,6 +214,55 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
         withdrawal = apply_amendments({"club": "Pilkington"}, evidence["Pilkington"], as_of)
         self.assertEqual(withdrawal["match_status"], "withdrawn_allocation")
         self.assertEqual(withdrawal["proposed_tier"], "")
+
+    def test_approval_readiness_reviews_every_identity_without_approving(self):
+        snapshot = date(2026, 11, 24)
+        competition = json.loads(COMPETITION.read_text(encoding="utf-8"))
+        rows, unmatched = review(competition, snapshot)
+        self.assertEqual(len(rows), 743)
+        self.assertEqual(sum(bool(row["proposed_tier"]) for row in rows), 742)
+        self.assertTrue(all(not row["approved_tier"] for row in rows))
+        by_club = {row["club"]: row for row in rows}
+        self.assertEqual(by_club["Boro Rangers FC"]["matching_method"], "unresolved")
+        self.assertEqual(by_club["Bradford Town FC"]["documented_membership_start"], "2026-06-12")
+        self.assertEqual(by_club["Bradford Town FC"]["first_scored_cup_date"], "2026-08-08")
+        self.assertEqual(by_club["Liverpool FC"]["documented_membership_start"], "2026-06-05")
+        self.assertEqual(by_club["Milton Keynes Dons FC"]["matching_method"], "documented_publisher_alias")
+        self.assertEqual(by_club["Corinthian Casuals FC"]["matching_method"], "spelling_normalization")
+        self.assertEqual(by_club["Wells City FC"]["documented_membership_start"], "")
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            write_review(rows, unmatched, snapshot, out)
+            report = (out / "league-tier-readiness-2026-27.md").read_text()
+        self.assertIn("Boro Rangers FC", report)
+        self.assertIn("Unlinked scored-result labels", report)
+
+    def test_readiness_rejects_division_tier_mismatch(self):
+        wrong = {
+            "club": "Example FC", "source_club": "Example", "source_status": "official_season_membership",
+            "source_url": "https://www.efl.com/news/example", "source_as_of": "2026-11-21",
+            "match_status": "matched_normalized_membership", "approved_tier": "",
+            "source_fa_step": "", "proposed_tier": 2, "league": "English Football League", "division": "League Two",
+        }
+        with self.assertRaisesRegex(ValueError, "Professional division/Tier mismatch"):
+            validate_candidate(wrong, {}, {}, {}, date(2026, 11, 24))
+
+    def test_cup_dates_do_not_pick_homonyms_or_conflicting_played_dates(self):
+        rows = [
+            {"club": "United FC", "source_club": "United"},
+            {"club": "United FC (Other)", "source_club": "United"},
+            {"club": "Some Town FC", "source_club": "Some Town"},
+        ]
+        replay = dict(round="Preliminary Round Replay", home="United", away="Some Town",
+                      date="2026-08-26", home_score=2, away_score=1, status="FT")
+        awarded = dict(replay, round="First Round Qualifying", date="2026-09-05", status="Awarded")
+        competition = {"season": "2026-27", "results": {"one": replay, "two": awarded},
+                       "result_history": {"Some Town": [dict(replay, date="2026-08-25")]}}
+        dates, identities, conflicts, unmatched = cup_observations(competition, rows, date(2026, 11, 24))
+        self.assertFalse(dates)
+        self.assertEqual(set(identities), {"United FC", "United FC (Other)"})
+        self.assertEqual(set(conflicts), {"Some Town FC"})
+        self.assertFalse(unmatched)
 
     def test_unsupported_step_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:

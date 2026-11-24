@@ -187,3 +187,101 @@ tests and uploads the report as an artifact. The workflow has
 
 The present outputs are not used by Public, BETA, Keep, Barry Air, the results
 watchers, Clubfinder, Stats or Mission Control. Nothing is auto-promoted.
+
+## Phase 4 evidence review
+
+The itemised readiness report covers all 742 candidates and the Boro
+Rangers hold. This pass rechecked all 996 initial entries against their
+published FA PDF tables and all 92 professional entries against the four
+season-specific league rosters. It also rechecked the 28 post-May candidates
+against their exact audit identity and source tuple. The CLI checks each
+candidate's source, club, league, division, Tier and FA Step, including a
+blank FA Step for professional memberships. The published May allocations
+remain subject to appeals. No consolidated replacement was located.
+
+| Evidence and matching method | Candidates | Readiness |
+| --- | ---: | --- |
+| Initial FA allocation, exact name | 19 | Needs an adopted constitution or equivalent official season confirmation |
+| Initial FA allocation, trailing FC/AFC only | 597 | Same requirement, with a recorded review of the exact suffix rule |
+| Initial FA allocation, spelling or punctuation | 6 | Needs a named identity check and season confirmation |
+| Professional season membership, exact name or trailing suffix | 91 | Eligible for a recorded season-membership review |
+| Professional season membership, documented publisher alias | 1 | Verify MK Dons against the full Milton Keynes Dons identity |
+| Post-May allocation decision | 2 | Review each later decision and its timing |
+| Adopted league constitution | 2 | Review each named identity and constitution |
+| Official league participation | 24 | Review the identity link and what period the evidence actually covers |
+
+The six spelling cases are Bishop's Stortford, Corinthian Casuals, Cray
+Valley (PM), Hollands & Blair, Larkfield & New Hythe and Weston-super-Mare.
+The 28 post-May rows include all previously resolved duplicates and three
+changed prior candidates. The named report flags those 35 candidates for
+individual membership scrutiny. It also retains Boro Rangers with no
+proposed Tier. Review senior identity independently of venue, postcode
+and website verification. Those fields play no part in the CLI's checks.
+
+### Tier on the day of a tie
+
+The readiness CLI compares scored, completed results and replays in the
+competition snapshot through 24 November. It excludes walkovers and other
+non-played results. It flags disputed dates, leaves a label shared by two
+clubs unresolved and lists unlinked result labels. Future scheduled ties
+are outside that comparison.
+
+Of 693 clubs with an unambiguous dated scored result in the snapshot, only
+Bradford Town has a documented membership start in the evidence under
+review. Its immediate move on 12 June predates the recorded 8 August tie.
+A start date alone leaves continuity through the tie date to be reviewed.
+The [Premier League AGM](https://www.premierleague.com/en/news/4673099/the-202627-premier-league-season-officially-starts/)
+formalised membership for the 20 Premier League candidates on 5 June.
+Those candidates have no scored FA Cup ties in this snapshot. The
+[EFL opening weekend](https://www.efl.com/news/2026/june/25/the-2026-27-efl-fixtures-are-here/)
+is a schedule milestone and the November division lists establish season
+membership. The present evidence carries no approved validity intervals.
+The FA's [round dates](https://www.thefa.com/news/2026/jun/05/round-dates)
+are useful for planning and do not supply a tie's actual played date.
+
+Two dated-result issues merit separate review before any tie-time use.
+The Kendal Town–Heaton Stannington preliminary round result has two dates
+in the snapshot. The bare Sutton United label could link to either audit
+identity, and the qualified labels need a recorded cup identity link.
+The readiness report records both problems without changing competition
+data or using the apparent round of entry to choose a club.
+
+### Proposed approval workflow
+
+1. **Prepare a review manifest via the CLI.** Pin the source commit, input
+   hashes, audit date and season. Emit the candidate's stable club
+   identifier, exact registry and source names, league, division, Tier,
+   optional FA Step, authority, evidence URLs and dated source snapshots.
+   Carry the source-to-registry identity decision explicitly. Re-running
+   with the same pinned inputs yields the same proposed manifest.
+2. **Record the review decision.** A reviewer records `approve season
+   membership`, `approve dated interval` or `hold`, with their
+   identity, timestamp, rationale and the manifest digest. For an
+   interval, require a sourced inclusive start, exclusive end or explicit
+   date through which continuity is verified. Publication/observation
+   dates cannot substitute for an effective date. Use a reviewed
+   correction or supersession record when a later decision changes
+   membership. A reviewer can accept simple suffix matches as a batch;
+   named identity links, competing evidence and amendments are reviewed
+   individually.
+3. **Validate and append through the CLI.** Preview the exact changes;
+   reject stale digests, absent sources, unresolved identities, conflicting
+   intervals, invalid league/Step/Tier tuples and approvals outside the
+   documented period. An explicit later apply operation appends reviewed
+   decisions to a version-controlled ledger. Repeated identical
+   decisions are idempotent. Corrections supersede prior entries while
+   preserving their evidence, reviewer, timestamp and commit lineage.
+4. **Resolve match-day Tier by stable identity and actual played date.**
+   A future consumer requires one applicable dated decision for each
+   participant. A season-only decision has no match-day effect. Missing
+   dates, aliases, bounds or conflicting decisions keep that use pending.
+
+This phase implements the read-only reviewer only. The proposed approval
+ledger, writes and publication remain for a separate decision.
+
+```bash
+python -m updater.league_tier_review --as-of 2026-11-24 --out /tmp/tffac-league-tier-2026-27
+```
+
+This adds the per-club `league-tier-readiness-2026-27.csv` and the grouped
+`league-tier-readiness-2026-27.md` to the audit reports.

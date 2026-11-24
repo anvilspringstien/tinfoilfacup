@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'updater/league_tier_readonly.py'
+      - 'updater/league_tier_review.py'
       - 'updater/league-tier-sources/**'
       - 'tests/test_league_tier_readonly.py'
       - 'docs/league-tier-readonly-2026-27.md'
@@ -54,6 +55,9 @@ jobs:
           assert all(not row['approved_tier'] for row in rows)
           print('PASS: no approved tiers, no giant-killer awards and all original 651 represented')
           PY
+      - name: Review source evidence and scored cup dates
+        run: |
+          python -m updater.league_tier_review --as-of "$(date -u +%F)" --out /tmp/tffac-league-tier-2026-27
       - name: Compare protected files against main
         run: |
           git fetch origin main
@@ -62,6 +66,7 @@ jobs:
             ':(exclude)docs/league-tier-readonly-2026-27.md' \
             ':(exclude)tests/test_league_tier_readonly.py' \
             ':(exclude)updater/league_tier_readonly.py' \
+            ':(exclude)updater/league_tier_review.py' \
             ':(exclude)updater/league-tier-sources/**'
           git status --porcelain
           test -z "$(git status --porcelain)"
