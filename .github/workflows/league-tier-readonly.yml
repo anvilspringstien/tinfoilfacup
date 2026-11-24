@@ -18,6 +18,8 @@ permissions:
 jobs:
   league-tier-audit:
     runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
