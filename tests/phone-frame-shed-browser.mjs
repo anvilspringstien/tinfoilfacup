@@ -42,6 +42,61 @@ try{
   assert.equal(await page.locator('#phoneApp').evaluate(f=>f.clientWidth),390);
   await context.close();
  }
+ // A trophy's animated 3D flip must not conjure a horizontal scrollbar
+ // inside the approved 390px phone viewport (nor move the underlying Deck).
+ for(const [width,height] of [[1024,768],[390,669]]){
+  const trophies=await browser.newContext({viewport:{width,height}});
+  await trophies.addInitScript(()=>{
+   try{
+    if(!localStorage.getItem('tffc.challengeDeck.v1'))localStorage.setItem('tffc.challengeDeck.v1',JSON.stringify({
+     version:1,accepted:{'01':true},completed:{'01':true},records:{}
+    }));
+   }catch(_){}
+  });
+  const trophyPage=await trophies.newPage();
+  await trophyPage.goto(origin+'/beta/phone-frame.html?view=challenges');
+  const trophyApp=trophyPage.frameLocator('#phoneApp');
+  const achieved=trophyApp.locator('#deckCabinet .trophy-slot.completed').first();
+  await achieved.waitFor({state:'visible'});
+  await achieved.scrollIntoViewIfNeeded();
+  const originalScroll=await trophyApp.locator('.overlay').evaluate(el=>el.scrollTop);
+  await achieved.click();
+  const viewer=trophyApp.locator('#trophyViewer');
+  await viewer.waitFor({state:'visible'});
+  const mat=viewer.locator('#trophyViewerMat');
+  async function sampleViewer(){
+   return viewer.evaluate(async root=>{
+    const frames=[];
+    for(let i=0;i<32;i++){
+     await new Promise(resolve=>requestAnimationFrame(resolve));
+     const r=root.querySelector('#trophyViewerMat').getBoundingClientRect();
+     frames.push({overflow:root.scrollWidth-root.clientWidth,
+      centerX:r.left+r.width/2,centerY:r.top+r.height/2,
+      left:r.left,right:r.right,viewportWidth:root.clientWidth});
+    }
+    return frames;
+   });
+  }
+  const opening=await sampleViewer();
+  await mat.click();
+  const flipping=await sampleViewer();
+  for(const [phase,frames] of [['opening',opening],['flipping',flipping]]){
+   assert.ok(frames.every(f=>f.overflow<=1),
+    'Trophy viewer temporarily overflowed horizontally during '+phase+': '+JSON.stringify(frames.filter(f=>f.overflow>1)));
+   assert.ok(frames.every(f=>f.left>=14&&f.right<=f.viewportWidth-14),
+    'Trophy mat escaped the padded viewer during '+phase);
+   const ys=frames.map(f=>f.centerY);
+   assert.ok(Math.max(...ys)-Math.min(...ys)<2,
+    'Trophy viewer jumped vertically during '+phase);
+  }
+  await mat.click();
+  await viewer.waitFor({state:'hidden'});
+  assert.equal(await trophyApp.locator('.overlay').evaluate(el=>el.scrollTop),originalScroll,
+   'Inspecting and closing a trophy must not scroll the Deck');
+  assert.ok(await achieved.evaluate(el=>document.activeElement===el),
+   'Closing the Trophy Viewer must restore focus to its cabinet slot');
+  await trophies.close();
+ }
  {
   // Start from an existing Campaign in the installed phone frame, then search again.
   const keep=await browser.newContext({viewport:{width:390,height:669},hasTouch:true});
