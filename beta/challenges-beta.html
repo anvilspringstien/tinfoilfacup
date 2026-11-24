@@ -31,9 +31,9 @@ font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px
 .trophy-viewer[hidden]{display:none!important}
 .trophy-viewer{position:fixed;inset:0;z-index:90;background:rgba(6,7,7,.89);display:flex;align-items:center;justify-content:center;overflow:auto;overscroll-behavior:contain;touch-action:manipulation;padding:16px}
 .trophy-viewer-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%;animation:trophy-view-in .2s ease-out both}
-/* Stay within the padded viewer: 96vw can exceed its content box at 390px,
-   producing a transient horizontal scrollbar during the 3D trophy flip. */
-.trophy-viewer-mat{width:min(610px,96vw,calc(100dvh - 110px));max-width:100%;aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
+/* Reserve perspective clearance within the padded viewer. At 390px a mat
+   flush to its content edge still projects 8px sideways during the 3D flip. */
+.trophy-viewer-mat{width:min(610px,96vw,calc(100dvh - 110px));max-width:calc(100% - 24px);aspect-ratio:1;position:relative;perspective:1500px;cursor:pointer;outline:none;touch-action:manipulation}
 .trophy-viewer-mat:focus-visible{outline:3px solid #f3e6c7;outline-offset:5px;border-radius:15px}
 .trophy-viewer-card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.2,.75,.25,1),opacity .52s ease}
 .trophy-viewer-card.flipped{transform:rotateX(180deg)}
