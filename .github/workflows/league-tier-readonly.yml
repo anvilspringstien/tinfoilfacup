@@ -48,6 +48,8 @@ jobs:
           PY
       - name: Prove production and BETA are unchanged
         run: |
+          git fetch origin main
+          git diff --exit-code origin/main...HEAD -- clubfinder.html competition.json beta/clubfinder-beta.html beta/challenges-beta.html journey-club-registry.json tester-club-postcodes.csv
           git diff --exit-code -- clubfinder.html competition.json beta/clubfinder-beta.html beta/challenges-beta.html journey-club-registry.json tester-club-postcodes.csv
           git status --porcelain
           test -z "$(git status --porcelain)"
