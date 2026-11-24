@@ -3,10 +3,11 @@ import csv
 import tempfile
 import unittest
 from collections import Counter
+from datetime import date
 from pathlib import Path
 from updater.league_tier_readonly import (
-    EFL_SOURCE, MATCH_STATUSES, PREMIER_LEAGUE_SOURCE, SOURCE, STEPS_5_6_SOURCE,
-    build_audit, key, load_allocations, match_population, write_audit,
+    AMENDMENTS, EFL_SOURCE, MATCH_STATUSES, PREMIER_LEAGUE_SOURCE, SOURCE, STEPS_5_6_SOURCE,
+    apply_amendments, build_audit, key, load_allocations, load_amendments, match_population, write_audit,
 )
 
 
@@ -36,7 +37,7 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
         self.assertNotIn(key("Copthorne"), official)
 
     def test_real_roster_complete_without_publication_or_awards(self):
-        rows, meta = build_audit()
+        rows, meta = build_audit(amendment_paths=[])
         self.assertEqual(meta["season"], "2026-27")
         self.assertEqual(meta["original_clubfinder_clubs"], 651)
         self.assertEqual(meta["initial_fa_rows_by_step"], {
@@ -75,7 +76,7 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
                 self.assertEqual(official[key(name)][0]["tier"], tier)
 
     def test_both_populations_and_review_queue_use_membership(self):
-        rows, meta = build_audit()
+        rows, meta = build_audit(amendment_paths=[])
         journey = [row for row in rows if row["population"] == "companion-journey-registry"]
         self.assertEqual(meta["season_membership_source_rows"], 92)
         self.assertEqual(len(journey), 92)
@@ -147,6 +148,71 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, "Invalid season membership"):
                         load_allocations([path])
 
+    def test_post_may_evidence_resolves_previous_exceptions_and_updates_existing_candidates(self):
+        rows, meta = build_audit(as_of=date(2026, 11, 24))
+        clubs = {row["club"]: row for row in rows}
+        self.assertEqual(meta["initial_fa_source_rows"], 996)
+        self.assertEqual(meta["season_membership_source_rows"], 92)
+        self.assertEqual(meta["original_match_status"]["matched_post_may"], 28)
+        waiting = [row["club"] for row in rows if row["match_status"] not in MATCH_STATUSES]
+        self.assertEqual(waiting, ["Boro Rangers FC"])
+        self.assertTrue(all(not row["approved_tier"] for row in rows))
+        self.assertEqual(clubs["Boro Rangers FC"]["match_status"], "withdrawn_allocation")
+        self.assertEqual(clubs["Boro Rangers FC"]["proposed_tier"], "")
+        expectations = {
+            "Bradford Town FC": (9, "Hellenic Football League"),
+            "Litherland Remyca FC": (9, "North West Counties League"),
+            "Wells City FC": (9, "Western Football League"),
+            "Guernsey FC": (9, "Southern Combination"),
+            "Peacehaven & Telscombe FC": (8, "Isthmian League"),
+            "Millbrook FC (Hampshire)": (9, "Wessex Football League"),
+            "Sutton United FC": (5, "National League"),
+            "Sutton United FC (Birmingham)": (9, "Midland Football League"),
+            "Royston Town FC": (8, "Southern League"),
+            "Stotfold FC": (8, "Southern League"),
+        }
+        for club, expected in expectations.items():
+            with self.subTest(club=club):
+                self.assertEqual((clubs[club]["proposed_tier"], clubs[club]["league"]), expected)
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            write_audit(rows, meta, folder)
+            report = (folder / "league-tier-exceptions-2026-27.md").read_text()
+        self.assertIn("## Boro Rangers FC", report)
+        self.assertIn("official replacement allocation", report)
+        self.assertIn("**Sutton United FC (Birmingham)**", report)
+
+    def test_amendments_require_exact_identity_and_effective_evidence(self):
+        before, _ = build_audit(as_of=date(2026, 6, 11))
+        clubs = {row["club"]: row for row in before}
+        self.assertEqual(clubs["Bradford Town FC"]["league"], "Western Football League")
+        self.assertEqual(clubs["Westfield FC"]["match_status"], "ambiguous_source")
+        evidence = load_amendments([AMENDMENTS])
+        official = evidence["Bradford Town FC"][0]
+        unofficial_alias = dict(clubs["Bradford Town FC"], club="Bradford Town")
+        self.assertEqual(apply_amendments(unofficial_alias, evidence.get("Bradford Town", []), date(2026, 11, 24)),
+                         unofficial_alias)
+        pending_effect = dict(official, available_on=date(2026, 11, 25))
+        self.assertEqual(apply_amendments(clubs["Bradford Town FC"], [pending_effect], date(2026, 11, 24)),
+                         clubs["Bradford Town FC"])
+
+    def test_amendment_precedence_and_conflicts_are_independent_of_row_order(self):
+        evidence = load_amendments([AMENDMENTS])
+        authority = evidence["Bradford Town FC"][0]
+        other = dict(authority, league="Western Football League",
+                     source_url="https://example.org/other")
+        weaker = dict(other, authority="participation", source_as_of="2026-11-23")
+        baseline = {"club": "Bradford Town FC"}
+        as_of = date(2026, 11, 24)
+        self.assertEqual(apply_amendments(baseline, [weaker, authority], as_of)["league"], "Hellenic Football League")
+        conflict = apply_amendments(baseline, [other, authority], as_of)
+        self.assertEqual(conflict, apply_amendments(baseline, [authority, other], as_of))
+        self.assertEqual(conflict["match_status"], "conflicting_amendments")
+        self.assertEqual(conflict["proposed_tier"], "")
+        withdrawal = apply_amendments({"club": "Pilkington"}, evidence["Pilkington"], as_of)
+        self.assertEqual(withdrawal["match_status"], "withdrawn_allocation")
+        self.assertEqual(withdrawal["proposed_tier"], "")
+
     def test_unsupported_step_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "invalid.csv"
@@ -176,9 +242,12 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
             meta = {"original_clubfinder_clubs": 1, "companion_only_clubs": 0,
                     "original_match_status": {"missing_allocation": 1}}
             write_audit(rows, meta, folder)
-            self.assertEqual(len(list(folder.iterdir())), 4)
+            self.assertEqual(len(list(folder.iterdir())), 5)
             self.assertIn("Some Club", (folder / "league-tier-review-queue-2026-27.csv").read_text())
             self.assertIn("NOT APPROVED", (folder / "league-tier-audit-2026-27.md").read_text())
+            exceptions = (folder / "league-tier-exceptions-2026-27.md").read_text()
+            self.assertIn("## Some Club", exceptions)
+            self.assertIn("Evidence required", exceptions)
 
 
 if __name__ == "__main__":

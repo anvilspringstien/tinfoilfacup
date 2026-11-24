@@ -48,15 +48,21 @@ jobs:
           memberships=[row for row in rows if row['source_status']=='official_season_membership']
           assert len(memberships)==92
           assert all(not row['source_fa_step'] and row['proposed_tier'] in {'1', '2', '3', '4'} for row in memberships)
+          assert summary['post_may_evidence_rows']>0
+          assert (p/'league-tier-exceptions-2026-27.md').is_file()
           assert len(rows)==summary['total_distinct_clubs']
           assert all(not row['approved_tier'] for row in rows)
           print('PASS: no approved tiers, no giant-killer awards and all original 651 represented')
           PY
-      - name: Prove production and BETA are unchanged
+      - name: Compare protected files against main
         run: |
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- clubfinder.html competition.json beta/clubfinder-beta.html beta/challenges-beta.html journey-club-registry.json tester-club-postcodes.csv
-          git diff --exit-code -- clubfinder.html competition.json beta/clubfinder-beta.html beta/challenges-beta.html journey-club-registry.json tester-club-postcodes.csv
+          git diff --exit-code origin/main...HEAD -- . \
+            ':(exclude).github/workflows/league-tier-readonly.yml' \
+            ':(exclude)docs/league-tier-readonly-2026-27.md' \
+            ':(exclude)tests/test_league_tier_readonly.py' \
+            ':(exclude)updater/league_tier_readonly.py' \
+            ':(exclude)updater/league-tier-sources/**'
           git status --porcelain
           test -z "$(git status --porcelain)"
       - name: Retain read-only evidence for Mission Control review

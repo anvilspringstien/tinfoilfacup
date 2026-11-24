@@ -20,8 +20,7 @@ a Clubfinder promotion, Mission Control deployment or Giant Killer release.
 - Ambiguous matches and alternative-club allocations never receive a Tier.
   Fuzzy names are only suggestions in the queue, not asserted matches.
 - Historic 15 November research reported **629 matches / 22 exceptions**.
-  The previous full match table was not retained. This number is a historical
-  lead to investigate, not a result claimed by the new partial-source audit.
+  The previous full match table was not retained.
 
 ## Initial FA allocations
 
@@ -92,26 +91,66 @@ The existing NLS ledgers provide FA Step, from which the CLI derives
 overall Tier 5–10. The candidate report uses `proposed_tier` for both
 evidence types and keeps every `approved_tier` empty.
 
-| Population | Clubs | Candidates | Exceptions |
+## Post-May evidence through 24 November 2026
+
+`updater/league-tier-sources/nls-2026-27-post-may-evidence.csv` records
+later decisions, adopted constitutions and senior league participation
+separately from the May PDFs. Each row names the audit identity and the
+club as listed by the source. Publication and effective dates are recorded
+where the source gives them. An undated source uses the date it was
+checked. The optional identity URL documents the name or team connection.
+
+The CLI considers this evidence only for the exact recorded audit
+identity. A formal allocation decision has precedence over an adopted
+constitution, followed by a league's season membership or fixture record,
+then the May allocation. A publication or a separately stated effective
+date after the audit cut-off delays application. Equally authoritative
+disagreements and conflicts with the professional membership ledger
+stay in the review queue. The CLI preserves both original FA ledgers,
+keeps name suggestions for review and proposes no Tier for a withdrawal.
+
+The FA allocation release still points to the May documents. The
+amendment search covered the FA and individual league notices, including
+the [Spartan South Midlands amendments](https://ssmfl.uk/news/statement-constitution-amendments-12062026),
+[Wessex appeal outcomes](https://www.wessexleague.co.uk/appeal-updates),
+[North West Counties AGM](https://nwcfl.com/news-articles.php?id=10153)
+and [Western League directory](https://www.westernleague.co.uk/teams).
+This is the set of changes found and verified in this pass. The public
+sources checked did not yield a consolidated replacement for the May PDFs.
+
+| Population | Baseline candidates | Post-May candidates | Post-May exceptions |
 | --- | ---: | ---: | ---: |
-| Original Clubfinder | 651 | 626 | 25 |
-| Companion-only Journey registry | 92 | 92 | 0 |
-| Combined | 743 | 718 | 25 |
+| Original Clubfinder | 626 of 651 | 650 of 651 | 1 |
+| Companion-only Journey registry | 92 of 92 | 92 of 92 | 0 |
+| Combined | 718 of 743 | 742 of 743 | 1 |
 
-The remaining 25 Clubfinder exceptions comprise 18 missing matches, four
-competing source matches and three clubs tied to provisional allocations.
-The original historical table for 629/651 is unavailable, and the current
-Clubfinder tally is three lower.
+The 25 original exceptions now have evidence-backed candidates.
+For example, the [Isthmian League](https://www.isthmian.co.uk/match/6a59064dce9ef452b61f3494)
+and [Southern Combination](https://fulltime.thefa.com/index.html?league=840602727)
+confirm the Peacehaven and Guernsey play-off outcome. The
+[Spartan South Midlands table](https://fulltime.thefa.com/index.html?league=522238936&selectedCompetition=0&selectedDivision=116590296&selectedFixtureGroupKey=1_43894481&selectedSeason=584103502)
+identifies the lower-division Royston Town and Stotfold rows as reserve sides.
 
-### Required further sources
+The comparison against all 718 former candidates identified four affected
+Clubfinder clubs.
 
-- Subsequent FA and league announcements, including revised allocations,
-  withdrawals and appeal outcomes. Lead for that pass: the
-  [Isthmian League](https://www.isthmian.co.uk/articles/club-allocations-for-202627-season)
-  lists Peacehaven & Telscombe in South East, and
-  [Guernsey FC](https://guernseyfc.com/two-new-opponents-and-an-old-friend-returns/)
-  records its Southern Combination place after the play-off. The initial
-  allocation audit retains both provisional records.
+| Club | May candidate | Post-May evidence |
+| --- | --- | --- |
+| Bradford Town | Western Premier, Tier 9 | Hellenic Premier, Tier 9 after an [upheld appeal](https://bradfordtownfc.com/club-statement-lateral-league-movement/) |
+| Litherland REMYCA | NWCFL Division One North, Tier 10 | Premier Division, Tier 9 after an [FA reprieve](https://www.nwcfl.com/news-articles.php?id=10150) |
+| Wells City | Western Division One, Tier 10 | [Western Premier Division](https://www.westernleague.co.uk/teams), Tier 9 |
+| Boro Rangers | Northern League Division One, Tier 9 | [Senior resignation](https://www.northernfootballleague.org/news/boro-rangers-submit-resignation/) on 30 June. Hold the proposed Tier until there is evidence of an active replacement senior allocation. |
+
+### Historical 629/651 comparison
+
+The 15 November tally was described as a unique-name match against the
+FA allocations and referred to spelling differences, duplicate names and
+the provisional play-off place. The prior discussion and repository
+history yielded no per-club table, input snapshot or matching settings
+for the 629. The rerunnable baseline produces 626 candidates, 18 missing
+matches, four competing matches and three provisional cases. The 25 named
+resolutions and Boro Rangers withdrawal explain the move from 626 to 650.
+The original three-club difference remains unattributed.
 
 Do **not** infer a club's Tier from its FA Cup entry round, historic result,
 postcode, playing venue, or a different season's league table.
@@ -120,17 +159,17 @@ postcode, playing venue, or a different season's league table.
 
 ```bash
 python -m unittest discover -s tests -p 'test_league_tier_readonly.py' -v
-python -m updater.league_tier_readonly --out /tmp/tffac-league-tier-2026-27
+python -m updater.league_tier_readonly --as-of 2026-11-24 --out /tmp/tffac-league-tier-2026-27
 ```
 
-Produces only four files under the explicitly supplied `--out` directory:
+Produces five files under the explicitly supplied `--out` directory:
 
 1. `league-tier-candidates-2026-27.csv`: **every original club** plus
    companion-only journey clubs; empty `approved_tier` throughout
-2. `league-tier-review-queue-2026-27.csv`: missing, provisional or
-   ambiguous source/identity cases
-3. `league-tier-audit-summary-2026-27.json`: counts and provenance
+2. `league-tier-review-queue-2026-27.csv`: each unresolved case and the evidence required
+3. `league-tier-audit-summary-2026-27.json`: counts, provenance and changes against the baseline
 4. `league-tier-audit-2026-27.md`: concise human summary
+5. `league-tier-exceptions-2026-27.md`: named remaining exceptions and prior cases resolved by the later evidence
 
 GitHub's `League and Tier — 2026-27 read-only audit` workflow runs the
 tests and uploads the report as an artifact. The workflow has
@@ -138,14 +177,11 @@ tests and uploads the report as an artifact. The workflow has
 
 ## Promotion boundary
 
-1. Reconcile subsequent FA and league amendments.
-2. Re-run matching over all relevant population, resolve exceptions and
-   historical 629/22 discrepancy with source citations.
-3. Apply reviewed, season-specific identity decisions through the normal
+1. Review the sourced candidates and apply season-specific identity decisions through the normal
    Construction Law route. Only a separately approved reviewed registry may
    contain `approved_tier` values.
-4. Expose it in Mission Control's eventual Club Audit as **read-only first**.
-5. Independently develop Giant Killer regression tests against canonical
+2. Expose it in Mission Control's eventual Club Audit as **read-only first**.
+3. Independently develop Giant Killer regression tests against canonical
    cup ties, resolved winners and historical Tier for each match. Keep the
    Challenge disabled until all promotion and safety gates pass.
 
