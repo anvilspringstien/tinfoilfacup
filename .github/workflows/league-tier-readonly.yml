@@ -5,8 +5,10 @@ on:
     paths:
       - 'updater/league_tier_readonly.py'
       - 'updater/league_tier_review.py'
+      - 'updater/league_tier_approval.py'
       - 'updater/league-tier-sources/**'
       - 'tests/test_league_tier_readonly.py'
+      - 'tests/test_league_tier_approval.py'
       - 'docs/league-tier-readonly-2026-27.md'
       - 'tester-club-postcodes.csv'
       - 'journey-club-registry.json'
@@ -30,7 +32,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify identity and safety contract
-        run: python -m unittest discover -s tests -p 'test_league_tier_readonly.py' -v
+        run: python -m unittest discover -s tests -p 'test_league_tier*.py' -v
       - name: Generate season-aware candidate and exception reports
         run: |
           mkdir -p /tmp/tffac-league-tier-2026-27
@@ -58,6 +60,14 @@ jobs:
       - name: Review source evidence and scored cup dates
         run: |
           python -m updater.league_tier_review --as-of "$(date -u +%F)" --out /tmp/tffac-league-tier-2026-27
+      - name: Prepare the pinned approval proposal
+        run: |
+          python -m updater.league_tier_approval prepare --as-of 2026-11-24 --out /tmp/tffac-league-tier-2026-27/league-tier-proposed-approval-2026-27.json
+          python - <<'PY'
+          import json
+          from updater.league_tier_approval import LEDGER
+          assert not json.loads(LEDGER.read_text())['events']
+          PY
       - name: Compare protected files against main
         run: |
           git fetch origin main
@@ -65,8 +75,10 @@ jobs:
             ':(exclude).github/workflows/league-tier-readonly.yml' \
             ':(exclude)docs/league-tier-readonly-2026-27.md' \
             ':(exclude)tests/test_league_tier_readonly.py' \
+            ':(exclude)tests/test_league_tier_approval.py' \
             ':(exclude)updater/league_tier_readonly.py' \
             ':(exclude)updater/league_tier_review.py' \
+            ':(exclude)updater/league_tier_approval.py' \
             ':(exclude)updater/league-tier-sources/**'
           git status --porcelain
           test -z "$(git status --porcelain)"

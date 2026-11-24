@@ -285,3 +285,90 @@ python -m updater.league_tier_review --as-of 2026-11-24 --out /tmp/tffac-league-
 
 This adds the per-club `league-tier-readiness-2026-27.csv` and the grouped
 `league-tier-readiness-2026-27.md` to the audit reports.
+
+## Phase 5 season confirmations and proposed approvals
+
+The evidence bundle checks all 48 NLS division lists. It captures
+2026–27 FA Full-Time tables, league tables and equivalent official
+season fixtures for the three National League divisions. The latter
+come from the [Sutton United release](https://www.suttonunited.net/fixtures-2026-27-schedule-revealed/),
+the [Chester fixture](https://chesterfc.com/fixtures/first-team/) and
+[result cards](https://chesterfc.com/results/first-team/), and the
+[Torquay United release](https://torquayunited.com/horsham-at-home-first-up-for-united-fixture-release-day/).
+Each captured list has its own source URL, captured names and observation
+date. These are membership snapshots, not evidence of uninterrupted
+membership at every date in the season.
+
+| Evidence population | Season membership proposed | Holds |
+| --- | ---: | ---: |
+| Initial FA allocation candidates | 620 of 622 | 2 |
+| Post-May candidates | 28 of 28 | 0 |
+| Official professional memberships | 92 of 92 | 0 |
+| Original Clubfinder overall | 648 of 651 | 3 |
+| Companion-only Journey registry overall | 92 of 92 | 0 |
+
+All 35 named identity or membership reviews from Phase 4 have supporting
+season evidence. Seven additional publisher abbreviations or variants
+have individual records. The 35 proposed division batches include only
+exact and trailing-suffix matches. Individual findings require their own
+explicit decisions. The fixture-identity hold for bare Sutton United and
+the Kendal Town–Heaton Stannington date conflict remain in the separate
+readiness report.
+
+- **Boro Rangers** remains unresolved after the senior withdrawal.
+- **Cribbs** withdrew its first XI on 9 November and remains a season
+  hold. A separately evidenced historic period may be reviewable.
+  [Club statement](https://cribbsfc.co.uk/news/club-statement-1st-xi-withdrawal-from-the-uhlsport-hellenic-league)
+- **Holmesdale** remains a hold for the legacy identity. The league
+  confirms the merger into Petts Wood & Holmesdale. The successor's
+  season membership requires a reviewed identity link before use for the
+  legacy record. [League announcement](https://scefl.com/holmesdale-merger-to-bring-growth-and-a-name-change)
+
+### Approval CLI
+
+Prepare the review proposal with the cut-off and an explicit output path.
+The JSON includes the full candidate list, source pins, per-entry
+evidence, proposed division batches and holds. The Markdown summary
+lists coverage and the named holds.
+
+```bash
+python -m unittest discover -s tests -p 'test_league_tier*.py' -v
+python -m updater.league_tier_approval prepare --as-of 2026-11-24 \
+  --out /tmp/league-tier-proposed-approval-2026-27.json
+```
+
+The manifest pins the bytes of the source ledgers and the reviewed
+membership evidence. It pins the population by its identity projection.
+Ground, postcode and website edits do not change that projection.
+Identity IDs are scoped to this season and its existing audit roster
+names. A future roster rename needs an explicitly reviewed identity
+migration before its earlier decisions can be carried forward.
+
+A subsequent authorised reviewer can submit a separate decision request
+with `manifest_sha256`, `reviewer`, a timezone-aware `reviewed_at`,
+and one or both of the following lists.
+
+- `division_batches` entries require the manifest's exact `batch_id`,
+  its `count` and a review `reason`. A batch only records season decisions.
+- `decisions` entries name the exact `club`, `scope` (`season` or
+  `interval`), `action` (`approve` or `hold`) and `reason`. For a
+  dated decision record `valid_from` and exclusive `valid_until`.
+  Approval also requires the exact `interval_sha256` of separately
+  reviewed dated evidence covering the requested dates. A new decision
+  can provide `supersedes` with the active event ID of the same identity
+  and scope.
+
+The `record` subcommand takes `--manifest`, `--decisions` and an
+explicit `--ledger`. It rebuilds the pinned manifest from the checked-out
+inputs, rejects altered or stale proposals, verifies every decision,
+and appends the batch atomically or leaves the existing ledger intact.
+External sources must be refreshed into new versioned evidence when
+they change. Season and dated decisions are separate and do not create
+events in each other's scope. Ambiguous identities, unsupported dates
+and conflicting active intervals fail validation. A repeated identical
+event is idempotent. Each event keeps the reviewer, reason, evidence,
+manifest digest, proposed classification and any superseded event.
+The ledger is version-controlled for review and correction.
+
+The live ledger contains zero events, all `approved_tier` fields are
+blank, and this evidence pass proposes zero dated intervals.
