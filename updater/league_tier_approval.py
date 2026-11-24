@@ -204,6 +204,8 @@ def decisions_from_request(request, manifest):
         raise ValueError("Decision request refers to a stale manifest")
     approved_batches = {batch["batch_id"]: batch for batch in manifest["batches"]}
     decisions = list(request.get("decisions", []))
+    if any("batch_id" in decision for decision in decisions):
+        raise ValueError("Individual decisions cannot claim division batch provenance")
     for selection in request.get("division_batches", []):
         batch = approved_batches.get(selection["batch_id"])
         if (not batch or batch["count"] != selection["count"] or not selection["reason"].strip()):

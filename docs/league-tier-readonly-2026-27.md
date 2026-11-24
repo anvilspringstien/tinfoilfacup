@@ -372,3 +372,55 @@ The ledger is version-controlled for review and correction.
 
 The live ledger contains zero events, all `approved_tier` fields are
 blank, and this evidence pass proposes zero dated intervals.
+
+## Phase 6 final acceptance
+
+The 24 November 2026 proposal digest is
+`e77fec695e631789c0835ae53895cabda8b27de502ae77e0a9734d45709eaddb`.
+The acceptance regression recomputes that digest, the six source-file
+hashes and the roster identity pin. It reconciles every membership to
+captured evidence, checks the Tier and FA Step relationship, and
+verifies that each of the 743 roster identities occurs exactly once.
+
+| Population | Season approvals in isolated replay | Holds |
+| --- | ---: | ---: |
+| Original Clubfinder | 648 | 3 |
+| Companion-only Journey | 92 | 0 |
+| Total | 740 | 3 |
+
+The CLI replay expanded 35 division batches into 698 season approvals
+and recorded 42 individual season approvals. The three explicit holds
+were Boro Rangers FC, Cribbs FC and Holmesdale FC. There were zero
+tie-day approvals. Two fresh temporary ledgers were byte-identical.
+Repeating the same request, submitting a rehashed stale proposal and
+requesting an unsupported tie-day interval each left the first temporary
+ledger byte-identical. The live ledger remained empty throughout.
+
+Only an active event for the same identity and scope can be superseded.
+The regression exercises wrong-identity, wrong-scope and already
+superseded events, as well as overlapping intervals. During review,
+individual requests were found to be able to supply their own
+`batch_id`. The CLI now derives batch provenance exclusively from
+validated batch selections. The stale check compares repository evidence
+pins. It relies on versioned updates for changes at the original
+publishers.
+
+The Sutton United cup identity ambiguity and the Kendal Town–Heaton
+Stannington date conflict (22 and 25 August) are still reported
+independently of the membership holds.
+
+### Main baseline failures
+
+Full test discovery reproduced all five failures on main
+`c9ce1aeb97fd22a6037dcb63a859d0bc359122d5`. The four focused test modules
+reproduced the same five failures after main advanced to `9d70321c`.
+The Weston alias and Public Stats window paths were also exercised with
+controlled data and window stubs.
+
+| Failing test | Cause and separate remediation |
+| --- | --- |
+| `test_weston_has_one_third_qualifying_conditional_slot` | The test reads current fixtures for a historical conditional draw. Weston subsequently lost the replay to Wimborne, whose 3 October tie against Crowborough is recorded as a completed result. Use a fixed pre-replay fixture for conditional draws and a resolved-history fixture for progression. |
+| `test_live_lookup_falls_back_to_canonical_club_identity` | BETA calls the competition-specific key helper where the test requires a literal call to the generic helper. The current lookup resolves both Weston results, including the replay loss. Assert the lookup behavior with a punctuation variant. |
+| `test_glance_card_and_existing_logic` | The old label and emoji assertions predate the styled “Pigeon Miles Flown” label and embedded icon. Assert the rendered card, mileage and icon. |
+| `test_stats_certificate_labels_pigeon_miles` | The expected “Pigeon Miles Travelled” label was renamed to “Pigeon Miles Flown”. Test the current label and numeric value. |
+| `test_popup_opens_once_and_before_first_await_in_certificate` | The old function signature and exact popup statement predate supplied-window support. Exercise both paths to check that a new window opens once before the mileage await and an existing window is reused. |
