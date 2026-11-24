@@ -19,9 +19,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "updater/league-tier-sources/fa-nls-steps-1-4-2026-27-initial.csv"
 STEPS_5_6_SOURCE = SOURCE.with_name("fa-nls-steps-5-6-2026-27-initial.csv")
+PREMIER_LEAGUE_SOURCE = SOURCE.with_name("premier-league-2026-27-membership.csv")
+EFL_SOURCE = SOURCE.with_name("efl-2026-27-membership.csv")
+DEFAULT_SOURCES = (SOURCE, STEPS_5_6_SOURCE, PREMIER_LEAGUE_SOURCE, EFL_SOURCE)
 ROSTER = ROOT / "tester-club-postcodes.csv"
 COMPANION = ROOT / "journey-club-registry.json"
 SEASON = "2026-27"
+MEMBERSHIP = "official_season_membership"
+MATCH_STATUSES = {
+    "matched_exact_initial", "matched_normalized_initial",
+    "matched_exact_membership", "matched_normalized_membership",
+}
 
 FIELDS = (
     "club", "population", "entry_round", "postcode", "match_status",
@@ -89,24 +97,32 @@ def load_allocations(paths):
     for path in paths:
         for row in load_csv(path):
             try:
-                step = int(row["fa_step"])
-            except (TypeError, KeyError, ValueError) as e:
-                raise ValueError(f"Invalid FA Step in {path}: {row}") from e
-            if not 1 <= step <= 6 or not row.get("club", "").strip():
+                step = int(row["fa_step"]) if row.get("fa_step") else None
+                tier = int(row["tier"]) if row.get("tier") else None
+            except ValueError as e:
+                raise ValueError(f"Invalid Tier or FA Step in {path}: {row}") from e
+            club = (row.get("club") or "").strip()
+            if not club:
                 raise ValueError(f"Invalid source allocation: {row}")
             status = row.get("source_status", "")
-            if status not in {"official_initial_allocation", "provisional_ambiguous"}:
+            if status == MEMBERSHIP:
+                if step is not None or tier not in range(1, 5) or row.get("season") != SEASON:
+                    raise ValueError(f"Invalid season membership: {row}")
+            elif status in {"official_initial_allocation", "provisional_ambiguous"}:
+                if step not in range(1, 7) or (tier is not None and tier != step + 4):
+                    raise ValueError(f"Invalid source allocation: {row}")
+                tier = step + 4
+            else:
                 raise ValueError(f"Unknown source evidence status: {status}")
             if not row.get("source_url", "").startswith("https://"):
                 raise ValueError(f"Source URL not HTTPS: {row}")
             if row.get("source_as_of", "")[:4] != "2026":
                 raise ValueError(f"Source lacks 2026 season evidence: {row}")
-            club = row["club"].strip()
-            source_key = (key(club), str(step), row["league"], row["division"])
+            source_key = (key(club), tier, row["league"], row["division"])
             if source_key in seen:
                 raise ValueError(f"Repeated source allocation: {club}")
             seen.add(source_key)
-            row = dict(row, fa_step=step, club=club)
+            row = dict(row, fa_step=step, tier=tier, club=club)
             source_counts[status] += 1
             if status == "provisional_ambiguous":
                 provisional.append(row)
@@ -138,27 +154,33 @@ def match_population(population, definite, provisional):
             data["review_note"] = "Initial FA allocation is conditional; check later league evidence."
         elif len(matches) == 1:
             hit = matches[0]
+            membership = hit["source_status"] == MEMBERSHIP
+            match_kind = "exact" if name.casefold() == hit["club"].casefold() else "normalized"
+            evidence_kind = "membership" if membership else "initial"
             data.update({
-                "match_status": ("matched_exact_initial" if
-                                 name.casefold() == hit["club"].casefold()
-                                 else "matched_normalized_initial"),
+                "match_status": f"matched_{match_kind}_{evidence_kind}",
                 "source_club": hit["club"],
-                "source_fa_step": hit["fa_step"],
-                "proposed_tier": hit["fa_step"] + 4,
+                "source_fa_step": hit["fa_step"] if hit["fa_step"] is not None else "",
+                "proposed_tier": hit["tier"],
                 "league": hit["league"],
                 "division": hit["division"],
                 "source_as_of": hit["source_as_of"],
                 "source_url": hit["source_url"],
                 "source_status": hit["source_status"],
-                "review_note": "Initial FA allocation: recheck amendments and club identity before approval.",
+                "review_note": (
+                    "Official season membership: check club identity before approval." if membership
+                    else "Initial FA allocation: recheck amendments and club identity before approval."
+                ),
             })
         elif len(matches) > 1:
             data["match_status"] = "ambiguous_source"
             data["review_note"] = "More than one official allocation has this normalized club name."
-            data["suggestions"] = " | ".join(
-                f"{row['club']} (Step {row['fa_step']}, {row['league']} / {row['division']})"
-                for row in matches
-            )
+            suggestions = []
+            for row in matches:
+                step = row["fa_step"]
+                level = f"Step {step}" if step is not None else f"Tier {row['tier']}"
+                suggestions.append(f"{row['club']} ({level}, {row['league']} / {row['division']})")
+            data["suggestions"] = " | ".join(suggestions)
         else:
             data["match_status"] = "missing_allocation"
             data["review_note"] = "Check season membership, amendments and club aliases."
@@ -171,29 +193,34 @@ def match_population(population, definite, provisional):
 
 
 def build_audit(roster=ROSTER, companion=COMPANION, source_paths=None):
-    sources = [SOURCE, STEPS_5_6_SOURCE] if source_paths is None else [Path(s) for s in source_paths]
+    sources = DEFAULT_SOURCES if source_paths is None else [Path(s) for s in source_paths]
     population, original_count = load_population(Path(roster), Path(companion))
     definite, provisional, source_counts = load_allocations(sources)
     rows = match_population(population, definite, provisional)
-    step_counts = Counter(row["fa_step"] for matches in definite.values() for row in matches)
-    step_counts.update(row["fa_step"] for row in provisional)
+    evidence = [row for matches in definite.values() for row in matches] + provisional
+    step_counts = Counter(row["fa_step"] for row in evidence if row["fa_step"] is not None)
+    membership_counts = Counter(row["tier"] for row in evidence if row["source_status"] == MEMBERSHIP)
     status = Counter(row["match_status"] for row in rows)
     originals = Counter(row["match_status"] for row in rows if row["population"] == "original-clubfinder")
+    companions = status - originals
     return rows, {
         "schema_version": 1, "season": SEASON, "read_only": True,
         "public_promotion": False, "giant_killer_awards_enabled": False,
-        "source_scope": "Initial FA NLS allocations; PL/EFL and amendments outside this audit",
+        "source_scope": "Season membership and initial FA NLS allocations; later amendments excluded",
         "initial_fa_rows_by_step": {str(step): step_counts[step] for step in sorted(step_counts)},
+        "season_membership_rows_by_tier": {str(tier): membership_counts[tier] for tier in sorted(membership_counts)},
         "original_clubfinder_clubs": original_count,
         "companion_only_clubs": len(rows) - original_count,
         "total_distinct_clubs": len(rows),
-        "initial_fa_source_rows": sum(source_counts.values()),
+        "initial_fa_source_rows": sum(step_counts.values()),
+        "season_membership_source_rows": sum(membership_counts.values()),
         "source_evidence_status": source_counts,
         "original_match_status": dict(sorted(originals.items())),
+        "companion_match_status": dict(sorted(companions.items())),
         "all_match_status": dict(sorted(status.items())),
         "historical_preliminary_15_november": {
             "matched": 629, "exceptions": 22,
-            "qualification": "Historical result only; source table not retained. Not a benchmark of this partial-source audit."
+            "qualification": "Historical tally; the original matching table was not retained."
         },
     }
 
@@ -205,7 +232,7 @@ def write_audit(rows, metadata, out: Path):
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)
-    waiting = [r for r in rows if r["match_status"] not in {"matched_exact_initial", "matched_normalized_initial"}]
+    waiting = [r for r in rows if r["match_status"] not in MATCH_STATUSES]
     with (out / "league-tier-review-queue-2026-27.csv").open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
@@ -218,16 +245,20 @@ def write_audit(rows, metadata, out: Path):
         "", "**NOT APPROVED FOR PUBLICATION. GIANT KILLER DISABLED.**", "",
         "Source: FA initial NLS allocations dated 14 May 2026; explicitly subject to later amendments.",
         f"Imported FA Steps: {', '.join(metadata.get('initial_fa_rows_by_step', {})) or 'none'}.",
+        f"Imported official season membership Tiers: {', '.join(metadata.get('season_membership_rows_by_tier', {})) or 'none'}.",
         "", f"Original Clubfinder clubs: **{metadata['original_clubfinder_clubs']}**",
         f"Companion-only entries: **{metadata['companion_only_clubs']}**", "",
         "## Current status (original Clubfinder population)", "",
     ]
     for k, v in sorted(metadata["original_match_status"].items()):
         summary.append(f"- {k}: {v}")
+    summary += ["", "## Current status (companion-only Journey population)", ""]
+    for k, v in sorted(metadata.get("companion_match_status", {}).items()):
+        summary.append(f"- {k}: {v}")
     summary += ["", f"## Unclassified or ambiguous: {len(waiting)} across both populations",
                 "", "Every matched Tier is a *proposed* Tier. Approved Tier is intentionally blank.",
-                "The historical 629/651 tally has not been reproduced and must not be presented as current.",
-                "Further evidence required: 2026–27 Premier League/EFL membership and subsequent league amendments.",
+                "Historical reference: 629/651 reported, with no original matching table retained.",
+                "Further evidence required: subsequent league amendments and club identity decisions.",
                 ""]
     (out / "league-tier-audit-2026-27.md").write_text("\n".join(summary), encoding="utf-8")
 
@@ -237,7 +268,7 @@ def main():
     p.add_argument("--roster", type=Path, default=ROSTER)
     p.add_argument("--companion", type=Path, default=COMPANION)
     p.add_argument("--source", action="append", type=Path, default=None,
-                   help="Override the default FA Steps 1–6 CSVs with the supplied allocation CSVs")
+                   help="Override the default source ledgers with the supplied evidence CSVs")
     p.add_argument("--out", type=Path, required=True,
                    help="Explicit directory for read-only report artifacts")
     args = p.parse_args()

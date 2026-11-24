@@ -1,11 +1,12 @@
 """Protect the read-only League & Tier review boundary."""
 import csv
-import json
 import tempfile
 import unittest
+from collections import Counter
 from pathlib import Path
 from updater.league_tier_readonly import (
-    SOURCE, STEPS_5_6_SOURCE, key, load_allocations, match_population, build_audit, write_audit
+    EFL_SOURCE, MATCH_STATUSES, PREMIER_LEAGUE_SOURCE, SOURCE, STEPS_5_6_SOURCE,
+    build_audit, key, load_allocations, match_population, write_audit,
 )
 
 
@@ -59,6 +60,40 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
         self.assertTrue(any(row["match_status"] == "missing_allocation" for row in rows))
         self.assertEqual(sum(meta["original_match_status"].values()), 651)
 
+    def test_official_membership_has_92_distinct_clubs_and_explicit_tiers(self):
+        official, provisional, counts = load_allocations([PREMIER_LEAGUE_SOURCE, EFL_SOURCE])
+        self.assertEqual(counts, {"official_season_membership": 92})
+        self.assertEqual(len(official), 92)
+        self.assertFalse(provisional)
+        memberships = [row for club_rows in official.values() for row in club_rows]
+        self.assertEqual(Counter(row["tier"] for row in memberships), {1: 20, 2: 24, 3: 24, 4: 24})
+        self.assertTrue(all(row["fa_step"] is None and row["season"] == "2026-27" for row in memberships))
+        for name, tier in [
+            ("Ipswich Town", 1), ("Wolverhampton Wanderers", 2), ("Leyton Orient", 3), ("Rochdale", 4)
+        ]:
+            with self.subTest(club=name):
+                self.assertEqual(official[key(name)][0]["tier"], tier)
+
+    def test_both_populations_and_review_queue_use_membership(self):
+        rows, meta = build_audit()
+        journey = [row for row in rows if row["population"] == "companion-journey-registry"]
+        self.assertEqual(meta["season_membership_source_rows"], 92)
+        self.assertEqual(len(journey), 92)
+        self.assertEqual(Counter(row["proposed_tier"] for row in journey), {1: 20, 2: 24, 3: 24, 4: 24})
+        self.assertTrue(all(row["source_fa_step"] == "" and row["approved_tier"] == "" for row in journey))
+        self.assertTrue(all(row["source_status"] == "official_season_membership" for row in journey))
+        self.assertEqual(sum(meta["companion_match_status"].values()), 92)
+        self.assertEqual(sum(meta["original_match_status"].get(status, 0) for status in MATCH_STATUSES), 626)
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            write_audit(rows, meta, folder)
+            with (folder / "league-tier-review-queue-2026-27.csv").open() as file:
+                waiting = list(csv.DictReader(file))
+        self.assertEqual(Counter(row["match_status"] for row in waiting), {
+            "missing_allocation": 18, "ambiguous_source": 4, "provisional_ambiguous": 3
+        })
+        self.assertTrue(all(row["population"] == "original-clubfinder" for row in waiting))
+
     def test_only_safe_suffix_normalisation_and_no_afc_prefix_collision(self):
         self.assertEqual(key("Crowborough Athletic FC"), key("Crowborough Athletic"))
         self.assertNotEqual(key("AFC Liverpool"), key("Liverpool FC"))
@@ -83,6 +118,34 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
                                 {key("Some Town"): [first, second]}, [])
         self.assertEqual(rows[0]["match_status"], "ambiguous_source")
         self.assertEqual(rows[0]["proposed_tier"], "")
+
+    def test_conflicting_membership_and_nls_evidence_stay_ambiguous(self):
+        nls, _, _ = load_allocations([SOURCE])
+        league, _, _ = load_allocations([EFL_SOURCE])
+        membership = league[key("Rochdale")][0]
+        allocation = dict(nls[key("AFC Fylde")][0], club="Rochdale")
+        result, = match_population(
+            [{"club": "Rochdale AFC"}], {key("Rochdale"): [membership, allocation]}, []
+        )
+        self.assertEqual(result["match_status"], "ambiguous_source")
+        self.assertEqual(result["proposed_tier"], "")
+        self.assertIn("Tier 4", result["suggestions"])
+        self.assertIn("Step 1", result["suggestions"])
+
+    def test_invalid_professional_evidence_fails_closed(self):
+        base = dict(season="2026-27", fa_step="", tier=3, club="Example FC", league="Test",
+                    division="Test", source_url="https://www.efl.com", source_as_of="2026-11-21",
+                    source_status="official_season_membership")
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "membership.csv"
+            for invalid in (dict(tier=""), dict(tier=5), dict(fa_step=1), dict(season="2025-26")):
+                with self.subTest(invalid=invalid):
+                    with path.open("w", newline="") as file:
+                        writer = csv.DictWriter(file, fieldnames=base.keys())
+                        writer.writeheader()
+                        writer.writerow(base | invalid)
+                    with self.assertRaisesRegex(ValueError, "Invalid season membership"):
+                        load_allocations([path])
 
     def test_unsupported_step_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:

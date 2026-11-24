@@ -44,6 +44,10 @@ jobs:
           assert not summary['giant_killer_awards_enabled']
           assert summary['original_clubfinder_clubs']==651
           assert summary['initial_fa_source_rows']==996
+          assert summary['season_membership_rows_by_tier']=={'1':20, '2':24, '3':24, '4':24}
+          memberships=[row for row in rows if row['source_status']=='official_season_membership']
+          assert len(memberships)==92
+          assert all(not row['source_fa_step'] and row['proposed_tier'] in {'1', '2', '3', '4'} for row in memberships)
           assert len(rows)==summary['total_distinct_clubs']
           assert all(not row['approved_tier'] for row in rows)
           print('PASS: no approved tiers, no giant-killer awards and all original 651 represented')

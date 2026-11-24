@@ -71,6 +71,38 @@ describe relegation and reprieve criteria and do not contribute memberships.
   **626** have a single candidate and **25** remain for review
   (18 missing, four with multiple source allocations and three provisional).
 
+## Official 2026–27 membership for Tiers 1–4
+
+| Tier | Division | Clubs | Official season evidence |
+| --- | --- | ---: | --- |
+| 1 | Premier League | 20 | [2026–27 fixture list](https://www.premierleague.com/en/news/4675097/all-380-fixtures-for-season-202627-premier-league-season), 19 October edition |
+| 2 | EFL Championship | 24 | [EFL Championship table](https://www.efl.com/news/2026/november/21/sky-bet-championshi-results-table-and-stats/), 21 November |
+| 3 | EFL League One | 24 | [EFL League One table](https://www.efl.com/news/2026/november/21/sky-bet-league-one-results--table---stats/), 21 November |
+| 4 | EFL League Two | 24 | [EFL League Two table](https://www.efl.com/news/2026/november/21/Sky-Bet-League-Two-results--table---stats-/), 21 November |
+
+The Premier League opening round names all 20 clubs. Each EFL table lists
+24 clubs. The two membership ledgers under `updater/league-tier-sources/`
+contain one source URL and date per club. The League One table lists
+MK Dons, recorded in the ledger under the full name
+[Milton Keynes Dons](https://www.mkdons.com/news/2026/may/02/league-one-awaits/)
+confirmed by the club for the same season. The general matching rules are unchanged.
+
+Membership ledgers provide an explicit `tier` and leave `fa_step` empty.
+The existing NLS ledgers provide FA Step, from which the CLI derives
+overall Tier 5–10. The candidate report uses `proposed_tier` for both
+evidence types and keeps every `approved_tier` empty.
+
+| Population | Clubs | Candidates | Exceptions |
+| --- | ---: | ---: | ---: |
+| Original Clubfinder | 651 | 626 | 25 |
+| Companion-only Journey registry | 92 | 92 | 0 |
+| Combined | 743 | 718 | 25 |
+
+The remaining 25 Clubfinder exceptions comprise 18 missing matches, four
+competing source matches and three clubs tied to provisional allocations.
+The original historical table for 629/651 is unavailable, and the current
+Clubfinder tally is three lower.
+
 ### Required further sources
 
 - Subsequent FA and league announcements, including revised allocations,
@@ -80,8 +112,6 @@ describe relegation and reprieve criteria and do not contribute memberships.
   [Guernsey FC](https://guernseyfc.com/two-new-opponents-and-an-old-friend-returns/)
   records its Southern Combination place after the play-off. The initial
   allocation audit retains both provisional records.
-- Official 2026–27 [Premier League](https://www.premierleague.com/) and
-  [English Football League](https://www.efl.com/) membership lists — Tiers 1–4.
 
 Do **not** infer a club's Tier from its FA Cup entry round, historic result,
 postcode, playing venue, or a different season's league table.
@@ -108,7 +138,7 @@ tests and uploads the report as an artifact. The workflow has
 
 ## Promotion boundary
 
-1. Import official Premier League/EFL **season evidence** and reconcile subsequent amendments.
+1. Reconcile subsequent FA and league amendments.
 2. Re-run matching over all relevant population, resolve exceptions and
    historical 629/22 discrepancy with source citations.
 3. Apply reviewed, season-specific identity decisions through the normal
