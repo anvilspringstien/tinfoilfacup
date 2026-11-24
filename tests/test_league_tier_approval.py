@@ -20,6 +20,7 @@ from updater.league_tier_readonly import AMENDMENTS, COMPANION, DEFAULT_SOURCES,
 AS_OF = date(2026, 11, 24)
 LEDGER_EMPTY = {"schema": 1, "season": "2026-27", "events": []}
 PHASE_5_DIGEST = "e77fec695e631789c0835ae53895cabda8b27de502ae77e0a9734d45709eaddb"
+FORMAL_REQUEST = LEDGER.with_name("league-tier-2026-27-season-approval-request.json")
 
 
 def canonical_sha256(data):
@@ -131,7 +132,6 @@ class LeagueTierApprovalTests(unittest.TestCase):
         corrupted["entries"]["One Town FC"]["proposed_tier"] = 7
         with self.assertRaisesRegex(ValueError, "Invalid manifest digest"):
             append_decisions(LEDGER_EMPTY, corrupted, self.request(corrupted, [one]), AS_OF)
-        self.assertEqual(read_json(LEDGER)["events"], [])
 
 
 class LeagueTierAcceptanceTests(unittest.TestCase):
@@ -237,9 +237,49 @@ class LeagueTierAcceptanceTests(unittest.TestCase):
                          {"original-clubfinder": 648, "companion-journey-registry": 92})
         return individual, holds
 
+    def verify_season_events(self, events, manifest, individual, holds):
+        self.assertEqual(Counter((event["scope"], event["action"]) for event in events),
+                         {("season", "approve"): 740, ("season", "hold"): 3})
+        self.assertEqual(Counter(event["club"] for event in events), dict.fromkeys(manifest["entries"], 1))
+        self.assertEqual({event["club"] for event in events if event["action"] == "hold"}, holds.keys())
+        self.assertEqual({event["club"]: event["batch_id"] for event in events if event["batch_id"]},
+                         {club: batch["batch_id"] for batch in manifest["batches"] for club in batch["members"]})
+        self.assertEqual({event["club"] for event in events if event["action"] == "approve"
+                          and not event["batch_id"]}, individual)
+        self.assertEqual(set(active_events(events)), {event["event_id"] for event in events})
+        for event in events:
+            self.assertEqual(event["entry"], manifest["entries"][event["club"]])
+            self.assertEqual(event["club_id"], event["entry"]["club_id"])
+            self.assertEqual(event["manifest_sha256"], PHASE_5_DIGEST)
+            self.assertFalse(event["valid_from"] or event["valid_until"] or event["interval_sha256"])
+
+    def test_formal_season_ledger_replays_from_checked_in_request(self):
+        committed = LEDGER.read_bytes()
+        with tempfile.TemporaryDirectory(prefix="tffac-league-tier-formal-") as directory:
+            proposal, replay = Path(directory) / "proposal.json", Path(directory) / "ledger.json"
+            self.cli("prepare", "--as-of", AS_OF, "--out", proposal)
+            manifest = read_json(proposal)
+            individual, holds = self.verify_proposal(manifest)
+            request = read_json(FORMAL_REQUEST)
+            self.assertEqual(request["reviewer"], "Anvil Springstien (GitHub: anvilspringstien)")
+            self.assertEqual(len(request["division_batches"]), 35)
+            self.assertEqual(len(request["decisions"]), 45)
+            events = json.loads(committed)["events"]
+            self.verify_season_events(events, manifest, individual, holds)
+            for event in events:
+                self.assertEqual(event["reviewer"], request["reviewer"])
+                self.assertEqual(event["reviewed_at"], request["reviewed_at"])
+                self.assertIn("Project owner authorised formal season decisions for PR #732", event["reason"])
+                if event["action"] == "hold":
+                    self.assertTrue(event["reason"].endswith(holds[event["club"]]))
+            write_json_atomic(replay, LEDGER_EMPTY)
+            for _ in range(2):
+                self.cli("record", "--manifest", proposal, "--decisions", FORMAL_REQUEST, "--ledger", replay)
+                self.assertEqual(replay.read_bytes(), committed)
+        self.assertEqual(LEDGER.read_bytes(), committed)
+
     def test_phase_5_proposal_replays_in_isolation(self):
         before = LEDGER.read_bytes()
-        self.assertEqual(json.loads(before), LEDGER_EMPTY)
         with tempfile.TemporaryDirectory(prefix="tffac-league-tier-acceptance-") as directory:
             tmp = Path(directory)
             proposal, request_file = tmp / "proposal.json", tmp / "request.json"
@@ -265,7 +305,7 @@ class LeagueTierAcceptanceTests(unittest.TestCase):
             write_json_atomic(request_file, request)
             ledgers = [tmp / "ledger.json", tmp / "replay.json"]
             for ledger in ledgers:
-                ledger.write_bytes(before)
+                write_json_atomic(ledger, LEDGER_EMPTY)
                 self.cli("record", "--manifest", proposal, "--decisions", request_file, "--ledger", ledger)
             ledger, replay = ledgers
             accepted = ledger.read_bytes()
@@ -273,20 +313,9 @@ class LeagueTierAcceptanceTests(unittest.TestCase):
             self.cli("record", "--manifest", proposal, "--decisions", request_file, "--ledger", ledger)
             self.assertEqual(accepted, ledger.read_bytes())
             events = read_json(ledger)["events"]
-            self.assertEqual(Counter((event["scope"], event["action"]) for event in events),
-                             {("season", "approve"): 740, ("season", "hold"): 3})
-            self.assertEqual(Counter(event["club"] for event in events), dict.fromkeys(manifest["entries"], 1))
+            self.verify_season_events(events, manifest, individual, holds)
             self.assertEqual({event["club"]: event["reason"] for event in events if event["action"] == "hold"},
                              holds)
-            self.assertEqual(Counter(event["batch_id"] for event in events if event["batch_id"]),
-                             {batch["batch_id"]: batch["count"] for batch in manifest["batches"]})
-            self.assertEqual({event["club"] for event in events if event["action"] == "approve"
-                              and not event["batch_id"]}, individual)
-            self.assertEqual(set(active_events(events)), {event["event_id"] for event in events})
-            for event in events:
-                self.assertEqual(event["entry"], manifest["entries"][event["club"]])
-                self.assertEqual(event["manifest_sha256"], PHASE_5_DIGEST)
-                self.assertFalse(event["valid_from"] or event["valid_until"] or event["interval_sha256"])
             altered = tmp / "stale-proposal.json"
             manifest["pins"]["audit_identities"] = "0" * 64
             del manifest["manifest_sha256"]

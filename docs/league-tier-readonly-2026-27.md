@@ -370,8 +370,8 @@ event is idempotent. Each event keeps the reviewer, reason, evidence,
 manifest digest, proposed classification and any superseded event.
 The ledger is version-controlled for review and correction.
 
-The live ledger contains zero events, all `approved_tier` fields are
-blank, and this evidence pass proposes zero dated intervals.
+At the proposal stage the live ledger contained zero events, all
+`approved_tier` fields were blank, and no dated intervals were proposed.
 
 ## Phase 6 final acceptance
 
@@ -424,3 +424,34 @@ controlled data and window stubs.
 | `test_glance_card_and_existing_logic` | The old label and emoji assertions predate the styled “Pigeon Miles Flown” label and embedded icon. Assert the rendered card, mileage and icon. |
 | `test_stats_certificate_labels_pigeon_miles` | The expected “Pigeon Miles Travelled” label was renamed to “Pigeon Miles Flown”. Test the current label and numeric value. |
 | `test_popup_opens_once_and_before_first_await_in_certificate` | The old function signature and exact popup statement predate supplied-window support. Exercise both paths to check that a new window opens once before the mileage await and an existing window is reused. |
+
+## Phase 7 formal season-membership decisions
+
+Approving reviewer **Anvil Springstien** (GitHub `anvilspringstien`)
+explicitly authorised the formal season decisions in the 24 November 2026
+Phase 7 instruction for PR #732. The CLI recorded the decisions at
+**19:52:18 UTC on 24 November 2026** using the accepted Phase 6 digest and
+evidence pins. The versioned
+[decision request](../updater/league-tier-sources/league-tier-2026-27-season-approval-request.json)
+preserves the batch and individual rationale and the three hold reasons.
+
+| Population | Season approvals | Season holds | Tie-day approvals |
+| --- | ---: | ---: | ---: |
+| Original Clubfinder | 648 | 3 | 0 |
+| Companion-only Journey | 92 | 0 | 0 |
+| **Total** | **740** | **3** | **0** |
+
+The ledger covers all 743 identities exactly once. The approvals comprise
+698 clubs across 35 division batches and 42 individual decisions. Boro
+Rangers, Cribbs and Holmesdale remain held. The Sutton United identity
+ambiguity and the 22/25 August Kendal Town–Heaton Stannington date
+conflict remain separate cup diagnostics.
+
+The CLI produced an identical ledger when replayed from an empty temporary
+ledger. Resubmitting the same request left the ledger byte-identical.
+The League & Tier regression suite repeats the check in isolation.
+The ledger SHA-256 is
+`e2c7c2b0540cb64e410722c7f22d2f9108a44a9d03eabbca1ae96a097aad9303`.
+The candidate export remains read-only with blank `approved_tier` fields.
+The five existing test failures and their separate remedies are listed
+in the Phase 6 baseline table above.

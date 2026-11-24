@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify identity and safety contract
+      - name: Verify identity, safety and formal ledger replay
         run: python -m unittest discover -s tests -p 'test_league_tier*.py' -v
       - name: Generate season-aware candidate and exception reports
         run: |
@@ -55,7 +55,7 @@ jobs:
           assert (p/'league-tier-exceptions-2026-27.md').is_file()
           assert len(rows)==summary['total_distinct_clubs']
           assert all(not row['approved_tier'] for row in rows)
-          print('PASS: no approved tiers, no giant-killer awards and all original 651 represented')
+          print('PASS: read-only candidate export, no giant-killer awards and all original 651 represented')
           PY
       - name: Review source evidence and scored cup dates
         run: |
@@ -63,11 +63,6 @@ jobs:
       - name: Prepare the pinned approval proposal
         run: |
           python -m updater.league_tier_approval prepare --as-of 2026-11-24 --out /tmp/tffac-league-tier-2026-27/league-tier-proposed-approval-2026-27.json
-          python - <<'PY'
-          import json
-          from updater.league_tier_approval import LEDGER
-          assert not json.loads(LEDGER.read_text())['events']
-          PY
       - name: Compare protected files against main
         run: |
           git fetch origin main
