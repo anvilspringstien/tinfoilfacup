@@ -18,6 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "updater/league-tier-sources/fa-nls-steps-1-4-2026-27-initial.csv"
+STEPS_5_6_SOURCE = SOURCE.with_name("fa-nls-steps-5-6-2026-27-initial.csv")
 ROSTER = ROOT / "tester-club-postcodes.csv"
 COMPANION = ROOT / "journey-club-registry.json"
 SEASON = "2026-27"
@@ -116,7 +117,11 @@ def load_allocations(paths):
 
 def match_population(population, definite, provisional):
     outputs = []
-    available = sorted(set(definite))
+    available = sorted(definite)
+    pending = defaultdict(list)
+    for row in provisional:
+        for name in row["club"].split(" or "):
+            pending[key(name)].append(row)
     for club in population:
         name = club["club"]
         k = key(name)
@@ -124,7 +129,14 @@ def match_population(population, definite, provisional):
         data = dict.fromkeys(FIELDS, "")
         data.update(club)
         data["approved_tier"] = ""  # never approved automatically
-        if len(matches) == 1:
+        unresolved = pending.get(k, [])
+        if unresolved:
+            data["match_status"] = "provisional_ambiguous"
+            data["source_club"] = " | ".join(dict.fromkeys(r["club"] for r in unresolved))
+            data["source_url"] = " | ".join(dict.fromkeys(r["source_url"] for r in unresolved))
+            data["source_status"] = "provisional_ambiguous"
+            data["review_note"] = "Initial FA allocation is conditional; check later league evidence."
+        elif len(matches) == 1:
             hit = matches[0]
             data.update({
                 "match_status": ("matched_exact_initial" if
@@ -143,20 +155,14 @@ def match_population(population, definite, provisional):
         elif len(matches) > 1:
             data["match_status"] = "ambiguous_source"
             data["review_note"] = "More than one official allocation has this normalized club name."
+            data["suggestions"] = " | ".join(
+                f"{row['club']} (Step {row['fa_step']}, {row['league']} / {row['division']})"
+                for row in matches
+            )
         else:
-            unresolved = [
-                row for row in provisional
-                if k in [key(part) for part in row["club"].split(" or ")]
-            ]
-            if unresolved:
-                data["match_status"] = "provisional_ambiguous"
-                data["source_club"] = " | ".join(r["club"] for r in unresolved)
-                data["source_url"] = unresolved[0]["source_url"]
-                data["source_status"] = "provisional_ambiguous"
-                data["review_note"] = "Original FA allocation contains alternative clubs; resolve from current league evidence."
-            else:
-                data["match_status"] = "missing_allocation"
-                data["review_note"] = "Not in imported source scope; check Steps 5–6, PL/EFL and club aliases."
+            data["match_status"] = "missing_allocation"
+            data["review_note"] = "Check season membership, amendments and club aliases."
+        if data["match_status"] in {"provisional_ambiguous", "missing_allocation"}:
             data["suggestions"] = " | ".join(
                 definite[s][0]["club"] for s in difflib.get_close_matches(k, available, n=3, cutoff=0.72)
             )
@@ -165,16 +171,19 @@ def match_population(population, definite, provisional):
 
 
 def build_audit(roster=ROSTER, companion=COMPANION, source_paths=None):
-    sources = [SOURCE] if source_paths is None else [Path(s) for s in source_paths]
+    sources = [SOURCE, STEPS_5_6_SOURCE] if source_paths is None else [Path(s) for s in source_paths]
     population, original_count = load_population(Path(roster), Path(companion))
     definite, provisional, source_counts = load_allocations(sources)
     rows = match_population(population, definite, provisional)
+    step_counts = Counter(row["fa_step"] for matches in definite.values() for row in matches)
+    step_counts.update(row["fa_step"] for row in provisional)
     status = Counter(row["match_status"] for row in rows)
     originals = Counter(row["match_status"] for row in rows if row["population"] == "original-clubfinder")
     return rows, {
         "schema_version": 1, "season": SEASON, "read_only": True,
         "public_promotion": False, "giant_killer_awards_enabled": False,
-        "source_scope": "FA NLS Steps 1–4 initial release; Steps 5–6, PL/EFL and amendments not imported",
+        "source_scope": "Initial FA NLS allocations; PL/EFL and amendments outside this audit",
+        "initial_fa_rows_by_step": {str(step): step_counts[step] for step in sorted(step_counts)},
         "original_clubfinder_clubs": original_count,
         "companion_only_clubs": len(rows) - original_count,
         "total_distinct_clubs": len(rows),
@@ -208,7 +217,7 @@ def write_audit(rows, metadata, out: Path):
         "# Tin Foil FA Cup — League & Tier read-only audit (2026–27)",
         "", "**NOT APPROVED FOR PUBLICATION. GIANT KILLER DISABLED.**", "",
         "Source: FA initial NLS allocations dated 14 May 2026; explicitly subject to later amendments.",
-        "Only Steps 1–4 are imported in this first stage. Missing means unclassified, **not** that the club is outside the pyramid.",
+        f"Imported FA Steps: {', '.join(metadata.get('initial_fa_rows_by_step', {})) or 'none'}.",
         "", f"Original Clubfinder clubs: **{metadata['original_clubfinder_clubs']}**",
         f"Companion-only entries: **{metadata['companion_only_clubs']}**", "",
         "## Current status (original Clubfinder population)", "",
@@ -218,7 +227,7 @@ def write_audit(rows, metadata, out: Path):
     summary += ["", f"## Unclassified or ambiguous: {len(waiting)} across both populations",
                 "", "Every matched Tier is a *proposed* Tier. Approved Tier is intentionally blank.",
                 "The historical 629/651 tally has not been reproduced and must not be presented as current.",
-                "Next source import: FA Steps 5–6, 2026–27 Premier League/EFL membership, plus subsequent league amendments.",
+                "Further evidence required: 2026–27 Premier League/EFL membership and subsequent league amendments.",
                 ""]
     (out / "league-tier-audit-2026-27.md").write_text("\n".join(summary), encoding="utf-8")
 
@@ -228,7 +237,7 @@ def main():
     p.add_argument("--roster", type=Path, default=ROSTER)
     p.add_argument("--companion", type=Path, default=COMPANION)
     p.add_argument("--source", action="append", type=Path, default=None,
-                   help="Additional reviewed allocation CSVs; defaults to first FA Steps 1–4 source")
+                   help="Override the default FA Steps 1–6 CSVs with the supplied allocation CSVs")
     p.add_argument("--out", type=Path, required=True,
                    help="Explicit directory for read-only report artifacts")
     args = p.parse_args()

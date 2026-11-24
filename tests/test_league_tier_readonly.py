@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from updater.league_tier_readonly import (
-    ROOT, SOURCE, key, load_allocations, match_population, build_audit, write_audit
+    SOURCE, STEPS_5_6_SOURCE, key, load_allocations, match_population, build_audit, write_audit
 )
 
 
@@ -23,10 +23,24 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
                 self.assertEqual(r["source_as_of"], "2026-05-14")
                 self.assertNotIn("verified", r["source_status"])
 
+    def test_steps_5_to_6_tables_include_conditional_places_and_exclude_appendix(self):
+        official, provisional, counts = load_allocations([STEPS_5_6_SOURCE])
+        self.assertEqual(counts, {"official_initial_allocation": 655, "provisional_ambiguous": 5})
+        self.assertEqual(
+            {row["club"] for row in provisional},
+            {"AFC Knowsley", "Halewood Apollo", "Crewe", "Harlow Town", "Guernsey or Peacehaven & Telscombe"},
+        )
+        self.assertEqual(official[key("Amersham Town")][0]["fa_step"], 5)
+        self.assertEqual(official[key("Holmer Green")][0]["fa_step"], 6)
+        self.assertNotIn(key("Copthorne"), official)
+
     def test_real_roster_complete_without_publication_or_awards(self):
         rows, meta = build_audit()
         self.assertEqual(meta["season"], "2026-27")
         self.assertEqual(meta["original_clubfinder_clubs"], 651)
+        self.assertEqual(meta["initial_fa_rows_by_step"], {
+            "1": 24, "2": 48, "3": 88, "4": 176, "5": 320, "6": 340
+        })
         self.assertGreaterEqual(meta["total_distinct_clubs"], 651)
         self.assertTrue(meta["read_only"])
         self.assertFalse(meta["public_promotion"])
@@ -34,6 +48,12 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
         self.assertTrue(all(not row["approved_tier"] for row in rows))
         names = {row["club"]: row for row in rows}
         self.assertEqual(names["Crowborough Athletic FC"]["proposed_tier"], 8)
+        self.assertEqual(names["Amersham Town FC"]["proposed_tier"], 9)
+        self.assertEqual(names["Harlow Town FC"]["match_status"], "provisional_ambiguous")
+        self.assertEqual(names["Harlow Town FC"]["proposed_tier"], "")
+        self.assertEqual(names["Westfield FC"]["match_status"], "ambiguous_source")
+        self.assertIn("Step 4", names["Westfield FC"]["suggestions"])
+        self.assertIn("Step 6", names["Westfield FC"]["suggestions"])
         self.assertIn(names["Crowborough Athletic FC"]["match_status"],
                       ("matched_exact_initial", "matched_normalized_initial"))
         self.assertTrue(any(row["match_status"] == "missing_allocation" for row in rows))
@@ -46,7 +66,7 @@ class LeagueTierReadOnlyTests(unittest.TestCase):
         self.assertNotEqual(key("Biggleswade Town"), key("Biggleswade"))
 
     def test_provisional_alternative_does_not_assign_a_tier(self):
-        _, pending, _ = load_allocations([SOURCE])
+        _, pending, _ = load_allocations([SOURCE, STEPS_5_6_SOURCE])
         rows = match_population([
             {"club": "Peacehaven & Telscombe FC", "population": "test"},
             {"club": "Guernsey FC", "population": "test"},

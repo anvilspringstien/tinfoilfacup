@@ -1,4 +1,4 @@
-# Tin Foil FA Cup — 2026–27 League & Tier audit (Stage 1, read-only)
+# Tin Foil FA Cup — 2026–27 League & Tier audit (read-only)
 
 ## Purpose
 
@@ -23,7 +23,7 @@ a Clubfinder promotion, Mission Control deployment or Giant Killer release.
   The previous full match table was not retained. This number is a historical
   lead to investigate, not a result claimed by the new partial-source audit.
 
-## Initial authoritative source loaded
+## Initial FA allocations
 
 **The Football Association, 14 May 2026**:
 [NLS Step 1–4 allocations (original PDF)](https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/nls/nls-1-to-4-club-allocations-2026-27---v1-140526.ashx)
@@ -46,12 +46,40 @@ states that allocations may be amended. Every match is a *candidate for
 review*, even one with an exact source name. The ledger must be reconciled
 against later official decisions before any approved Tier exists.
 
+### Steps 5–6
+
+[FA Steps 5–6 allocation PDF, 14 May 2026](https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/nls/nls-56-club-allocations-202627-v1-140526.ashx)
+
+The ledger `updater/league-tier-sources/fa-nls-steps-5-6-2026-27-initial.csv`
+transcribes the allocation tables on pages 1–10. Appendix pages 11–12
+describe relegation and reprieve criteria and do not contribute memberships.
+
+- Step 5: 320 places, proposed overall Tier 9.
+- Step 6: 340 places, proposed overall Tier 10.
+- Five places are provisional. AFC Knowsley, Halewood Apollo and Crewe
+  were marked pending promotion. Harlow Town's place was subject to
+  compliance with Rule 13.B. The Southern Combination also listed the
+  Guernsey/Peacehaven alternative. The two FA PDFs list one
+  alternative place each, at Steps 4 and 5.
+- Retained reprieves marked `[2]` are named initial allocations.
+  Western Football League Step 6 is recorded as Division One, the
+  [league's published name](https://www.westernleague.co.uk/).
+  The FA PDF labels the column Premier Division (WL1).
+- Counts use the numbered club rows, including Norwich United and
+  Christchurch where the source repeats a row number.
+- Across both PDFs there are **996 places**. Of the 651 Clubfinder entries,
+  **626** have a single candidate and **25** remain for review
+  (18 missing, four with multiple source allocations and three provisional).
+
 ### Required further sources
 
-- [FA NLS Steps 5–6 allocations (14 May 2026 original PDF)](https://www.thefa.com/-/media/thefacom-new/files/competitions/2026-27/nls/nls-56-club-allocations-202627-v1-140526.ashx)
-  — proposed overall Tiers 9 and 10.
 - Subsequent FA and league announcements, including revised allocations,
-  withdrawals, appeal outcomes and the specific Guernsey/Peacehaven decision.
+  withdrawals and appeal outcomes. Lead for that pass: the
+  [Isthmian League](https://www.isthmian.co.uk/articles/club-allocations-for-202627-season)
+  lists Peacehaven & Telscombe in South East, and
+  [Guernsey FC](https://guernseyfc.com/two-new-opponents-and-an-old-friend-returns/)
+  records its Southern Combination place after the play-off. The initial
+  allocation audit retains both provisional records.
 - Official 2026–27 [Premier League](https://www.premierleague.com/) and
   [English Football League](https://www.efl.com/) membership lists — Tiers 1–4.
 
@@ -80,7 +108,7 @@ tests and uploads the report as an artifact. The workflow has
 
 ## Promotion boundary
 
-1. Import official Steps 5–6 and Premier League/EFL **season evidence**.
+1. Import official Premier League/EFL **season evidence** and reconcile subsequent amendments.
 2. Re-run matching over all relevant population, resolve exceptions and
    historical 629/22 discrepancy with source citations.
 3. Apply reviewed, season-specific identity decisions through the normal

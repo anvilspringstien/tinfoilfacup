@@ -43,7 +43,7 @@ jobs:
           assert summary['read_only'] and not summary['public_promotion']
           assert not summary['giant_killer_awards_enabled']
           assert summary['original_clubfinder_clubs']==651
-          assert summary['initial_fa_source_rows']==336
+          assert summary['initial_fa_source_rows']==996
           assert len(rows)==summary['total_distinct_clubs']
           assert all(not row['approved_tier'] for row in rows)
           print('PASS: no approved tiers, no giant-killer awards and all original 651 represented')
