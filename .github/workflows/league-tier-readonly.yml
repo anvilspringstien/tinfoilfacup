@@ -1,0 +1,57 @@
+name: League and Tier — 2026-27 read-only audit
+
+on:
+  pull_request:
+    paths:
+      - 'updater/league_tier_readonly.py'
+      - 'updater/league-tier-sources/**'
+      - 'tests/test_league_tier_readonly.py'
+      - 'docs/league-tier-readonly-2026-27.md'
+      - 'tester-club-postcodes.csv'
+      - 'journey-club-registry.json'
+      - '.github/workflows/league-tier-readonly.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  league-tier-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify identity and safety contract
+        run: python -m unittest discover -s tests -p 'test_league_tier_readonly.py' -v
+      - name: Generate season-aware candidate and exception reports
+        run: |
+          mkdir -p /tmp/tffac-league-tier-2026-27
+          python -m updater.league_tier_readonly --out /tmp/tffac-league-tier-2026-27
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          p=Path('/tmp/tffac-league-tier-2026-27')
+          summary=json.loads((p/'league-tier-audit-summary-2026-27.json').read_text())
+          rows=list(csv.DictReader((p/'league-tier-candidates-2026-27.csv').open()))
+          assert summary['read_only'] and not summary['public_promotion']
+          assert not summary['giant_killer_awards_enabled']
+          assert summary['original_clubfinder_clubs']==651
+          assert summary['initial_fa_source_rows']==336
+          assert len(rows)==summary['total_distinct_clubs']
+          assert all(not row['approved_tier'] for row in rows)
+          print('PASS: no approved tiers, no giant-killer awards and all original 651 represented')
+          PY
+      - name: Prove production and BETA are unchanged
+        run: |
+          git diff --exit-code -- clubfinder.html competition.json beta/clubfinder-beta.html beta/challenges-beta.html journey-club-registry.json tester-club-postcodes.csv
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+      - name: Retain read-only evidence for Mission Control review
+        uses: actions/upload-artifact@v4
+        with:
+          name: league-tier-review-2026-27
+          path: /tmp/tffac-league-tier-2026-27/
+          if-no-files-found: error
