@@ -1,0 +1,28 @@
+name: Mission Control Club Audit (read-only)
+
+on:
+  pull_request:
+    paths:
+      - 'updater/club_audit.py'
+      - 'updater/club-audit-open-location-reviews.json'
+      - 'tests/test_club_audit.py'
+      - 'docs/club-audit*'
+      - 'docs/examples/club-audit-*.json'
+      - '.github/workflows/club-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -B -m unittest discover -s tests -p 'test_club_audit.py' -v

@@ -1,0 +1,2685 @@
+{
+  "schema_version": 1,
+  "read_only": true,
+  "season": "2026-27",
+  "generated_on": "2026-11-25",
+  "competition_updated_at": "2026-11-25T03:01:27.274624+00:00",
+  "source_revisions": {
+    "beta/clubfinder-beta.html": "8278d674d58b3c15397dfe81e79b1003da789f6b00671f2ea6fc051973964e7e",
+    "clubfinder.html": "9b862c8ffa50ac8154c428a61fb8c08a076b22f78a7e9497a9c66214f17c178c",
+    "competition.json": "d9778b2f6a68435cd313a237ab384d925a11311be1163c94e6d12de1a991b409",
+    "journey-club-registry.json": "108be2e42b45da2cdd08b89627c62d67ebc601c92a4753b1b17dd698b09cd93e",
+    "tester-club-postcodes.csv": "bdc707c813fbb278d1dfbad5ed8716f185cf36879c56504dc75a61dc6e774857",
+    "updater/apply_beta_current_ground_names.py": "2b1a84d7850a468d08eb7a584f6c838948aca8e118bfd2623bb20cbc0a4a9c83",
+    "updater/audit_active_custodian_locations.py": "02e99052f804f3ab4f1b5f56de733df4a5b62a8bcfc659a5fb30281fe895e26f",
+    "updater/club-audit-open-location-reviews.json": "3535cb09cbeddd89a47b6002bb56f910996aa242c077e6fdd63bc152ffccc175",
+    "updater/club_audit.py": "ffd31c7f6df420f5623fbe514b2b0b410c1f4ddf450fa0db6a21c4af7be9c911",
+    "updater/club_entry_radar.py": "bf9c0a4a3241f4435393f95358f79e73d3cf854573a7b5952057758b60ffa9b1",
+    "updater/club_website_audit_queue.json": "3676bedcf46df64fecce4ff5a512ab83044c9c110db2f3c7376b1b17e685ced5",
+    "updater/club_website_bulk_promote.js": "37b6f33a504e626e431cdbc34422469f0c148b082710b354a2817ef54c495aee",
+    "updater/club_website_queue.js": "273463fedb793ddbe5c157cdf27d744bf0c5b47a75e0ad68feb9eb9bbf90edd3",
+    "updater/club_website_verified_batch_01.json": "e02c21e05a1791f0421b44ca75827f433fc5491fa6a43de4241e2ca0917b5021",
+    "updater/club_website_verified_batch_02.json": "6dda6eb96f57de208514ec29683a986574766e39b8692202e436d0d5099f6e2f",
+    "updater/club_website_verified_batch_03.json": "af6c8be1ba02373537faf7154c8ceae950284076063fa096965c4b5d6dd28dcc",
+    "updater/club_website_verified_batch_04.json": "ddff0a94358e66f02cf30b22a0fcb0f4fa1079aa46ad4e0067e2424ce017aef1",
+    "updater/club_website_verified_batch_05.json": "c1ed8809797ac3cc63d727104b1e680c1e68d0c861b37ac5fd9d80c5b2a1d4ed",
+    "updater/club_website_verified_batch_06.json": "d656044a033788b4fc922038e3be282188c952ab2daef70e208720caab853a46",
+    "updater/club_website_verified_batch_07.json": "65c3aa485c7a461ed575c17e6fd6554aa08f49e3ffef936edb47484d0e45e675",
+    "updater/club_website_verified_batch_08.json": "bad343e76a7f766a9edc2435d85875cc9e2e2e8125ff04b856f482accd17bf9a",
+    "updater/club_website_verified_batch_09.json": "8fd679193cd090856e8b9348d42d6d05ceea7097082d8df3ca8b26c54c780d59",
+    "updater/club_website_verified_batch_10.json": "b47e93e5c550a89cac9a3692b329293b787ea224bac2b755ba8e8e86ccc59ffb",
+    "updater/club_website_verified_batch_11.json": "2cc020d5d8cf3c60cabbbf93118af34512d3ad5e230dce072f1aaea91d5ce1e2",
+    "updater/club_website_verified_batch_12.json": "62cf45b609c25e21f05544092ea334185c15c8186b355bc7e669228d000428bd",
+    "updater/club_website_verified_batch_13.json": "d20183a55f095e40dcf2c010f11a465f1d5189597c289d2241641745e9eda3d5",
+    "updater/club_website_verified_batch_14.json": "fcf294a04dfc58e26f2341a9cd096bd00cb9f426c5ec2f0aa7b18730aa7b9a85",
+    "updater/club_website_verified_batch_15.json": "057858ddd2a81fe56b5dbb570f19d525c9dd8664bacb8b198a1ea830f2fcf1a1",
+    "updater/club_website_verified_batch_16.json": "dcac33ef0c0820df357969656f8de1876a134b1867c6a4caa965f66de9534e03",
+    "updater/club_website_verified_batch_17.json": "658c124d386df3761db13cb5708210663d34c9a68dd18256bbbefdfc8e62fefd",
+    "updater/club_website_verified_batch_18.json": "219b816c66d943dec7cb3b0b8afe597e69f401c75dd558aa18025e1189fd54b9",
+    "updater/club_website_verified_batch_19.json": "24229f4f6aa62053cb07f23cb40df9bc40f6f3244f81351fdb03b9089c1c9eb8",
+    "updater/club_website_verified_batch_20.json": "75bc66745f2d767de065b73bf1cc5434df8470cd6569b89a3af19571f9dfd572",
+    "updater/club_website_verified_batch_21.json": "523141383e6a1a49b59b06ca0d449bea1716c1d0b3e63ece676b4349e013ba36",
+    "updater/club_website_verified_batch_22.json": "2e38b77204a4782106875ab4069c647520979f25b2b08eff32a48337304561e1",
+    "updater/club_website_verified_batch_23.json": "072503788c43c7411c25410ef828aa4517d2290c42ff12c1680fd699c67206ec",
+    "updater/club_website_verified_batch_24.json": "49e53dc281559763b862fe102d10fa854205602b6212a80b0772db2601966731",
+    "updater/club_website_verified_batch_25.json": "03356467f43eeee4a140cb885d6730d702017042183510257a3681eb251375d4",
+    "updater/club_website_verified_batch_26.json": "795313ca15ea5c6fff8ac941527a6bd7912ee9f7389d2d49c41ce5fa6c0ea83f",
+    "updater/club_website_verified_batch_27.json": "f1487d3e04dd7ace3b87fe5125e21ae48653fde5a7bdaa3cb135b486c95465be",
+    "updater/current-ground-name-ledger.json": "59d3da003a7e7a85a9829b9ea0c517b041b22e25e289b0ae757a9e45c0112a96",
+    "updater/entrant-home-ground-evidence-2026.json": "76676566f9b8182fdb6163a171690d62669d388f239865cb66ebb1ff05b35f97",
+    "updater/identity-variant-confirmation.json": "b8794bdae4b338f08e4baf2322ab7484bf7f2db4498ec1ca43e50d054dde85e4",
+    "updater/law2-verified-location-ledger.json": "d926b0afb7ccf0612de3821fc5bb6cca922a7b8277e56b4049a7478a7cb407f1",
+    "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json": "e2c7c2b0540cb64e410722c7f22d2f9108a44a9d03eabbca1ae96a097aad9303",
+    "updater/league_tier_approval.py": "05a16fe28c01bef0feeb71f2415066942c3dd87976a7c32810faf0e2370b6b2e",
+    "updater/league_tier_readonly.py": "0ae06db55db1e8961ecb977ad1e2a7e152228d89bc303554bb6ff0b9f4fc7463",
+    "updater/league_tier_review.py": "2593d8d78570914f33535877134c49d1578745414b392793436f227fbad35c7f",
+    "updater/round_state_engine.py": "f2ea931d30860e0ce55c2141ee4c0f9ac851d716a60e7fa7591704ade48b393f"
+  },
+  "summary": {
+    "identities": 743,
+    "original_clubfinder_identities": 651,
+    "companion_only_identities": 92,
+    "companion_registry_entries": 252,
+    "season_memberships": {
+      "approved": 740,
+      "held": 3
+    },
+    "tie_day_interval_approvals": 0,
+    "eligible_website_coverage": {
+      "public": {
+        "eligible": 651,
+        "linked": 32
+      },
+      "beta": {
+        "eligible": 651,
+        "linked": 334
+      }
+    },
+    "canonical_website_queue": {
+      "eligible": 651,
+      "eligible_linked": 334,
+      "committed_snapshot_matches": true
+    },
+    "ground_record_gaps": {
+      "all_identities": {
+        "public": 92,
+        "beta": 62
+      },
+      "second_round_proper": {
+        "participants": 40,
+        "missing": {
+          "public": 31,
+          "beta": 0
+        },
+        "clubs": {
+          "public": [
+            "Barnet",
+            "Barnsley",
+            "Blackpool",
+            "Bradford City",
+            "Bristol Rovers",
+            "Burton Albion",
+            "Cheltenham Town",
+            "Chesterfield",
+            "Colchester United",
+            "Crewe Alexandra",
+            "Exeter City",
+            "Grimsby Town",
+            "Leicester City",
+            "Leyton Orient",
+            "Luton Town",
+            "Mansfield Town",
+            "Milton Keynes Dons",
+            "Newport County AFC",
+            "Notts County",
+            "Oldham Athletic AFC",
+            "Plymouth Argyle",
+            "Port Vale",
+            "Reading",
+            "Rochdale AFC",
+            "Rotherham United",
+            "Shrewsbury Town",
+            "Stevenage",
+            "Stockport County",
+            "Wigan Athletic",
+            "Wycombe Wanderers",
+            "York City"
+          ],
+          "beta": []
+        }
+      }
+    }
+  },
+  "reconciliation": {
+    "source_only_round_observations": [
+      {
+        "round": "Preliminary Round",
+        "label": "Eastwood Town",
+        "status": "unregistered",
+        "candidate_clubs": []
+      },
+      {
+        "round": "Extra Preliminary Round Replay",
+        "label": "Petts Wood & Holmesdale",
+        "status": "unregistered",
+        "candidate_clubs": []
+      },
+      {
+        "round": "Preliminary Round",
+        "label": "Petts Wood & Holmesdale",
+        "status": "unregistered",
+        "candidate_clubs": []
+      },
+      {
+        "round": "First Round Qualifying",
+        "label": "Petts Wood & Holmesdale",
+        "status": "unregistered",
+        "candidate_clubs": []
+      },
+      {
+        "round": "Extra Preliminary Round",
+        "label": "Wolverhampton City",
+        "status": "unregistered",
+        "candidate_clubs": []
+      },
+      {
+        "round": "Preliminary Round",
+        "label": "Wolverhampton City",
+        "status": "unregistered",
+        "candidate_clubs": []
+      },
+      {
+        "round": "First Round Qualifying",
+        "label": "Wolverhampton City",
+        "status": "unregistered",
+        "candidate_clubs": []
+      }
+    ],
+    "unmatched_played_labels": [
+      "Eastwood Town",
+      "Petts Wood & Holmesdale",
+      "Wolverhampton City"
+    ],
+    "unmatched_league_tier_decisions": [],
+    "unmatched_open_location_reviews": [],
+    "eligible_roster_differences": {
+      "public": {
+        "roster_only": [],
+        "build_only": []
+      },
+      "beta": {
+        "roster_only": [
+          "Holmesdale FC"
+        ],
+        "build_only": [
+          "Petts Wood & Holmesdale FC"
+        ]
+      }
+    }
+  },
+  "selection": {
+    "mode": "excerpt",
+    "returned": 9
+  },
+  "clubs": [
+    {
+      "club_id": "1ff70bfdcd7ef1204fc91a1dbaa9da68c0404f2ccb6b46213134acd37b620730",
+      "club": "Billingshurst FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Billingshurst",
+          "scope": "competition",
+          "source": "competition.json"
+        },
+        {
+          "label": "Billingshurst",
+          "scope": "league_publisher",
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round",
+            "label": "Billingshurst",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Rod Gaskin Ltd Stadium, Jubilee Fields",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "Rod Gaskin Ltd Stadium, Jubilee Fields",
+                "status": "verified",
+                "provenance": "https://www.billingshurstfc.co.uk/clubinfo/1047"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://www.billingshurstfc.co.uk/results/1045?fenddate=25%2F11%2F2026&frt=all&fsea=all&fstartdate=18%2F11%2F2026&order=asc&sort=sopp",
+                  "https://hhtfc.co.uk/2026/09/21/match-preview-billingshurst-vs-haywards-heath-town/",
+                  "https://www.billingshurstfc.co.uk/clubinfo/1047"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "Four Seasons Fuel Stadium"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "RH14 9HZ",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "RH14 9HZ",
+                "status": "verified",
+                "provenance": "https://www.billingshurstfc.co.uk/clubinfo/1047"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "retained",
+                "urls": [
+                  "https://www.billingshurstfc.co.uk/results/1045?fenddate=25%2F11%2F2026&frt=all&fsea=all&fstartdate=18%2F11%2F2026&order=asc&sort=sopp",
+                  "https://hhtfc.co.uk/2026/09/21/match-preview-billingshurst-vs-haywards-heath-town/",
+                  "https://www.billingshurstfc.co.uk/clubinfo/1047"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "RH14 9HZ"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.0236,
+              "lon": -0.4517
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.0236,
+                  "lon": -0.4517
+                },
+                "status": "verified",
+                "provenance": "Jubilee Fields football-ground mapped location; publication guard requires finite venue-level coordinate"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_08.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.billingshurstfc.co.uk/",
+                "evidence_urls": [
+                  "https://www.billingshurstfc.co.uk/clubinfo/1047"
+                ],
+                "reviewed_on": "2026-10-27",
+                "reason": "Own club-information page identifies Billingshurst Football Club, founded 1891, senior SCFL team and Jubilee Fields RH14 9HZ. League directory explicitly links this domain for the same club. Homepage has October 2026 fixtures and reports.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Four Seasons Fuel Stadium",
+            "status": "recorded",
+            "review_status": "club_confirmed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "Four Seasons Fuel Stadium",
+                "status": "verified",
+                "provenance": "https://www.billingshurstfc.co.uk/clubinfo/1047"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://www.billingshurstfc.co.uk/results/1045?fenddate=25%2F11%2F2026&frt=all&fsea=all&fstartdate=18%2F11%2F2026&order=asc&sort=sopp",
+                  "https://hhtfc.co.uk/2026/09/21/match-preview-billingshurst-vs-haywards-heath-town/",
+                  "https://www.billingshurstfc.co.uk/clubinfo/1047"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "Four Seasons Fuel Stadium"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "RH14 9HZ",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "RH14 9HZ",
+                "status": "verified",
+                "provenance": "https://www.billingshurstfc.co.uk/clubinfo/1047"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "retained",
+                "urls": [
+                  "https://www.billingshurstfc.co.uk/results/1045?fenddate=25%2F11%2F2026&frt=all&fsea=all&fstartdate=18%2F11%2F2026&order=asc&sort=sopp",
+                  "https://hhtfc.co.uk/2026/09/21/match-preview-billingshurst-vs-haywards-heath-town/",
+                  "https://www.billingshurstfc.co.uk/clubinfo/1047"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "RH14 9HZ"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.0236,
+              "lon": -0.4517
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.0236,
+                  "lon": -0.4517
+                },
+                "status": "verified",
+                "provenance": "Jubilee Fields football-ground mapped location; publication guard requires finite venue-level coordinate"
+              }
+            ]
+          },
+          "website": {
+            "value": "https://www.billingshurstfc.co.uk/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Billingshurst FC": "https://www.billingshurstfc.co.uk/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_08.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.billingshurstfc.co.uk/",
+                "evidence_urls": [
+                  "https://www.billingshurstfc.co.uk/clubinfo/1047"
+                ],
+                "reviewed_on": "2026-10-27",
+                "reason": "Own club-information page identifies Billingshurst Football Club, founded 1891, senior SCFL team and Jubilee Fields RH14 9HZ. League directory explicitly links this domain for the same club. Homepage has October 2026 fixtures and reports.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "approved",
+        "league": "Southern Combination",
+        "division": "Premier Division",
+        "tier": 9,
+        "fa_step": 5,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "1c1cd0eedf89e081a5e5afdac2aee6f0924f8bb982f7efe21d1ee4e4ab6c22f8",
+          "action": "approve",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": {
+            "identity_url": "",
+            "note": "FA Full-Time, season 2026–27, selected division Premier.",
+            "observed_on": "2026-11-24",
+            "sha256": "bf3f883544962060cdaa5a53c2c49f1745868348bf86a94ab32d8017fbef2056",
+            "source_url": "https://fulltime.thefa.com/index.html?selectedCompetition=0&selectedFixtureGroupAgeGroup=0&selectedDivision=269553327&selectedSeason=626037376"
+          },
+          "reason": "Project owner authorised formal season decisions for PR #732 in the Phase 7 instruction of 24 November 2026. Phase 6 verified the captured 2026–27 membership and identity matches for Southern Combination, Premier Division."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-08-09",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "ground",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": "Rod Gaskin Ltd Stadium, Jubilee Fields",
+          "beta": "Four Seasons Fuel Stadium"
+        },
+        {
+          "field": "ground",
+          "code": "club_confirmation_differs",
+          "build": "public",
+          "reason": "The build differs from the current club-confirmed value.",
+          "source": "updater/current-ground-name-ledger.json",
+          "observed_value": "Four Seasons Fuel Stadium"
+        },
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://www.billingshurstfc.co.uk/"
+        }
+      ]
+    },
+    {
+      "club_id": "18e880a83b3a44ac39044f029c03247b53fc3a824180e3761ea2118e6ea9297c",
+      "club": "Boro Rangers FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Boro Rangers",
+          "scope": "competition",
+          "source": "competition.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round",
+            "label": "Boro Rangers",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Phoenix Park",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "Phoenix Park",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "TS4 3JW",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "TS4 3JW",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 54.542771,
+              "lon": -1.230584
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 54.542771,
+                  "lon": -1.230584
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "held",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_09.json",
+                "section": "held",
+                "status": "held_unavailable_club_evidence",
+                "url": "https://bororangers.co.uk/",
+                "evidence_urls": [
+                  "https://bororangers.co.uk/",
+                  "https://www.northernfootballleague.org/news/boro-rangers-new-home-unveiled/",
+                  "https://www.northernfootballleague.org/team/boro-rangers/"
+                ],
+                "reviewed_on": "2026-10-28",
+                "reason": "Northern League directly links bororangers.co.uk and corroborates Phoenix Park TS4 3JW. The club destination timed out in the research reader and returned HTTP 503 on ordinary GET, so no accessible club-published identity/contact evidence was established. Do not substitute a directory, social page, Brora Rangers or a youth organisation.",
+                "next_step": "Check the league-linked club homepage when ordinarily accessible; no eligibility or competition inference is made."
+              },
+              {
+                "source": "updater/club_website_verified_batch_26.json",
+                "section": "held",
+                "status": "held",
+                "url": null,
+                "evidence_urls": [],
+                "reviewed_on": "2026-11-17",
+                "reason": "League cross-link is available, but the preferred public homepage returned 503.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Phoenix Park",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "Phoenix Park",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "TS4 3JW",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "TS4 3JW",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 54.542771,
+              "lon": -1.230584
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 54.542771,
+                  "lon": -1.230584
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "held",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_09.json",
+                "section": "held",
+                "status": "held_unavailable_club_evidence",
+                "url": "https://bororangers.co.uk/",
+                "evidence_urls": [
+                  "https://bororangers.co.uk/",
+                  "https://www.northernfootballleague.org/news/boro-rangers-new-home-unveiled/",
+                  "https://www.northernfootballleague.org/team/boro-rangers/"
+                ],
+                "reviewed_on": "2026-10-28",
+                "reason": "Northern League directly links bororangers.co.uk and corroborates Phoenix Park TS4 3JW. The club destination timed out in the research reader and returned HTTP 503 on ordinary GET, so no accessible club-published identity/contact evidence was established. Do not substitute a directory, social page, Brora Rangers or a youth organisation.",
+                "next_step": "Check the league-linked club homepage when ordinarily accessible; no eligibility or competition inference is made."
+              },
+              {
+                "source": "updater/club_website_verified_batch_26.json",
+                "section": "held",
+                "status": "held",
+                "url": null,
+                "evidence_urls": [],
+                "reviewed_on": "2026-11-17",
+                "reason": "League cross-link is available, but the preferred public homepage returned 503.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "missing"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "held",
+        "league": null,
+        "division": null,
+        "tier": null,
+        "fa_step": null,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "e34ae19ae838a27d7aacb66510227dfe1e6d4e243933148573a4fc4c3308f62f",
+          "action": "hold",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": null,
+          "reason": "Find an official replacement allocation for this senior team before proposing a tier."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "website",
+          "code": "held",
+          "build": "public",
+          "reason": "Website evidence needs review. See the dated website evidence."
+        },
+        {
+          "field": "website",
+          "code": "held",
+          "build": "beta",
+          "reason": "Website evidence needs review. See the dated website evidence."
+        },
+        {
+          "field": "league_tier",
+          "code": "season_membership_held",
+          "reason": "Find an official replacement allocation for this senior team before proposing a tier."
+        }
+      ]
+    },
+    {
+      "club_id": "3afb0ba4421159ff9e9b14a865d368a0a69b57c24e38c92ee6102cd51327a4ca",
+      "club": "Brightlingsea Regent FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Brightlingsea Regent",
+          "scope": "competition",
+          "source": "competition.json"
+        },
+        {
+          "label": "Brightlingsea Regent",
+          "scope": "league_publisher",
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round",
+            "label": "Brightlingsea Regent",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "North Road",
+            "status": "recorded",
+            "review_status": "club_confirmed",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "North Road",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://www.brightlingsearegentfc.com/contact"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "North Road"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "CO7 0PL",
+            "status": "recorded",
+            "review_status": "club_confirmed",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "CO7 0PL",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://www.brightlingsearegentfc.com/contact"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "CO7 0PL"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.81583,
+              "lon": 1.026378
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.81583,
+                  "lon": 1.026378
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_11.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.brightlingsearegentfc.com/",
+                "evidence_urls": [
+                  "https://www.brightlingsearegentfc.com/contact"
+                ],
+                "reviewed_on": "2026-10-30",
+                "reason": "Own current club-managed homepage carries October2026 senior reports; contact identifies North Road, Brightlingsea CO7 0PL and senior committee. Isthmian identifies the R's at North Road, founded2005. Separate walking-football directory is not the destination.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "North Road",
+            "status": "recorded",
+            "review_status": "club_confirmed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "North Road",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://www.brightlingsearegentfc.com/contact"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "North Road"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "CO7 0PL",
+            "status": "recorded",
+            "review_status": "club_confirmed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "CO7 0PL",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://www.brightlingsearegentfc.com/contact"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "CO7 0PL"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.81583,
+              "lon": 1.026378
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.81583,
+                  "lon": 1.026378
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": "https://www.brightlingsearegentfc.com/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Brightlingsea Regent FC": "https://www.brightlingsearegentfc.com/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_11.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.brightlingsearegentfc.com/",
+                "evidence_urls": [
+                  "https://www.brightlingsearegentfc.com/contact"
+                ],
+                "reviewed_on": "2026-10-30",
+                "reason": "Own current club-managed homepage carries October2026 senior reports; contact identifies North Road, Brightlingsea CO7 0PL and senior committee. Isthmian identifies the R's at North Road, founded2005. Separate walking-football directory is not the destination.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "approved",
+        "league": "Isthmian League",
+        "division": "North",
+        "tier": 8,
+        "fa_step": 4,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "c9867b06b14e4730783356682af2c39644125e6992ab857b5eae86cb1b8fe388",
+          "action": "approve",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": {
+            "identity_url": "",
+            "note": "Official current league table for 2026–27.",
+            "observed_on": "2026-11-24",
+            "sha256": "1dbadbea2bd0101a2ed1c1d9c21f5d78f274d90b7db71f0a17fe9bc01c1d3b10",
+            "source_url": "https://www.isthmian.co.uk/overview/north"
+          },
+          "reason": "Project owner authorised formal season decisions for PR #732 in the Phase 7 instruction of 24 November 2026. Phase 6 verified the captured 2026–27 membership and identity matches for Isthmian League, North."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-08-08",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://www.brightlingsearegentfc.com/"
+        }
+      ]
+    },
+    {
+      "club_id": "da43a58a5dda6aac86eccd72557d8000a7381d2efbbe3840469f31553a1b05bc",
+      "club": "Chislehurst Glebe FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Chislehurst Glebe",
+          "scope": "competition",
+          "source": "competition.json"
+        },
+        {
+          "label": "Chislehurst Glebe",
+          "scope": "league_publisher",
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round",
+            "label": "Chislehurst Glebe",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Foxbury",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "Foxbury",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "retained",
+                "urls": [
+                  "https://chislehurstglebefc.com/contact/",
+                  "https://scefl.com/sceflclub-glebe",
+                  "https://api.postcodes.io/postcodes/BR76SD"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "Foxbury"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BR7 6HA",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "BR7 6HA",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://chislehurstglebefc.com/contact/",
+                  "https://scefl.com/sceflclub-glebe",
+                  "https://api.postcodes.io/postcodes/BR76SD"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "BR7 6SD"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.419765,
+              "lon": 0.08382
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.419765,
+                  "lon": 0.08382
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_14.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://chislehurstglebefc.com/",
+                "evidence_urls": [
+                  "https://chislehurstglebefc.com/about/"
+                ],
+                "reviewed_on": "2026-11-02",
+                "reason": "Own current homepage/about identify Chislehurst Glebe, the Foxes, senior SCEFL first team and2025 name change. SCEFL corroborates exact name at Foxbury BR7 6SD. League-linked old club-managed Pitchero explicitly says it is no longer used and directs visitors to this new domain; no inferred alias or location change.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Foxbury",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "Foxbury",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "retained",
+                "urls": [
+                  "https://chislehurstglebefc.com/contact/",
+                  "https://scefl.com/sceflclub-glebe",
+                  "https://api.postcodes.io/postcodes/BR76SD"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "Foxbury"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BR7 6SD",
+            "status": "recorded",
+            "review_status": "club_confirmed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "BR7 6SD",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/current-ground-name-ledger.json",
+                "section": "approved",
+                "status": "club_confirmed",
+                "urls": [
+                  "https://chislehurstglebefc.com/contact/",
+                  "https://scefl.com/sceflclub-glebe",
+                  "https://api.postcodes.io/postcodes/BR76SD"
+                ],
+                "reviewed_on": "2026-11-25",
+                "value": "BR7 6SD"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.419765,
+              "lon": 0.08382
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.419765,
+                  "lon": 0.08382
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": "https://chislehurstglebefc.com/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Chislehurst Glebe FC": "https://chislehurstglebefc.com/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_14.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://chislehurstglebefc.com/",
+                "evidence_urls": [
+                  "https://chislehurstglebefc.com/about/"
+                ],
+                "reviewed_on": "2026-11-02",
+                "reason": "Own current homepage/about identify Chislehurst Glebe, the Foxes, senior SCEFL first team and2025 name change. SCEFL corroborates exact name at Foxbury BR7 6SD. League-linked old club-managed Pitchero explicitly says it is no longer used and directs visitors to this new domain; no inferred alias or location change.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "approved",
+        "league": "Southern Counties East Football League",
+        "division": "Premier Division",
+        "tier": 9,
+        "fa_step": 5,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "f3b0975b5e92b2c6601853015406828070e06886d595149c7eb2f30c595db998",
+          "action": "approve",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": {
+            "identity_url": "",
+            "note": "FA Full-Time, season 2026–27.",
+            "observed_on": "2026-11-24",
+            "sha256": "9f31dc8493e4f97755bf81e5ea0dd52e1aba0b816b27da8d2fc9e9ac5a2e0ee9",
+            "source_url": "https://fulltime.thefa.com/index.html?selectedCompetition=0&selectedFixtureGroupAgeGroup=0&selectedDivision=244989883&selectedSeason=6265623"
+          },
+          "reason": "Project owner authorised formal season decisions for PR #732 in the Phase 7 instruction of 24 November 2026. Phase 6 verified the captured 2026–27 membership and identity matches for Southern Counties East Football League, Premier Division."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-08-08",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "postcode",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": "BR7 6HA",
+          "beta": "BR7 6SD"
+        },
+        {
+          "field": "postcode",
+          "code": "club_confirmation_differs",
+          "build": "public",
+          "reason": "The build differs from the current club-confirmed value.",
+          "source": "updater/current-ground-name-ledger.json",
+          "observed_value": "BR7 6SD"
+        },
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://chislehurstglebefc.com/"
+        }
+      ]
+    },
+    {
+      "club_id": "c4760d3d5cb85e5cdf37f9c380650aa879d108dea79646db20e424619019f8d6",
+      "club": "Cribbs FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Cribbs",
+          "scope": "competition",
+          "source": "competition.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round",
+            "label": "Cribbs",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "South West Pitch-side Trauma Care Stadium",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "South West Pitch-side Trauma Care Stadium",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BS10 7TB",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "BS10 7TB",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.51627,
+              "lon": -2.627604
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.51627,
+                  "lon": -2.627604
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_16.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://cribbsfc.co.uk/",
+                "evidence_urls": [
+                  "https://cribbsfc.co.uk/club-info/committee"
+                ],
+                "reviewed_on": "2026-11-04",
+                "reason": "Own homepage/committee identify Cribbs Football Club as members club and unincorporated association, The Lawns, Station Road, Henbury BS10 7TB, chairman/league secretary Nick Veale and senior first XI. Hellenic directory explicitly links this domain and corroborates officials and senior history. Sports/social venue alone is not substituted.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "South West Pitch-side Trauma Care Stadium",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "South West Pitch-side Trauma Care Stadium",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BS10 7TB",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "BS10 7TB",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.51627,
+              "lon": -2.627604
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.51627,
+                  "lon": -2.627604
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": "https://cribbsfc.co.uk/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Cribbs FC": "https://cribbsfc.co.uk/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_16.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://cribbsfc.co.uk/",
+                "evidence_urls": [
+                  "https://cribbsfc.co.uk/club-info/committee"
+                ],
+                "reviewed_on": "2026-11-04",
+                "reason": "Own homepage/committee identify Cribbs Football Club as members club and unincorporated association, The Lawns, Station Road, Henbury BS10 7TB, chairman/league secretary Nick Veale and senior first XI. Hellenic directory explicitly links this domain and corroborates officials and senior history. Sports/social venue alone is not substituted.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "held",
+        "league": null,
+        "division": null,
+        "tier": null,
+        "fa_step": null,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "c34e12a1510f6dde6fbf10569332c9520ca9c399a2669d1aebfb94ed0d0e9769",
+          "action": "hold",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": null,
+          "reason": "The club withdrew its first XI from the Hellenic League with immediate effect on 9 November 2026. A senior allocation or independently bounded historic interval is needed."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-08-07",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://cribbsfc.co.uk/"
+        },
+        {
+          "field": "league_tier",
+          "code": "season_membership_held",
+          "reason": "The club withdrew its first XI from the Hellenic League with immediate effect on 9 November 2026. A senior allocation or independently bounded historic interval is needed."
+        }
+      ]
+    },
+    {
+      "club_id": "ece2786cabf4a7c6dda211526a12f6a026bd884cc55b359fda23679f44d8fe06",
+      "club": "Holmesdale FC",
+      "season": "2026-27",
+      "aliases": [],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": false
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "RTL Group Stadium",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "RTL Group Stadium",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BR2 8HQ",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "BR2 8HQ",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 51.37413,
+              "lon": 0.03742
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 51.37413,
+                  "lon": 0.03742
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "missing",
+          "ground": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [],
+            "matching_labels": []
+          },
+          "postcode": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [],
+            "matching_labels": []
+          },
+          "coordinates": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [],
+            "matching_labels": []
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              }
+            ],
+            "queue_status": []
+          }
+        }
+      },
+      "league_tier": {
+        "status": "held",
+        "league": null,
+        "division": null,
+        "tier": null,
+        "fa_step": null,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "cddb9d849663f08cddc3b10368f92e9c6ad093042535c9b0c2f60d2413906f90",
+          "action": "hold",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": null,
+          "reason": "The league confirms the senior merger into Petts Wood & Holmesdale. A reviewed competition identity migration is required before assigning the merged club’s membership to the legacy roster identity."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "ground",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": "RTL Group Stadium",
+          "beta": null
+        },
+        {
+          "field": "postcode",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": "BR2 8HQ",
+          "beta": null
+        },
+        {
+          "field": "coordinates",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": {
+            "lat": 51.37413,
+            "lon": 0.03742
+          },
+          "beta": null
+        },
+        {
+          "field": "league_tier",
+          "code": "season_membership_held",
+          "reason": "The league confirms the senior merger into Petts Wood & Holmesdale. A reviewed competition identity migration is required before assigning the merged club’s membership to the legacy roster identity."
+        }
+      ]
+    },
+    {
+      "club_id": "4f8737e0d45dbc2eb2a87a2df59911444cc283bf879af31104ee2416afe7b0cc",
+      "club": "Leyton Orient FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Leyton Orient",
+          "scope": "competition",
+          "source": "competition.json"
+        },
+        {
+          "label": "Leyton Orient",
+          "scope": "league_publisher",
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json"
+        }
+      ],
+      "membership": {
+        "population": "companion-journey-registry",
+        "original_clubfinder": false,
+        "eligible_in": {
+          "public": false,
+          "beta": false
+        },
+        "companion_journey_registry": true,
+        "companion_label": "Leyton Orient FC",
+        "companion_state": "active-supporting-evidence"
+      },
+      "competition": {
+        "entry_round": "First Round Proper",
+        "companion_entry_round": "First Round Proper",
+        "observed_rounds": [
+          {
+            "round": "First Round Proper",
+            "label": "Leyton Orient",
+            "match": "identity_key"
+          },
+          {
+            "round": "Second Round Proper",
+            "label": "Leyton Orient",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": [
+          {
+            "type": "fchd-gazetteer-candidate",
+            "club_name": "Leyton Orient",
+            "ground": "Gaughan Group Stadium",
+            "postcode": "E10 5NF",
+            "source": "https://fchd.info/maps/GAZ.htm"
+          }
+        ]
+      },
+      "published": {
+        "public": {
+          "record_status": "missing",
+          "ground": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [
+              {
+                "source": "updater/entrant-home-ground-evidence-2026.json",
+                "section": "clubs",
+                "status": "official_source_confirmed",
+                "urls": [
+                  "https://www.leytonorient.com/club/company-details",
+                  "https://www.leytonorient.com/fans/matchday-guide/travel-information/"
+                ],
+                "reviewed_on": null,
+                "publication_review": "awaiting-coordinates-and-human-promotion",
+                "value": "BetWright Stadium"
+              }
+            ],
+            "matching_labels": []
+          },
+          "postcode": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [
+              {
+                "source": "updater/entrant-home-ground-evidence-2026.json",
+                "section": "clubs",
+                "status": "official_source_confirmed",
+                "urls": [
+                  "https://www.leytonorient.com/club/company-details",
+                  "https://www.leytonorient.com/fans/matchday-guide/travel-information/"
+                ],
+                "reviewed_on": null,
+                "publication_review": "awaiting-coordinates-and-human-promotion",
+                "value": "E10 5NF"
+              }
+            ],
+            "matching_labels": []
+          },
+          "coordinates": {
+            "value": null,
+            "status": "missing",
+            "review_status": "unreviewed",
+            "evidence": [
+              {
+                "source": "updater/entrant-home-ground-evidence-2026.json",
+                "section": "clubs",
+                "status": "pending",
+                "urls": [
+                  "https://www.leytonorient.com/club/company-details",
+                  "https://www.leytonorient.com/fans/matchday-guide/travel-information/"
+                ],
+                "reviewed_on": null,
+                "publication_review": "awaiting-coordinates-and-human-promotion",
+                "value": null
+              }
+            ],
+            "matching_labels": []
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_04.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.leytonorient.com/",
+                "evidence_urls": [
+                  "https://www.leytonorient.com/"
+                ],
+                "reviewed_on": "2026-10-21",
+                "reason": "Independently checked against the club-published homepage or club information page; directory candidates are not treated as verification.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "BetWright Stadium",
+            "status": "recorded",
+            "review_status": "official_source_confirmed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "BetWright Stadium",
+                "status": "unverified",
+                "provenance": "Official club source — pending independent coordinate verification"
+              },
+              {
+                "source": "updater/entrant-home-ground-evidence-2026.json",
+                "section": "clubs",
+                "status": "official_source_confirmed",
+                "urls": [
+                  "https://www.leytonorient.com/club/company-details",
+                  "https://www.leytonorient.com/fans/matchday-guide/travel-information/"
+                ],
+                "reviewed_on": null,
+                "publication_review": "awaiting-coordinates-and-human-promotion",
+                "value": "BetWright Stadium"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "E10 5NF",
+            "status": "recorded",
+            "review_status": "official_source_confirmed",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "E10 5NF",
+                "status": "unverified",
+                "provenance": "Official club source — pending independent coordinate verification"
+              },
+              {
+                "source": "updater/entrant-home-ground-evidence-2026.json",
+                "section": "clubs",
+                "status": "official_source_confirmed",
+                "urls": [
+                  "https://www.leytonorient.com/club/company-details",
+                  "https://www.leytonorient.com/fans/matchday-guide/travel-information/"
+                ],
+                "reviewed_on": null,
+                "publication_review": "awaiting-coordinates-and-human-promotion",
+                "value": "E10 5NF"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": null,
+            "status": "missing",
+            "review_status": "pending",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": null,
+                "status": "unverified"
+              },
+              {
+                "source": "updater/entrant-home-ground-evidence-2026.json",
+                "section": "clubs",
+                "status": "pending",
+                "urls": [
+                  "https://www.leytonorient.com/club/company-details",
+                  "https://www.leytonorient.com/fans/matchday-guide/travel-information/"
+                ],
+                "reviewed_on": null,
+                "publication_review": "awaiting-coordinates-and-human-promotion",
+                "value": null
+              }
+            ]
+          },
+          "website": {
+            "value": "https://www.leytonorient.com/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Leyton Orient": "https://www.leytonorient.com/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_04.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.leytonorient.com/",
+                "evidence_urls": [
+                  "https://www.leytonorient.com/"
+                ],
+                "reviewed_on": "2026-10-21",
+                "reason": "Independently checked against the club-published homepage or club information page; directory candidates are not treated as verification.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "approved",
+        "league": "English Football League",
+        "division": "League One",
+        "tier": 3,
+        "fa_step": null,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "cbc3b651fadab059a00dda38c8ca529f2bbb4685efd005ee345db0a4113ec882",
+          "action": "approve",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": {
+            "identity_url": "",
+            "note": "",
+            "observed_on": "2026-11-21",
+            "sha256": "4c518233ec24b82fe30dfd806e3ff7f55abab2a3a66c68bd704c8e2b21ac4774",
+            "source_url": "https://www.efl.com/news/2026/november/21/sky-bet-league-one-results--table---stats/"
+          },
+          "reason": "Project owner authorised formal season decisions for PR #732 in the Phase 7 instruction of 24 November 2026. Phase 6 verified the captured 2026–27 membership and identity matches for English Football League, League One."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-11-07",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "ground",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "BetWright Stadium"
+        },
+        {
+          "field": "postcode",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "E10 5NF"
+        },
+        {
+          "field": "coordinates",
+          "code": "coordinates_pending",
+          "build": "beta",
+          "reason": "The ground record has no usable venue coordinates."
+        },
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://www.leytonorient.com/"
+        }
+      ]
+    },
+    {
+      "club_id": "e3b3e08b77b7cc3fa59fea2050f4631bc77ea11ef1c981dabb65085e329c88cb",
+      "club": "Ossett United FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Ossett United",
+          "scope": "competition",
+          "source": "competition.json"
+        },
+        {
+          "label": "Ossett United",
+          "scope": "league_publisher",
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round Replay",
+            "label": "Ossett United",
+            "match": "identity_key"
+          },
+          {
+            "round": "Preliminary Round",
+            "label": "Ossett United",
+            "match": "identity_key"
+          },
+          {
+            "round": "First Round Qualifying",
+            "label": "Ossett United",
+            "match": "identity_key"
+          },
+          {
+            "round": "Second Round Qualifying",
+            "label": "Ossett United",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Ingfield",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "Ingfield",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "WF5 9HA",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "WF5 9HA",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/club-audit-open-location-reviews.json",
+                "status": "open_source_discrepancy",
+                "urls": [
+                  "https://www.ossettutd.com/club/contact/"
+                ],
+                "value": "WF5 9HL",
+                "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 53.681547,
+              "lon": -1.577532
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 53.681547,
+                  "lon": -1.577532
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_27.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.ossettutd.com/",
+                "evidence_urls": [
+                  "https://www.ossettutd.com/club/contact/"
+                ],
+                "reviewed_on": "2026-11-20",
+                "reason": "Official Ossett United senior site and contact page; site postcode WF5 9HL differs from Clubfinder WF5 9HA, which is not altered.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Ingfield",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "Ingfield",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "WF5 9HA",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "WF5 9HA",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/club-audit-open-location-reviews.json",
+                "status": "open_source_discrepancy",
+                "urls": [
+                  "https://www.ossettutd.com/club/contact/"
+                ],
+                "value": "WF5 9HL",
+                "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 53.681547,
+              "lon": -1.577532
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 53.681547,
+                  "lon": -1.577532
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": "https://www.ossettutd.com/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Ossett United FC": "https://www.ossettutd.com/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_27.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://www.ossettutd.com/",
+                "evidence_urls": [
+                  "https://www.ossettutd.com/club/contact/"
+                ],
+                "reviewed_on": "2026-11-20",
+                "reason": "Official Ossett United senior site and contact page; site postcode WF5 9HL differs from Clubfinder WF5 9HA, which is not altered.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "approved",
+        "league": "Northern Premier League",
+        "division": "East",
+        "tier": 8,
+        "fa_step": 4,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "26b6d438903b7ae9f484296c8b6badc77ce0d74e38450b58ad4a08468054a6df",
+          "action": "approve",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": {
+            "identity_url": "",
+            "note": "Official current league table for 2026–27.",
+            "observed_on": "2026-11-24",
+            "sha256": "b64da9ad51a4e013a0530a2fdfa4c141dd1d350a97d81b9d6e0b5990c96c6b5c",
+            "source_url": "https://www.thenpl.co.uk/tables/east"
+          },
+          "reason": "Project owner authorised formal season decisions for PR #732 in the Phase 7 instruction of 24 November 2026. Phase 6 verified the captured 2026–27 membership and identity matches for Northern Premier League, East."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-08-08",
+            "status": "not_approved",
+            "event_id": null
+          },
+          {
+            "date": "2026-08-11",
+            "status": "not_approved",
+            "event_id": null
+          },
+          {
+            "date": "2026-08-21",
+            "status": "not_approved",
+            "event_id": null
+          },
+          {
+            "date": "2026-09-04",
+            "status": "not_approved",
+            "event_id": null
+          },
+          {
+            "date": "2026-09-19",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://www.ossettutd.com/"
+        },
+        {
+          "field": "postcode",
+          "code": "open_source_discrepancy",
+          "reason": "The contact page gives WF5 9HL while Clubfinder uses WF5 9HA. Confirm the preferred matchday postcode.",
+          "observed_value": "WF5 9HL",
+          "source": "https://www.ossettutd.com/club/contact/",
+          "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+        }
+      ]
+    },
+    {
+      "club_id": "6d70e78f1f34ccc02b9871b3bdbda44193af10d78ec9a5f49e89fa28f79da3e4",
+      "club": "Peacehaven & Telscombe FC",
+      "season": "2026-27",
+      "aliases": [
+        {
+          "label": "Peacehaven & Telscombe",
+          "scope": "competition",
+          "source": "competition.json"
+        },
+        {
+          "label": "Peacehaven & Telscombe",
+          "scope": "league_publisher",
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json"
+        }
+      ],
+      "membership": {
+        "population": "original-clubfinder",
+        "original_clubfinder": true,
+        "eligible_in": {
+          "public": true,
+          "beta": true
+        },
+        "companion_journey_registry": false,
+        "companion_label": null,
+        "companion_state": null
+      },
+      "competition": {
+        "entry_round": "Extra Preliminary Round",
+        "companion_entry_round": null,
+        "observed_rounds": [
+          {
+            "round": "Extra Preliminary Round",
+            "label": "Peacehaven & Telscombe",
+            "match": "identity_key"
+          },
+          {
+            "round": "Preliminary Round",
+            "label": "Peacehaven & Telscombe",
+            "match": "identity_key"
+          }
+        ],
+        "supporting_home_ground_evidence": []
+      },
+      "published": {
+        "public": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Piddinghoe Avenue",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "Piddinghoe Avenue",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/club-audit-open-location-reviews.json",
+                "status": "open_source_discrepancy",
+                "urls": [
+                  "https://pt-fc.com/"
+                ],
+                "value": "The Sports Park",
+                "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BN10 8RJ",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": "BN10 8RJ",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/club-audit-open-location-reviews.json",
+                "status": "open_source_discrepancy",
+                "urls": [
+                  "https://pt-fc.com/"
+                ],
+                "value": "BN10 8WS",
+                "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 50.793462,
+              "lon": 0.012974
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 50.793462,
+                  "lon": 0.012974
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": null,
+            "status": "missing",
+            "review_status": "verified_unmapped",
+            "evidence": [
+              {
+                "source": "clubfinder.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {}
+              },
+              {
+                "source": "updater/club_website_verified_batch_27.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://pt-fc.com/",
+                "evidence_urls": [
+                  "https://pt-fc.com/"
+                ],
+                "reviewed_on": "2026-11-20",
+                "reason": "Community-owned senior football club site identifies Peacehaven & Telscombe and current 2026/27 ownership and league information.",
+                "next_step": null
+              }
+            ],
+            "queue_status": []
+          }
+        },
+        "beta": {
+          "record_status": "recorded",
+          "ground": {
+            "value": "Piddinghoe Avenue",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "Piddinghoe Avenue",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/club-audit-open-location-reviews.json",
+                "status": "open_source_discrepancy",
+                "urls": [
+                  "https://pt-fc.com/"
+                ],
+                "value": "The Sports Park",
+                "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+              }
+            ]
+          },
+          "postcode": {
+            "value": "BN10 8RJ",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": "BN10 8RJ",
+                "status": "verified",
+                "provenance": "FCHD 2025-26 Gazetteer"
+              },
+              {
+                "source": "updater/club-audit-open-location-reviews.json",
+                "status": "open_source_discrepancy",
+                "urls": [
+                  "https://pt-fc.com/"
+                ],
+                "value": "BN10 8WS",
+                "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+              }
+            ]
+          },
+          "coordinates": {
+            "value": {
+              "lat": 50.793462,
+              "lon": 0.012974
+            },
+            "status": "recorded",
+            "review_status": "recorded_with_provenance",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "GROUNDS",
+                "value": {
+                  "lat": 50.793462,
+                  "lon": 0.012974
+                },
+                "status": "verified",
+                "provenance": "FCHD coordinates; validated against Postcodes.io postcode centroid"
+              }
+            ]
+          },
+          "website": {
+            "value": "https://pt-fc.com/",
+            "status": "recorded",
+            "review_status": "verified",
+            "evidence": [
+              {
+                "source": "beta/clubfinder-beta.html",
+                "section": "CLUB_WEBSITES",
+                "mappings": {
+                  "Peacehaven & Telscombe FC": "https://pt-fc.com/"
+                }
+              },
+              {
+                "source": "updater/club_website_verified_batch_27.json",
+                "section": "verified",
+                "status": "verified_official_club_site",
+                "url": "https://pt-fc.com/",
+                "evidence_urls": [
+                  "https://pt-fc.com/"
+                ],
+                "reviewed_on": "2026-11-20",
+                "reason": "Community-owned senior football club site identifies Peacehaven & Telscombe and current 2026/27 ownership and league information.",
+                "next_step": null
+              }
+            ],
+            "queue_status": [
+              "verified"
+            ]
+          }
+        }
+      },
+      "league_tier": {
+        "status": "approved",
+        "league": "Isthmian League",
+        "division": "South East",
+        "tier": 8,
+        "fa_step": 4,
+        "decision": {
+          "source": "updater/league-tier-sources/league-tier-2026-27-approval-ledger.json",
+          "event_id": "d78cd0c335a564df60d6ae6979f9ca4c9f37db60cbc51945c7d55c44082948cb",
+          "action": "approve",
+          "reviewed_at": "2026-11-24T19:52:18+00:00",
+          "evidence": {
+            "identity_url": "https://guernseyfc.com/two-new-opponents-and-an-old-friend-returns/",
+            "note": "The play-off winner entered Isthmian South East; the league's 2026–27 Merstham match confirms the division.",
+            "observed_on": "2026-11-24",
+            "sha256": "9d539c76440b5a28946fdf3b896274cce5336abdbbf5441501c7e9000f8f85fa",
+            "source_url": "https://www.isthmian.co.uk/overview/south-east"
+          },
+          "reason": "Project owner authorised formal season decisions for PR #732 in the Phase 7 instruction of 24 November 2026. Phase 6 verified the individual membership and identity evidence. The play-off winner entered Isthmian South East; the league's 2026–27 Merstham match confirms the division."
+        }
+      },
+      "tie_day": {
+        "status": "not_approved",
+        "interval_decisions": [],
+        "played_dates": [
+          {
+            "date": "2026-08-08",
+            "status": "not_approved",
+            "event_id": null
+          },
+          {
+            "date": "2026-08-22",
+            "status": "not_approved",
+            "event_id": null
+          }
+        ],
+        "identity_holds": [],
+        "date_holds": []
+      },
+      "discrepancies": [
+        {
+          "field": "website",
+          "code": "builds_differ",
+          "reason": "Public and BETA values differ.",
+          "public": null,
+          "beta": "https://pt-fc.com/"
+        },
+        {
+          "field": "postcode",
+          "code": "open_source_discrepancy",
+          "reason": "The Contact and Sports Park pages give BN10 8WS. Matchday and league evidence also give BN10 8RJ. Confirm the preferred visitor directions.",
+          "observed_value": "BN10 8WS",
+          "source": "https://pt-fc.com/",
+          "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+        },
+        {
+          "field": "ground",
+          "code": "open_source_discrepancy",
+          "reason": "Clubfinder lists Piddinghoe Avenue and the club uses The Sports Park. Confirm the current display name.",
+          "observed_value": "The Sports Park",
+          "source": "https://pt-fc.com/",
+          "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+        }
+      ]
+    }
+  ]
+}
