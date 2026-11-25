@@ -1,0 +1,16 @@
+# Existing Radar test Worker only. See HOSTED-ACCEPTANCE.md before using this target.
+name = "tffac-mission-control-radar-test"
+main = ".radar-test-build/worker.mjs"
+compatibility_date = "2026-11-21"
+compatibility_flags = []
+workers_dev = true
+keep_vars = true
+no_bundle = true
+find_additional_modules = false
+
+[build]
+command = "node build-radar-test.mjs"
+
+[[services]]
+binding = "OMBUDSMAN_SERVICE"
+service = "tffc-ombudsman"
