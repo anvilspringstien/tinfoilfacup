@@ -41,3 +41,8 @@ jobs:
         env:
           TFFAC_MC_TEST_TARGET: isolated
         run: node --test mission-control-worker/worker.test.mjs
+      - name: Check the derived hosted target with synthetic Gmail
+        run: |
+          node mission-control-worker/build-radar-test.mjs
+          node --check mission-control-worker/.radar-test-build/worker.mjs
+          node --test mission-control-worker/test/hosted-target.test.mjs

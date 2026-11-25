@@ -13,7 +13,7 @@ Run the checks in [README.md](README.md). Select the fixture with `TFFAC_MC_TEST
 
 On 25 November 2026, unauthenticated GET requests to [the existing Radar test host](https://tffac-mission-control-radar-test.anvilspringstien.workers.dev/) returned HTTP 403 for `/` and `/api/radar/latest` and 401 for `/api/gmail/status`. The historical Radar handoffs name that distinct Worker and report a previous successful authenticated fetch of a main-branch Radar artifact. The public responses confirm its external access gate. The current deployment revision, OAuth client, installed binding names, and last successful authenticated test require owner-side verification.
 
-The existing Radar test Worker is a candidate for a later owner-approved hosted test. The recovered Worker pins the live hostname and rejects requests to the Radar test hostname, so a copy of the current source would fail closed there. Use the in-process fixture for Phase 2C.1. The branch adds no alternate Wrangler target and leaves the existing Radar Worker in place.
+The existing Radar test Worker is a candidate for a later owner-approved hosted test. The recovered Worker pins the live hostname and rejects requests to the Radar test hostname, so a copy of the current source would fail closed there. Phase 2C.4 adds an explicit [Radar TEST target and acceptance runbook](HOSTED-ACCEPTANCE.md). Preparation leaves the existing Worker serving its current configuration.
 
 ## Owner checks before any hosted smoke test
 
