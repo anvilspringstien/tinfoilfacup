@@ -172,7 +172,8 @@ test('Gmail reads only with separate consent and returns minimal outreach and dr
   gmailRoute('messages', url => {
     assert.match(url.searchParams.get('q'), /^in:sent /);
     assert.equal(url.searchParams.get('maxResults'), '20');
-    return Response.json({ messages: [{ id: 'abc123' }, { id: 'abc456' }], nextPageToken: 'next-page' });
+    return Response.json({ messages: [{ id: 'abc123' }, { id: 'abc456' }, { id: 'abc789' }, { id: 'unusable' }],
+      nextPageToken: 'next-page' });
   });
   for (const [id, subject] of [['abc123', 'Keeping your club details up to date'], ['abc456', 'Re: Keeping your club details up to date']]) {
     gmailRoute('messages/' + id, url => {
@@ -185,11 +186,18 @@ test('Gmail reads only with separate consent and returns minimal outreach and dr
       } });
     });
   }
+  gmailRoute('messages/abc789', () => Response.json({ payload: {
+    headers: [{ name: 'Subject', value: 'Keeping your club details up to date' }],
+    mimeType: 'text/plain',
+  } }));
   const outreach = await call('/api/gmail/outreach?kind=current', { cookies });
   assert.equal(outreach.status, 200);
   const count = await outreach.json();
   assert.equal(count.next, 'next-page');
   assert.equal(count.audit.repliesSkipped, 1);
+  assert.equal(count.audit.unparseable, 1);
+  assert.equal(count.audit.bodiesMissing, 1);
+  assert.equal(count.audit.idRejected, 1);
   assert.deepEqual(count.rows.map(row => row.club), ['Example Athletic FC']);
   assert.deepEqual(Object.keys(count.rows[0]).sort(), ['club', 'day']);
 
@@ -197,14 +205,77 @@ test('Gmail reads only with separate consent and returns minimal outreach and dr
   assert.deepEqual(await (await call('/api/gmail/drafts', { cookies })).json(), { count: 1, complete: false });
   gmailRoute('drafts', () => Response.json({ detail: 'Mock provider body' }, { status: 401 }));
   const failed = await call('/api/gmail/drafts', { cookies });
-  assert.equal(failed.status, 502);
-  assert.deepEqual(await failed.json(), { error: 'draft_list_unavailable' });
+  assert.equal(failed.status, 401);
+  assert.deepEqual(await failed.json(), { error: 'gmail_grant_rejected' });
+  cookie(failed, grantName, 0);
+  assert.ok(!failed.headers.getSetCookie().some(item => item.startsWith(sessionName + '=')));
 
   assert.equal((await call('/gmail/disconnect', { method: 'POST', cookies, headers: { Origin: origin } })).status, 403);
+  assert.equal((await call('/gmail/disconnect', { method: 'POST', cookies,
+    headers: { Origin: 'null', 'X-TFFAC-Action': 'disconnect' } })).status, 403);
   const disconnect = await call('/gmail/disconnect', { method: 'POST', cookies,
     headers: { Origin: origin, 'X-TFFAC-Action': 'disconnect' } });
   assert.equal(disconnect.status, 200);
   cookie(disconnect, grantName, 0);
+});
+
+test('distinguishes local Gmail grant expiry and Mission Control session expiry', async t => {
+  let now = Date.now();
+  t.mock.method(Date, 'now', () => now);
+  const session = await signIn();
+  const grant = cookie(await authorize({ session }), grantName);
+  const cookies = [session, grant];
+  now += 600_000;
+  const status = await call('/api/gmail/status', { cookies });
+  assert.deepEqual(await status.json(), { connected: false, reason: 'gmail_grant_expired' });
+  cookie(status, grantName, 0);
+  assert.deepEqual(await (await call('/api/gmail/outreach?kind=current', { cookies })).json(),
+    { error: 'gmail_grant_expired' });
+  assert.equal((await call('/', { cookies: [session] })).status, 200);
+
+  now += 3_001_000;
+  const expired = await call('/api/gmail/status', { cookies });
+  assert.equal(expired.status, 401);
+  assert.deepEqual(await expired.json(), { error: 'sign_in_required' });
+  const disconnect = await call('/gmail/disconnect', { method: 'POST', cookies,
+    headers: { Origin: origin, 'X-TFFAC-Action': 'disconnect' } });
+  assert.equal(disconnect.status, 401);
+  assert.deepEqual(await disconnect.json(), { error: 'sign_in_required' });
+  assert.deepEqual(disconnect.headers.getSetCookie(), []);
+});
+
+test('classifies provider, permission, quota, network and malformed results without leaking details', async () => {
+  const session = await signIn();
+  const grant = cookie(await authorize({ session }), grantName);
+  const cookies = [session, grant];
+  const list = 'GET https://gmail.googleapis.com/gmail/v1/users/me/messages';
+  for (const [code, expectedStatus, reply] of [
+    ['gmail_permission', 403, () => Response.json({ error: { errors: [{ reason: 'insufficientPermissions' }], message: 'private' } }, { status: 403 })],
+    ['gmail_quota', 429, () => Response.json({ error: { errors: [{ reason: 'userRateLimitExceeded' }] } }, { status: 403 })],
+    ['gmail_quota', 429, () => new Response(null, { status: 429 })],
+    ['gmail_network', 502, () => { throw new TypeError('private network detail'); }],
+    ['gmail_upstream', 502, () => new Response('private upstream detail', { status: 503 })],
+    ['gmail_upstream', 502, () => Response.json({})],
+    ['gmail_upstream', 502, () => Response.json({ messages: [], resultSizeEstimate: 1 })],
+    ['gmail_upstream', 502, () => Response.json({ messages: [], nextPageToken: 'unexpected-page' })],
+  ]) {
+    mocks.set(list, reply);
+    const response = await call('/api/gmail/outreach?kind=classic', { cookies });
+    assert.equal(response.status, expectedStatus);
+    assert.deepEqual(await response.json(), { error: code });
+    assert.deepEqual(response.headers.getSetCookie(), []);
+  }
+  mocks.set(list, () => new Response(null, { status: 401 }));
+  const rejected = await call('/api/gmail/outreach?kind=classic', { cookies });
+  assert.equal(rejected.status, 401);
+  assert.deepEqual(await rejected.json(), { error: 'gmail_grant_rejected' });
+  cookie(rejected, grantName, 0);
+  assert.equal(rejected.headers.getSetCookie().length, 1);
+
+  mocks.set(list, () => Response.json({ resultSizeEstimate: 0 }));
+  const zero = await call('/api/gmail/outreach?kind=classic', { cookies });
+  assert.equal(zero.status, 200);
+  assert.deepEqual(await zero.json(), outreachPage());
 });
 
 function radarArchive(report) {
@@ -303,7 +374,7 @@ function inlineScripts(html) {
   return Array.from(html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g), match => match[1]);
 }
 
-function browser(scripts, storage = new Map()) {
+function browser(scripts, storage = new Map(), upstream = async () => new Response(null, { status: 503 })) {
   const listeners = new Map();
   const elements = new Map();
   const requests = [];
@@ -315,18 +386,32 @@ function browser(scripts, storage = new Map()) {
   const sandbox = vm.createContext({
     document: { body: node(), getElementById, querySelectorAll: () => [], createElement: node,
       addEventListener: (event, handler) => listeners.set(event, handler) },
-    localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) },
+    localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value),
+      removeItem: key => storage.delete(key) },
     window: { scrollTo() {} }, URL, AbortController, crypto,
     fetch: async (input, options = {}) => {
-      requests.push({ url: new URL(input, origin), method: options.method ?? 'GET' });
-      return new Response(null, { status: 503 });
+      const url = new URL(input, origin);
+      requests.push({ url, method: options.method ?? 'GET', options });
+      return upstream(url, options);
     },
     setTimeout: () => 1, clearTimeout() {},
   });
   for (const script of scripts) vm.runInContext(script, sandbox);
-  return { requests, sandbox, element: getElementById, navigate: target => {
-    listeners.get('click')({ target: { closest: selector => selector === '[data-nav]' ? { dataset: { nav: target } } : null } });
-  }};
+  function click(attribute, value) {
+    return listeners.get('click')({ target: {
+      closest: selector => selector === '[data-' + attribute + ']' ? { dataset: { [attribute]: value } } : null,
+    } });
+  }
+  const evaluate = source => vm.runInContext(source, sandbox);
+  async function idle() {
+    for (let attempt = 0; attempt < 100; attempt++) {
+      await new Promise(setImmediate);
+      if (evaluate('!state.loading&&!state.gmail.operation')) return;
+    }
+    assert.fail('Dashboard did not settle');
+  }
+  return { requests, sandbox, element: getElementById, evaluate, idle,
+    navigate: target => click('nav', target), action: target => click('action', target) };
 }
 
 test('the dashboard navigates locally and restores a browser-local workspace', async () => {
@@ -360,4 +445,252 @@ test('the dashboard navigates locally and restores a browser-local workspace', a
   const allowed = new Set([origin, 'https://api.github.com', 'https://raw.githubusercontent.com']);
   assert.ok(app.requests.length > 0);
   assert.ok([...app.requests, ...reopened.requests].every(req => req.method === 'GET' && allowed.has(req.url.origin)));
+});
+
+const countKey = 'tffac-mission-control-gmail-count-v1';
+const mockDrafts = { count: 2, complete: true };
+
+function outreachPage(clubs = [], { next = null, repliesSkipped = 0, unparseable = 0, idRejected = 0 } = {}) {
+  const fetched = clubs.length + repliesSkipped + unparseable;
+  return {
+    next,
+    rows: clubs.map(club => ({ club, day: null })),
+    audit: { listed: fetched + idRejected, fetched, accepted: clubs.length, repliesSkipped, subjectSkipped: 0,
+      unparseable, bodiesMissing: unparseable, idRejected },
+  };
+}
+
+async function dashboardScripts(session = null) {
+  const sessionCookie = session ?? await signIn();
+  return inlineScripts(await (await call('/', { cookies: [sessionCookie] })).text());
+}
+
+function dashboardFixture(scripts, storage = new Map(), { connected = true, classic, current, drafts } = {}) {
+  const fixture = {
+    status: () => Response.json({ connected }),
+    scan: url => Response.json((url.searchParams.get('kind') === 'classic' ? classic : current) ?? outreachPage()),
+    drafts: () => Response.json(drafts ?? mockDrafts),
+    disconnect: () => Response.json({ disconnected: true }),
+  };
+  const app = browser(scripts, storage, (url, options) => {
+    if (url.origin !== origin) return new Response(null, { status: 503 });
+    if (url.pathname === '/api/gmail/status') return fixture.status();
+    if (url.pathname === '/api/gmail/outreach') return fixture.scan(url, options);
+    if (url.pathname === '/api/gmail/drafts') return fixture.drafts();
+    if (url.pathname === '/gmail/disconnect') return fixture.disconnect(options);
+    return new Response(null, { status: 503 });
+  });
+  return { app, fixture, storage };
+}
+
+function panel(app) {
+  app.navigate('outreach');
+  return app.element('content').innerHTML;
+}
+
+test('the delegated Disconnect click clears the Worker grant with exact-origin headers and confirms status', async () => {
+  const session = await signIn();
+  const grant = cookie(await authorize({ session }), grantName);
+  const scripts = await dashboardScripts(session);
+  const jar = new Map([[sessionName, session], [grantName, grant]]);
+  const app = browser(scripts, new Map(), async (url, options) => {
+    if (url.origin !== origin) return new Response(null, { status: 503 });
+    if (url.pathname === '/api/gmail/outreach') return Response.json(outreachPage(['Example Town FC']));
+    if (url.pathname === '/api/gmail/drafts') return Response.json(mockDrafts);
+    if (!['/gmail/disconnect', '/api/gmail/status'].includes(url.pathname)) return new Response(null, { status: 503 });
+    assert.equal(options.credentials, 'same-origin');
+    let headers;
+    if (url.pathname === '/gmail/disconnect') {
+      assert.equal(options.method, 'POST');
+      assert.equal(options.mode, 'same-origin');
+      assert.equal(options.redirect, 'error');
+      assert.equal(options.referrerPolicy, 'same-origin');
+      // Model the user agent's automatic Origin header. Node fetch does not add it.
+      headers = { ...options.headers, Origin: origin };
+    }
+    const response = await call(url.href, { method: options.method, cookies: [...jar.values()], headers });
+    for (const header of response.headers.getSetCookie()) {
+      if (/; Max-Age=0;/.test(header)) jar.delete(header.split('=')[0]);
+    }
+    return response;
+  });
+  await app.idle();
+  assert.match(panel(app), /Clubs contacted: 1/);
+  const requestIndex = app.requests.length;
+  await app.action('gmail-disconnect');
+  assert.deepEqual(app.requests.slice(requestIndex).map(r => [r.method, r.url.pathname]),
+    [['POST', '/gmail/disconnect'], ['GET', '/api/gmail/status']]);
+  assert.equal(jar.has(grantName), false);
+  assert.equal(jar.get(sessionName), session);
+  assert.match(panel(app), /Disconnected\./);
+  assert.match(panel(app), /Stale data/);
+  assert.equal((await call('/', { cookies: [...jar.values()] })).status, 200);
+});
+
+test('the delegated Disconnect click requires both acknowledgement and an absent grant', async () => {
+  const scripts = await dashboardScripts();
+  const { app, fixture } = dashboardFixture(scripts);
+  await app.idle();
+  fixture.disconnect = () => Response.json({ disconnected: false });
+  await app.action('gmail-disconnect');
+  assert.match(panel(app), /Disconnect could not be confirmed/);
+  assert.doesNotMatch(panel(app), /Disconnected\./);
+
+  fixture.disconnect = () => Response.json({ disconnected: true });
+  await app.action('gmail-disconnect');
+  assert.match(panel(app), /Disconnect could not be confirmed/);
+  assert.doesNotMatch(panel(app), /Disconnected\./);
+
+  fixture.disconnect = () => Response.json({ error: 'sign_in_required' }, { status: 401 });
+  await app.action('gmail-disconnect');
+  assert.match(panel(app), /Mission Control session expired/);
+  assert.match(panel(app), /href="\/login">Sign in to Mission Control/);
+});
+
+test('expiry and read failures give distinct dashboard instructions', async () => {
+  const scripts = await dashboardScripts();
+  const { app, fixture } = dashboardFixture(scripts);
+  await app.idle();
+  for (const [code, status, message] of [
+    ['gmail_permission', 403, /Gmail denied read access/],
+    ['gmail_quota', 429, /Gmail rate or quota limit/],
+    ['gmail_network', 502, /could not reach Mission Control/],
+    ['gmail_upstream', 502, /returned an unusable response/],
+    ['gmail_grant_rejected', 401, /Gmail rejected the saved permission/],
+  ]) {
+    fixture.scan = () => Response.json({ error: code }, { status });
+    await app.action('gmail-refresh');
+    assert.match(panel(app), message);
+    assert.match(panel(app), /Stale data/);
+  }
+  assert.match(panel(app), /Reconnect Gmail read-only/);
+
+  const expiredGrant = dashboardFixture(scripts, new Map(), { connected: false });
+  await expiredGrant.app.idle();
+  expiredGrant.fixture.status = () => Response.json({ connected: false, reason: 'gmail_grant_expired' });
+  await expiredGrant.app.evaluate('missionGmailStatus()');
+  assert.match(panel(expiredGrant.app), /Gmail permission expired/);
+  assert.match(panel(expiredGrant.app), /href="\/gmail\/connect">Reconnect Gmail read-only/);
+
+  const expiredSession = dashboardFixture(scripts, new Map(), { connected: false });
+  await expiredSession.app.idle();
+  expiredSession.fixture.status = () => Response.json({ error: 'sign_in_required' }, { status: 401 });
+  await expiredSession.app.evaluate('missionGmailStatus()');
+  assert.match(panel(expiredSession.app), /Mission Control session expired/);
+  assert.doesNotMatch(panel(expiredSession.app), /href="\/gmail\/connect"/);
+});
+
+test('complete zero, incomplete first scans and draft listings retain their distinct meanings', async () => {
+  const scripts = await dashboardScripts();
+  const zero = dashboardFixture(scripts, new Map(), { drafts: { count: 500, complete: false } });
+  await zero.app.idle();
+  assert.equal(JSON.parse(zero.storage.get(countKey)).count, 0);
+  assert.match(panel(zero.app), /Clubs contacted: 0/);
+  assert.match(panel(zero.app), /CURRENT/);
+  assert.match(panel(zero.app), /Partial listing checked/);
+  assert.doesNotMatch(panel(zero.app), /metric-val">500/);
+
+  for (const page of [
+    outreachPage([], { idRejected: 1 }),
+    outreachPage([], { unparseable: 1 }),
+    { ...outreachPage(), audit: { ...outreachPage().audit, listed: 1 } },
+    outreachPage(['Example FC'], { next: 'repeated-token' }),
+  ]) {
+    const first = dashboardFixture(scripts, new Map(), { current: page });
+    await first.app.idle();
+    assert.equal(first.storage.has(countKey), false);
+    assert.match(panel(first.app), /Clubs contacted: Unknown/);
+    assert.match(panel(first.app), /Scan incomplete/);
+    assert.match(panel(first.app), /metric-val">2/); // Drafts succeed independently.
+  }
+});
+
+test('only a reconciled two-family scan replaces the saved count and timestamp', async () => {
+  const scripts = await dashboardScripts();
+  const { app, fixture, storage } = dashboardFixture(scripts);
+  fixture.scan = url => {
+    const [kind, page] = [url.searchParams.get('kind'), url.searchParams.get('page')];
+    if (kind === 'classic' && !page) return Response.json(outreachPage(['Example Town FC'], { next: 'page-two' }));
+    if (kind === 'classic' && page === 'page-two') return Response.json(outreachPage(['United FC'], { repliesSkipped: 1 }));
+    assert.equal(kind, 'current');
+    return Response.json(outreachPage(['Example Town', 'Town Athletic FC']));
+  };
+  await app.idle();
+  const saved = storage.get(countKey);
+  const snapshot = JSON.parse(saved);
+  assert.equal(snapshot.count, 3);
+  assert.deepEqual(Object.keys(snapshot).sort(), ['checkedAt', 'count', 'version']);
+  assert.equal(new Date(snapshot.checkedAt).toISOString(), snapshot.checkedAt);
+  assert.match(panel(app), /Combined: 3 unique · 1 repeated keys/);
+  assert.ok(app.requests.some(r => r.url.searchParams.get('page') === 'page-two'));
+
+  fixture.scan = url => url.searchParams.get('kind') === 'classic'
+    ? Response.json(outreachPage(['Partial Record FC']))
+    : Response.json({ error: 'gmail_network' }, { status: 502 });
+  await app.action('gmail-refresh');
+  assert.equal(storage.get(countKey), saved);
+  assert.match(panel(app), /Clubs contacted: 3/);
+  assert.match(panel(app), /Stale data/);
+  assert.ok(panel(app).includes(snapshot.checkedAt));
+
+  const reloaded = dashboardFixture(scripts, storage, { connected: false });
+  await reloaded.app.idle();
+  assert.match(panel(reloaded.app), /Clubs contacted: 3/);
+  assert.match(panel(reloaded.app), /Stale data/);
+  assert.ok(panel(reloaded.app).includes(snapshot.checkedAt));
+
+  const reconnected = dashboardFixture(scripts, storage, {
+    classic: outreachPage(['New Club FC']), current: outreachPage(),
+  });
+  await reconnected.app.idle();
+  assert.match(panel(reconnected.app), /Clubs contacted: 1/);
+  assert.match(panel(reconnected.app), /CURRENT/);
+  reconnected.app.action('reset-local');
+  reconnected.app.element('reset-confirm').value = 'RESET LOCAL';
+  reconnected.app.action('confirm-reset');
+  assert.equal(storage.has(countKey), false);
+  assert.match(panel(reconnected.app), /Clubs contacted: Unknown/);
+});
+
+test('disconnect and clear-data invalidate pending refreshes even if a reply arrives after abort', async () => {
+  const scripts = await dashboardScripts();
+  const { app, fixture, storage } = dashboardFixture(scripts, new Map(), { classic: outreachPage(['Saved FC']) });
+  await app.idle();
+  const saved = storage.get(countKey);
+
+  function pauseRefresh() {
+    let resume;
+    fixture.scan = () => new Promise(resolve => { resume = resolve; });
+    const pending = app.action('gmail-refresh');
+    const scanRequest = app.requests.at(-1);
+    assert.match(panel(app), /REFRESHING/);
+    return { pending, scanRequest, complete: () => resume(Response.json(outreachPage(['Obsolete FC', 'Another FC']))) };
+  }
+
+  const duringDisconnect = pauseRefresh();
+  fixture.status = () => Response.json({ connected: false });
+  await app.action('gmail-disconnect');
+  assert.equal(duringDisconnect.scanRequest.options.signal.aborted, true);
+  assert.equal(storage.get(countKey), saved);
+  assert.match(panel(app), /Disconnected\./);
+
+  fixture.status = () => Response.json({ connected: true });
+  await app.evaluate('missionGmailStatus()');
+  fixture.scan = () => Response.json(outreachPage(['New Connection FC']));
+  await app.action('gmail-refresh');
+  const reconnected = storage.get(countKey);
+  assert.match(panel(app), /CURRENT/);
+  duringDisconnect.complete();
+  await duringDisconnect.pending;
+  assert.equal(storage.get(countKey), reconnected);
+  assert.match(panel(app), /Clubs contacted: 1/);
+
+  const duringClear = pauseRefresh();
+  app.element('reset-confirm').value = 'RESET LOCAL';
+  app.action('confirm-reset');
+  assert.equal(duringClear.scanRequest.options.signal.aborted, true);
+  duringClear.complete();
+  await duringClear.pending;
+  assert.equal(storage.has(countKey), false);
+  assert.match(panel(app), /Clubs contacted: Unknown/);
 });
