@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tin Foil FA Cup Club Audit v1",
+  "type": "object",
+  "required": ["schema_version", "read_only", "season", "generated_on", "competition_updated_at", "source_revisions", "summary", "reconciliation", "selection", "clubs"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "read_only": {"const": true},
+    "season": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}$"},
+    "generated_on": {"type": "string", "format": "date"},
+    "competition_updated_at": {"type": "string", "format": "date-time"},
+    "source_revisions": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha256"}},
+    "summary": {
+      "type": "object",
+      "required": ["identities", "original_clubfinder_identities", "companion_only_identities", "companion_registry_entries", "season_memberships", "tie_day_interval_approvals", "eligible_website_coverage", "canonical_website_queue", "ground_record_gaps"],
+      "properties": {
+        "identities": {"$ref": "#/$defs/count"},
+        "original_clubfinder_identities": {"$ref": "#/$defs/count"},
+        "companion_only_identities": {"$ref": "#/$defs/count"},
+        "companion_registry_entries": {"$ref": "#/$defs/count"},
+        "season_memberships": {"type": "object", "additionalProperties": {"$ref": "#/$defs/count"}},
+        "tie_day_interval_approvals": {"$ref": "#/$defs/count"},
+        "eligible_website_coverage": {
+          "type": "object",
+          "required": ["public", "beta"],
+          "properties": {"public": {"$ref": "#/$defs/coverage"}, "beta": {"$ref": "#/$defs/coverage"}}
+        },
+        "canonical_website_queue": {
+          "type": "object",
+          "required": ["eligible", "eligible_linked", "committed_snapshot_matches"],
+          "properties": {
+            "eligible": {"$ref": "#/$defs/count"},
+            "eligible_linked": {"$ref": "#/$defs/count"},
+            "committed_snapshot_matches": {"type": "boolean"}
+          }
+        },
+        "ground_record_gaps": {
+          "type": "object",
+          "required": ["all_identities", "second_round_proper"],
+          "properties": {
+            "all_identities": {"$ref": "#/$defs/build_counts"},
+            "second_round_proper": {
+              "type": "object",
+              "required": ["participants", "missing", "clubs"],
+              "properties": {
+                "participants": {"$ref": "#/$defs/count"},
+                "missing": {"$ref": "#/$defs/build_counts"},
+                "clubs": {
+                  "type": "object",
+                  "required": ["public", "beta"],
+                  "properties": {"public": {"$ref": "#/$defs/strings"}, "beta": {"$ref": "#/$defs/strings"}}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "required": ["source_only_round_observations", "unmatched_played_labels", "unmatched_league_tier_decisions", "unmatched_open_location_reviews", "eligible_roster_differences"],
+      "properties": {
+        "source_only_round_observations": {"type": "array", "items": {
+          "type": "object",
+          "required": ["round", "label", "status", "candidate_clubs"],
+          "properties": {
+            "round": {"type": "string"}, "label": {"type": "string"},
+            "status": {"enum": ["ambiguous", "unregistered"]},
+            "candidate_clubs": {"$ref": "#/$defs/strings"}
+          }
+        }},
+        "unmatched_played_labels": {"$ref": "#/$defs/strings"},
+        "unmatched_league_tier_decisions": {"type": "array", "items": {"type": "object"}},
+        "unmatched_open_location_reviews": {"type": "array", "items": {"type": "object"}},
+        "eligible_roster_differences": {"type": "object", "required": ["public", "beta"], "additionalProperties": {
+          "type": "object",
+          "required": ["roster_only", "build_only"],
+          "properties": {"roster_only": {"$ref": "#/$defs/strings"}, "build_only": {"$ref": "#/$defs/strings"}}
+        }}
+      }
+    },
+    "selection": {
+      "type": "object",
+      "required": ["mode", "returned"],
+      "properties": {"mode": {"enum": ["all", "excerpt"]}, "returned": {"$ref": "#/$defs/count"}}
+    },
+    "clubs": {"type": "array", "items": {"$ref": "#/$defs/club"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "count": {"type": "integer", "minimum": 0},
+    "strings": {"type": "array", "items": {"type": "string"}},
+    "coverage": {
+      "type": "object",
+      "required": ["eligible", "linked"],
+      "properties": {"eligible": {"$ref": "#/$defs/count"}, "linked": {"$ref": "#/$defs/count"}}
+    },
+    "build_counts": {
+      "type": "object",
+      "required": ["public", "beta"],
+      "properties": {"public": {"$ref": "#/$defs/count"}, "beta": {"$ref": "#/$defs/count"}}
+    },
+    "field": {
+      "type": "object",
+      "required": ["value", "status", "review_status", "evidence"],
+      "properties": {
+        "status": {"enum": ["recorded", "missing", "ambiguous", "conflict", "invalid"]},
+        "review_status": {"type": "string"},
+        "evidence": {"type": "array", "items": {
+          "type": "object", "required": ["source"], "properties": {"source": {"type": "string"}}
+        }},
+        "matching_labels": {"$ref": "#/$defs/strings"},
+        "queue_status": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "text_field": {
+      "allOf": [{"$ref": "#/$defs/field"}, {"properties": {"value": {"type": ["string", "null"]}}}]
+    },
+    "coordinates_field": {
+      "allOf": [{"$ref": "#/$defs/field"}, {"properties": {"value": {
+        "oneOf": [{"type": "null"}, {
+          "type": "object",
+          "required": ["lat", "lon"],
+          "properties": {"lat": {"type": "number", "minimum": -90, "maximum": 90},
+                         "lon": {"type": "number", "minimum": -180, "maximum": 180}}
+        }]
+      }}}]
+    },
+    "build": {
+      "type": "object",
+      "required": ["record_status", "ground", "postcode", "coordinates", "website"],
+      "properties": {
+        "record_status": {"enum": ["recorded", "missing", "ambiguous", "conflict"]},
+        "ground": {"$ref": "#/$defs/text_field"},
+        "postcode": {"$ref": "#/$defs/text_field"},
+        "coordinates": {"$ref": "#/$defs/coordinates_field"},
+        "website": {"$ref": "#/$defs/text_field"}
+      }
+    },
+    "club": {
+      "type": "object",
+      "required": ["club_id", "club", "season", "aliases", "membership", "competition", "published", "league_tier", "tie_day", "discrepancies"],
+      "properties": {
+        "club_id": {"$ref": "#/$defs/sha256"},
+        "club": {"type": "string", "minLength": 1},
+        "season": {"type": "string"},
+        "aliases": {"type": "array", "items": {
+          "type": "object",
+          "required": ["label", "scope", "source"],
+          "properties": {"label": {"type": "string"}, "scope": {"type": "string"}, "source": {"type": "string"}}
+        }},
+        "membership": {
+          "type": "object",
+          "required": ["population", "original_clubfinder", "eligible_in", "companion_journey_registry", "companion_label", "companion_state"],
+          "properties": {
+            "population": {"enum": ["original-clubfinder", "companion-journey-registry"]},
+            "original_clubfinder": {"type": "boolean"},
+            "eligible_in": {"type": "object", "required": ["public", "beta"], "additionalProperties": {"type": "boolean"}},
+            "companion_journey_registry": {"type": "boolean"},
+            "companion_label": {"type": ["string", "null"]},
+            "companion_state": {"type": ["string", "null"]}
+          }
+        },
+        "competition": {
+          "type": "object",
+          "required": ["entry_round", "companion_entry_round", "observed_rounds", "supporting_home_ground_evidence"],
+          "properties": {
+            "entry_round": {"type": ["string", "null"]},
+            "companion_entry_round": {"type": ["string", "null"]},
+            "observed_rounds": {"type": "array", "items": {
+              "type": "object",
+              "required": ["round", "label", "match"],
+              "properties": {"round": {"type": "string"}, "label": {"type": "string"},
+                             "match": {"enum": ["identity_key", "reviewed_alias"]}}
+            }},
+            "supporting_home_ground_evidence": {"type": "array", "items": {"type": "object"}}
+          }
+        },
+        "published": {
+          "type": "object",
+          "required": ["public", "beta"],
+          "properties": {"public": {"$ref": "#/$defs/build"}, "beta": {"$ref": "#/$defs/build"}}
+        },
+        "league_tier": {
+          "type": "object",
+          "required": ["status", "league", "division", "tier", "fa_step", "decision"],
+          "properties": {
+            "status": {"enum": ["approved", "held", "missing"]},
+            "league": {"type": ["string", "null"]},
+            "division": {"type": ["string", "null"]},
+            "tier": {"type": ["integer", "null"]},
+            "fa_step": {"type": ["integer", "null"]},
+            "decision": {"type": ["object", "null"]}
+          }
+        },
+        "tie_day": {
+          "type": "object",
+          "required": ["status", "interval_decisions", "played_dates", "identity_holds", "date_holds"],
+          "properties": {
+            "status": {"enum": ["not_approved", "has_interval_decisions"]},
+            "interval_decisions": {"type": "array", "items": {"type": "object"}},
+            "played_dates": {"type": "array", "items": {
+              "type": "object",
+              "required": ["date", "status", "event_id"],
+              "properties": {"date": {"type": "string", "format": "date"},
+                             "status": {"enum": ["approved", "held", "not_approved"]},
+                             "event_id": {"type": ["string", "null"]}}
+            }},
+            "identity_holds": {"$ref": "#/$defs/strings"},
+            "date_holds": {"$ref": "#/$defs/strings"}
+          }
+        },
+        "discrepancies": {"type": "array", "items": {
+          "type": "object",
+          "required": ["field", "code", "reason"],
+          "properties": {"field": {"type": "string"}, "code": {"type": "string"}, "reason": {"type": "string"}}
+        }}
+      }
+    }
+  }
+}

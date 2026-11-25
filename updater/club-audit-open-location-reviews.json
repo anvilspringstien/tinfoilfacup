@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "season": "2026-27",
+  "reviews": [
+    {
+      "club": "Ossett United FC",
+      "field": "postcode",
+      "code": "open_source_discrepancy",
+      "reason": "The contact page gives WF5 9HL while Clubfinder uses WF5 9HA. Confirm the preferred matchday postcode.",
+      "observed_value": "WF5 9HL",
+      "source": "https://www.ossettutd.com/club/contact/",
+      "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+    },
+    {
+      "club": "Peacehaven & Telscombe FC",
+      "field": "postcode",
+      "code": "open_source_discrepancy",
+      "reason": "The Contact and Sports Park pages give BN10 8WS. Matchday and league evidence also give BN10 8RJ. Confirm the preferred visitor directions.",
+      "observed_value": "BN10 8WS",
+      "source": "https://pt-fc.com/",
+      "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+    },
+    {
+      "club": "Peacehaven & Telscombe FC",
+      "field": "ground",
+      "code": "open_source_discrepancy",
+      "reason": "Clubfinder lists Piddinghoe Avenue and the club uses The Sports Park. Confirm the current display name.",
+      "observed_value": "The Sports Park",
+      "source": "https://pt-fc.com/",
+      "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+    },
+    {
+      "club": "Nantwich Town FC",
+      "field": "ground",
+      "code": "open_source_discrepancy",
+      "reason": "The current club name for the stadium differs from Clubfinder; both use CW5 5BS.",
+      "observed_value": "Swansway Stadium",
+      "source": "https://www.nantwichtownfc.co.uk/club-details-and-personnel/",
+      "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+    },
+    {
+      "club": "North Ferriby FC",
+      "field": "ground",
+      "code": "open_source_discrepancy",
+      "reason": "The club contact uses Grange Lane and Clubfinder uses Dransfield Stadium; both use HU14 3AB. Confirm the preferred venue label.",
+      "observed_value": "Grange Lane",
+      "source": "https://www.northferribyfc.co.uk/contact-us",
+      "review_reference": "https://github.com/anvilspringstien/tinfoilfacup/pull/733"
+    }
+  ]
+}
