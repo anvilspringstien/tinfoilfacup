@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply reviewed current ground names and access postcodes to the BETA listing."""
+"""Apply and verify club-confirmed current ground details in the BETA listing."""
 import argparse
 import json
 import re
@@ -48,8 +48,8 @@ def apply_names(html, ledger):
         if not urls or any(urlparse(u).scheme != 'https' or not urlparse(u).hostname or urlparse(u).username or urlparse(u).password for u in urls):
             raise ValueError('Expected public HTTPS evidence: ' + club)
         before, after, postcode = (item.get(k) for k in ('previous_name', 'current_name', 'postcode'))
-        if not all(isinstance(v, str) and v.strip() == v and v for v in (before, after, postcode)) or before == after:
-            raise ValueError('Invalid name-only change: ' + club)
+        if not all(isinstance(v, str) and v.strip() == v and v for v in (before, after, postcode)):
+            raise ValueError('Invalid current ground details: ' + club)
         previous_postcode = item.get('previous_postcode', postcode)
         if not isinstance(previous_postcode, str) or not re.fullmatch(r'[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}', previous_postcode):
             raise ValueError('Invalid previous postcode: ' + club)

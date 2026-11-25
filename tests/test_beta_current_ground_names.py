@@ -49,6 +49,18 @@ class CurrentGroundNameTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'identity/postcode drift'):
             apply_names(html.replace('SO19 9PW', 'SO19 9PZ'), self.ledger)
 
+    def test_postcode_only_change_and_unchanged_confirmation(self):
+        self.ledger['approved'][0].update(current_name=self.row['ground'])
+        self.assertEqual(apply_names(self.html, self.ledger), (self.html, []))
+        with self.assertRaisesRegex(ValueError, 'identity/postcode drift'):
+            apply_names(self.html.replace('SO19 9PW', 'SO19 9PZ'), self.ledger)
+
+        self.ledger['approved'][0].update(postcode='SO19 9PX', previous_postcode='SO19 9PW')
+        updated, changes = apply_names(self.html, self.ledger)
+        self.assertEqual(changes, ['Sholing FC'])
+        self.assertEqual(updated, self.html.replace('SO19 9PW', 'SO19 9PX'))
+        self.assertEqual(apply_names(updated, self.ledger), (updated, []))
+
     def test_committed_listing_matches_reviewed_name(self):
         html = (ROOT / 'beta/clubfinder-beta.html').read_text()
         ledger = json.loads((ROOT / 'updater/current-ground-name-ledger.json').read_text())

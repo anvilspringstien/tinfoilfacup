@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "policy": "Reviewed current listing names only. A rename does not change postcode, coordinates, eligibility, historical venues or canonical competition data.",
+  "policy": "Club-confirmed current BETA listing details. Postcodes change only with an explicit previous postcode. Keep coordinates, eligibility, historical venues and canonical competition data.",
   "approved": [
     {
       "club": "Sholing FC",
@@ -145,6 +145,47 @@
         "https://www.garforth.town/news"
       ],
       "review_notes": "Andy Hey, club chair, confirmed by email on 18 November 2026 that the ground is now BD Community Stadium, Cedar Ridge, Garforth, LS25 2PF, and that the other details remain correct. The club's 25 July partnership announcement and current matchday/contact pages corroborate the stadium name at the same address. Current BETA listing name only; retain postcode LS25 2PF, existing coordinates, verification state, and historical competition/fixture venues."
+    },
+    {
+      "club": "Chislehurst Glebe FC",
+      "previous_name": "Foxbury",
+      "current_name": "Foxbury",
+      "previous_postcode": "BR7 6HA",
+      "postcode": "BR7 6SD",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-25",
+      "public_sources": [
+        "https://chislehurstglebefc.com/contact/",
+        "https://scefl.com/sceflclub-glebe",
+        "https://api.postcodes.io/postcodes/BR76SD"
+      ],
+      "review_notes": "The club corrected the Foxbury postcode by email on 24 November. Its contact page and league directions agree, while the first-team page still shows the old postcode. Postcodes.io gives a centroid of 51.418846, 0.084950, 129 metres from the existing venue pin at 51.419765, 0.083820. Retain the venue pin and update the current address postcode."
+    },
+    {
+      "club": "Billingshurst FC",
+      "previous_name": "Rod Gaskin Ltd Stadium, Jubilee Fields",
+      "current_name": "Four Seasons Fuel Stadium",
+      "postcode": "RH14 9HZ",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-25",
+      "public_sources": [
+        "https://www.billingshurstfc.co.uk/results/1045?fenddate=25%2F11%2F2026&frt=all&fsea=all&fstartdate=18%2F11%2F2026&order=asc&sort=sopp",
+        "https://hhtfc.co.uk/2026/09/21/match-preview-billingshurst-vs-haywards-heath-town/",
+        "https://www.billingshurstfc.co.uk/clubinfo/1047"
+      ],
+      "review_notes": "The club confirmed the new name by email on 24 November. Its senior match listings and a visiting club's match preview use it at Jubilee Fields. The club-info page retains the old sponsor name and gives RH14 9HZ. Apply the confirmed name only to the current ground listing."
+    },
+    {
+      "club": "Brightlingsea Regent FC",
+      "previous_name": "North Road",
+      "current_name": "North Road",
+      "postcode": "CO7 0PL",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-25",
+      "public_sources": [
+        "https://www.brightlingsearegentfc.com/contact"
+      ],
+      "review_notes": "The club secretary confirmed the listing by email on 24 November. The contact page agrees. The existing ground record already matches."
     }
   ]
 }
