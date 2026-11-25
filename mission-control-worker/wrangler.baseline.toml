@@ -1,0 +1,13 @@
+# Reference for the existing Worker. Use an explicit --config after release approval.
+name = "tffac-mission-control"
+main = "worker.mjs"
+compatibility_date = "2026-11-18"
+compatibility_flags = []
+workers_dev = true
+keep_vars = true
+no_bundle = true
+find_additional_modules = false
+
+[[services]]
+binding = "OMBUDSMAN_SERVICE"
+service = "tffc-ombudsman"
