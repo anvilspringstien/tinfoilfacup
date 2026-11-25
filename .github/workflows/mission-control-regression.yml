@@ -1,0 +1,43 @@
+name: Mission Control regression (no deploy)
+
+on:
+  pull_request:
+    paths:
+      - 'mission-control-worker/**'
+      - '.github/workflows/mission-control-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify source syntax and current integrity
+        working-directory: mission-control-worker
+        run: |
+          node --check worker.mjs
+          sha256sum --check SHA256SUMS
+      - name: Verify the pinned d4a21101 recovery fingerprint
+        env:
+          RECOVERY_COMMIT: e88e644d72bcf67052dc89184018e3dc496c42fa
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$RECOVERY_COMMIT"
+          git show FETCH_HEAD:mission-control-worker/SHA256SUMS | cmp - mission-control-worker/recovery-d4a21101.sha256
+          historical="$(git show FETCH_HEAD:mission-control-worker/worker.mjs | sha256sum)"
+          printf '%s  worker.mjs\n' "${historical%% *}" | cmp - mission-control-worker/recovery-d4a21101.sha256
+      - name: Run the seven baseline regressions with mocks
+        run: node --test mission-control-worker/worker.test.mjs
+      - name: Run the same regressions against the in-process isolated target
+        env:
+          TFFAC_MC_TEST_TARGET: isolated
+        run: node --test mission-control-worker/worker.test.mjs

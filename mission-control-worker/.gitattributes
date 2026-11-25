@@ -1,2 +1,4 @@
 # Preserve the deployed-source export, including its original CRLF bytes.
 worker.mjs -text whitespace=cr-at-eol
+SHA256SUMS text eol=lf
+recovery-d4a21101.sha256 text eol=lf

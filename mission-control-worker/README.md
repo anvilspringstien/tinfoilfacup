@@ -1,6 +1,6 @@
 # Mission Control Worker baseline
 
-The project owner recovered this source directly from the active Cloudflare editor on 25 November 2026. [worker.mjs](worker.mjs) is the complete export of `TFFAC-Mission-Control-LIVE-d4a21101-BACKUP-2026-11-25.js`, with its original CRLF line endings. The import was compared byte-for-byte with the owner-supplied file. [SHA256SUMS](SHA256SUMS) records the independently calculated fingerprint.
+The project owner recovered this source directly from the active Cloudflare editor on 25 November 2026. The Phase 2B import of [worker.mjs](worker.mjs) was compared byte-for-byte with the owner-supplied export, including its original CRLF line endings. [recovery-d4a21101.sha256](recovery-d4a21101.sha256) preserves that historical fingerprint. [SHA256SUMS](SHA256SUMS) pins the current reviewed Worker bytes.
 
 | Existing setting | Recovered baseline |
 | --- | --- |
@@ -36,13 +36,16 @@ From the repository root, using Node.js 24:
 (cd mission-control-worker && sha256sum -c SHA256SUMS)
 node --check mission-control-worker/worker.mjs
 node --test mission-control-worker/worker.test.mjs
+TFFAC_MC_TEST_TARGET=isolated node --test mission-control-worker/worker.test.mjs
 ```
 
 The tests cover the source fingerprint, Google sign-in and exact hostname, deny-by-default HTTP routing, same-origin session controls, separate Gmail consent and read-only queries, Radar artifact selection and credential separation, and Ombudsman freshness and response filtering. The dashboard's actual inline scripts run against a small DOM, fetch and browser-storage harness to check navigation and workspace restoration. These checks use synthetic bindings, tokens and service responses. They do not validate real Google consent, the actual Cloudflare bindings or Chrome installation.
 
+For an intentional, reviewed Worker edit, regenerate only the current manifest with `(cd mission-control-worker && sha256sum worker.mjs > SHA256SUMS)`. Keep the recovered fingerprint as historical evidence. The regression workflow verifies both the checked-out source and the archived bytes in the Phase 2B merge commit. See [testing and Radar isolation](TESTING.md) and the [report-only Gmail repair proposal](gmail-repair-proposal.md).
+
 ## Source-import deployment isolation
 
-This PR adds no deployment workflow, Git integration, deployment hooks or root-level Wrangler configuration. The reference file has a non-default name and is selected only with `--config`. The import commit uses the CI-skip marker so the documentation and source can be reviewed without triggering GitHub Actions or Cloudflare Pages preview deployment. Run the tests locally for this import. Existing Workers Builds integrations are managed separately in Cloudflare and are left as configured. Keep this branch off the production branch until separately approved. See [Pages CI-skip behaviour](https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/) and [Workers build branch controls](https://developers.cloudflare.com/workers/ci-cd/builds/build-branches/).
+Phase 2B used a CI-skip marker on its source import. Phase 2C.1 adds a test-only GitHub Actions workflow with read-only repository permissions. The reference file has a non-default name and is selected only with `--config`. Existing Workers Builds integrations are managed separately in Cloudflare. See [Pages CI-skip behaviour](https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/) and [Workers build branch controls](https://developers.cloudflare.com/workers/ci-cd/builds/build-branches/).
 
 ## Future release and rollback
 
