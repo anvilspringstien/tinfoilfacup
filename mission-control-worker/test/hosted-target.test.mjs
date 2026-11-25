@@ -125,7 +125,7 @@ test('uses synthetic provider data through actual pagination, parsing and error 
     const result = await scan('classic', await connectCookie(scenario));
     assert.equal(result.status, status);
     assert.deepEqual(await result.json(), { error });
-    assert.equal(Boolean(grantCookie(result)), scenario === 'rejected');
+    assert.equal(grantCookie(result), undefined);
   }
   assert.equal(outbound.mock.callCount(), 0);
 });
@@ -149,8 +149,7 @@ test('separate tab requests share grant changes when the browser applies Set-Coo
   assert.equal((await tab('/api/gmail/outreach?kind=classic')).status, 200);
 });
 
-test('a late provider 401 still sends a deletion after another tab reconnects', async t => {
-  // Characterise the existing shared-cookie race for the hosted acceptance gate.
+test('a late provider 401 cannot delete the new grant established in another tab', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const oldGrant = await connectCookie('delayedRejected');
   const firstTabScan = scan('classic', oldGrant);
@@ -160,5 +159,15 @@ test('a late provider 401 still sends a deletion after another tab reconnects', 
   t.mock.timers.tick(5000);
   const late = await firstTabScan;
   assert.equal(late.status, 401);
-  assert.match(grantCookie(late), /^__Host-tffac_gmail=; Path=\/; Max-Age=0;/);
+  assert.deepEqual(late.headers.getSetCookie(), []);
+  const connected = await call('/api/gmail/status', { cookies: [session(), newGrant] });
+  assert.deepEqual(await connected.json(), { connected: true });
+  const newId = connected.headers.get('X-TFFAC-Gmail-Grant');
+  const oldId = (await call('/api/gmail/status', { cookies: [session(), oldGrant] })).headers.get('X-TFFAC-Gmail-Grant');
+  assert.match(newId, /^[a-zA-Z0-9_-]{43}$/);
+  assert.notEqual(newId, oldId);
+  const stale = await call('/gmail/disconnect', { method: 'POST', cookies: [session(), newGrant],
+    headers: { Origin: testOrigin, 'X-TFFAC-Action': 'disconnect', 'X-TFFAC-Gmail-Grant': oldId } });
+  assert.equal(stale.status, 409);
+  assert.deepEqual(stale.headers.getSetCookie(), []);
 });

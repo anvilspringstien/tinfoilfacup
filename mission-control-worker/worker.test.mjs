@@ -207,7 +207,7 @@ test('Gmail reads only with separate consent and returns minimal outreach and dr
   const failed = await call('/api/gmail/drafts', { cookies });
   assert.equal(failed.status, 401);
   assert.deepEqual(await failed.json(), { error: 'gmail_grant_rejected' });
-  cookie(failed, grantName, 0);
+  assert.deepEqual(failed.headers.getSetCookie(), []);
   assert.ok(!failed.headers.getSetCookie().some(item => item.startsWith(sessionName + '=')));
 
   assert.equal((await call('/gmail/disconnect', { method: 'POST', cookies, headers: { Origin: origin } })).status, 403);
@@ -228,7 +228,7 @@ test('distinguishes local Gmail grant expiry and Mission Control session expiry'
   now += 600_000;
   const status = await call('/api/gmail/status', { cookies });
   assert.deepEqual(await status.json(), { connected: false, reason: 'gmail_grant_expired' });
-  cookie(status, grantName, 0);
+  assert.deepEqual(status.headers.getSetCookie(), []);
   assert.deepEqual(await (await call('/api/gmail/outreach?kind=current', { cookies })).json(),
     { error: 'gmail_grant_expired' });
   assert.equal((await call('/', { cookies: [session] })).status, 200);
@@ -269,8 +269,7 @@ test('classifies provider, permission, quota, network and malformed results with
   const rejected = await call('/api/gmail/outreach?kind=classic', { cookies });
   assert.equal(rejected.status, 401);
   assert.deepEqual(await rejected.json(), { error: 'gmail_grant_rejected' });
-  cookie(rejected, grantName, 0);
-  assert.equal(rejected.headers.getSetCookie().length, 1);
+  assert.deepEqual(rejected.headers.getSetCookie(), []);
 
   mocks.set(list, () => Response.json({ resultSizeEstimate: 0 }));
   const zero = await call('/api/gmail/outreach?kind=classic', { cookies });
@@ -374,7 +373,7 @@ function inlineScripts(html) {
   return Array.from(html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g), match => match[1]);
 }
 
-function browser(scripts, storage = new Map(), upstream = async () => new Response(null, { status: 503 })) {
+function browser(scripts, storage = new Map(), upstream = async () => new Response(null, { status: 503 }), locks = { request: async (_name, task) => task() }) {
   const listeners = new Map();
   const elements = new Map();
   const requests = [];
@@ -388,7 +387,8 @@ function browser(scripts, storage = new Map(), upstream = async () => new Respon
       addEventListener: (event, handler) => listeners.set(event, handler) },
     localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value),
       removeItem: key => storage.delete(key) },
-    window: { scrollTo() {} }, URL, AbortController, crypto,
+    window: { scrollTo() {}, addEventListener: (event, handler) => listeners.set(event, handler) },
+    navigator: { locks }, URL, AbortController, crypto,
     fetch: async (input, options = {}) => {
       const url = new URL(input, origin);
       requests.push({ url, method: options.method ?? 'GET', options });
@@ -411,7 +411,8 @@ function browser(scripts, storage = new Map(), upstream = async () => new Respon
     assert.fail('Dashboard did not settle');
   }
   return { requests, sandbox, element: getElementById, evaluate, idle,
-    navigate: target => click('nav', target), action: target => click('action', target) };
+    navigate: target => click('nav', target), action: target => click('action', target),
+    storageEvent: key => listeners.get('storage')({ key }) };
 }
 
 test('the dashboard navigates locally and restores a browser-local workspace', async () => {
@@ -465,21 +466,26 @@ async function dashboardScripts(session = null) {
   return inlineScripts(await (await call('/', { cookies: [sessionCookie] })).text());
 }
 
-function dashboardFixture(scripts, storage = new Map(), { connected = true, classic, current, drafts } = {}) {
+function dashboardFixture(scripts, storage = new Map(), { connected = true, classic, current, drafts, locks } = {}) {
   const fixture = {
     status: () => Response.json({ connected }),
     scan: url => Response.json((url.searchParams.get('kind') === 'classic' ? classic : current) ?? outreachPage()),
     drafts: () => Response.json(drafts ?? mockDrafts),
     disconnect: () => Response.json({ disconnected: true }),
+    grant: 'g'.repeat(43),
   };
   const app = browser(scripts, storage, (url, options) => {
     if (url.origin !== origin) return new Response(null, { status: 503 });
-    if (url.pathname === '/api/gmail/status') return fixture.status();
+    if (url.pathname === '/api/gmail/status') {
+      const response = fixture.status();
+      response.headers.set('X-TFFAC-Gmail-Grant', fixture.grant);
+      return response;
+    }
     if (url.pathname === '/api/gmail/outreach') return fixture.scan(url, options);
     if (url.pathname === '/api/gmail/drafts') return fixture.drafts();
     if (url.pathname === '/gmail/disconnect') return fixture.disconnect(options);
     return new Response(null, { status: 503 });
-  });
+  }, locks);
   return { app, fixture, storage };
 }
 
@@ -647,7 +653,7 @@ test('only a reconciled two-family scan replaces the saved count and timestamp',
   assert.match(panel(reconnected.app), /CURRENT/);
   reconnected.app.action('reset-local');
   reconnected.app.element('reset-confirm').value = 'RESET LOCAL';
-  reconnected.app.action('confirm-reset');
+  await reconnected.app.action('confirm-reset');
   assert.equal(storage.has(countKey), false);
   assert.match(panel(reconnected.app), /Clubs contacted: Unknown/);
 });
@@ -658,16 +664,17 @@ test('disconnect and clear-data invalidate pending refreshes even if a reply arr
   await app.idle();
   const saved = storage.get(countKey);
 
-  function pauseRefresh() {
+  async function pauseRefresh() {
     let resume;
     fixture.scan = () => new Promise(resolve => { resume = resolve; });
     const pending = app.action('gmail-refresh');
+    await new Promise(setImmediate);
     const scanRequest = app.requests.at(-1);
     assert.match(panel(app), /REFRESHING/);
     return { pending, scanRequest, complete: () => resume(Response.json(outreachPage(['Obsolete FC', 'Another FC']))) };
   }
 
-  const duringDisconnect = pauseRefresh();
+  const duringDisconnect = await pauseRefresh();
   fixture.status = () => Response.json({ connected: false });
   await app.action('gmail-disconnect');
   assert.equal(duringDisconnect.scanRequest.options.signal.aborted, true);
@@ -685,12 +692,89 @@ test('disconnect and clear-data invalidate pending refreshes even if a reply arr
   assert.equal(storage.get(countKey), reconnected);
   assert.match(panel(app), /Clubs contacted: 1/);
 
-  const duringClear = pauseRefresh();
+  const duringClear = await pauseRefresh();
   app.element('reset-confirm').value = 'RESET LOCAL';
-  app.action('confirm-reset');
+  await app.action('confirm-reset');
   assert.equal(duringClear.scanRequest.options.signal.aborted, true);
   duringClear.complete();
   await duringClear.pending;
   assert.equal(storage.has(countKey), false);
   assert.match(panel(app), /Clubs contacted: Unknown/);
+});
+
+test('shared scan, Disconnect and Clear Data boundaries fence obsolete results even before storage events', async () => {
+  const scripts = await dashboardScripts();
+  const storage = new Map();
+  let tail = Promise.resolve();
+  const locks = {
+    request(_name, task) {
+      const result = tail.then(task);
+      tail = result.catch(() => {});
+      return result;
+    },
+  };
+  const a = dashboardFixture(scripts, storage, { classic: outreachPage(['Saved FC']), locks });
+  await a.app.idle();
+  const b = dashboardFixture(scripts, storage, { classic: outreachPage(['Recent FC']), locks });
+  await b.app.idle();
+  const sync = 'tffac-mission-control-gmail-sync-v1';
+  a.app.storageEvent(sync);
+  await a.app.idle();
+
+  async function holdScan() {
+    let release;
+    a.fixture.scan = () => new Promise(resolve => { release = resolve; });
+    a.app.storageEvent(sync);
+    await a.app.idle();
+    const pending = a.app.action('gmail-refresh');
+    await new Promise(setImmediate);
+    assert.ok(release, 'scan did not reach the provider');
+    return async (response = Response.json(outreachPage(['Old One FC', 'Old Two FC']))) => {
+      release(response);
+      await pending;
+    };
+  }
+
+  const newer = await holdScan();
+  b.app.storageEvent(sync);
+  await b.app.idle();
+  b.fixture.scan = () => Response.json(outreachPage(['Recent FC', 'Other FC', 'Third FC']));
+  await b.app.action('gmail-refresh');
+  const saved = storage.get(countKey);
+  assert.equal(JSON.parse(saved).count, 3);
+  await newer();
+  assert.equal(storage.get(countKey), saved);
+  a.app.storageEvent(sync);
+  await a.app.idle();
+  assert.match(panel(a.app), /Clubs contacted: 3/);
+  assert.match(panel(a.app), /Stale data/);
+
+  const oldGrant = await holdScan();
+  b.fixture.grant = a.fixture.grant = 'n'.repeat(43);
+  b.app.storageEvent(sync);
+  await b.app.idle();
+  await oldGrant(Response.json({ error: 'gmail_grant_rejected' }, { status: 401 }));
+  assert.equal(storage.get(countKey), saved);
+  assert.equal(JSON.parse(storage.get(sync)).rejected, false);
+  assert.match(panel(b.app), /Mailbox connected/);
+
+  const disconnect = await holdScan();
+  b.fixture.status = a.fixture.status = () => Response.json({ connected: false });
+  await b.app.action('gmail-disconnect');
+  await disconnect();
+  assert.equal(storage.get(countKey), saved);
+  a.app.storageEvent(sync);
+  await a.app.idle();
+  assert.match(panel(a.app), /Reconnect Gmail/);
+
+  a.fixture.status = b.fixture.status = () => Response.json({ connected: true });
+  await a.app.evaluate('missionGmailStatus()');
+  const clear = await holdScan();
+  b.app.element('reset-confirm').value = 'RESET LOCAL';
+  await b.app.action('confirm-reset');
+  await clear();
+  a.app.storageEvent(sync);
+  await a.app.idle();
+  assert.equal(storage.has(countKey), false);
+  assert.match(panel(a.app), /Clubs contacted: Unknown/);
 });

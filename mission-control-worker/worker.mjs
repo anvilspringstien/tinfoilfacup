@@ -150,6 +150,9 @@ const DASHBOARD_HTML = [
   "function missionGmailUnique(records){return [...new Set((records||[]).map(x=>missionGmailNormalize(x.club)).filter(Boolean))]}\n",
   "function missionGmailCountAuditV6(records){ const parts={classic:[],current:[]},all=new Map(); for(const row of records||[]){const kind=row.kind==='current'?'current':'classic',raw=String(row.club||'').trim(),key=missionGmailNormalize(raw);if(!key)continue;parts[kind].push(key);if(!all.has(key))all.set(key,{n:0,c:0,r:0,name:raw});const entry=all.get(key);entry.n++;if(kind==='classic')entry.c++;else entry.r++;} const a=new Set(parts.classic),b=new Set(parts.current); const duplicates=[...all.values()].filter(v=>v.n>1).sort((x,y)=>y.n-x.n||x.name.localeCompare(y.name)); return {total:(records||[]).length,classic:parts.classic.length,current:parts.current.length,classicUnique:a.size,currentUnique:b.size,overlap:[...a].filter(k=>b.has(k)).length,combined:all.size,duplicateKeys:duplicates.length,excess:[...all.values()].reduce((n,v)=>n+v.n-1,0),top:duplicates.slice(0,8)};}function missionGmailCountAuditV6Html(records){ const a=missionGmailCountAuditV6(records); const top=a.top.length?a.top.map(v=>`${e(v.name)} (${v.n}: old ${v.c}, new ${v.r})`).join(' \u00b7 '):'None'; return `<div class=\"tiny-note\" style=\"margin-top:10px;padding:12px;border:1px solid #dddcd0;border-radius:9px;line-height:1.8;overflow-wrap:anywhere\"><strong>Count Audit v6 \u00b7 identification only</strong><div>Original: ${a.classic} messages / ${a.classicUnique} unique \u00b7 Newer: ${a.current} messages / ${a.currentUnique} unique \u00b7 Shared club keys: ${a.overlap}</div><div>Combined: ${a.combined} unique \u00b7 ${a.duplicateKeys} repeated keys \u00b7 ${a.excess} messages above one per key</div><div><strong>Most repeated club labels:</strong> ${top}</div><div>Diagnostic only; the displayed club count is unchanged. Normalised club labels can still be inaccurate.</div></div>`;}function missionGmailAuditLine(a){if(!a)return '';const s=k=>{const p=a[k]||{};return k+': '+(p.accepted||0)+'/'+(p.listed||0)+' recognised, '+(p.repliesSkipped||0)+' replies excluded, '+(p.unparseable||0)+' unparsed, '+(p.subjectSkipped||0)+' other, '+(p.idRejected||0)+' invalid IDs'+(p.bodiesMissing?' ('+p.bodiesMissing+' without a readable text body)':'')};return 'Scan audit \u00b7 '+s('classic')+' \u00b7 '+s('current');}\n",
   "const GMAIL_COUNT_KEY='tffac-mission-control-gmail-count-v1';\n",
+  "const GMAIL_SYNC_KEY='tffac-mission-control-gmail-sync-v1';\n",
+  "const GMAIL_SYNC_LOCK='tffac-mission-control-gmail-v1';\n",
+  "const GMAIL_GRANT_HEADER='X-TFFAC-Gmail-Grant';\n",
   "const GMAIL_AUDIT_FIELDS=['listed','fetched','accepted','repliesSkipped','subjectSkipped','unparseable','bodiesMissing','idRejected'];\n",
   "const GMAIL_MESSAGES={\n",
   " sign_in_required:'Mission Control session expired. Sign in again, then reconnect Gmail read-only.',\n",
@@ -161,6 +164,8 @@ const DASHBOARD_HTML = [
   " gmail_network:'Gmail request could not reach Mission Control or Gmail. Check the connection and retry.',\n",
   " gmail_upstream:'Gmail or Mission Control returned an unusable response. Try again.',\n",
   " gmail_scan_incomplete:'Scan incomplete. Check the audit for unresolved records or retry the scan.',\n",
+  " gmail_connection_changed:'Gmail connection changed in another tab. Check the connection and retry.',\n",
+  " gmail_sync_unavailable:'Browser coordination is unavailable. Use a secure browser with local storage and Web Locks to refresh, disconnect or clear Gmail data.',\n",
   " gmail_disconnect_unconfirmed:'Disconnect could not be confirmed. Check Gmail status and retry.',\n",
   "};\n",
   "function missionGmailLoadCount(){\n",
@@ -176,8 +181,43 @@ const DASHBOARD_HTML = [
   "}\n",
   "function missionGmailState(last=missionGmailLoadCount(),connection='unknown'){\n",
   " return {last,connection,operation:null,controller:null,error:null,result:null,drafts:null,draftError:null,\n",
-  "  audit:null,progress:0,saveFailed:false};\n",
+  "  audit:null,progress:0,saveFailed:false,grant:null,fence:missionGmailShared().fence};\n",
   "}\n",
+  "// This record contains only opaque grant fingerprints and browser operation identifiers.\n",
+  "function missionGmailShared(){\n",
+  " try{return JSON.parse(localStorage.getItem(GMAIL_SYNC_KEY))||{};}catch{return {};}\n",
+  "}\n",
+  "function missionGmailAdvance(g,grant,rejected=false){\n",
+  " const fence=crypto.randomUUID();\n",
+  " try{localStorage.setItem(GMAIL_SYNC_KEY,JSON.stringify({fence,grant,rejected}));}\n",
+  " catch{throw Error('gmail_sync_unavailable');}\n",
+  " g.fence=fence;\n",
+  "}\n",
+  "function missionGmailLocked(task){\n",
+  " if(!navigator.locks)return Promise.reject(Error('gmail_sync_unavailable'));\n",
+  " return navigator.locks.request(GMAIL_SYNC_LOCK,task);\n",
+  "}\n",
+  "function missionGmailCurrent(g){\n",
+  " return state.gmail===g&&missionGmailShared().fence===g.fence;\n",
+  "}\n",
+  "function missionGmailSync(event){\n",
+  " if(event.key!==null&&event.key!==GMAIL_SYNC_KEY&&event.key!==GMAIL_COUNT_KEY)return;\n",
+  " const g=state.gmail;\n",
+  " // An explicit Disconnect takes precedence over another tab's scan start.\n",
+  " if(g.operation==='disconnecting')return;\n",
+  " if(missionGmailCurrent(g)){\n",
+  "  const last=missionGmailLoadCount();\n",
+  "  if(last?.checkedAt!==g.last?.checkedAt||last?.count!==g.last?.count){\n",
+  "   g.last=last;g.result=null;g.drafts=null;render();\n",
+  "  }\n",
+  "  return;\n",
+  " }\n",
+  " g.controller?.abort();\n",
+  " state.gmail=missionGmailState();\n",
+  " render();\n",
+  " void missionGmailStatus();\n",
+  "}\n",
+  "window.addEventListener('storage',missionGmailSync);\n",
   "function missionGmailBegin(operation,changes={}){\n",
   " const previous=state.gmail;\n",
   " previous.controller?.abort();\n",
@@ -231,31 +271,59 @@ const DASHBOARD_HTML = [
   "async function missionGmailRequest(g,url,options={}){\n",
   " let response;\n",
   " try{\n",
-  "  response=await fetch(url,{credentials:'same-origin',cache:'no-store',signal:g.controller.signal,...options});\n",
+  "  const headers={...options.headers};\n",
+  "  if(g.grant&&url!=='/api/gmail/status')headers[GMAIL_GRANT_HEADER]=g.grant;\n",
+  "  response=await fetch(url,{credentials:'same-origin',cache:'no-store',signal:g.controller.signal,...options,headers});\n",
   " }catch{throw Error('gmail_network');}\n",
   " let data;\n",
   " try{data=await response.json();}catch{throw Error('gmail_upstream');}\n",
   " if(state.gmail!==g)throw Error('gmail_obsolete');\n",
   " if(!response.ok)throw Error(Object.hasOwn(GMAIL_MESSAGES,data?.error)?data.error:'gmail_upstream');\n",
+  " if(url==='/api/gmail/status'&&data?.connected){\n",
+  "  const grant=response.headers.get(GMAIL_GRANT_HEADER);\n",
+  "  if(!/^[a-zA-Z0-9_-]{43}$/.test(grant||''))throw Error('gmail_upstream');\n",
+  "  data.grant=grant;\n",
+  " }\n",
   " return data;\n",
   "}\n",
   "async function missionGmailStatus(){\n",
   " if(state.gmail.operation)return;\n",
-  " const g=missionGmailBegin('checking');\n",
+  " const g=missionGmailBegin('checking',{fence:missionGmailShared().fence});\n",
   " try{\n",
   "  const data=await missionGmailRequest(g,'/api/gmail/status');\n",
-  "  if(state.gmail!==g)return;\n",
   "  if(typeof data?.connected!=='boolean')throw Error('gmail_upstream');\n",
-  "  const previous=g.connection;\n",
-  "  g.connection=data.connected?'connected':previous==='disconnected'?'disconnected':'reconnect';\n",
-  "  if(!data.connected){\n",
-  "   g.result=null;g.drafts=null;\n",
-  "   if(data.reason==='gmail_grant_expired')g.error=data.reason;\n",
-  "  }\n",
-  "  return g;\n",
+  "  const apply=()=>{\n",
+  "   if(!missionGmailCurrent(g))return;\n",
+  "   const grant=data.grant||null,shared=missionGmailShared();\n",
+  "   // A different grant belongs to a newer connection, even after a full OAuth navigation.\n",
+  "   if(navigator.locks&&(shared.grant??null)!==grant)missionGmailAdvance(g,grant);\n",
+  "   g.grant=grant;\n",
+  "   if(grant&&shared.grant===grant&&shared.rejected)missionGmailIssue(g,'gmail_grant_rejected');\n",
+  "   else g.connection=grant?'connected':g.connection==='disconnected'?'disconnected':'reconnect';\n",
+  "   if(!grant){\n",
+  "    g.result=null;g.drafts=null;\n",
+  "    if(data.reason==='gmail_grant_expired')g.error=data.reason;\n",
+  "   }\n",
+  "   return g;\n",
+  "  };\n",
+  "  return navigator.locks?await missionGmailLocked(apply):apply();\n",
   " }catch(error){\n",
-  "  if(state.gmail===g){g.connection='unknown';missionGmailIssue(g,error.message);}\n",
+  "  if(missionGmailCurrent(g)){g.connection='unknown';missionGmailIssue(g,error.message);}\n",
   " }finally{missionGmailEnd(g);}\n",
+  "}\n",
+  "async function missionGmailScanIssue(g,code){\n",
+  " if(!missionGmailCurrent(g))return;\n",
+  " if(code==='gmail_grant_rejected'){\n",
+  "  try{\n",
+  "   await missionGmailLocked(async()=>{\n",
+  "    if(!missionGmailCurrent(g))return;\n",
+  "    const status=await missionGmailRequest(g,'/api/gmail/status');\n",
+  "    if(status.grant!==g.grant)throw Error('gmail_connection_changed');\n",
+  "    missionGmailAdvance(g,g.grant,true);\n",
+  "    missionGmailIssue(g,code);\n",
+  "   });\n",
+  "  }catch(error){if(missionGmailCurrent(g))missionGmailIssue(g,error.message);}\n",
+  " }else missionGmailIssue(g,code);\n",
   "}\n",
   "function missionGmailCollectPage(data,kind,totals,found){\n",
   " const a=data?.audit;\n",
@@ -278,7 +346,7 @@ const DASHBOARD_HTML = [
   "  for(let n=0;n<40;n++){\n",
   "   const url='/api/gmail/outreach?kind='+kind+(page?'&page='+encodeURIComponent(page):'');\n",
   "   const data=await missionGmailRequest(g,url);\n",
-  "   if(state.gmail!==g)return;\n",
+  "   if(!missionGmailCurrent(g))return;\n",
   "   missionGmailCollectPage(data,kind,g.audit[kind],found);\n",
   "   g.progress=found.length;render();\n",
   "   if(data.next===null)break;\n",
@@ -287,23 +355,28 @@ const DASHBOARD_HTML = [
   "  }\n",
   " }\n",
   " if(Object.values(g.audit).some(a=>a.unparseable||a.idRejected))throw Error('gmail_scan_incomplete');\n",
-  " if(state.gmail!==g)return;\n",
-  " g.result=found;\n",
-  " g.last={version:1,count:missionGmailUnique(found).length,checkedAt:new Date().toISOString()};\n",
-  " try{localStorage.setItem(GMAIL_COUNT_KEY,JSON.stringify(g.last));g.saveFailed=false;}catch{g.saveFailed=true;}\n",
+  " await missionGmailLocked(async()=>{\n",
+  "  if(!missionGmailCurrent(g))return;\n",
+  "  const status=await missionGmailRequest(g,'/api/gmail/status');\n",
+  "  if(!missionGmailCurrent(g))return;\n",
+  "  if(status.grant!==g.grant)throw Error('gmail_connection_changed');\n",
+  "  g.result=found;\n",
+  "  g.last={version:1,count:missionGmailUnique(found).length,checkedAt:new Date().toISOString()};\n",
+  "  try{localStorage.setItem(GMAIL_COUNT_KEY,JSON.stringify(g.last));g.saveFailed=false;}catch{g.saveFailed=true;}\n",
+  " });\n",
   "}\n",
   "async function missionGmailCheckDrafts(g){\n",
   " g.operation='drafts';render();\n",
   " try{\n",
   "  const data=await missionGmailRequest(g,'/api/gmail/drafts');\n",
-  "  if(state.gmail!==g)return;\n",
+  "  if(!missionGmailCurrent(g))return;\n",
   "  if(typeof data?.complete!=='boolean'||!Number.isSafeInteger(data.count)||data.count<0||data.count>500)throw Error('gmail_upstream');\n",
   "  g.drafts={count:data.complete?data.count:null,complete:data.complete,checkedAt:new Date().toISOString()};\n",
   " }catch(error){\n",
-  "  if(state.gmail!==g)return;\n",
+  "  if(!missionGmailCurrent(g))return;\n",
   "  g.draftError=Object.hasOwn(GMAIL_MESSAGES,error.message)?error.message:'gmail_upstream';\n",
   "  if(['sign_in_required','gmail_not_connected','gmail_grant_expired','gmail_grant_rejected'].includes(g.draftError)){\n",
-  "   missionGmailIssue(g,g.draftError);\n",
+  "   await missionGmailScanIssue(g,g.draftError);\n",
   "  }\n",
   " }\n",
   "}\n",
@@ -311,35 +384,58 @@ const DASHBOARD_HTML = [
   " if(state.gmail.operation||state.gmail.connection!=='connected')return;\n",
   " const g=missionGmailBegin('refreshing',{result:null,drafts:null,draftError:null,audit:{classic:{},current:{}},progress:0});\n",
   " try{\n",
-  "  try{await missionGmailScan(g);}catch(error){if(state.gmail===g)missionGmailIssue(g,error.message);}\n",
-  "  if(state.gmail===g&&g.connection==='connected')await missionGmailCheckDrafts(g);\n",
-  " }finally{missionGmailEnd(g);}\n",
+  "  await missionGmailLocked(()=>{\n",
+  "   if(!missionGmailCurrent(g))return;\n",
+  "   const shared=missionGmailShared();\n",
+  "   if(shared.grant!==g.grant||shared.rejected)throw Error('gmail_connection_changed');\n",
+  "   missionGmailAdvance(g,g.grant);\n",
+  "  });\n",
+  "  if(!missionGmailCurrent(g))return;\n",
+  "  try{await missionGmailScan(g);}catch(error){await missionGmailScanIssue(g,error.message);}\n",
+  "  if(missionGmailCurrent(g)&&g.connection==='connected')await missionGmailCheckDrafts(g);\n",
+  " }catch(error){if(missionGmailCurrent(g))missionGmailIssue(g,error.message);}\n",
+  " finally{missionGmailEnd(g);}\n",
   "}\n",
   "async function missionGmailDisconnect(){\n",
   " if(state.gmail.operation==='disconnecting')return;\n",
   " const g=missionGmailBegin('disconnecting',{result:null,drafts:null,draftError:null,audit:null});\n",
   " try{\n",
-  "  // Allow the browser to send its exact Origin on this same-origin POST.\n",
-  "  const ack=await missionGmailRequest(g,'/gmail/disconnect',{method:'POST',mode:'same-origin',\n",
-  "   redirect:'error',referrerPolicy:'same-origin',headers:{'X-TFFAC-Action':'disconnect'}});\n",
-  "  if(state.gmail!==g)return;\n",
-  "  if(ack?.disconnected!==true)throw Error('gmail_disconnect_unconfirmed');\n",
-  "  const status=await missionGmailRequest(g,'/api/gmail/status');\n",
-  "  if(state.gmail!==g)return;\n",
-  "  if(status?.connected!==false)throw Error('gmail_disconnect_unconfirmed');\n",
-  "  g.connection='disconnected';\n",
+  "  await missionGmailLocked(async()=>{\n",
+  "   if(state.gmail!==g)return;\n",
+  "   const shared=missionGmailShared();\n",
+  "   if((shared.grant??null)!==g.grant){\n",
+  "    g.fence=shared.fence;throw Error('gmail_connection_changed');\n",
+  "   }\n",
+  "   missionGmailAdvance(g,g.grant,shared.rejected);\n",
+  "   const ack=await missionGmailRequest(g,'/gmail/disconnect',{method:'POST',mode:'same-origin',\n",
+  "    redirect:'error',referrerPolicy:'same-origin',headers:{'X-TFFAC-Action':'disconnect'}});\n",
+  "   if(ack?.disconnected!==true)throw Error('gmail_disconnect_unconfirmed');\n",
+  "   const status=await missionGmailRequest(g,'/api/gmail/status');\n",
+  "   if(status?.connected!==false)throw Error('gmail_disconnect_unconfirmed');\n",
+  "   g.connection='disconnected';g.grant=null;\n",
+  "   missionGmailAdvance(g,null);\n",
+  "  });\n",
   " }catch(error){\n",
-  "  if(state.gmail===g){\n",
+  "  if(missionGmailCurrent(g)){\n",
   "   const code=error.message;\n",
-  "   missionGmailIssue(g,['sign_in_required','gmail_network'].includes(code)?code:'gmail_disconnect_unconfirmed');\n",
+  "   missionGmailIssue(g,['sign_in_required','gmail_network','gmail_connection_changed','gmail_sync_unavailable'].includes(code)?code:'gmail_disconnect_unconfirmed');\n",
   "  }\n",
   " }finally{missionGmailEnd(g);}\n",
   "}\n",
-  "function missionGmailClearCount(){\n",
+  "async function missionGmailClearCount(){\n",
   " const previous=state.gmail;\n",
   " previous.controller?.abort();\n",
-  " state.gmail=missionGmailState(null,previous.operation==='disconnecting'?'unknown':previous.connection);\n",
-  " try{localStorage.removeItem(GMAIL_COUNT_KEY);return true;}catch{return false;}\n",
+  " const g=missionGmailState(null,previous.operation==='disconnecting'?'unknown':previous.connection);\n",
+  " g.grant=previous.grant;\n",
+  " state.gmail=g;\n",
+  " try{\n",
+  "  await missionGmailLocked(()=>{\n",
+  "   const shared=missionGmailShared();\n",
+  "   missionGmailAdvance(g,shared.grant??null,shared.rejected);\n",
+  "   localStorage.removeItem(GMAIL_COUNT_KEY);\n",
+  "  });\n",
+  "  return true;\n",
+  " }catch{return false;}\n",
   "}\n",
   "function missionOutreachSignal(){\n",
   " const g=state.gmail,status=missionGmailCountState(g);\n",
@@ -884,7 +980,7 @@ const DASHBOARD_HTML = [
   "}catch(ex){toast(`Import rejected: ${ex.message}`,true)}finally{element.value=''}}\n",
   "function clickAction(btn){const a=btn.dataset.action,club=decodeURIComponent(btn.dataset.club||'');if(missionHandleAction(a,btn))return;if(a==='refresh-all')return refreshAll();if(a==='gmail-refresh')return missionGmailRefresh();if(a==='gmail-disconnect')return missionGmailDisconnect();if(a==='close-overlay'){state.overlay=null;return renderOverlay()}if(a==='page-prev'){state.queuePage--;return render()}if(a==='page-next'){state.queuePage++;return render()}if(a==='new-proposal')return startProposal(club);if(a==='save-proposal')return saveProposal(false);if(a==='submit-proposal')return saveProposal(true);if(a==='edit-proposal'){const p=workspace.proposals.find(x=>x.id===btn.dataset.id);if(p)return open({type:'proposal-form',proposal:p})}if(a==='review-proposal')return open({type:'approve',id:btn.dataset.id});if(a==='confirm-approval')return confirmApproval();if(a==='reject-proposal'){const p=workspace.proposals.find(x=>x.id===btn.dataset.id);if(p){p.status='rejected';p.updatedAt=iso();record('rejection',`Correction rejected: ${p.club}`,p.kind);state.overlay=null;nav('approvals');toast('Rejected locally. No data was published.')}return}\n",
   "if(a==='new-outreach')return startOutreach(club);if(a==='new-reply')return startOutreach(club,'reply',btn.dataset.original||'');if(a==='log-incoming-reply')return startOutreach(null,'incoming_reply');if(a==='save-outreach')return storeOutreach(false);if(a==='approve-outreach')return storeOutreach(true);if(a==='log-reply')return storeOutreach(false,true);if(a==='start-outreach-approval')return open({type:'outreach-approval',id:btn.dataset.id});if(a==='confirm-outreach')return confirmOutreach();if(a==='edit-outreach'){const o=workspace.outreach.find(x=>x.id===btn.dataset.id);if(o)return open({type:'outreach-form',kind:o.kind,record:o})}if(a==='open-sent')return open({type:'sent',id:btn.dataset.id});if(a==='confirm-sent')return confirmSent();\n",
-  "if(a==='new-incident')return open({type:'incident'});if(a==='save-incident')return saveIncident();if(a==='export-approved')return exportApproved();if(a==='export-workspace')return exportWorkspace();if(a==='import-clubs')return importFile('import-clubs');if(a==='import-ombudsman')return importFile('import-ombudsman');if(a==='import-workspace')return importFile('import-workspace');if(a==='reset-local')return open({type:'reset'});if(a==='confirm-reset'){if(document.getElementById('reset-confirm')?.value!=='RESET LOCAL')return toast('Type RESET LOCAL exactly.',true);workspace=defaultWorkspace();const workspaceCleared=save(),countCleared=missionGmailClearCount();state.overlay=null;nav('sources');toast(workspaceCleared&&countCleared?'Local review records and Gmail count cleared.':'Browser storage prevented clearing all local data.',!workspaceCleared||!countCleared)}}\n",
+  "if(a==='new-incident')return open({type:'incident'});if(a==='save-incident')return saveIncident();if(a==='export-approved')return exportApproved();if(a==='export-workspace')return exportWorkspace();if(a==='import-clubs')return importFile('import-clubs');if(a==='import-ombudsman')return importFile('import-ombudsman');if(a==='import-workspace')return importFile('import-workspace');if(a==='reset-local')return open({type:'reset'});if(a==='confirm-reset'){if(document.getElementById('reset-confirm')?.value!=='RESET LOCAL')return toast('Type RESET LOCAL exactly.',true);workspace=defaultWorkspace();const workspaceCleared=save(),countCleared=missionGmailClearCount();return countCleared.then(cleared=>{state.overlay=null;nav('sources');toast(workspaceCleared&&cleared?'Local review records and Gmail count cleared.':'Browser storage prevented clearing all local data.',!workspaceCleared||!cleared)})}}\n",
   "document.addEventListener('click',ev=>{const navEl=ev.target.closest('[data-nav]');if(navEl){nav(navEl.dataset.nav);return}const a=ev.target.closest('[data-action]');if(a){if(a.dataset.action==='radar-import'){document.getElementById('import-radar').click();return}if(a.dataset.action==='radar-refresh'){radarFetchLatest();return}return clickAction(a)}const o=ev.target.closest('[data-open]');if(o){const [type,...rest]=o.dataset.open.split(':');const value=rest.join(':');if(['sources','ombudsman','approvals','clubfinder'].includes(type))return nav(type);if(type==='club')return open({type:'club',name:decodeURIComponent(value)});if(type==='proposal')return open({type:'proposal',id:value});if(type==='outreach')return open({type:'outreach',id:value});return}const t=ev.target.closest('[data-outreach-tab]');if(t){state.outreachTab=t.dataset.outreachTab;return render()}const rt=ev.target.closest('[data-review-tab]');if(rt){state.reviewTab=rt.dataset.reviewTab;return render()}if(ev.target.matches('[data-dismiss=\"1\"]')){state.overlay=null;renderOverlay()}});\n",
   "document.addEventListener('change',ev=>{const el=ev.target;if(missionHandleChange(el))return;if(el.id==='import-radar'){radarImport(el);return}if(el.id==='radar-round'){radar.round=el.value;radar.status='all';render();return}if(el.id==='radar-source'){radar.source=el.value;render();return}if(el.id==='radar-status'){radar.status=el.value;render();return}if(el.id==='club-status'){state.queueFilter=el.value;state.queuePage=0;render()}if(el.id==='club-scope'){state.queueScope=el.value;state.queuePage=0;render()}if(el.id==='import-clubs')doImport(el,'clubs');if(el.id==='import-workspace')doImport(el,'workspace');if(el.id==='import-ombudsman')doImport(el,'ombudsman')});\n",
   "document.addEventListener('input',ev=>{missionHandleInput(ev.target);if(ev.target.id==='radar-search'){const caret=ev.target.selectionStart;radar.search=ev.target.value;render();const field=document.getElementById('radar-search');if(field){field.focus();try{field.setSelectionRange(caret,caret)}catch{}}return}if(ev.target.id==='club-search'){const start=ev.target.selectionStart;state.queueSearch=ev.target.value;state.queuePage=0;render();const el=document.getElementById('club-search');if(el){el.focus();try{el.setSelectionRange(start,start)}catch{}}}});\n",
@@ -897,7 +993,7 @@ const DASHBOARD_HTML = [
   "</html>\n"
 ].join('');
 
-const DASHBOARD_CSP = "default-src 'none'; script-src 'sha256-ejwBUq2GCLsrE/gMOmygs6dQHlJ49AUpHD2Y6HEz6do=' 'sha256-IuvwWgcd7VQJSHf0prGOQZeeFJ1oCvftKMsp2lhI0HI='; script-src-attr 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+const DASHBOARD_CSP = "default-src 'none'; script-src 'sha256-xglNUjxAy82qc+srPua4jkb1AvBcXfM4igZojI8Tq/M=' 'sha256-58FxmnfNS+rb/MLvq4/wPfI/TiaxX+kjRZaS7zktNAQ='; script-src-attr 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
 
 // Authenticated dashboard: no mailbox tokens, backend writes, or admin APIs.
 function privateDashboard() {
@@ -1140,6 +1236,10 @@ async function gmailOpen(request,env,session){
   return v;
  }catch{return null;}
 }
+async function gmailGrantId(request){
+ const input=new TextEncoder().encode('TFFAC_GMAIL_GRANT_ID|'+cookieValue(request,GMAIL_COOKIE));
+ return bytesToB64u(new Uint8Array(await crypto.subtle.digest('SHA-256',input)));
+}
 function gmailJson(value,status=200){return Response.json(value,{status,headers:{'Cache-Control':'no-store, private','X-Content-Type-Options':'nosniff','Vary':'Cookie','Referrer-Policy':'no-referrer'}});}
 async function gmailConnect(env,key,session){
  const state=randomString(),nonce=randomString(),verifier=randomString();
@@ -1185,9 +1285,8 @@ class GmailReadError extends Error {
 }
 function gmailReadFailure(error){
  if(!(error instanceof GmailReadError))return gmailJson({error:'gmail_upstream'},502);
- const response=gmailJson({error:error.message},error.status);
- if(error.message==='gmail_grant_rejected')response.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));
- return response;
+ // A read may finish after another tab reconnects. Only explicit actions may edit cookies.
+ return gmailJson({error:error.message},error.status);
 }
 async function gmailFetch(token,path,params={}){
  const url=new URL('https://gmail.googleapis.com/gmail/v1/users/me/'+path);
@@ -1450,6 +1549,8 @@ export default {
         if(request.headers.get('Origin')!==BASE||request.headers.get('X-TFFAC-Action')!=='disconnect')return denied();
         const session=await checked(cookieValue(request,SESSION_COOKIE),key,'session');
         if(!session||session.email!==ALLOWED_EMAIL||!session.sub)return gmailJson({error:'sign_in_required'},401);
+        const expected=request.headers.get('X-TFFAC-Gmail-Grant');
+        if(expected&&expected!==await gmailGrantId(request))return gmailJson({error:'gmail_connection_changed'},409);
         const response=gmailJson({disconnected:true});
         response.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));
         response.headers.append('Set-Cookie',clearCookie(GMAIL_FLOW_COOKIE));
@@ -1465,10 +1566,16 @@ export default {
           const response=url.pathname==='/api/gmail/status'
             ?gmailJson(expired?{connected:false,reason}:{connected:false})
             :gmailJson({error:reason},401);
-          if(expired)response.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));
           return response;
         }
-        if(url.pathname==='/api/gmail/status')return gmailJson({connected:true});
+        const id=await gmailGrantId(request);
+        if(url.pathname==='/api/gmail/status'){
+          const response=gmailJson({connected:true});
+          response.headers.set('X-TFFAC-Gmail-Grant',id);
+          return response;
+        }
+        const expected=request.headers.get('X-TFFAC-Gmail-Grant');
+        if(expected&&expected!==id)return gmailJson({error:'gmail_connection_changed'},409);
         if(url.pathname==='/api/gmail/outreach')return gmailOutreach(request,grant.token);
         if(url.pathname==='/api/gmail/drafts')return gmailDrafts(grant.token);
         return gmailJson({error:'not_found'},404);
