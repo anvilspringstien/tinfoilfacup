@@ -14,7 +14,7 @@ from updater.audit_active_custodian_locations import (
     ROOT, array_from_html, display_key, identity_key, next_round_entrants,
 )
 from updater.club_entry_radar import inspect_rounds
-from updater.league_tier_approval import LEDGER, active_events, digest, iso_day
+from updater.league_tier_approval import LEDGER, SEASON_FROM, SEASON_UNTIL, active_events, digest, iso_day
 from updater.league_tier_readonly import SEASON, key, load_population
 from updater.league_tier_review import cup_observations
 from updater.round_state_engine import TEAM_IDENTITY_ALIASES
@@ -258,20 +258,38 @@ def league_fields(decisions, dates, identity_holds, date_holds):
                   "tier": entry.get("proposed_tier"), "fa_step": entry.get("fa_step") or None,
                   "decision": decision_details(season)}
     approvals = []
+    previous_end = SEASON_FROM
     for event in sorted((e for e in decisions if e["scope"] == "interval"),
                         key=lambda e: (e["valid_from"], e["event_id"])):
-        evidence = next((proof for proof in event["entry"]["interval_evidence"]
-                         if proof["sha256"] == event["interval_sha256"]), None)
-        if event["action"] == "approve" and evidence is None:
-            raise ValueError(f"Unproven interval approval: {event['club']}")
+        start, end = iso_day(event["valid_from"]), iso_day(event["valid_until"])
+        if not SEASON_FROM <= start < end <= SEASON_UNTIL:
+            raise ValueError(f"Invalid interval bounds: {event['event_id']}")
+        if start < previous_end:
+            raise ValueError(f"Overlapping active intervals: {event['event_id']}")
+        previous_end = end
+        evidence = None
+        if event["action"] == "approve":
+            proofs = [proof for proof in event["entry"]["interval_evidence"]
+                      if proof["sha256"] == event["interval_sha256"]]
+            if len(proofs) != 1:
+                raise ValueError(f"Interval approval requires one pinned evidence record: {event['event_id']}")
+            evidence = proofs[0]
+            if (digest({k: v for k, v in evidence.items() if k != "sha256"}) != evidence["sha256"]
+                    or not iso_day(evidence["valid_from"]) <= start < end <= iso_day(evidence["valid_until"])):
+                raise ValueError(f"Interval approval exceeds or differs from its pinned evidence: {event['event_id']}")
         approvals.append({"source": APPROVALS, "event_id": event["event_id"], "action": event["action"],
                           "valid_from": event["valid_from"], "valid_until": event["valid_until"],
                           "reason": event["reason"], "evidence": evidence})
     played = []
+    # Observations are keyed by club and date rather than by tie. Holds cannot
+    # safely be attached to one row, so withhold affected club-level approvals.
+    ambiguous = bool(identity_holds or date_holds)
     for day in sorted(dates):
         day = day.isoformat()
         interval = next((e for e in approvals if e["valid_from"] <= day < e["valid_until"]), None)
         status = {"approve": "approved", "hold": "held"}[interval["action"]] if interval else "not_approved"
+        if status == "approved" and ambiguous:
+            status, interval = "held", None
         played.append({"date": day, "status": status,
                        "event_id": interval["event_id"] if interval else None})
     return membership, {"status": ("has_interval_decisions" if approvals else "not_approved"),

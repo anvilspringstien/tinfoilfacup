@@ -20,6 +20,17 @@ SAMPLE = ROOT / "docs/examples/club-audit-2026-11-25.json"
 GENERATION_DAY = date(2026, 11, 25)
 
 
+def interval_decision(start="2026-09-01", end="2026-09-08", action="approve"):
+    proof = {"valid_from": "2026-09-01", "valid_until": "2026-10-01", "source_url": "https://example.test/"}
+    pin = digest(proof)
+    event = {"club": "Example FC", "club_id": "example", "scope": "interval",
+             "action": action, "valid_from": start, "valid_until": end,
+             "interval_sha256": pin if action == "approve" else "", "supersedes": "",
+             "entry": {"interval_evidence": [dict(proof, sha256=pin)]},
+             "reason": "Reviewed interval"}
+    return dict(event, event_id=digest(event))
+
+
 class ClubAuditTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -150,11 +161,49 @@ class ClubAuditTests(unittest.TestCase):
         dates = {date(2026, 9, 1), date(2026, 9, 8)}
         _, tie_day = league_fields([season], dates, (), ())
         self.assertEqual([r["status"] for r in tie_day["played_dates"]], ["not_approved"] * 2)
-        interval = {"scope": "interval", "action": "approve", "event_id": "b",
-                    "valid_from": "2026-09-01", "valid_until": "2026-09-08", "interval_sha256": "c",
-                    "entry": {"interval_evidence": [{"sha256": "c"}]}, "reason": "Reviewed interval"}
+        interval = interval_decision()
         _, tie_day = league_fields([season, interval], dates, (), ())
         self.assertEqual([r["status"] for r in tie_day["played_dates"]], ["approved", "not_approved"])
+
+    def test_tie_day_withholds_approval_when_identity_or_date_is_ambiguous(self):
+        dates = {date(2026, 9, 1), date(2026, 9, 8)}
+        for identity_holds, date_holds in (({"Ambiguous identity"}, ()), ((), {"Conflicting dates"})):
+            _, tie_day = league_fields([interval_decision()], dates, identity_holds, date_holds)
+            self.assertEqual([r["status"] for r in tie_day["played_dates"]], ["held", "not_approved"])
+            self.assertIsNone(tie_day["played_dates"][0]["event_id"])
+            self.assertEqual(tie_day["identity_holds"], sorted(identity_holds))
+            self.assertEqual(tie_day["date_holds"], sorted(date_holds))
+
+    def test_active_overlapping_intervals_fail_even_if_one_is_a_hold(self):
+        first = interval_decision()
+        for action in ("approve", "hold"):
+            overlap = interval_decision(start="2026-09-07", end="2026-09-12", action=action)
+            with self.assertRaisesRegex(ValueError, "Conflicting active decisions"):
+                active_events([first, overlap])
+            with self.assertRaisesRegex(ValueError, "Overlapping active intervals"):
+                league_fields([first, overlap], {date(2026, 9, 7)}, (), ())
+
+        adjacent = interval_decision(start="2026-09-08", end="2026-09-12", action="hold")
+        self.assertEqual(len(active_events([first, adjacent])), 2)
+        _, tie_day = league_fields([first, adjacent], {date(2026, 9, 7), date(2026, 9, 8)}, (), ())
+        self.assertEqual([r["status"] for r in tie_day["played_dates"]], ["approved", "held"])
+        self.assertEqual(tie_day["played_dates"][1]["event_id"], adjacent["event_id"])
+
+    def test_interval_approval_rejects_missing_duplicate_or_out_of_bounds_evidence(self):
+        for copies in (0, 2):
+            event = interval_decision()
+            event["entry"]["interval_evidence"] *= copies
+            with self.assertRaisesRegex(ValueError, "one pinned evidence record"):
+                league_fields([event], set(), (), ())
+
+        altered = interval_decision()
+        altered["entry"]["interval_evidence"][0]["source_url"] = "https://example.test/changed"
+        with self.assertRaisesRegex(ValueError, "differs from its pinned evidence"):
+            league_fields([altered], set(), (), ())
+        with self.assertRaisesRegex(ValueError, "exceeds or differs from its pinned evidence"):
+            league_fields([interval_decision(end="2026-10-02")], set(), (), ())
+        with self.assertRaisesRegex(ValueError, "Invalid interval bounds"):
+            league_fields([interval_decision(start="2026-09-08")], set(), (), ())
 
     def test_deterministic_cli_and_checkout_remains_unmodified(self):
         with tempfile.TemporaryDirectory() as directory:
