@@ -35,7 +35,7 @@ jobs:
           git show FETCH_HEAD:mission-control-worker/SHA256SUMS | cmp - mission-control-worker/recovery-d4a21101.sha256
           historical="$(git show FETCH_HEAD:mission-control-worker/worker.mjs | sha256sum)"
           printf '%s  worker.mjs\n' "${historical%% *}" | cmp - mission-control-worker/recovery-d4a21101.sha256
-      - name: Run the seven baseline regressions with mocks
+      - name: Run the baseline regressions with mocks
         run: node --test mission-control-worker/worker.test.mjs
       - name: Run the same regressions against the in-process isolated target
         env:

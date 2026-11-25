@@ -1,8 +1,8 @@
-# Phase 2C.2 Gmail repair proposal
+# Phase 2C.2 and 2C.3 Gmail reliability
 
-This is a source review of the recovered Worker. The deployed browser failure and live provider responses were not reproduced against the owner's mailbox.
+The source review and approved scope below describe the recovered Worker before the repair. The implementation is covered by the [Mission Control regression suite](worker.test.mjs) in the baseline and isolated environments.
 
-## Current behaviour
+## Recovered behaviour
 
 | Path | Observed in the source |
 | --- | --- |
@@ -20,3 +20,13 @@ This is a source review of the recovered Worker. The deployed browser failure an
 4. **Publish only complete counts.** Stage scan results until both query families finish, all pages are accounted for and audit rows reconcile. Keep excluded replies separate from potentially eligible results with missing bodies, rejected IDs or unresolved club identity. Any incomplete or unresolved scan should surface its status and retain the last successful value. With no successful scan, show **Unknown**. A complete scan with no eligible introductions can correctly show zero. Draft availability should have its own timestamp and completeness state and must not determine the outreach count.
 
 Extend the mocked regressions for session expiry, local grant expiry, a provider 401 during a valid dashboard session, permission or quota errors, the delegated Disconnect sequence, and in-flight refresh ordering. Cover a complete zero, an incomplete first scan, success followed by an incomplete scan, a partial draft listing, persistence across reload, and clear-data reset. Review the UI copy and result states in the isolated fixture before considering any hosted test.
+
+## Implementation notes
+
+- The delegated Disconnect click uses a same-origin POST with a request-specific same-origin referrer policy. The Worker continues to require its exact Origin, the action header and a valid Mission Control session. The panel confirms both the POST acknowledgement and the subsequent absence of a Gmail grant. Local disconnect does not revoke Google's grant outside that browser.
+- The saved record contains a version, unique-club count and UTC completion time. Browser storage is origin-local. Gmail access errors and interrupted or unresolved scans leave the record intact. The draft listing has its own completion status and timestamp.
+- Aborting an older request and checking the owning operation before updating the UI or storage prevents late same-page replies from replacing a newer result. Connection status reflects the latest check. The app does not poll Google in the background. A Gmail listing is paginated rather than an atomic mailbox snapshot.
+- The two automated fixtures execute the real delegated handler with synthetic browser events and mocked providers. They do not exercise real Google consent, the hosted Cloudflare Worker, a real mailbox or cross-tab cookie timing.
+- A local Chromium smoke test at the isolated origin used intercepted requests, synthetic authentication and mocked Gmail responses. On the candidate, the browser sent the exact Origin, the Worker cleared the Gmail cookie, the subsequent status check confirmed disconnect, and reload showed the retained count as stale. The dashboard session cookie remained present. The recovered build also accepted its POST in that Chromium session, so the reported live failure was not reproduced.
+
+See the [Fetch Origin-header algorithm](https://fetch.spec.whatwg.org/#origin-header) and [Gmail API error handling](https://developers.google.com/workspace/gmail/api/guides/handle-errors).

@@ -1,6 +1,6 @@
 # Mission Control regression and isolation
 
-The [GitHub Actions workflow](../.github/workflows/mission-control-regression.yml) runs for Mission Control PR changes and can be started manually. The job checks syntax, the current SHA-256 manifest and the original d4a21101 fingerprint from the pinned Phase 2B merge commit. It then runs the seven baseline regressions and repeats them with the isolated fixture. The job has read-only repository permissions and no schedule, deployment or Cloudflare authentication step.
+The [GitHub Actions workflow](../.github/workflows/mission-control-regression.yml) runs for Mission Control PR changes and can be started manually. The job checks syntax, the current SHA-256 manifest and the original d4a21101 fingerprint from the pinned Phase 2B merge commit. It runs the regression suite against the Worker and repeats it with the isolated fixture. The job has read-only repository permissions and no schedule, deployment or Cloudflare authentication step.
 
 | Target | Worker host and OAuth callback used by the test | Workspace and credentials |
 | --- | --- | --- |

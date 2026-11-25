@@ -149,69 +149,204 @@ const DASHBOARD_HTML = [
   "function missionGmailNormalize(name){return String(name||'').toLowerCase().replace(/[\u2019']/g,'').replace(/\\b(?:football club|a\\.?f\\.?c\\.?|f\\.?c\\.?)\\b/g,'').replace(/[^a-z0-9]+/g,' ').trim().replace(/\\s+/g,' ')}\n",
   "function missionGmailUnique(records){return [...new Set((records||[]).map(x=>missionGmailNormalize(x.club)).filter(Boolean))]}\n",
   "function missionGmailCountAuditV6(records){ const parts={classic:[],current:[]},all=new Map(); for(const row of records||[]){const kind=row.kind==='current'?'current':'classic',raw=String(row.club||'').trim(),key=missionGmailNormalize(raw);if(!key)continue;parts[kind].push(key);if(!all.has(key))all.set(key,{n:0,c:0,r:0,name:raw});const entry=all.get(key);entry.n++;if(kind==='classic')entry.c++;else entry.r++;} const a=new Set(parts.classic),b=new Set(parts.current); const duplicates=[...all.values()].filter(v=>v.n>1).sort((x,y)=>y.n-x.n||x.name.localeCompare(y.name)); return {total:(records||[]).length,classic:parts.classic.length,current:parts.current.length,classicUnique:a.size,currentUnique:b.size,overlap:[...a].filter(k=>b.has(k)).length,combined:all.size,duplicateKeys:duplicates.length,excess:[...all.values()].reduce((n,v)=>n+v.n-1,0),top:duplicates.slice(0,8)};}function missionGmailCountAuditV6Html(records){ const a=missionGmailCountAuditV6(records); const top=a.top.length?a.top.map(v=>`${e(v.name)} (${v.n}: old ${v.c}, new ${v.r})`).join(' \u00b7 '):'None'; return `<div class=\"tiny-note\" style=\"margin-top:10px;padding:12px;border:1px solid #dddcd0;border-radius:9px;line-height:1.8;overflow-wrap:anywhere\"><strong>Count Audit v6 \u00b7 identification only</strong><div>Original: ${a.classic} messages / ${a.classicUnique} unique \u00b7 Newer: ${a.current} messages / ${a.currentUnique} unique \u00b7 Shared club keys: ${a.overlap}</div><div>Combined: ${a.combined} unique \u00b7 ${a.duplicateKeys} repeated keys \u00b7 ${a.excess} messages above one per key</div><div><strong>Most repeated club labels:</strong> ${top}</div><div>Diagnostic only; the displayed club count is unchanged. Normalised club labels can still be inaccurate.</div></div>`;}function missionGmailAuditLine(a){if(!a)return '';const s=k=>{const p=a[k]||{};return k+': '+(p.accepted||0)+'/'+(p.listed||0)+' recognised, '+(p.repliesSkipped||0)+' replies excluded, '+(p.unparseable||0)+' unparsed, '+(p.subjectSkipped||0)+' other, '+(p.idRejected||0)+' invalid IDs'+(p.bodiesMissing?' ('+p.bodiesMissing+' without a readable text body)':'')};return 'Scan audit \u00b7 '+s('classic')+' \u00b7 '+s('current');}\n",
+  "const GMAIL_COUNT_KEY='tffac-mission-control-gmail-count-v1';\n",
+  "const GMAIL_AUDIT_FIELDS=['listed','fetched','accepted','repliesSkipped','subjectSkipped','unparseable','bodiesMissing','idRejected'];\n",
+  "const GMAIL_MESSAGES={\n",
+  " sign_in_required:'Mission Control session expired. Sign in again, then reconnect Gmail read-only.',\n",
+  " gmail_not_connected:'Gmail is disconnected. Connect Gmail read-only to check Sent.',\n",
+  " gmail_grant_expired:'Gmail permission expired. Reconnect Gmail read-only to continue.',\n",
+  " gmail_grant_rejected:'Gmail rejected the saved permission. Reconnect Gmail read-only.',\n",
+  " gmail_permission:'Gmail denied read access. Disconnect and reconnect Gmail. If it persists, check the mailbox policy.',\n",
+  " gmail_quota:'Gmail rate or quota limit reached. Wait before refreshing.',\n",
+  " gmail_network:'Gmail request could not reach Mission Control or Gmail. Check the connection and retry.',\n",
+  " gmail_upstream:'Gmail or Mission Control returned an unusable response. Try again.',\n",
+  " gmail_scan_incomplete:'Scan incomplete. Check the audit for unresolved records or retry the scan.',\n",
+  " gmail_disconnect_unconfirmed:'Disconnect could not be confirmed. Check Gmail status and retry.',\n",
+  "};\n",
+  "function missionGmailLoadCount(){\n",
+  " try{\n",
+  "  const saved=JSON.parse(localStorage.getItem(GMAIL_COUNT_KEY)||'null');\n",
+  "  const when=Date.parse(saved?.checkedAt);\n",
+  "  if(saved?.version===1&&Number.isSafeInteger(saved.count)&&saved.count>=0&&Number.isFinite(when)&&\n",
+  "     when<=Date.now()&&new Date(when).toISOString()===saved.checkedAt){\n",
+  "   return {version:1,count:saved.count,checkedAt:saved.checkedAt};\n",
+  "  }\n",
+  " }catch{}\n",
+  " return null;\n",
+  "}\n",
+  "function missionGmailState(last=missionGmailLoadCount(),connection='unknown'){\n",
+  " return {last,connection,operation:null,controller:null,error:null,result:null,drafts:null,draftError:null,\n",
+  "  audit:null,progress:0,saveFailed:false};\n",
+  "}\n",
+  "function missionGmailBegin(operation,changes={}){\n",
+  " const previous=state.gmail;\n",
+  " previous.controller?.abort();\n",
+  " const g={...previous,...changes,operation,controller:new AbortController(),error:null};\n",
+  " state.gmail=g;render();\n",
+  " return g;\n",
+  "}\n",
+  "function missionGmailEnd(g){\n",
+  " if(state.gmail===g){g.operation=null;g.controller=null;render();}\n",
+  "}\n",
+  "function missionGmailIssue(g,code){\n",
+  " g.error=Object.hasOwn(GMAIL_MESSAGES,code)?code:'gmail_upstream';\n",
+  " g.result=null;g.drafts=null;\n",
+  " if(code==='sign_in_required')g.connection='sign_in_required';\n",
+  " else if(['gmail_not_connected','gmail_grant_expired','gmail_grant_rejected'].includes(code))g.connection='reconnect';\n",
+  "}\n",
+  "function missionGmailCountState(g){\n",
+  " if(g.operation==='refreshing')return 'Refreshing';\n",
+  " if(g.result)return 'Current';\n",
+  " return g.last?'Stale':'Unknown';\n",
+  "}\n",
+  "function missionGmailTimestamp(value){\n",
+  " return '<time datetime=\"'+e(value)+'\">'+e(niceDate(value))+'</time>';\n",
+  "}\n",
   "function missionGmailPanel(compact=false){\n",
-  " const g=state.gmail, clubs=g.loaded&&!g.error?missionGmailUnique(g.records).length:null;\n",
-  " const today=g.loaded&&!g.error?g.records.filter(x=>x.day===ukDay()).length:null;\n",
-  " const content=`<div class=\"mission-panel-head\"><div><div class=\"eyebrow\">GMAIL \u00b7 READ-ONLY</div><h2>Clubs contacted: ${clubs===null?'\u2014':e(clubs)}</h2><p>${g.busy?`Checking Gmail sent history \u00b7 ${g.progress} records\u2026`:g.error?`Gmail check incomplete: ${e(g.error)}`:g.loaded?`${g.records.length} first-contact messages \u00b7 ${today} sent today \u00b7 checked ${e(since(g.checkedAt))}`:g.connected?'Mailbox connected; select refresh to verify totals.':'Gmail is not connected. No mailbox count is inferred from the local desk.'}</p></div>${g.loaded&&!g.error?missionToneBadge('SCAN COMPLETED \u00b7 REVIEW','warning'):missionToneBadge('NOT VERIFIED','unknown')}</div>\n",
-  " <div class=\"btn-row\" style=\"margin-top:12px\">${g.connected?`<button class=\"btn small\" data-action=\"gmail-refresh\" ${g.busy?'disabled':''}>${icon('refresh')} Refresh Gmail counts</button><button class=\"btn small\" data-action=\"gmail-disconnect\">Disconnect Gmail</button>`:`<a class=\"btn small primary\" href=\"/gmail/connect\">${icon('mail')} Connect Gmail read-only</a>`}<a class=\"btn small\" href=\"https://mail.google.com/mail/u/?authuser=tinfoilfacup%40gmail.com#drafts\" rel=\"noopener noreferrer\" target=\"_blank\">Open Gmail drafts</a></div>\n",
-  " ${g.loaded&&!g.error&&!compact?`<div class=\"grid3\" style=\"margin-top:16px\">${metric('Unique clubs',clubs,'One per club, not one per address','check','good')}${metric('Initial messages',g.records.length,'Replies excluded','mail')}${metric('Gmail drafts',g.draftCount===null?'\u2014':g.draftCount,'Matching Outreach subject; never sent','clock')}</div>`:''}\n",
+  " const g=state.gmail, countState=missionGmailCountState(g), clubs=g.last?.count??'Unknown';\n",
+  " const today=g.result?.filter(x=>x.day===ukDay()).length;\n",
+  " const instruction=g.error?GMAIL_MESSAGES[g.error]:g.connection==='disconnected'?'Disconnected. Connect Gmail read-only to check Sent.':\n",
+  "  g.connection==='connected'?'Mailbox connected. Refresh to check Sent.':\n",
+  "  g.connection==='reconnect'?'Reconnect Gmail read-only to continue.':'Connect Gmail read-only to check Sent.';\n",
+  " const busy=g.operation==='refreshing'?'Refreshing Gmail Sent history \u00b7 '+g.progress+' recognised records\u2026':\n",
+  "  g.operation==='disconnecting'?'Confirming Gmail disconnect\u2026':g.operation==='checking'?'Checking Gmail connection\u2026':'';\n",
+  " const next=g.connection==='sign_in_required'?'<a class=\"btn small primary\" href=\"/login\">Sign in to Mission Control</a>':\n",
+  "  g.connection==='connected'?`<button class=\"btn small\" data-action=\"gmail-refresh\" ${g.operation?'disabled':''}>${icon('refresh')} Refresh Gmail counts</button><button class=\"btn small\" data-action=\"gmail-disconnect\" ${g.operation==='disconnecting'?'disabled':''}>Disconnect Gmail</button>`:\n",
+  "  '<a class=\"btn small primary\" href=\"/gmail/connect\">'+(g.connection==='reconnect'?'Reconnect Gmail read-only':'Connect Gmail read-only')+'</a>';\n",
+  " const stale=g.last&&!g.result?`<p class=\"tiny-note\"><strong>Stale data</strong> \u00b7 Last complete scan ${missionGmailTimestamp(g.last.checkedAt)}.</p>`:'';\n",
+  " const current=g.result?`<p class=\"tiny-note\">${g.result.length} first-contact messages \u00b7 ${today} sent today \u00b7 Checked ${missionGmailTimestamp(g.last.checkedAt)}.</p>`:'';\n",
+  " const draftText=g.drafts?.complete?g.drafts.count:'Unknown';\n",
+  " const draftDetail=g.draftError?GMAIL_MESSAGES[g.draftError]:g.drafts?\n",
+  "  (g.drafts.complete?'Checked ':'Partial listing checked ')+missionGmailTimestamp(g.drafts.checkedAt):\n",
+  "  g.operation==='drafts'?'Checking drafts\u2026':'No complete draft listing.';\n",
+  " const content=`<div class=\"mission-panel-head\"><div><div class=\"eyebrow\">GMAIL \u00b7 READ-ONLY</div><h2>Clubs contacted: ${e(clubs)}</h2><p>${e(busy||instruction)}</p>${current}${stale}</div>${missionToneBadge(countState.toUpperCase(),countState==='Current'?'good':g.last?'warning':'unknown')}</div>\n",
+  " <div class=\"btn-row\" style=\"margin-top:12px\">${next}<a class=\"btn small\" href=\"https://mail.google.com/mail/u/?authuser=tinfoilfacup%40gmail.com#drafts\" rel=\"noopener noreferrer\" target=\"_blank\">Open Gmail drafts</a></div>\n",
+  " ${!compact?`<div class=\"grid3\" style=\"margin-top:16px\">${metric('Gmail drafts',draftText,draftDetail,'clock')}</div>`:''}\n",
   " ${g.audit?`<p class=\"tiny-note\" style=\"margin-top:9px\">${e(missionGmailAuditLine(g.audit))}</p>`:''}\n",
-  " ${g.loaded&&!g.error?missionGmailCountAuditV6Html(g.records):''}\n",
-  " <p class=\"tiny-note\" style=\"margin-top:10px\">Email is read only. No drafts, replies, sending or mailbox changes. Counts are current-session snapshots; unknown is not zero.</p>`;\n",
+  " ${g.result&&!compact?missionGmailCountAuditV6Html(g.result):''}\n",
+  " ${g.saveFailed?'<p class=\"tiny-note\">Browser storage is unavailable. This count may be lost on reload.</p>':''}\n",
+  " <p class=\"tiny-note\" style=\"margin-top:10px\">Gmail access is read-only. Completed counts and timestamps are saved in this browser.</p>`;\n",
   " return `<section class=\"surface pad\" style=\"margin-top:17px\">${content}</section>`;\n",
   "}\n",
+  "async function missionGmailRequest(g,url,options={}){\n",
+  " let response;\n",
+  " try{\n",
+  "  response=await fetch(url,{credentials:'same-origin',cache:'no-store',signal:g.controller.signal,...options});\n",
+  " }catch{throw Error('gmail_network');}\n",
+  " let data;\n",
+  " try{data=await response.json();}catch{throw Error('gmail_upstream');}\n",
+  " if(state.gmail!==g)throw Error('gmail_obsolete');\n",
+  " if(!response.ok)throw Error(Object.hasOwn(GMAIL_MESSAGES,data?.error)?data.error:'gmail_upstream');\n",
+  " return data;\n",
+  "}\n",
   "async function missionGmailStatus(){\n",
-  " try{const r=await fetch('/api/gmail/status',{credentials:'same-origin',cache:'no-store'});if(!r.ok)throw Error('Mailbox status unavailable');const d=await r.json();state.gmail.connected=d.connected===true;if(!state.gmail.connected){state.gmail.loaded=false;state.gmail.records=[];state.gmail.draftCount=null;} }\n",
-  " catch {state.gmail.connected=false;state.gmail.loaded=false;state.gmail.error='Connection status unavailable';}\n",
-  " render();\n",
+  " if(state.gmail.operation)return;\n",
+  " const g=missionGmailBegin('checking');\n",
+  " try{\n",
+  "  const data=await missionGmailRequest(g,'/api/gmail/status');\n",
+  "  if(state.gmail!==g)return;\n",
+  "  if(typeof data?.connected!=='boolean')throw Error('gmail_upstream');\n",
+  "  const previous=g.connection;\n",
+  "  g.connection=data.connected?'connected':previous==='disconnected'?'disconnected':'reconnect';\n",
+  "  if(!data.connected){\n",
+  "   g.result=null;g.drafts=null;\n",
+  "   if(data.reason==='gmail_grant_expired')g.error=data.reason;\n",
+  "  }\n",
+  "  return g;\n",
+  " }catch(error){\n",
+  "  if(state.gmail===g){g.connection='unknown';missionGmailIssue(g,error.message);}\n",
+  " }finally{missionGmailEnd(g);}\n",
+  "}\n",
+  "function missionGmailCollectPage(data,kind,totals,found){\n",
+  " const a=data?.audit;\n",
+  " if(!Array.isArray(data?.rows)||!a||\n",
+  "    GMAIL_AUDIT_FIELDS.some(key=>!Number.isSafeInteger(a[key])||a[key]<0||a[key]>20)||\n",
+  "    a.listed!==a.fetched+a.idRejected||a.fetched!==a.accepted+a.repliesSkipped+a.subjectSkipped+a.unparseable||\n",
+  "    a.bodiesMissing>a.unparseable||a.accepted!==data.rows.length||\n",
+  "    (data.next!==null&&(typeof data.next!=='string'||data.next.length>1400||!data.next||!a.listed||!/^[A-Za-z0-9_\\-+/=]+$/.test(data.next)))||\n",
+  "    data.rows.some(row=>typeof row?.club!=='string'||row.club.length>100||!missionGmailNormalize(row.club)||\n",
+  "     (row.day!==null&&(typeof row.day!=='string'||!/^\\d{4}-\\d{2}-\\d{2}$/.test(row.day))))){\n",
+  "  throw Error('gmail_scan_incomplete');\n",
+  " }\n",
+  " for(const key of GMAIL_AUDIT_FIELDS)totals[key]=(totals[key]||0)+a[key];\n",
+  " found.push(...data.rows.map(row=>({club:row.club,day:row.day,kind})));\n",
+  "}\n",
+  "async function missionGmailScan(g){\n",
+  " const found=[];\n",
+  " for(const kind of ['classic','current']){\n",
+  "  let page='',seen=new Set();\n",
+  "  for(let n=0;n<40;n++){\n",
+  "   const url='/api/gmail/outreach?kind='+kind+(page?'&page='+encodeURIComponent(page):'');\n",
+  "   const data=await missionGmailRequest(g,url);\n",
+  "   if(state.gmail!==g)return;\n",
+  "   missionGmailCollectPage(data,kind,g.audit[kind],found);\n",
+  "   g.progress=found.length;render();\n",
+  "   if(data.next===null)break;\n",
+  "   if(seen.has(data.next)||n===39)throw Error('gmail_scan_incomplete');\n",
+  "   seen.add(data.next);page=data.next;\n",
+  "  }\n",
+  " }\n",
+  " if(Object.values(g.audit).some(a=>a.unparseable||a.idRejected))throw Error('gmail_scan_incomplete');\n",
+  " if(state.gmail!==g)return;\n",
+  " g.result=found;\n",
+  " g.last={version:1,count:missionGmailUnique(found).length,checkedAt:new Date().toISOString()};\n",
+  " try{localStorage.setItem(GMAIL_COUNT_KEY,JSON.stringify(g.last));g.saveFailed=false;}catch{g.saveFailed=true;}\n",
+  "}\n",
+  "async function missionGmailCheckDrafts(g){\n",
+  " g.operation='drafts';render();\n",
+  " try{\n",
+  "  const data=await missionGmailRequest(g,'/api/gmail/drafts');\n",
+  "  if(state.gmail!==g)return;\n",
+  "  if(typeof data?.complete!=='boolean'||!Number.isSafeInteger(data.count)||data.count<0||data.count>500)throw Error('gmail_upstream');\n",
+  "  g.drafts={count:data.complete?data.count:null,complete:data.complete,checkedAt:new Date().toISOString()};\n",
+  " }catch(error){\n",
+  "  if(state.gmail!==g)return;\n",
+  "  g.draftError=Object.hasOwn(GMAIL_MESSAGES,error.message)?error.message:'gmail_upstream';\n",
+  "  if(['sign_in_required','gmail_not_connected','gmail_grant_expired','gmail_grant_rejected'].includes(g.draftError)){\n",
+  "   missionGmailIssue(g,g.draftError);\n",
+  "  }\n",
+  " }\n",
   "}\n",
   "async function missionGmailRefresh(){\n",
-  " const g=state.gmail;if(g.busy||!g.connected)return;\n",
-  " g.busy=true;g.error=null;g.loaded=false;g.progress=0;g.records=[];g.audit={classic:{},current:{}};render();\n",
+  " if(state.gmail.operation||state.gmail.connection!=='connected')return;\n",
+  " const g=missionGmailBegin('refreshing',{result:null,drafts:null,draftError:null,audit:{classic:{},current:{}},progress:0});\n",
   " try{\n",
-  "  const found=[];\n",
-  "  for(const kind of ['classic','current']){\n",
-  "   let page='',seen=new Set();\n",
-  "   for(let n=0;n<40;n++){\n",
-  "    const url='/api/gmail/outreach?kind='+kind+(page?'&page='+encodeURIComponent(page):'');\n",
-  "    const r=await fetch(url,{credentials:'same-origin',cache:'no-store'});\n",
-  "    if(!r.ok){\n",
-  "      if(r.status===401)throw Error('Gmail permission expired; reconnect to continue.');\n",
-  "      let detail='not_reported';\n",
-  "      try{const problem=await r.json();const candidate=String(problem?.error||'');if(/^outreach_(classic|current)_(list|details)_(provider_http_\\d{3}_(rateLimitExceeded|userRateLimitExceeded|dailyLimitExceeded|insufficientPermissions|domainPolicy|accessNotConfigured|forbidden|unknown)|network_failure|processing_failure)$/.test(candidate))detail=candidate;}catch{}\n",
-  "      throw Error('Gmail source returned '+r.status+' ('+detail+')');\n",
-  "    }\n",
-  "    const d=await r.json();if(!Array.isArray(d.rows)||!d.audit||typeof d.audit!=='object')throw Error('Gmail response missing audit');\n",
-  "    const totals=g.audit[kind];\n",
-  "    for(const k of ['listed','fetched','accepted','repliesSkipped','subjectSkipped','unparseable','bodiesMissing','idRejected']){\n",
-  "      const value=d.audit[k];if(!Number.isSafeInteger(value)||value<0||value>500)throw Error('Invalid Gmail audit counters');\n",
-  "      totals[k]=(totals[k]||0)+value;\n",
-  "    }\n",
-  "    if(d.audit.accepted!==d.rows.length)throw Error('Gmail audit/records mismatch');\n",
-  "    found.push(...d.rows.map(row=>({...row,kind})));g.progress=found.length;render();\n",
-  "    if(!d.next)break;if(seen.has(d.next)||n===39)throw Error('Gmail page limit or repeated token');seen.add(d.next);page=d.next;\n",
-  "   }\n",
-  "  }\n",
-  "  const rr=await fetch('/api/gmail/drafts',{credentials:'same-origin',cache:'no-store'});\n",
-  "  if(rr.ok){const dt=await rr.json();g.draftCount=dt.complete?dt.count:null;}else g.draftCount=null;\n",
-  "  g.records=found;g.checkedAt=new Date().toISOString();g.loaded=true;\n",
-  " }catch(err){g.error=String(err.message||'Mail source unavailable');g.records=[];g.loaded=false;}\n",
-  " finally {g.busy=false;render();}\n",
+  "  try{await missionGmailScan(g);}catch(error){if(state.gmail===g)missionGmailIssue(g,error.message);}\n",
+  "  if(state.gmail===g&&g.connection==='connected')await missionGmailCheckDrafts(g);\n",
+  " }finally{missionGmailEnd(g);}\n",
   "}\n",
   "async function missionGmailDisconnect(){\n",
-  " try{const r=await fetch('/gmail/disconnect',{method:'POST',credentials:'same-origin',headers:{'X-TFFAC-Action':'disconnect'}});if(!r.ok)throw Error('Disconnect failed');state.gmail={connected:false,loaded:false,busy:false,checkedAt:null,draftCount:null,records:[],audit:null,error:null,progress:0};render();}catch(err){state.gmail.error=String(err.message);render();}\n",
+  " if(state.gmail.operation==='disconnecting')return;\n",
+  " const g=missionGmailBegin('disconnecting',{result:null,drafts:null,draftError:null,audit:null});\n",
+  " try{\n",
+  "  // Allow the browser to send its exact Origin on this same-origin POST.\n",
+  "  const ack=await missionGmailRequest(g,'/gmail/disconnect',{method:'POST',mode:'same-origin',\n",
+  "   redirect:'error',referrerPolicy:'same-origin',headers:{'X-TFFAC-Action':'disconnect'}});\n",
+  "  if(state.gmail!==g)return;\n",
+  "  if(ack?.disconnected!==true)throw Error('gmail_disconnect_unconfirmed');\n",
+  "  const status=await missionGmailRequest(g,'/api/gmail/status');\n",
+  "  if(state.gmail!==g)return;\n",
+  "  if(status?.connected!==false)throw Error('gmail_disconnect_unconfirmed');\n",
+  "  g.connection='disconnected';\n",
+  " }catch(error){\n",
+  "  if(state.gmail===g){\n",
+  "   const code=error.message;\n",
+  "   missionGmailIssue(g,['sign_in_required','gmail_network'].includes(code)?code:'gmail_disconnect_unconfirmed');\n",
+  "  }\n",
+  " }finally{missionGmailEnd(g);}\n",
+  "}\n",
+  "function missionGmailClearCount(){\n",
+  " const previous=state.gmail;\n",
+  " previous.controller?.abort();\n",
+  " state.gmail=missionGmailState(null,previous.operation==='disconnecting'?'unknown':previous.connection);\n",
+  " try{localStorage.removeItem(GMAIL_COUNT_KEY);return true;}catch{return false;}\n",
   "}\n",
   "function missionOutreachSignal(){\n",
-  " if(state.gmail.loaded&&!state.gmail.error){\n",
-  "  const unique=missionGmailUnique(state.gmail.records);\n",
-  "  return {tone:'good',title:`${unique.length} clubs contacted`,detail:`${state.gmail.records.length} initial messages \u00b7 Gmail checked ${e(since(state.gmail.checkedAt))}`,action:'outreach'};\n",
-  " }\n",
-  "\n",
-  " const pending=workspace.outreach.filter(o=>o.status==='approved'||o.status==='awaiting_sent').length;\n",
-  " const held=workspace.outreach.filter(o=>o.status==='held'||o.status==='draft').length;\n",
-  " if(pending)return {tone:'warning',title:`${pending} awaiting SENT`,detail:'External send / proof outstanding',action:'outreach'};\n",
-  " if(held)return {tone:'warning',title:`${held} drafts to review`,detail:'Mailbox itself not yet checked',action:'outreach'};\n",
-  " return {tone:'unknown',title:'Local desk clear',detail:'Gmail not independently checked',action:'outreach'};\n",
+  " const g=state.gmail,status=missionGmailCountState(g);\n",
+  " if(g.result)return {tone:'good',title:`${g.last.count} clubs contacted`,detail:`Complete Gmail scan \u00b7 ${niceDate(g.last.checkedAt)}`,action:'outreach'};\n",
+  " if(g.last)return {tone:'warning',title:`${g.last.count} clubs contacted \u00b7 Stale`,detail:`${status==='Refreshing'?'Refreshing \u00b7 ':''}Last complete scan ${niceDate(g.last.checkedAt)}`,action:'outreach'};\n",
+  " return {tone:'unknown',title:'Clubs contacted: Unknown',detail:status==='Refreshing'?'Checking Gmail Sent history\u2026':\n",
+  "  g.error?GMAIL_MESSAGES[g.error]:'A complete Gmail scan is needed.',action:'outreach'};\n",
   "}\n",
   "function missionSignalCard(name,key,s){return `<button class=\"signal-card ${s.tone}\" data-nav=\"${s.action}\" aria-label=\"${e(name)}: ${e(s.title)}. Open details\"><div class=\"signal-head\"><span>${e(name)}</span>${missionToneBadge(({good:'GREEN',warning:'AMBER',danger:'RED',unknown:'UNKNOWN'})[s.tone],s.tone)}</div><strong>${e(s.title)}</strong><small>${e(s.detail)}</small><span class=\"signal-more\">Inspect ${icon('arrow')}</span></button>`;}\n",
   "function missionHealthRibbon(){\n",
@@ -305,7 +440,7 @@ const DASHBOARD_HTML = [
   " const loaded=!!state.postcodeRows;\n",
   " return `<section class=\"surface pad comparison-desk\"><div class=\"mission-panel-head\"><div><div class=\"eyebrow\">OUTREACH / QUICK CHECK</div><h2>Postcode comparison desk</h2><p>The same two-minute check, without six browser switches. Draft copy stays in memory until you leave this view.</p></div>${missionToneBadge(loaded?`${state.postcodeRows.length} reference rows`:'Source needed',loaded?'good':'unknown')}</div>\n",
   " <div class=\"compare-grid\"><div class=\"compare-left\"><div class=\"field\"><label for=\"mc-club\">Club \u2014 exact name from Clubfinder</label><input id=\"mc-club\" list=\"mc-club-options\" placeholder=\"Start typing the club name\" value=\"${e(state.compareClub)}\"><datalist id=\"mc-club-options\">${state.queue.map(r=>`<option value=\"${e(r.club)}\"></option>`).join('')}</datalist></div><div class=\"field\"><label for=\"mc-draft\">Email draft \u2014 paste the copy to check</label><textarea id=\"mc-draft\" rows=\"8\" placeholder=\"Paste the outreach email here. A postcode in a footer or signature may be detected too, so check the selected one.\">${e(state.compareDraft)}</textarea></div><div class=\"compare-source\">${icon('database')} ${loaded?`${e(state.postcodeSource)} \u00b7 loaded ${e(niceDate(state.postcodeAt))}`:'Postcode reference not loaded. No matching or publication decision can be claimed.'}<div class=\"btn-row\" style=\"margin-top:9px\"><button class=\"btn small\" data-action=\"import-postcodes\">Import trusted CSV</button>${urlLink(`${GH}/blob/main/tester-club-postcodes.csv`,'Inspect reference source')}<button class=\"btn small\" data-action=\"compare-clear\">Clear draft</button></div></div></div><div class=\"compare-right\"><div id=\"mc-result\" aria-live=\"polite\">${missionCompareResult()}</div><div class=\"compare-history\"><strong>Recent local text checks</strong>${(workspace.postcodeChecks||[]).slice(0,4).map(c=>`<div class=\"compare-history-row\"><span>${e(c.club)} \u00b7 ${e(c.postcode)}</span><small>${e(niceDate(c.checkedAt))}</small></div>`).join('')||'<small>No comparisons recorded yet.</small>'}</div></div></div>\n",
-  " <div class=\"tiny-note\" style=\"margin-top:13px\">A Gmail draft is not fetched automatically here. Google sign-in protects the dashboard, but Gmail inbox access is NOT connected; pasted copy is not saved. The comparison source is a test-postcode export, not a substitute for a current ground/venue investigation.</div></section>`;\n",
+  " <div class=\"tiny-note\" style=\"margin-top:13px\">A Gmail draft is not fetched automatically here. The Gmail connection is separate from this comparison. Pasted copy is not saved. The comparison source is a test-postcode export, not a substitute for a current ground/venue investigation.</div></section>`;\n",
   "}\n",
   "function missionIdeaForm(idea){return `<div class=\"modal-backdrop\" data-dismiss=\"1\"><div class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Ideas board editor\"><div class=\"modal-head\"><div><div class=\"eyebrow\">THE FUN BIT / THE IDEAS BOARD</div><h2>${idea.id?'Edit this What If':'Capture a What If'}</h2></div><button class=\"icon-btn\" data-action=\"close-overlay\">${icon('close')}</button></div><form id=\"mission-idea-form\" data-id=\"${e(idea.id||'')}\"><div class=\"form-grid\"><div class=\"field full\"><label>What's the idea?</label><input name=\"title\" required maxlength=\"180\" value=\"${e(idea.title||'')}\" placeholder=\"D\u2019you think we could\u2026?\"></div><div class=\"field full\"><label>Notes, curiosities, possible rabbit holes</label><textarea name=\"notes\" rows=\"5\" maxlength=\"4000\" placeholder=\"No deadlines. No obligation to turn this into a task.\">${e(idea.notes||'')}</textarea></div><div class=\"field\"><label>Where should it sit?</label><select name=\"state\"><option value=\"spark\" ${(idea.state||'spark')==='spark'?'selected':''}>Just an idea</option><option value=\"exploring\" ${idea.state==='exploring'?'selected':''}>Exploring</option><option value=\"parked\" ${idea.state==='parked'?'selected':''}>Parked for later</option><option value=\"archived\" ${idea.state==='archived'?'selected':''}>Archived, not deleted</option></select></div></div><div class=\"form-controls btn-row\"><button type=\"button\" class=\"btn primary\" data-action=\"save-idea\">${icon('save')} Save in this browser</button><button type=\"button\" class=\"btn\" data-action=\"close-overlay\">Cancel</button></div></form><p class=\"text-xs muted\">An idea is not a PR, a task, or a production change. Back up local work from Sources & safety.</p></div></div>`;}\n",
   "function missionIdeasPage(){\n",
@@ -445,7 +580,7 @@ const DASHBOARD_HTML = [
   "const defaultWorkspace=()=>({version:1,proposals:[],outreach:[],incidents:[],history:[],ideas:[],prReviews:[],postcodeChecks:[],daily:{date:null,completed:[]},ombudsmanSnapshot:null});\n",
   "function loadWorkspace(){try{const a=JSON.parse(localStorage.getItem(WORKSPACE_KEY)||'null');if(a&&a.version===1&&Array.isArray(a.proposals)&&Array.isArray(a.outreach)&&Array.isArray(a.history))return {...defaultWorkspace(),...a,ideas:Array.isArray(a.ideas)?a.ideas:[],prReviews:Array.isArray(a.prReviews)?a.prReviews:[],postcodeChecks:Array.isArray(a.postcodeChecks)?a.postcodeChecks:[],daily:a.daily&&Array.isArray(a.daily.completed)?a.daily:{date:null,completed:[]}}}catch{}return defaultWorkspace()}\n",
   "let workspace=loadWorkspace();\n",
-  "let state={section:'overview',queue:seedQueue,queueMeta:summaryBaseline,queueLoaded:false,queueTime:null,queueError:null,queueFilter:'all',queueScope:'all',queueSearch:'',queuePage:0,queuePageSize:15,selectedClub:null,selectedOutreach:null,outreachTab:'introductions',reviewTab:'proposals',workflow:{results:null,draw:null},workflowError:null,workflowAt:null,healthText:'',healthAt:null,healthSourceDate:'2026-11-18T04:21:55Z',loading:false,overlay:null,postcodeRows:null,postcodeAt:null,postcodeError:null,postcodeSource:null,openPRs:null,prAt:null,prError:null,compareClub:'',compareDraft:'',compareChoice:'',ideasFilter:'all',prFilter:'all',liveOmbudsman:null,ombudsmanAttempted:false,ombudsmanConnectionError:null,gmail:{connected:false,loaded:false,busy:false,checkedAt:null,draftCount:null,records:[],error:null,progress:0}};\n",
+  "let state={section:'overview',queue:seedQueue,queueMeta:summaryBaseline,queueLoaded:false,queueTime:null,queueError:null,queueFilter:'all',queueScope:'all',queueSearch:'',queuePage:0,queuePageSize:15,selectedClub:null,selectedOutreach:null,outreachTab:'introductions',reviewTab:'proposals',workflow:{results:null,draw:null},workflowError:null,workflowAt:null,healthText:'',healthAt:null,healthSourceDate:'2026-11-18T04:21:55Z',loading:false,overlay:null,postcodeRows:null,postcodeAt:null,postcodeError:null,postcodeSource:null,openPRs:null,prAt:null,prError:null,compareClub:'',compareDraft:'',compareChoice:'',ideasFilter:'all',prFilter:'all',liveOmbudsman:null,ombudsmanAttempted:false,ombudsmanConnectionError:null,gmail:missionGmailState()};\n",
   "const save=()=>{try{localStorage.setItem(WORKSPACE_KEY,JSON.stringify(workspace));return true}catch{return false}};\n",
   "function record(type,label,detail=''){workspace.history.unshift({id:id(),type,label,detail,at:iso()});if(workspace.history.length>3000)workspace.history.length=3000;save()}\n",
   "const toast=(msg,warn=false)=>{const root=document.getElementById('toast-area');const x=document.createElement('div');x.className='toast'+(warn?' warn':'');x.textContent=msg;root.append(x);setTimeout(()=>x.remove(),5200)};\n",
@@ -479,7 +614,7 @@ const DASHBOARD_HTML = [
   "  state.ombudsmanConnectionError=null;\n",
   " }catch(err){state.liveOmbudsman=null;state.ombudsmanConnectionError=String(err.message||'No read-only health report');}\n",
   "}\n",
-  "async function refreshAll(){if(state.loading)return;state.loading=true;render();await Promise.allSettled([pullQueue(),pullWorkflows(),pullHealth(),missionPullPostcodes(),missionPullPRs(),missionPullOmbudsman(),missionGmailStatus()]);state.loading=false;render();if(state.gmail.connected&&!state.gmail.loaded)await missionGmailRefresh();toast('Source check completed. Unavailable feeds remain UNKNOWN; check freshness before acting.',!!state.queueError)}\n",
+  "async function refreshAll(){if(state.loading)return;state.loading=true;render();const gmailCheck=missionGmailStatus();await Promise.allSettled([pullQueue(),pullWorkflows(),pullHealth(),missionPullPostcodes(),missionPullPRs(),missionPullOmbudsman(),gmailCheck]);state.loading=false;render();const gmail=await gmailCheck;if(gmail&&gmail===state.gmail&&gmail.connection==='connected'&&!gmail.result)await missionGmailRefresh();toast('Source check completed. Unavailable feeds remain UNKNOWN; check freshness before acting.',!!state.queueError)}\n",
   "function queueCounts(){return state.queue.reduce((d,r)=>(d[r.status]=(d[r.status]||0)+1,d),{})}\n",
   "function todayOutreach(){return workspace.outreach.filter(o=>o.kind==='introduction'&&o.approvedOn===ukDay()&&['approved','awaiting_sent','sent_verified','replied'].includes(o.status))}\n",
   "const slotsLeft=()=>Math.max(0,15-todayOutreach().length);\n",
@@ -749,8 +884,8 @@ const DASHBOARD_HTML = [
   "}catch(ex){toast(`Import rejected: ${ex.message}`,true)}finally{element.value=''}}\n",
   "function clickAction(btn){const a=btn.dataset.action,club=decodeURIComponent(btn.dataset.club||'');if(missionHandleAction(a,btn))return;if(a==='refresh-all')return refreshAll();if(a==='gmail-refresh')return missionGmailRefresh();if(a==='gmail-disconnect')return missionGmailDisconnect();if(a==='close-overlay'){state.overlay=null;return renderOverlay()}if(a==='page-prev'){state.queuePage--;return render()}if(a==='page-next'){state.queuePage++;return render()}if(a==='new-proposal')return startProposal(club);if(a==='save-proposal')return saveProposal(false);if(a==='submit-proposal')return saveProposal(true);if(a==='edit-proposal'){const p=workspace.proposals.find(x=>x.id===btn.dataset.id);if(p)return open({type:'proposal-form',proposal:p})}if(a==='review-proposal')return open({type:'approve',id:btn.dataset.id});if(a==='confirm-approval')return confirmApproval();if(a==='reject-proposal'){const p=workspace.proposals.find(x=>x.id===btn.dataset.id);if(p){p.status='rejected';p.updatedAt=iso();record('rejection',`Correction rejected: ${p.club}`,p.kind);state.overlay=null;nav('approvals');toast('Rejected locally. No data was published.')}return}\n",
   "if(a==='new-outreach')return startOutreach(club);if(a==='new-reply')return startOutreach(club,'reply',btn.dataset.original||'');if(a==='log-incoming-reply')return startOutreach(null,'incoming_reply');if(a==='save-outreach')return storeOutreach(false);if(a==='approve-outreach')return storeOutreach(true);if(a==='log-reply')return storeOutreach(false,true);if(a==='start-outreach-approval')return open({type:'outreach-approval',id:btn.dataset.id});if(a==='confirm-outreach')return confirmOutreach();if(a==='edit-outreach'){const o=workspace.outreach.find(x=>x.id===btn.dataset.id);if(o)return open({type:'outreach-form',kind:o.kind,record:o})}if(a==='open-sent')return open({type:'sent',id:btn.dataset.id});if(a==='confirm-sent')return confirmSent();\n",
-  "if(a==='new-incident')return open({type:'incident'});if(a==='save-incident')return saveIncident();if(a==='export-approved')return exportApproved();if(a==='export-workspace')return exportWorkspace();if(a==='import-clubs')return importFile('import-clubs');if(a==='import-ombudsman')return importFile('import-ombudsman');if(a==='import-workspace')return importFile('import-workspace');if(a==='reset-local')return open({type:'reset'});if(a==='confirm-reset'){if(document.getElementById('reset-confirm')?.value!=='RESET LOCAL')return toast('Type RESET LOCAL exactly.',true);workspace=defaultWorkspace();save();state.overlay=null;nav('sources');toast('Local review records cleared. Public sources untouched.')}}\n",
-  "document.addEventListener('click',ev=>{const navEl=ev.target.closest('[data-nav]');if(navEl){nav(navEl.dataset.nav);return}const a=ev.target.closest('[data-action]');if(a){if(a.dataset.action==='radar-import'){document.getElementById('import-radar').click();return}if(a.dataset.action==='radar-refresh'){radarFetchLatest();return}clickAction(a);return}const o=ev.target.closest('[data-open]');if(o){const [type,...rest]=o.dataset.open.split(':');const value=rest.join(':');if(['sources','ombudsman','approvals','clubfinder'].includes(type))return nav(type);if(type==='club')return open({type:'club',name:decodeURIComponent(value)});if(type==='proposal')return open({type:'proposal',id:value});if(type==='outreach')return open({type:'outreach',id:value});return}const t=ev.target.closest('[data-outreach-tab]');if(t){state.outreachTab=t.dataset.outreachTab;return render()}const rt=ev.target.closest('[data-review-tab]');if(rt){state.reviewTab=rt.dataset.reviewTab;return render()}if(ev.target.matches('[data-dismiss=\"1\"]')){state.overlay=null;renderOverlay()}});\n",
+  "if(a==='new-incident')return open({type:'incident'});if(a==='save-incident')return saveIncident();if(a==='export-approved')return exportApproved();if(a==='export-workspace')return exportWorkspace();if(a==='import-clubs')return importFile('import-clubs');if(a==='import-ombudsman')return importFile('import-ombudsman');if(a==='import-workspace')return importFile('import-workspace');if(a==='reset-local')return open({type:'reset'});if(a==='confirm-reset'){if(document.getElementById('reset-confirm')?.value!=='RESET LOCAL')return toast('Type RESET LOCAL exactly.',true);workspace=defaultWorkspace();const workspaceCleared=save(),countCleared=missionGmailClearCount();state.overlay=null;nav('sources');toast(workspaceCleared&&countCleared?'Local review records and Gmail count cleared.':'Browser storage prevented clearing all local data.',!workspaceCleared||!countCleared)}}\n",
+  "document.addEventListener('click',ev=>{const navEl=ev.target.closest('[data-nav]');if(navEl){nav(navEl.dataset.nav);return}const a=ev.target.closest('[data-action]');if(a){if(a.dataset.action==='radar-import'){document.getElementById('import-radar').click();return}if(a.dataset.action==='radar-refresh'){radarFetchLatest();return}return clickAction(a)}const o=ev.target.closest('[data-open]');if(o){const [type,...rest]=o.dataset.open.split(':');const value=rest.join(':');if(['sources','ombudsman','approvals','clubfinder'].includes(type))return nav(type);if(type==='club')return open({type:'club',name:decodeURIComponent(value)});if(type==='proposal')return open({type:'proposal',id:value});if(type==='outreach')return open({type:'outreach',id:value});return}const t=ev.target.closest('[data-outreach-tab]');if(t){state.outreachTab=t.dataset.outreachTab;return render()}const rt=ev.target.closest('[data-review-tab]');if(rt){state.reviewTab=rt.dataset.reviewTab;return render()}if(ev.target.matches('[data-dismiss=\"1\"]')){state.overlay=null;renderOverlay()}});\n",
   "document.addEventListener('change',ev=>{const el=ev.target;if(missionHandleChange(el))return;if(el.id==='import-radar'){radarImport(el);return}if(el.id==='radar-round'){radar.round=el.value;radar.status='all';render();return}if(el.id==='radar-source'){radar.source=el.value;render();return}if(el.id==='radar-status'){radar.status=el.value;render();return}if(el.id==='club-status'){state.queueFilter=el.value;state.queuePage=0;render()}if(el.id==='club-scope'){state.queueScope=el.value;state.queuePage=0;render()}if(el.id==='import-clubs')doImport(el,'clubs');if(el.id==='import-workspace')doImport(el,'workspace');if(el.id==='import-ombudsman')doImport(el,'ombudsman')});\n",
   "document.addEventListener('input',ev=>{missionHandleInput(ev.target);if(ev.target.id==='radar-search'){const caret=ev.target.selectionStart;radar.search=ev.target.value;render();const field=document.getElementById('radar-search');if(field){field.focus();try{field.setSelectionRange(caret,caret)}catch{}}return}if(ev.target.id==='club-search'){const start=ev.target.selectionStart;state.queueSearch=ev.target.value;state.queuePage=0;render();const el=document.getElementById('club-search');if(el){el.focus();try{el.setSelectionRange(start,start)}catch{}}}});\n",
   "document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&state.overlay){state.overlay=null;renderOverlay()}});\n",
@@ -762,7 +897,7 @@ const DASHBOARD_HTML = [
   "</html>\n"
 ].join('');
 
-const DASHBOARD_CSP = "default-src 'none'; script-src 'sha256-fBHQ2hDkmKCr2vN7IfuG2xYR/b+o2PLhIrNUB7fUL8I=' 'sha256-7PrNnyVeQdG1pFxB3jzDELm3lG/u31tzLSNT97PR3D8='; script-src-attr 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+const DASHBOARD_CSP = "default-src 'none'; script-src 'sha256-ejwBUq2GCLsrE/gMOmygs6dQHlJ49AUpHD2Y6HEz6do=' 'sha256-IuvwWgcd7VQJSHf0prGOQZeeFJ1oCvftKMsp2lhI0HI='; script-src-attr 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
 
 // Authenticated dashboard: no mailbox tokens, backend writes, or admin APIs.
 function privateDashboard() {
@@ -1045,26 +1180,48 @@ async function gmailCallback(request,env,key,session,flow){
   r.headers.append('Set-Cookie',clearCookie(GMAIL_FLOW_COOKIE));return r;
  }
 }
+class GmailReadError extends Error {
+ constructor(code,status=502){super(code);this.status=status;}
+}
+function gmailReadFailure(error){
+ if(!(error instanceof GmailReadError))return gmailJson({error:'gmail_upstream'},502);
+ const response=gmailJson({error:error.message},error.status);
+ if(error.message==='gmail_grant_rejected')response.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));
+ return response;
+}
 async function gmailFetch(token,path,params={}){
  const url=new URL('https://gmail.googleapis.com/gmail/v1/users/me/'+path);
  for(const [k,v] of Object.entries(params)){if(v)url.searchParams.set(k,String(v));}
- const r=await fetch(url.toString(),{headers:{Authorization:'Bearer '+token,Accept:'application/json'},redirect:'manual'});
- if(!r.ok){
-  // Never return or log Google's free-text message, response body, message IDs or addresses.
-  // Google's structured reason identifies quota throttling vs. permission failures.
-  let reason='unknown';
-  if(r.status===403||r.status===429){
-   try{
-    const data=await r.json();
-    const candidate=String(data?.error?.errors?.[0]?.reason||'');
-    if(['rateLimitExceeded','userRateLimitExceeded','dailyLimitExceeded',
-        'insufficientPermissions','domainPolicy','accessNotConfigured','forbidden'].includes(candidate))reason=candidate;
-   }catch{}
+ let response;
+ try{response=await fetch(url,{headers:{Authorization:'Bearer '+token,Accept:'application/json'},redirect:'manual'});}
+ catch{throw new GmailReadError('gmail_network');}
+ if(response.status===401)throw new GmailReadError('gmail_grant_rejected',401);
+ if(response.status===429)throw new GmailReadError('gmail_quota',429);
+ if(response.status===403){
+  let reason;
+  try{reason=(await response.json())?.error?.errors?.[0]?.reason;}catch{}
+  if(['rateLimitExceeded','userRateLimitExceeded','dailyLimitExceeded','quotaExceeded'].includes(reason)){
+   throw new GmailReadError('gmail_quota',429);
   }
-  throw Error('gmail_http_'+r.status+'_'+reason);
+  throw new GmailReadError('gmail_permission',403);
  }
- return r.json();
+ if(!response.ok)throw new GmailReadError('gmail_upstream');
+ try{return await response.json();}catch{throw new GmailReadError('gmail_upstream');}
 }
+function gmailPage(result,field,limit){
+ const next=result?.nextPageToken??null;
+ if(next!==null&&(typeof next!=='string'||!validGmailPageToken(next)||!next)){
+  throw new GmailReadError('gmail_upstream');
+ }
+ const rows=result?.[field];
+ // An omitted list is only usable when Gmail explicitly reports an empty result.
+ if(rows===undefined&&result?.resultSizeEstimate===0&&next===null)return {rows:[],next};
+ if(!Array.isArray(rows)||rows.length>limit||(!rows.length&&(next!==null||result.resultSizeEstimate>0))){
+  throw new GmailReadError('gmail_upstream');
+ }
+ return {rows,next};
+}
+function validGmailPageToken(value){return value.length<=1400&&/^[A-Za-z0-9_\-+/=]*$/.test(value);}
 function gmailPace(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 function gmailDecodeHeader(value){
  // A number of older Outreach subjects use RFC 2047 UTF-8 encoded words (em dashes).
@@ -1125,52 +1282,45 @@ function gmailClub(message,kind){
 }
 async function gmailOutreach(request,token){
  const p=new URL(request.url).searchParams,kind=p.get('kind'),pageToken=p.get('page')||'';
- if(!['classic','current'].includes(kind)||pageToken.length>1400||!/^[A-Za-z0-9_\-+/=]*$/.test(pageToken))return gmailJson({error:'invalid_pagination'},400);
+ if(!['classic','current'].includes(kind)||!validGmailPageToken(pageToken))return gmailJson({error:'invalid_pagination'},400);
  const query=kind==='classic'?'in:sent subject:"on Tin Foil FA Cup" after:2026/10/01':'in:sent subject:"Keeping your club details up to date" after:2026/10/01';
- let stage='list';
  try{
-  const result=await gmailFetch(token,'messages',{q:query,maxResults:'20',pageToken});
-  const listed=Array.isArray(result.messages)?result.messages.length:0;
-  const ids=(result.messages||[]).slice(0,20).map(m=>m.id).filter(m=>/^[a-f0-9]{5,50}$/i.test(m));
+  const page=gmailPage(await gmailFetch(token,'messages',{q:query,maxResults:'20',pageToken}),'messages',20);
+  const ids=new Map();
+  for(const entry of page.rows){
+   if(typeof entry?.id==='string'&&/^[a-f0-9]{5,50}$/i.test(entry.id))ids.set(entry.id.toLowerCase(),entry.id);
+  }
   const rows=[];
-  const audit={listed,fetched:ids.length,accepted:0,repliesSkipped:0,subjectSkipped:0,unparseable:0,bodiesMissing:0,idRejected:listed-ids.length};
-  // Limit concurrency and keep the subrequest budget comfortably below Free Workers ceilings.
-  stage='details';
-  // As of May 2026, Gmail charges 60 quota units per full message but 20 for metadata.
-  // Only classic email subjects are needed; current emails still need their body.
-  // Pace requests across browser pages to stay below the 6,000-unit/user/minute allowance.
+  const audit={listed:page.rows.length,fetched:ids.size,accepted:0,repliesSkipped:0,subjectSkipped:0,
+    unparseable:0,bodiesMissing:0,idRejected:page.rows.length-ids.size};
+  // Pace reads to keep paginated scans beneath the Gmail request budget.
   const format=kind==='classic'?'metadata':'full';
   const pauseMs=kind==='classic'?250:850;
-  for(const id of ids){
+  for(const id of ids.values()){
    await gmailPace(pauseMs);
    const message=await gmailFetch(token,'messages/'+encodeURIComponent(id),
      format==='metadata'?{format,metadataHeaders:'Subject'}:{format});
-   const club=gmailClub(message,kind);
-   if(club){const date=new Date(Number(message.internalDate)||0);
-     const day=Number.isFinite(date.valueOf())&&date.getTime()>0?new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(date):null;
-     rows.push({club,day});audit.accepted++;
+   const club=message&&gmailClub(message,kind);
+   if(club){
+    const date=new Date(Number(message.internalDate)||0);
+    const day=Number.isFinite(date.valueOf())&&date.getTime()>0?new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(date):null;
+    rows.push({club,day});audit.accepted++;
    }else{
-     const subject=gmailHeader(message,'Subject').trim();
-     if(/^(?:Re|Fwd):/i.test(subject))audit.repliesSkipped++;
-     else if(kind==='current'&&subject==='Keeping your club details up to date'){
-       audit.unparseable++;if(!gmailBodyText(message.payload))audit.bodiesMissing++;
-     }else if(kind==='classic'&&/on Tin Foil FA Cup/i.test(subject))audit.unparseable++;
-     else audit.subjectSkipped++;
+    const subject=gmailHeader(message||{},'Subject').trim();
+    if(/^(?:Re|Fwd):/i.test(subject))audit.repliesSkipped++;
+    else if(!subject||(kind==='classic'?/on Tin Foil FA Cup/i.test(subject):/Keeping your club details up to date/i.test(subject))){
+     audit.unparseable++;if(kind==='current'&&!gmailBodyText(message?.payload))audit.bodiesMissing++;
+    }else audit.subjectSkipped++;
    }
   }
-  return gmailJson({rows,next:result.nextPageToken||null,audit});
- }catch(err){
-  // Only an allowlisted stage and HTTP status are returned to the signed-in administrator.
-  const status=/^gmail_http_(\d{3})_(rateLimitExceeded|userRateLimitExceeded|dailyLimitExceeded|insufficientPermissions|domainPolicy|accessNotConfigured|forbidden|unknown)$/.exec(String(err?.message||''));
-  const category=status?'provider_http_'+status[1]+'_'+status[2]:err instanceof TypeError?'network_failure':'processing_failure';
-  return gmailJson({error:'outreach_'+kind+'_'+stage+'_'+category},502);
- }
+  return gmailJson({rows,next:page.next,audit});
+ }catch(error){return gmailReadFailure(error);}
 }
 async function gmailDrafts(token){
  try{
-  const all=await gmailFetch(token,'drafts',{q:'subject:"Keeping your club details up to date"',maxResults:'500'});
-  return gmailJson({count:(all.drafts||[]).length,complete:!all.nextPageToken});
- }catch{return gmailJson({error:'draft_list_unavailable'},502);}
+  const page=gmailPage(await gmailFetch(token,'drafts',{q:'subject:"Keeping your club details up to date"',maxResults:'500'}),'drafts',500);
+  return gmailJson({count:page.rows.length,complete:page.next===null});
+ }catch(error){return gmailReadFailure(error);}
 }
 function signedIn(email) {
   return page('Welcome to Mission Control', `<p>Authenticated as <strong>${escapeHtml(email)}</strong>.</p><p>The entrance is working. Gmail has <strong>not</strong> been connected and no messages have been read.</p><p>Next: protect and serve the existing dashboard, then design separate Gmail authorisation and secure token storage.</p><form method="POST" action="/logout"><button type="submit">Sign out</button></form>`);
@@ -1293,20 +1443,32 @@ export default {
       }
       if (request.method === 'GET' && url.pathname === '/gmail/connect') {
         const session=await checked(cookieValue(request,SESSION_COOKIE),key,'session');
-        if(!session||session.email!==ALLOWED_EMAIL||!session.sub)return denied();
+        if(!session||session.email!==ALLOWED_EMAIL||!session.sub)return denied('Sign in to Mission Control before connecting Gmail.');
         return gmailConnect(env,key,session);
       }
       if (request.method === 'POST' && url.pathname === '/gmail/disconnect') {
+        if(request.headers.get('Origin')!==BASE||request.headers.get('X-TFFAC-Action')!=='disconnect')return denied();
         const session=await checked(cookieValue(request,SESSION_COOKIE),key,'session');
-        if(!session||session.email!==ALLOWED_EMAIL||request.headers.get('Origin')!==BASE||request.headers.get('X-TFFAC-Action')!=='disconnect')return denied();
-        const r=gmailJson({disconnected:true});r.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));return r;
+        if(!session||session.email!==ALLOWED_EMAIL||!session.sub)return gmailJson({error:'sign_in_required'},401);
+        const response=gmailJson({disconnected:true});
+        response.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));
+        response.headers.append('Set-Cookie',clearCookie(GMAIL_FLOW_COOKIE));
+        return response;
       }
       if (request.method === 'GET' && url.pathname.startsWith('/api/gmail/')) {
         const session=await checked(cookieValue(request,SESSION_COOKIE),key,'session');
         if(!session||session.email!==ALLOWED_EMAIL||!session.sub)return gmailJson({error:'sign_in_required'},401);
         const grant=await gmailOpen(request,env,session);
-        if(url.pathname==='/api/gmail/status')return gmailJson({connected:!!grant});
-        if(!grant)return gmailJson({error:'gmail_not_connected'},401);
+        if(!grant){
+          const expired=!!cookieValue(request,GMAIL_COOKIE);
+          const reason=expired?'gmail_grant_expired':'gmail_not_connected';
+          const response=url.pathname==='/api/gmail/status'
+            ?gmailJson(expired?{connected:false,reason}:{connected:false})
+            :gmailJson({error:reason},401);
+          if(expired)response.headers.append('Set-Cookie',clearCookie(GMAIL_COOKIE));
+          return response;
+        }
+        if(url.pathname==='/api/gmail/status')return gmailJson({connected:true});
         if(url.pathname==='/api/gmail/outreach')return gmailOutreach(request,grant.token);
         if(url.pathname==='/api/gmail/drafts')return gmailDrafts(grant.token);
         return gmailJson({error:'not_found'},404);
