@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-17T03:55:02.447396+00:00",
+  "competition_updated_at": "2026-11-25T03:01:27.274624+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 319,
+  "eligible_linked": 334,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -2061,31 +2061,9 @@
       "evidence": []
     },
     {
-      "club": "Nantwich Town FC",
-      "identities": [
-        "Nantwich Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Needham Market FC",
       "identities": [
         "Needham Market FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Nelson FC",
-      "identities": [
-        "Nelson FC"
       ],
       "current_competition": false,
       "website": null,
@@ -2108,72 +2086,6 @@
       "club": "Newcastle Benfield FC",
       "identities": [
         "Newcastle Benfield FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Newcastle Town FC",
-      "identities": [
-        "Newcastle Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Newhaven FC",
-      "identities": [
-        "Newhaven FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Newmarket Town FC",
-      "identities": [
-        "Newmarket Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Newport Pagnell Town FC",
-      "identities": [
-        "Newport Pagnell Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Newton Aycliffe FC",
-      "identities": [
-        "Newton Aycliffe FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "North Ferriby FC",
-      "identities": [
-        "North Ferriby FC"
       ],
       "current_competition": false,
       "website": null,
@@ -2281,31 +2193,9 @@
       "evidence": []
     },
     {
-      "club": "Ossett United FC",
-      "identities": [
-        "Ossett United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Padiham FC",
       "identities": [
         "Padiham FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Pagham FC",
-      "identities": [
-        "Pagham FC"
       ],
       "current_competition": false,
       "website": null,
@@ -2328,28 +2218,6 @@
       "club": "Paulton Rovers FC",
       "identities": [
         "Paulton Rovers FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Peacehaven & Telscombe FC",
-      "identities": [
-        "Peacehaven & Telscombe FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Penistone Church FC",
-      "identities": [
-        "Penistone Church FC"
       ],
       "current_competition": false,
       "website": null,
@@ -2424,17 +2292,6 @@
       "evidence": []
     },
     {
-      "club": "Phoenix Sports FC",
-      "identities": [
-        "Phoenix Sports FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Pickering Town FC",
       "identities": [
         "Pickering Town FC"
@@ -2460,17 +2317,6 @@
       "club": "Poole Town FC",
       "identities": [
         "Poole Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Portishead Town FC",
-      "identities": [
-        "Portishead Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -2526,17 +2372,6 @@
       "club": "Prestwich Heys AFC",
       "identities": [
         "Prestwich Heys AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Punjab United FC",
-      "identities": [
-        "Punjab United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9760,6 +9595,42 @@
       ]
     },
     {
+      "club": "Nantwich Town FC",
+      "identities": [
+        "Nantwich Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.nantwichtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.nantwichtownfc.co.uk/",
+          "evidence_url": "https://www.nantwichtownfc.co.uk/club-details-and-personnel/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Nelson FC",
+      "identities": [
+        "Nelson FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.nelsonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.nelsonfc.co.uk/",
+          "evidence_url": "https://www.nelsonfc.co.uk/visitors/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
       "club": "Newcastle Blue Star FC",
       "identities": [
         "Newcastle Blue Star FC"
@@ -9778,6 +9649,132 @@
       ]
     },
     {
+      "club": "Newcastle Town FC",
+      "identities": [
+        "Newcastle Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://newcastletownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://newcastletownfc.co.uk/",
+          "evidence_url": "https://newcastletownfc.co.uk/contact-us/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Newhaven FC",
+      "identities": [
+        "Newhaven FC"
+      ],
+      "current_competition": false,
+      "website": "https://newhavenfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://newhavenfc.co.uk/",
+          "evidence_url": "https://newhavenfc.co.uk/club/directions/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Newmarket Town FC",
+      "identities": [
+        "Newmarket Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.newmarkettownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.newmarkettownfc.com/",
+          "evidence_url": "https://www.newmarkettownfc.com/contact",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Newport Pagnell Town FC",
+      "identities": [
+        "Newport Pagnell Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.nptfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.nptfc.co.uk/",
+          "evidence_url": "https://www.nptfc.co.uk/news/message-from-our-chairman",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Newton Aycliffe FC",
+      "identities": [
+        "Newton Aycliffe FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.newtonaycliffefc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.newtonaycliffefc.co.uk/",
+          "evidence_url": "https://www.newtonaycliffefc.co.uk/about-us",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "North Ferriby FC",
+      "identities": [
+        "North Ferriby FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.northferribyfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.northferribyfc.co.uk/",
+          "evidence_url": "https://www.northferribyfc.co.uk/contact-us",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Ossett United FC",
+      "identities": [
+        "Ossett United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.ossettutd.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.ossettutd.com/",
+          "evidence_url": "https://www.ossettutd.com/club/contact/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
       "club": "Oxford City FC",
       "identities": [
         "Oxford City FC"
@@ -9792,6 +9789,114 @@
           "evidence_url": "https://www.oxfordcityfc.co.uk/",
           "verified_on": "2026-10-21",
           "ledger": "club_website_verified_batch_04.json"
+        }
+      ]
+    },
+    {
+      "club": "Pagham FC",
+      "identities": [
+        "Pagham FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/paghamfootballclub",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/paghamfootballclub",
+          "evidence_url": "https://www.pitchero.com/clubs/paghamfootballclub/contact",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Peacehaven & Telscombe FC",
+      "identities": [
+        "Peacehaven & Telscombe FC"
+      ],
+      "current_competition": false,
+      "website": "https://pt-fc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://pt-fc.com/",
+          "evidence_url": "https://pt-fc.com/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Penistone Church FC",
+      "identities": [
+        "Penistone Church FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.penistonechurchfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.penistonechurchfc.com/",
+          "evidence_url": "https://www.penistonechurchfc.com/contact-us",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Phoenix Sports FC",
+      "identities": [
+        "Phoenix Sports FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.phoenixsportsfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.phoenixsportsfc.co.uk/",
+          "evidence_url": "https://www.phoenixsportsfc.co.uk/blank-3-1",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Portishead Town FC",
+      "identities": [
+        "Portishead Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://portisheadtownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://portisheadtownfc.com/",
+          "evidence_url": "https://portisheadtownfc.com/contact/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
+        }
+      ]
+    },
+    {
+      "club": "Punjab United FC",
+      "identities": [
+        "Punjab United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pufc.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pufc.uk/",
+          "evidence_url": "https://www.pufc.uk/",
+          "verified_on": "2026-11-20",
+          "ledger": "club_website_verified_batch_27.json"
         }
       ]
     },
