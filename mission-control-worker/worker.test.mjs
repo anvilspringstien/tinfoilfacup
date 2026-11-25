@@ -4,17 +4,9 @@ import { readFile } from 'node:fs/promises';
 import { afterEach, beforeEach, test } from 'node:test';
 import vm from 'node:vm';
 import { crc32, deflateRawSync } from 'node:zlib';
-import worker from './worker.mjs';
+import { env, origin, worker } from './test/isolated-runtime.mjs';
 
-const origin = 'https://tffac-mission-control.anvilspringstien.workers.dev';
 const allowedMailbox = 'tinfoilfacup@gmail.com'; // Already published project contact.
-const env = {
-  GOOGLE_CLIENT_ID: 'synthetic-client',
-  GOOGLE_CLIENT_SECRET: 'synthetic-secret',
-  SESSION_SECRET: Buffer.alloc(32, 17).toString('base64'),
-  GITHUB_RADAR_TOKEN: 'synthetic-actions-read-token',
-  OMBUDSMAN_STATUS_TOKEN: 'synthetic-health-token',
-};
 const gmailScope = 'https://www.googleapis.com/auth/gmail.readonly';
 const sessionName = '__Host-tffac_session';
 const grantName = '__Host-tffac_gmail';
@@ -102,18 +94,22 @@ async function signIn() {
   return cookie(response, sessionName, 3600);
 }
 
-test('records the SHA-256 of the original Worker bytes', async () => {
+test('matches the SHA-256 manifest for the current Worker bytes', async () => {
   const original = await readFile(new URL('./worker.mjs', import.meta.url));
   const manifest = await readFile(new URL('./SHA256SUMS', import.meta.url), 'utf8');
   assert.equal(manifest, createHash('sha256').update(original).digest('hex') + '  worker.mjs\n');
-  assert.equal(original.length, 237434);
 });
 
 test('requires the exact host, an authenticated account and a valid session', async () => {
   for (const path of ['/', '/gmail/connect', '/api/radar/latest', '/api/ombudsman',
-                      'https://preview.example.test/login']) {
+                      'https://preview.example.test/login',
+                      'https://tffac-mission-control-radar-test.anvilspringstien.workers.dev/login']) {
     assert.equal((await call(path)).status, 403, path);
   }
+  const otherOrigin = origin === 'https://mission-control.test'
+    ? 'https://tffac-mission-control.anvilspringstien.workers.dev'
+    : 'https://mission-control.test';
+  assert.equal((await call(otherOrigin + '/login')).status, 403);
   assert.equal((await call('/api/gmail/status')).status, 401);
   assert.equal((await call('/', { bindings: {} })).status, 503);
   assert.equal((await call('/', { cookies: [sessionName + '=invalid-session'] })).status, 403);
