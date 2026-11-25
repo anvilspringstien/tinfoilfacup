@@ -1,0 +1,2 @@
+# Preserve the deployed-source export, including its original CRLF bytes.
+worker.mjs -text whitespace=cr-at-eol
