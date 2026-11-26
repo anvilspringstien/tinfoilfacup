@@ -9,7 +9,7 @@ export function browser(origin, scripts, storage = new Map(), upstream = async (
   const listeners = new Map();
   const elements = new Map();
   const requests = [];
-  const node = () => ({ innerHTML: '', textContent: '', style: {}, append() {} });
+  const node = () => ({ innerHTML: '', textContent: '', style: {}, append() {}, querySelector: () => null });
   const getElementById = id => {
     if (!elements.has(id)) elements.set(id, node());
     return elements.get(id);
