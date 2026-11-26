@@ -28,7 +28,6 @@
 }
 
 .floating-cup-view {
-  perspective: 170cqw;
   visibility: hidden;
 }
 
@@ -37,8 +36,8 @@
 }
 
 .floating-cup-depth {
-  transform-style: preserve-3d;
-  transform: rotateX(var(--view-x, 0deg)) rotateY(var(--view-y, 0deg));
+  perspective: 170cqw;
+  perspective-origin: calc(50% + var(--view-x, 0%)) calc(50% + var(--view-y, 0%));
 }
 
 .floating-cup-depth img {

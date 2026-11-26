@@ -5,7 +5,7 @@ import {chromium} from 'playwright';
 const origin = 'http://127.0.0.1:8765';
 const experiment = '/beta/floating-cup.html';
 const approved = readFileSync('beta/index.html', 'utf8');
-const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="floating-cup.css?v=2"><script defer src="floating-cup.js?v=2"></script>';
+const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="floating-cup.css?v=3"><script defer src="floating-cup.js?v=3"></script>';
 assert.equal(readFileSync('beta/floating-cup.html', 'utf8').replace(additions, ''), approved);
 
 const browser = await chromium.launch();
@@ -42,8 +42,11 @@ try {
 
   await enable.tap();
   assert.equal(await phone.evaluate(() => window.motionRequests), 1);
-  await orientation(phone, 45, 0); // Neutral is the position held when the first reading arrives.
-  await phone.locator(flyingCrest).waitFor();
+  const fixedTime = new Date('2026-11-26T12:00:00Z');
+  await phone.clock.install({time: fixedTime});
+  await phone.clock.pauseAt(new Date(fixedTime.getTime() + 1000));
+  await orientation(phone, 45, 0); // The first sample is the neutral viewing pose.
+  assert.equal(await phone.locator(flyingCrest).count(), 1);
   const background = phone.locator('.floating-cup-view > img');
   const cup = phone.locator('.floating-cup-depth img');
   const backgroundBoxes = () => background.evaluateAll(images =>
@@ -54,46 +57,49 @@ try {
   for (const key of ['x', 'y', 'width', 'height']) {
     assert.ok(Math.abs(rest[key] - crest[key]) < .1, 'neutral cup alignment: ' + key);
   }
+  const travel = box => Math.hypot(box.x - rest.x, box.y - rest.y);
 
   await orientation(phone, 56, 11);
-  await phone.waitForFunction(() => {
-    const depth = document.querySelector('.floating-cup-depth');
-    return Math.abs(parseFloat(depth.style.getPropertyValue('--view-y')) - 7.425) < .05;
-  });
-  const [travel, originalTravel] = await cup.evaluate(image => {
-    // Track the projected center at the cup's depth. A rotated image's
-    // bounding box also moves when its outside corners change perspective.
-    const depth = image.parentElement;
-    const z = new DOMMatrix(getComputedStyle(image).transform).m43;
-    const center = document.createElement('span');
-    Object.assign(center.style, {
-      position: 'absolute', left: '50%', top: '50%', transform: 'translateZ(' + z + 'px)',
-    });
-    depth.append(center);
-    const original = depth.style.transform;
-    const moved = center.getBoundingClientRect();
-    depth.style.transform = 'none';
-    const neutral = center.getBoundingClientRect();
-    depth.style.transform = 'rotateX(-14.85deg) rotateY(14.85deg)';
-    const legacy = center.getBoundingClientRect();
-    depth.style.transform = original;
-    center.remove();
-    const distance = point => Math.hypot(point.x - neutral.x, point.y - neutral.y);
-    return [distance(moved), distance(legacy)];
-  });
-  assert.ok(travel > 4, 'cup still has perceptible relative parallax');
+  await phone.clock.runFor(176);
+  const moved = await cup.boundingBox();
   assert.deepEqual(await backgroundBoxes(), fixed, 'ivory, white and rings remain fixed');
-  const ratio = travel / originalTravel;
-  assert.ok(ratio >= .45 && ratio <= .55, 'cup travels about half as far as before: ' + ratio);
+  assert.ok(Math.abs(moved.width - rest.width) < .1 && Math.abs(moved.height - rest.height) < .1);
+  assert.equal(await cup.evaluate(image => getComputedStyle(image.parentElement).transform), 'none');
 
-  await orientation(phone, 45, 0);
-  await phone.waitForFunction(() => {
-    const depth = document.querySelector('.floating-cup-depth');
-    return Math.abs(parseFloat(depth.style.getPropertyValue('--view-y'))) < .05;
-  });
+  // Compare with the previous projection of the cup centre at the same diagonal tilt.
+  const oldAngle = 7.425 * Math.PI / 180;
+  const depth = .204 * crest.width;
+  const oldZ = depth * Math.cos(oldAngle) ** 2;
+  const oldTravel = Math.hypot(depth * Math.sin(oldAngle), depth * Math.sin(oldAngle) * Math.cos(oldAngle))
+    / (1 - oldZ / (1.7 * crest.width));
+  const ratio = travel(moved) / oldTravel;
+  assert.ok(ratio >= .22 && ratio <= .28, 'cup travels about a quarter as far as before: ' + ratio);
+
+  // Keep sending readings at the changed pose, including slight sensor noise.
+  // The new pose should settle without crossing centre or leaving an offset.
+  let previous = travel(moved);
+  for (const jitter of [.05, -.05, .06, -.06, 0, 0]) {
+    await orientation(phone, 56 + jitter, 11 - jitter);
+    await phone.clock.runFor(80);
+    const held = await cup.boundingBox();
+    assert.ok(held.x >= rest.x - .02 && held.y >= rest.y - .02, 'no overshoot');
+    const distance = travel(held);
+    assert.ok(distance <= previous + .02, 'settles monotonically');
+    previous = distance;
+  }
+  assert.ok(previous < .02, 'a held off-centre pose leaves no displacement');
   const settled = await cup.boundingBox();
-  assert.ok(Math.hypot(settled.x - rest.x, settled.y - rest.y) < .25, 'cup settles back to neutral');
+  await phone.clock.runFor(600);
+  assert.deepEqual(await cup.boundingBox(), settled, 'the viewpoint is stationary after settling');
   assert.deepEqual(await backgroundBoxes(), fixed);
+
+  await orientation(phone, 60, 15);
+  await phone.clock.runFor(160);
+  assert.ok(travel(await cup.boundingBox()) > .75, 'movement resumes from the new neutral pose');
+  await phone.evaluate(() => Object.defineProperty(screen.orientation, 'angle', {value: 90, configurable: true}));
+  await orientation(phone, 60, 15);
+  assert.ok(travel(await cup.boundingBox()) < .02, 'rotation of the screen recalibrates without a jump');
+  await phone.clock.resume();
   assert.deepEqual(await phone.locator('.splash-start').boundingBox(), layout);
   assert.deepEqual(await phone.locator(staticCrest).boundingBox(), crest);
   assert.equal(await phone.locator('.splash-start').getAttribute('href'), 'clubfinder-journey.html');

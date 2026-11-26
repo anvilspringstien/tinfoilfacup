@@ -2,7 +2,7 @@
   'use strict';
 
   const original = document.querySelector('.crest-compartment > .crest');
-  if (!original || !CSS.supports('perspective', '170cqw') || !CSS.supports('transform-style', 'preserve-3d')) return;
+  if (!original || !CSS.supports('perspective', '170cqw') || !CSS.supports('perspective-origin', '50% 50%')) return;
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const orientation = window.DeviceOrientationEvent;
@@ -40,36 +40,52 @@
   original.classList.add('floating-cup-original');
   original.before(scene);
 
-  function restrainedAngle(value) {
-    return Math.max(-16, Math.min(16, value)) * .5;
-  }
+  // The artwork stays on its original depth plane. Shift the viewing centre
+  // by at most 6% of the crest width, roughly a quarter of the previous travel.
+  const viewpointOffset = value => Math.max(-16, Math.min(16, value)) * -.375;
 
   let frame = 0;
-  let x = 0, y = 0, targetX = 0, targetY = 0;
+  let x = 0, y = 0, lastFrame = 0, lastMove = -Infinity;
+  let sample = { x: 0, y: 0 };
+  let reference = sample;
 
-  function paint() {
+  function paint(now) {
     frame = 0;
-    x += (targetX - x) * .25;
-    y += (targetY - y) * .25;
-    cupDepth.style.setProperty('--view-x', x.toFixed(2) + 'deg');
-    cupDepth.style.setProperty('--view-y', y.toFixed(2) + 'deg');
-    if (Math.abs(targetX - x) > .05 || Math.abs(targetY - y) > .05) {
-      frame = requestAnimationFrame(paint);
-    }
+    const moving = now - lastMove < 200;
+    // A held pose becomes the neutral viewpoint. Small sensor jitter does not
+    // restart the movement, and the camera eases to centre without overshoot.
+    if (!moving) reference = sample;
+    const targetX = viewpointOffset(sample.x - reference.x);
+    const targetY = viewpointOffset(sample.y - reference.y);
+    const follow = 1 - Math.exp(-Math.max(0, now - lastFrame) / 55);
+    lastFrame = now;
+    x += (targetX - x) * follow;
+    y += (targetY - y) * follow;
+    const settled = !moving && Math.hypot(x, y) < .02;
+    if (settled) x = y = 0;
+    cupDepth.style.setProperty('--view-x', x.toFixed(3) + '%');
+    cupDepth.style.setProperty('--view-y', y.toFixed(3) + '%');
+    if (!settled) frame = requestAnimationFrame(paint);
   }
 
   function aim(horizontal, vertical) {
     if (reduced.matches) return;
     scene.dataset.moving = '';
-    targetX = restrainedAngle(-vertical);
-    targetY = restrainedAngle(horizontal);
-    if (!frame) frame = requestAnimationFrame(paint);
+    if (Math.hypot(horizontal - sample.x, vertical - sample.y) < .25) return;
+    sample = { x: horizontal, y: vertical };
+    lastMove = performance.now();
+    if (!frame) {
+      lastFrame = lastMove;
+      frame = requestAnimationFrame(paint);
+    }
   }
 
   function showStatic() {
     cancelAnimationFrame(frame);
     frame = 0;
-    x = y = targetX = targetY = 0;
+    x = y = 0;
+    sample = reference = { x: 0, y: 0 };
+    lastMove = -Infinity;
     cupDepth.style.removeProperty('--view-x');
     cupDepth.style.removeProperty('--view-y');
     delete scene.dataset.moving;
@@ -99,6 +115,7 @@
     const angle = screen.orientation?.angle ?? window.orientation ?? 0;
     if (!neutral || neutral.angle !== angle) {
       neutral = { beta: event.beta, gamma: event.gamma, angle };
+      showStatic();
       aim(0, 0);
       return;
     }
