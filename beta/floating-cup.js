@@ -31,13 +31,18 @@
   const view = document.createElement('div');
   view.className = 'floating-cup-view';
   view.setAttribute('aria-hidden', 'true');
-  const planes = document.createElement('div');
-  planes.className = 'floating-cup-planes';
-  planes.append(...layers);
-  view.append(planes);
+  const [ivory, white, rings, cup] = layers;
+  const cupDepth = document.createElement('div');
+  cupDepth.className = 'floating-cup-depth';
+  cupDepth.append(cup);
+  view.append(ivory, white, rings, cupDepth);
   scene.append(view);
   original.classList.add('floating-cup-original');
   original.before(scene);
+
+  function restrainedAngle(value) {
+    return Math.max(-16, Math.min(16, value)) * .5;
+  }
 
   let frame = 0;
   let x = 0, y = 0, targetX = 0, targetY = 0;
@@ -46,8 +51,8 @@
     frame = 0;
     x += (targetX - x) * .25;
     y += (targetY - y) * .25;
-    planes.style.setProperty('--view-x', x.toFixed(2) + 'deg');
-    planes.style.setProperty('--view-y', y.toFixed(2) + 'deg');
+    cupDepth.style.setProperty('--view-x', x.toFixed(2) + 'deg');
+    cupDepth.style.setProperty('--view-y', y.toFixed(2) + 'deg');
     if (Math.abs(targetX - x) > .05 || Math.abs(targetY - y) > .05) {
       frame = requestAnimationFrame(paint);
     }
@@ -56,8 +61,8 @@
   function aim(horizontal, vertical) {
     if (reduced.matches) return;
     scene.dataset.moving = '';
-    targetX = Math.max(-16, Math.min(16, -vertical));
-    targetY = Math.max(-16, Math.min(16, horizontal));
+    targetX = restrainedAngle(-vertical);
+    targetY = restrainedAngle(horizontal);
     if (!frame) frame = requestAnimationFrame(paint);
   }
 
@@ -65,8 +70,8 @@
     cancelAnimationFrame(frame);
     frame = 0;
     x = y = targetX = targetY = 0;
-    planes.style.removeProperty('--view-x');
-    planes.style.removeProperty('--view-y');
+    cupDepth.style.removeProperty('--view-x');
+    cupDepth.style.removeProperty('--view-y');
     delete scene.dataset.moving;
   }
 

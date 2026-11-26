@@ -19,8 +19,8 @@
 }
 
 .floating-cup-view,
-.floating-cup-planes,
-.floating-cup-planes img {
+.floating-cup-depth,
+.floating-cup-view img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -36,30 +36,14 @@
   visibility: visible;
 }
 
-.floating-cup-planes {
+.floating-cup-depth {
   transform-style: preserve-3d;
   transform: rotateX(var(--view-x, 0deg)) rotateY(var(--view-y, 0deg));
 }
 
-.floating-cup-planes img {
-  /* Scale compensates for perspective at rest to preserve the source alignment. */
-  transform: translateZ(var(--plane, 0px)) scale(var(--plate-scale, 1));
-}
-
-.floating-cup-planes img:nth-child(2) {
-  --plane: 2.4cqw;
-  --plate-scale: .9859;
-}
-
-.floating-cup-planes img:nth-child(3) {
-  --plane: 5.1cqw;
-  --plate-scale: .97;
-}
-
-.floating-cup-planes img:nth-child(4) {
-  --plane: 20.4cqw;
-  --plate-scale: .88;
-  /* The original cup PNG already has a shadow. */
+.floating-cup-depth img {
+  /* Keep the cup on the original depth plane. Scale cancels perspective at rest. */
+  transform: translateZ(20.4cqw) scale(.88);
 }
 
 .floating-cup-tilt {
