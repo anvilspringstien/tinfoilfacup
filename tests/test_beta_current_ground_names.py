@@ -90,6 +90,18 @@ class CurrentGroundNameTests(unittest.TestCase):
         self.assertNotEqual(previous, html)
         self.assertEqual(apply_names(previous, ledger), (html, ['Garforth Town FC']))
 
+    def test_explicit_coordinate_replacement_and_public_postcode_parity(self):
+        ledger = json.loads((ROOT / 'updater/current-ground-name-ledger.json').read_text())
+        ledger['approved'] = [row for row in ledger['approved'] if row['club'] in ('Ashington FC', 'Birtley Town FC')]
+        for path in ('clubfinder.html', 'beta/clubfinder-beta.html'):
+            html = (ROOT / path).read_text()
+            self.assertEqual(apply_names(html, ledger), (html, []))
+            rows = {row['name']: row for row in literal(html, 'GROUNDS')[2]}
+            self.assertEqual((rows['Ashington FC']['lat'], rows['Ashington FC']['lon']), (55.184623, -1.551254))
+            self.assertEqual((rows['Birtley Town FC']['lat'], rows['Birtley Town FC']['lon']), (54.887887, -1.580739))
+            with self.assertRaisesRegex(ValueError, 'Coordinate drift'):
+                apply_names(html.replace('"lat":55.184623,"lon":-1.551254', '"lat":55.18,"lon":-1.551254', 1), ledger)
+
     def test_duplicate_identity_across_location_stores_fails(self):
         html = self.html + ';const LAW2_ORIGIN_LOCATIONS=' + json.dumps([self.row], separators=(',', ':')) + ';'
         with self.assertRaisesRegex(ValueError, 'one exact ground record'):

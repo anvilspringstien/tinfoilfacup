@@ -66,15 +66,38 @@ jobs:
       - name: Compare protected files against main
         run: |
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- . \
-            ':(exclude).github/workflows/league-tier-readonly.yml' \
-            ':(exclude)docs/league-tier-readonly-2026-27.md' \
-            ':(exclude)tests/test_league_tier_readonly.py' \
-            ':(exclude)tests/test_league_tier_approval.py' \
-            ':(exclude)updater/league_tier_readonly.py' \
-            ':(exclude)updater/league_tier_review.py' \
-            ':(exclude)updater/league_tier_approval.py' \
-            ':(exclude)updater/league-tier-sources/**'
+          # A Clubfinder facts PR may regenerate only the roster's postcode column.
+          # League & Tier source changes still use the existing protected-file gate.
+          if ! git diff --quiet origin/main...HEAD -- tester-club-postcodes.csv && \
+             git diff --quiet origin/main...HEAD -- updater/league-tier-sources/ \
+               updater/league_tier_readonly.py updater/league_tier_review.py updater/league_tier_approval.py \
+               tests/test_league_tier_readonly.py tests/test_league_tier_approval.py \
+               docs/league-tier-readonly-2026-27.md journey-club-registry.json; then
+            python -B -m updater.public_club_facts_guard --base origin/main
+            python - <<'PY'
+          import csv, io, subprocess
+          from pathlib import Path
+          base = subprocess.check_output(['git', 'merge-base', 'origin/main', 'HEAD'], text=True).strip()
+          previous = subprocess.check_output(['git', 'show', base + ':tester-club-postcodes.csv'], text=True)
+          current = Path('tester-club-postcodes.csv').read_text()
+          def identity_fields(value):
+              return [{key: item for key, item in row.items() if key != 'Postcode'}
+                      for row in csv.DictReader(io.StringIO(value))]
+          assert identity_fields(previous) == identity_fields(current), 'League & Tier roster identity fields changed'
+          PY
+            python -B updater/export_test_postcodes.py
+            git diff --exit-code -- tester-club-postcodes.csv
+          else
+            git diff --exit-code origin/main...HEAD -- . \
+              ':(exclude).github/workflows/league-tier-readonly.yml' \
+              ':(exclude)docs/league-tier-readonly-2026-27.md' \
+              ':(exclude)tests/test_league_tier_readonly.py' \
+              ':(exclude)tests/test_league_tier_approval.py' \
+              ':(exclude)updater/league_tier_readonly.py' \
+              ':(exclude)updater/league_tier_review.py' \
+              ':(exclude)updater/league_tier_approval.py' \
+              ':(exclude)updater/league-tier-sources/**'
+          fi
           git status --porcelain
           test -z "$(git status --porcelain)"
       - name: Retain read-only evidence for Mission Control review

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Apply and verify club-confirmed current ground details in the BETA listing."""
+"""Apply and verify club-confirmed current ground details in the BETA listing or explicitly selected Public rows."""
 import argparse
 import json
+import math
 import re
 from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML = ROOT / 'beta/clubfinder-beta.html'
+PUBLIC = ROOT / 'clubfinder.html'
 LEDGER = ROOT / 'updater/current-ground-name-ledger.json'
 
 
@@ -61,7 +63,20 @@ def apply_names(html, ledger):
         store, row = matches[0]
         if row.get('postcode') not in (previous_postcode, postcode) or row.get('ground') not in (before, after):
             raise ValueError('Ground identity/postcode drift: ' + club)
-        if row['ground'] == after and row['postcode'] == postcode:
+        updated_row = dict(row, ground=after, postcode=postcode)
+        if 'coordinates' in item:
+            record = item['coordinates']
+            prior, reviewed = (record.get(k) for k in ('previous', 'reviewed'))
+            for point in (prior, reviewed):
+                if (not isinstance(point, dict) or set(point) != {'lat', 'lon'}
+                        or any(type(point[k]) not in (float, int) or not math.isfinite(point[k])
+                               or abs(point[k]) > limit for k, limit in (('lat', 90), ('lon', 180)))):
+                    raise ValueError('Invalid reviewed coordinates: ' + club)
+            current = {k: row.get(k) for k in ('lat', 'lon')}
+            if current not in (prior, reviewed) or not isinstance(record.get('source'), str) or not record['source'].strip():
+                raise ValueError('Coordinate drift or missing coordinate evidence: ' + club)
+            updated_row.update(reviewed, coordinate_source=record['source'])
+        if updated_row == row:
             continue
         ascii_row = compact(row, ensure_ascii=True)
         original = compact(row)
@@ -70,7 +85,7 @@ def apply_names(html, ledger):
             original = ascii_row
         if store['body'].count(original) != 1:
             raise ValueError('Ground serialization boundary changed: ' + club)
-        updated = compact(dict(row, ground=after, postcode=postcode), ensure_ascii=ensure_ascii)
+        updated = compact(updated_row, ensure_ascii=ensure_ascii)
         store['body'] = store['body'].replace(original, updated, 1)
         changes.append(club)
     for store in sorted(stores, key=lambda item: item['start'], reverse=True):
@@ -83,13 +98,23 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--apply', action='store_true')
     mode.add_argument('--check', action='store_true')
+    parser.add_argument('--public', action='store_true', help='Use the Public listing for an explicit set of reviewed clubs')
+    parser.add_argument('--club', action='append', default=[], help='Select an exact reviewed club (repeatable)')
     args = parser.parse_args()
-    html = HTML.read_text(encoding='utf-8')
-    expected, changes = apply_names(html, json.loads(LEDGER.read_text(encoding='utf-8')))
+    if args.public and not args.club:
+        parser.error('--public requires explicit --club selections')
+    path = PUBLIC if args.public else HTML
+    ledger = json.loads(LEDGER.read_text(encoding='utf-8'))
+    if args.club:
+        if len(set(args.club)) != len(args.club) or not set(args.club) <= {r['club'] for r in ledger['approved']}:
+            parser.error('Duplicate or unknown --club selection')
+        ledger['approved'] = [r for r in ledger['approved'] if r['club'] in args.club]
+    html = path.read_text(encoding='utf-8')
+    expected, changes = apply_names(html, ledger)
     if args.check and expected != html:
         raise SystemExit('CURRENT GROUND NAME CHECK: FAIL — reviewed names not applied')
     if args.apply and expected != html:
-        HTML.write_text(expected, encoding='utf-8')
+        path.write_text(expected, encoding='utf-8')
     print('CURRENT GROUND NAMES: PASS', {'changes': changes, 'applied': args.apply, 'check': args.check})
 
 
