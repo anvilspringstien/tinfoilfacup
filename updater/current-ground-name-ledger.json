@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "policy": "Club-confirmed current BETA listing details. Postcodes change only with an explicit previous postcode. Keep coordinates, eligibility, historical venues and canonical competition data.",
+  "policy": "Club-confirmed current listing details. Postcode and coordinate changes require explicit previous values and independent evidence. Preserve eligibility, historical venues and canonical competition data.",
   "approved": [
     {
       "club": "Sholing FC",
@@ -186,6 +186,49 @@
         "https://www.brightlingsearegentfc.com/contact"
       ],
       "review_notes": "The club secretary confirmed the listing by email on 24 November. The contact page agrees. The existing ground record already matches."
+    },
+    {
+      "club": "Ashington FC",
+      "previous_name": "Woodhorn Lane",
+      "current_name": "Woodhorn Lane",
+      "previous_postcode": "NE63 9YF",
+      "postcode": "NE63 9FW",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-26",
+      "public_sources": [
+        "https://www.ashingtonafc.com/team/ashington/",
+        "https://www.northernfootballleague.org/team/ashington/",
+        "https://www.fchd.info/maps/GAZ.htm",
+        "https://api.postcodes.io/postcodes/NE639FW"
+      ],
+      "review_notes": "Club secretary confirmed the postcode on 25 November. The old pin is approximately 2.05 km from the Woodhorn Lane venue. The FCHD venue point and the postcode centroid corroborate the current site, but represent separate points. Replace the pin with the FCHD venue point.",
+      "coordinates": {
+        "previous": {
+          "lat": 55.1714,
+          "lon": -1.5732
+        },
+        "reviewed": {
+          "lat": 55.184623,
+          "lon": -1.551254
+        },
+        "source": "FCHD 2025–26 gazetteer (Woodhorn Lane venue pin)"
+      }
+    },
+    {
+      "club": "Birtley Town FC",
+      "previous_name": "Arrowmark Home Improvements Stadium",
+      "current_name": "Arrowmark Home Improvements Stadium",
+      "previous_postcode": "DH3 2TB",
+      "postcode": "DH3 2QW",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-26",
+      "public_sources": [
+        "https://birtleytownfc.co.uk/contact/",
+        "https://www.northernfootballleague.org/team/birtley-town/",
+        "https://www.fchd.info/maps/GAZ.htm",
+        "https://api.postcodes.io/postcodes/DH32QW"
+      ],
+      "review_notes": "Club confirmed on 25 November that DH3 2QW serves the spectator entrance. The existing pin independently matches the venue coordinates in the FCHD gazetteer. Retain the venue pin rather than moving it to the entrance-postcode centroid, about 240 m away."
     }
   ]
 }
