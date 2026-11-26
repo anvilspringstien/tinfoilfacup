@@ -6,23 +6,24 @@ The target is the existing [Radar TEST Worker](https://tffac-mission-control-rad
 
 | Item | Baseline |
 | --- | --- |
-| GitHub source | PR [#741](https://github.com/anvilspringstien/tinfoilfacup/pull/741) merged as `2a93526aa27b0ea39e1bcf3b40720d8fff2fdf8e`. |
+| GitHub source | PR [#742](https://github.com/anvilspringstien/tinfoilfacup/pull/742) is included in the owner’s clean checkout at `d4c6d84e40ef05a16d7cee7d5c650278304968f8`. The reviewed Worker SHA-256 matched. |
 | Cloudflare Worker | `tffac-mission-control-radar-test` |
-| Serving version, owner observation on 25 November 2026 | `271cbcc5-737e-4ec5-ac9f-4560fe96f805` at 100%. This is the original version used by previous successful sign-ins. |
-| Latest upload, owner observation on 25 November 2026 | `54793580-0f82-441c-970a-4b9997ba4de0`, staged with no traffic. It has yet to pass hosted sign-in. |
-| Staged credential changes, in order | `63bc39a1` updated `GOOGLE_CLIENT_ID`, `e665aa81` updated `GOOGLE_CLIENT_SECRET`, and `54793580` updated `SESSION_SECRET`. Verify the cumulative binding names and the exact test callback in the owner dashboard before activation. |
-| Runtime | Compatibility date `2026-11-21`, no flags, Default placement, cache disabled, as supplied by the owner. Verify settings against Cloudflare before upload. |
-| OAuth | Dedicated test client. Exact callback `https://tffac-mission-control-radar-test.anvilspringstien.workers.dev/oauth/callback`. The previous Incognito sign-in verified the original serving version. The staged test client and signing configuration still require an independent Incognito sign-in after activation. |
-| Secret binding names | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SESSION_SECRET`, `GITHUB_RADAR_TOKEN`. Verify names and types only. Keep the installed test client and independent signing secret. |
-| Service | `OMBUDSMAN_SERVICE` → `tffc-ombudsman`, default entrypoint. With `OMBUDSMAN_STATUS_TOKEN` absent, the candidate reports the feed unavailable and skips the service call. |
+| Verified serving and candidate rollback version | `54793580-0f82-441c-970a-4b9997ba4de0` at 100%, observed by the owner on 26 November 2026. |
+| Credential history | Previous serving version `271cbcc5-737e-4ec5-ac9f-4560fe96f805`. Dashboard updates were `63bc39a1` for `GOOGLE_CLIENT_ID`, `e665aa81` for `GOOGLE_CLIENT_SECRET` and `54793580` for `SESSION_SECRET`. |
+| Runtime | Compatibility date `2026-11-21`, no compatibility flags, Default placement, cache disabled. The exact `workers.dev` host remains enabled and preview URLs remain disabled. Observability and logs are enabled. |
+| OAuth | The owner verified dedicated test-client sign-in and refresh on the serving credential baseline. Exact callback `https://tffac-mission-control-radar-test.anvilspringstien.workers.dev/oauth/callback`. Rejection of a stale session from before the credential change remains untested. |
+| Dashboard bindings | `GOOGLE_CLIENT_ID` is a plain-text variable. `GOOGLE_CLIENT_SECRET`, `SESSION_SECRET` and `GITHUB_RADAR_TOKEN` are encrypted. Inspect names and types only. |
+| Service | `OMBUDSMAN_SERVICE` → `tffc-ombudsman`, environment `production`, entrypoint `default`. With `OMBUDSMAN_STATUS_TOKEN` absent, the candidate reports the feed unavailable and skips the service call. |
+| CLI access | The owner verified a temporary account-owned API token with **Individual Workers Editor** permission scoped exclusively to the existing Radar TEST Worker. |
+| Candidate upload | The owner cancelled at Wrangler’s remote-configuration prompt. The candidate has no uploaded version from that attempt. |
 
 The [explicit Wrangler target](wrangler.radar-test.toml) builds from the reviewed `worker.mjs` into a git-ignored directory. The [builder](build-radar-test.mjs) stops when an expected integration point changes. The candidate pins the Radar test origin, labels both sign-in and dashboard pages **TEST**, and keeps the existing Google dashboard sign-in checks and `openid email` scopes. The authenticated test form issues a short-lived, synthetic grant bound to the dashboard session. Gmail requests use the [local synthetic transport](test/hosted-gmail-fixture.mjs) through the same parser, pagination, audit, status and Disconnect logic. The generated Worker has no Gmail OAuth handler or Gmail network fallback. Radar remains a read-only GitHub integration.
 
 ## Read-only deployment inspection
 
-The owner has already recorded the serving and staged versions through their Cloudflare dashboard. Recheck both immediately before any approved activation. There is no need to authorise Wrangler OAuth for this read-only check.
+Recheck the serving version, latest upload and traffic in the owner dashboard before any authorised action. The dashboard is sufficient for read-only inspection.
 
-If the owner separately approves API inspection, Cloudflare documents an API token with **Metadata Read-Only** scoped to **Individual Workers**, selecting only `tffac-mission-control-radar-test`. Both inventory endpoints explicitly accept that scope. The token has no script-content or deployment permission. If the individual-Worker scope is unavailable, use the owner dashboard. Do not broaden to a product-wide or write role to make this check work. No token was created or used for this change. [Workers permission scopes](https://developers.cloudflare.com/workers/authorization/workers/) · [List deployments](https://developers.cloudflare.com/api/resources/workers/subresources/scripts/subresources/deployments/methods/list/) · [List versions](https://developers.cloudflare.com/api/resources/workers/subresources/scripts/subresources/versions/methods/list/).
+If the owner separately approves API inspection, Cloudflare documents an API token with **Metadata Read-Only** scoped to **Individual Workers**, selecting only `tffac-mission-control-radar-test`. Both inventory endpoints explicitly accept that scope. The token has no script-content or deployment permission. If the individual-Worker scope is unavailable, use the owner dashboard. Do not broaden to a product-wide or write role to make this check work. Use the editor token only for an explicitly authorised operation in the existing TEST Worker. [Workers permission scopes](https://developers.cloudflare.com/workers/authorization/workers/) · [List deployments](https://developers.cloudflare.com/api/resources/workers/subresources/scripts/subresources/deployments/methods/list/) · [List versions](https://developers.cloudflare.com/api/resources/workers/subresources/scripts/subresources/versions/methods/list/).
 
 For an already approved, short-lived, single-Worker token in a private shell, set `CF_RADAR_ACCOUNT_ID` and make these GET requests. Keep the token out of command arguments, logs, transcripts and Git:
 
@@ -42,17 +43,20 @@ unset CF_RADAR_READ_TOKEN
 
 Inspect only IDs and traffic. Record the observation time and account/Worker selection privately. Keep client secrets, signing secrets, OAuth codes, cookies and raw inventory out of the PR.
 
-## Prepare and verify the credential baseline
+## Local verification
 
-A local dry run needs no Cloudflare login. Start from the repository root of a clean checkout with Node 24 and Bash. Use the explicit target for every Wrangler command.
+A dry run needs no Cloudflare login. Start from the repository root of a clean checkout with Node 24 and Bash. Use the explicit target for every Wrangler command.
+
+Wrangler is pinned to **4.156.2** for this target. On the owner’s checkout, both 4.156.1 and 4.156.2 passed the dry run with identical reported build sizes. Only 4.156.2 got past the remote metadata retrieval that blocked 4.156.1 with the restricted token. The candidate upload was then cancelled for configuration review.
 
 ```sh
 radar() {
-  WRANGLER_SEND_METRICS=false npx --yes wrangler@4.156.1 "$@" \
+  WRANGLER_SEND_METRICS=false npx --yes wrangler@4.156.2 "$@" \
     --cwd mission-control-worker --config wrangler.radar-test.toml
 }
 git rev-parse HEAD
 git status --short
+node --check mission-control-worker/worker.mjs
 (cd mission-control-worker && sha256sum --check SHA256SUMS)
 node --test mission-control-worker/worker.test.mjs
 TFFAC_MC_TEST_TARGET=isolated node --test mission-control-worker/worker.test.mjs
@@ -60,49 +64,49 @@ node --test mission-control-worker/test/hosted-target.test.mjs
 radar versions upload --dry-run
 ```
 
-**Do not upload the candidate while the credential version is staged.** First reconcile the separation between the two versions:
+## Wrangler 4.156.2 configuration reconciliation
 
-1. From the owner dashboard or approved metadata-only inspection, confirm the original ID is serving 100% and the staged credential ID is still the expected upload. Verify the account, exact test hostname, compatibility, cache, service binding and Google callback. Record the original ID as the rollback for this credential-only window. Stop if either ID or its configuration differs.
-2. After separate owner approval for this activation, use the existing authorised operator session to deploy exactly the staged credential ID at 100% on the Radar test Worker. Use the authenticated dashboard if the operator has not approved equivalent Wrangler permissions. With an already authorised Worker-scoped deployment session, the CLI command is:
+The published [Wrangler 4.156.2 package](https://www.npmjs.com/package/wrangler/v/4.156.2) is the reference for the command behaviour below. The local dry run builds the same upload metadata without making the remote preflight requests.
 
-   ```sh
-   radar versions deploy '54793580-0f82-441c-970a-4b9997ba4de0@100' \
-     --message "Activate Radar TEST credential baseline only"
-   ```
-
-3. Verify the staged ID now serves 100%. In a new Chrome Incognito window, sign in at the exact Radar test origin. Confirm the redirect uses the dedicated Google client and exact callback, the account is accepted, and reload retains the dashboard session. Exercise only dashboard sign-in, which requests `openid email`. Avoid Gmail Connect on the old executable. An independent session signing configuration should reject a stale session from the original deployment, if one is available to test without exposing a cookie.
-4. If sign-in fails, the authorised operator restores `271cbcc5-737e-4ec5-ac9f-4560fe96f805` to 100%, confirms the original sign-in, and stops. The equivalent approved CLI command is `radar rollback '271cbcc5-737e-4ec5-ac9f-4560fe96f805'`. No candidate upload follows a failed credential activation.
-5. If sign-in succeeds, record the now-serving `54793580-0f82-441c-970a-4b9997ba4de0` as the known-good credential baseline and candidate rollback ID. Only then request separate candidate upload approval.
+| Remote observation | Reviewed local representation and effect |
+| --- | --- |
+| Preview URLs disabled | `preview_urls = false` prevents Wrangler’s comparison from inferring enabled previews from `workers_dev = true`. Version upload reads the remote subdomain settings when reporting URLs and does not change them. Use only the exact registered TEST hostname. |
+| Dashboard-only `GOOGLE_CLIENT_ID` | `keep_vars = true` adds `plain_text` and `json` to `keep_bindings` in the version upload payload. The upload also includes `secret_text` and `secret_key` for unchanged secrets. Wrangler sends `bindings_inherit=strict` to the versions API. A dashboard variable can still appear in the configuration comparison because the comparison does not apply the upload’s inheritance rules. Keep its value out of TOML and verify its name and type on the candidate before serving it. |
+| `OMBUDSMAN_SERVICE`, production, default | The service binding encodes `environment = "production"` and `entrypoint = "default"`, matching the observed remote binding metadata. Wrangler 4.156.2 accepts and serializes both fields. |
+| Observability and logs enabled | Both are explicit in TOML. Wrangler compares them before upload but omits observability from the version payload. `versions deploy` can separately sync it after changing traffic. Before any CLI deployment, verify the complete Observability configuration in the owner dashboard, including sampling, invocation logs, persistence and traces. If any unrecorded settings differ, stop and reconcile them before scheduling CLI deployment. |
+| Cache disabled | `[cache] enabled = false` retains the disabled state in the versioned upload metadata. |
 
 ## Upload and serving traffic
 
-After specific upload authorisation, set `RADAR_ROLLBACK_VERSION` to the recorded full ID, then upload a separately versioned candidate from the reviewed checkout:
+Immediately before a separately authorised upload, confirm that `54793580-0f82-441c-970a-4b9997ba4de0` still serves 100% and is the intended rollback version. Confirm the account, exact TEST hostname and callback, placement, cache and all binding names and types in the owner dashboard. Stop on unexpected state or a newer upload so the version from which Cloudflare inherits bindings can be confirmed.
+
+Use an interactive private shell with the existing authorised TEST-only token set outside the command line. Keep shell tracing, debug logs and session recording off. Review the prompt privately because Wrangler’s comparison may display dashboard variable values. Cancel on any unexplained difference. Proceed past a known dashboard-only `GOOGLE_CLIENT_ID` difference only once the owner has approved the inherited-variable approach. Use the owner dashboard for settings and binding inspection where the restricted token cannot read the required metadata. Do not broaden access.
 
 ```sh
-radar versions view "$RADAR_ROLLBACK_VERSION"
+RADAR_ROLLBACK_VERSION=54793580-0f82-441c-970a-4b9997ba4de0
 radar deployments status --json
 radar versions upload --message "Mission Control synthetic Gmail acceptance $(git rev-parse --short HEAD)"
 radar versions list --json
 radar deployments status --json
 ```
 
-Record the full uploaded ID as `RADAR_CANDIDATE_VERSION`. Use `radar versions view "$RADAR_CANDIDATE_VERSION"` to compare binding **names and types**, compatibility and placement with the approved baseline. Confirm the existing version still serves 100%. The upload uses the installed encrypted bindings. Supply no secrets file, preview alias, route override, new binding or settings command. Use the exact registered test hostname for the browser session.
+Record the full uploaded ID as `RADAR_CANDIDATE_VERSION`. In the dashboard, compare the candidate’s binding names, types and service target, compatibility and placement with the verified baseline. Confirm that the candidate inherited `GOOGLE_CLIENT_ID` and all three encrypted bindings and that the rollback version still serves 100%. Upload from the reviewed commit with no secrets file, preview alias, environment or route override. No triggers or settings command is required for acceptance.
 
-After separate authorisation to serve the candidate, confirm the full test version in Wrangler's interactive prompt:
+After separate authorisation to serve the candidate and verification of the full observability settings, confirm the full TEST candidate ID in Wrangler’s interactive prompt:
 
 ```sh
 radar versions deploy "${RADAR_CANDIDATE_VERSION}@100" --message "Mission Control controlled hosted acceptance"
 radar deployments status --json
 ```
 
-Use the window for testing only. Record outcomes and restore the known-good version at the end of the window or immediately after a stop condition:
+Verify the traffic and dashboard settings after that command, including if a settings sync fails after the traffic change. Use the window for testing only. Restore the verified baseline at the end of the window or immediately after a stop condition:
 
 ```sh
 radar rollback "$RADAR_ROLLBACK_VERSION" --message "Restore verified post-credential Radar test baseline"
 radar deployments status --json
 ```
 
-Verify the recorded version is back at 100%, the original test gate still requires authentication, and fresh Incognito sign-in works. Close the temporary browser session after recording results. Rollback changes the serving Worker version. Browser-local test state is disposable and is reset separately.
+Verify the recorded version is back at 100%, preview URLs are still disabled, observability and logs are still enabled, the TEST gate requires authentication, and fresh Incognito sign-in and refresh work. Close the temporary browser session after recording results. Browser-local test state is disposable and is reset separately.
 
 ## Hosted browser acceptance
 
@@ -120,6 +124,6 @@ Use a fresh Chrome Incognito window for the Radar host and two tabs in that same
 | Radar and Ombudsman | Verify Radar reads an existing successful main-branch artifact and shows provenance. A missing or expired artifact should be reported as unavailable. The Ombudsman feed must report unavailable because the status token is absent. Do not add the token. |
 | Workspace and closure | Add a synthetic local workspace item and verify reload. Clear Data resets the browser-local workspace and saved count. Record the tested version, outcomes and any exceptions, then restore and verify the post-credential baseline. |
 
-The two-tab coordination uses origin-local storage and Web Locks in secure browser contexts. Read failures carry no cookie mutation. The dashboard binds each read to the checked grant and rechecks that grant before publishing. Disconnect and Clear Data fence earlier operations, and the most recently started scan takes precedence. When Web Locks or browser storage cannot provide coordination, refresh, Disconnect and count clearing report that limitation rather than publishing across an unprotected boundary. The Phase 2C.5 local Chromium check used two tabs, loopback HTTPS, synthetic sessions and the generated fixture. It confirmed that a late 401 leaves a newer grant active, another tab’s Disconnect retains a stale count and dashboard session, and another tab’s Clear Data stays cleared after a held response finishes. Google consent, Cloudflare routing and test credential activation remain for the hosted window.
+The two-tab coordination uses origin-local storage and Web Locks in secure browser contexts. Read failures carry no cookie mutation. The dashboard binds each read to the checked grant and rechecks that grant before publishing. Disconnect and Clear Data fence earlier operations, and the most recently started scan takes precedence. When Web Locks or browser storage cannot provide coordination, refresh, Disconnect and count clearing report that limitation rather than publishing across an unprotected boundary. The Phase 2C.5 local Chromium check used two tabs, loopback HTTPS, synthetic sessions and the generated fixture. It confirmed that a late 401 leaves a newer grant active, another tab’s Disconnect retains a stale count and dashboard session, and another tab’s Clear Data stays cleared after a held response finishes. Candidate authentication, Cloudflare routing and the synthetic Gmail browser scenarios remain for the hosted window. Test stale pre-credential session rejection only if such a session is already available on the TEST origin. Keep the cookie inside that browser.
 
 References: [Cloudflare versions and deployments](https://developers.cloudflare.com/workers/versions-and-deployments/), [Wrangler Worker commands](https://developers.cloudflare.com/workers/wrangler/commands/workers/), and [Wrangler configuration and encrypted bindings](https://developers.cloudflare.com/workers/wrangler/configuration/).

@@ -51,10 +51,33 @@ test('derives a deterministic, explicit Radar TEST target with no live Gmail tra
   assert.equal(generated, await hostedSource(baseSource));
   await assert.rejects(hostedSource(baseSource.replace('return gmailConnect(env,key,session);', '')), /integration point/);
   const config = await readFile(new URL('../wrangler.radar-test.toml', import.meta.url), 'utf8');
-  assert.match(config, /^name = "tffac-mission-control-radar-test"$/m);
-  assert.match(config, /^compatibility_date = "2026-11-21"$/m);
-  assert.match(config, /^keep_vars = true$/m);
-  assert.doesNotMatch(config, /^\[vars\]|^\[env\.|^routes?\s*=|OMBUDSMAN_STATUS_TOKEN/m);
+  const settings = config.split(/\r?\n/).map(line => line.trim())
+    .filter(line => line && !line.startsWith('#'));
+  // Allow comments and whitespace. An extra setting, binding or section needs explicit review.
+  assert.deepEqual(settings, [
+    'name = "tffac-mission-control-radar-test"',
+    'main = ".radar-test-build/worker.mjs"',
+    'compatibility_date = "2026-11-21"',
+    'compatibility_flags = []',
+    'workers_dev = true',
+    'preview_urls = false',
+    'keep_vars = true',
+    'no_bundle = true',
+    'find_additional_modules = false',
+    '[cache]',
+    'enabled = false',
+    '[observability]',
+    'enabled = true',
+    '[observability.logs]',
+    'enabled = true',
+    '[build]',
+    'command = "node build-radar-test.mjs"',
+    '[[services]]',
+    'binding = "OMBUDSMAN_SERVICE"',
+    'service = "tffc-ombudsman"',
+    'environment = "production"',
+    'entrypoint = "default"',
+  ]);
   assert.doesNotMatch(generated, /async function gmail(?:Connect|Callback)\(/);
   for (const host of [liveOrigin, 'https://preview.example.test', testOrigin.replace('https:', 'http:')]) {
     assert.equal((await call(host + '/login')).status, 403);
