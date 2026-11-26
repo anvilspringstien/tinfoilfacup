@@ -4,9 +4,20 @@ main = ".radar-test-build/worker.mjs"
 compatibility_date = "2026-11-21"
 compatibility_flags = []
 workers_dev = true
+preview_urls = false
+# Preserve dashboard-managed plain-text variables as well as encrypted secrets.
 keep_vars = true
 no_bundle = true
 find_additional_modules = false
+
+[cache]
+enabled = false
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
 
 [build]
 command = "node build-radar-test.mjs"
@@ -14,3 +25,5 @@ command = "node build-radar-test.mjs"
 [[services]]
 binding = "OMBUDSMAN_SERVICE"
 service = "tffc-ombudsman"
+environment = "production"
+entrypoint = "default"
