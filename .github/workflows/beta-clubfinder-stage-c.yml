@@ -9,6 +9,9 @@ on:
   pull_request:
     paths:
       - 'beta/clubfinder-beta.html'
+      - 'clubfinder.html'
+      - 'updater/public_club_facts_guard.py'
+      - 'tests/test_public_club_facts_guard.py'
       - 'tests/test_beta_legacy_penalty_progression.js'
       - 'updater/audit_beta_clubfinder_stage_c.py'
       - 'docs/refactor/2026-09-25-stage-c-clubfinder-producer-map.md'
@@ -61,8 +64,9 @@ jobs:
         run: |
           set -euo pipefail
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- \
-            clubfinder.html competition.json
+          git diff --exit-code origin/main...HEAD -- competition.json
+          python -B -m unittest discover -s tests -p test_public_club_facts_guard.py
+          python -B -m updater.public_club_facts_guard --base origin/main
           # PR #323 pairs return navigation; PR #329 updates Challenges naming
           # and its shared identity regression. Both remain subject to all tests.
           # Other PRs retain the Deck isolation guard.

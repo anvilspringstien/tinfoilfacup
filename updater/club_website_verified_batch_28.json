@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-26",
+  "scope": "Five independently verified official club websites; no location decisions.",
+  "reviewed_count": 5,
+  "verified": [
+    {
+      "club": "Maidstone United FC",
+      "url": "https://maidstoneunited.co.uk/",
+      "evidence_url": "https://maidstoneunited.co.uk/matchday/travel-directions/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Official matchday directions identify Gallagher Stadium, ME14 1LQ.",
+      "aliases": [
+        "Maidstone United"
+      ]
+    },
+    {
+      "club": "Lewes FC",
+      "url": "https://lewesfc.com/",
+      "evidence_url": "https://lewesfc.com/matchday-information/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club matchday information identifies The Dripping Pan, BN7 2XA.",
+      "aliases": [
+        "Lewes"
+      ]
+    },
+    {
+      "club": "Hyde United FC",
+      "url": "https://hydeunited.co.uk/",
+      "evidence_url": "https://hydeunited.co.uk/event/hyde-united-v-warrington-rylands/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club first-team match page identifies Project Solar Stadium, SK14 5PL.",
+      "aliases": [
+        "Hyde United"
+      ]
+    },
+    {
+      "club": "Hebburn Town FC",
+      "url": "https://hebburntownfc.com/",
+      "evidence_url": "https://hebburntownfc.com/contact-us",
+      "status": "verified_official_club_site",
+      "verification_notes": "Current club first-team news and fixtures, plus the club-managed contact page, were accessible on the apex host. Supersedes the earlier accessibility hold without removing its evidence.",
+      "aliases": [
+        "Hebburn Town"
+      ]
+    },
+    {
+      "club": "Horsham FC",
+      "url": "https://www.horsham-fc.co.uk/",
+      "evidence_url": "https://www.horsham-fc.co.uk/how-to-find-us/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Official club site and matchday directions identify Horsham. The name and postcode discrepancy is a separate location review.",
+      "aliases": [
+        "Horsham"
+      ]
+    }
+  ]
+}

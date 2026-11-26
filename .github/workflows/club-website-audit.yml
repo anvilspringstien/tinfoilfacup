@@ -5,6 +5,7 @@ on:
       - 'updater/club_website*'
       - 'tests/test_club_website_publication.js'
       - 'beta/clubfinder-beta.html'
+      - 'clubfinder.html'
       - '.github/workflows/club-website-audit.yml'
   push:
     branches-ignore: [main]
@@ -26,4 +27,5 @@ jobs:
           node tests/test_club_website_publication.js
           node updater/club_website_queue.js --out /tmp/club-website-queue.json
           node updater/club_website_bulk_promote.js --ledger updater/club_website_verified_batch_04.json --out /tmp/club-website-map.json --apply-beta
+          node updater/club_website_bulk_promote.js --ledger updater/club_website_verified_batch_28.json --out /tmp/club-website-map-28.json --apply-beta --apply-public
           git diff --exit-code -- beta/clubfinder-beta.html competition.json clubfinder.html

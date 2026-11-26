@@ -55,13 +55,17 @@ function promote(html,competition,ledger){
 function applyMapping(html,websites){const r=literalRange(html,'CLUB_WEBSITES','{','}');return html.slice(0,r.begin)+JSON.stringify(websites)+html.slice(r.end)}
 function main(){
  const args=process.argv.slice(2),option=k=>{const i=args.indexOf(k);return i<0?null:args[i+1]},ledgerFile=option('--ledger'),output=option('--out');
- if(!ledgerFile||!output)throw Error('Usage: node updater/club_website_bulk_promote.js --ledger reviewed.json --out mapping.json [--apply-beta]');
- const root=path.join(__dirname,'..'),beta=path.join(root,'beta/clubfinder-beta.html'),canonical=path.join(root,'competition.json');
- if([beta,canonical,path.join(root,'clubfinder.html')].includes(path.resolve(output)))throw Error('Output cannot replace an application or competition input');
- const html=fs.readFileSync(beta,'utf8'),result=promote(html,JSON.parse(fs.readFileSync(canonical,'utf8')),JSON.parse(fs.readFileSync(ledgerFile,'utf8')));
+ if(!ledgerFile||!output)throw Error('Usage: node updater/club_website_bulk_promote.js --ledger reviewed.json --out mapping.json [--apply-beta] [--apply-public]');
+ const root=path.join(__dirname,'..'),beta=path.join(root,'beta/clubfinder-beta.html'),publicFile=path.join(root,'clubfinder.html'),canonical=path.join(root,'competition.json');
+ if([beta,canonical,publicFile,path.resolve(ledgerFile)].includes(path.resolve(output)))throw Error('Output cannot replace an application, competition or evidence input');
+ const competition=JSON.parse(fs.readFileSync(canonical,'utf8')),ledger=JSON.parse(fs.readFileSync(ledgerFile,'utf8'));
+ const html=fs.readFileSync(beta,'utf8'),result=promote(html,competition,ledger);
+ const publicHtml=args.includes('--apply-public')?fs.readFileSync(publicFile,'utf8'):null;
+ const publicResult=publicHtml===null?null:promote(publicHtml,competition,ledger);
  fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
  if(args.includes('--apply-beta'))fs.writeFileSync(beta,applyMapping(html,result.websites));
- console.log(JSON.stringify({eligible:result.eligible,known_competition_identities:result.known_competition_identities,accepted:result.accepted.length,removed:result.removed.length,website_count:result.website_count,beta_applied:args.includes('--apply-beta')},null,2));
+ if(publicResult)fs.writeFileSync(publicFile,applyMapping(publicHtml,publicResult.websites));
+ console.log(JSON.stringify({eligible:result.eligible,known_competition_identities:result.known_competition_identities,accepted:result.accepted.length,removed:result.removed.length,website_count:result.website_count,beta_applied:args.includes('--apply-beta'),public_accepted:publicResult?.accepted.length??null,public_applied:publicResult!==null},null,2));
 }
 module.exports={literalRange,normal,registry,promote,applyMapping};
 if(require.main===module){try{main()}catch(error){console.error(error.message);process.exitCode=1}}
