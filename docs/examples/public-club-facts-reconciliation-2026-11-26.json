@@ -1,0 +1,2568 @@
+{
+  "public_before": {
+    "eligible": 651,
+    "linked": 37
+  },
+  "public_after": {
+    "eligible": 651,
+    "linked": 339
+  },
+  "beta": {
+    "eligible": 651,
+    "linked": 339
+  },
+  "eligible_only_in_public": [
+    "Holmesdale FC"
+  ],
+  "eligible_only_in_beta": [
+    "Petts Wood & Holmesdale FC"
+  ],
+  "approved_website_additions": [
+    {
+      "identity": "1874 Northwich FC",
+      "url": "https://1874northwich.com/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_01.json"
+    },
+    {
+      "identity": "AFC Fylde",
+      "url": "https://www.afcfylde.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "AFC Greenwich Borough",
+      "url": "https://greenwichborough.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Liverpool",
+      "url": "https://www.afcliverpool.co.uk/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_01.json"
+    },
+    {
+      "identity": "AFC Mansfield",
+      "url": "https://www.afcmansfield.net/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Stoneham",
+      "url": "https://www.afcstoneham.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Telford United",
+      "url": "https://www.telfordunited.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Totton",
+      "url": "https://www.afctotton.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Welwyn",
+      "url": "https://www.afcwelwyn.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Whyteleafe",
+      "url": "https://afcwhyteleafe.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "AFC Wimbledon",
+      "url": "https://www.afcwimbledon.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Abbey Hey FC",
+      "url": "https://www.pitchero.com/clubs/abbeyheyfootballclub2",
+      "verified_on": "2026-11-17",
+      "ledger": "club_website_verified_batch_26.json"
+    },
+    {
+      "identity": "Abbey Hulton United FC",
+      "url": "https://abbeyhultonunitedfootball.club/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Abbey Rangers FC",
+      "url": "https://www.abbeyrangers.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Accrington Stanley",
+      "url": "https://www.accringtonstanley.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Albion Sports FC",
+      "url": "https://www.albionsports.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Aldershot Town",
+      "url": "https://www.theshots.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Aldershot Town FC",
+      "url": "https://www.theshots.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Alfreton Town FC",
+      "url": "https://alfretontownfootballclub.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Alton FC",
+      "url": "https://www.altonfc.com/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_02.json"
+    },
+    {
+      "identity": "Altrincham",
+      "url": "https://altrinchamfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Altrincham FC",
+      "url": "https://altrinchamfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Alvechurch",
+      "url": "https://www.alvechurchfc.club/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Alvechurch FC",
+      "url": "https://www.alvechurchfc.club/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Anstey Nomads FC",
+      "url": "https://ansteynomads.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Arlesey Town FC",
+      "url": "https://www.arleseytownfc.co.uk/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_02.json"
+    },
+    {
+      "identity": "Ascot United FC",
+      "url": "https://ascotunited.net/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_01.json"
+    },
+    {
+      "identity": "Ashby Ivanhoe FC",
+      "url": "https://www.ashbyivanhoefc.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Ashton United FC",
+      "url": "https://www.ashtonunited.org/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Atherstone Town CFC",
+      "url": "https://www.atherstonetown.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Atherton Collieries FC",
+      "url": "https://athertoncollieries.co.uk/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_01.json"
+    },
+    {
+      "identity": "Atherton LR FC",
+      "url": "https://www.athertonlr.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Aveley FC",
+      "url": "https://www.pitchero.com/clubs/aveley/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Avro FC",
+      "url": "https://www.avrofc.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Aylesbury United FC",
+      "url": "https://www.aylesbury.football/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_01.json"
+    },
+    {
+      "identity": "Aylesbury Vale Dynamos FC",
+      "url": "https://www.aylesburyvaledynamos.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Aylestone Park FC",
+      "url": "https://www.aylestoneparkfc.org.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Badshot Lea FC",
+      "url": "https://badshotleafootballclub.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Baffins Milton Rovers FC",
+      "url": "https://bmrfc.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Baldock Town FC",
+      "url": "https://www.baldocktownfc.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Balham FC",
+      "url": "https://balhamfc.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Bamber Bridge FC",
+      "url": "https://www.bamberbridgefc.com/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Banbury United FC",
+      "url": "https://www.banburyunitedfc.co.uk/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Barking FC",
+      "url": "https://barking-fc.co.uk/",
+      "verified_on": "2026-11-17",
+      "ledger": "club_website_verified_batch_26.json"
+    },
+    {
+      "identity": "Barnet",
+      "url": "https://barnetfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Barnsley",
+      "url": "https://www.barnsleyfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Barnstaple Town FC",
+      "url": "https://www.barnstapletownfc.co.uk/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_02.json"
+    },
+    {
+      "identity": "Barrow AFC",
+      "url": "https://www.barrowafc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Barton Town FC",
+      "url": "https://bartontownfc.co.uk/contact/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Barwell FC",
+      "url": "https://www.pitchero.com/clubs/barwell/",
+      "verified_on": "2026-10-23",
+      "ledger": "club_website_verified_batch_06.json"
+    },
+    {
+      "identity": "Basford United FC",
+      "url": "https://www.basfordunited.com/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_01.json"
+    },
+    {
+      "identity": "Bashley FC",
+      "url": "https://bashleyfootballclub.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Basildon United FC",
+      "url": "https://www.pitchero.com/clubs/basildonunitedfootballclub4",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Basingstoke Town FC",
+      "url": "https://btfc.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Bath City FC",
+      "url": "https://www.bathcityfc.com/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Beaconsfield Town FC",
+      "url": "https://www.beaconsfieldtownfc.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Bearsted FC",
+      "url": "https://www.bearstedfc.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Bedfont FC",
+      "url": "https://bedfontfc.com/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Bedfont Sports Club FC",
+      "url": "https://www.bedfontsportsclub.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Bedford Town FC",
+      "url": "https://bedfordtownfc.com/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Bedworth United FC",
+      "url": "https://bedworthunitedfc.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Belper Town FC",
+      "url": "https://www.belpertownfc.co.uk/",
+      "verified_on": "2026-10-26",
+      "ledger": "club_website_verified_batch_07.json"
+    },
+    {
+      "identity": "Belper United FC",
+      "url": "https://belperunited.co.uk/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Bemerton Heath Harlequins FC",
+      "url": "https://www.bemertonheathharlequinsfc.co.uk/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Benfleet FC",
+      "url": "https://www.benfleetfc.co.uk/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Berkhamsted",
+      "url": "https://www.pitchero.com/clubs/berkhamstedfootballclub/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Berkhamsted FC",
+      "url": "https://www.pitchero.com/clubs/berkhamstedfootballclub/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Beverley Town FC",
+      "url": "https://www.beverleytownfc.com/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Bexhill United FC",
+      "url": "https://bexhillunited.com/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Bideford AFC",
+      "url": "https://www.pitchero.com/clubs/bidefordafc/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Biggleswade FC",
+      "url": "https://www.biggleswadefc.co.uk/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Biggleswade Town FC",
+      "url": "https://www.pitchero.com/clubs/biggleswadetownfc",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_25.json"
+    },
+    {
+      "identity": "Biggleswade United FC",
+      "url": "https://www.biggleswadeutd.com/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Billericay Town FC",
+      "url": "https://www.billericaytownfc.co.uk/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Billingshurst FC",
+      "url": "https://www.billingshurstfc.co.uk/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Binfield FC",
+      "url": "https://binfieldfc.com/",
+      "verified_on": "2026-10-27",
+      "ledger": "club_website_verified_batch_08.json"
+    },
+    {
+      "identity": "Bishop Auckland FC",
+      "url": "https://bishopafc.com/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Bishop's Cleeve FC",
+      "url": "https://www.pitchero.com/clubs/bishopscleevefc/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Bishop's Stortford FC",
+      "url": "https://bsfc.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Blackpool",
+      "url": "https://www.blackpoolfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Blyth Spartans AFC",
+      "url": "https://www.blythspartans.com/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Bognor Regis Town FC",
+      "url": "https://bognorregistownfc.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Boldmere St Michaels FC",
+      "url": "https://boldmerestmichaelsfc.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Boreham Wood",
+      "url": "https://www.borehamwoodfootballclub.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Boreham Wood FC",
+      "url": "https://www.borehamwoodfootballclub.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Boston Town FC",
+      "url": "https://bostontownfc.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Boston United FC",
+      "url": "https://www.bostonunited.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Bottesford Town FC",
+      "url": "https://bottesfordtown.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Bourne Town FC",
+      "url": "https://www.bournetownfc.co.uk/",
+      "verified_on": "2026-10-28",
+      "ledger": "club_website_verified_batch_09.json"
+    },
+    {
+      "identity": "Bournemouth Poppies FC",
+      "url": "https://www.bournemouthfc.org.uk/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Bowers & Pitsea FC",
+      "url": "https://www.bowerspitseafc.co.uk/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Brackley Town FC",
+      "url": "https://www.brackleytownfc.com/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Bracknell Town FC",
+      "url": "https://www.bracknelltownfc.com/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Bradford (Park Avenue) FC",
+      "url": "https://bpafc.com/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Bradford City",
+      "url": "https://www.bradfordcityafc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Bradford Town FC",
+      "url": "https://bradfordtownfc.com/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Braintree Town FC",
+      "url": "https://www.braintreetownfc.org.uk/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Brantham Athletic FC",
+      "url": "https://www.branthamathletic.com/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Brentwood Town FC",
+      "url": "https://www.brentwoodtownfc.co.uk/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Bridgwater United FC",
+      "url": "https://www.bridgwaterunitedfc.com/",
+      "verified_on": "2026-10-29",
+      "ledger": "club_website_verified_batch_10.json"
+    },
+    {
+      "identity": "Brightlingsea Regent FC",
+      "url": "https://www.brightlingsearegentfc.com/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Brislington FC",
+      "url": "https://www.brislingtonfc.net/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Bristol Manor Farm FC",
+      "url": "https://bristolmanorfarm.com/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Bristol Rovers",
+      "url": "https://www.bristolrovers.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Brixham AFC",
+      "url": "https://brixhamafc.co.uk/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Broadbridge Heath FC",
+      "url": "https://www.broadbridgeheathfc.com/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Broadfields United FC",
+      "url": "https://www.broadfieldsunitedfc.co.uk/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Brockenhurst FC",
+      "url": "https://brockenhurstfc.co.uk/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Brocton FC",
+      "url": "https://www.broctonfc.com/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Bromley",
+      "url": "https://www.bromleyfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Bromsgrove Sporting FC",
+      "url": "https://bromsgrovesporting.co.uk/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Buckhurst Hill FC",
+      "url": "https://bhfc.co.uk/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Buckland Athletic FC",
+      "url": "https://bucklandathletic.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_25.json"
+    },
+    {
+      "identity": "Burgess Hill Town FC",
+      "url": "https://bhtfc.co.uk/",
+      "verified_on": "2026-10-30",
+      "ledger": "club_website_verified_batch_11.json"
+    },
+    {
+      "identity": "Burnham FC",
+      "url": "https://burnhamfc1878.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Burscough FC",
+      "url": "https://www.burscoughfc.com/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Burton Albion",
+      "url": "https://www.burtonalbionfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Bury FC",
+      "url": "https://buryfc.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Bury Town FC",
+      "url": "https://www.burytownfc.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Buxton FC",
+      "url": "https://www.buxtonfc.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Camberley Town FC",
+      "url": "https://www.camberleytownfc.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Cambridge City FC",
+      "url": "https://www.cambridgecityfc.com/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Cambridge United",
+      "url": "https://www.cambridgeunited.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Campion AFC",
+      "url": "https://www.campionafc.com/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Canvey Island FC",
+      "url": "https://www.canveyislandfc.com/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Carlisle United AFC",
+      "url": "https://www.carlisleunited.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Carlton Town FC",
+      "url": "https://www.carltontownfc.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Carshalton Athletic FC",
+      "url": "https://www.carshaltonathletic.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Chadderton FC",
+      "url": "https://www.chaddertonfc.co.uk/",
+      "verified_on": "2026-10-31",
+      "ledger": "club_website_verified_batch_12.json"
+    },
+    {
+      "identity": "Charnock Richard FC",
+      "url": "https://www.charnockrichardfc.co.uk/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chasetown FC",
+      "url": "https://www.chasetownfc.co.uk/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chatham Town FC",
+      "url": "https://www.chathamtownfc.com/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Cheadle Town FC",
+      "url": "https://www.cheadletown.co.uk/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chelmsford City FC",
+      "url": "https://chelmsfordcityfc.com/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Cheltenham Town",
+      "url": "https://www.ctfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Chertsey Town FC",
+      "url": "https://chertseytownfc.co.uk/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chesham United FC",
+      "url": "https://cheshamunited.co.uk/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Cheshunt FC",
+      "url": "https://cheshuntfc.com/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chester FC",
+      "url": "https://chesterfc.com/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chesterfield",
+      "url": "https://www.chesterfield-fc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Chichester City FC",
+      "url": "https://chichestercityfc.co.uk/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chippenham Town FC",
+      "url": "https://chippenhamtown.com/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chipstead FC",
+      "url": "https://www.chipsteadfc.com/",
+      "verified_on": "2026-11-01",
+      "ledger": "club_website_verified_batch_13.json"
+    },
+    {
+      "identity": "Chislehurst Glebe FC",
+      "url": "https://chislehurstglebefc.com/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Chorley FC",
+      "url": "https://chorleyfc.com/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Christchurch FC",
+      "url": "https://www.christchurchfc.co.uk/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Cinderford Town FC",
+      "url": "https://www.cinderfordtown.co.uk/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Clapton Community FC",
+      "url": "https://www.claptoncfc.co.uk/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Cleethorpes Town FC",
+      "url": "https://www.pitchero.com/clubs/cleethorpestown/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Clevedon Town FC",
+      "url": "https://www.clevedontownfc.com/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Clitheroe FC",
+      "url": "https://www.clitheroefc.co.uk/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Cobham FC",
+      "url": "https://www.cobhamfootballclub.com/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Cockfosters FC",
+      "url": "https://www.pitchero.com/clubs/cockfosters/",
+      "verified_on": "2026-11-02",
+      "ledger": "club_website_verified_batch_14.json"
+    },
+    {
+      "identity": "Colchester United",
+      "url": "https://www.cu-fc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Coleshill Town FC",
+      "url": "https://www.coleshilltownfc.com/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Colney Heath FC",
+      "url": "https://www.colneyheathfc.co.uk/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Concord Rangers FC",
+      "url": "https://www.concordrangers-fc.co.uk/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Congleton Town FC",
+      "url": "https://ctfc.club/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Corby Town FC",
+      "url": "https://www.corbytown.co.uk/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Corinthian Casuals FC",
+      "url": "https://www.corinthian-casuals.com/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Corinthian FC",
+      "url": "https://www.corinthiansportsclub.co.uk/football",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Cornard United FC",
+      "url": "https://cornardunitedfc.co.uk/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Coton Green FC",
+      "url": "https://www.thegreenarmy.co.uk/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Coventry Sphinx FC",
+      "url": "https://www.pitchero.com/clubs/coventrysphinx/",
+      "verified_on": "2026-11-03",
+      "ledger": "club_website_verified_batch_15.json"
+    },
+    {
+      "identity": "Crawley Down Gatwick FC",
+      "url": "https://www.crawleydowngatwickfc.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Crawley Town",
+      "url": "https://www.crawleytownfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Cray Valley (PM) FC",
+      "url": "https://www.crayvalleypmfc.com/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Cray Wanderers",
+      "url": "https://www.cray-wanderers.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Cray Wanderers FC",
+      "url": "https://www.cray-wanderers.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Crewe Alexandra",
+      "url": "https://www.crewealex.net/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Cribbs FC",
+      "url": "https://cribbsfc.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Crowborough Athletic FC",
+      "url": "https://www.crowboroughathletic.com/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_03.json"
+    },
+    {
+      "identity": "Curzon Ashton FC",
+      "url": "https://curzon-ashton.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Dagenham & Redbridge FC",
+      "url": "https://daggers.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Darlaston Town FC",
+      "url": "https://www.darlastontown1874fc.com/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Darlington FC",
+      "url": "https://darlingtonfc.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Dartford FC",
+      "url": "https://dartfordfc.com/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Daventry Town FC",
+      "url": "https://dtfc.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Deal Town FC",
+      "url": "https://dealtownfc.co.uk/",
+      "verified_on": "2026-11-04",
+      "ledger": "club_website_verified_batch_16.json"
+    },
+    {
+      "identity": "Deeping Rangers FC",
+      "url": "https://www.deepingrangersfc.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Dereham Town FC",
+      "url": "https://www.derehamtownfc.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Desborough Town FC",
+      "url": "https://www.pitchero.com/clubs/desboroughtown/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Devizes Town FC",
+      "url": "https://devizestownfootball.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Didcot Town FC",
+      "url": "https://www.pitchero.com/clubs/didcottown/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Doncaster Rovers",
+      "url": "https://www.doncasterroversfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Dorchester Town FC",
+      "url": "https://www.dorchestertownfc.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Dorking Wanderers FC",
+      "url": "https://dwfc.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Dover Athletic",
+      "url": "https://doverathletic.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Dover Athletic FC",
+      "url": "https://doverathletic.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Downham Town FC",
+      "url": "https://downhamtownfc.co.uk/",
+      "verified_on": "2026-11-17",
+      "ledger": "club_website_verified_batch_26.json"
+    },
+    {
+      "identity": "Downton FC",
+      "url": "https://www.downtonfc.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Droitwich Spa FC",
+      "url": "https://www.dsfc.news/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Dudley Town FC",
+      "url": "https://www.dudleytownfootballclub.co.uk/",
+      "verified_on": "2026-11-05",
+      "ledger": "club_website_verified_batch_17.json"
+    },
+    {
+      "identity": "Dulwich Hamlet FC",
+      "url": "https://dulwichhamletfc.co.uk/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Dunston FC",
+      "url": "https://www.dunstonutsfc.com/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Easington Colliery FC",
+      "url": "https://www.pitchero.com/clubs/easingtoncollieryafc/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Easington Sports FC",
+      "url": "https://www.easingtonsportsfc.com/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "East Grinstead Town FC",
+      "url": "https://www.egtfc.co.uk/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Eastbourne Borough FC",
+      "url": "https://ebfc.co.uk/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_03.json"
+    },
+    {
+      "identity": "Eastbourne United AFC",
+      "url": "https://www.eastbourneunitedafc.com/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Eastleigh",
+      "url": "https://eastleighfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Eastleigh FC",
+      "url": "https://eastleighfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Eastwood Community FC",
+      "url": "https://www.eastwoodcfc.co.uk/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Ebbsfleet United FC",
+      "url": "https://ebbsfleetunited.co.uk/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Egham Town FC",
+      "url": "https://officialeghamtownfcltd.com/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Ely City FC",
+      "url": "https://www.elycityfc.co.uk/",
+      "verified_on": "2026-11-06",
+      "ledger": "club_website_verified_batch_18.json"
+    },
+    {
+      "identity": "Emley AFC",
+      "url": "https://www.emleyafc.co.uk/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Enfield Town FC",
+      "url": "https://etfc.london/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Erith & Belvedere FC",
+      "url": "https://thederesfc.co.uk/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Erith Town FC",
+      "url": "https://erithtown.com/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Euxton Villa FC",
+      "url": "https://www.euxtonvillafc.com/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Everett Rovers FC",
+      "url": "https://everettroversfc.co.uk/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Eversley & California FC",
+      "url": "https://www.pitchero.com/clubs/californiafc/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Evesham United FC",
+      "url": "https://eveshamunitedfc.com/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Exeter City",
+      "url": "https://www.exetercityfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Exmouth Town FC",
+      "url": "https://exmouth-townfc.co.uk/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "Eynesbury Rovers FC",
+      "url": "https://eynesburyrovers.com/",
+      "verified_on": "2026-11-07",
+      "ledger": "club_website_verified_batch_19.json"
+    },
+    {
+      "identity": "FC Halifax Town",
+      "url": "https://fchalifaxtown.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "FC Peterborough",
+      "url": "https://www.fcpeterborough.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "FC St Helens",
+      "url": "https://www.fcsthelens.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "FC United of Manchester",
+      "url": "https://fc-utd.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Fairford Town FC",
+      "url": "https://fairfordtownfc.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Fakenham Town FC",
+      "url": "https://fakenhamtownfc.org/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Falmouth Town AFC",
+      "url": "https://www.falmouthtownafc.co.uk/index.php",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Fareham Town FC",
+      "url": "https://farehamtownfc.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Farnborough FC",
+      "url": "https://farnboroughfc.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Farnham Town FC",
+      "url": "https://farnhamtownfc.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Faversham Strike Force FC",
+      "url": "https://favershamstrikeforce.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Faversham Town FC",
+      "url": "https://favershamtownfc.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Felixstowe & Walton United FC",
+      "url": "https://felixstowefootball.co.uk/",
+      "verified_on": "2026-11-08",
+      "ledger": "club_website_verified_batch_20.json"
+    },
+    {
+      "identity": "Fisher FC",
+      "url": "https://www.fisherfc.org/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Flackwell Heath FC",
+      "url": "https://www.pitchero.com/clubs/flackwellheath/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Fleet Town FC",
+      "url": "https://www.fleettownfc.co.uk/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Fleetlands FC",
+      "url": "https://www.fleetlandsfc.co.uk/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Fleetwood Town",
+      "url": "https://www.fleetwoodtownfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Folkestone Invicta FC",
+      "url": "https://folkestoneinvictafc.co.uk/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Forest Green Rovers",
+      "url": "https://www.fgr.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Forest Green Rovers FC",
+      "url": "https://www.fgr.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Forest Row FC",
+      "url": "https://www.frowfc.co.uk/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Frenford FC",
+      "url": "https://www.frenfordfc.co.uk/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Frickley Athletic FC",
+      "url": "https://frickleyathletic.co.uk/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Frome Town FC",
+      "url": "https://frometownfc.com/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Gainsborough Trinity FC",
+      "url": "https://www.gainsboroughtrinity.com/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Garforth Town FC",
+      "url": "https://www.garforth.town/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Gateshead FC",
+      "url": "https://gateshead-fc.com/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Gillingham",
+      "url": "https://www.gillinghamfootballclub.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Glossop North End FC",
+      "url": "https://www.glossopnorthendafc.co.uk/",
+      "verified_on": "2026-11-10",
+      "ledger": "club_website_verified_batch_21.json"
+    },
+    {
+      "identity": "Gloucester City AFC",
+      "url": "https://www.gloucestercityafc.com/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_03.json"
+    },
+    {
+      "identity": "Godalming Town FC",
+      "url": "https://godalmingtownfc.co.uk/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Godmanchester Rovers FC",
+      "url": "https://www.godmanchesterrovers.co.uk/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Golcar United FC",
+      "url": "https://www.golcarunited.co.uk/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Gorleston FC",
+      "url": "https://gorlestonfc.com/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Gosport Borough FC",
+      "url": "https://gosportboroughfc.com/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Grantham Town FC",
+      "url": "https://www.granthamtownfc.com/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Grays Athletic FC",
+      "url": "https://www.graysathletic.co.uk/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Great Wakering Rovers FC",
+      "url": "https://www.gwrovers.co/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Great Yarmouth Town FC",
+      "url": "https://gytfc.co.uk/",
+      "verified_on": "2026-11-11",
+      "ledger": "club_website_verified_batch_22.json"
+    },
+    {
+      "identity": "Gresley Rovers FC",
+      "url": "https://www.gresleyrovers.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Grimsby Borough FC",
+      "url": "https://grimsbyboroughfc.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Grimsby Town",
+      "url": "https://gtfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Guernsey FC",
+      "url": "https://guernseyfc.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Guiseley AFC",
+      "url": "https://guiseleyafc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Hackney Wick FC",
+      "url": "https://www.hackneywickfootballclub.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hadley FC",
+      "url": "https://www.hadleyfc.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Halesowen Town FC",
+      "url": "https://ht-fc.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hallam FC",
+      "url": "https://hallamfc.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Halstead Town FC",
+      "url": "https://www.halsteadtownfc.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hamble Club FC",
+      "url": "https://www.hcyfc.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hampton & Richmond Borough FC",
+      "url": "https://hamrichfc.com/",
+      "verified_on": "2026-10-12",
+      "ledger": "club_website_verified_batch_03.json"
+    },
+    {
+      "identity": "Hamworthy Recreation FC",
+      "url": "https://www.hamworthyrecreationfc.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Handsworth FC",
+      "url": "https://www.pitchero.com/clubs/handsworthfc/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hanley Town FC",
+      "url": "https://www.hanleytownfootballclub.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hanwell Town FC",
+      "url": "https://www.hanwelltown.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hanworth Villa FC",
+      "url": "https://www.hanworthvilla.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Harborough Town",
+      "url": "https://harboroughtownfc.org/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Harborough Town FC",
+      "url": "https://harboroughtownfc.org/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Harefield United FC",
+      "url": "https://www.harefieldunited.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Haringey Borough FC",
+      "url": "https://www.haringeyboroughfc.net/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Harleston Town FC",
+      "url": "https://www.harlestontownfc.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Harlow Town FC",
+      "url": "https://www.harlowtownfootballclub.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Harpenden Town FC",
+      "url": "https://www.harpendentownfc.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Harrogate Town AFC",
+      "url": "https://www.harrogatetownafc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Harrow Borough FC",
+      "url": "https://www.pitchero.com/clubs/harrowborough/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hartlepool United FC",
+      "url": "https://www.hartlepoolunited.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hartpury FC",
+      "url": "https://www.hartpury.ac.uk/hartpury-fc/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hashtag United FC",
+      "url": "https://hashtagunited.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hassocks FC",
+      "url": "https://hassocksfc.net/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hastings United FC",
+      "url": "https://www.hastingsunited.com/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Havant & Waterlooville FC",
+      "url": "https://havantandwaterloovillefc.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Haverhill Rovers FC",
+      "url": "https://www.pitchero.com/clubs/haverhillroversfc/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Haywards Heath Town FC",
+      "url": "https://hhtfc.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Heanor Town FC",
+      "url": "https://www.heanortownfc.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hednesford Town FC",
+      "url": "https://htfc.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hemel Hempstead Town FC",
+      "url": "https://www.hemelfc.com/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hereford FC",
+      "url": "https://herefordfc.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Hereford Pegasus FC",
+      "url": "https://herefordpegasus.co.uk/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_24.json"
+    },
+    {
+      "identity": "Herne Bay FC",
+      "url": "https://www.hernebayfootballclub.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hitchin Town FC",
+      "url": "https://hitchintownfc.club/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hollands & Blair FC",
+      "url": "https://www.hollandsandblair.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Horley Town FC",
+      "url": "https://www.horleytownfc.com/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Hornchurch",
+      "url": "https://hornchurchfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Hornchurch FC",
+      "url": "https://hornchurchfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Huddersfield Town",
+      "url": "https://www.htafc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Ilford FC",
+      "url": "https://www.ilfordfc.co.uk/",
+      "verified_on": "2026-11-14",
+      "ledger": "club_website_verified_batch_23.json"
+    },
+    {
+      "identity": "Kidderminster Harriers",
+      "url": "https://www.harriers.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Kidderminster Harriers FC",
+      "url": "https://www.harriers.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Leicester City",
+      "url": "https://www.lcfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Leyton Orient",
+      "url": "https://www.leytonorient.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Luton Town",
+      "url": "https://www.lutontown.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Macclesfield",
+      "url": "https://macclesfieldfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Macclesfield FC",
+      "url": "https://macclesfieldfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Mansfield Town",
+      "url": "https://www.mansfieldtown.net/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Marine",
+      "url": "https://marinefc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Marine FC",
+      "url": "https://marinefc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Milton Keynes Dons",
+      "url": "https://www.mkdons.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Nantwich Town FC",
+      "url": "https://www.nantwichtownfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Nelson FC",
+      "url": "https://www.nelsonfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Newcastle Town FC",
+      "url": "https://newcastletownfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Newhaven FC",
+      "url": "https://newhavenfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Newmarket Town FC",
+      "url": "https://www.newmarkettownfc.com/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Newport County AFC",
+      "url": "https://www.newport-county.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Newport Pagnell Town FC",
+      "url": "https://www.nptfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Newton Aycliffe FC",
+      "url": "https://www.newtonaycliffefc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "North Ferriby FC",
+      "url": "https://www.northferribyfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Northampton Town",
+      "url": "https://www.ntfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Notts County",
+      "url": "https://www.nottscountyfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Oldham Athletic AFC",
+      "url": "https://www.oldhamathletic.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Ossett United FC",
+      "url": "https://www.ossettutd.com/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Oxford City",
+      "url": "https://www.oxfordcityfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Oxford City FC",
+      "url": "https://www.oxfordcityfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Oxford United",
+      "url": "https://www.oufc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Pagham FC",
+      "url": "https://www.pitchero.com/clubs/paghamfootballclub",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Peacehaven & Telscombe FC",
+      "url": "https://pt-fc.com/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Penistone Church FC",
+      "url": "https://www.penistonechurchfc.com/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Peterborough United",
+      "url": "https://www.theposh.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Phoenix Sports FC",
+      "url": "https://www.phoenixsportsfc.co.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Plymouth Argyle",
+      "url": "https://www.pafc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Plymouth Parkway",
+      "url": "https://www.ppfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Plymouth Parkway FC",
+      "url": "https://www.ppfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Port Vale",
+      "url": "https://www.port-vale.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Portishead Town FC",
+      "url": "https://portisheadtownfc.com/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Punjab United FC",
+      "url": "https://www.pufc.uk/",
+      "verified_on": "2026-11-20",
+      "ledger": "club_website_verified_batch_27.json"
+    },
+    {
+      "identity": "Reading",
+      "url": "https://www.readingfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Rochdale AFC",
+      "url": "https://rochdaleafc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Rotherham United",
+      "url": "https://www.themillers.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Salford City",
+      "url": "https://www.salfordcityfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Salisbury",
+      "url": "https://salisburyfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Salisbury FC",
+      "url": "https://salisburyfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Scunthorpe United",
+      "url": "https://www.scunthorpe-united.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Scunthorpe United FC",
+      "url": "https://www.scunthorpe-united.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Sheffield Wednesday",
+      "url": "https://www.swfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Sholing",
+      "url": "https://sholingfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Sholing FC",
+      "url": "https://sholingfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Shrewsbury Town",
+      "url": "https://www.shrewsburytown.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Stafford Rangers",
+      "url": "https://staffordrangersfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Stafford Rangers FC",
+      "url": "https://staffordrangersfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Stevenage",
+      "url": "https://www.stevenagefc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Stockport County",
+      "url": "https://www.stockportcounty.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Sutton United",
+      "url": "https://www.suttonunited.net/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Sutton United FC",
+      "url": "https://www.suttonunited.net/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Swindon Town",
+      "url": "https://www.swindontownfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Trafford",
+      "url": "https://traffordfc.com/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_25.json"
+    },
+    {
+      "identity": "Trafford FC",
+      "url": "https://traffordfc.com/",
+      "verified_on": "2026-11-16",
+      "ledger": "club_website_verified_batch_25.json"
+    },
+    {
+      "identity": "Tranmere Rovers",
+      "url": "https://www.tranmererovers.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Walsall",
+      "url": "https://www.saddlers.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Wealdstone",
+      "url": "https://www.wealdstonefc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Wealdstone FC",
+      "url": "https://www.wealdstonefc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Wigan Athletic",
+      "url": "https://wiganathletic.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Wimborne Town",
+      "url": "https://wimbornetownfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Wimborne Town FC",
+      "url": "https://wimbornetownfc.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Worcester City",
+      "url": "https://worcestercityfc.org/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Worcester City FC",
+      "url": "https://worcestercityfc.org/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Wycombe Wanderers",
+      "url": "https://www.wwfc.com/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Yeovil Town",
+      "url": "https://ytfc.net/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "Yeovil Town FC",
+      "url": "https://ytfc.net/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    },
+    {
+      "identity": "York City",
+      "url": "https://www.yorkcityfootballclub.co.uk/",
+      "verified_on": "2026-10-21",
+      "ledger": "club_website_verified_batch_04.json"
+    }
+  ],
+  "held_website_differences": [],
+  "approved_ground_changes": [
+    {
+      "club": "Sholing FC",
+      "ground": {
+        "previous": "Mortgage Decisions Community Stadium",
+        "reviewed": "The Charters Stadium"
+      }
+    },
+    {
+      "club": "AFC Rushden & Diamonds",
+      "ground": {
+        "previous": "Rushden & Higham United FC",
+        "reviewed": "Hayden Road Sports Ground"
+      }
+    },
+    {
+      "club": "Forest Green Rovers FC",
+      "ground": {
+        "previous": "The Bolt New Lawn",
+        "reviewed": "The New Lawn"
+      }
+    },
+    {
+      "club": "Fairford Town FC",
+      "ground": {
+        "previous": "Acorn Property Group Stadium",
+        "reviewed": "Cinder Lane"
+      }
+    },
+    {
+      "club": "Brixham AFC",
+      "ground": {
+        "previous": "MoreSeaFood Ground",
+        "reviewed": "Pump Technology Ltd Ground"
+      }
+    },
+    {
+      "club": "1874 Northwich FC",
+      "ground": {
+        "previous": "Barnton FC - The Creative Hut Stadium",
+        "reviewed": "The Creative Hut Stadium"
+      }
+    },
+    {
+      "club": "Barton Town FC",
+      "ground": {
+        "previous": "The Easy Buy Stadium",
+        "reviewed": "The Matte Black Surfacing Stadium"
+      },
+      "postcode": {
+        "previous": "DN18 5JD",
+        "reviewed": "DN18 5RL"
+      }
+    },
+    {
+      "club": "Cirencester Town FC",
+      "ground": {
+        "previous": "Corinium Stadium",
+        "reviewed": "HGV Drivers UK Stadium"
+      }
+    },
+    {
+      "club": "Bridlington Town AFC",
+      "ground": {
+        "previous": "Mounting Systems Stadium",
+        "reviewed": "HDM Energies Stadium"
+      }
+    },
+    {
+      "club": "Crowborough Athletic FC",
+      "ground": {
+        "previous": "Charles Centrury Community Stadium",
+        "reviewed": "Charles Century Community Stadium"
+      },
+      "postcode": {
+        "previous": "TN6 3BU",
+        "reviewed": "TN6 3FY"
+      }
+    },
+    {
+      "club": "Garforth Town FC",
+      "ground": {
+        "previous": "Bannister Prentice Stadium",
+        "reviewed": "BD Community Stadium"
+      }
+    },
+    {
+      "club": "Chislehurst Glebe FC",
+      "postcode": {
+        "previous": "BR7 6HA",
+        "reviewed": "BR7 6SD"
+      }
+    },
+    {
+      "club": "Billingshurst FC",
+      "ground": {
+        "previous": "Rod Gaskin Ltd Stadium, Jubilee Fields",
+        "reviewed": "Four Seasons Fuel Stadium"
+      }
+    }
+  ],
+  "pending_entrant_ground_evidence": [
+    {
+      "club": "Barnet FC",
+      "ground": "The Hive London",
+      "postcode": "HA8 6AG",
+      "source": "https://barnetfc.com/company-details"
+    },
+    {
+      "club": "Barnsley FC",
+      "ground": "Oakwell",
+      "postcode": "S71 1ET",
+      "source": "https://www.barnsleyfc.co.uk/fans/first-time-fans"
+    },
+    {
+      "club": "Blackpool FC",
+      "ground": "Bloomfield Road",
+      "postcode": "FY1 6JJ",
+      "source": "https://shop.blackpoolfc.co.uk/page/dataprotec"
+    },
+    {
+      "club": "Bradford City FC",
+      "ground": "Mbanq Valley Parade",
+      "postcode": "BD8 7DY",
+      "source": "https://www.bradfordcityafc.com/news/2026/november/12/matchday-guide-bantams-v-crewe-alexandra/"
+    },
+    {
+      "club": "Bristol Rovers FC",
+      "ground": "Memorial Stadium",
+      "postcode": "BS7 0BF",
+      "source": "https://www.bristolrovers.co.uk/fans/getting-mem"
+    },
+    {
+      "club": "Burton Albion FC",
+      "ground": "Pirelli Stadium",
+      "postcode": "DE13 0AR",
+      "source": "https://www.burtonalbionfc.co.uk/news/2026/november/03/know-before-you-go--afc-rushden---diamonds/"
+    },
+    {
+      "club": "Cheltenham Town FC",
+      "ground": "EV Charger Points Stadium",
+      "postcode": "GL52 5NA",
+      "source": "https://www.ctfc.com/club/contact-us"
+    },
+    {
+      "club": "Chesterfield FC",
+      "ground": "SMH Group Stadium",
+      "postcode": "S41 8NZ",
+      "source": "https://chesterfield-fc.co.uk/news/smh-group-renew-stadium-sponsorship"
+    },
+    {
+      "club": "Colchester United FC",
+      "ground": "JobServe Community Stadium",
+      "postcode": "CO4 5UP",
+      "source": "https://tickets.colchesterunited.net/Terms"
+    },
+    {
+      "club": "Crewe Alexandra FC",
+      "ground": "Mornflake Stadium",
+      "postcode": "CW2 6EB",
+      "source": "https://www.crewealex.net/club/mornflake-stadium"
+    },
+    {
+      "club": "Exeter City FC",
+      "ground": "St James Park",
+      "postcode": "EX4 6PX",
+      "source": "https://www.exetercityfc.co.uk/contact-us"
+    },
+    {
+      "club": "Grimsby Town FC",
+      "ground": "Blundell Park",
+      "postcode": "DN35 7PY",
+      "source": "https://gtfc.co.uk/visitors/"
+    },
+    {
+      "club": "Leicester City FC",
+      "ground": "King Power Stadium",
+      "postcode": "LE2 7FL",
+      "source": "https://www.lcfc.com/club-contact"
+    },
+    {
+      "club": "Leyton Orient FC",
+      "ground": "BetWright Stadium",
+      "postcode": "E10 5NF",
+      "source": "https://www.leytonorient.com/club/company-details"
+    },
+    {
+      "club": "Luton Town FC",
+      "ground": "Kenilworth Road",
+      "postcode": "LU4 8AW",
+      "source": "https://www.lutontown.co.uk/en/club-information"
+    },
+    {
+      "club": "Mansfield Town FC",
+      "ground": "One Call Stadium",
+      "postcode": "NG18 5DA",
+      "source": "https://www.mansfieldtown.net/news/2026/march/05/preview--stags-v-arsenal"
+    },
+    {
+      "club": "Milton Keynes Dons FC",
+      "ground": "Stadium MK",
+      "postcode": "MK1 1ST",
+      "source": "https://shop.mkdons.com/contact-us"
+    },
+    {
+      "club": "Newport County AFC",
+      "ground": "Rodney Parade",
+      "postcode": "NP19 0UU",
+      "source": "https://www.newport-county.co.uk/company-details"
+    },
+    {
+      "club": "Notts County FC",
+      "ground": "Meadow Lane",
+      "postcode": "NG2 3HJ",
+      "source": "https://shop.nottscountyfc.co.uk/page/termsandconditions"
+    },
+    {
+      "club": "Oldham Athletic AFC",
+      "ground": "Boundary Park",
+      "postcode": "OL1 2PA",
+      "source": "https://www.oldhamathletic.co.uk/news/2026/november/17/vacancy--commercial-manager/"
+    },
+    {
+      "club": "Plymouth Argyle FC",
+      "ground": "Home Park Stadium",
+      "postcode": "PL2 3DQ",
+      "source": "https://www.pafc.co.uk/club/visiting-home-park"
+    },
+    {
+      "club": "Port Vale FC",
+      "ground": "Vale Park",
+      "postcode": "ST6 1AW",
+      "source": "https://www.port-vale.co.uk/club/contact-us-0"
+    },
+    {
+      "club": "Reading FC",
+      "ground": "Select Car Leasing Stadium",
+      "postcode": "RG2 0FL",
+      "source": "https://www.readingfc.co.uk/matchday/travel-parking/"
+    },
+    {
+      "club": "Rochdale AFC",
+      "ground": "Crown Oil Arena",
+      "postcode": "OL11 5DR",
+      "source": "https://rochdaleafc.co.uk/company-details/"
+    },
+    {
+      "club": "Rotherham United FC",
+      "ground": "AESSEAL New York Stadium",
+      "postcode": "S60 1FJ",
+      "source": "https://www.aessealnewyorkstadium.com/location"
+    },
+    {
+      "club": "Shrewsbury Town FC",
+      "ground": "The Croud Meadow",
+      "postcode": "SY2 6ST",
+      "source": "https://www.shrewsburytown.com/club/stadium"
+    },
+    {
+      "club": "Stevenage FC",
+      "ground": "The Lamex Stadium",
+      "postcode": "SG2 8RH",
+      "source": "https://jobs.stevenagefc.com/contact/"
+    },
+    {
+      "club": "Stockport County FC",
+      "ground": "Edgeley Park",
+      "postcode": "SK3 9DD",
+      "source": "https://www.stockportcounty.com/news/2026/may/29/join-us-at-edgeley-park-for-ben-hinchliffe-s-testimonial/"
+    },
+    {
+      "club": "Wigan Athletic FC",
+      "ground": "The Brick Community Stadium",
+      "postcode": "WN5 0UH",
+      "source": "https://thebrickcommunitystadium.com/contact-us/"
+    },
+    {
+      "club": "Wycombe Wanderers FC",
+      "ground": "Adams Park",
+      "postcode": "HP12 4HJ",
+      "source": "https://shop.wwfc.com/pages/contact"
+    },
+    {
+      "club": "York City FC",
+      "ground": "LNER Community Stadium",
+      "postcode": "YO32 9AF",
+      "source": "https://www.yorkcityfootballclub.co.uk/get-in-touch/club-shop-opening-times"
+    }
+  ]
+}
