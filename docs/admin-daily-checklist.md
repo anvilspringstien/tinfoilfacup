@@ -16,12 +16,28 @@ This is the repeatable morning routine. The existing **08:00 UK PR triage** is s
 - Subject and headline: **Keeping your club details up to date**.
 - Use the **actual original 600 × 226 transparent PNG banner**, named `tffc-combined-photo-and-crest.png`, as an **embedded inline image above the headline**, not a detached attachment, broken CID, temporary image URL or a recreated crest. The image must be undistorted: `width:100%;max-width:600px;height:auto`.
 - Use the approved introduction wording: `Your club is already included in this season’s Tin Foil FA Cup.` Include the short custodianship explanation and grassroots support rationale.
-- Include **Your current listing:** as a four-field table: **Club, Ground, Postcode, Website**. Copy these as currently shown in Clubfinder, not as assumed updates. Where absent, **No link currently shown**. Ask the club to confirm a candidate website separately.
+- Include **Your current listing:** as a four-field table with **Club, Ground, Postcode, Website**. Use the actual Public listing. Apply the website status check below and ask the club to confirm any candidate destination separately.
+- Use the approved closing paragraph in both the HTML and plain-text alternatives:
+
+  > If everything looks right, a quick “all correct” reply would be lovely. If anything needs changing or verifying, just reply with the correction and I’ll check it through.
 - Verify every intended contact, actual postcode, starting Campaign number, current ground name and website state. Never presume every tested postcode returns Campaign 1.
 - Include exactly **one full approved contact footer**, with name, project, site, email and telephone. Avoid duplicate Gmail signature blocks.
 - Save **unsent drafts**. Reopen and visually inspect the **first** for banner, title, full listing and footer, then inspect the remainder. Match Gmail Draft/Sent counts; **zero unapproved sends**.
 - Use the restored structured MIME workflow demonstrated by the Punjab United pilot on 23 November and subsequent successful batches. Preserve the original HTML styling and plain-text alternative, with the exact PNG as a related inline MIME part and matching Content-ID. Inspect every completed introduction and acknowledgement; replies retain the approved crest and full footer in the original thread. If the current connector cannot produce this structure, stop and delegate to the proven Work workflow rather than generating defective drafts. No unattended sending scripts.
 - Reconcile introductions against Gmail Sent by unique club identity, not message count. A duplicate introduction, acknowledgement or follow-up must not increment the contacted-club total. Drafts never count as contacted. On 25 November the reported reconciliation was 304 unique clubs from 305 introductions, including one duplicate for Gosport Borough.
+
+### Website status in Outreach
+
+1. Open the actual Public Clubfinder in a fresh browser session, search the club’s published postcode and identify the club’s starting Campaign card. Follow the public navigation or redirect through to the rendered card. The Campaign route can serve a shared Clubfinder build, so the standalone Public mapping table is insufficient for this check. Inspect the website link on that club’s listing and check its destination. For direct-club Outreach, use the Public club detail view for that exact club. A current custodian, opponent or neighbouring origin can have its own link. A generic search, directory fallback, map, or placeholder does not establish a club website link.
+2. Check the exact club identity and displayed destination against the current approved website evidence separately. Confirm that the displayed destination, or its reviewed redirect, matches active evidence for the senior club. A BETA or ledger-only entry cannot establish Public visibility. If the Public listing cannot be checked, hold that draft until it can be verified.
+
+| What Public shows | Approved wording |
+| --- | --- |
+| No direct club website link, or only a generic search or fallback | No link currently shown |
+| A direct club website link whose destination lacks matching current approval | Link currently shown — unverified |
+| A direct club website link with matching current approval for the displayed destination | Link currently shown — verified |
+
+Use the same status text in both MIME alternatives. Keep any request to confirm a candidate website outside the listing table.
 
 ## Website audit — evidence before publication
 
