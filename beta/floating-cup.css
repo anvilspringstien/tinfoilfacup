@@ -1,0 +1,89 @@
+/* The approved crest still establishes the grid size and accessible image. */
+.crest-compartment {
+  position: relative;
+}
+
+.floating-cup {
+  grid-area: 1 / 1;
+  position: relative;
+  container-type: inline-size;
+  pointer-events: none;
+}
+
+.floating-cup-original {
+  grid-area: 1 / 1;
+}
+
+.floating-cup[data-moving] + .floating-cup-original {
+  opacity: 0;
+}
+
+.floating-cup-view,
+.floating-cup-planes,
+.floating-cup-planes img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-cup-view {
+  perspective: 170cqw;
+  visibility: hidden;
+}
+
+.floating-cup[data-moving] .floating-cup-view {
+  visibility: visible;
+}
+
+.floating-cup-planes {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--view-x, 0deg)) rotateY(var(--view-y, 0deg));
+}
+
+.floating-cup-planes img {
+  /* Scale compensates for perspective at rest to preserve the source alignment. */
+  transform: translateZ(var(--plane, 0px)) scale(var(--plate-scale, 1));
+}
+
+.floating-cup-planes img:nth-child(2) {
+  --plane: 2.4cqw;
+  --plate-scale: .9859;
+}
+
+.floating-cup-planes img:nth-child(3) {
+  --plane: 5.1cqw;
+  --plate-scale: .97;
+}
+
+.floating-cup-planes img:nth-child(4) {
+  --plane: 20.4cqw;
+  --plate-scale: .88;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / .18));
+}
+
+.floating-cup-tilt {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  pointer-events: auto;
+  font: 500 12px system-ui, sans-serif;
+  color: #f6f3e8;
+  background: #292724;
+  border: 1px solid #818181;
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 0 6px;
+}
+
+.floating-cup-tilt:focus-visible {
+  outline: 2px solid #f6f3e8;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-cup-view,
+  .floating-cup-tilt { display: none; }
+  .floating-cup[data-moving] + .floating-cup-original { opacity: 1; }
+}
