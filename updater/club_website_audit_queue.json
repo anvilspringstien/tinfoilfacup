@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-25T03:01:27.274624+00:00",
+  "competition_updated_at": "2026-11-26T05:05:27.878950+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 334,
+  "eligible_linked": 339,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -1016,17 +1016,6 @@
       "evidence": []
     },
     {
-      "club": "Hebburn Town FC",
-      "identities": [
-        "Hebburn Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Hertford Town FC",
       "identities": [
         "Hertford Town FC"
@@ -1148,17 +1137,6 @@
       "evidence": []
     },
     {
-      "club": "Horsham FC",
-      "identities": [
-        "Horsham FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Horsham YMCA FC",
       "identities": [
         "Horsham YMCA FC"
@@ -1195,17 +1173,6 @@
       "club": "Hutton FC",
       "identities": [
         "Hutton FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hyde United FC",
-      "identities": [
-        "Hyde United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -1566,17 +1533,6 @@
       "evidence": []
     },
     {
-      "club": "Lewes FC",
-      "identities": [
-        "Lewes FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Lichfield City FC",
       "identities": [
         "Lichfield City FC"
@@ -1778,17 +1734,6 @@
       "club": "Maidenhead United FC",
       "identities": [
         "Maidenhead United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Maidstone United FC",
-      "identities": [
-        "Maidstone United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9325,6 +9270,24 @@
       ]
     },
     {
+      "club": "Hebburn Town FC",
+      "identities": [
+        "Hebburn Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://hebburntownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://hebburntownfc.com/",
+          "evidence_url": "https://hebburntownfc.com/contact-us",
+          "verified_on": "2026-11-26",
+          "ledger": "club_website_verified_batch_28.json"
+        }
+      ]
+    },
+    {
       "club": "Hednesford Town FC",
       "identities": [
         "Hednesford Town FC"
@@ -9505,6 +9468,24 @@
       ]
     },
     {
+      "club": "Horsham FC",
+      "identities": [
+        "Horsham FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.horsham-fc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.horsham-fc.co.uk/",
+          "evidence_url": "https://www.horsham-fc.co.uk/how-to-find-us/",
+          "verified_on": "2026-11-26",
+          "ledger": "club_website_verified_batch_28.json"
+        }
+      ]
+    },
+    {
       "club": "Hungerford Town FC",
       "identities": [
         "Hungerford Town FC"
@@ -9519,6 +9500,24 @@
           "evidence_url": "https://www.hungerfordtown.com/",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_05.json"
+        }
+      ]
+    },
+    {
+      "club": "Hyde United FC",
+      "identities": [
+        "Hyde United FC"
+      ],
+      "current_competition": false,
+      "website": "https://hydeunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://hydeunited.co.uk/",
+          "evidence_url": "https://hydeunited.co.uk/event/hyde-united-v-warrington-rylands/",
+          "verified_on": "2026-11-26",
+          "ledger": "club_website_verified_batch_28.json"
         }
       ]
     },
@@ -9559,6 +9558,24 @@
       ]
     },
     {
+      "club": "Lewes FC",
+      "identities": [
+        "Lewes FC"
+      ],
+      "current_competition": false,
+      "website": "https://lewesfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://lewesfc.com/",
+          "evidence_url": "https://lewesfc.com/matchday-information/",
+          "verified_on": "2026-11-26",
+          "ledger": "club_website_verified_batch_28.json"
+        }
+      ]
+    },
+    {
       "club": "Macclesfield FC",
       "identities": [
         "Macclesfield FC"
@@ -9573,6 +9590,24 @@
           "evidence_url": "https://macclesfieldfc.com/",
           "verified_on": "2026-10-21",
           "ledger": "club_website_verified_batch_04.json"
+        }
+      ]
+    },
+    {
+      "club": "Maidstone United FC",
+      "identities": [
+        "Maidstone United FC"
+      ],
+      "current_competition": false,
+      "website": "https://maidstoneunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://maidstoneunited.co.uk/",
+          "evidence_url": "https://maidstoneunited.co.uk/matchday/travel-directions/",
+          "verified_on": "2026-11-26",
+          "ledger": "club_website_verified_batch_28.json"
         }
       ]
     },
