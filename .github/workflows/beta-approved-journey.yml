@@ -5,6 +5,8 @@ on:
       - 'index.html'
       - 'beta/index.html'
       - 'beta/floating-cup.*'
+      - 'beta/astral-portal.*'
+      - 'beta/assets/astral-portal/**'
       - 'beta/assets/floating-cup/**'
       - 'beta/splash-campaign-label.js'
       - 'beta/clubfinder-journey.html'
@@ -42,6 +44,9 @@ jobs:
 
       - name: Test the isolated Floating Cup experiment
         run: node tests/beta-approved-journey-floating-cup.mjs
+
+      - name: Test the isolated Astral Portal experiment
+        run: node tests/beta-approved-journey-astral-portal.mjs
 
       - name: Test Four Laws wheel handoff
         run: node tests/four-laws-wheel-browser.mjs

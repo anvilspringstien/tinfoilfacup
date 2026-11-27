@@ -1,0 +1,86 @@
+/* The original crest keeps its grid size and accessible name. */
+.astral-portal,
+.astral-portal-ready {
+  grid-area: 1 / 1;
+}
+
+.astral-portal-ready {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.astral-portal {
+  position: relative;
+  container-type: inline-size;
+  pointer-events: none;
+}
+
+.astral-art,
+.astral-art img,
+.astral-plane,
+.astral-opening {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.astral-opening {
+  /* Reuse the alpha of the original white disc for exact registration. */
+  mask: url("assets/floating-cup/CREST_BASE_RING_INNER_WHITE.png") center / 100% 100% no-repeat;
+}
+
+/* With constant viewer distance and parallel planes, the normalised
+   perspective projection is a translation. Project against a viewing
+   distance of 170: depth -45 for the sky, +20.4 for the cup. Both planes
+   use the same viewpoint, in units of the full crest width and height. */
+.astral-plane {
+  transform: translate(
+    calc(var(--view-x, 0%) * var(--projection)),
+    calc(var(--view-y, 0%) * var(--projection))
+  );
+}
+
+.astral-opening .astral-plane {
+  --projection: .209302;
+}
+
+.astral-near {
+  --projection: -.136364;
+}
+
+.astral-opening img {
+  /* Centre on the original disc, with overscan so tilt never exposes an edge. */
+  inset: 15% auto auto 15%;
+  width: 70%;
+  height: 70%;
+}
+
+.astral-near img {
+  filter: drop-shadow(0 .5cqw .65cqw rgb(0 0 0 / .25));
+}
+
+.astral-tilt {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  pointer-events: auto;
+  font: 500 12px system-ui, sans-serif;
+  color: #f6f3e8;
+  background: #292724;
+  border: 1px solid #818181;
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 0 6px;
+}
+
+.astral-tilt:focus-visible {
+  outline: 2px solid #f6f3e8;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .astral-portal { --view-x: 0% !important; --view-y: 0% !important; }
+  .astral-tilt { display: none; }
+}
