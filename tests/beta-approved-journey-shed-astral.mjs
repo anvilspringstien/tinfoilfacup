@@ -134,15 +134,16 @@ try {
   assert.equal(await stillVisible(desktop), false);
   await desktop.close();
 
-  const slow = await mobile('granted');
-  await slow.route('**/astral-portal.js?v=shed', route => route.abort());
-  await slow.goto(shed, {waitUntil: 'commit'});
-  await slow.locator(still).waitFor();
-  await slow.waitForFunction(() => document.querySelector('.shed-astral-crest')?.naturalWidth === 507);
-  assert.ok(await stillVisible(slow));
-  assert.equal(await slow.locator(art).count(), 0);
-  assert.equal(await campaign(slow).getAttribute('href'), 'clubfinder-journey.html');
-  await slow.close();
+  for (const extension of ['js', 'css']) {
+    const slow = await mobile('granted');
+    await slow.route(`**/astral-portal.${extension}?v=shed`, route => route.abort());
+    await slow.goto(shed, {waitUntil: 'domcontentloaded'});
+    await slow.waitForFunction(() => document.querySelector('.shed-astral-crest')?.naturalWidth === 507);
+    assert.ok(await stillVisible(slow));
+    assert.equal(await slow.locator('.astral-portal').count(), 0);
+    assert.equal(await campaign(slow).getAttribute('href'), 'clubfinder-journey.html');
+    await slow.close();
+  }
 } finally {
   await browser.close();
 }
