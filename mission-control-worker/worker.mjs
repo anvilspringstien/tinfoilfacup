@@ -965,8 +965,15 @@ const DASHBOARD_HTML = [
   " +sections+`<div class=\"links-footnote\">Revolut Pro is accessed through the personal Revolut mobile app; its link opens official instructions, not a Business dashboard. The BETA Shed shares some live files until the planned app/Shed separation refactor.</div>`;\n",
   "}\n",
   "\n",
-  "function render(){updateChrome();const root=document.getElementById('content');root.innerHTML=({overview,clubfinder,radar:radarPage,outreach:outreachPage,ombudsman:ombudsmanPage,approvals:approvalsPage,sources:sourcePage,ideas:ideasPage,pullrequests:pullrequestsPage,links:linksPage})[state.section]();renderOverlay()}\n",
-  "function renderOverlay(){const root=document.getElementById('overlay');const v=state.overlay;root.innerHTML=!v?'':v.type==='club'?clubDrawer(v.name):v.type==='proposal'?proposalDetail(workspace.proposals.find(p=>p.id===v.id)||{}):v.type==='proposal-form'?proposalForm(v.proposal||{}):v.type==='approve'?approveModal(workspace.proposals.find(p=>p.id===v.id)||{}):v.type==='outreach'?outreachDetail(workspace.outreach.find(o=>o.id===v.id)||{}):v.type==='outreach-form'?outreachForm(v.record||{},v.kind):v.type==='outreach-approval'?outreachApprovalModal(workspace.outreach.find(o=>o.id===v.id)||{}):v.type==='sent'?sentModal(workspace.outreach.find(o=>o.id===v.id)||{}):v.type==='incident'?incidentModal():v.type==='reset'?resetModal():v.type==='idea-form'?missionIdeaForm(v.idea||{}):v.type==='pr-note'?missionPRNoteModal(v.pr):'';document.body.style.overflow=v?'hidden':''}\n",
+  "function render(){updateChrome();const root=document.getElementById('content');root.innerHTML=({overview,clubfinder,radar:radarPage,outreach:outreachPage,ombudsman:ombudsmanPage,approvals:approvalsPage,sources:sourcePage,ideas:ideasPage,pullrequests:pullrequestsPage,links:linksPage})[state.section]();renderOverlay({preserveInputs:true})}\n",
+  "let renderedOverlay=null;\n",
+  "function renderOverlay({preserveInputs=false}={}){\n",
+  " const root=document.getElementById('overlay'),v=state.overlay;\n",
+  " // Feed updates can redraw the page while the browser owns unsaved dialogue input.\n",
+  " if(preserveInputs&&v&&v===renderedOverlay&&root.querySelector('input,select,textarea'))return;\n",
+  " root.innerHTML=!v?'':v.type==='club'?clubDrawer(v.name):v.type==='proposal'?proposalDetail(workspace.proposals.find(p=>p.id===v.id)||{}):v.type==='proposal-form'?proposalForm(v.proposal||{}):v.type==='approve'?approveModal(workspace.proposals.find(p=>p.id===v.id)||{}):v.type==='outreach'?outreachDetail(workspace.outreach.find(o=>o.id===v.id)||{}):v.type==='outreach-form'?outreachForm(v.record||{},v.kind):v.type==='outreach-approval'?outreachApprovalModal(workspace.outreach.find(o=>o.id===v.id)||{}):v.type==='sent'?sentModal(workspace.outreach.find(o=>o.id===v.id)||{}):v.type==='incident'?incidentModal():v.type==='reset'?resetModal():v.type==='idea-form'?missionIdeaForm(v.idea||{}):v.type==='pr-note'?missionPRNoteModal(v.pr):'';\n",
+  " renderedOverlay=v;document.body.style.overflow=v?'hidden':'';\n",
+  "}\n",
   "function open(v){state.overlay=v;renderOverlay()}\n",
   "function startProposal(club){state.selectedClub=club||null;open({type:'proposal-form',proposal:{club:club||'',kind:'official_website'}})}\n",
   "function startOutreach(club,kind='introduction',original=''){state.selectedClub=club||null;open({type:'outreach-form',kind,record:{club:club||'',kind,originalRef:original||''}})}\n",
@@ -993,7 +1000,7 @@ const DASHBOARD_HTML = [
   "</html>\n"
 ].join('');
 
-const DASHBOARD_CSP = "default-src 'none'; script-src 'sha256-xglNUjxAy82qc+srPua4jkb1AvBcXfM4igZojI8Tq/M=' 'sha256-58FxmnfNS+rb/MLvq4/wPfI/TiaxX+kjRZaS7zktNAQ='; script-src-attr 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+const DASHBOARD_CSP = "default-src 'none'; script-src 'sha256-xglNUjxAy82qc+srPua4jkb1AvBcXfM4igZojI8Tq/M=' 'sha256-3rRALlh28a4soC7o94c6g9W094KobDTIgQBG5bYjq7U='; script-src-attr 'none'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
 
 // Authenticated dashboard: no mailbox tokens, backend writes, or admin APIs.
 function privateDashboard() {

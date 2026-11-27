@@ -13,7 +13,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v5
         with:
@@ -46,3 +46,10 @@ jobs:
           node mission-control-worker/build-radar-test.mjs
           node --check mission-control-worker/.radar-test-build/worker.mjs
           node --test mission-control-worker/test/hosted-target.test.mjs
+
+      - name: Install isolated browser test dependencies
+        run: |
+          npm install --no-save playwright@1.65.1
+          npx playwright install --with-deps chromium
+      - name: Reproduce the Radar TEST workspace reset across browser tabs
+        run: node --test mission-control-worker/test/hosted-reset-browser.mjs
