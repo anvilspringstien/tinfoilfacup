@@ -5,7 +5,13 @@
   if (!original || !CSS.supports('mask-image', 'url("disc.png")') || !CSS.supports('filter', 'drop-shadow(0 .5cqw .65cqw black)')) return;
 
   const shed = original.classList.contains('shed-astral-crest');
-  if (shed && getComputedStyle(original).getPropertyValue('--shed-astral-styled').trim() !== '1') return;
+  if (shed) {
+    const styled = () => getComputedStyle(original).getPropertyValue('--shed-astral-styled').trim() === '1';
+    if (!styled() && document.readyState !== 'complete') {
+      await new Promise(resolve => window.addEventListener('load', resolve, {once: true}));
+    }
+    if (!styled()) return;
+  }
 
   function wrap(className, ...children) {
     const element = document.createElement('div');
