@@ -10,7 +10,7 @@
     crestAssets + 'CREST_BASE_RING_INNER_WHITE.png',
     crestAssets + 'CREST_RINGS_PLUS_TEXT.png',
     crestAssets + 'ICONIC_CUP_TOP_LAYER.png',
-    'assets/astral-portal/icon-sky.png',
+    'assets/astral-portal/owner-sky.png',
   ];
   const layers = filenames.map(src => {
     const image = new Image();

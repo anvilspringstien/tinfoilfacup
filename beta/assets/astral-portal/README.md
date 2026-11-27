@@ -1,13 +1,12 @@
 # Astral Portal sky
 
-`icon-sky.png` is an unretouched 172 × 172 crop of the original icon-family
-artwork `Glossy TFFAC Starry Trophy Emblem.png` (1254 × 1254), from pixel
-coordinates (854, 542) inclusive to (1026, 714) exclusive. The artwork available
-for this experiment was flattened. The crop uses a clear patch of sky and
-excludes the emblem, clouds, lettering and cup.
+`owner-sky.png` is the owner-supplied `CREST_MOCK_UP_ASTRAL_PORTAL_BG(1).png`
+(507 × 507), copied byte-for-byte. The complete crest mock-up was used to
+review the placement of the clouds and stars.
 
-Original SHA-256
-`eb4c4efe9935afe7731328e30bdbdae8747c1f696dd36b2331ba6ffa7990703c`
+Source SHA-256
+`b54d5b98ea8035c78edd8cdd1393b56f5e1cd1d14437d916de5bc64d8fb1f68f`
 
-The opening uses the alpha of the original white crest disc as its mask.
-The cup, ivory surround and lettering use the original Floating Cup assets.
+The original white disc supplies the stationary alpha mask. The sky is
+rendered at 110% and shifted slightly left within the crest canvas so its opaque artwork
+covers the mask at all four extremes of the existing tilt travel.
