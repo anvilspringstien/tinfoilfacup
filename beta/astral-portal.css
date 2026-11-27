@@ -30,9 +30,23 @@
   mask: url("assets/floating-cup/CREST_BASE_RING_INNER_WHITE.png") center / 100% 100% no-repeat;
 }
 
+/* With constant viewer distance and parallel planes, the normalised
+   perspective projection is a translation. Project against a viewing
+   distance of 170: depth -45 for the sky, +20.4 for the cup. Both planes
+   use the same viewpoint, in units of the full crest width and height. */
 .astral-plane {
-  perspective: 170cqw;
-  perspective-origin: calc(50% + var(--view-x, 0%)) calc(50% + var(--view-y, 0%));
+  transform: translate(
+    calc(var(--view-x, 0%) * var(--projection)),
+    calc(var(--view-y, 0%) * var(--projection))
+  );
+}
+
+.astral-opening .astral-plane {
+  --projection: .209302;
+}
+
+.astral-near {
+  --projection: -.136364;
 }
 
 .astral-opening img {
@@ -40,11 +54,9 @@
   inset: 15% auto auto 15%;
   width: 70%;
   height: 70%;
-  transform: translateZ(-45cqw) scale(1.264706);
 }
 
 .astral-near img {
-  transform: translateZ(20.4cqw) scale(.88);
   filter: drop-shadow(0 .5cqw .65cqw rgb(0 0 0 / .25));
 }
 

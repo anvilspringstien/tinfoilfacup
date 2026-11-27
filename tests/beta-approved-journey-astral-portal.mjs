@@ -74,8 +74,9 @@ try {
   const tiltedSky = await rect(page, stars);
   assert.ok(tiltedCup.x > neutralCup.x && tiltedCup.y > neutralCup.y);
   assert.ok(tiltedSky.x < neutralSky.x && tiltedSky.y < neutralSky.y);
-  assert.equal(await page.locator('.astral-plane').evaluateAll(planes =>
-    getComputedStyle(planes[0]).perspectiveOrigin === getComputedStyle(planes[1]).perspectiveOrigin), true);
+  const opposedTravel = distance(tiltedSky, neutralSky) / distance(tiltedCup, neutralCup);
+  assert.ok(Math.abs(opposedTravel - (45 / 215) / (20.4 / 149.6)) < .04,
+    'Both planes follow the same viewpoint at their respective depths');
   assert.ok(Math.abs(tiltedCup.width - neutralCup.width) < .05);
   assert.ok(Math.abs(tiltedSky.width - neutralSky.width) < .05);
   assert.deepEqual(await readBackground(), background);

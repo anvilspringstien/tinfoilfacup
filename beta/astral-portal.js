@@ -2,7 +2,7 @@
   'use strict';
 
   const original = document.querySelector('.crest-compartment > .crest');
-  if (!original || !CSS.supports('perspective', '170cqw') || !CSS.supports('mask-image', 'url("disc.png")')) return;
+  if (!original || !CSS.supports('mask-image', 'url("disc.png")') || !CSS.supports('filter', 'drop-shadow(0 .5cqw .65cqw black)')) return;
 
   const crestAssets = 'assets/floating-cup/';
   const filenames = [
