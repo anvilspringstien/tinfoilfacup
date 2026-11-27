@@ -5,13 +5,13 @@ import {chromium, devices} from 'playwright';
 
 const origin = 'http://127.0.0.1:8765';
 const experiment = '/beta/astral-portal.html';
-const skyPath = '/beta/assets/astral-portal/owner-sky.png';
-const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="astral-portal.css?v=owner-sky"><script defer src="astral-portal.js?v=owner-sky"></script>';
+const skyPath = '/beta/assets/astral-portal/full-sky.webp';
+const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="astral-portal.css?v=full-sky"><script defer src="astral-portal.js?v=full-sky"></script>';
 const approved = readFileSync('beta/index.html', 'utf8');
 assert.equal(readFileSync('beta/astral-portal.html', 'utf8').replace(additions, '')
   .replace('Tin Foil FA Cup — Astral Portal (Shed)', 'Tin Foil FA Cup — BETA'), approved);
 assert.equal(createHash('sha256').update(readFileSync('.' + skyPath)).digest('hex'),
-  'b54d5b98ea8035c78edd8cdd1393b56f5e1cd1d14437d916de5bc64d8fb1f68f');
+  '06c6ed2c539149874fca787908c88eca4fbb68395e496c7367d835da02e9abe8');
 
 const browser = await chromium.launch();
 const cup = '.astral-near img';
@@ -65,7 +65,15 @@ try {
     canvas.height = mask.naturalHeight;
     const context = canvas.getContext('2d', {willReadFrequently: true});
     context.drawImage(mask, 0, 0);
-    const maskPixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const rings = opening.nextElementSibling;
+    // The fixed black ring conceals the disc's outermost pixels.
+    context.globalCompositeOperation = 'destination-out';
+    context.drawImage(rings, 0, 0, canvas.width, canvas.height);
+    context.globalCompositeOperation = 'source-over';
+    const aperturePixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    if (!aperturePixels.some((alpha, index) => index % 4 === 3 && alpha === 255)) {
+      throw new Error('The visible aperture is empty');
+    }
     const sky = opening.querySelector('img');
     const aperture = opening.getBoundingClientRect();
     const scene = opening.closest('.astral-portal');
@@ -82,7 +90,7 @@ try {
         context.drawImage(sky, (box.x - aperture.x) * factor, (box.y - aperture.y) * factor,
           box.width * factor, box.height * factor);
         const skyPixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-        unfilled.push(maskPixels.some((alpha, index) =>
+        unfilled.push(aperturePixels.some((alpha, index) =>
           index % 4 === 3 && alpha > 0 && skyPixels[index] < 255));
       }
     }
@@ -90,7 +98,14 @@ try {
     scene.style.removeProperty('--view-y');
     return unfilled;
   });
-  assert.deepEqual(uncovered, [false, false, false, false], 'Opaque sky covers the full stationary mask');
+  assert.deepEqual(uncovered, [false, false, false, false], 'Opaque sky covers the visible aperture at the full tilt limits');
+  // Match the three visible bright stars to the owner's 507px mock-up.
+  for (const [sourceX, sourceY, mockX, mockY] of [[161, 551, 125, 216],
+    [390, 305, 195, 141], [1087, 612, 407, 234]]) {
+    const x = (neutralSky.x - original.x + neutralSky.width * sourceX / 1254) * 507 / original.width;
+    const y = (neutralSky.y - original.y + neutralSky.height * sourceY / 1254) * 507 / original.height;
+    assert.ok(Math.hypot(x - mockX, y - mockY) < 1, 'Star registers to the resting mock-up');
+  }
   for (const axis of ['x', 'y', 'width', 'height']) {
     assert.ok(Math.abs(neutralCup[axis] - original[axis]) < .05, 'Original alignment and proportions');
   }
