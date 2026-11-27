@@ -4,6 +4,9 @@ on:
     paths:
       - 'index.html'
       - 'beta/index.html'
+      - 'beta/*-splash.html'
+      - 'beta/phone-frame*'
+      - 'beta/refresh-tffac.js'
       - 'beta/floating-cup.*'
       - 'beta/astral-portal.*'
       - 'beta/assets/astral-portal/**'
@@ -50,6 +53,9 @@ jobs:
 
       - name: Test Astral Portal integration and motion consent
         run: node tests/beta-approved-journey-shed-astral.mjs
+
+      - name: Test the Public, installed and Shed entrance boundary
+        run: node tests/beta-approved-journey-entrances.mjs
 
       - name: Test Four Laws wheel handoff
         run: node tests/four-laws-wheel-browser.mjs

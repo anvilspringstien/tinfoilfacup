@@ -2144,7 +2144,11 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   if(!suppliedWindow){
     if(returnMode==='clubfinder'&&/iPhone|iPod/i.test(navigator.userAgent||'')&&window.top?.location?.assign){
       prepared?.catch(()=>{});
-      window.top.location.assign('/beta/clubfinder-beta.html?stats=1');
+      const shell=window.top.location.pathname;
+      const statsUrl=new URL('/beta/clubfinder-beta.html?stats=1',location.origin);
+      if(['/beta/','/beta/index.html','/beta/phone-frame-shed.html'].includes(shell))statsUrl.searchParams.set('shell','shed');
+      else if(shell==='/'||shell==='/index.html')statsUrl.searchParams.set('shell','public');
+      window.top.location.assign(statsUrl.href);
       return;
     }
     const w=window.open("","_blank");
@@ -2180,7 +2184,7 @@ async function journeyCertificate(origin, suppliedWindow=null, returnMode="clubf
   if(!w||w.closed)return;
   w.document.open();w.document.write(doc);w.document.close();
 }
-async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder",standaloneReturn=false){
+async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder",standaloneReturn=""){
   const journey=buildJourney(origin);
   const carrier=journey.carrier||origin;
   const crumbs=journey.breadcrumbs||[];
@@ -2471,7 +2475,7 @@ async function tinFoilPrepareStatsDocument(origin,returnMode="clubfinder",standa
   '<div><div class="bt">NOTES</div><div class="notes">Pigeon Miles Flown = twice the straight-line distance from your Campaign start postcode to each tie venue.</div></div></section>'+
 
   '<div class="motto"><span class="motto-star">★</span><span>The Campaign Itself is The Source of Truth</span><span class="motto-star">★</span></div>'+
-  '</main>'+'<nav class="stats-actions" aria-label="Stats actions"><span class="stats-return"><button type="button" onclick="'+(standaloneReturn?"window.location.replace('phone-frame.html?view=campaign');":(returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"← Challenges":"← My Campaign")+'</button></span><button type="button" class="stats-share" disabled><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M8 10H5v11h14V10h-3"/></svg><span>Share PDF</span></button><p class="stats-share-status" role="status"></p></nav>'+
+  '</main>'+'<nav class="stats-actions" aria-label="Stats actions"><span class="stats-return"><button type="button" onclick="'+(standaloneReturn?"window.location.replace('"+standaloneReturn+"');":(returnMode==="challengesForward"||returnMode==="challenges")?"window.location.replace(\'challenges-beta.html?from=stats-return-v2\');":"if(window.opener&amp;&amp;!window.opener.closed){try{window.opener.tinFoilRefreshCampaignIdentityDisplay();}catch(e){}try{window.opener.tffcScrollToFinder();}catch(e){}window.opener.focus();window.close();}else{window.location.replace(\'clubfinder-beta.html?from=stats-exit-v1\');}")+'">'+((returnMode==="challenges"||returnMode==="challengesForward")?"← Challenges":"← My Campaign")+'</button></span><button type="button" class="stats-share" disabled><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4M8 10H5v11h14V10h-3"/></svg><span>Share PDF</span></button><p class="stats-share-status" role="status"></p></nav>'+
   '<scr'+'ipt>('+statsActions.toString()+')();</scr'+'ipt></body></html>';
 
   try{
@@ -2630,8 +2634,10 @@ async function tinFoilMaybeOpenCanonicalStatsRoute(){
   const origin=saved&&ELIGIBLE.find(c=>norm(c.name)===norm(saved.originName));
   if(!origin){document.documentElement.classList.remove('tffc-stats-route');return;}
   const returnMode=q.get('return')==='challenges'?'challenges':'clubfinder';
+  const shell=q.get('shell');
+  const campaignUrl=shell==='shed'?'/beta/?view=campaign':shell==='public'?'/?view=campaign':'phone-frame.html?view=campaign';
   const prepared=window.top===window&&returnMode==='clubfinder'
-    ?tinFoilPrepareStatsDocument(origin,returnMode,true):null;
+    ?tinFoilPrepareStatsDocument(origin,returnMode,campaignUrl):null;
   await journeyCertificate(origin,window,returnMode,prepared);
 }
 if(tinFoilStatsRouteRequested){
@@ -2850,4 +2856,4 @@ if(typeof document!=='undefined' && document.documentElement && typeof document.
   observer.observe(document.documentElement,{childList:true,subtree:true});
  }
 })();
-</script><script src="campaign-introductions.js?v=barry-air-20261117"></script><script src="keep-magic-return.js"></script><script defer src="post-office-launcher.js"></script></body></html>
+</script><script src="campaign-introductions.js?v=entrance-boundary-20261127"></script><script src="keep-magic-return.js"></script><script defer src="post-office-launcher.js"></script></body></html>

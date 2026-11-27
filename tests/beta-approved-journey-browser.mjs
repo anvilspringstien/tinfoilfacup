@@ -35,7 +35,7 @@ try {
   assert.equal(await publicPage.evaluate(()=>sessionStorage.getItem('tffc.beta.approved-journey')),'1');
   assert.deepEqual(publicErrors,[],width+'x'+height+' public entry produced script errors');
   await publicPage.close();
-  await page.goto(origin+'/beta/',{waitUntil:'domcontentloaded'});
+  await page.goto(origin+'/beta/shed-splash.html',{waitUntil:'domcontentloaded'});
   await page.locator('.splash-start').waitFor();
   const before=await page.locator('.field').boundingBox();
   const splashGeometry=await page.evaluate(()=>Object.fromEntries(['.field','.crest','.splash-intro','.splash-message','.splash-start','.splash-grassroots'].map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{x:r.x,y:r.y,width:r.width,height:r.height}]})));
@@ -103,7 +103,7 @@ try {
    return route.abort();
   });
   await page.evaluate(value=>localStorage.setItem('tinFoilFACupJourney_v7',JSON.stringify(value)),saved);
-  for(const splash of ['/', '/beta/']){
+  for(const splash of ['/', '/beta/shed-splash.html']){
    await page.goto(origin+splash);await page.evaluate(()=>document.fonts.ready);
    const journey=splash==='/'?await(await page.locator('#phoneApp').elementHandle()).contentFrame():page;
    const baseline=splash==='/'?publicGeometry:splashGeometry;
