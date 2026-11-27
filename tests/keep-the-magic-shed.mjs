@@ -22,7 +22,7 @@ try{
  // The destination frame follows the actual approved front door at each size.
  for(const [width,height] of [[390,669],[390,645],[390,620],[390,560],[768,1024],[1024,768],[1680,889]]){
   await page.setViewportSize({width,height});
-  await page.goto(base+'/beta/index.html');
+  await page.goto(base+'/beta/shed-splash.html');
   const front=await page.locator('.field').boundingBox();
   await page.goto(base+'/beta/share-popup-embed.html');
   const share=await page.locator('#magic').boundingBox();

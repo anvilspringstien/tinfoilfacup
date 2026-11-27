@@ -38,7 +38,7 @@
    const barry=!!document.querySelector('#barry-site-footer');
    const challenges=!!document.querySelector('.deck-footer-help');
    const current=new URL(window.top.location.href);
-   if(current.origin===root.origin&&/^\/beta\/phone-frame(?:-shed)?\.html$/.test(current.pathname))url=new URL(current.pathname,root);
+   if(current.origin===root.origin&&/^\/beta\/(?:index\.html|phone-frame(?:-shed)?\.html)?$/.test(current.pathname))url=new URL(current.pathname,root);
    if(barry){url=new URL('beta/barry-air/',root);url.hash=current.hash;}
    else url.searchParams.set('view',challenges?'challenges':'campaign');
    url.searchParams.set('tffc-refresh',String(Date.now()));

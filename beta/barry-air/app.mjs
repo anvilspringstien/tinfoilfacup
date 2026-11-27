@@ -1,3 +1,6 @@
+if(new URLSearchParams(location.search).get('shell')==='shed'){
+ for(const link of document.querySelectorAll('.return-campaign'))link.href='/beta/?view=campaign';
+}
 import './footer.mjs?v=challenges-refresh-fix-20261105';
 import {drawRoute,flightPathImage,publicFlightStops,saveBootRoomFlightPath} from './flight-path-share.mjs?v=6';
 import {boardingPassImage} from './boarding-pass-share.mjs?v=ticket2';

@@ -8,7 +8,9 @@
  const base=new URL('.',document.currentScript.src);
  // Explicit opt-in follows this tab across the real app frames.
  if(new URLSearchParams(location.search).get('likePreview')==='1')try{sessionStorage.setItem('tffc.like.shed','1');}catch{}
- const entries={splash:'index.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html',club:'club-details.html'};
+ const shed=document.documentElement.dataset.tffcEntrance==='shed';
+ if(shed)frame.allow="web-share; accelerometer 'self'; gyroscope 'self'";
+ const entries={splash:shed?'shed-splash.html':'public-splash.html',campaign:'clubfinder-journey.html',challenges:'challenges-beta.html',stats:'stats-beta.html',share:'keep-the-magic-shed.html',club:'club-details.html'};
  const params=new URLSearchParams(location.search);
  const entry=params.get('view')||'splash';
  const shedRoom=location.pathname.endsWith('/phone-frame-shed.html')&&params.get('bootRoomFrame')==='1'&&entry==='boot-room';

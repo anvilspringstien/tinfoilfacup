@@ -60,7 +60,8 @@
  function openEntrance(){
   const entrance=campaignEntry()||home+'/';
   const outer=window.top.location;
-  if(outer.pathname?.endsWith('/phone-frame-shed.html')&&new URLSearchParams(outer.search).get('bootRoomFrame')==='1'){
+  if(outer.pathname==='/beta/'||outer.pathname==='/beta/index.html'||
+     (outer.pathname?.endsWith('/phone-frame-shed.html')&&new URLSearchParams(outer.search).get('bootRoomFrame')==='1')){
    outer.href='/beta/phone-frame-shed.html?view=boot-room&bootRoomFrame=1'+new URL(entrance).hash;
    return;
   }

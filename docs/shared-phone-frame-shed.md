@@ -1,15 +1,35 @@
 # Shared phone frame — public launch
 
-The shared phone composition is now the public front door at `/` and
-`/index.html`. The root retains the accepted Splash markup and metadata as its
-no-JavaScript fallback; a small launcher mounts the same accepted BETA Splash
-inside the proven frame. `/beta/phone-frame.html` is the installed-app landing
-within the existing manifest scope. The installed entry restores cookies first,
-then opens that frame; its manifest identity and all storage keys stay unchanged.
-The opt-in `/beta/phone-frame-shed.html` remains available for comparison.
+The public and installed entrances select the white-disc Splash explicitly.
+The normal Shed uses the same phone-frame launcher and selects its own Splash.
 
-Locked visual master hashes, legacy BETA source entrances, competition machinery,
-search eligibility and saved Campaign data remain unchanged.
+| Entry | Splash document |
+| --- | --- |
+| `/` or `/index.html` | `/beta/public-splash.html` |
+| Installed landing `/beta/phone-frame.html` | `/beta/public-splash.html` |
+| `/beta/` or `/beta/index.html` | `/beta/shed-splash.html` |
+| Opt-in `/beta/phone-frame-shed.html` | `/beta/shed-splash.html` |
+
+The root retains its white-disc fallback and sharing metadata. Older cached
+shells that request `/beta/index.html` inside a frame resolve to the Splash
+for their parent route. The Shed uses the accepted #756 Astral Portal layers
+and its first-paint composite. The standalone Astral Portal and Floating Cup
+pages retain their existing URLs, Splash geometry and independent controls.
+
+Both entrances use the same Four Laws and Campaign wrapper, Clubfinder data
+and navigation enhancements. Campaign and Challenge storage, Pigeon identities,
+manifest identities and installation scope are shared as before. The installed
+handover opens the Public experience, and shared links and QR codes continue
+to use the canonical public URL. Keep and Share close within the opening
+Campaign frame. Refresh retains the shell path. Desktop Stats retains the
+opening shell in its popup, and native iPhone Stats carries a fixed return
+route for the Public or Shed entrance. The Shed Boot Room uses the existing
+framed Shed return.
+
+The owner reproduced the narrow desktop appearance by changing Chrome zoom
+from 100% to 67% at the same URL. The routing correction leaves the shared
+frame dimensions and Splash styles intact.
+
 Above 700px wide, the existing application renders in a real 390 × 693.333px
 viewport (9:16), scaled uniformly to the available height and centred. Rotation
 changes the scale, not the arrangement. On phones, the viewport follows the
@@ -81,3 +101,20 @@ so the scrollbar cannot squeeze or shift the composition. Phone and touch tablet
 presentation, nested reading scroll areas and the Stats report are unchanged.
 The browser regression compares Splash/Four Laws position and width, then checks
 the long saved Campaign still responds to wheel scrolling.
+
+
+## Entrance boundary acceptance
+
+Run the entrance browser regression against the real root, installed shell,
+and normal Shed. Verify the decoded crest in the child document, then select
+a fresh Campaign from Four Laws and return to the saved Campaign. Check the
+enamel navigation and Barry Air on each route. Check Refresh, Stats, and the
+Keep and Share return from the normal Shed. The test intercepts the counter
+request and uses a mock number, and checks that returns issue no new number.
+
+The motion regression exercises the same-origin Shed child frame. Confirm
+no prompt on load, motion only after the explicit control, and an unchanged
+still crest when permission is declined. The regression simulates the
+browser prompt. Physical hosted iPhone acceptance is required after an
+authorised merge. Check Big Boy in Incognito at 100% and 67% zoom against the
+same entry and confirm neither zoom changes which shell or crest is selected.

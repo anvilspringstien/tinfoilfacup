@@ -6,7 +6,11 @@ const identityStyle=document.createElement('style');
 identityStyle.textContent='.campaign-identity .campaign-call-sign-label{font-weight:300}';
 document.head.append(identityStyle);
 const introBase=new URL('.',document.currentScript.src);
-const openBarry=()=>window.top.location.assign(new URL('barry-air/',introBase).href);
+const openBarry=()=>{
+ const url=new URL('barry-air/',introBase);
+ if(window.top.document.documentElement.dataset.tffcEntrance==='shed')url.searchParams.set('shell','shed');
+ window.top.location.assign(url.href);
+};
 let active=null;
 const copy={
  barry:{title:'Barry Air',message:"Welcome aboard Barry Air — Tin Foil FA Cup’s partner airline of choice.\n\nBarry Air’s fleet of pigeons is second to none. Our motto is ‘Straight there. Straight back, and No Messing About!’ Proving once again that your safety is our mission.\n\nAll Barry Air pigeons are Pie-Fed and vermin free – guaranteed!\n\nRemember to Check In on your Boarding Pass when you’re ready for your next adventure. Baggage Allowance is as many pies as will safely fit under the seat in front of you.\n\nThe Departures & Arrivals board records Departures & Arrivals in the finest tradition of Departures & Arrivals boards. Only the best is good enough for Barry Air.\n\nFlight Path follows your Campaign from ground to ground. Miles Flown counts your pigeon’s journeys from home and back, and flight details update automatically with your Campaign.\n\nSo sit back, relax, and enjoy the flight.\n\nAnd thank you for flying with Barry Air.\n\nBarry the Pigeon.\nCEO & Founder, Barry Air."},
