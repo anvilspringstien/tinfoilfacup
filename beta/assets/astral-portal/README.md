@@ -1,12 +1,14 @@
 # Astral Portal sky
 
-`owner-sky.png` is the owner-supplied `CREST_MOCK_UP_ASTRAL_PORTAL_BG(1).png`
-(507 × 507), copied byte-for-byte. The complete crest mock-up was used to
-review the placement of the clouds and stars.
+`full-sky.webp` holds the whole owner-supplied astronomical PNG
+`ChatGPT Image Nov 19, 2026, 05_27_39 PM-1.png`. The web asset is
+resampled from 1254 × 1254 to 768 × 768 with Lanczos and encoded as
+lossless WebP. The original PNG SHA-256 is
+`a4fcc19365808db214a7a8bb31f95c659b8ef2c868b75f7f841875487643d0d6`.
 
-Source SHA-256
-`b54d5b98ea8035c78edd8cdd1393b56f5e1cd1d14437d916de5bc64d8fb1f68f`
-
-The original white disc supplies the stationary alpha mask. The sky is
-rendered at 110% and shifted slightly left within the crest canvas so its opaque artwork
-covers the mask at all four extremes of the existing tilt travel.
+Cloud and star positions in the clipped reference locate the full artwork on
+the 507px crest canvas at approximately (76, 48), with a 382px square size.
+The full source supplies bleed outside the visible opening. The opening
+retains the original disc mask and stationary rings. The browser regression
+checks coverage throughout the existing travel range by testing the four
+extreme positions, including the aperture's antialiased edges.
