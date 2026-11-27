@@ -5,13 +5,13 @@ import {chromium, devices} from 'playwright';
 
 const origin = 'http://127.0.0.1:8765';
 const experiment = '/beta/astral-portal.html';
-const skyPath = '/beta/assets/astral-portal/icon-sky.png';
-const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="astral-portal.css"><script defer src="astral-portal.js"></script>';
+const skyPath = '/beta/assets/astral-portal/owner-sky.png';
+const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="astral-portal.css?v=owner-sky"><script defer src="astral-portal.js?v=owner-sky"></script>';
 const approved = readFileSync('beta/index.html', 'utf8');
 assert.equal(readFileSync('beta/astral-portal.html', 'utf8').replace(additions, '')
   .replace('Tin Foil FA Cup — Astral Portal (Shed)', 'Tin Foil FA Cup — BETA'), approved);
 assert.equal(createHash('sha256').update(readFileSync('.' + skyPath)).digest('hex'),
-  'bb33bbe02c55b1e11c5546e542975ff7b7b6ba99a067f9599cbd69a0882d3913');
+  'b54d5b98ea8035c78edd8cdd1393b56f5e1cd1d14437d916de5bc64d8fb1f68f');
 
 const browser = await chromium.launch();
 const cup = '.astral-near img';
@@ -55,6 +55,42 @@ try {
   assert.equal(background.length, 3);
   assert.ok(await page.locator('.astral-opening').evaluate(element =>
     getComputedStyle(element).maskImage.includes('CREST_BASE_RING_INNER_WHITE.png')));
+  const uncovered = await page.locator('.astral-opening').evaluate(async opening => {
+    const mask = new Image();
+    mask.src = getComputedStyle(opening).maskImage.slice(5, -2);
+    await mask.decode();
+
+    const canvas = document.createElement('canvas');
+    canvas.width = mask.naturalWidth;
+    canvas.height = mask.naturalHeight;
+    const context = canvas.getContext('2d', {willReadFrequently: true});
+    context.drawImage(mask, 0, 0);
+    const maskPixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const sky = opening.querySelector('img');
+    const aperture = opening.getBoundingClientRect();
+    const scene = opening.closest('.astral-portal');
+    const unfilled = [];
+
+    // Exercise the artwork at every corner of the viewpoint's full travel.
+    for (const x of [-1.5, 1.5]) {
+      for (const y of [-1.5, 1.5]) {
+        scene.style.setProperty('--view-x', x + '%');
+        scene.style.setProperty('--view-y', y + '%');
+        const box = sky.getBoundingClientRect();
+        const factor = canvas.width / aperture.width;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(sky, (box.x - aperture.x) * factor, (box.y - aperture.y) * factor,
+          box.width * factor, box.height * factor);
+        const skyPixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        unfilled.push(maskPixels.some((alpha, index) =>
+          index % 4 === 3 && alpha > 0 && skyPixels[index] < 255));
+      }
+    }
+    scene.style.removeProperty('--view-x');
+    scene.style.removeProperty('--view-y');
+    return unfilled;
+  });
+  assert.deepEqual(uncovered, [false, false, false, false], 'Opaque sky covers the full stationary mask');
   for (const axis of ['x', 'y', 'width', 'height']) {
     assert.ok(Math.abs(neutralCup[axis] - original[axis]) < .05, 'Original alignment and proportions');
   }
@@ -150,4 +186,4 @@ try {
   await browser.close();
 }
 
-console.log('Astral Portal: original crop and mask, fixed reference plane, opposed parallax, 25% travel, smooth settling, permissions and fallbacks passed.');
+console.log('Astral Portal: owner background, mask bleed, fixed reference plane, opposed parallax, 25% travel, smooth settling, permissions and fallbacks passed.');
