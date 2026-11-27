@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {acceptedSplash} from './beta-approved-journey-splash-reference.mjs';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 
@@ -24,13 +25,18 @@ const approved={
 for(const [path,expected] of Object.entries(approved)){
  assert.equal(sha(path),expected,'Approved locked source changed: '+path);
 }
-const referenceSplash=read('beta/two-rooms-splash-iframe-proof.html');
 const permanentSplash=read('beta/index.html');
-assert.equal(permanentSplash,referenceSplash
- .replace('<title>Two rooms — Approved Master Splash</title>','<title>Tin Foil FA Cup — BETA</title>')
- .replace('href="two-rooms-iframe-engine-proof.html"','href="clubfinder-journey.html"')
- .replace('</head>','<script defer src="splash-campaign-label.js"></script></head>'),
- 'BETA entrance must remain exactly the accepted Splash');
+const crest=permanentSplash.match(/<img class="crest shed-astral-crest" decoding="sync" src="data:image\/webp;base64,([A-Za-z0-9+/=]+)"/);
+assert.ok(crest,'Shed entrance must inline the accepted static Astral Portal');
+assert.equal(createHash('sha256').update(Buffer.from(crest[1],'base64')).digest('hex'),
+ '95fd53512b9879556d2fe81fdf65dabad4bec567977e9bcc273bf385d875de9d',
+ 'Static Astral Portal artwork must match the accepted neutral composition');
+const integration='<link rel="stylesheet" href="astral-portal.css?v=shed"><script defer src="astral-portal.js?v=shed"></script>';
+assert.ok(permanentSplash.includes(integration));
+assert.equal(permanentSplash.replace(integration,'')
+ .replace(crest[0],'<img class="crest" src="tffc-splash-logo-q80.webp"'),
+ acceptedSplash,
+ 'Shed entrance may change only the accepted crest and its enhancement');
 const referenceEngine=read('beta/two-rooms-iframe-engine-proof.html');
 const permanentEngine=read('beta/clubfinder-journey.html');
 assert.equal(permanentEngine,referenceEngine
@@ -63,8 +69,8 @@ const afterHead=html=>html.slice(html.indexOf('</head>')+7);
 assert.equal(afterHead(homepage)
  .replace('href="beta/clubfinder-journey.html"','href="clubfinder-journey.html"')
  .replace('src="beta/tffc-splash-logo-q80.webp"','src="tffc-splash-logo-q80.webp"'),
- afterHead(permanentSplash),
- 'Public Splash body must match the approved BETA Splash (except paths)');
+ afterHead(acceptedSplash),
+ 'Public Splash body must match the separately approved Splash (except paths)');
 for(const fragment of [
  '<script defer src="beta/splash-campaign-label.js"></script>',
  '<link rel="stylesheet" href="beta/phone-frame-shed.css">',
@@ -80,4 +86,4 @@ for(const fragment of [
  ])assert.ok(homepage.includes(fragment),'Missing public homepage contract: '+fragment);
 assert.ok(!homepage.includes('href="beta/clubfinder-beta.html"'),
  'Public Start must not bypass the approved three-frame journey');
-console.log('Approved masters and BETA snapshots unchanged; public Splash matches approved source and retains sharing metadata.');
+console.log('Approved layout, Astral Portal artwork and separate Public Splash contracts passed.');

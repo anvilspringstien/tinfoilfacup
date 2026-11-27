@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {acceptedSplash} from './beta-approved-journey-splash-reference.mjs';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {chromium, devices} from 'playwright';
@@ -7,9 +8,8 @@ const origin = 'http://127.0.0.1:8765';
 const experiment = '/beta/astral-portal.html';
 const skyPath = '/beta/assets/astral-portal/full-sky.webp';
 const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="astral-portal.css?v=full-sky"><script defer src="astral-portal.js?v=full-sky"></script>';
-const approved = readFileSync('beta/index.html', 'utf8');
 assert.equal(readFileSync('beta/astral-portal.html', 'utf8').replace(additions, '')
-  .replace('Tin Foil FA Cup — Astral Portal (Shed)', 'Tin Foil FA Cup — BETA'), approved);
+  .replace('Tin Foil FA Cup — Astral Portal (Shed)', 'Tin Foil FA Cup — BETA'), acceptedSplash);
 assert.equal(createHash('sha256').update(readFileSync('.' + skyPath)).digest('hex'),
   '06c6ed2c539149874fca787908c88eca4fbb68395e496c7367d835da02e9abe8');
 
@@ -192,11 +192,9 @@ try {
   await fallback.goto(origin + experiment, {waitUntil: 'networkidle'});
   assert.equal(await fallback.locator('.astral-portal').count(), 0);
   assert.equal(await fallback.getByRole('img', {name: 'Tin Foil FA Cup crest'}).count(), 1);
-  for (const path of ['/', '/beta/']) {
-    await fallback.goto(origin + path);
-    assert.equal(await fallback.locator('.astral-portal').count(), 0);
-    assert.equal(await fallback.locator('script[src*="astral-portal"]').count(), 0);
-  }
+  await fallback.goto(origin + '/');
+  assert.equal(await fallback.locator('.astral-portal').count(), 0);
+  assert.equal(await fallback.locator('script[src*="astral-portal"]').count(), 0);
 } finally {
   await browser.close();
 }

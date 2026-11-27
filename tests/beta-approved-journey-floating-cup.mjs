@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
+import {acceptedSplash} from './beta-approved-journey-splash-reference.mjs';
 import {readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
 
 const origin = 'http://127.0.0.1:8765';
 const experiment = '/beta/floating-cup.html';
-const approved = readFileSync('beta/index.html', 'utf8');
 const additions = '<meta name="robots" content="noindex"><link rel="stylesheet" href="floating-cup.css?v=3"><script defer src="floating-cup.js?v=3"></script>';
-assert.equal(readFileSync('beta/floating-cup.html', 'utf8').replace(additions, ''), approved);
+assert.equal(readFileSync('beta/floating-cup.html', 'utf8').replace(additions, ''), acceptedSplash);
 
 const browser = await chromium.launch();
 const orientation = (page, beta, gamma) => page.evaluate(([beta, gamma]) => {

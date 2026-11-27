@@ -84,3 +84,76 @@
   .astral-portal { --view-x: 0% !important; --view-y: 0% !important; }
   .astral-tilt { display: none; }
 }
+
+/* The Shed's inline still and the optional layers share the locked crest box. */
+.astral-shed-scene {
+  z-index: 1;
+}
+
+.shed-astral-crest {
+  --shed-astral-styled: 1;
+  grid-area: 1 / 1;
+}
+
+.astral-portal:not(.astral-layers-visible) .astral-art {
+  visibility: hidden;
+}
+
+.astral-motion-target {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+}
+
+.astral-motion-target:focus-visible,
+.astral-motion-panel button:focus-visible {
+  outline: 2px solid #f6f3e8;
+  outline-offset: 2px;
+}
+
+.astral-motion-panel {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  margin-inline: auto;
+  width: max-content;
+  max-width: 100%;
+  padding: 6px;
+  color: #f6f3e8;
+  background: #292724;
+  border: 1px solid #818181;
+  border-radius: 8px;
+  text-align: center;
+  font: 500 12px system-ui, sans-serif;
+  pointer-events: auto;
+}
+
+.astral-motion-panel button {
+  min-height: 44px;
+  color: inherit;
+  background: #292724;
+  border: 1px solid #818181;
+  border-radius: 6px;
+  margin: 2px;
+  padding: 0 8px;
+  font: inherit;
+}
+
+.astral-motion-panel p {
+  margin: 4px;
+}
+
+.astral-motion-panel p:empty {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .astral-motion-target,
+  .astral-motion-panel { display: none; }
+}

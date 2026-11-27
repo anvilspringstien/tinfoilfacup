@@ -4,24 +4,13 @@
   const original = document.querySelector('.crest-compartment > .crest');
   if (!original || !CSS.supports('mask-image', 'url("disc.png")') || !CSS.supports('filter', 'drop-shadow(0 .5cqw .65cqw black)')) return;
 
-  const crestAssets = 'assets/floating-cup/';
-  const filenames = [
-    crestAssets + 'CREST_BASE_RING_IVORY.png',
-    crestAssets + 'CREST_BASE_RING_INNER_WHITE.png',
-    crestAssets + 'CREST_RINGS_PLUS_TEXT.png',
-    crestAssets + 'ICONIC_CUP_TOP_LAYER.png',
-    'assets/astral-portal/full-sky.webp',
-  ];
-  const layers = filenames.map(src => {
-    const image = new Image();
-    image.alt = '';
-    image.src = src;
-    return image;
-  });
-  try {
-    await Promise.all(layers.map(image => image.decode()));
-  } catch {
-    return;
+  const shed = original.classList.contains('shed-astral-crest');
+  if (shed) {
+    const styled = () => getComputedStyle(original).getPropertyValue('--shed-astral-styled').trim() === '1';
+    if (!styled() && document.readyState !== 'complete') {
+      await new Promise(resolve => window.addEventListener('load', resolve, {once: true}));
+    }
+    if (!styled()) return;
   }
 
   function wrap(className, ...children) {
@@ -31,15 +20,51 @@
     return element;
   }
 
-  const [ivory, , rings, cup, sky] = layers;
-  const art = wrap('astral-art',
-    ivory,
-    wrap('astral-opening', wrap('astral-plane', sky)),
-    rings,
-    wrap('astral-plane astral-near', cup));
-  art.setAttribute('aria-hidden', 'true');
-  const scene = wrap('crest astral-portal', art);
-  original.classList.add('astral-portal-ready');
+  const scene = wrap('crest astral-portal');
+  if (shed) scene.classList.add('astral-shed-scene');
+  let art;
+  let loadingArt;
+  let showMotion = false;
+
+  function updateArtwork() {
+    const showLayers = Boolean(art && (!shed || showMotion));
+    scene.classList.toggle('astral-layers-visible', showLayers);
+    original.classList.toggle('astral-portal-ready', showLayers);
+  }
+
+  async function loadArtwork() {
+    const crestAssets = 'assets/floating-cup/';
+    const layers = [
+      crestAssets + 'CREST_BASE_RING_IVORY.png',
+      crestAssets + 'CREST_BASE_RING_INNER_WHITE.png',
+      crestAssets + 'CREST_RINGS_PLUS_TEXT.png',
+      crestAssets + 'ICONIC_CUP_TOP_LAYER.png',
+      'assets/astral-portal/full-sky.webp',
+    ].map(src => {
+      const image = new Image();
+      image.alt = '';
+      image.src = src;
+      return image;
+    });
+    try {
+      await Promise.all(layers.map(image => image.decode()));
+    } catch {
+      return false;
+    }
+
+    const [ivory, , rings, cup, sky] = layers;
+    art = wrap('astral-art',
+      ivory,
+      wrap('astral-opening', wrap('astral-plane', sky)),
+      rings,
+      wrap('astral-plane astral-near', cup));
+    art.setAttribute('aria-hidden', 'true');
+    scene.prepend(art);
+    updateArtwork();
+    return true;
+  }
+
+  if (!shed && !await loadArtwork()) return;
   original.before(scene);
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -58,6 +83,17 @@
   let granted = false;
   let sensorTimeout;
   let button;
+  let panel;
+  let target;
+  let dismiss;
+  let status;
+
+  function closePanel(focus = false) {
+    if (!panel) return;
+    panel.hidden = true;
+    target.setAttribute('aria-expanded', 'false');
+    if (focus) target.focus({preventScroll: true});
+  }
 
   function follow(from, to, elapsed, timescale) {
     const weight = -Math.expm1(-elapsed / timescale);
@@ -97,6 +133,11 @@
     if (reduced.matches || document.hidden) return;
     if (sample.x === x && sample.y === y) return;
     sample = {x, y};
+    if (shed && !showMotion) {
+      showMotion = true;
+      loadingArt ??= loadArtwork();
+      updateArtwork();
+    }
     if (!frame) {
       lastFrame = performance.now();
       frame = requestAnimationFrame(paint);
@@ -106,6 +147,10 @@
   function pause() {
     cancelAnimationFrame(frame);
     frame = 0;
+    if (shed) {
+      showMotion = false;
+      updateArtwork();
+    }
     sample = filtered = reference = zero;
     paintedX = paintedY = undefined;
     scene.style.removeProperty('--view-x');
@@ -117,7 +162,9 @@
     window.removeEventListener('deviceorientation', onTilt);
     listening = false;
     neutral = undefined;
-    if (button) button.textContent = label;
+    if (button) button.textContent = shed ? 'Enable crest motion' : label;
+    if (dismiss) dismiss.textContent = 'Keep still';
+    if (status) status.textContent = label === 'Tilt unavailable' ? 'Crest motion is unavailable.' : '';
     pause();
   }
 
@@ -139,27 +186,31 @@
 
   if (canTilt) {
     button = document.createElement('button');
-    button.className = 'astral-tilt';
     button.type = 'button';
-    button.textContent = 'Enable tilt';
+    button.textContent = shed ? 'Enable crest motion' : 'Enable tilt';
     button.addEventListener('click', async () => {
       if (listening) {
         stop();
+        closePanel(true);
         return;
       }
       if (reduced.matches) return;
       button.disabled = true;
+      if (status) status.textContent = '';
       try {
         if (!granted && typeof orientation.requestPermission === 'function') {
           granted = await orientation.requestPermission() === 'granted';
           if (!granted) {
             stop('Tilt blocked');
+            if (status) status.textContent = 'Motion permission was declined. The crest will stay still.';
             return;
           }
         }
         if (reduced.matches || document.hidden) return;
         listening = true;
-        button.textContent = 'Tilt off';
+        button.textContent = shed ? 'Turn off crest motion' : 'Tilt off';
+        if (dismiss) dismiss.textContent = 'Done';
+        closePanel(true);
         window.addEventListener('deviceorientation', onTilt);
         sensorTimeout = setTimeout(() => stop('Tilt unavailable'), 2500);
       } catch {
@@ -168,11 +219,46 @@
         button.disabled = false;
       }
     });
-    scene.append(button);
+    if (shed) {
+      target = document.createElement('button');
+      target.className = 'astral-motion-target';
+      target.type = 'button';
+      target.setAttribute('aria-label', 'Crest motion settings');
+      target.setAttribute('aria-controls', 'astral-motion-panel');
+      target.setAttribute('aria-expanded', 'false');
+
+      dismiss = document.createElement('button');
+      dismiss.type = 'button';
+      dismiss.textContent = 'Keep still';
+      dismiss.addEventListener('click', () => closePanel(true));
+      status = document.createElement('p');
+      status.setAttribute('role', 'status');
+      panel = wrap('astral-motion-panel', button, dismiss, status);
+      panel.id = 'astral-motion-panel';
+      panel.setAttribute('role', 'group');
+      panel.setAttribute('aria-label', 'Crest motion');
+      panel.hidden = true;
+      target.addEventListener('click', () => {
+        if (!panel.hidden) {
+          closePanel();
+          return;
+        }
+        panel.hidden = false;
+        target.setAttribute('aria-expanded', 'true');
+        button.focus({preventScroll: true});
+      });
+      panel.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closePanel(true);
+      });
+      scene.append(target, panel);
+    } else {
+      button.className = 'astral-tilt';
+      scene.append(button);
+    }
   }
 
   original.parentElement.addEventListener('pointermove', event => {
-    if (event.pointerType !== 'mouse' || listening || event.target === button) return;
+    if (event.pointerType !== 'mouse' || listening || event.target === button || panel?.contains(event.target)) return;
     const rect = scene.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right ||
         event.clientY < rect.top || event.clientY > rect.bottom) return;
@@ -180,7 +266,10 @@
       (event.clientY - rect.top - rect.height / 2) / rect.height * 32);
   });
 
-  reduced.addEventListener('change', () => stop());
+  reduced.addEventListener('change', () => {
+    stop();
+    closePanel();
+  });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       neutral = undefined;
