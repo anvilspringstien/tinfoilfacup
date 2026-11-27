@@ -2,7 +2,7 @@
 'use strict';
 // Read-only queue: current fixtures first; every existing link still needs evidence.
 const fs=require('node:fs'),path=require('node:path');
-const {literalRange}=require('./club_website_bulk_promote');
+const {literalRange,withdrawalStatuses}=require('./club_website_bulk_promote');
 const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'beta/clubfinder-beta.html'),'utf8');
 const eligible=literalRange(html,'ELIGIBLE','[',']').value,websites=literalRange(html,'CLUB_WEBSITES','{','}').value;
 const competition=JSON.parse(fs.readFileSync(path.join(root,'competition.json'),'utf8'));
@@ -10,7 +10,7 @@ const active=new Set();for(const f of Object.values(competition.fixtures||{}))fo
 const evidence=new Map(),withdrawals=new Map(),reviewedAliases=[];for(const file of fs.readdirSync(__dirname).filter(n=>/^club_website_verified_batch_.*\.json$/.test(n))){
  const ledger=JSON.parse(fs.readFileSync(path.join(__dirname,file),'utf8'));for(const row of ledger.verified||[])if(row.status==='verified_official_club_site')reviewedAliases.push([row.club,...(row.aliases||[])]);for(const row of ledger.verified||[])for(const name of [row.club,...(row.aliases||[])])if(row.status==='verified_official_club_site')evidence.set(name,{url:row.url,evidence_url:row.evidence_url,verified_on:row.verified_on||ledger.verified_on,ledger:file});
  for(const row of ledger.withdrawn||[]){
-  if(row.status!=='club_confirmed_offline')continue;
+  if(!withdrawalStatuses.has(row.status))continue;
   const identities=[row.club,...(row.aliases||[])];
   reviewedAliases.push(identities);
   const record={url:row.url,evidence_url:row.evidence_url,verified_on:row.verified_on||ledger.verified_on,ledger:file,status:row.status,reason:row.reason};

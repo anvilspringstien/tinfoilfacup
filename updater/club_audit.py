@@ -175,7 +175,7 @@ def website_evidence(sources):
                          "next_step": row.get("next_step")}
                 for label in sorted({identity_key(label) for label in labels}):
                     reviews[label].append(proof)
-                if status in {"verified_official_club_site", "club_confirmed_offline"}:
+                if status in {"verified_official_club_site", "club_confirmed_offline", "owner_observed_security_warning"}:
                     aliases.extend((row["club"], alias, "website", relative) for alias in labels[1:])
     return reviews, aliases
 
@@ -185,7 +185,8 @@ def website_field(club, path, websites, evidence, queue_rows):
     urls = sorted(set(by_label.values()))
     url = urls[0] if len(urls) == 1 else None
     latest = max((p["reviewed_on"] or "" for p in evidence if p["section"] != "held"), default="")
-    withdrawn = any(p["status"] == "club_confirmed_offline" and (p["reviewed_on"] or "") == latest
+    withdrawn = any(p["status"] == "owner_observed_security_warning"
+                    or (p["status"] == "club_confirmed_offline" and (p["reviewed_on"] or "") == latest)
                     for p in evidence)
     held = any(p["section"] == "held" for p in evidence)
     matches = [p for p in evidence if p["url"] == url and p["status"] == "verified_official_club_site"]

@@ -44,6 +44,30 @@ const realLedger=JSON.parse(fs.readFileSync('updater/club_website_verified_batch
 const checked=promote(realHtml,realCompetition,realLedger);
 assert.deepEqual(checked.accepted,[],'committed BETA already includes all approved identities');
 assert.equal(applyMapping(realHtml,checked.websites),realHtml,'repeat CLI publication produces no application diff');
+const holdLedger=JSON.parse(fs.readFileSync('updater/club_website_verified_batch_30.json','utf8'));
+const hold=holdLedger.withdrawn[0];
+for(const file of ['clubfinder.html','beta/clubfinder-beta.html']){
+ const source=fs.readFileSync(file,'utf8');
+ assert(!source.includes('traffordfc.com'),'no Clubfinder literal or fallback points to the held domain');
+ const websites=literalRange(source,'CLUB_WEBSITES','{','}').value;
+ const original=applyMapping(source,{...websites,[hold.club]:hold.url,[hold.aliases[0]]:hold.url});
+ const withdrawn=promote(original,realCompetition,holdLedger);
+ assert.deepEqual(withdrawn.removed,['Trafford FC','Trafford']);
+ assert.deepEqual(withdrawn.websites,websites,'the hold preserves all unrelated mappings');
+ assert.equal(applyMapping(original,withdrawn.websites),source,'the hold changes only website mappings');
+}
+const queue=JSON.parse(fs.readFileSync('updater/club_website_audit_queue.json','utf8'));
+const trafford=queue.rows.find(row=>row.identities.includes('Trafford FC'));
+assert.deepEqual(trafford.identities,['Trafford FC']);
+assert.equal(trafford.status,'withdrawn');
+assert.equal(trafford.website,null);
+assert.equal(trafford.evidence[0].status,'owner_observed_security_warning');
+const restore=require('node:child_process').spawnSync(process.execPath,[
+ 'updater/club_website_bulk_promote.js','--ledger','updater/club_website_verified_batch_25.json',
+ '--out',require('node:path').join(require('node:os').tmpdir(),'trafford-restore-map.json'),
+],{encoding:'utf8'});
+assert.notEqual(restore.status,0);
+assert.match(restore.stderr,/Active website warning requires separate restoration approval: Trafford FC/);
 const protectedBytes=fs.readFileSync('competition.json');
 const attempted=require('node:child_process').spawnSync(process.execPath,['updater/club_website_queue.js','--out','competition.json'],{encoding:'utf8'});
 assert.notEqual(attempted.status,0,'queue cannot overwrite competition input');assert.deepEqual(fs.readFileSync('competition.json'),protectedBytes);

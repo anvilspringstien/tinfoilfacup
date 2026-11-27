@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-27",
+  "scope": "Trafford FC only: temporary withdrawal of the clickable destination in Public and BETA.",
+  "reviewed_count": 1,
+  "verified": [],
+  "withdrawn": [
+    {
+      "club": "Trafford FC",
+      "aliases": ["Trafford"],
+      "url": "https://traffordfc.com/",
+      "verified_on": "2026-11-27",
+      "status": "owner_observed_security_warning",
+      "evidence_url": "https://support.avast.com/article/258/",
+      "observation_source": "Project owner, routine Outreach acceptance on 27 November 2026",
+      "prior_verified_ledger": "updater/club_website_verified_batch_25.json",
+      "reason": "Avast blocked access with a URL:Blacklist warning. The owner notified Trafford FC in Outreach and included the Avast Alert ID. The warning is an observation and does not establish a compromise or change the verified official-domain identity.",
+      "next_step": "Seek an Avast review. Restore the clickable destination only after satisfactory evidence and a separate project-owner approval."
+    }
+  ]
+}
