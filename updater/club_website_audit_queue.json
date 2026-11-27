@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-26T05:05:27.878950+00:00",
+  "competition_updated_at": "2026-11-27T08:34:49.721753+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 339,
+  "eligible_linked": 351,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -961,28 +961,6 @@
       "evidence": []
     },
     {
-      "club": "Enfield FC",
-      "identities": [
-        "Enfield FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Epsom & Ewell FC",
-      "identities": [
-        "Epsom & Ewell FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Hallen FC",
       "identities": [
         "Hallen FC"
@@ -1456,17 +1434,6 @@
       "evidence": []
     },
     {
-      "club": "Leamington FC",
-      "identities": [
-        "Leamington FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Leatherhead FC",
       "identities": [
         "Leatherhead FC"
@@ -1731,17 +1698,6 @@
       "evidence": []
     },
     {
-      "club": "Maidenhead United FC",
-      "identities": [
-        "Maidenhead United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Maldon & Tiptree FC",
       "identities": [
         "Maldon & Tiptree FC"
@@ -1855,17 +1811,6 @@
       "club": "Merstham FC",
       "identities": [
         "Merstham FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Merthyr Town FC",
-      "identities": [
-        "Merthyr Town FC"
       ],
       "current_competition": false,
       "website": null,
@@ -2897,17 +2842,6 @@
       "evidence": []
     },
     {
-      "club": "Slough Town FC",
-      "identities": [
-        "Slough Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Snodland Town FC",
       "identities": [
         "Snodland Town FC"
@@ -2963,31 +2897,9 @@
       "evidence": []
     },
     {
-      "club": "South Shields FC",
-      "identities": [
-        "South Shields FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Southall FC",
       "identities": [
         "Southall FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Southend United FC",
-      "identities": [
-        "Southend United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -3054,17 +2966,6 @@
       "club": "Sporting Khalsa FC",
       "identities": [
         "Sporting Khalsa FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "St Albans City FC",
-      "identities": [
-        "St Albans City FC"
       ],
       "current_competition": false,
       "website": null,
@@ -3527,17 +3428,6 @@
       "club": "Torpoint Athletic FC",
       "identities": [
         "Torpoint Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Torquay United FC",
-      "identities": [
-        "Torquay United FC"
       ],
       "current_competition": false,
       "website": null,
@@ -4041,17 +3931,6 @@
       "evidence": []
     },
     {
-      "club": "Woking FC",
-      "identities": [
-        "Woking FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Wokingham Town FC",
       "identities": [
         "Wokingham Town FC"
@@ -4132,17 +4011,6 @@
       "club": "Worsbrough Bridge Athletic FC",
       "identities": [
         "Worsbrough Bridge Athletic FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Worthing FC",
-      "identities": [
-        "Worthing FC"
       ],
       "current_competition": false,
       "website": null,
@@ -7792,6 +7660,24 @@
       ]
     },
     {
+      "club": "Enfield FC",
+      "identities": [
+        "Enfield FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/enfieldfc3/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/enfieldfc3/",
+          "evidence_url": "https://www.pitchero.com/clubs/enfieldfc3/a/information--67289.html",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
       "club": "Enfield Town FC",
       "identities": [
         "Enfield Town FC"
@@ -7806,6 +7692,24 @@
           "evidence_url": "https://etfc.london/information/whoswho/",
           "verified_on": "2026-11-07",
           "ledger": "club_website_verified_batch_19.json"
+        }
+      ]
+    },
+    {
+      "club": "Epsom & Ewell FC",
+      "identities": [
+        "Epsom & Ewell FC"
+      ],
+      "current_competition": false,
+      "website": "https://epsomandewellfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://epsomandewellfc.co.uk/",
+          "evidence_url": "https://epsomandewellfc.co.uk/tables/first-team/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
         }
       ]
     },
@@ -9558,6 +9462,24 @@
       ]
     },
     {
+      "club": "Leamington FC",
+      "identities": [
+        "Leamington FC"
+      ],
+      "current_competition": false,
+      "website": "https://leamingtonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://leamingtonfc.co.uk/",
+          "evidence_url": "https://leamingtonfc.co.uk/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
       "club": "Lewes FC",
       "identities": [
         "Lewes FC"
@@ -9594,6 +9516,24 @@
       ]
     },
     {
+      "club": "Maidenhead United FC",
+      "identities": [
+        "Maidenhead United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.maidenheadunitedfc.org/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.maidenheadunitedfc.org/",
+          "evidence_url": "https://www.maidenheadunitedfc.org/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
       "club": "Maidstone United FC",
       "identities": [
         "Maidstone United FC"
@@ -9626,6 +9566,24 @@
           "evidence_url": "https://marinefc.com/",
           "verified_on": "2026-10-21",
           "ledger": "club_website_verified_batch_04.json"
+        }
+      ]
+    },
+    {
+      "club": "Merthyr Town FC",
+      "identities": [
+        "Merthyr Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.merthyrtownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.merthyrtownfc.co.uk/",
+          "evidence_url": "https://www.merthyrtownfc.co.uk/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
         }
       ]
     },
@@ -9972,6 +9930,24 @@
       ]
     },
     {
+      "club": "Slough Town FC",
+      "identities": [
+        "Slough Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.sloughtownfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.sloughtownfc.com/",
+          "evidence_url": "https://www.sloughtownfc.com/terms-of-use",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
       "club": "South Liverpool FC",
       "identities": [
         "South Liverpool FC"
@@ -9986,6 +9962,60 @@
           "evidence_url": "https://www.southliverpoolfc.com/",
           "verified_on": "2026-10-23",
           "ledger": "club_website_verified_batch_05.json"
+        }
+      ]
+    },
+    {
+      "club": "South Shields FC",
+      "identities": [
+        "South Shields FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.southshieldsfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.southshieldsfc.co.uk/",
+          "evidence_url": "https://www.southshieldsfc.co.uk/mens-team/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
+      "club": "Southend United FC",
+      "identities": [
+        "Southend United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.southendunited.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.southendunited.co.uk/",
+          "evidence_url": "https://www.southendunited.co.uk/news/2026/november/26/pre-match--kieron-dyer-previews-hartlepool-united--a-/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
+      "club": "St Albans City FC",
+      "identities": [
+        "St Albans City FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.stalbanscityfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.stalbanscityfc.com/",
+          "evidence_url": "https://www.stalbanscityfc.com/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
         }
       ]
     },
@@ -10022,6 +10052,24 @@
           "evidence_url": "https://www.suttonunited.net/contact-us/",
           "verified_on": "2026-10-21",
           "ledger": "club_website_verified_batch_04.json"
+        }
+      ]
+    },
+    {
+      "club": "Torquay United FC",
+      "identities": [
+        "Torquay United FC"
+      ],
+      "current_competition": false,
+      "website": "https://torquayunited.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://torquayunited.com/",
+          "evidence_url": "https://torquayunited.com/fixtures/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
         }
       ]
     },
@@ -10080,6 +10128,24 @@
       ]
     },
     {
+      "club": "Woking FC",
+      "identities": [
+        "Woking FC"
+      ],
+      "current_competition": false,
+      "website": "https://wokingfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://wokingfc.co.uk/",
+          "evidence_url": "https://wokingfc.co.uk/fixtures/men/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
+        }
+      ]
+    },
+    {
       "club": "Worcester City FC",
       "identities": [
         "Worcester City FC"
@@ -10094,6 +10160,24 @@
           "evidence_url": "https://worcestercityfc.org/",
           "verified_on": "2026-10-21",
           "ledger": "club_website_verified_batch_04.json"
+        }
+      ]
+    },
+    {
+      "club": "Worthing FC",
+      "identities": [
+        "Worthing FC"
+      ],
+      "current_competition": false,
+      "website": "https://worthingfc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://worthingfc.com/",
+          "evidence_url": "https://worthingfc.com/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_29.json"
         }
       ]
     },
