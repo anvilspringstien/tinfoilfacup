@@ -9,6 +9,11 @@ import subprocess
 from updater.apply_beta_current_ground_names import apply_names, literal
 
 ROOT = Path(__file__).resolve().parents[1]
+SECURITY_HOLD = 'owner_observed_security_warning'
+WEBSITE_SECTIONS = {
+    'verified': {'verified_official_club_site'},
+    'withdrawn': {'club_confirmed_offline', SECURITY_HOLD},
+}
 
 
 # The same canonical website validator and renderer used for individual batches.
@@ -27,18 +32,20 @@ def reviewed_websites(root):
         ledger = json.loads(path.read_text(encoding='utf-8'))
         if ledger.get('schema_version') != 1:
             raise ValueError(f'Unsupported website evidence ledger: {path.name}')
-        for section, status in (('verified', 'verified_official_club_site'), ('withdrawn', 'club_confirmed_offline')):
+        for section, statuses in WEBSITE_SECTIONS.items():
             for item in ledger.get(section, []):
-                if item['status'] != status:
+                status = item['status']
+                if status not in statuses:
                     continue
                 checked = item.get('verified_on') or ledger.get('verified_on')
                 checked_date = date.fromisoformat(checked)
                 for name in (item['club'], *item.get('aliases', [])):
-                    key = (checked_date, path.name)
+                    key = (status == SECURITY_HOLD, checked_date, path.name)
                     if name not in latest or key > latest[name][0]:
                         latest[name] = (key, {
                             'club': name, 'status': status, 'url': item['url'],
                             'evidence_url': item['evidence_url'], 'verified_on': checked,
+                            **({'reason': item['reason']} if status == SECURITY_HOLD else {}),
                         }, path.name)
     return {name: (row, path) for name, (_, row, path) in latest.items()}
 
@@ -61,11 +68,11 @@ def website_plan(public_map, beta_map, evidence):
     return ready, held
 
 
-def render_websites(root, original, rows):
+def render_websites(root, original, rows, withdrawals=()):
     try:
         result = subprocess.run(
             ['node', '-e', WEBSITE_PUBLICATION], cwd=root, text=True, check=True, capture_output=True,
-            input=json.dumps({'source': original, 'ledger': {'schema_version': 1, 'verified': rows}}),
+            input=json.dumps({'source': original, 'ledger': {'schema_version': 1, 'verified': rows, 'withdrawn': withdrawals}}),
         )
     except subprocess.CalledProcessError as error:
         raise ValueError('Canonical website publication rejected the proposed links: ' + error.stderr.strip()) from error
@@ -76,14 +83,25 @@ def prove(root, original, proposed, beta, ground_ledger, website_evidence):
     if proposed == original:
         return 0, 0
     before_map, after_map, beta_map = (literal(html, 'CLUB_WEBSITES')[2] for html in (original, proposed, beta))
-    if any(after_map.get(name) != url for name, url in before_map.items()):
+    removed_names = set(before_map) - set(after_map)
+    withdrawals = []
+    for name in sorted(removed_names):
+        review, _ = website_evidence.get(name, ({}, None))
+        if review.get('status') != SECURITY_HOLD or review.get('url') != before_map[name] or name in beta_map:
+            raise ValueError('Public website replacement or removal requires separate review')
+        withdrawals.append(review)
+    if any(after_map[name] != before_map[name] for name in before_map.keys() & after_map.keys()):
         raise ValueError('Public website replacement or removal requires separate review')
+    if any(row.get('status') == SECURITY_HOLD and name in after_map
+           for name, (row, _) in website_evidence.items()):
+        raise ValueError('Public website retains a mapping subject to an active website warning')
     new_names = set(after_map) - set(before_map)
     allowed, _ = website_plan(before_map, beta_map, website_evidence)
     by_name = {item['club']: item for item, _ in allowed}
     if any(name not in by_name or by_name[name]['url'] != after_map[name] for name in new_names):
         raise ValueError('Public website changes lack exact approved BETA evidence')
-    expected = render_websites(root, original, [by_name[name] for name in sorted(new_names)]) if new_names else original
+    expected = (render_websites(root, original, [by_name[name] for name in sorted(new_names)], withdrawals)
+                if new_names or withdrawals else original)
 
     selected = set()
     for table in ('GROUNDS', 'LAW2_ORIGIN_LOCATIONS'):
@@ -101,7 +119,7 @@ def prove(root, original, proposed, beta, ground_ledger, website_evidence):
         expected, _ = apply_names(expected, reviewed)
     if expected != proposed:
         raise ValueError('Public changes exceed the exact output of the approved club factual CLIs')
-    return len(selected), len(new_names)
+    return len(selected), len(new_names) + len(removed_names)
 
 
 def main():

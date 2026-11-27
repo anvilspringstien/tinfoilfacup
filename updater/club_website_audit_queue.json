@@ -5,7 +5,7 @@
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 351,
+  "eligible_linked": 350,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -10079,15 +10079,17 @@
         "Trafford FC"
       ],
       "current_competition": false,
-      "website": "https://traffordfc.com/",
-      "status": "verified",
+      "website": null,
+      "status": "withdrawn",
       "priority": 3,
       "evidence": [
         {
           "url": "https://traffordfc.com/",
-          "evidence_url": "https://traffordfc.com/",
-          "verified_on": "2026-11-16",
-          "ledger": "club_website_verified_batch_25.json"
+          "evidence_url": "https://support.avast.com/article/258/",
+          "verified_on": "2026-11-27",
+          "ledger": "club_website_verified_batch_30.json",
+          "status": "owner_observed_security_warning",
+          "reason": "Avast blocked access with a URL:Blacklist warning. The owner notified Trafford FC in Outreach and included the Avast Alert ID. The warning is an observation and does not establish a compromise or change the verified official-domain identity."
         }
       ]
     },

@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 
-from updater.public_club_facts_guard import prove, website_plan
+from updater.public_club_facts_guard import prove, reviewed_websites, website_plan
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,6 +19,23 @@ class PublicClubFactsGuardTests(unittest.TestCase):
         original = 'const CLUB_WEBSITES={"Test FC":"https://current.example/"};'
         with self.assertRaisesRegex(ValueError, 'replacement or removal'):
             prove(ROOT, original, original.replace('current', 'replacement'), original, {}, {})
+
+    def test_trafford_warning_permits_only_matching_withdrawal_in_both_builds(self):
+        original = (
+            'const ELIGIBLE=[{"name":"Trafford FC"}];'
+            'const GROUNDS=[];const LAW2_ORIGIN_LOCATIONS=[];'
+            'const CLUB_WEBSITES={"Trafford":"https://traffordfc.com/",'
+            '"Trafford FC":"https://traffordfc.com/","Other":"https://other.example/"};'
+        )
+        proposed = original.replace('"Trafford":"https://traffordfc.com/",', '').replace(
+            '"Trafford FC":"https://traffordfc.com/",', '')
+        evidence = reviewed_websites(ROOT)
+        self.assertEqual(prove(ROOT, original, proposed, proposed, {'approved': []}, evidence), (0, 2))
+        with self.assertRaisesRegex(ValueError, 'replacement or removal'):
+            prove(ROOT, original, proposed, original, {'approved': []}, evidence)
+        with self.assertRaisesRegex(ValueError, 'replacement or removal'):
+            prove(ROOT, original, proposed.replace('"Other":"https://other.example/"', ''), proposed,
+                  {'approved': []}, evidence)
 
     def test_website_plan_uses_exact_identity_and_current_approval(self):
         beta = {'Test FC': 'https://test.example/', 'Test Town FC': 'https://test-town.example/'}

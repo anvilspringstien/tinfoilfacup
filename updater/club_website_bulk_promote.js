@@ -2,6 +2,8 @@
 'use strict';
 // Reviewed evidence -> reproducible website map. Competition/search eligibility is read-only.
 const fs=require('node:fs'),path=require('node:path');
+const securityHold='owner_observed_security_warning';
+const withdrawalStatuses=new Set(['club_confirmed_offline',securityHold]);
 function literalRange(html,name,open,close){
  const tag='const '+name+'=',at=html.indexOf(tag);if(at<0)throw Error('Missing '+name);
  const begin=at+tag.length;let depth=0,quoted=false,escaped=false;
@@ -35,8 +37,8 @@ function promote(html,competition,ledger){
   if(identities.some(n=>normal(n)!==normal(club))){errors.push('Alias identity mismatch: '+club);continue}
   if(identities.some(n=>seen.has(n))||new Set(identities).size!==identities.length){errors.push('Duplicate approval: '+club);continue}
   identities.forEach(n=>seen.add(n));
-  const expectedStatus=remove?'club_confirmed_offline':'verified_official_club_site';
-  if(status!==expectedStatus||(remove&&(typeof item.reason!=='string'||!item.reason.trim()))){errors.push('Not independently verified: '+club);continue}
+  const validStatus=remove?withdrawalStatuses.has(status):status==='verified_official_club_site';
+  if(!validStatus||(remove&&(typeof item.reason!=='string'||!item.reason.trim()))){errors.push('Not independently verified: '+club);continue}
   if(!/^\d{4}-\d{2}-\d{2}$/.test(verified_on||'')||!evidence_url){errors.push('Missing evidence/date: '+club);continue}
   try{const u=new URL(url),e=new URL(evidence_url);
    if(u.protocol!=='https:'||e.protocol!=='https:'||u.username||u.password||e.username||e.password)throw Error('HTTPS required');
@@ -59,6 +61,16 @@ function main(){
  const root=path.join(__dirname,'..'),beta=path.join(root,'beta/clubfinder-beta.html'),publicFile=path.join(root,'clubfinder.html'),canonical=path.join(root,'competition.json');
  if([beta,canonical,publicFile,path.resolve(ledgerFile)].includes(path.resolve(output)))throw Error('Output cannot replace an application, competition or evidence input');
  const competition=JSON.parse(fs.readFileSync(canonical,'utf8')),ledger=JSON.parse(fs.readFileSync(ledgerFile,'utf8'));
+ const holds=new Set();
+ for(const file of fs.readdirSync(__dirname).filter(name=>/^club_website_verified_batch_.*\.json$/.test(name))){
+  const evidence=JSON.parse(fs.readFileSync(path.join(__dirname,file),'utf8'));
+  for(const row of evidence.withdrawn||[]){
+   if(row.status===securityHold) for(const name of [row.club,...(row.aliases||[])]) holds.add(name);
+  }
+ }
+ for(const row of ledger.verified||[]){
+  if([row.club,...(row.aliases||[])].some(name=>holds.has(name)))throw Error('Active website warning requires separate restoration approval: '+row.club);
+ }
  const html=fs.readFileSync(beta,'utf8'),result=promote(html,competition,ledger);
  const publicHtml=args.includes('--apply-public')?fs.readFileSync(publicFile,'utf8'):null;
  const publicResult=publicHtml===null?null:promote(publicHtml,competition,ledger);
@@ -67,5 +79,5 @@ function main(){
  if(publicResult)fs.writeFileSync(publicFile,applyMapping(publicHtml,publicResult.websites));
  console.log(JSON.stringify({eligible:result.eligible,known_competition_identities:result.known_competition_identities,accepted:result.accepted.length,removed:result.removed.length,website_count:result.website_count,beta_applied:args.includes('--apply-beta'),public_accepted:publicResult?.accepted.length??null,public_applied:publicResult!==null},null,2));
 }
-module.exports={literalRange,normal,registry,promote,applyMapping};
+module.exports={literalRange,normal,registry,promote,applyMapping,withdrawalStatuses};
 if(require.main===module){try{main()}catch(error){console.error(error.message);process.exitCode=1}}
