@@ -249,8 +249,7 @@ function historicalResultsForClub(club){
     if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
     if(!out.some(x=>sameSemanticResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
   }
-  const hist=liveLookup('result_history',club.name);
-  if(Array.isArray(hist))for(const r of hist)add(r,r&&r.round);
+  for(const r of liveResultHistory(club.name))add(r,r&&r.round);
   add(liveLookup('results',club.name));
   if(!out.length){
     const f=club.fixture||{};
@@ -293,6 +292,14 @@ function liveLookup(section,name){
     if(tinFoilBetaCompetitionClubKey(key)===target)return value;
   }
   return null;
+}
+function liveResultHistory(name){
+  const history=LIVE_COMPETITION_DATA?.result_history;
+  const reviewed=tinFoilBetaReviewedHistoryKey(name);
+  const canonical=reviewed&&history?.[reviewed];
+  if(Array.isArray(canonical)&&canonical.length)return canonical;
+  const direct=liveLookup('result_history',name);
+  return Array.isArray(direct)?direct:[];
 }
 function nextRoundInfo(club,preserveConditional){
   const cr=resultFor(club),current=(cr&&cr.round)?cr.round:(club.entry_round||'');
@@ -427,6 +434,8 @@ function sameSemanticResult(a,b){
 }
 function tinFoilBetaCompetitionClubKey(name){
   const key=canonicalClubKey(name);
+  const reviewed=tinFoilBetaReviewedHistoryKey(name);
+  if(reviewed)return canonicalClubKey(reviewed);
   // The 2026–27 archive also repeats the Barton Town tie as Eastwood Town.
   if(LIVE_COMPETITION_DATA?.season==='2026-27'&&
      (key==='eastwood community'||key==='eastwood town'))return 'eastwood';
@@ -451,6 +460,10 @@ function tinFoilBetaPenaltyResultNote(r){
 function tinFoilBetaResultVoided(r){
   const status=String((r&&r.status)||'').toUpperCase();
   return !!r&&(status==='VOID'||status==='VOIDED'||String(r.decision||'').toLowerCase()==='voided-replay-ordered');
+}
+function tinFoilBetaReviewedHistoryKey(name){
+  const key=canonicalClubKey(name);
+  return LIVE_COMPETITION_DATA?.season==='2026-27'&&(key==='irlam'||key==='irlam town')?'Irlam Town':'';
 }
 function tinFoilBetaVerifiedThameNextFixture(club,nextName){
   // Fixture-local bridge for the FA's exact Third Qualifying draw abbreviation.

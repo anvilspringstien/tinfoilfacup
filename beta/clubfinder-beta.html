@@ -533,8 +533,12 @@ function liveLookup(section,name){
 }
 
 function liveResultHistory(name){
-  const arr=liveLookup('result_history',name)||[];
-  return Array.isArray(arr)?arr:[];
+  const history=LIVE_COMPETITION_DATA?.result_history;
+  const reviewed=tinFoilBetaReviewedHistoryKey(name);
+  const canonical=reviewed&&history?.[reviewed];
+  if(Array.isArray(canonical)&&canonical.length)return canonical;
+  const direct=liveLookup('result_history',name);
+  return Array.isArray(direct)?direct:[];
 }
 function applyLiveRoundDates(){
   const d=LIVE_COMPETITION_DATA&&LIVE_COMPETITION_DATA.round_dates;if(!d)return;
@@ -816,8 +820,16 @@ function tinFoilBetaHolmesdale2026Ready(){
     canonicalClubKey(r.home)==='petts wood and holmesdale'&&
     canonicalClubKey(r.away)==='tooting and mitcham united');
 }
+// The round-state engine already resolves Irlam and Irlam Town together.
+// Keep the roster name and use the complete canonical source bucket for custody.
+function tinFoilBetaReviewedHistoryKey(name){
+  const key=canonicalClubKey(name);
+  return LIVE_COMPETITION_DATA?.season==='2026-27'&&(key==='irlam'||key==='irlam town')?'Irlam Town':'';
+}
 function tinFoilBetaCompetitionClubKey(name){
   const key=canonicalClubKey(name);
+  const reviewed=tinFoilBetaReviewedHistoryKey(name);
+  if(reviewed)return canonicalClubKey(reviewed);
   // The 2026–27 archive also repeats the Barton Town tie as Eastwood Town.
   if(LIVE_COMPETITION_DATA?.season==='2026-27'&&
      (key==='eastwood community'||key==='eastwood town'))return 'eastwood';
@@ -1110,8 +1122,7 @@ function historicalResultsForClub(club){
     if(!sameClubIdentity(r.home,club.name)&&!sameClubIdentity(r.away,club.name))return;
     if(!out.some(x=>sameSemanticResult(x.result,r)))out.push({round:round||r.round||club.entry_round||'FA Cup',result:r});
   }
-  const hist=liveLookup('result_history',club.name);
-  if(Array.isArray(hist))for(const r of hist)add(r,r&&r.round);
+  for(const r of liveResultHistory(club.name))add(r,r&&r.round);
   add(liveLookup('results',club.name));
   if(!out.length){
     const f=club.fixture||{};
