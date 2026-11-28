@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-28",
+  "scope": "Independent senior-team website review for eligible Clubfinder origins. Apply reviewed website mappings through the BETA publication CLI.",
+  "reviewed_count": 15,
+  "verified": [
+    {
+      "club": "Harwich & Parkeston FC",
+      "url": "https://www.harwichandparkeston.com/",
+      "evidence_url": "https://www.harwichandparkeston.com/teams/23487/fixtures-results",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed site identifies the Royal Oak Ground and publishes the senior team's 2026–27 league and cup fixtures.",
+      "aliases": [
+        "Harwich & Parkeston"
+      ]
+    },
+    {
+      "club": "Hayes & Yeading United FC",
+      "url": "https://www.hyufc.com/",
+      "evidence_url": "https://www.hyufc.com/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club homepage publishes the 24 November men's cup result and the 28 November 2026 fixture versus Littlehampton Town.",
+      "aliases": [
+        "Hayes & Yeading United"
+      ],
+      "supporting_evidence_urls": [
+        "https://slc-www.southern-football-league.co.uk/clubs/hayes-yeading-united"
+      ]
+    },
+    {
+      "club": "Heybridge Swifts FC",
+      "url": "https://www.pitchero.com/clubs/heybridgeswifts3/",
+      "evidence_url": "https://www.pitchero.com/clubs/heybridgeswifts3/teams/254642/fixtures-results",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed Pitchero separates the senior first team from reserves and U18s and publishes November 2026 senior match coverage.",
+      "aliases": [
+        "Heybridge Swifts"
+      ]
+    },
+    {
+      "club": "Highworth Town FC",
+      "url": "https://www.pitchero.com/clubs/highworthtown/",
+      "evidence_url": "https://www.pitchero.com/clubs/highworthtown/matches/2026/11",
+      "status": "verified_official_club_site",
+      "verification_notes": "The club-managed site identifies the men's first team separately and lists November 2026 cup fixtures against Fairford and Cirencester Town.",
+      "aliases": [
+        "Highworth Town"
+      ],
+      "supporting_evidence_urls": [
+        "https://www.thehellenicleague.com/clubs/highworth-town/"
+      ]
+    },
+    {
+      "club": "Hinckley AFC",
+      "url": "https://hinckleyafc.co.uk/",
+      "evidence_url": "https://hinckleyafc.co.uk/first-team/fixtures/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club site publishes 2026–27 first-team results and fixtures. The United Counties League links the same domain for Hinckley AFC.",
+      "aliases": [
+        "Hinckley"
+      ],
+      "supporting_evidence_urls": [
+        "https://theucl.co.uk/clubs/hinckley-afc/"
+      ]
+    },
+    {
+      "club": "Histon FC",
+      "url": "https://www.histonfc.co.uk/",
+      "evidence_url": "https://www.histonfc.co.uk/mensfirstteam/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-maintained 2026–27 men's results include the FA Cup tie against Brightlingsea Regent. The United Counties League identifies the same club and domain.",
+      "aliases": [
+        "Histon"
+      ],
+      "supporting_evidence_urls": [
+        "https://theucl.co.uk/clubs/histon/"
+      ]
+    },
+    {
+      "club": "Hucknall Town FC",
+      "url": "https://www.hucknalltownfc.co.uk/",
+      "evidence_url": "https://www.hucknalltownfc.co.uk/teams/70936/fixtures-results",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club-managed website distinguishes the senior first team and publishes 2026–27 fixtures and November senior match previews.",
+      "aliases": [
+        "Hucknall Town"
+      ],
+      "supporting_evidence_urls": [
+        "https://theucl.co.uk/clubs/hucknall-town-fc/"
+      ]
+    },
+    {
+      "club": "Ilkeston Town FC",
+      "url": "https://ilkestontownfc.uk/",
+      "evidence_url": "https://ilkestontownfc.uk/fixtures-and-results/",
+      "status": "verified_official_club_site",
+      "verification_notes": "The official Robins site publishes senior Northern Premier League results through 21 November and the 28 November home game against Emley.",
+      "aliases": [
+        "Ilkeston Town"
+      ]
+    },
+    {
+      "club": "Jersey Bulls FC",
+      "url": "https://www.bulls.je/",
+      "evidence_url": "https://www.bulls.je/fixtures/",
+      "status": "verified_official_club_site",
+      "verification_notes": "Club site identifies the men's first team, its 21 November result at Littlehampton and the 28 November 2026 home fixture at Springfield Stadium. Clubfinder distance is a separate location review.",
+      "aliases": [
+        "Jersey Bulls"
+      ],
+      "supporting_evidence_urls": [
+        "https://www.bulls.je/club/ownership/"
+      ]
+    }
+  ],
+  "held": [
+    {
+      "club": "Beckenham Town FC",
+      "candidate_url": "https://www.beckenhamtownfc.com/",
+      "evidence_url": "https://scefl.com/sceflclub/beckenham-town",
+      "status": "held_for_verification",
+      "reason": "The league links the exact senior club domain. The destination could not be opened for this review.",
+      "next_step": "Recheck a functioning club-managed senior destination before promotion."
+    },
+    {
+      "club": "Bovey Tracey FC",
+      "candidate_url": "https://boveytraceyafc.co.uk/",
+      "evidence_url": "https://www.westernleague.co.uk/teams/premier-division/bovey-tracey",
+      "status": "held_for_verification",
+      "reason": "The league confirms the senior club identity. The candidate destination returned an unavailable response.",
+      "next_step": "Recheck a functioning club-managed senior destination before promotion."
+    },
+    {
+      "club": "Bridlington Town AFC",
+      "candidate_url": "https://www.bridtownafc.com/",
+      "evidence_url": "https://www.thenpl.co.uk/clubs/bridlington-town",
+      "status": "held_for_verification",
+      "reason": "Indexed club pages show official ownership and 2026–27 senior fixtures. Direct homepage, fixture and contact requests timed out or failed. Keep accessibility hold.",
+      "next_step": "Recheck a functioning club-managed senior destination before promotion."
+    },
+    {
+      "club": "Cirencester Town FC",
+      "candidate_url": "https://www.cirentownfc.com/",
+      "evidence_url": "https://www.thehellenicleague.com/clubs/cirencester-town/",
+      "status": "held_for_verification",
+      "reason": "The league confirms the senior club. The candidate domain timed out and could not be verified as a usable destination.",
+      "next_step": "Recheck a functioning club-managed senior destination before promotion."
+    },
+    {
+      "club": "Corsham Town FC",
+      "candidate_url": "https://corshamtownfc.co.uk/",
+      "evidence_url": "https://linktr.ee/corshamtownfc",
+      "status": "held_for_verification",
+      "reason": "The club's Linktree identifies the destination, which still renders a default WordPress placeholder.",
+      "next_step": "Recheck a functioning club-managed senior destination before promotion."
+    },
+    {
+      "club": "Hertford Town FC",
+      "candidate_url": "https://hertfordtownfc.co.uk/",
+      "evidence_url": "https://www.pitchero.com/clubs/hertfordtownfc/",
+      "status": "held_for_verification",
+      "reason": "The old standalone domain serves unrelated gaming content. Pitchero identifies the club but current senior-team updates were not confirmed there. Do not substitute the youth site.",
+      "next_step": "Recheck a functioning club-managed senior destination before promotion."
+    }
+  ]
+}

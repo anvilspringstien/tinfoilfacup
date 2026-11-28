@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "competition_updated_at": "2026-11-27T08:34:49.721753+00:00",
+  "competition_updated_at": "2026-11-28T10:28:09.229435+00:00",
   "eligible": 651,
   "current_clubs": 40,
   "current_verified": 40,
   "current_linked": 40,
-  "eligible_linked": 350,
+  "eligible_linked": 359,
   "rows": [
     {
       "club": "AFC Fylde",
@@ -972,42 +972,9 @@
       "evidence": []
     },
     {
-      "club": "Harwich & Parkeston FC",
-      "identities": [
-        "Harwich & Parkeston FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hayes & Yeading United FC",
-      "identities": [
-        "Hayes & Yeading United FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Hertford Town FC",
       "identities": [
         "Hertford Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Heybridge Swifts FC",
-      "identities": [
-        "Heybridge Swifts FC"
       ],
       "current_competition": false,
       "website": null,
@@ -1027,42 +994,9 @@
       "evidence": []
     },
     {
-      "club": "Highworth Town FC",
-      "identities": [
-        "Highworth Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Hilltop FC",
       "identities": [
         "Hilltop FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Hinckley AFC",
-      "identities": [
-        "Hinckley AFC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Histon FC",
-      "identities": [
-        "Histon FC"
       ],
       "current_competition": false,
       "website": null,
@@ -1126,17 +1060,6 @@
       "evidence": []
     },
     {
-      "club": "Hucknall Town FC",
-      "identities": [
-        "Hucknall Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Hullbridge Sports FC",
       "identities": [
         "Hullbridge Sports FC"
@@ -1170,17 +1093,6 @@
       "evidence": []
     },
     {
-      "club": "Ilkeston Town FC",
-      "identities": [
-        "Ilkeston Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
       "club": "Ipswich Wanderers FC",
       "identities": [
         "Ipswich Wanderers FC"
@@ -1206,17 +1118,6 @@
       "club": "Ivybridge Town FC",
       "identities": [
         "Ivybridge Town FC"
-      ],
-      "current_competition": false,
-      "website": null,
-      "status": "missing",
-      "priority": 2,
-      "evidence": []
-    },
-    {
-      "club": "Jersey Bulls FC",
-      "identities": [
-        "Jersey Bulls FC"
       ],
       "current_competition": false,
       "website": null,
@@ -9010,6 +8911,24 @@
       ]
     },
     {
+      "club": "Harwich & Parkeston FC",
+      "identities": [
+        "Harwich & Parkeston FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.harwichandparkeston.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.harwichandparkeston.com/",
+          "evidence_url": "https://www.harwichandparkeston.com/teams/23487/fixtures-results",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
       "club": "Hashtag United FC",
       "identities": [
         "Hashtag United FC"
@@ -9096,6 +9015,24 @@
           "evidence_url": "https://www.pitchero.com/clubs/haverhillroversfc/information",
           "verified_on": "2026-11-16",
           "ledger": "club_website_verified_batch_24.json"
+        }
+      ]
+    },
+    {
+      "club": "Hayes & Yeading United FC",
+      "identities": [
+        "Hayes & Yeading United FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.hyufc.com/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.hyufc.com/",
+          "evidence_url": "https://www.hyufc.com/",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
         }
       ]
     },
@@ -9300,6 +9237,78 @@
       ]
     },
     {
+      "club": "Heybridge Swifts FC",
+      "identities": [
+        "Heybridge Swifts FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/heybridgeswifts3/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/heybridgeswifts3/",
+          "evidence_url": "https://www.pitchero.com/clubs/heybridgeswifts3/teams/254642/fixtures-results",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
+      "club": "Highworth Town FC",
+      "identities": [
+        "Highworth Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.pitchero.com/clubs/highworthtown/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.pitchero.com/clubs/highworthtown/",
+          "evidence_url": "https://www.pitchero.com/clubs/highworthtown/matches/2026/11",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
+      "club": "Hinckley AFC",
+      "identities": [
+        "Hinckley AFC"
+      ],
+      "current_competition": false,
+      "website": "https://hinckleyafc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://hinckleyafc.co.uk/",
+          "evidence_url": "https://hinckleyafc.co.uk/first-team/fixtures/",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
+      "club": "Histon FC",
+      "identities": [
+        "Histon FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.histonfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.histonfc.co.uk/",
+          "evidence_url": "https://www.histonfc.co.uk/mensfirstteam/",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
       "club": "Hitchin Town FC",
       "identities": [
         "Hitchin Town FC"
@@ -9390,6 +9399,24 @@
       ]
     },
     {
+      "club": "Hucknall Town FC",
+      "identities": [
+        "Hucknall Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.hucknalltownfc.co.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.hucknalltownfc.co.uk/",
+          "evidence_url": "https://www.hucknalltownfc.co.uk/teams/70936/fixtures-results",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
       "club": "Hungerford Town FC",
       "identities": [
         "Hungerford Town FC"
@@ -9440,6 +9467,42 @@
           "evidence_url": "https://www.ilfordfc.co.uk/stadium",
           "verified_on": "2026-11-14",
           "ledger": "club_website_verified_batch_23.json"
+        }
+      ]
+    },
+    {
+      "club": "Ilkeston Town FC",
+      "identities": [
+        "Ilkeston Town FC"
+      ],
+      "current_competition": false,
+      "website": "https://ilkestontownfc.uk/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://ilkestontownfc.uk/",
+          "evidence_url": "https://ilkestontownfc.uk/fixtures-and-results/",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
+        }
+      ]
+    },
+    {
+      "club": "Jersey Bulls FC",
+      "identities": [
+        "Jersey Bulls FC"
+      ],
+      "current_competition": false,
+      "website": "https://www.bulls.je/",
+      "status": "verified",
+      "priority": 3,
+      "evidence": [
+        {
+          "url": "https://www.bulls.je/",
+          "evidence_url": "https://www.bulls.je/fixtures/",
+          "verified_on": "2026-11-28",
+          "ledger": "club_website_verified_batch_31.json"
         }
       ]
     },
