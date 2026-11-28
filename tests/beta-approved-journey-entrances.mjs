@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {chromium, devices} from 'playwright';
 
-const origin = 'http://127.0.0.1:8765';
+const origin=process.env.TFFC_PREVIEW_BASE || 'http://127.0.0.1:8765';
 const browser = await chromium.launch();
 const journeyKey = 'tinFoilFACupJourney_v7';
 const publicArt = '6bb8ae591609e95f220b22ecf684beba56e05e369d1b5c803b09429fa1ae04ef';
@@ -117,6 +117,29 @@ try {
     assert.equal(allocations(),1,'returning, refreshing and closing auxiliary views must not allocate');
     await context.close();
   }
+
+  // The provider recognises these island postcodes but supplies no grid point.
+  const {context:islands,allocations:islandAllocations}=await newContext({reducedMotion:'reduce'});
+  await islands.route('https://api.postcodes.io/**',route=>{
+    if(route.request().method()==='POST')return route.fulfill({json:{result:[]}});
+    const postcode=decodeURIComponent(new URL(route.request().url()).pathname.split('/').at(-1)).toUpperCase();
+    return route.fulfill({json:{result:{postcode,latitude:null,longitude:null}}});
+  });
+  const islandPage=await islands.newPage();
+  const islandApp=app(islandPage),islandLaws=islandApp.frameLocator('.tffc-exact-master-frame');
+  await islandPage.goto(origin+'/?view=campaign');
+  for(const [postcode,club] of [['JE2 4LF','Jersey Bulls FC'],['GY2 4BB','Guernsey FC']]){
+    await islandLaws.locator('#postcode').fill(postcode);
+    await islandLaws.getByRole('button',{name:'Find My Club'}).click();
+    const card=islandApp.locator('.result').first();
+    await card.getByRole('heading',{name:'Nearest: '+club,exact:true}).waitFor();
+    assert.ok((await card.locator('.meta').first().innerText()).includes(postcode+' • 0.0 miles'));
+  }
+  await islandLaws.locator('#postcode').fill('JE2 4ZZ');
+  await islandLaws.getByRole('button',{name:'Find My Club'}).click();
+  await islandLaws.getByText('Coordinates are unavailable for this postcode. Try another postcode.').waitFor();
+  assert.equal(islandAllocations(),2,'an unresolved coordinate must not allocate a search identity');
+  await islands.close();
 
   // Simulate a cached shell renderer that still asks for beta/index.html.
   const {context:cached}=await newContext({reducedMotion:'reduce'});

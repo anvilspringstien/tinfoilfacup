@@ -3,6 +3,56 @@
   "policy": "Club-confirmed current listing details. Postcode and coordinate changes require explicit previous values and independent evidence. Preserve eligibility, historical venues and canonical competition data.",
   "approved": [
     {
+      "club": "Jersey Bulls FC",
+      "previous_name": "Springfield Stadium",
+      "current_name": "Springfield Stadium",
+      "postcode": "JE2 4LF",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-28",
+      "public_sources": [
+        "https://www.bulls.je/visit/",
+        "https://www.active.je/locations/springfield/",
+        "https://mapcarta.com/W182196435"
+      ],
+      "review_notes": "The official club visitor page confirms the ground and exact postcode. The mapped venue corroborates the existing pin. Postcodes.io returns null coordinates and did not validate this venue pin.",
+      "coordinates": {
+        "previous": {
+          "lat": 49.191565,
+          "lon": -2.100728
+        },
+        "reviewed": {
+          "lat": 49.191565,
+          "lon": -2.100728
+        },
+        "source": "FCHD 2025–26 venue pin, independently corroborated by the mapped Springfield Stadium footprint"
+      }
+    },
+    {
+      "club": "Guernsey FC",
+      "previous_name": "Victoria Park",
+      "current_name": "Victoria Park",
+      "postcode": "GY2 4BB",
+      "status": "club_confirmed",
+      "reviewed_on": "2026-11-28",
+      "public_sources": [
+        "https://guernseyfc.com/the-ground/",
+        "https://victoriapark.gg/contact",
+        "https://mapcarta.com/W471494081"
+      ],
+      "review_notes": "The official club visitor page confirms the ground and exact postcode. The mapped venue corroborates the existing pin. Postcodes.io returns null coordinates and did not validate this venue pin.",
+      "coordinates": {
+        "previous": {
+          "lat": 49.47402,
+          "lon": -2.538714
+        },
+        "reviewed": {
+          "lat": 49.47402,
+          "lon": -2.538714
+        },
+        "source": "FCHD 2025–26 venue pin, independently corroborated by the mapped Victoria Park pitch"
+      }
+    },
+    {
       "club": "Sholing FC",
       "previous_name": "Mortgage Decisions Community Stadium",
       "current_name": "The Charters Stadium",

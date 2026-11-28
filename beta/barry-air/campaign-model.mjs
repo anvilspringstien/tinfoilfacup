@@ -20,8 +20,8 @@ export async function buildCampaign(saved,competition,{fetcher=globalThis.fetch}
  async function stopFor(f,venue,status){
   const pc=String(venue?.postcode||'').trim();const venueKey=pc&&!/TBC/i.test(pc)?[venue?.ground,pc].join('|'):[f.home,f.date,f.round].join('|');
   if(known.has(venueKey)){const i=known.get(venueKey);stops[i].visits++;return i;}
-  let coords=Number.isFinite(Number(venue?.lat))&&Number.isFinite(Number(venue?.lon))?{lat:Number(venue.lat),lon:Number(venue.lon)}:null;
-  if(!coords&&pc&&!/TBC/i.test(pc)){const g=a.findGround({name:f.home});if(g&&String(g.postcode||'').replace(/\s/g,'').toUpperCase()===pc.replace(/\s/g,'').toUpperCase()&&Number.isFinite(Number(g.lat))&&Number.isFinite(Number(g.lon)))coords={lat:Number(g.lat),lon:Number(g.lon)};}
+  let coords=a.clubfinderCoordinates(venue?.lat,venue?.lon);
+  if(!coords&&pc&&!/TBC/i.test(pc)){const g=a.findGround({name:f.home});if(g&&String(g.postcode||'').replace(/\s/g,'').toUpperCase()===pc.replace(/\s/g,'').toUpperCase())coords=a.clubfinderCoordinates(g.lat,g.lon);}
   if(!coords)coords=await a.tinFoilPigeonCoords(pc);
   const name=f.home||venue?.ground||'Venue to be confirmed';const i=stops.length;
   stops.push({name,short:name.replace(/\s+(FC|AFC|CFC)$/,''),ground:venue?.ground||'Venue to be confirmed',pc:pc||'Postcode to be confirmed',...(coords||{}),tag:f.round||'FA Cup',result:'',round:dateLabel(f.date)+(f.kickoff?' · '+f.kickoff:''),status,visits:1});known.set(venueKey,i);return i;
