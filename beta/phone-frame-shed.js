@@ -67,11 +67,89 @@
   hideDesktopEdgeScrollbar();
   if(!framedRoom)window.tffcInstallPhoneFrameNavigation?.(frame);
  }
+ // Cover only the child viewport during the Splash-to-Four-Laws handoff.
+ // WebKit can paint the child document's own white canvas during navigation
+ // and document.write, independently of the iframe element's background.
+ const journeyUrl=new URL(entries.campaign,base);
+ const splashUrl=new URL(entries.splash,base);
+ const handoffTimeout=10000;
+ const cover=document.createElement('div');
+ cover.hidden=true;
+ cover.setAttribute('aria-hidden','true');
+ cover.style.cssText='position:absolute;inset:0;z-index:1;pointer-events:none;background:#141210';
+ shell.append(cover);
+ const recovery=document.createElement('section');
+ recovery.hidden=true;
+ recovery.style.cssText='position:absolute;inset:0;margin:auto;width:80%;height:max-content;max-height:100%;overflow:auto;color:#f6f3e8;text-align:center;font:1rem/1.5 system-ui';
+ recovery.innerHTML='<p role="alert">The Four Laws could not load. Try again, or return to the start.</p>'
+  +'<button type="button">Try again</button> <button type="button">Return to start</button>';
+ cover.append(recovery);
+ const [retry,back]=recovery.querySelectorAll('button');
+ let handoff=null;
+ function clearHandoff(){
+  clearTimeout(handoff?.timer);
+  handoff=null;
+  cover.hidden=true;
+  cover.setAttribute('aria-hidden','true');
+  cover.style.pointerEvents='none';
+  recovery.hidden=true;
+  frame.inert=false;
+ }
+ function readyMaster(attempt){
+  const journey=frame.contentDocument;
+  if(!journey||journey===attempt.previous||journey.location?.pathname!==journeyUrl.pathname)return null;
+  const master=journey.querySelector('.tffc-exact-master-frame')?.contentDocument;
+  return master?.readyState==='complete'&&master.getElementById('postcode')&&
+   master.querySelector('.clubfinder-search button')&&master.getElementById('clubfinder-status') ? master : null;
+ }
+ function startHandoff(destination){
+  clearHandoff();
+  const attempt={destination,previous:frame.contentDocument};
+  handoff=attempt;
+  cover.hidden=false;
+  attempt.timer=setTimeout(()=>{
+   if(handoff!==attempt)return;
+   if(readyMaster(attempt)){clearHandoff();return;}
+   const focusWasInFrame=document.activeElement===frame;
+   cover.removeAttribute('aria-hidden');
+   cover.style.pointerEvents='auto';
+   recovery.hidden=false;
+   frame.inert=true;
+   if(focusWasInFrame)retry.focus();
+  },handoffTimeout);
+ }
+ retry.addEventListener('click',()=>{
+  const destination=handoff.destination;
+  startHandoff(destination);
+  frame.contentWindow.location.replace(destination.href);
+ });
+ back.addEventListener('click',()=>{
+  clearHandoff();
+  frame.contentWindow.location.replace(splashUrl.href);
+ });
+ window.addEventListener('message',event=>{
+  if(handoff&&event.origin===location.origin&&event.source===frame.contentWindow&&
+     event.data?.type==='tffc-journey-painted'&&readyMaster(handoff))clearHandoff();
+ });
+ frame.addEventListener('tffc-splash-start',()=>{
+  if(frame.contentDocument?.location.pathname===splashUrl.pathname)startHandoff(journeyUrl);
+ });
  function prepareDocument(){
   let win,href;
   try{win=frame.contentWindow;href=new URL(win.location.href);}catch(_){return;}
   if(href.href==='about:blank'){fit();return;}
-  if(href.origin!==location.origin)return;
+  if(href.origin!==location.origin){if(handoff)clearHandoff();return;}
+  if(handoff&&href.pathname!==journeyUrl.pathname)clearHandoff();
+  else if(handoff){
+   // A cached pre-handoff wrapper has no paint message. The outer load
+   // includes its nested master, so use that completed document as a fallback.
+   const attempt=handoff,master=readyMaster(attempt);
+   if(master){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+     if(handoff===attempt&&readyMaster(attempt)===master)clearHandoff();
+    }));
+   }
+  }
   // document.write from the Campaign opener can give Stats its opener's
   // URL. Identify the rendered report as well as canonical Stats routes.
   report=popup||!!win.document.querySelector('.stats-actions')||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
@@ -123,6 +201,7 @@
   const destination=new URL(groundReview?'clubfinder-ground-review-journey.html':framedRoom?'boot-room/?frame='+(shedRoom?'shed':'campaign'):entries[entry]||entries.splash,base);
   if(framedRoom)destination.hash=location.hash;
   if(entry==='club')destination.searchParams.set('club',new URLSearchParams(location.search).get('club')||'');
+  if(destination.pathname===journeyUrl.pathname)startHandoff(destination);
   frame.src=destination.href;
  }
 })();

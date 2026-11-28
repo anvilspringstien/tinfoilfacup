@@ -27,7 +27,7 @@
 
 .astral-opening {
   /* Reuse the alpha of the original white disc for exact registration. */
-  mask: url("assets/floating-cup/CREST_BASE_RING_INNER_WHITE.png") center / 100% 100% no-repeat;
+  mask: var(--astral-disc-mask, url("assets/floating-cup/CREST_BASE_RING_INNER_WHITE.png")) center / 100% 100% no-repeat;
 }
 
 /* With constant viewer distance and parallel planes, the normalised

@@ -26,23 +26,33 @@ for(const [path,expected] of Object.entries(approved)){
  assert.equal(sha(path),expected,'Approved locked source changed: '+path);
 }
 const noindex='<meta name="robots" content="noindex">';
-const permanentSplash=read('beta/shed-splash.html').replace(noindex,'');
-assert.equal(read('beta/public-splash.html').replace(noindex,''),acceptedSplash);
+const paintedSplash=path=>read(path).replace(noindex,'')
+ .replace('splash-campaign-label.js?v=journey-paint-20261128','splash-campaign-label.js');
+const permanentSplash=paintedSplash('beta/shed-splash.html');
+assert.equal(paintedSplash('beta/public-splash.html'),acceptedSplash);
 assert.ok(read('beta/index.html').includes('data-tffc-entrance="shed"'));
-assert.ok(read('beta/index.html').includes('phone-frame-launch.js?v=entrance-boundary-20261127'));
+assert.ok(read('beta/index.html').includes('phone-frame-launch.js?v=journey-recovery-20261128'));
 const crest=permanentSplash.match(/<img class="crest shed-astral-crest" decoding="sync" src="data:image\/webp;base64,([A-Za-z0-9+/=]+)"/);
 assert.ok(crest,'Shed entrance must inline the accepted static Astral Portal');
 assert.equal(createHash('sha256').update(Buffer.from(crest[1],'base64')).digest('hex'),
  '95fd53512b9879556d2fe81fdf65dabad4bec567977e9bcc273bf385d875de9d',
  'Static Astral Portal artwork must match the accepted neutral composition');
-const integration='<link rel="stylesheet" href="astral-portal.css?v=shed"><script defer src="astral-portal.js?v=shed"></script>';
+const integration='<link rel="stylesheet" href="astral-portal.css?v=shed-paint-20261128"><script defer src="astral-portal.js?v=shed-paint-20261128"></script>';
 assert.ok(permanentSplash.includes(integration));
 assert.equal(permanentSplash.replace(integration,'')
  .replace(crest[0],'<img class="crest" src="tffc-splash-logo-q80.webp"'),
  acceptedSplash,
  'Shed entrance may change only the accepted crest and its enhancement');
 const referenceEngine=read('beta/two-rooms-iframe-engine-proof.html');
-const permanentEngine=read('beta/clubfinder-journey.html');
+const permanentEngine=read('beta/clubfinder-journey.html')
+ .replaceAll('<meta name="color-scheme" content="dark">','')
+ .replace(String.raw` const ready=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{\n  if(parent!==window)parent.postMessage({type:'tffc-journey-painted'},location.origin);\n }));\n`,'')
+ .replace(String.raw`\n  if(parent!==window)parent.postMessage({type:'tffc-journey-painted'},location.origin);\n  return;\n }`,String.raw`\n  return;\n }`)
+ .replace("frame.title='Four Laws master unavailable';ready();return;", "frame.title='Four Laws master unavailable';return;")
+ .replace(String.raw`if(page.URL!=='about:blank'){frame.title='Four Laws master controls unavailable';ready();}return;}\n  ready();`,
+  "frame.title='Four Laws master controls unavailable';return;}")
+ .replace("}catch(error){\n  document.body.textContent='Shed proof could not load: '+error.message;\n  if(parent!==window)parent.postMessage({type:'tffc-journey-painted'},location.origin);\n }",
+  "}catch(error){document.body.textContent='Shed proof could not load: '+error.message;}");
 assert.equal(permanentEngine,referenceEngine
  .replace('<title>Shed — Splash to approved Four Laws to original BETA</title>','<title>Tin Foil FA Cup — BETA Clubfinder</title>')
  .replace("const response=await fetch('clubfinder-beta.html',{cache:'no-store'});",
@@ -78,7 +88,7 @@ assert.equal(afterHead(homepage)
 for(const fragment of [
  '<script defer src="beta/splash-campaign-label.js"></script>',
  '<link rel="stylesheet" href="beta/phone-frame-shed.css">',
- '<script defer src="beta/phone-frame-launch.js?v=entrance-boundary-20261127"></script>',
+ '<script defer src="beta/phone-frame-launch.js?v=journey-recovery-20261128"></script>',
  'href="beta/clubfinder-journey.html"',
  'src="beta/tffc-splash-logo-q80.webp"',
  'href="beta/two-rooms-splash-locked.css"',

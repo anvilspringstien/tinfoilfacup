@@ -148,7 +148,7 @@ try {
 
   for (const extension of ['js', 'css']) {
     const slow = await mobile('granted');
-    await slow.route(`**/astral-portal.${extension}?v=shed`, route => route.abort());
+    await slow.route(`**/astral-portal.${extension}?v=shed-paint-20261128`, route => route.abort());
     await slow.goto(shed + 'shed-splash.html', {waitUntil: 'domcontentloaded'});
     await slow.waitForFunction(() => document.querySelector('.shed-astral-crest')?.naturalWidth === 507);
     assert.ok(await stillVisible(slow));
