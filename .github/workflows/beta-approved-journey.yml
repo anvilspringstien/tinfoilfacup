@@ -37,7 +37,7 @@ jobs:
       - name: Assert accepted masters and BETA snapshots have not drifted
         run: node tests/beta-approved-journey-lock.mjs
       - name: Install isolated browser test dependencies
-        run: npm install --no-save playwright
+        run: npm install --no-save playwright pngjs
       - name: Install Chromium for regression check
         run: npx playwright install --with-deps chromium
       - name: Serve BETA locally
@@ -56,6 +56,9 @@ jobs:
 
       - name: Test the Public, installed and Shed entrance boundary
         run: node tests/beta-approved-journey-entrances.mjs
+
+      - name: Sample intermediate crest and Four Laws paints
+        run: node tests/beta-approved-journey-transition-paint.mjs
 
       - name: Test Four Laws wheel handoff
         run: node tests/four-laws-wheel-browser.mjs

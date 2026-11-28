@@ -3,7 +3,13 @@
 'use strict';
 let button,sizer,label;
 function update(){
- if(!button)button=document.querySelector('.splash-start');
+ if(!button){
+  button=document.querySelector('.splash-start');
+  button?.addEventListener('click',event=>{
+   if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.altKey||event.shiftKey)return;
+   window.frameElement?.dispatchEvent(new Event('tffc-splash-start'));
+  });
+ }
  if(!button)return;
  let current=false;
  try{

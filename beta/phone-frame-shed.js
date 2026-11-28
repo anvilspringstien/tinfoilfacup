@@ -67,11 +67,39 @@
   hideDesktopEdgeScrollbar();
   if(!framedRoom)window.tffcInstallPhoneFrameNavigation?.(frame);
  }
+ // Cover only the child viewport during the Splash-to-Four-Laws handoff.
+ // WebKit can paint the child document's own white canvas during navigation
+ // and document.write, independently of the iframe element's background.
+ const journeyPath=new URL(entries.campaign,base).pathname;
+ const cover=document.createElement('div');
+ cover.hidden=true;
+ cover.setAttribute('aria-hidden','true');
+ cover.style.cssText='position:absolute;inset:0;z-index:1;pointer-events:none;background:#141210';
+ shell.append(cover);
+ window.addEventListener('message',event=>{
+  if(event.origin===location.origin&&event.source===frame.contentWindow&&
+     event.data?.type==='tffc-journey-painted'&&frame.contentDocument?.location.pathname===journeyPath)cover.hidden=true;
+ });
+ frame.addEventListener('tffc-splash-start',()=>{
+  if(frame.contentDocument?.location.pathname===new URL(entries.splash,base).pathname)cover.hidden=false;
+ });
  function prepareDocument(){
   let win,href;
   try{win=frame.contentWindow;href=new URL(win.location.href);}catch(_){return;}
   if(href.href==='about:blank'){fit();return;}
-  if(href.origin!==location.origin)return;
+  if(href.origin!==location.origin){cover.hidden=true;return;}
+  if(href.pathname!==journeyPath)cover.hidden=true;
+  else if(!cover.hidden){
+   // A cached pre-handoff wrapper has no paint message. The outer load
+   // includes its nested master, so use that completed document as a fallback.
+   const master=win.document.querySelector('.tffc-exact-master-frame')?.contentDocument;
+   if(master?.readyState==='complete'&&master.getElementById('postcode')){
+    const journey=win.document;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+     if(frame.contentDocument===journey&&journey.location.pathname===journeyPath)cover.hidden=true;
+    }));
+   }
+  }
   // document.write from the Campaign opener can give Stats its opener's
   // URL. Identify the rendered report as well as canonical Stats routes.
   report=popup||!!win.document.querySelector('.stats-actions')||/\/stats-beta\.html$/.test(href.pathname)||href.searchParams.has('stats');
@@ -123,6 +151,7 @@
   const destination=new URL(groundReview?'clubfinder-ground-review-journey.html':framedRoom?'boot-room/?frame='+(shedRoom?'shed':'campaign'):entries[entry]||entries.splash,base);
   if(framedRoom)destination.hash=location.hash;
   if(entry==='club')destination.searchParams.set('club',new URLSearchParams(location.search).get('club')||'');
+  if(destination.pathname===journeyPath)cover.hidden=false;
   frame.src=destination.href;
  }
 })();
