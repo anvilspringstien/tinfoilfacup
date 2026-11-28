@@ -51,6 +51,25 @@ A **critical candidate-health failure** must block publication of the affected c
 
 Publication order remains **build → validate → health → regress → commit**, followed by the required stale-input/rebase checks before push. A green result for a *single item* is not the same as overall health, and a successful catch-up run is not evidence that its scheduled launch occurred. Diagnostic reports may still be retained without canonical publication.
 
+## Public / Shed release boundary
+
+**Public and Shed separation must be demonstrable throughout the entire rendering and data dependency chain, not merely through different URLs or filenames.**
+
+No Shed-only change shall reach Public without explicit, owner-approved promotion.
+
+Shared dependencies must be deliberately identified, governed and tested.
+
+Public includes the normal hosted entrance, installed app and their complete downstream rendering and data paths. Shared canonical competition data remains governed by the publication invariant; shared application code does not exempt experimental changes from release approval.
+
+Mission Control must distinguish four states, each supported by its own evidence:
+
+1. **Verified** — supported by sufficient evidence.
+2. **In the Shed** — implemented within the experimental environment.
+3. **Approved for Public** — explicitly authorised for publication.
+4. **Served to Public** — independently confirmed in the hosted user experience.
+
+No state may be inferred merely from the preceding state.
+
 ## Future Round Fire Drill
 
 Hardening is complete **only when an end-to-end synthetic Future Round Fire Drill passes as an acceptance test** through the ordinary pipeline without application-code edits; documentation, selected historical regression tests, or a passing current-round scan do not substitute for this proof. The drill should include unknown clubs, unfamiliar valid grounds/postcodes, home and away wins, draws/replays where applicable, changing custodians and campaigns reaching new venues.
