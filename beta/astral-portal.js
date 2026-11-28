@@ -46,18 +46,27 @@
       image.src = src;
       return image;
     });
+    const [ivory, disc, rings, cup, sky] = layers;
+    const opening = wrap('astral-opening', wrap('astral-plane', sky));
     try {
       await Promise.all(layers.map(image => image.decode()));
+      if (shed) {
+        // The CSS mask used to load the disc separately. Until that mask
+        // painted, the moving sky could disappear and expose the ivory base.
+        const bitmap = document.createElement('canvas');
+        bitmap.width = disc.naturalWidth;
+        bitmap.height = disc.naturalHeight;
+        bitmap.getContext('2d').drawImage(disc, 0, 0);
+        const mask = new Image();
+        mask.src = bitmap.toDataURL();
+        await mask.decode();
+        opening.style.setProperty('--astral-disc-mask', 'url("' + mask.src + '")');
+      }
     } catch {
       return false;
     }
 
-    const [ivory, , rings, cup, sky] = layers;
-    art = wrap('astral-art',
-      ivory,
-      wrap('astral-opening', wrap('astral-plane', sky)),
-      rings,
-      wrap('astral-plane astral-near', cup));
+    art = wrap('astral-art', ivory, opening, rings, wrap('astral-plane astral-near', cup));
     art.setAttribute('aria-hidden', 'true');
     scene.prepend(art);
     updateArtwork();
