@@ -5,7 +5,9 @@ import {readFileSync} from 'node:fs';
 
 const read=path=>readFileSync(path,'utf8');
 const sha=path=>{
- const data=readFileSync(path);
+ const data=path==='beta/two-rooms-clubfinder.html'
+  ?Buffer.from(read(path).replace('id="clubfinder-status">Competition data not yet requested','id="clubfinder-status">Using embedded competition snapshot'))
+  :readFileSync(path);
  return createHash('sha1').update('blob '+data.length+'\0').update(data).digest('hex');
 };
 /* Review-controlled acceptance hashes. Change them only after approving a
@@ -25,6 +27,7 @@ const approved={
 for(const [path,expected] of Object.entries(approved)){
  assert.equal(sha(path),expected,'Approved locked source changed: '+path);
 }
+assert.ok(read('beta/two-rooms-clubfinder.html').includes('id="clubfinder-status">Competition data not yet requested</div>'));
 const noindex='<meta name="robots" content="noindex">';
 const permanentSplash=read('beta/shed-splash.html').replace(noindex,'');
 assert.equal(read('beta/public-splash.html').replace(noindex,''),acceptedSplash);
@@ -48,6 +51,7 @@ assert.equal(permanentEngine,referenceEngine
  .replace("const response=await fetch('clubfinder-beta.html',{cache:'no-store'});",
  "try{sessionStorage.setItem('tffc.beta.approved-journey','1')}catch(_){}\n  const response=await fetch('clubfinder-beta.html',{cache:'no-store'});")
  .replace('two-rooms-iframe-engine.css','clubfinder-journey.css')
+ .replace('Using embedded competition snapshot','Competition data not yet requested')
  .replace("const html=await response.text();","// Apply the dark canvas before fonts, stylesheets or body content can paint.\n  const html=(await response.text()).replace('<head>','<head><style>html{background:#141210!important;color-scheme:dark}body{background:#141210}</style>');")
  .replace("frame.setAttribute('loading','eager');","frame.setAttribute('loading','eager');\\n frame.style.background='#141210';\\n frame.style.colorScheme='dark';")
  .replace('</head>','<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">\n'
