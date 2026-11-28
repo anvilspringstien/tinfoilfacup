@@ -31,7 +31,7 @@ const paintedSplash=path=>read(path).replace(noindex,'')
 const permanentSplash=paintedSplash('beta/shed-splash.html');
 assert.equal(paintedSplash('beta/public-splash.html'),acceptedSplash);
 assert.ok(read('beta/index.html').includes('data-tffc-entrance="shed"'));
-assert.ok(read('beta/index.html').includes('phone-frame-launch.js?v=journey-paint-20261128'));
+assert.ok(read('beta/index.html').includes('phone-frame-launch.js?v=journey-recovery-20261128'));
 const crest=permanentSplash.match(/<img class="crest shed-astral-crest" decoding="sync" src="data:image\/webp;base64,([A-Za-z0-9+/=]+)"/);
 assert.ok(crest,'Shed entrance must inline the accepted static Astral Portal');
 assert.equal(createHash('sha256').update(Buffer.from(crest[1],'base64')).digest('hex'),
@@ -88,7 +88,7 @@ assert.equal(afterHead(homepage)
 for(const fragment of [
  '<script defer src="beta/splash-campaign-label.js"></script>',
  '<link rel="stylesheet" href="beta/phone-frame-shed.css">',
- '<script defer src="beta/phone-frame-launch.js?v=journey-paint-20261128"></script>',
+ '<script defer src="beta/phone-frame-launch.js?v=journey-recovery-20261128"></script>',
  'href="beta/clubfinder-journey.html"',
  'src="beta/tffc-splash-logo-q80.webp"',
  'href="beta/two-rooms-splash-locked.css"',

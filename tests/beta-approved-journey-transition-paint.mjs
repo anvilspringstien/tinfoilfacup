@@ -120,10 +120,103 @@ async function journeyPaint(entry) {
   }
 }
 
+async function journeyRecovery(scenario) {
+  const c = await context(devices['iPad Pro 11']);
+  let release = () => {};
+  try {
+    const page = await c.newPage();
+    await page.clock.install();
+    const masterPath = '**/beta/two-rooms-clubfinder.html';
+    if (scenario === 'failed') {
+      await page.route(masterPath, route => route.fulfill({
+        status:503, contentType:'text/html', body:'<body style="background:white">Unavailable</body>'
+      }), {times:1});
+    }
+    if (scenario === 'stalled' || scenario === 'interrupted') {
+      let request;
+      const requested = new Promise(resolve => {request = resolve;});
+      const pending = new Promise(resolve => {release = resolve;});
+      await page.route(masterPath, async route => {
+        request();
+        await pending;
+        await route.abort().catch(() => {});
+      }, {times:1});
+      // The handler acknowledges receipt while the real child remains stalled.
+      await page.goto(origin+'/beta/', {waitUntil:'domcontentloaded'});
+      const start = app(page).getByRole('link',{name:'Start Campaign'});
+      await start.click({noWaitAfter:true});
+      await requested;
+    } else {
+      if (scenario === 'missing message' || scenario === 'cached wrapper') {
+        await page.route('**/beta/clubfinder-journey.html', async route => {
+          const response = await route.fetch();
+          let body = (await response.text()).replaceAll(
+            "if(parent!==window)parent.postMessage({type:'tffc-journey-painted'},location.origin);", ''
+          );
+          if (scenario === 'cached wrapper') {
+            // The pre-handoff wrapper also lacked the initial dark hints.
+            body = body.replaceAll('<meta name="color-scheme" content="dark">','');
+          }
+          await route.fulfill({response,body});
+        });
+      }
+      // Exercise both framed startup and a real Splash click.
+      await page.goto(origin+(scenario === 'failed'?'/beta/phone-frame.html?view=campaign':'/'));
+      if (scenario !== 'failed') await app(page).getByRole('link',{name:'Start Campaign'}).click();
+    }
+    const frame = page.locator('#phoneApp');
+    const cover = page.locator('.phone-shell > div').first();
+    const retry = page.getByRole('button',{name:'Try again'});
+    const back = page.getByRole('button',{name:'Return to start'});
+    const fourLaws = app(page).frameLocator('.tffc-exact-master-frame').getByRole('heading',{name:'The Four Laws',exact:true});
+    if (scenario === 'missing message' || scenario === 'cached wrapper') {
+      await fourLaws.waitFor();
+      await cover.waitFor({state:'hidden'});
+      // The load fallback releases immediately, before the ten-second deadline.
+      assert.equal(await retry.count(),0);
+      return;
+    }
+    if (scenario === 'interrupted') {
+      await frame.evaluate(element=>element.contentWindow.location.replace('/beta/shed-splash.html'));
+      await app(page).getByRole('link',{name:'Start Campaign'}).waitFor();
+      await cover.waitFor({state:'hidden'});
+      await page.clock.fastForward(10001);
+      assert.equal(await retry.count(),0,'the previous deadline must not cover the Splash');
+      await app(page).getByRole('link',{name:'Start Campaign'}).click();
+      await fourLaws.waitFor();
+      await cover.waitFor({state:'hidden'});
+      return;
+    }
+    await cover.waitFor();
+    assert.equal(await retry.count(),0,'loading should not show an error immediately');
+    await page.clock.fastForward(10001);
+    await retry.waitFor();
+    assert.match(await page.getByRole('alert').innerText(),/The Four Laws could not load/);
+    assert.equal(await frame.evaluate(element=>element.inert),true);
+    const box = await frame.boundingBox();
+    assert.ok((await pixel(page,box.x+box.width*.8,box.y+box.height*.23)).every(channel=>channel<60),
+      'Recovery must retain the dark canvas over a failed or stalled child');
+    if (scenario === 'stalled') {
+      await back.click();
+      await app(page).getByRole('link',{name:'Start Campaign'}).waitFor();
+      await app(page).getByRole('link',{name:'Start Campaign'}).click();
+    } else {
+      await retry.click();
+    }
+    await fourLaws.waitFor();
+    await cover.waitFor({state:'hidden'});
+    assert.equal(await frame.evaluate(element=>element.inert),false);
+  } finally {
+    release();
+    await c.close();
+  }
+}
+
 try {
   await crestPaint();
   for (const entry of ['/','/beta/','/beta/phone-frame.html']) await journeyPaint(entry);
+  for (const scenario of ['failed','stalled','missing message','cached wrapper','interrupted']) await journeyRecovery(scenario);
 } finally {
   await browser.close();
 }
-console.log('Rendered transition paint passed for the cold crest swap and the Public, Shed and installed Four Laws handoffs.');
+console.log('Rendered transition paint and bounded recovery passed for the crest and Four Laws handoffs.');
