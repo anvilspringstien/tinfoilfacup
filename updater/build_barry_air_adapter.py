@@ -28,7 +28,7 @@ def extract(source,n):
    if depth==0:return source[m.start():i+1]
   i+=1
  raise ValueError('Unclosed function '+n)
-roots=['buildJourney','completedResultVenue','competitionState','nextRoundInfo','resolveLiveFixtureForCarrier','tinFoilPigeonCoords','tinFoilPigeonMilesForStats','tinFoilSavedCallSign','tinFoilSavedPigeonName','resultLinePlain','findGround','sameClubIdentity','candidateClubByName']
+roots=['buildJourney','completedResultVenue','competitionState','nextRoundInfo','resolveLiveFixtureForCarrier','tinFoilPigeonCoords','tinFoilPigeonMilesForStats','tinFoilSavedCallSign','tinFoilSavedPigeonName','clubfinderCoordinates','resultLinePlain','findGround','sameClubIdentity','candidateClubByName']
 allnames=set(re.findall(r'\b(?:async\s+)?function\s+(\w+)\s*\(',s))
 selected={};todo=roots.copy()
 while todo:
