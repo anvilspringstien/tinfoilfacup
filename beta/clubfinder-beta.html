@@ -367,7 +367,7 @@ html.tffc-geometry-proof.tffc-single-frame:not(.tffc-stats-route):not(.tffc-camp
  document.fonts?.ready?.then(schedule);
  schedule();
 })();
-</script><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Using embedded competition snapshot</span></div><div id="status"></div><div id="results"></div></main><script>
+</script><section id="tffcFourLaws" aria-label="The Four Laws"><div class="tffcOuter"><div class="tffcContent"><img class="tffcCrest" src="tffc-four-laws-logo-q80.webp" alt="Tin Foil FA Cup — The Four Laws"><ol><li>1. Make a Tin Foil FA Cup</li><li>2. Find your nearest Qualifying Round</li><li>3. Follow the Winner until you Can't Get Tickets</li><li>4. Eat Pies</li></ol><p class="tffcSmall">The Four Laws will take you to at least 5 non-league grounds before the 1st Round Proper.</p><p class="tffcInvitation">Buy Tickets · Eat Pies · Drink Beer · Meet People</p></div></div></section><main id="clubfinderField"><div id="searchPanel"><input id="postcode" aria-label="UK postcode" placeholder="Enter Your Postcode" autocomplete="postal-code" maxlength="10" enterkeyhint="search"><button id="findBtn">Find My Club</button></div><div id="liveDataTools"><span id="liveDataBadge">Competition data not yet requested</span></div><div id="status"></div><div id="results"></div></main><script>
 /* Real BETA single-frame presentation, default in the Shed. The existing
    search/results DOM nodes retain their IDs, listeners and engine. */
 (function(){
@@ -512,7 +512,7 @@ const BETA_COMPETITION_DATA_URL='./competition-fallback.json';
 const PRODUCTION_COMPETITION_DATA_URL='../competition.json';
 
 let LIVE_COMPETITION_DATA=null;
-let LIVE_DATA_STATUS={state:'loading',updated_at:null,message:'Loading competition data'};
+let LIVE_DATA_STATUS={state:'idle',updated_at:null,message:'Competition data not yet requested'};
 function liveLookup(section,name){
   if(!LIVE_COMPETITION_DATA||!LIVE_COMPETITION_DATA[section])return null;
   const obj=LIVE_COMPETITION_DATA[section],raw=String(name||''),short=raw.replace(/\s+(FC|AFC|CFC)$/,'');
@@ -541,6 +541,8 @@ function applyLiveRoundDates(){
   Object.keys(d).forEach(k=>{if(ROUND_META[k])ROUND_META[k].date=d[k];});
 }
 async function refreshCompetitionData(force=false){
+  LIVE_DATA_STATUS={state:'loading',updated_at:null,message:'Loading competition data'};
+  updateLiveDataBadge();
   // Canonical publication is authoritative. The BETA snapshot is an offline fallback only.
   async function loadSource(url,label){
     const u=url+(url.includes('?')?'&':'?')+'t='+Date.now();
@@ -557,7 +559,7 @@ async function refreshCompetitionData(force=false){
     try{
       const d=await loadSource(BETA_COMPETITION_DATA_URL,'BETA fallback');
       LIVE_COMPETITION_DATA=d;applyLiveRoundDates();
-      LIVE_DATA_STATUS={state:'fallback',updated_at:d.updated_at||null,message:'BETA snapshot fallback — canonical data unavailable'};
+      LIVE_DATA_STATUS={state:'fallback',updated_at:d.updated_at||null,message:'Using embedded competition snapshot — canonical data unavailable'};
     }catch(fallbackError){
       LIVE_COMPETITION_DATA=null;
       LIVE_DATA_STATUS={state:'unavailable',updated_at:null,message:'Competition data unavailable. Please try again later.'};
@@ -583,14 +585,14 @@ function tffcLoadVerifiedCheckStatus(){
 }
 function updateLiveDataBadge(){
   const e=document.getElementById('liveDataBadge');if(!e)return;
-  tffcLoadVerifiedCheckStatus();
+  if(LIVE_DATA_STATUS.state==='live')tffcLoadVerifiedCheckStatus();
   const searchLabel=typeof tinFoilSearchNumberLabel==='function'?tinFoilSearchNumberLabel(tinFoilCurrentSearchNumber()):'';
   const suffix=searchLabel?'  '+searchLabel:'';
   if(LIVE_DATA_STATUS.state==='live'){
     let w=LIVE_DATA_STATUS.updated_at||'';try{w=new Date(w).toLocaleString('en-GB');}catch(x){}
     e.textContent=TFFC_CHECK_STATUS
-      ? 'Clubfinder v7.6 — Data last checked: '+TFFC_CHECK_STATUS.toLocaleString('en-GB')+suffix
-      : 'Clubfinder v7.6 — Data updated: '+w+suffix;
+      ? 'Clubfinder v7.6 — Live · Data last checked: '+TFFC_CHECK_STATUS.toLocaleString('en-GB')+suffix
+      : 'Clubfinder v7.6 — Live · Data updated: '+w+suffix;
   }else e.textContent='Clubfinder v7.6 — '+LIVE_DATA_STATUS.message+suffix;
 }
 

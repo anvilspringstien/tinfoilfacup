@@ -60,6 +60,9 @@ jobs:
       - name: Sample intermediate crest and Four Laws paints
         run: node tests/beta-approved-journey-transition-paint.mjs
 
+      - name: Test canonical and fallback status through the framed entrances
+        run: node tests/beta-approved-journey-data-status.mjs
+
       - name: Test Four Laws wheel handoff
         run: node tests/four-laws-wheel-browser.mjs
 
